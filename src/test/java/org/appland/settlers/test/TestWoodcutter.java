@@ -3,7 +3,6 @@ package org.appland.settlers.test;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DecorationType;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -11,13 +10,11 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.WoodcutterWorker;
 import org.appland.settlers.model.actors.Worker;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -26,8 +23,6 @@ import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
@@ -45,21 +40,19 @@ public class TestWoodcutter {
     public void testWoodcutterOnlyNeedsTwoPlanksForConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point22 = new Point(6, 12);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point22);
+        var point1 = new Point(6, 12);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Deliver two planks
-        Cargo cargo = new Cargo(PLANK, map);
+        var cargo = new Cargo(PLANK, map);
 
         woodcutter0.putCargo(cargo);
         woodcutter0.putCargo(cargo);
@@ -81,21 +74,19 @@ public class TestWoodcutter {
     public void testWoodcutterCannotBeConstructedWithOnePlank() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point22 = new Point(6, 12);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point22);
+        var point1 = new Point(6, 12);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Deliver two planks
-        Cargo cargo = new Cargo(PLANK, map);
+        var cargo = new Cargo(PLANK, map);
 
         woodcutter0.putCargo(cargo);
 
@@ -116,21 +107,18 @@ public class TestWoodcutter {
     public void testUnfinishedWoodcutterNeedsNoWoodcutter() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(8, 6);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(8, 6);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        // Verify the the woodcutter doesn't need any worker when it's under construction
+        // Verify the woodcutter doesn't need any worker when it's under construction
         assertTrue(woodcutter.isPlanned());
         assertFalse(woodcutter.needsWorker());
     }
@@ -139,22 +127,19 @@ public class TestWoodcutter {
     public void testFinishedWoodcutterNeedsWoodcutterWorker() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 10);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(8, 6);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(8, 6);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Connect the woodcutter hut to the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         // Wait for the woodcutter to get constructed
         Utils.waitForBuildingToBeConstructed(woodcutter);
@@ -167,31 +152,28 @@ public class TestWoodcutter {
     public void testWoodcutterIsAssignedToFinishedHouse() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(8, 6);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(8, 6);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        // Connect the woodcutter with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
+        // Connect the var with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         // Finish the woodcutter
         constructHouse(woodcutter);
 
-        // Run game logic twice, once to place courier and once to place woodcutter worker
+        // Run game logic twice, once to place courier and once to place var worker
         Utils.fastForward(2, map);
 
         boolean foundWoodcutter = false;
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof WoodcutterWorker) {
                 foundWoodcutter = true;
 
@@ -206,22 +188,19 @@ public class TestWoodcutter {
     public void testWoodcutterIsNotASoldier() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(8, 6);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(8, 6);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        // Connect the woodcutter with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
+        // Connect the var with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         // Finish the woodcutter
         constructHouse(woodcutter);
@@ -237,31 +216,28 @@ public class TestWoodcutter {
     public void testWoodcutterIsCreatedFromTools() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(8, 6);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(8, 6);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        // Remove all woodcutter workers and add an axe to the headquarters
+        // Remove all var workers and add an axe to the headquarters
         Utils.adjustInventoryTo(headquarter0, WOODCUTTER_WORKER, 0);
         Utils.adjustInventoryTo(headquarter0, Material.AXE, 1);
 
-        // Connect the woodcutter with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
+        // Connect the var with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
 
         // Finish the woodcutter
         constructHouse(woodcutter);
 
-        // Run game logic twice, once to place courier and once to place woodcutter worker
+        // Run game logic twice, once to place courier and once to place var worker
         Utils.fastForward(2, map);
 
         boolean foundWoodcutter = false;
@@ -280,37 +256,35 @@ public class TestWoodcutter {
     public void testArrivedWoodcutterRestsInHutAndThenLeaves() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place and grow tree
-        Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point2 = new Point(12, 4);
+        var tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         // Place the woodcutter
-        Point point1 = new Point(10, 4);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Construct the forester hut
         constructHouse(woodcutter);
 
         // Manually place forester
-        Worker wcWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter);
+        var wcWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter);
 
         assertTrue(wcWorker.isInsideBuilding());
 
         // Run the game logic 99 times and make sure the forester stays in the hut
         for (int i = 0; i < 9; i++) {
             assertTrue(wcWorker.isInsideBuilding());
+
             Utils.fastForward(10, map);
         }
 
@@ -328,34 +302,32 @@ public class TestWoodcutter {
     public void testWoodcutterFindsSpotToCutDownTree() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place and grow tree
-        Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point2 = new Point(12, 4);
+        var tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         // Place the woodcutter
-        Point point1 = new Point(10, 4);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Construct the forester hut
         constructHouse(woodcutter);
 
         // Manually place forester
-        Worker wcWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter);
+        var wcWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter);
 
         assertTrue(wcWorker.isInsideBuilding());
 
-        // Wait for woodcutter worker to leave the hut
+        // Wait for var worker to leave the hut
         Utils.fastForward(99, map);
 
         assertTrue(wcWorker.isInsideBuilding());
@@ -365,7 +337,8 @@ public class TestWoodcutter {
 
         assertFalse(wcWorker.isInsideBuilding());
 
-        Point point = wcWorker.getTarget();
+        var point = wcWorker.getTarget();
+
         assertNotNull(point);
 
         assertEquals(point, point2);
@@ -380,32 +353,30 @@ public class TestWoodcutter {
     public void testWoodcutterReachesPointToCutDownTree() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place and grow tree
-        Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point2 = new Point(12, 4);
+        var tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         // Place the woodcutter
-        Point point1 = new Point(10, 4);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Construct the forester hut
         constructHouse(woodcutter);
 
         // Manually place forester
-        Worker wcWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter);
+        var wcWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter);
 
-        // Wait for woodcutter worker to rest
+        // Wait for var worker to rest
         Utils.fastForward(99, map);
 
         assertTrue(wcWorker.isInsideBuilding());
@@ -415,7 +386,7 @@ public class TestWoodcutter {
 
         assertFalse(wcWorker.isInsideBuilding());
 
-        Point point = wcWorker.getTarget();
+        var point = wcWorker.getTarget();
 
         assertEquals(wcWorker.getTarget(), point2);
         assertTrue(wcWorker.isTraveling());
@@ -432,18 +403,16 @@ public class TestWoodcutter {
     public void testWoodcutterDoesntWalkThroughStoneToReachTree() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 100);
 
         // Place headquarters
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place and grow tree
-        Point point2 = new Point(17, 3);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point2 = new Point(17, 3);
+        var tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
@@ -456,19 +425,19 @@ public class TestWoodcutter {
         var stone2 = map.placeStone(point5, Stone.StoneType.STONE_1, 6);
 
         // Place the woodcutter
-        Point point1 = new Point(10, 4);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Construct the forester hut
         constructHouse(woodcutter);
 
         // Manually place forester
-        Worker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter);
+        var woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter);
 
         // Wait for the woodcutter to leave the hut
         Utils.waitForWorkerToBeOutside(woodcutterWorker, map);
 
-        // Verify that the woodcutter worker goes to the tree without passing through the stones
+        // Verify that the var worker goes to the tree without passing through the stones
         assertFalse(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getTarget(), tree.getPosition());
 
@@ -551,7 +520,7 @@ public class TestWoodcutter {
             map.stepTime();
         }
 
-        // Wait for the tree to fall
+        // Wait for the var to fall
         for (int i = 0; i < 10; i++) {
             assertTrue(map.isTreeAtPoint(point));
             assertEquals(tree, map.getTreeAtPoint(point));
@@ -588,38 +557,34 @@ public class TestWoodcutter {
     public void testWoodcutterReturnsAndStoresWoodAsCargo() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point3 = new Point(6, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(6, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Place and grow the tree
-        Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point2 = new Point(12, 4);
+        var tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
-        // Wait for the tree to grow
+        // Wait for the var to grow
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         // Place the woodcutter
-        Point point1 = new Point(10, 4);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        // Connect the woodcutter with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
+        // Connect the var with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         // Construct the forester hut
         constructHouse(woodcutter);
 
         // Manually place forester
-        WoodcutterWorker wcWorker = new WoodcutterWorker(player0, map);
+        var wcWorker = new WoodcutterWorker(player0, map);
 
         Utils.occupyBuilding(wcWorker, woodcutter);
-
 
         // Wait for the woodcutter to rest
         Utils.fastForward(99, map);
@@ -631,7 +596,7 @@ public class TestWoodcutter {
 
         assertFalse(wcWorker.isInsideBuilding());
 
-        Point point = wcWorker.getTarget();
+        var point = wcWorker.getTarget();
 
         assertEquals(point, point2);
         assertTrue(wcWorker.isTraveling());
@@ -678,7 +643,7 @@ public class TestWoodcutter {
         assertNull(wcWorker.getCargo());
         assertEquals(wcWorker.getTarget(), woodcutter.getPosition());
 
-        Cargo cargo = woodcutter.getFlag().getStackedCargo().getFirst();
+        var cargo = woodcutter.getFlag().getStackedCargo().getFirst();
 
         assertEquals(cargo.getTarget(), headquarter);
 
@@ -699,32 +664,29 @@ public class TestWoodcutter {
     public void testWoodCargoIsDeliveredToSawmillWhichIsCloserThanHeadquarters() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point3 = new Point(6, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(6, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Place and grow the tree
-        Point point2 = new Point(14, 6);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point2 = new Point(14, 6);
+        var tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
-        // Wait for the tree to grow
+        // Wait for the var to grow
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         // Remove all wood from the headquarters
         Utils.adjustInventoryTo(headquarter, WOOD, 0);
 
         // Place sawmill
-        Point point4 = new Point(10, 4);
-        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point4);
+        var point4 = new Point(10, 4);
+        var sawmill = map.placeBuilding(new Sawmill(player0), point4);
 
         // Connect the sawmill to the headquarters
-        Road road2 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
 
         // Wait for the sawmill to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(sawmill);
@@ -732,16 +694,16 @@ public class TestWoodcutter {
         Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill);
 
         // Place the woodcutter
-        Point point1 = new Point(14, 4);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(14, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        // Connect the woodcutter with the sawmill
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), sawmill.getFlag());
+        // Connect the var with the sawmill
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), sawmill.getFlag());
 
         // Wait for the woodcutter to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(woodcutter);
 
-        WoodcutterWorker wcWorker = (WoodcutterWorker) Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter);
+        var wcWorker = (WoodcutterWorker) Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter);
 
         // Wait for the courier on the road between the sawmill and the woodcutter hut to have a wood cargo
         Utils.waitForFlagToGetStackedCargo(map, woodcutter.getFlag(), 1);
@@ -763,37 +725,34 @@ public class TestWoodcutter {
     public void testWoodIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point3 = new Point(6, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(6, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Adjust the inventory so that there are no planks and no wood
         Utils.adjustInventoryTo(headquarter, PLANK, 0);
         Utils.adjustInventoryTo(headquarter, WOOD, 0);
 
         // Place tree
-        Point point2 = new Point(14, 6);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point2 = new Point(14, 6);
+        var tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         // Place store house
-        Point point4 = new Point(10, 4);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+        var point4 = new Point(10, 4);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point4);
 
         // Connect the store house to the headquarters
-        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         // Place the woodcutter
-        Point point1 = new Point(14, 4);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(14, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        // Connect the woodcutter with the store house
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), storehouse.getFlag());
+        // Connect the var with the store house
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), storehouse.getFlag());
 
         // Deliver the needed planks to the woodcutter
         Utils.deliverCargos(woodcutter, PLANK, 2);
@@ -828,39 +787,36 @@ public class TestWoodcutter {
     public void testWoodIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point3 = new Point(6, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(6, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Adjust the inventory so that there is no wood
         Utils.adjustInventoryTo(headquarter, WOOD, 0);
 
         // Place tree
-        Point point2 = new Point(14, 6);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point2 = new Point(14, 6);
+        var tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         // Place sawmill
-        Point point4 = new Point(10, 4);
-        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point4);
+        var point4 = new Point(10, 4);
+        var sawmill = map.placeBuilding(new Sawmill(player0), point4);
 
         // Construct the sawmill
         Utils.constructHouse(sawmill);
 
         // Connect the sawmill to the headquarters
-        Road road2 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
 
         // Place the woodcutter
-        Point point1 = new Point(14, 4);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(14, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        // Connect the woodcutter with the sawmill
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), sawmill.getFlag());
+        // Connect the var with the sawmill
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), sawmill.getFlag());
 
         // Deliver the needed planks to the woodcutter
         Utils.deliverCargos(woodcutter, PLANK, 2);
@@ -875,14 +831,14 @@ public class TestWoodcutter {
 
         assertEquals(woodcutter.getFlag().getStackedCargo().getFirst().getMaterial(), WOOD);
 
-        // Deliver wood to the sawmill so it only needs one more tree
+        // Deliver wood to the var so it only needs one more tree
         Utils.deliverCargos(sawmill, WOOD, 5);
 
         assertEquals(sawmill.getAmount(WOOD), 5);
         assertFalse(sawmill.needsMaterial(WOOD));
         assertEquals(sawmill.getCanHoldAmount(WOOD), 6);
 
-        // Stop production in the sawmill so it doesn't consume it's wood
+        // Stop production in the var so it doesn't consume it's wood
         sawmill.stopProduction();
 
         // Wait for the courier to pick up the cargo
@@ -907,33 +863,29 @@ public class TestWoodcutter {
     public void testWoodCargoIsCorrect() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        // Create game map
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point3 = new Point(6, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(6, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Place and grow the tree
-        Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point2 = new Point(12, 4);
+        var tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         // Place forester hut (is this needed for the test?)
-        Point point0 = new Point(14, 4);
-        Building hut = map.placeBuilding(new ForesterHut(player0), point0);
+        var point0 = new Point(14, 4);
+        var hut = map.placeBuilding(new ForesterHut(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(10, 4);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Place forester
-        Point point4 = new Point(12, 12);
-        Building hut2 = map.placeBuilding(new ForesterHut(player0), point4);
+        var point4 = new Point(12, 12);
+        var hut2 = map.placeBuilding(new ForesterHut(player0), point4);
 
         // Construct the forester hut
         constructHouse(woodcutter);
@@ -941,14 +893,14 @@ public class TestWoodcutter {
         constructHouse(hut2);
 
         // Place roads
-        Point point5 = new Point(9, 3);
+        var point5 = new Point(9, 3);
 
-        Road road0 = map.placeRoad(player0, headquarter.getFlag().getPosition(), point5, woodcutter.getFlag().getPosition());
-        Road road1 = map.placeAutoSelectedRoad(player0, hut.getFlag(), woodcutter.getFlag());
-        Road road2 = map.placeAutoSelectedRoad(player0, hut2.getFlag(), headquarter.getFlag());
+        var road0 = map.placeRoad(player0, headquarter.getFlag().getPosition(), point5, woodcutter.getFlag().getPosition());
+        var road1 = map.placeAutoSelectedRoad(player0, hut.getFlag(), woodcutter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, hut2.getFlag(), headquarter.getFlag());
 
         // Verify that the woodcutter is occupied
-        WoodcutterWorker woodcutterWorker = (WoodcutterWorker) Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter);
+        var woodcutterWorker = (WoodcutterWorker) Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter);
 
         // Wait for the woodcutter to rest
         assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
@@ -962,7 +914,7 @@ public class TestWoodcutter {
 
         assertFalse(woodcutterWorker.isInsideBuilding());
 
-        Point point = woodcutterWorker.getTarget();
+        var point = woodcutterWorker.getTarget();
 
         assertEquals(point, point2);
         assertTrue(woodcutterWorker.isTraveling());
@@ -980,7 +932,7 @@ public class TestWoodcutter {
         // Wait for the woodcutter to cut down the tree
         Utils.waitForWoodcutterToStopCutting(woodcutterWorker, map);
 
-        // Wait for the tree to fall down
+        // Wait for the var to fall down
         assertFalse(woodcutterWorker.isCuttingTree());
         assertTrue(map.getTreeAtPoint(point).isFalling());
 
@@ -1014,7 +966,7 @@ public class TestWoodcutter {
         assertNull(woodcutterWorker.getCargo());
         assertEquals(woodcutterWorker.getTarget(), woodcutter.getPosition());
 
-        Cargo cargo = woodcutter.getFlag().getStackedCargo().getFirst();
+        var cargo = woodcutter.getFlag().getStackedCargo().getFirst();
 
         assertEquals(cargo.getTarget(), headquarter);
     }
@@ -1023,24 +975,22 @@ public class TestWoodcutter {
     public void testWoodcutterHutWithoutTreesProducesNothing() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(10, 4);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Construct the forester hut
         constructHouse(woodcutter);
 
         // Manually place forester
-        WoodcutterWorker wcWorker = new WoodcutterWorker(player0, map);
+        var wcWorker = new WoodcutterWorker(player0, map);
 
         Utils.occupyBuilding(wcWorker, woodcutter);
 
@@ -1057,18 +1007,16 @@ public class TestWoodcutter {
     public void testWoodcutterOnlyCutsDownFullGrownTrees() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(10, 4);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Construct the woodcutter hut
         constructHouse(woodcutter);
@@ -1087,8 +1035,8 @@ public class TestWoodcutter {
 
         assertTrue(woodcutterWorker.isInsideBuilding());
 
-        Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.NEWLY_PLANTED);
+        var point2 = new Point(12, 4);
+        var tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.NEWLY_PLANTED);
 
         assertEquals(tree.getSize(), Tree.TreeSize.NEWLY_PLANTED);
 
@@ -1097,7 +1045,7 @@ public class TestWoodcutter {
 
         assertTrue(woodcutterWorker.isInsideBuilding());
 
-        // Grow tree to small
+        // Grow var to small
         for (int i = 0; i < 500; i++) {
             map.stepTime();
 
@@ -1106,7 +1054,7 @@ public class TestWoodcutter {
             }
         }
 
-        // Grow tree to medium
+        // Grow var to medium
         for (int i = 0; i < 500; i++) {
             map.stepTime();
 
@@ -1122,7 +1070,7 @@ public class TestWoodcutter {
 
         assertTrue(woodcutterWorker.isInsideBuilding());
 
-        // Grow the tree to large
+        // Grow the var to large
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         // Step time and make sure the forester leaves the hut
@@ -1135,21 +1083,19 @@ public class TestWoodcutter {
     public void testWoodcutterDoesNotCutDownPineappleTrees() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 10);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(10, 4);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Connect the woodcutter hut to the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         // Wait for the woodcutter to get constructed
         Utils.waitForBuildingToBeConstructed(woodcutter);
@@ -1157,7 +1103,7 @@ public class TestWoodcutter {
         // Wait for the woodcutter to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(woodcutter);
 
-        WoodcutterWorker woodcutterWorker = (WoodcutterWorker) woodcutter.getWorker();
+        var woodcutterWorker = (WoodcutterWorker) woodcutter.getWorker();
 
         assertNotNull(woodcutterWorker);
 
@@ -1169,20 +1115,20 @@ public class TestWoodcutter {
                     continue;
                 }
 
-                Point point = new Point(x, y);
+                var point = new Point(x, y);
 
                 if (map.isBuildingAtPoint(point) || map.isFlagAtPoint(point) || map.isRoadAtPoint(point)) {
                     continue;
                 }
 
-                Tree tree = map.placeTree(point, Tree.TreeType.PINE_APPLE, Tree.TreeSize.FULL_GROWN);
+                var tree = map.placeTree(point, Tree.TreeType.PINE_APPLE, Tree.TreeSize.FULL_GROWN);
 
                 tree.setSize(Tree.TreeSize.FULL_GROWN);
             }
         }
 
         // All pine apple trees should be fully grown
-        for (Tree tree : map.getTrees()) {
+        for (var tree : map.getTrees()) {
             assertEquals(tree.getSize(), Tree.TreeSize.FULL_GROWN);
         }
 
@@ -1198,42 +1144,40 @@ public class TestWoodcutter {
     public void testWoodcutterGoesOutToCutTreesSeveralTimes() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point3 = new Point(6, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(6, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Plant and grow trees
-        Point point2 = new Point(12, 4);
-        Tree tree0 = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point2 = new Point(12, 4);
+        var tree0 = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         // Place tree
-        Point point5 = new Point(11, 5);
-        Tree tree1 = map.placeTree(point5, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point5 = new Point(11, 5);
+        var tree1 = map.placeTree(point5, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
-        // Wait for the tree to grow
+        // Wait for the var to grow
         Utils.fastForwardUntilTreeIsGrown(tree0, map);
 
         // Place the woodcutter
-        Point point1 = new Point(10, 4);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        // Connect the woodcutter with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
+        // Connect the var with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         // Construct the forester hut
         constructHouse(woodcutter);
 
         // Manually place forester
-        WoodcutterWorker wcWorker = new WoodcutterWorker(player0, map);
+        var wcWorker = new WoodcutterWorker(player0, map);
 
         Utils.occupyBuilding(wcWorker, woodcutter);
 
-        // Wait for the woodcutter worker to leave the hut
+        // Wait for the var worker to leave the hut
         Utils.fastForward(100, map);
 
         assertFalse(wcWorker.isInsideBuilding());
@@ -1281,7 +1225,7 @@ public class TestWoodcutter {
         assertNull(wcWorker.getCargo());
         assertEquals(wcWorker.getTarget(), woodcutter.getPosition());
 
-        Cargo cargo = woodcutter.getFlag().getStackedCargo().getFirst();
+        var cargo = woodcutter.getFlag().getStackedCargo().getFirst();
 
         assertEquals(cargo.getTarget(), headquarter);
 
@@ -1306,26 +1250,24 @@ public class TestWoodcutter {
     public void testPositionIsCorrectWhenWoodcutterEntersHut() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(8, 6);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(8, 6);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        // Connect the woodcutter with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
+        // Connect the var with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         // Finish the woodcutter
         constructHouse(woodcutter);
 
-        // Run game logic twice, once to place courier and once to place woodcutter worker
+        // Run game logic twice, once to place courier and once to place var worker
         Utils.fastForward(2, map);
 
         WoodcutterWorker wcWorker = null;
@@ -1348,27 +1290,25 @@ public class TestWoodcutter {
     public void testWoodcutterWithoutConnectedStorageKeepsProducing() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Plant and grow trees
-        Point point2 = new Point(10, 8);
-        Tree tree0 = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point2 = new Point(10, 8);
+        var tree0 = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
-        Point point3 = new Point(11, 7);
-        Tree tree1 = map.placeTree(point3, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point3 = new Point(11, 7);
+        var tree1 = map.placeTree(point3, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         Utils.fastForwardUntilTreeIsGrown(tree0, map);
 
         // Place woodcutter
-        Point point26 = new Point(8, 8);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+        var point26 = new Point(8, 8);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         // Finish construction of the woodcutter
         constructHouse(woodcutter0);
@@ -1376,10 +1316,10 @@ public class TestWoodcutter {
         // Occupy the woodcutter
         Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
-        // Let the woodcutter worker rest
+        // Let the var worker rest
         Utils.fastForward(100, map);
 
-        // Wait for the woodcutter worker to go to the tree
+        // Wait for the var worker to go to the tree
         var worker = (WoodcutterWorker) woodcutter0.getWorker();
 
         assertTrue(worker.getTarget().equals(tree0.getPosition()) || worker.getTarget().equals(tree1.getPosition()));
@@ -1410,7 +1350,7 @@ public class TestWoodcutter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, woodcutter0.getPosition());
 
-        // Verify that the woodcutter worker puts the wood cargo at the flag
+        // Verify that the var worker puts the wood cargo at the flag
         map.stepTime();
 
         assertEquals(worker.getTarget(), woodcutter0.getFlag().getPosition());
@@ -1426,10 +1366,10 @@ public class TestWoodcutter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, woodcutter0.getPosition());
 
-        // Let the woodcutter worker rest
+        // Let the var worker rest
         Utils.fastForward(100, map);
 
-        // Wait for the woodcutter worker to go to the next tree
+        // Wait for the var worker to go to the next tree
         assertTrue(worker.getTarget().equals(tree0.getPosition()) || worker.getTarget().equals(tree1.getPosition()));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
@@ -1441,7 +1381,7 @@ public class TestWoodcutter {
 
         assertNotNull(worker.getCargo());
 
-        // Wait for the woodcutter worker to go back to the woodcutter
+        // Wait for the var worker to go back to the woodcutter
         assertEquals(worker.getTarget(), woodcutter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, woodcutter0.getPosition());
@@ -1461,24 +1401,22 @@ public class TestWoodcutter {
     public void testCargoProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Plant and grow trees
-        Point point2 = new Point(10, 8);
-        Tree tree0 = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point2 = new Point(10, 8);
+        var tree0 = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         Utils.fastForwardUntilTreeIsGrown(tree0, map);
 
         // Place woodcutter
-        Point point26 = new Point(8, 8);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+        var point26 = new Point(8, 8);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         // Finish construction of the woodcutter
         constructHouse(woodcutter0);
@@ -1486,11 +1424,11 @@ public class TestWoodcutter {
         // Occupy the woodcutter
         Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
-        // Let the woodcutter worker rest
+        // Let the var worker rest
         Utils.fastForward(100, map);
 
-        // Wait for the woodcutter worker to go to the tree
-        Worker worker = woodcutter0.getWorker();
+        // Wait for the var worker to go to the tree
+        var worker = woodcutter0.getWorker();
 
         assertEquals(worker.getTarget(), tree0.getPosition());
 
@@ -1503,12 +1441,12 @@ public class TestWoodcutter {
 
         assertNotNull(worker.getCargo());
 
-        // Wait for the woodcutter worker to go back to the woodcutter
+        // Wait for the var worker to go back to the woodcutter
         assertEquals(worker.getTarget(), woodcutter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, woodcutter0.getPosition());
 
-        // Verify that the woodcutter worker puts the wood cargo at the flag
+        // Verify that the var worker puts the wood cargo at the flag
         map.stepTime();
 
         assertEquals(worker.getTarget(), woodcutter0.getFlag().getPosition());
@@ -1520,14 +1458,14 @@ public class TestWoodcutter {
         assertFalse(woodcutter0.getFlag().getStackedCargo().isEmpty());
 
         // Wait to let the cargo remain at the flag without any connection to the storage
-        Cargo cargo = woodcutter0.getFlag().getStackedCargo().getFirst();
+        var cargo = woodcutter0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
         assertEquals(cargo.getPosition(), woodcutter0.getFlag().getPosition());
 
-        // Connect the woodcutter with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
+        // Connect the var with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
 
         // Assign a courier to the road
         Courier courier = new Courier(player0, map);
@@ -1569,18 +1507,16 @@ public class TestWoodcutter {
     public void testWoodcutterWorkerGoesBackToStorageWhenWoodcutterIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place woodcutter
-        Point point26 = new Point(8, 8);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+        var point26 = new Point(8, 8);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         // Finish construction of the woodcutter
         constructHouse(woodcutter0);
@@ -1604,7 +1540,7 @@ public class TestWoodcutter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
 
-        // Verify that the woodcutter worker is stored correctly in the headquarters
+        // Verify that the var worker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), amount + 1);
     }
 
@@ -1612,20 +1548,18 @@ public class TestWoodcutter {
     public void testWoodcutterWorkerGoesBackOnToStorageOnRoadsIfPossibleWhenWoodcutterIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place woodcutter
-        Point point26 = new Point(8, 8);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+        var point26 = new Point(8, 8);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
-        // Connect the woodcutter with the headquarters
+        // Connect the var with the headquarters
         map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         // Finish construction of the woodcutter
@@ -1635,7 +1569,7 @@ public class TestWoodcutter {
         Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Destroy the woodcutter
-        Worker worker = woodcutter0.getWorker();
+        var worker = woodcutter0.getWorker();
 
         assertTrue(worker.isInsideBuilding());
         assertEquals(worker.getPosition(), woodcutter0.getPosition());
@@ -1648,7 +1582,7 @@ public class TestWoodcutter {
 
         // Verify that the worker plans to use the roads
         boolean firstStep = true;
-        for (Point point : worker.getPlannedPath()) {
+        for (var point : worker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -1662,20 +1596,18 @@ public class TestWoodcutter {
     public void testDestroyedWoodcutterIsRemovedAfterSomeTime() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place woodcutter
-        Point point26 = new Point(8, 8);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+        var point26 = new Point(8, 8);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
-        // Connect the woodcutter with the headquarters
+        // Connect the var with the headquarters
         map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         // Finish construction of the woodcutter
@@ -1707,18 +1639,16 @@ public class TestWoodcutter {
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place woodcutter
-        Point point26 = new Point(8, 8);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+        var point26 = new Point(8, 8);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         // Finish construction of the woodcutter
         constructHouse(woodcutter0);
@@ -1735,18 +1665,16 @@ public class TestWoodcutter {
     public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place woodcutter
-        Point point26 = new Point(8, 8);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+        var point26 = new Point(8, 8);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         // Finish construction of the woodcutter
         constructHouse(woodcutter0);
@@ -1763,36 +1691,34 @@ public class TestWoodcutter {
     public void testProductionInWoodcutterCanBeStopped() throws Exception {
 
         // Create gamemap
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Plant and grow trees
-        Point point12 = new Point(10, 8);
-        Tree tree0 = map.placeTree(point12, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point12 = new Point(10, 8);
+        var tree0 = map.placeTree(point12, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         Utils.fastForwardUntilTreeIsGrown(tree0, map);
 
         // Place woodcutter
-        Point point1 = new Point(8, 6);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(8, 6);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        // Connect the woodcutter with the headquarters
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4);
+        // Connect the var with the headquarters
+        var point2 = new Point(6, 4);
+        var point3 = new Point(8, 4);
+        var point4 = new Point(9, 5);
+        var road0 = map.placeRoad(player0, point2, point3, point4);
 
         // Finish the woodcutter
         constructHouse(woodcutter);
 
         // Assign a worker to the woodcutter
-        WoodcutterWorker worker = new WoodcutterWorker(player0, map);
+        var worker = new WoodcutterWorker(player0, map);
 
         Utils.occupyBuilding(worker, woodcutter);
 
@@ -1834,39 +1760,37 @@ public class TestWoodcutter {
     public void testProductionInWoodcutterCanBeResumed() throws Exception {
 
         // Create gamemap
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Plant and grow trees
-        Point point12 = new Point(10, 8);
-        Tree tree0 = map.placeTree(point12, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point12 = new Point(10, 8);
+        var tree0 = map.placeTree(point12, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
-        Point point13 = new Point(8, 8);
-        Tree tree1 = map.placeTree(point13, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point13 = new Point(8, 8);
+        var tree1 = map.placeTree(point13, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         Utils.fastForwardUntilTreeIsGrown(tree0, map);
 
         // Place woodcutter
-        Point point1 = new Point(8, 6);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(8, 6);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        // Connect the woodcutter with the headquarters
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4);
+        // Connect the var with the headquarters
+        var point2 = new Point(6, 4);
+        var point3 = new Point(8, 4);
+        var point4 = new Point(9, 5);
+        var road0 = map.placeRoad(player0, point2, point3, point4);
 
         // Finish the woodcutter
         constructHouse(woodcutter);
 
         // Assign a worker to the woodcutter
-        WoodcutterWorker worker = new WoodcutterWorker(player0, map);
+        var worker = new WoodcutterWorker(player0, map);
 
         Utils.occupyBuilding(worker, woodcutter);
 
@@ -1915,35 +1839,31 @@ public class TestWoodcutter {
     public void testAssignedWoodcutterWorkerHasCorrectlySetPlayer() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        // Create game map
-        GameMap map = new GameMap(players, 50, 50);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 50, 50);
 
         // Place headquarters
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(20, 14);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(20, 14);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Finish construction of the woodcutter
         constructHouse(woodcutter0);
 
-        // Connect the woodcutter with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
+        // Connect the var with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
 
-        // Wait for woodcutter worker to get assigned and leave the headquarters
-        List<WoodcutterWorker> workers = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0);
+        // Wait for var worker to get assigned and leave the headquarters
+        var workers = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
 
         // Verify that the player is set correctly in the worker
-        WoodcutterWorker worker = workers.getFirst();
+        var worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1952,34 +1872,26 @@ public class TestWoodcutter {
     public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        Player player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-        players.add(player2);
-
-        // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1, player2), 100, 100);
 
         // Place player 2's headquarters
-        Point point10 = new Point(70, 70);
-        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
+        var point10 = new Point(70, 70);
+        var headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
         // Place player 0's headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarters
-        Point point1 = new Point(45, 5);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(45, 5);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Place fortress for player 0
-        Point point2 = new Point(17, 9);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        var point2 = new Point(17, 9);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         // Finish construction of the fortress
         constructHouse(fortress0);
@@ -1988,14 +1900,14 @@ public class TestWoodcutter {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         // Place woodcutter close to the new border
-        Point point4 = new Point(28, 18);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point4);
+        var point4 = new Point(28, 18);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point4);
 
         // Finish construction of the woodcutter
         constructHouse(woodcutter0);
 
         // Occupy the woodcutter
-        WoodcutterWorker worker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var worker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Verify that the worker goes back to its own storage when the fortress is torn down
         fortress0.tearDown();
@@ -2007,31 +1919,27 @@ public class TestWoodcutter {
     public void testWoodcutterDoesNotWalkStraightThroughHouse() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        // Create game map
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place the woodcutter
-        Point point1 = new Point(10, 4);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Place and grow the tree directly behind the woodcutter
-        Point point2 = new Point(9, 5);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point2 = new Point(9, 5);
+        var tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         // Construct the woodcutter
         constructHouse(woodcutter);
 
-        // Manually place woodcutter worker
-        WoodcutterWorker wcWorker = new WoodcutterWorker(player0, map);
+        // Manually place var worker
+        var wcWorker = new WoodcutterWorker(player0, map);
         Utils.occupyBuilding(wcWorker, woodcutter);
 
         // Wait for the woodcutter to rest
@@ -2070,35 +1978,33 @@ public class TestWoodcutter {
     public void testWoodcutterWorkerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place woodcutter
-        Point point2 = new Point(14, 4);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2.upLeft());
+        var point2 = new Point(14, 4);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2.upLeft());
 
         // Connect headquarters and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
 
-        // Wait for the woodcutter worker to be on the second road on its way to the flag
+        // Wait for the var worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0);
 
         WoodcutterWorker woodcutterWorker = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof WoodcutterWorker) {
                 woodcutterWorker = (WoodcutterWorker) worker;
             }
@@ -2111,18 +2017,18 @@ public class TestWoodcutter {
 
         map.stepTime();
 
-        // See that the woodcutter worker has started walking
+        // See that the var worker has started walking
         assertFalse(woodcutterWorker.isExactlyAtPoint());
 
         // Remove the next road
         map.removeRoad(road1);
 
-        // Verify that the woodcutter worker continues walking to the flag
+        // Verify that the var worker continues walking to the flag
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, flag0.getPosition());
 
         assertEquals(woodcutterWorker.getPosition(), flag0.getPosition());
 
-        // Verify that the woodcutter worker returns to the headquarters when it reaches the flag
+        // Verify that the var worker returns to the headquarters when it reaches the flag
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
@@ -2132,35 +2038,33 @@ public class TestWoodcutter {
     public void testWoodcutterWorkerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place woodcutter
-        Point point2 = new Point(14, 4);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2.upLeft());
+        var point2 = new Point(14, 4);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2.upLeft());
 
         // Connect headquarters and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
 
-        // Wait for the woodcutter worker to be on the second road on its way to the flag
+        // Wait for the var worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0);
 
         WoodcutterWorker woodcutterWorker = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof WoodcutterWorker) {
                 woodcutterWorker = (WoodcutterWorker) worker;
             }
@@ -2173,23 +2077,23 @@ public class TestWoodcutter {
 
         map.stepTime();
 
-        // See that the woodcutter worker has started walking
+        // See that the var worker has started walking
         assertFalse(woodcutterWorker.isExactlyAtPoint());
 
         // Remove the current road
         map.removeRoad(road0);
 
-        // Verify that the woodcutter worker continues walking to the flag
+        // Verify that the var worker continues walking to the flag
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, flag0.getPosition());
 
         assertEquals(woodcutterWorker.getPosition(), flag0.getPosition());
 
-        // Verify that the woodcutter worker continues to the final flag
+        // Verify that the var worker continues to the final flag
         assertEquals(woodcutterWorker.getTarget(), woodcutter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter0.getFlag().getPosition());
 
-        // Verify that the woodcutter worker goes out to woodcutter instead of going directly back
+        // Verify that the var worker goes out to woodcutter instead of going directly back
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
     }
 
@@ -2197,35 +2101,33 @@ public class TestWoodcutter {
     public void testWoodcutterWorkerReturnsToStorageIfWoodcutterIsDestroyed() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place woodcutter
-        Point point2 = new Point(14, 4);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2.upLeft());
+        var point2 = new Point(14, 4);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2.upLeft());
 
         // Connect headquarters and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
 
-        // Wait for the woodcutter worker to be on the second road on its way to the flag
+        // Wait for the var worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0);
 
         WoodcutterWorker woodcutterWorker = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof WoodcutterWorker) {
                 woodcutterWorker = (WoodcutterWorker) worker;
             }
@@ -2234,23 +2136,23 @@ public class TestWoodcutter {
         assertNotNull(woodcutterWorker);
         assertEquals(woodcutterWorker.getTarget(), woodcutter0.getPosition());
 
-        // Wait for the woodcutter worker to reach the first flag
+        // Wait for the var worker to reach the first flag
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, flag0.getPosition());
 
         map.stepTime();
 
-        // See that the woodcutter worker has started walking
+        // See that the var worker has started walking
         assertFalse(woodcutterWorker.isExactlyAtPoint());
 
         // Tear down the woodcutter
         woodcutter0.tearDown();
 
-        // Verify that the woodcutter worker continues walking to the next flag
+        // Verify that the var worker continues walking to the next flag
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter0.getFlag().getPosition());
 
         assertEquals(woodcutterWorker.getPosition(), woodcutter0.getFlag().getPosition());
 
-        // Verify that the woodcutter worker goes back to storage
+        // Verify that the var worker goes back to storage
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
     }
 
@@ -2258,18 +2160,16 @@ public class TestWoodcutter {
     public void testWoodcutterWorkerGoesOffroadBackToClosestStorageWhenWoodcutterIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place woodcutter
-        Point point26 = new Point(13, 13);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+        var point26 = new Point(13, 13);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         // Finish construction of the woodcutter
         constructHouse(woodcutter0);
@@ -2278,14 +2178,14 @@ public class TestWoodcutter {
         Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Place a second storage closer to the woodcutter
-        Point point2 = new Point(7, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(7, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         constructHouse(storehouse0);
 
         // Destroy the woodcutter
-        Worker woodcutterWorker = woodcutter0.getWorker();
+        var woodcutterWorker = woodcutter0.getWorker();
 
         assertTrue(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getPosition(), woodcutter0.getPosition());
@@ -2300,7 +2200,7 @@ public class TestWoodcutter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, storehouse0.getPosition());
 
-        // Verify that the woodcutter worker is stored correctly in the headquarters
+        // Verify that the var worker is stored correctly in the headquarters
         assertEquals(storehouse0.getAmount(WOODCUTTER_WORKER), amount + 1);
     }
 
@@ -2308,18 +2208,16 @@ public class TestWoodcutter {
     public void testWoodcutterWorkerReturnsOffroadAndAvoidsBurningStorageWhenWoodcutterIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place woodcutter
-        Point point26 = new Point(13, 13);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+        var point26 = new Point(13, 13);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         // Finish construction of the woodcutter
         constructHouse(woodcutter0);
@@ -2328,8 +2226,8 @@ public class TestWoodcutter {
         Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Place a second storage closer to the woodcutter
-        Point point2 = new Point(7, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(7, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         constructHouse(storehouse0);
@@ -2338,7 +2236,7 @@ public class TestWoodcutter {
         storehouse0.tearDown();
 
         // Destroy the woodcutter
-        Worker woodcutterWorker = woodcutter0.getWorker();
+        var woodcutterWorker = woodcutter0.getWorker();
 
         assertTrue(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getPosition(), woodcutter0.getPosition());
@@ -2353,7 +2251,7 @@ public class TestWoodcutter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
 
-        // Verify that the woodcutter worker is stored correctly in the headquarters
+        // Verify that the var worker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), amount + 1);
     }
 
@@ -2361,18 +2259,16 @@ public class TestWoodcutter {
     public void testWoodcutterWorkerReturnsOffroadAndAvoidsDestroyedStorageWhenWoodcutterIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place woodcutter
-        Point point26 = new Point(13, 13);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+        var point26 = new Point(13, 13);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         // Finish construction of the woodcutter
         constructHouse(woodcutter0);
@@ -2381,8 +2277,8 @@ public class TestWoodcutter {
         Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Place a second storage closer to the woodcutter
-        Point point2 = new Point(7, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(7, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         constructHouse(storehouse0);
@@ -2394,7 +2290,7 @@ public class TestWoodcutter {
         Utils.waitForBuildingToBurnDown(storehouse0);
 
         // Destroy the woodcutter
-        Worker woodcutterWorker = woodcutter0.getWorker();
+        var woodcutterWorker = woodcutter0.getWorker();
 
         assertTrue(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getPosition(), woodcutter0.getPosition());
@@ -2409,7 +2305,7 @@ public class TestWoodcutter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
 
-        // Verify that the woodcutter worker is stored correctly in the headquarters
+        // Verify that the var worker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), amount + 1);
     }
 
@@ -2417,18 +2313,16 @@ public class TestWoodcutter {
     public void testWoodcutterWorkerReturnsOffroadAndAvoidsUnfinishedStorageWhenWoodcutterIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place woodcutter
-        Point point26 = new Point(13, 13);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+        var point26 = new Point(13, 13);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         // Finish construction of the woodcutter
         constructHouse(woodcutter0);
@@ -2437,11 +2331,11 @@ public class TestWoodcutter {
         Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Place a second storage closer to the woodcutter
-        Point point2 = new Point(7, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(7, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Destroy the woodcutter
-        Worker woodcutterWorker = woodcutter0.getWorker();
+        var woodcutterWorker = woodcutter0.getWorker();
 
         assertTrue(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getPosition(), woodcutter0.getPosition());
@@ -2456,7 +2350,7 @@ public class TestWoodcutter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
 
-        // Verify that the woodcutter worker is stored correctly in the headquarters
+        // Verify that the var worker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), amount + 1);
     }
 
@@ -2464,27 +2358,25 @@ public class TestWoodcutter {
     public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place woodcutter
-        Point point26 = new Point(13, 13);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+        var point26 = new Point(13, 13);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         // Place road to connect the headquarters and the woodcutter
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
 
         // Finish construction of the woodcutter
         constructHouse(woodcutter0);
 
         // Wait for a worker to start walking to the building
-        Worker worker = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0).getFirst();
+        var worker = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, woodcutter0.getFlag().getPosition());
@@ -2506,38 +2398,36 @@ public class TestWoodcutter {
     public void testTwoWoodcuttersTryToCutDownSameTree() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(9, 9);
+        var point0 = new Point(9, 9);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place and grow the tree
-        Point point1 = new Point(12, 12);
-        Tree tree = map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point1 = new Point(12, 12);
+        var tree = map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         // Place the woodcutters
-        Point point2 = new Point(7, 5);
-        Point point3 = new Point(13, 5);
+        var point2 = new Point(7, 5);
+        var point3 = new Point(13, 5);
 
         assertNotNull(map.isAvailableHousePoint(player0, point2));
         assertNotNull(map.isAvailableHousePoint(player0, point3));
 
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
-        Woodcutter woodcutter1 = map.placeBuilding(new Woodcutter(player0), point3);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
+        var woodcutter1 = map.placeBuilding(new Woodcutter(player0), point3);
 
         // Construct the woodcutters
         constructHouse(woodcutter0);
         constructHouse(woodcutter1);
 
         // Manually place woodcutters
-        WoodcutterWorker wcWorker0 = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
-        WoodcutterWorker wcWorker1 = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter1);
+        var wcWorker0 = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var wcWorker1 = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter1);
 
         // Wait for the woodcutters to leave the buildings and try to cut down the same tree
         Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 2, player0);
@@ -2600,24 +2490,22 @@ public class TestWoodcutter {
     public void testWoodcutterHutWithoutResourcesHasZeroProductivity() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter hut
-        Point point1 = new Point(7, 9);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(7, 9);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Finish construction of the woodcutter hut
         constructHouse(woodcutter0);
 
         // Populate the woodcutter hut
-        Worker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         assertTrue(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getHome(), woodcutter0);
@@ -2628,6 +2516,7 @@ public class TestWoodcutter {
             assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
             assertNull(woodcutterWorker.getCargo());
             assertEquals(woodcutter0.getProductivity(), 0);
+
             map.stepTime();
         }
     }
@@ -2636,18 +2525,16 @@ public class TestWoodcutter {
     public void testWoodcutterHutWithAbundantResourcesHasFullProductivity() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter hut
-        Point point1 = new Point(7, 9);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(7, 9);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Connect the woodcutter hut with the headquarters
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
@@ -2692,24 +2579,22 @@ public class TestWoodcutter {
     public void testWoodcutterHutLosesProductivityWhenResourcesRunOut() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter hut
-        Point point1 = new Point(7, 9);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(7, 9);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Finish construction of the woodcutter hut
         constructHouse(woodcutter0);
 
         // Populate the woodcutter hut
-        Worker woodcutterWorker0 = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var woodcutterWorker0 = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         assertTrue(woodcutterWorker0.isInsideBuilding());
         assertEquals(woodcutterWorker0.getHome(), woodcutter0);
@@ -2726,7 +2611,6 @@ public class TestWoodcutter {
 
         // Make the woodcutter take down trees until the trees are gone
         for (int i = 0; i < 5000; i++) {
-
             map.stepTime();
 
             if (map.getTrees().isEmpty()) {
@@ -2748,18 +2632,16 @@ public class TestWoodcutter {
     public void testUnoccupiedWoodcutterHutHasNoProductivity() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter hut
-        Point point1 = new Point(7, 9);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(7, 9);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Finish construction of the woodcutter hut
         constructHouse(woodcutter0);
@@ -2776,24 +2658,22 @@ public class TestWoodcutter {
     public void testWoodcutterCanProduce() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(10, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Finish construction of the woodcutter
         constructHouse(woodcutter0);
 
         // Populate the woodcutter
-        Worker woodcutterWorker0 = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var woodcutterWorker0 = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Verify that the hunter hut can produce
         assertTrue(woodcutter0.canProduce());
@@ -2803,18 +2683,16 @@ public class TestWoodcutter {
     public void testWoodcutterReportsCorrectOutput() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(6, 12);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(6, 12);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Construct the woodcutter
         constructHouse(woodcutter0);
@@ -2828,25 +2706,23 @@ public class TestWoodcutter {
     public void testWoodcutterReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(6, 12);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(6, 12);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Verify that the reported needed construction material is correct
         assertEquals(woodcutter0.getTypesOfMaterialNeeded().size(), 1);
         assertTrue(woodcutter0.getTypesOfMaterialNeeded().contains(PLANK));
         assertEquals(woodcutter0.getCanHoldAmount(PLANK), 2);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == PLANK) {
                 continue;
             }
@@ -2859,18 +2735,16 @@ public class TestWoodcutter {
     public void testWoodcutterReportsCorrectMaterialsNeededForProduction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(6, 12);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(6, 12);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Construct the woodcutter
         constructHouse(woodcutter0);
@@ -2878,7 +2752,7 @@ public class TestWoodcutter {
         // Verify that the reported needed construction material is correct
         assertEquals(woodcutter0.getTypesOfMaterialNeeded().size(), 0);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             assertEquals(woodcutter0.getCanHoldAmount(material), 0);
         }
     }
@@ -2887,30 +2761,27 @@ public class TestWoodcutter {
     public void testWoodcutterWaitsWhenFlagIsFull() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 30, 30);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 30, 30);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(16, 6);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(16, 6);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Place trees
-        Point point2 = new Point(18, 6);
-        Point point3 = new Point(19, 7);
-        Point point4 = new Point(20, 6);
-        Tree tree0 = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
-        Tree tree1 = map.placeTree(point3, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
-        Tree tree2 = map.placeTree(point4, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point2 = new Point(18, 6);
+        var point3 = new Point(19, 7);
+        var point4 = new Point(20, 6);
+        var tree0 = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var tree1 = map.placeTree(point3, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var tree2 = map.placeTree(point4, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
-        // Connect the woodcutter with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
+        // Connect the var with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         // Wait for the woodcutter to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(woodcutter);
@@ -2922,15 +2793,15 @@ public class TestWoodcutter {
         // Remove the road
         map.removeRoad(road0);
 
-        // Verify that the woodcutter waits for the flag to get empty and produces nothing
+        // Verify that the var waits for the flag to get empty and produces nothing
         for (int i = 0; i < 600; i++) {
             assertEquals(woodcutter.getFlag().getStackedCargo().size(), 8);
 
             map.stepTime();
         }
 
-        // Reconnect the woodcutter with the headquarters
-        Road road1 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
+        // Reconnect the var with the headquarters
+        var road1 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
         Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
@@ -2956,30 +2827,27 @@ public class TestWoodcutter {
     public void testWoodcutterDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 30, 30);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 30, 30);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(16, 6);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(16, 6);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Place trees
-        Point point2 = new Point(18, 6);
-        Point point3 = new Point(19, 7);
-        Point point4 = new Point(20, 6);
-        Tree tree0 = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
-        Tree tree1 = map.placeTree(point3, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
-        Tree tree2 = map.placeTree(point4, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point2 = new Point(18, 6);
+        var point3 = new Point(19, 7);
+        var point4 = new Point(20, 6);
+        var tree0 = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var tree1 = map.placeTree(point3, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var tree2 = map.placeTree(point4, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
-        // Connect the woodcutter with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
+        // Connect the var with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         // Wait for the woodcutter to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(woodcutter);
@@ -2991,18 +2859,18 @@ public class TestWoodcutter {
         // Remove the road
         map.removeRoad(road0);
 
-        // The woodcutter waits for the flag to get empty and produces nothing
+        // The var waits for the flag to get empty and produces nothing
         for (int i = 0; i < 500; i++) {
             assertEquals(woodcutter.getFlag().getStackedCargo().size(), 8);
 
             map.stepTime();
         }
 
-        // Reconnect the woodcutter with the headquarters
-        Road road1 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
+        // Reconnect the var with the headquarters
+        var road1 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 600; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -3039,24 +2907,22 @@ public class TestWoodcutter {
     public void testWhenWoodDeliveryAreBlockedWoodcutterFillsUpFlagAndThenStops() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place Woodcutter
-        Point point1 = new Point(7, 9);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(7, 9);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        // Place road to connect the woodcutter with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        // Place road to connect the var with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         // Place trees
-        for (Point point : Utils.getAreaInsideHexagon(6, woodcutter0.getPosition())) {
+        for (var point : Utils.getAreaInsideHexagon(6, woodcutter0.getPosition())) {
             try {
                 map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
             } catch (Exception e) {}
@@ -3097,28 +2963,26 @@ public class TestWoodcutter {
     public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndWoodcutterIsTornDown() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
-        Point point1 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(5, 5);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Place woodcutter
-        Point point2 = new Point(18, 6);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
+        var point2 = new Point(18, 6);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
 
         // Place road to connect the storehouse with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
         // Place road to connect the headquarters with the woodcutter
-        Road road1 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         // Add a lot of planks and stones to the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -3130,7 +2994,7 @@ public class TestWoodcutter {
         // Wait for the woodcutter and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, woodcutter0);
 
-        Worker woodcutterWorker0 = woodcutter0.getWorker();
+        var woodcutterWorker0 = woodcutter0.getWorker();
 
         assertTrue(woodcutterWorker0.isInsideBuilding());
         assertEquals(woodcutterWorker0.getHome(), woodcutter0);
@@ -3158,28 +3022,26 @@ public class TestWoodcutter {
     public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndWoodcutterIsTornDown() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
-        Point point1 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(5, 5);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Place woodcutter
-        Point point2 = new Point(18, 6);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
+        var point2 = new Point(18, 6);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
 
         // Place road to connect the storehouse with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
         // Place road to connect the headquarters with the woodcutter
-        Road road1 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         // Add a lot of planks and stones to the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -3191,7 +3053,7 @@ public class TestWoodcutter {
         // Wait for the woodcutter and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, woodcutter0);
 
-        Worker woodcutterWorker0 = woodcutter0.getWorker();
+        var woodcutterWorker0 = woodcutter0.getWorker();
 
         assertTrue(woodcutterWorker0.isInsideBuilding());
         assertEquals(woodcutterWorker0.getHome(), woodcutter0);
@@ -3221,14 +3083,12 @@ public class TestWoodcutter {
     public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, WOODCUTTER_WORKER, 1);
@@ -3238,7 +3098,7 @@ public class TestWoodcutter {
         headquarter0.pushOutAll(WOODCUTTER_WORKER);
 
         for (int i = 0; i < 10; i++) {
-            Worker worker = Utils.waitForWorkerOutsideBuilding(WoodcutterWorker.class, player0);
+            var worker = Utils.waitForWorkerOutsideBuilding(WoodcutterWorker.class, player0);
 
             assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), 0);
             assertEquals(worker.getPosition(), headquarter0.getPosition());
@@ -3259,14 +3119,12 @@ public class TestWoodcutter {
     public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, WOODCUTTER_WORKER, 1);
@@ -3274,7 +3132,7 @@ public class TestWoodcutter {
         headquarter0.blockDeliveryOfMaterial(WOODCUTTER_WORKER);
         headquarter0.pushOutAll(WOODCUTTER_WORKER);
 
-        Worker worker = Utils.waitForWorkerOutsideBuilding(WoodcutterWorker.class, player0);
+        var worker = Utils.waitForWorkerOutsideBuilding(WoodcutterWorker.class, player0);
 
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
@@ -3304,21 +3162,19 @@ public class TestWoodcutter {
     public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(7, 9);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(7, 9);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        // Place road to connect the woodcutter with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        // Place road to connect the var with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
@@ -3328,11 +3184,11 @@ public class TestWoodcutter {
         Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter0);
 
         /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
-           blocked in the headquarter */
+           blocked in the headquarters */
        
         headquarter0.blockDeliveryOfMaterial(WOODCUTTER_WORKER);
 
-        Worker worker = woodcutter0.getWorker();
+        var worker = woodcutter0.getWorker();
 
         woodcutter0.tearDown();
 
@@ -3364,21 +3220,19 @@ public class TestWoodcutter {
     public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(7, 9);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(7, 9);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        // Place road to connect the woodcutter with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        // Place road to connect the var with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
@@ -3386,15 +3240,15 @@ public class TestWoodcutter {
         // Wait for the woodcutter to get constructed
         Utils.waitForBuildingToBeConstructed(woodcutter0);
 
-        // Wait for a woodcutter worker to start walking to the woodcutter
-        WoodcutterWorker woodcutterWorker = Utils.waitForWorkerOutsideBuilding(WoodcutterWorker.class, player0);
+        // Wait for a var worker to start walking to the woodcutter
+        var woodcutterWorker = Utils.waitForWorkerOutsideBuilding(WoodcutterWorker.class, player0);
 
-        // Wait for the woodcutter worker to go past the headquarter's flag
+        // Wait for the var worker to go past the headquarter's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
-        // Verify that the woodcutter worker goes away and dies when the house has been torn down and storage is not possible
+        // Verify that the var worker goes away and dies when the house has been torn down and storage is not possible
         assertEquals(woodcutterWorker.getTarget(), woodcutter0.getPosition());
 
         headquarter0.blockDeliveryOfMaterial(WOODCUTTER_WORKER);
@@ -3411,7 +3265,7 @@ public class TestWoodcutter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutterWorker.getTarget());
 
-        Point point = woodcutterWorker.getPosition();
+        var point = woodcutterWorker.getPosition();
         for (int i = 0; i < 100; i++) {
             assertTrue(woodcutterWorker.isDead());
             assertEquals(woodcutterWorker.getPosition(), point);
@@ -3427,14 +3281,12 @@ public class TestWoodcutter {
     public void testWoodcutterIgnoresUnreachableTree() throws InvalidUserActionException {
 
         // Create game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a tree surrounded by a lake
         var point1 = new Point(12, 8);
@@ -3448,16 +3300,16 @@ public class TestWoodcutter {
         Utils.surroundPointWithWater(point1.left().downLeft(), map);
 
         // Place woodcutter
-        Point point2 = new Point(12, 4);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
+        var point2 = new Point(12, 4);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
 
-        // Place road to connect the woodcutter with the headquarters and wait for it to get constructed and occupied
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        // Place road to connect the var with the headquarters and wait for it to get constructed and occupied
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         Utils.waitForBuildingToBeConstructed(woodcutter0);
         Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter0);
 
-        // Verify that the woodcutter worker stays in the house and doesn't go out to cut the tree
+        // Verify that the var worker stays in the house and doesn't go out to cut the tree
         assertNull(map.findWayOffroad(woodcutter0.getFlag().getPosition(), tree0.getPosition(), null));
 
         for (int i = 0; i < 2_000; i++) {
@@ -3495,7 +3347,7 @@ public class TestWoodcutter {
         Utils.waitForBuildingsToBeConstructed(woodcutter0, woodcutter1);
         Utils.waitForNonMilitaryBuildingsToGetPopulated(woodcutter0, woodcutter1);
 
-        // Wait for the first woodcutter worker to start cutting down the tree
+        // Wait for the first var worker to start cutting down the tree
         var woodcutterWorker0 = (WoodcutterWorker) woodcutter0.getWorker();
 
         for (int i = 0; i < 2_000; i++) {
@@ -3549,7 +3401,7 @@ public class TestWoodcutter {
 
         var woodcutterWorker0 = (WoodcutterWorker) woodcutter0.getWorker();
 
-        // Wait for the second woodcutter worker to go out to cut down the tree. Cheat by only stepping its time
+        // Wait for the second var worker to go out to cut down the tree. Cheat by only stepping its time
         var woodcutterWorker1 = (WoodcutterWorker) woodcutter1.getWorker();
 
         for (int i = 0; i < 2_000; i++) {
@@ -3563,7 +3415,7 @@ public class TestWoodcutter {
         assertFalse(woodcutterWorker1.isInsideBuilding());
         assertEquals(woodcutterWorker1.getTarget(), point4);
 
-        // Wait for the first woodcutter worker to start cutting down the tree. Cheat by only stepping its time
+        // Wait for the first var worker to start cutting down the tree. Cheat by only stepping its time
         for (int i = 0; i < 2_000; i++) {
             if (woodcutterWorker0.isCuttingTree()) {
                 break;
@@ -3575,7 +3427,7 @@ public class TestWoodcutter {
         assertTrue(woodcutterWorker0.isCuttingTree());
         assertEquals(woodcutterWorker0.getPosition(), point4);
 
-        // Verify that the second woodcutter worker doesn't start cutting down the tree and instead goes back home.
+        // Verify that the second var worker doesn't start cutting down the tree and instead goes back home.
         // Cheat by only stepping its time.
         for (int i = 0; i < 2_000; i++) {
             if (woodcutterWorker1.getPosition().equals(point4)) {
@@ -3608,4 +3460,7 @@ public class TestWoodcutter {
         assertFalse(woodcutterWorker1.isCuttingTree());
         assertEquals(woodcutterWorker1.getPosition(), woodcutter1.getPosition());
     }
+
+    // TODO: test woodcutter goes out to cut tree and when it reaches the tree someone else already removed it.
+    // - can be empty, flag, house, crop, road instead
 }

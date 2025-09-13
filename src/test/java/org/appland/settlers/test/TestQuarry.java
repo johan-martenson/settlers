@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
@@ -16,8 +10,6 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Stonemason;
 import org.appland.settlers.model.actors.Worker;
@@ -29,8 +21,6 @@ import org.appland.settlers.model.buildings.Quarry;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
@@ -50,92 +40,90 @@ public class TestQuarry {
     @Test
     public void testQuarryOnlyNeedsTwoPlanksForConstruction() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        // Place headquarter
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Place quarry */
-        Point point22 = new Point(6, 12);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point22);
+        // Place quarry
+        var point22 = new Point(6, 12);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point22);
 
-        /* Deliver two planks */
-        Cargo cargo = new Cargo(PLANK, map);
+        // Deliver two planks
+        var cargo = new Cargo(PLANK, map);
 
         quarry0.putCargo(cargo);
         quarry0.putCargo(cargo);
 
-        /* Assign builder */
+        // Assign builder
         Utils.assignBuilder(quarry0);
 
-        /* Verify that this is enough to construct the quarry */
+        // Verify that this is enough to construct the quarry
         for (int i = 0; i < 100; i++) {
             assertTrue(quarry0.isUnderConstruction());
+            assertFalse(quarry0.isReady());
 
             map.stepTime();
         }
 
         assertTrue(quarry0.isReady());
+        assertFalse(quarry0.isUnderConstruction());
     }
 
     @Test
     public void testQuarryCannotBeConstructedWithOnePlank() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        // Place headquarter
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Place quarry */
-        Point point22 = new Point(6, 12);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point22);
+        // Place quarry
+        var point22 = new Point(6, 12);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point22);
 
-        /* Deliver two planks */
-        Cargo cargo = new Cargo(PLANK, map);
+        // Deliver two planks
+        var cargo = new Cargo(PLANK, map);
 
         quarry0.putCargo(cargo);
 
-        /* Assign builder */
+        // Assign builder
         Utils.assignBuilder(quarry0);
 
-        /* Verify that this is enough to construct the quarry */
+        // Verify that this is enough to construct the quarry
         for (int i = 0; i < 500; i++) {
             assertTrue(quarry0.isUnderConstruction());
+            assertFalse(quarry0.isReady());
 
             map.stepTime();
         }
 
         assertFalse(quarry0.isReady());
+        assertTrue(quarry0.isUnderConstruction());
     }
 
     @Test
     public void testFinishedQuarryNeedsWorker() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarter */
-        Point point0 = new Point(10, 10);
+        // Place headquarter
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(8, 6);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(8, 6);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Verify that a finished quarry needs a worker */
+        // Verify that a finished quarry needs a worker
         constructHouse(quarry);
 
         assertTrue(quarry.isReady());
@@ -145,143 +133,136 @@ public class TestQuarry {
     @Test
     public void testStonemasonIsAssignedToFinishedHouse() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(8, 6);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(8, 6);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Connect the quarry with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
+        // Connect the quarry with the headquarter
+        var road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
 
-        /* Finish the woodcutter */
+        // Finish the woodcutter
         constructHouse(quarry);
 
-        /* Run game logic twice, once to place courier and once to place woodcutter worker */
+        // Run game logic twice, once to place courier and once to place woodcutter worker
         Utils.fastForward(2, map);
 
-        /* Verify that the right amount of workers are added to the map */
+        // Verify that the right amount of workers are added to the map
         assertTrue(map.getWorkers().size() >= 3);
 
-        /* Verify that the map contains a stonemason */
+        // Verify that the map contains a stonemason
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Stonemason.class);
     }
 
     @Test
     public void testStonemasonIsNotASoldier() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(8, 6);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(8, 6);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Connect the quarry with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
+        // Connect the quarry with the headquarter
+        var road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
 
-        /* Finish the woodcutter */
+        // Finish the woodcutter
         constructHouse(quarry);
 
-        /* Wait for a stonemason to walk out */
+        // Wait for a stonemason to walk out
         Stonemason stonemason0 = Utils.waitForWorkerOutsideBuilding(Stonemason.class, player0);
 
-        /* Verify that the stonemason is not a soldier */
+        // Verify that the stonemason is not a soldier
         assertFalse(stonemason0.isSoldier());
     }
 
     @Test
     public void testStonemasonIsCreatedFromPickAxe() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Remove all stone masons from the headquarter and add a pick axe */
+        // Remove all stonemasons from the headquarter and add a pick axe
         Utils.adjustInventoryTo(headquarter, STONEMASON, 0);
         Utils.adjustInventoryTo(headquarter, Material.PICK_AXE, 1);
 
-        /* Place quarry */
-        Point point1 = new Point(8, 6);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(8, 6);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Connect the quarry with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
+        // Connect the quarry with the headquarter
+        var road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
 
-        /* Finish the woodcutter */
+        // Finish the woodcutter
         constructHouse(quarry);
 
-        /* Run game logic twice, once to place courier and once to place woodcutter worker */
+        // Run game logic twice, once to place courier and once to place woodcutter worker
         Utils.fastForward(2, map);
 
-        /* Verify that the right amount of workers are added to the map */
+        // Verify that the right amount of workers are added to the map
         assertTrue(map.getWorkers().size() >= 3);
 
-        /* Verify that the map contains a stonemason */
+        // Verify that the map contains a stonemason
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Stonemason.class);
     }
 
     @Test
     public void testArrivedStonemasonRestsInHutAndThenLeaves() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarter */
-        Point point0 = new Point(10, 10);
+        // Place headquarter
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(10, 4);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(10, 4);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Place stone */
-        Point point2 = new Point(12, 4);
-        Stone stone = map.placeStone(point2, STONE_1, 7);
+        // Place stone
+        var point2 = new Point(12, 4);
+        var stone = map.placeStone(point2, STONE_1, 7);
 
-        /* Construct the quarry */
+        // Construct the quarry
         constructHouse(quarry);
 
-        /* Assign a stonemason to the quarry */
-        Stonemason stonemason = new Stonemason(player0, map);
+        // Assign a stonemason to the quarry
+        var stonemason = new Stonemason(player0, map);
 
         Utils.occupyBuilding(stonemason, quarry);
 
         assertTrue(stonemason.isInsideBuilding());
 
-        /* Run the game logic 99 times and make sure the forester stays in the hut */
+        // Run the game logic 99 times and make sure the forester stays in the hut
         for (int i = 0; i < 99; i++) {
             assertTrue(stonemason.isInsideBuilding());
+
             map.stepTime();
         }
 
         assertTrue(stonemason.isInsideBuilding());
 
-        /* Step once and make sure the forester goes out of the hut */
+        // Step once and make sure the forester goes out of the hut
         map.stepTime();
 
         assertFalse(stonemason.isInsideBuilding());
@@ -290,49 +271,48 @@ public class TestQuarry {
     @Test
     public void testStonemasonFindsSpotToGetStone() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarter */
-        Point point0 = new Point(10, 10);
+        // Place headquarter
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(10, 4);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(10, 4);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Place stone */
-        Point point2 = new Point(12, 4);
-        Stone stone = map.placeStone(point2, STONE_1, 7);
+        // Place stone
+        var point2 = new Point(12, 4);
+        var stone = map.placeStone(point2, STONE_1, 7);
 
-        /* Construct the quarry */
+        // Construct the quarry
         constructHouse(quarry);
 
-        /* Assign a stonemason to the quarry */
-        Stonemason stonemason = new Stonemason(player0, map);
+        // Assign a stonemason to the quarry
+        var stonemason = new Stonemason(player0, map);
 
         Utils.occupyBuilding(stonemason, quarry);
 
         assertTrue(stonemason.isInsideBuilding());
 
-        /* Wait for the stonemason to rest */
+        // Wait for the stonemason to rest
         Utils.fastForward(99, map);
 
         assertTrue(stonemason.isInsideBuilding());
         assertTrue(map.isStoneAtPoint(point2));
 
-        /* Step once and make sure the stone mason goes out of the hut */
+        // Step once and make sure the stonemason goes out of the hut
         map.stepTime();
 
         assertFalse(stonemason.isInsideBuilding());
 
-        Point point = stonemason.getTarget();
+        var point = stonemason.getTarget();
+
         assertNotNull(point);
 
-        /* Verify that the stonemason has chosen a correct spot */
+        // Verify that the stonemason has chosen a correct spot
         assertEquals(point, point2);
         assertTrue(stonemason.isTraveling() || point.equals(stonemason.getPosition()));
         assertFalse(map.isBuildingAtPoint(point));
@@ -341,44 +321,42 @@ public class TestQuarry {
     @Test
     public void testStonemasonReachesPointToGetStone() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarter */
-        Point point0 = new Point(10, 10);
+        // Place headquarter
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(10, 4);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(10, 4);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Place stone */
-        Point point2 = new Point(11, 5);
-        Stone stone = map.placeStone(point2, STONE_1, 7);
+        // Place stone
+        var point2 = new Point(11, 5);
+        var stone = map.placeStone(point2, STONE_1, 7);
 
-        /* Construct the forester hut */
+        // Construct the forester hut
         constructHouse(quarry);
 
-        /* Assign a stonemason to the quarry */
-        Stonemason stonemason = new Stonemason(player0, map);
+        // Assign a stonemason to the quarry
+        var stonemason = new Stonemason(player0, map);
 
         Utils.occupyBuilding(stonemason, quarry);
 
-        /* Wait for the stonemason to rest */
+        // Wait for the stonemason to rest
         Utils.fastForward(99, map);
 
         assertTrue(stonemason.isInsideBuilding());
         assertTrue(map.isStoneAtPoint(point2));
 
-        /* Step once to let the stonemason go out to get stone */
+        // Step once to let the stonemason go out to get stone
         map.stepTime();
 
         assertFalse(stonemason.isInsideBuilding());
 
-        Point point = stonemason.getTarget();
+        var point = stonemason.getTarget();
 
         assertEquals(stonemason.getTarget(), stone.getPosition());
         assertEquals(stonemason.getTarget(), point2);
@@ -386,7 +364,7 @@ public class TestQuarry {
 
         map.stepTime();
 
-        /* Wait for the stonemason to arrive if it isn't already at the right spot */
+        // Wait for the stonemason to arrive if it isn't already at the right spot
         if (!stonemason.isArrived()) {
             Utils.fastForwardUntilWorkersReachTarget(map, stonemason);
         }
@@ -400,51 +378,49 @@ public class TestQuarry {
     @Test
     public void testStonemasonGetsStone() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarter */
-        Point point0 = new Point(10, 10);
+        // Place headquarter
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(10, 4);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(10, 4);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Place stone */
-        Point point2 = new Point(11, 5);
-        Stone stone = map.placeStone(point2, STONE_1, 7);
+        // Place stone
+        var point2 = new Point(11, 5);
+        var stone = map.placeStone(point2, STONE_1, 7);
 
-        /* Construct the quarry */
+        // Construct the quarry
         constructHouse(quarry);
 
-        /* Assign a stonemason to the quarry */
-        Stonemason stonemason = new Stonemason(player0, map);
+        // Assign a stonemason to the quarry
+        var stonemason = new Stonemason(player0, map);
 
         Utils.occupyBuilding(stonemason, quarry);
 
-        /* Wait for the stonemason to rest */
+        // Wait for the stonemason to rest
         Utils.fastForward(99, map);
 
         assertTrue(stonemason.isInsideBuilding());
         assertTrue(map.isStoneAtPoint(point2));
 
-        /* Step once to let the stonemason go out to get stone */
+        // Step once to let the stonemason go out to get stone
         map.stepTime();
 
         assertFalse(stonemason.isInsideBuilding());
 
-        Point point = stonemason.getTarget();
+        var point = stonemason.getTarget();
 
         assertEquals(stonemason.getTarget(), stone.getPosition());
         assertTrue(stonemason.isTraveling());
 
         map.stepTime();
 
-        /* Let the stonemason reach the chosen spot if it isn't already there */
+        // Let the stonemason reach the chosen spot if it isn't already there
         if (!stonemason.isArrived()) {
             Utils.fastForwardUntilWorkersReachTarget(map, stonemason);
         }
@@ -453,7 +429,7 @@ public class TestQuarry {
         assertEquals(stonemason.getPosition(), stone.getPosition());
         assertTrue(stonemason.isGettingStone());
 
-        /* Verify that the stonemason gets stone */
+        // Verify that the stonemason gets stone
         for (int i = 0; i < 49; i++) {
             assertTrue(stonemason.isGettingStone());
             map.stepTime();
@@ -461,7 +437,7 @@ public class TestQuarry {
 
         assertTrue(stonemason.isGettingStone());
 
-        /* Verify that the stonemason is done getting stone at the correct time */
+        // Verify that the stonemason is done getting stone at the correct time
         assertFalse(map.isDecoratedAtPoint(point2));
 
         map.stepTime();
@@ -475,53 +451,51 @@ public class TestQuarry {
     @Test
     public void testNothingRemainsWhenStonemasonGetsLastStone() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarter */
-        Point point0 = new Point(10, 10);
+        // Place headquarter
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(10, 4);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(10, 4);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Place stone */
-        Point point2 = new Point(11, 5);
-        Stone stone = map.placeStone(point2, STONE_2, 1);
+        // Place stone
+        var point2 = new Point(11, 5);
+        var stone = map.placeStone(point2, STONE_2, 1);
 
         assertEquals(stone.getStoneType(), STONE_2);
 
-        /* Construct the quarry */
+        // Construct the quarry
         constructHouse(quarry);
 
-        /* Assign a stonemason to the quarry */
-        Stonemason stonemason = new Stonemason(player0, map);
+        // Assign a stonemason to the quarry
+        var stonemason = new Stonemason(player0, map);
 
         Utils.occupyBuilding(stonemason, quarry);
 
-        /* Wait for the stonemason to rest */
+        // Wait for the stonemason to rest
         Utils.fastForward(99, map);
 
         assertTrue(stonemason.isInsideBuilding());
         assertTrue(map.isStoneAtPoint(point2));
 
-        /* Step once to let the stonemason go out to get stone */
+        // Step once to let the stonemason go out to get stone
         map.stepTime();
 
         assertFalse(stonemason.isInsideBuilding());
 
-        Point point = stonemason.getTarget();
+        var point = stonemason.getTarget();
 
         assertEquals(stonemason.getTarget(), stone.getPosition());
         assertTrue(stonemason.isTraveling());
 
         map.stepTime();
 
-        /* Let the stonemason reach the chosen spot if it isn't already there */
+        // Let the stonemason reach the chosen spot if it isn't already there
         if (!stonemason.isArrived()) {
             Utils.fastForwardUntilWorkersReachTarget(map, stonemason);
         }
@@ -530,15 +504,16 @@ public class TestQuarry {
         assertEquals(stonemason.getPosition(), stone.getPosition());
         assertTrue(stonemason.isGettingStone());
 
-        /* Verify that the stonemason gets stone */
+        // Verify that the stonemason gets stone
         for (int i = 0; i < 49; i++) {
             assertTrue(stonemason.isGettingStone());
+
             map.stepTime();
         }
 
         assertTrue(stonemason.isGettingStone());
 
-        /* Verify that the stonemason is done getting stone at the correct time */
+        // Verify that the stonemason is done getting stone at the correct time
         assertFalse(map.isDecoratedAtPoint(point2));
 
         map.stepTime();
@@ -557,51 +532,47 @@ public class TestQuarry {
     @Test
     public void testStonemasonReturnsAndStoresStoneAsCargo() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarter */
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        // Place headquarter
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place quarry */
-        Point point2 = new Point(10, 4);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point2);
+        // Place quarry
+        var point2 = new Point(10, 4);
+        var quarry = map.placeBuilding(new Quarry(player0), point2);
 
-        /* Connect the quarry with the headquarter */
+        // Connect the quarry with the headquarter
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
 
-        /* Place stone */
-        Point point3 = new Point(13, 5);
-        Stone stone = map.placeStone(point3, STONE_1, 7);
+        // Place stone
+        var point3 = new Point(13, 5);
+        var stone = map.placeStone(point3, STONE_1, 7);
 
-        /* Construct the quarry */
+        // Construct the quarry
         constructHouse(quarry);
 
-        /* Assign a stonemason to the quarry */
-        Stonemason stonemason = new Stonemason(player0, map);
+        // Assign a stonemason to the quarry
+        var stonemason = new Stonemason(player0, map);
 
         Utils.occupyBuilding(stonemason, quarry);
 
-        /* Wait for the stonemason to rest */
+        // Wait for the stonemason to rest
         Utils.fastForward(99, map);
 
         assertTrue(stonemason.isInsideBuilding());
 
-        /* Step once to let the stonemason go out to get stone */
+        // Step once to let the stonemason go out to get stone
         map.stepTime();
 
         assertFalse(stonemason.isInsideBuilding());
 
-        Point point = stonemason.getTarget();
-
         assertEquals(stonemason.getTarget(), stone.getPosition());
         assertTrue(stonemason.isTraveling());
 
-        /* Let the stonemason reach the chosen spot if it isn't already there */
+        // Let the stonemason reach the chosen spot if it isn't already there
         if (!stonemason.isArrived()) {
             Utils.fastForwardUntilWorkersReachTarget(map, stonemason);
         }
@@ -611,7 +582,7 @@ public class TestQuarry {
         assertTrue(stonemason.isGettingStone());
         assertNull(stonemason.getCargo());
 
-        /* Wait for the stonemason to get some stone */
+        // Wait for the stonemason to get some stone
         Utils.fastForward(49, map);
 
         assertTrue(stonemason.isGettingStone());
@@ -619,7 +590,7 @@ public class TestQuarry {
 
         map.stepTime();
 
-        /* Stonemason has the stone and goes back to the quarry */
+        // Stonemason has the stone and goes back to the quarry
         assertFalse(stonemason.isGettingStone());
 
         assertEquals(stonemason.getTarget(), quarry.getPosition());
@@ -630,7 +601,7 @@ public class TestQuarry {
         assertTrue(stonemason.isInsideBuilding());
         assertNotNull(stonemason.getCargo());
 
-        /* Stonemason leaves the hut and goes to the flag to drop the cargo */
+        // Stonemason leaves the hut and goes to the flag to drop the cargo
         map.stepTime();
 
         assertFalse(stonemason.isInsideBuilding());
@@ -642,7 +613,7 @@ public class TestQuarry {
         assertFalse(quarry.getFlag().getStackedCargo().isEmpty());
         assertNull(stonemason.getCargo());
 
-        /* The stonemason goes back to the quarry */
+        // The stonemason goes back to the quarry
         assertEquals(stonemason.getTarget(), quarry.getPosition());
 
         Utils.fastForwardUntilWorkersReachTarget(map, stonemason);
@@ -653,52 +624,49 @@ public class TestQuarry {
     @Test
     public void testStoneCargoIsDeliveredToGuardHouseUnderConstructionWhichIsCloserThanHeadquarters() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        GameMap map = new GameMap(players, 20, 20);
+        // Place headquarter
+        var point3 = new Point(6, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
-        /* Place headquarter */
-        Point point3 = new Point(6, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        // Place stone
+        var point2 = new Point(14, 8);
+        var stone = map.placeStone(point2, STONE_1, 10);
 
-        /* Place stone */
-        Point point2 = new Point(14, 8);
-        Stone stone = map.placeStone(point2, STONE_1, 10);
-
-        /* Remove all stone from the headquarters */
+        // Remove all stone from the headquarters
         Utils.adjustInventoryTo(headquarter, STONE, 0);
 
-        /* Place guard house */
-        Point point4 = new Point(10, 4);
-        GuardHouse guardHouse = map.placeBuilding(new GuardHouse(player0), point4);
+        // Place guard house
+        var point4 = new Point(10, 4);
+        var guardHouse = map.placeBuilding(new GuardHouse(player0), point4);
 
-        /* Connect the guard house to the headquarters */
-        Road road2 = map.placeAutoSelectedRoad(player0, guardHouse.getFlag(), headquarter.getFlag());
+        // Connect the guard house to the headquarters
+        var road2 = map.placeAutoSelectedRoad(player0, guardHouse.getFlag(), headquarter.getFlag());
 
-        /* Place the quarry */
-        Point point1 = new Point(14, 4);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        // Place the quarry
+        var point1 = new Point(14, 4);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Connect the quarry with the guard house */
-        Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), guardHouse.getFlag());
+        // Connect the quarry with the guard house
+        var road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), guardHouse.getFlag());
 
-        /* Wait for the quarry to get constructed and occupied */
+        // Wait for the quarry to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(quarry);
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(quarry);
 
-        /* Wait for the courier on the road between the guard house and the quarry hut to have a stone cargo */
+        // Wait for the courier on the road between the guard house and the quarry hut to have a stone cargo
         Utils.waitForFlagToGetStackedCargo(map, quarry.getFlag(), 1);
 
         assertEquals(quarry.getFlag().getStackedCargo().getFirst().getMaterial(), STONE);
 
-        /* Wait for the courier to pick up the cargo */
+        // Wait for the courier to pick up the cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
 
-        /* Verify that the courier delivers the cargo to the guard house (and not the headquarters) */
+        // Verify that the courier delivers the cargo to the guard house (and not the headquarters)
         assertEquals(quarry.getAmount(STONE), 0);
         assertTrue(guardHouse.needsMaterial(STONE));
         assertTrue(guardHouse.isUnderConstruction());
@@ -711,60 +679,58 @@ public class TestQuarry {
     @Test
     public void testStoneIsNotDeliveredToStorehouseUnderConstructionThatDoesntNeedStone() throws InvalidUserActionException {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        GameMap map = new GameMap(players, 20, 20);
+        // Place headquarter
+        var point3 = new Point(6, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
-        /* Place headquarter */
-        Point point3 = new Point(6, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
-
-        /* Adjust the inventory so that there are stones but no planks */
+        // Adjust the inventory so that there are stones but no planks
         Utils.adjustInventoryTo(headquarter, PLANK, 0);
         Utils.adjustInventoryTo(headquarter, STONE, 20);
 
-        /* Place stone */
-        Point point2 = new Point(14, 6);
-        Stone stone = map.placeStone(point2, STONE_1, 10);
+        // Place stone
+        var point2 = new Point(14, 6);
+        var stone = map.placeStone(point2, STONE_1, 10);
 
-        /* Place storehouse */
-        Point point4 = new Point(10, 4);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+        // Place storehouse
+        var point4 = new Point(10, 4);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point4);
 
-        /* Connect the storehouse to the headquarters */
-        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+        // Connect the storehouse to the headquarters
+        var road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
-        /* Wait until the storehouse doesn't need stones */
+        // Wait until the storehouse doesn't need stones
         assertEquals(map, storehouse.getMap());
+
         Utils.waitUntilBuildingDoesntNeedMaterial(storehouse, STONE);
 
-        /* Place the quarry */
-        Point point1 = new Point(14, 4);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        // Place the quarry
+        var point1 = new Point(14, 4);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Connect the quarry with the storehouse */
-        Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), storehouse.getFlag());
+        // Connect the quarry with the storehouse
+        var road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), storehouse.getFlag());
 
-        /* Deliver the needed planks to the quarry */
+        // Deliver the needed planks to the quarry
         Utils.deliverCargos(quarry, PLANK, 2);
 
-        /* Wait for the quarry to get constructed and occupied */
+        // Wait for the quarry to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(quarry);
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(quarry);
 
-        /* Wait for the courier on the road between the storehouse and the quarry hut to have a stone cargo */
+        // Wait for the courier on the road between the storehouse and the quarry hut to have a stone cargo
         Utils.waitForFlagToGetStackedCargo(map, quarry.getFlag(), 1);
 
         assertEquals(quarry.getFlag().getStackedCargo().getFirst().getMaterial(), STONE);
 
-        /* Wait for the courier to pick up the cargo */
+        // Wait for the courier to pick up the cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
 
-        /* Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters */
+        // Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters
         assertEquals(headquarter.getAmount(STONE), 17);
         assertEquals(quarry.getAmount(STONE), 0);
         assertFalse(storehouse.needsMaterial(STONE));
@@ -780,59 +746,56 @@ public class TestQuarry {
     @Test
     public void testStoneIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        GameMap map = new GameMap(players, 20, 20);
+        // Place headquarter
+        var point3 = new Point(6, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
-        /* Place headquarter */
-        Point point3 = new Point(6, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
-
-        /* Adjust the inventory so that there are stones but no planks */
+        // Adjust the inventory so that there are stones but no planks
         Utils.adjustInventoryTo(headquarter, STONE, 0);
 
-        /* Place stone */
-        Point point2 = new Point(14, 6);
-        Stone stone = map.placeStone(point2, STONE_1, 10);
+        // Place stone
+        var point2 = new Point(14, 6);
+        var stone = map.placeStone(point2, STONE_1, 10);
 
-        /* Place storehouse */
-        Point point4 = new Point(10, 4);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+        // Place storehouse
+        var point4 = new Point(10, 4);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point4);
 
-        /* Deliver stones to the storehouse so it only needs one more stone */
+        // Deliver stones to the var so it only needs one more stone
         Utils.deliverCargos(storehouse, PLANK, 4);
         Utils.deliverCargos(storehouse, STONE, 2);
 
-        /* Connect the storehouse to the headquarters */
-        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+        // Connect the storehouse to the headquarters
+        var road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
-        /* Place the quarry */
-        Point point1 = new Point(14, 4);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        // Place the quarry
+        var point1 = new Point(14, 4);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Connect the quarry with the storehouse */
-        Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), storehouse.getFlag());
+        // Connect the quarry with the storehouse
+        var road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), storehouse.getFlag());
 
-        /* Deliver the needed planks to the quarry */
+        // Deliver the needed planks to the quarry
         Utils.deliverCargos(quarry, PLANK, 2);
 
-        /* Wait for the quarry to get constructed and occupied */
+        // Wait for the quarry to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(quarry);
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(quarry);
 
-        /* Wait for the flag on the road between the storehouse and the quarry to have a stone cargo */
+        // Wait for the flag on the road between the storehouse and the quarry to have a stone cargo
         Utils.waitForFlagToGetStackedCargo(map, quarry.getFlag(), 1);
 
         assertEquals(quarry.getFlag().getStackedCargo().getFirst().getMaterial(), STONE);
 
-        /* Wait for the courier to pick up the cargo */
+        // Wait for the courier to pick up the cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
 
-        /* Verify that no stone is delivered from the headquarters */
+        // Verify that no stone is delivered from the headquarters
         Utils.adjustInventoryTo(headquarter, STONE, 1);
 
         assertEquals(storehouse.getCanHoldAmount(STONE) - storehouse.getAmount(STONE), 1);
@@ -850,34 +813,33 @@ public class TestQuarry {
     @Test
     public void testQuarryWithoutStoneProducesNothing() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarter */
-        Point point0 = new Point(10, 10);
+        // Place headquarter
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(10, 4);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(10, 4);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Construct the quarry */
+        // Construct the quarry
         constructHouse(quarry);
 
-        /* Assign a stonemason to the quarry */
-        Stonemason stonemason = new Stonemason(player0, map);
+        // Assign a stonemason to the quarry
+        var stonemason = new Stonemason(player0, map);
 
         Utils.occupyBuilding(stonemason, quarry);
 
         assertTrue(stonemason.isInsideBuilding());
         assertNull(stonemason.getCargo());
 
-        /* Verify that no stone is available from the quarry's flag */
+        // Verify that no stone is available from the quarry's flag
         for (int i = 0; i < 100; i++) {
             map.stepTime();
+
             assertTrue(quarry.getFlag().getStackedCargo().isEmpty());
             assertNull(stonemason.getCargo());
         }
@@ -886,66 +848,61 @@ public class TestQuarry {
     @Test
     public void testStonemasonStaysAtHomeWhenNoStonesAreAvailable() throws Exception {
 
-        /* Create new game map with one player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create new game map with one player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarter */
-        Point point0 = new Point(10, 10);
+        // Place headquarter
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(10, 4);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(10, 4);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Construct the quarry */
+        // Construct the quarry
         constructHouse(quarry);
 
-        /* Assign a stonemason to the quarry */
-        Stonemason stonemason = new Stonemason(player0, map);
+        // Assign a stonemason to the quarry
+        var stonemason = new Stonemason(player0, map);
 
         Utils.occupyBuilding(stonemason, quarry);
 
         assertTrue(stonemason.isInsideBuilding());
 
-        /* Wait for the stonemason to rest */
+        // Wait for the stonemason to rest
         Utils.fastForward(99, map);
 
         assertTrue(stonemason.isInsideBuilding());
 
-        /* Verify that the stone mason hasn't understood that there are no resources available */
+        // Verify that the stonemason hasn't understood that there are no resources available
         assertFalse(quarry.isOutOfNaturalResources());
 
-        /* Step once to verify that the stonemason stays inside */
+        // Step once to verify that the stonemason stays inside
         map.stepTime();
 
         assertTrue(stonemason.isInsideBuilding());
 
-        /* Verify that the quarry is out of natural resources */
+        // Verify that the quarry is out of natural resources
         assertTrue(quarry.isOutOfNaturalResources());
     }
 
     @Test
     public void testStoneDisappearsAfterAllHasBeenRetrieved() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 15, 15);
 
-        GameMap map = new GameMap(players, 15, 15);
-
-        /* Place headquarter */
-        Point point0 = new Point(10, 10);
+        // Place headquarter
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place stone */
-        Point point1 = new Point(5, 5);
-        Stone stone0 = map.placeStone(point1, STONE_1, 7);
+        // Place stone
+        var point1 = new Point(5, 5);
+        var stone0 = map.placeStone(point1, STONE_1, 7);
 
-        /* Remove all but one pats of the stone */
+        // Remove all but one pats of the stone
         for (int i = 0; i < 6; i++) {
             stone0.removeOnePart();
 
@@ -954,7 +911,7 @@ public class TestQuarry {
             assertTrue(map.isStoneAtPoint(point1));
         }
 
-        /* Verify that the stone is gone when the final part is removed */
+        // Verify that the stone is gone when the final part is removed
         stone0.removeOnePart();
 
         assertEquals(stone0.getAmount(), 0);
@@ -967,51 +924,49 @@ public class TestQuarry {
     @Test
     public void testQuarryWithoutConnectedStorageKeepsProducing() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        // Place headquarter
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place stone */
-        Point point3 = new Point(12, 8);
-        Stone stone = map.placeStone(point3, STONE_1, 7);
+        // Place stone
+        var point3 = new Point(12, 8);
+        var stone = map.placeStone(point3, STONE_1, 7);
 
-        /* Place quarry */
-        Point point26 = new Point(8, 8);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        // Place quarry
+        var point26 = new Point(8, 8);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
-        /* Finish construction of the quarry */
+        // Finish construction of the quarry
         constructHouse(quarry0);
 
-        /* Occupy the quarry */
+        // Occupy the quarry
         Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
-        /* Let the stone mason rest */
+        // Let the stonemason rest
         Utils.fastForward(100, map);
 
-        /* Wait for the stone mason to produce a new stone cargo */
-        Worker stonemason = quarry0.getWorker();
+        // Wait for the stonemason to produce a new stone cargo
+        var stonemason = quarry0.getWorker();
 
         assertEquals(stonemason.getTarget(), stone.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, stonemason.getTarget());
 
-        /* Wait for the stone mason to get a new stone */
+        // Wait for the stonemason to get a new stone
         Utils.fastForward(50, map);
 
         assertNotNull(stonemason.getCargo());
 
-        /* Wait for the stone mason to go back to the quarry */
+        // Wait for the stonemason to go back to the quarry
         assertEquals(stonemason.getTarget(), quarry0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getPosition());
 
-        /* Verify that the stone mason puts the stone cargo at the flag */
+        // Verify that the stonemason puts the stone cargo at the flag
         map.stepTime();
 
         assertEquals(stonemason.getTarget(), quarry0.getFlag().getPosition());
@@ -1022,31 +977,31 @@ public class TestQuarry {
         assertNull(stonemason.getCargo());
         assertFalse(quarry0.getFlag().getStackedCargo().isEmpty());
 
-        /* Wait for the worker to go back to the quarry */
+        // Wait for the worker to go back to the quarry
         assertEquals(stonemason.getTarget(), quarry0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getPosition());
 
-        /* Wait for the worker to rest and produce another cargo */
+        // Wait for the worker to rest and produce another cargo
         Utils.fastForward(100, map);
 
         assertEquals(stonemason.getTarget(), stone.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, stonemason.getTarget());
 
-        /* Wait for the stone mason to get a new stone */
+        // Wait for the stonemason to get a new stone
         Utils.fastForward(50, map);
 
         assertNotNull(stonemason.getCargo());
 
-        /* Wait for the stone mason to go back to the quarry */
+        // Wait for the stonemason to go back to the quarry
         assertEquals(stonemason.getTarget(), quarry0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getPosition());
 
         assertNotNull(stonemason.getCargo());
 
-        /* Verify that the second cargo is put at the flag */
+        // Verify that the second cargo is put at the flag
         map.stepTime();
 
         assertEquals(stonemason.getTarget(), quarry0.getFlag().getPosition());
@@ -1060,51 +1015,49 @@ public class TestQuarry {
     @Test
     public void testCargoProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        // Place headquarter
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place stone */
-        Point point3 = new Point(12, 8);
-        Stone stone = map.placeStone(point3, STONE_1, 7);
+        // Place stone
+        var point3 = new Point(12, 8);
+        var stone = map.placeStone(point3, STONE_1, 7);
 
-        /* Place quarry */
-        Point point26 = new Point(8, 8);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        // Place quarry
+        var point26 = new Point(8, 8);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
-        /* Finish construction of the quarry */
+        // Finish construction of the quarry
         constructHouse(quarry0);
 
-        /* Occupy the quarry */
+        // Occupy the quarry
         Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
-        /* Let the stone mason rest */
+        // Let the stonemason rest
         Utils.fastForward(100, map);
 
-        /* Wait for the stone mason to go to the stone */
-        Worker stonemason = quarry0.getWorker();
+        // Wait for the stonemason to go to the stone
+        var stonemason = quarry0.getWorker();
 
         assertEquals(stonemason.getTarget(), stone.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, stonemason.getTarget());
 
-        /* Wait for the stone mason to get a new stone */
+        // Wait for the stonemason to get a new stone
         Utils.fastForward(50, map);
 
         assertNotNull(stonemason.getCargo());
 
-        /* Wait for the stone mason to go back to the quarry */
+        // Wait for the stonemason to go back to the quarry
         assertEquals(stonemason.getTarget(), quarry0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getPosition());
 
-        /* Verify that the stone mason puts the stone cargo at the flag */
+        // Verify that the stonemason puts the stone cargo at the flag
         map.stepTime();
 
         assertEquals(stonemason.getTarget(), quarry0.getFlag().getPosition());
@@ -1115,47 +1068,47 @@ public class TestQuarry {
         assertNull(stonemason.getCargo());
         assertFalse(quarry0.getFlag().getStackedCargo().isEmpty());
 
-        /* Wait to let the cargo remain at the flag without any connection to the storage */
-        Cargo cargo = quarry0.getFlag().getStackedCargo().getFirst();
+        // Wait to let the cargo remain at the flag without any connection to the storage
+        var cargo = quarry0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
         assertEquals(cargo.getPosition(), quarry0.getFlag().getPosition());
 
-        /* Connect the quarry with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
+        // Connect the quarry with the headquarter
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
 
-        /* Assign a courier to the road */
+        // Assign a courier to the road
         Courier courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
 
-        /* Wait for the courier to reach the idle point of the road */
+        // Wait for the courier to reach the idle point of the road
         assertNotEquals(courier.getTarget(), headquarter0.getFlag().getPosition());
         assertNotEquals(courier.getTarget(), quarry0.getFlag().getPosition());
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
 
-        /* Verify that the courier walks to pick up the cargo */
+        // Verify that the courier walks to pick up the cargo
         map.stepTime();
 
         assertEquals(courier.getTarget(), quarry0.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
 
-        /* Verify that the courier has picked up the cargo */
+        // Verify that the courier has picked up the cargo
         assertNotNull(courier.getCargo());
         assertEquals(courier.getCargo(), cargo);
 
-        /* Verify that the courier delivers the cargo to the headquarter */
+        // Verify that the courier delivers the cargo to the headquarter
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(STONE);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
-        /* Verify that the courier has delivered the cargo to the headquarter */
+        // Verify that the courier has delivered the cargo to the headquarter
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(STONE), amount + 1);
     }
@@ -1163,35 +1116,33 @@ public class TestQuarry {
     @Test
     public void testStonemasonGoesBackToStorageWhenQuarryIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        // Place headquarter
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place quarry */
-        Point point26 = new Point(8, 8);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        // Place quarry
+        var point26 = new Point(8, 8);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
-        /* Finish construction of the quarry */
+        // Finish construction of the quarry
         constructHouse(quarry0);
 
-        /* Occupy the quarry */
+        // Occupy the quarry
         Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
-        /* Destroy the quarry */
-        Worker stonemason = quarry0.getWorker();
+        // Destroy the quarry
+        var stonemason = quarry0.getWorker();
 
         assertTrue(stonemason.isInsideBuilding());
         assertEquals(stonemason.getPosition(), quarry0.getPosition());
 
         quarry0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(stonemason.isInsideBuilding());
         assertEquals(stonemason.getTarget(), headquarter0.getPosition());
 
@@ -1199,51 +1150,49 @@ public class TestQuarry {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
 
-        /* Verify that the stonemason is stored correctly in the headquarter */
+        // Verify that the stonemason is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(STONEMASON), amount + 1);
     }
 
     @Test
     public void testStonemasonGoesBackOnToStorageOnRoadsIfPossibleWhenQuarryIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        // Place headquarter
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place quarry */
-        Point point26 = new Point(8, 8);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        // Place quarry
+        var point26 = new Point(8, 8);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
-        /* Connect the quarry with the headquarter */
+        // Connect the quarry with the headquarter
         map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
 
-        /* Finish construction of the quarry */
+        // Finish construction of the quarry
         constructHouse(quarry0);
 
-        /* Occupy the quarry */
+        // Occupy the quarry
         Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
-        /* Destroy the quarry */
-        Worker stonemason = quarry0.getWorker();
+        // Destroy the quarry
+        var stonemason = quarry0.getWorker();
 
         assertTrue(stonemason.isInsideBuilding());
         assertEquals(stonemason.getPosition(), quarry0.getPosition());
 
         quarry0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(stonemason.isInsideBuilding());
         assertEquals(stonemason.getTarget(), headquarter0.getPosition());
 
-        /* Verify that the worker plans to use the roads */
+        // Verify that the worker plans to use the roads
         boolean firstStep = true;
-        for (Point point : stonemason.getPlannedPath()) {
+        for (var point : stonemason.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -1256,37 +1205,35 @@ public class TestQuarry {
     @Test
     public void testDestroyedQuarryIsRemovedAfterSomeTime() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        // Place headquarter
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place quarry */
-        Point point26 = new Point(8, 8);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        // Place quarry
+        var point26 = new Point(8, 8);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
-        /* Connect the quarry with the headquarter */
+        // Connect the quarry with the headquarter
         map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
 
-        /* Finish construction of the quarry */
+        // Finish construction of the quarry
         constructHouse(quarry0);
 
-        /* Destroy the quarry */
+        // Destroy the quarry
         quarry0.tearDown();
 
         assertTrue(quarry0.isBurningDown());
 
-        /* Wait for the quarry to stop burning */
+        // Wait for the quarry to stop burning
         Utils.fastForward(50, map);
 
         assertTrue(quarry0.isDestroyed());
 
-        /* Wait for the quarry to disappear */
+        // Wait for the quarry to disappear
         for (int i = 0; i < 100; i++) {
             assertEquals(map.getBuildingAtPoint(point26), quarry0);
 
@@ -1301,24 +1248,22 @@ public class TestQuarry {
     @Test
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        // Place headquarter
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place quarry */
-        Point point26 = new Point(8, 8);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        // Place quarry
+        var point26 = new Point(8, 8);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
-        /* Finish construction of the quarry */
+        // Finish construction of the quarry
         constructHouse(quarry0);
 
-        /* Remove the flag and verify that the driveway is removed */
+        // Remove the flag and verify that the driveway is removed
         assertNotNull(map.getRoad(quarry0.getPosition(), quarry0.getFlag().getPosition()));
 
         map.removeFlag(quarry0.getFlag());
@@ -1329,24 +1274,22 @@ public class TestQuarry {
     @Test
     public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        // Place headquarter
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place quarry */
-        Point point26 = new Point(8, 8);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        // Place quarry
+        var point26 = new Point(8, 8);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
-        /* Finish construction of the quarry */
+        // Finish construction of the quarry
         constructHouse(quarry0);
 
-        /* Tear down the building and verify that the driveway is removed */
+        // Tear down the building and verify that the driveway is removed
         assertNotNull(map.getRoad(quarry0.getPosition(), quarry0.getFlag().getPosition()));
 
         quarry0.tearDown();
@@ -1357,61 +1300,59 @@ public class TestQuarry {
     @Test
     public void testProductionInQuarryCanBeStopped() throws Exception {
 
-        /* Create game map */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create game map
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place stone */
-        Point point5 = new Point(10, 8);
-        Stone stone = map.placeStone(point5, STONE_1, 7);
+        // Place stone
+        var point5 = new Point(10, 8);
+        var stone = map.placeStone(point5, STONE_1, 7);
 
-        /* Place quarry */
-        Point point1 = new Point(8, 6);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(8, 6);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Connect the quarry and the headquarter */
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4);
+        // Connect the quarry and the headquarter
+        var point2 = new Point(6, 4);
+        var point3 = new Point(8, 4);
+        var point4 = new Point(9, 5);
+        var road0 = map.placeRoad(player0, point2, point3, point4);
 
-        /* Finish the quarry */
+        // Finish the quarry
         constructHouse(quarry0);
 
-        /* Assign a worker to the quarry */
-        Stonemason stonemason = new Stonemason(player0, map);
+        // Assign a worker to the quarry
+        var stonemason = new Stonemason(player0, map);
 
         Utils.occupyBuilding(stonemason, quarry0);
 
         assertTrue(stonemason.isInsideBuilding());
 
-        /* Let the worker rest */
+        // Let the worker rest
         Utils.fastForward(100, map);
 
-        /* Wait for the stonemason to produce cargo */
+        // Wait for the stonemason to produce cargo
         Utils.fastForwardUntilWorkerProducesCargo(map, stonemason);
 
         assertEquals(stonemason.getCargo().getMaterial(), STONE);
 
-        /* Wait for the worker to go back to the quarry */
+        // Wait for the worker to go back to the quarry
         assertEquals(stonemason.getTarget(), quarry0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getPosition());
 
-        /* Wait for the worker to deliver the cargo */
+        // Wait for the worker to deliver the cargo
         map.stepTime();
 
         assertEquals(stonemason.getTarget(), quarry0.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getFlag().getPosition());
 
-        /* Stop production and verify that no stone is produced */
+        // Stop production and verify that no stone is produced
         quarry0.stopProduction();
 
         assertFalse(quarry0.isProductionEnabled());
@@ -1426,61 +1367,59 @@ public class TestQuarry {
     @Test
     public void testProductionInQuarryCanBeResumed() throws Exception {
 
-        /* Create game map */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create game map
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place stone */
-        Point point5 = new Point(10, 8);
-        Stone stone = map.placeStone(point5, STONE_1, 7);
+        // Place stone
+        var point5 = new Point(10, 8);
+        var stone = map.placeStone(point5, STONE_1, 7);
 
-        /* Place quarry */
-        Point point1 = new Point(8, 6);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(8, 6);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Connect the quarry and the headquarter */
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4);
+        // Connect the quarry and the headquarter
+        var point2 = new Point(6, 4);
+        var point3 = new Point(8, 4);
+        var point4 = new Point(9, 5);
+        var road0 = map.placeRoad(player0, point2, point3, point4);
 
-        /* Finish the quarry */
+        // Finish the quarry
         constructHouse(quarry0);
 
-        /* Assign a worker to the quarry */
-        Stonemason stonemason = new Stonemason(player0, map);
+        // Assign a worker to the quarry
+        var stonemason = new Stonemason(player0, map);
 
         Utils.occupyBuilding(stonemason, quarry0);
 
         assertTrue(stonemason.isInsideBuilding());
 
-        /* Let the worker rest */
+        // Let the worker rest
         Utils.fastForward(100, map);
 
-        /* Wait for the stonemason to produce stone */
+        // Wait for the stonemason to produce stone
         Utils.fastForwardUntilWorkerProducesCargo(map, stonemason);
 
         assertEquals(stonemason.getCargo().getMaterial(), STONE);
 
-        /* Wait for the worker to go back to the quarry */
+        // Wait for the worker to go back to the quarry
         assertEquals(stonemason.getTarget(), quarry0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getPosition());
 
-        /* Wait for the worker to deliver the cargo */
+        // Wait for the worker to deliver the cargo
         map.stepTime();
 
         assertEquals(stonemason.getTarget(), quarry0.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getFlag().getPosition());
 
-        /* Stop production */
+        // Stop production
         quarry0.stopProduction();
 
         for (int i = 0; i < 300; i++) {
@@ -1489,7 +1428,7 @@ public class TestQuarry {
             map.stepTime();
         }
 
-        /* Resume production and verify that the quarry produces stone again */
+        // Resume production and verify that the quarry produces stone again
         quarry0.resumeProduction();
 
         assertTrue(quarry0.isProductionEnabled());
@@ -1502,35 +1441,31 @@ public class TestQuarry {
     @Test
     public void testAssignedStonemasonHasCorrectlySetPlayer() throws Exception {
 
-        /* Create players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Create new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 50, 50);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 50, 50);
+        // Place headquarter
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place quarry
+        var point1 = new Point(20, 14);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Place quarry */
-        Point point1 = new Point(20, 14);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
-
-        /* Finish construction of the quarry */
+        // Finish construction of the quarry
         constructHouse(quarry0);
 
-        /* Connect the quarry with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
+        // Connect the quarry with the headquarter
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
 
-        /* Wait for stonemason to get assigned and leave the headquarter */
+        // Wait for stonemason to get assigned and leave the headquarter
         List<Stonemason> workers = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
 
-        /* Verify that the player is set correctly in the worker */
+        // Verify that the player is set correctly in the worker
         Stonemason worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
@@ -1539,53 +1474,45 @@ public class TestQuarry {
     @Test
     public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
 
-        /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        Player player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        // Create multiplayer game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1, player2), 100, 100);
 
-        List<Player> players = new LinkedList<>();
+        // Place player 2's headquarter
+        var point10 = new Point(70, 70);
+        var headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
-        players.add(player0);
-        players.add(player1);
-        players.add(player2);
+        // Place player 0's headquarter
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Create game map choosing two players */
-        GameMap map = new GameMap(players, 100, 100);
+        // Place player 1's headquarters
+        var point1 = new Point(45, 5);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place player 2's headquarter */
-        Point point10 = new Point(70, 70);
-        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
-
-        /* Place player 0's headquarter */
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
-
-        /* Place player 1's headquarter */
-        Point point1 = new Point(45, 5);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
-
-        /* Place fortress for player 0 */
-        Point point2 = new Point(21, 9);
+        // Place fortress for player 0
+        var point2 = new Point(21, 9);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
-        /* Finish construction of the fortress */
+        // Finish construction of the fortress
         constructHouse(fortress0);
 
-        /* Occupy the fortress */
+        // Occupy the fortress
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
-        /* Place quarry close to the new border */
-        Point point4 = new Point(28, 18);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point4);
+        // Place quarry close to the new border
+        var point4 = new Point(28, 18);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point4);
 
-        /* Finish construction of the quarry */
+        // Finish construction of the quarry
         constructHouse(quarry0);
 
-        /* Occupy the quarry */
+        // Occupy the quarry
         Stonemason worker = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
-        /* Verify that the worker goes back to its own storage when the fortress is torn down */
+        // Verify that the worker goes back to its own storage when the fortress is torn down
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
@@ -1596,31 +1523,29 @@ public class TestQuarry {
     @Test
     public void testStoneMasonReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place first flag */
-        Point point1 = new Point(10, 4);
+        // Place first flag
+        var point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place quarry */
-        Point point2 = new Point(14, 4);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point2.upLeft());
+        // Place quarry
+        var point2 = new Point(14, 4);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point2.upLeft());
 
-        /* Connect headquarter and first flag */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        // Connect headquarter and first flag
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Connect the first flag with the second flag */
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, quarry0.getFlag());
+        // Connect the first flag with the second flag
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, quarry0.getFlag());
 
-        /* Wait for the stone mason to be on the second road on its way to the flag */
+        // Wait for the stonemason to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0);
 
         Stonemason stoneMason = null;
@@ -1638,18 +1563,18 @@ public class TestQuarry {
 
         map.stepTime();
 
-        /* See that the stone mason has started walking */
+        // See that the stonemason has started walking
         assertFalse(stoneMason.isExactlyAtPoint());
 
-        /* Remove the next road */
+        // Remove the next road
         map.removeRoad(road1);
 
-        /* Verify that the stone mason continues walking to the flag */
+        // Verify that the stonemason continues walking to the flag
         Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, flag0.getPosition());
 
         assertEquals(stoneMason.getPosition(), flag0.getPosition());
 
-        /* Verify that the stone mason returns to the headquarter when it reaches the flag */
+        // Verify that the stonemason returns to the headquarter when it reaches the flag
         assertEquals(stoneMason.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, headquarter0.getPosition());
@@ -1658,31 +1583,29 @@ public class TestQuarry {
     @Test
     public void testStoneMasonContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place first flag */
-        Point point1 = new Point(10, 4);
+        // Place first flag
+        var point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place quarry */
-        Point point2 = new Point(14, 4);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point2.upLeft());
+        // Place quarry
+        var point2 = new Point(14, 4);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point2.upLeft());
 
-        /* Connect headquarter and first flag */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        // Connect headquarter and first flag
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Connect the first flag with the second flag */
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, quarry0.getFlag());
+        // Connect the first flag with the second flag
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, quarry0.getFlag());
 
-        /* Wait for the stone mason to be on the second road on its way to the flag */
+        // Wait for the stonemason to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0);
 
         Stonemason stoneMason = null;
@@ -1700,54 +1623,52 @@ public class TestQuarry {
 
         map.stepTime();
 
-        /* See that the stone mason has started walking */
+        // See that the stonemason has started walking
         assertFalse(stoneMason.isExactlyAtPoint());
 
-        /* Remove the current road */
+        // Remove the current road
         map.removeRoad(road0);
 
-        /* Verify that the stone mason continues walking to the flag */
+        // Verify that the stonemason continues walking to the flag
         Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, flag0.getPosition());
 
         assertEquals(stoneMason.getPosition(), flag0.getPosition());
 
-        /* Verify that the stone mason continues to the final flag */
+        // Verify that the stonemason continues to the final flag
         assertEquals(stoneMason.getTarget(), quarry0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, quarry0.getFlag().getPosition());
 
-        /* Verify that the stone mason goes out to quarry instead of going directly back */
+        // Verify that the stonemason goes out to quarry instead of going directly back
         assertNotEquals(stoneMason.getTarget(), headquarter0.getPosition());
     }
 
     @Test
     public void testStonemasonReturnsToStorageIfQuarryIsDestroyed() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place first flag */
-        Point point1 = new Point(10, 4);
+        // Place first flag
+        var point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place quarry */
-        Point point2 = new Point(14, 4);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point2.upLeft());
+        // Place quarry
+        var point2 = new Point(14, 4);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point2.upLeft());
 
-        /* Connect headquarter and first flag */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        // Connect headquarter and first flag
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Connect the first flag with the second flag */
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, quarry0.getFlag());
+        // Connect the first flag with the second flag
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, quarry0.getFlag());
 
-        /* Wait for the stonemason to be on the second road on its way to the flag */
+        // Wait for the stonemason to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0);
 
         Stonemason stonemason = null;
@@ -1761,65 +1682,63 @@ public class TestQuarry {
         assertNotNull(stonemason);
         assertEquals(stonemason.getTarget(), quarry0.getPosition());
 
-        /* Wait for the stone mason to reach the first flag */
+        // Wait for the stonemason to reach the first flag
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, flag0.getPosition());
 
         map.stepTime();
 
-        /* See that the stone mason has started walking */
+        // See that the stonemason has started walking
         assertFalse(stonemason.isExactlyAtPoint());
 
-        /* Tear down the quarry */
+        // Tear down the quarry
         quarry0.tearDown();
 
-        /* Verify that the stone mason continues walking to the next flag */
+        // Verify that the stonemason continues walking to the next flag
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getFlag().getPosition());
 
         assertEquals(stonemason.getPosition(), quarry0.getFlag().getPosition());
 
-        /* Verify that the stone mason goes back to storage */
+        // Verify that the stonemason goes back to storage
         assertEquals(stonemason.getTarget(), headquarter0.getPosition());
     }
 
     @Test
     public void testStonemasonGoesOffroadBackToClosestStorageWhenQuarryIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        // Place headquarter
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place quarry */
-        Point point26 = new Point(17, 17);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        // Place quarry
+        var point26 = new Point(17, 17);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
-        /* Finish construction of the quarry */
+        // Finish construction of the quarry
         constructHouse(quarry0);
 
-        /* Occupy the quarry */
+        // Occupy the quarry
         Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
-        /* Place a second storage closer to the quarry */
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        // Place a second storage closer to the quarry
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Finish construction of the storage */
+        // Finish construction of the storage
         constructHouse(storehouse0);
 
-        /* Destroy the quarry */
-        Worker stonemason = quarry0.getWorker();
+        // Destroy the quarry
+        var stonemason = quarry0.getWorker();
 
         assertTrue(stonemason.isInsideBuilding());
         assertEquals(stonemason.getPosition(), quarry0.getPosition());
 
         quarry0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(stonemason.isInsideBuilding());
         assertEquals(stonemason.getTarget(), storehouse0.getPosition());
 
@@ -1827,52 +1746,50 @@ public class TestQuarry {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, storehouse0.getPosition());
 
-        /* Verify that the stonemason is stored correctly in the headquarter */
+        // Verify that the stonemason is stored correctly in the headquarter
         assertEquals(storehouse0.getAmount(STONEMASON), amount + 1);
     }
 
     @Test
     public void testStonemasonReturnsOffroadAndAvoidsBurningStorageWhenQuarryIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        // Place headquarter
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place quarry */
-        Point point26 = new Point(17, 17);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        // Place quarry
+        var point26 = new Point(17, 17);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
-        /* Finish construction of the quarry */
+        // Finish construction of the quarry
         constructHouse(quarry0);
 
-        /* Occupy the quarry */
+        // Occupy the quarry
         Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
-        /* Place a second storage closer to the quarry */
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        // Place a second storage closer to the quarry
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Finish construction of the storage */
+        // Finish construction of the storage
         constructHouse(storehouse0);
 
-        /* Destroy the storage */
+        // Destroy the storage
         storehouse0.tearDown();
 
-        /* Destroy the quarry */
-        Worker stonemason = quarry0.getWorker();
+        // Destroy the quarry
+        var stonemason = quarry0.getWorker();
 
         assertTrue(stonemason.isInsideBuilding());
         assertEquals(stonemason.getPosition(), quarry0.getPosition());
 
         quarry0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(stonemason.isInsideBuilding());
         assertEquals(stonemason.getTarget(), headquarter0.getPosition());
 
@@ -1880,55 +1797,53 @@ public class TestQuarry {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
 
-        /* Verify that the stonemason is stored correctly in the headquarter */
+        // Verify that the stonemason is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(STONEMASON), amount + 1);
     }
 
     @Test
     public void testStonemasonReturnsOffroadAndAvoidsDestroyedStorageWhenQuarryIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        // Place headquarter
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place quarry */
-        Point point26 = new Point(17, 17);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        // Place quarry
+        var point26 = new Point(17, 17);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
-        /* Finish construction of the quarry */
+        // Finish construction of the quarry
         constructHouse(quarry0);
 
-        /* Occupy the quarry */
+        // Occupy the quarry
         Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
-        /* Place a second storage closer to the quarry */
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        // Place a second storage closer to the quarry
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Finish construction of the storage */
+        // Finish construction of the storage
         constructHouse(storehouse0);
 
-        /* Destroy the storage */
+        // Destroy the storage
         storehouse0.tearDown();
 
-        /* Wait for the storage to burn down */
+        // Wait for the storage to burn down
         Utils.waitForBuildingToBurnDown(storehouse0);
 
-        /* Destroy the quarry */
-        Worker stonemason = quarry0.getWorker();
+        // Destroy the quarry
+        var stonemason = quarry0.getWorker();
 
         assertTrue(stonemason.isInsideBuilding());
         assertEquals(stonemason.getPosition(), quarry0.getPosition());
 
         quarry0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(stonemason.isInsideBuilding());
         assertEquals(stonemason.getTarget(), headquarter0.getPosition());
 
@@ -1936,46 +1851,44 @@ public class TestQuarry {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
 
-        /* Verify that the stonemason is stored correctly in the headquarter */
+        // Verify that the stonemason is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(STONEMASON), amount + 1);
     }
 
     @Test
     public void testStonemasonReturnsOffroadAndAvoidsUnfinishedStorageWhenQuarryIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        // Place headquarter
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place quarry */
-        Point point26 = new Point(17, 17);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        // Place quarry
+        var point26 = new Point(17, 17);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
-        /* Finish construction of the quarry */
+        // Finish construction of the quarry
         constructHouse(quarry0);
 
-        /* Occupy the quarry */
+        // Occupy the quarry
         Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
-        /* Place a second storage closer to the quarry */
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        // Place a second storage closer to the quarry
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Destroy the quarry */
-        Worker stonemason = quarry0.getWorker();
+        // Destroy the quarry
+        var stonemason = quarry0.getWorker();
 
         assertTrue(stonemason.isInsideBuilding());
         assertEquals(stonemason.getPosition(), quarry0.getPosition());
 
         quarry0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(stonemason.isInsideBuilding());
         assertEquals(stonemason.getTarget(), headquarter0.getPosition());
 
@@ -1983,43 +1896,41 @@ public class TestQuarry {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
 
-        /* Verify that the stonemason is stored correctly in the headquarter */
+        // Verify that the stonemason is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(STONEMASON), amount + 1);
     }
 
     @Test
     public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        // Place headquarter
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place quarry */
-        Point point26 = new Point(17, 17);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        // Place quarry
+        var point26 = new Point(17, 17);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
-        /* Place road to connect the headquarter and the quarry */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
+        // Place road to connect the headquarter and the quarry
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
 
-        /* Finish construction of the quarry */
+        // Finish construction of the quarry
         constructHouse(quarry0);
 
-        /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).getFirst();
+        // Wait for a worker to start walking to the building
+        var worker = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).getFirst();
 
-        /* Wait for the worker to get to the building's flag */
+        // Wait for the worker to get to the building's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, quarry0.getFlag().getPosition());
 
-        /* Tear down the building */
+        // Tear down the building
         quarry0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
+        // Verify that the worker goes to the building and then returns to the headquarter instead of entering
         assertEquals(worker.getTarget(), quarry0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, quarry0.getPosition());
@@ -2032,38 +1943,36 @@ public class TestQuarry {
     @Test
     public void testTwoStonemasonsGettingLastStone() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(10, 12);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(10, 12);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place stone */
-        Point point1 = new Point(8, 6);
-        Stone stone = map.placeStone(point1, STONE_1, 7);
+        // Place stone
+        var point1 = new Point(8, 6);
+        var stone = map.placeStone(point1, STONE_1, 7);
 
-        /* Place two quarries with the same distance to the stone */
-        Point point2 = new Point(5, 9);
-        Point point3 = new Point(9, 9);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point2);
-        Quarry quarry1 = map.placeBuilding(new Quarry(player0), point3);
+        // Place two quarries with the same distance to the stone
+        var point2 = new Point(5, 9);
+        var point3 = new Point(9, 9);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point2);
+        var quarry1 = map.placeBuilding(new Quarry(player0), point3);
 
-        /* Finish construction of the quarries */
+        // Finish construction of the quarries
         constructHouse(quarry0);
         constructHouse(quarry1);
 
-        /* Occupy the quarries */
+        // Occupy the quarries
         Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
         Utils.occupyBuilding(new Stonemason(player0, map), quarry1);
 
-        /* Remove almost all of the stone so there is only a single piece left */
+        // Remove almost all of the stone so there is only a single piece left
         Utils.removePiecesFromStoneUntil(stone, 1);
 
-        /* Wait for the stone masons to go out and try to get the same piece of stone */
+        // Wait for the stonemasons to go out and try to get the same piece of stone
         Utils.waitForWorkersOutsideBuilding(Stonemason.class, 2, player0);
 
         Worker stonemason0 = quarry0.getWorker();
@@ -2072,10 +1981,10 @@ public class TestQuarry {
         assertEquals(stonemason0.getTarget(), stone.getPosition());
         assertEquals(stonemason0.getTarget(), stone.getPosition());
 
-        /* Wait for the stonemasons to try to get the same stone */
+        // Wait for the stonemasons to try to get the same stone
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason0, stonemason0.getTarget());
 
-        /* Wait for the stone mason to get a new stone */
+        // Wait for the stonemason to get a new stone
         for (int i = 0; i < 1000; i++) {
             if (stonemason0.getCargo() != null || stonemason1.getCargo() != null) {
                 break;
@@ -2087,7 +1996,7 @@ public class TestQuarry {
         assertTrue(stonemason0.getCargo() != null || stonemason1.getCargo() != null);
         assertFalse(stonemason0.getCargo() != null && stonemason1.getCargo() != null);
 
-        /* Wait for the stone masons to go back to the quarries */
+        // Wait for the stonemasons to go back to the quarries
         assertEquals(stonemason0.getTarget(), quarry0.getPosition());
         assertEquals(stonemason1.getTarget(), quarry1.getPosition());
 
@@ -2100,31 +2009,29 @@ public class TestQuarry {
     @Test
     public void testQuarryWithoutResourcesHasZeroProductivity() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(7, 9);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(7, 9);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Finish construction of the quarry */
+        // Finish construction of the quarry
         constructHouse(quarry0);
 
-        /* Populate the quarry */
+        // Populate the quarry
         Worker stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         assertTrue(stonemason.isInsideBuilding());
         assertEquals(stonemason.getHome(), quarry0);
         assertEquals(quarry0.getWorker(), stonemason);
 
-        /* Verify that the productivity is 0% when the quarry doesn't produce anything */
+        // Verify that the productivity is 0% when the quarry doesn't produce anything
         for (int i = 0; i < 500; i++) {
             assertTrue(quarry0.getFlag().getStackedCargo().isEmpty());
             assertNull(stonemason.getCargo());
@@ -2136,47 +2043,45 @@ public class TestQuarry {
     @Test
     public void testQuarryWithAbundantResourcesHasFullProductivity() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(7, 9);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(7, 9);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Finish construction of the quarry */
+        // Finish construction of the quarry
         constructHouse(quarry0);
 
-        /* Populate the quarry */
+        // Populate the quarry
         Worker quarry = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         assertTrue(quarry.isInsideBuilding());
         assertEquals(quarry.getHome(), quarry0);
         assertEquals(quarry0.getWorker(), quarry);
 
-        /* Connect the quarry with the headquarter */
+        // Connect the quarry with the headquarter
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
 
-        /* Place a stone on the map */
+        // Place a stone on the map
         Utils.putStoneOnOnePoint(map.getPointsWithinRadius(quarry0.getPosition(), 4), map);
 
-        /* Make the quarry produce some stones available */
+        // Make the quarry produce some stones available
         for (int i = 0; i < 1000; i++) {
             map.stepTime();
 
-            /* Put a new stone if the current one is gone */
+            // Put a new stone if the current one is gone
             if (map.getStones().isEmpty()) {
                 Utils.putStoneOnOnePoint(map.getPointsWithinRadius(quarry0.getPosition(), 4), map);
             }
         }
 
-        /* Verify that the productivity is 100% and stays there */
+        // Verify that the productivity is 100% and stays there
         assertEquals(quarry0.getProductivity(), 100);
 
         for (int i = 0; i < 1000; i++) {
@@ -2185,7 +2090,7 @@ public class TestQuarry {
 
             assertEquals(quarry0.getProductivity(), 100);
 
-            /* Put a new stone if the current one is gone */
+            // Put a new stone if the current one is gone
             if (map.getStones().isEmpty()) {
                 Utils.putStoneOnOnePoint(map.getPointsWithinRadius(quarry0.getPosition(), 4), map);
             }
@@ -2195,39 +2100,37 @@ public class TestQuarry {
     @Test
     public void testQuarryLosesProductivityWhenResourcesRunOut() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(7, 9);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(7, 9);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Finish construction of the quarry */
+        // Finish construction of the quarry
         constructHouse(quarry0);
 
-        /* Populate the quarry */
+        // Populate the quarry
         Worker stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         assertTrue(stonemason.isInsideBuilding());
         assertEquals(stonemason.getHome(), quarry0);
         assertEquals(quarry0.getWorker(), stonemason);
 
-        /* Connect the quarry with the headquarter */
+        // Connect the quarry with the headquarter
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
 
-        /* Put a new stone if the current one is gone */
+        // Put a new stone if the current one is gone
         if (map.getStones().isEmpty()) {
             Utils.putStoneOnOnePoint(map.getPointsWithinRadius(quarry0.getPosition(), 4), map);
         }
 
-        /* Make the quarry take down stones until the stones are gone */
+        // Make the quarry take down stones until the stones are gone
         for (int i = 0; i < 5000; i++) {
 
             map.stepTime();
@@ -2239,7 +2142,7 @@ public class TestQuarry {
 
         assertEquals(quarry0.getProductivity(), 100);
 
-        /* Verify that the productivity goes down when resources run out */
+        // Verify that the productivity goes down when resources run out
         for (int i = 0; i < 2000; i++) {
             map.stepTime();
         }
@@ -2250,24 +2153,22 @@ public class TestQuarry {
     @Test
     public void testUnoccupiedQuarryHasNoProductivity() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(7, 9);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(7, 9);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Finish construction of the quarry */
+        // Finish construction of the quarry
         constructHouse(quarry0);
 
-        /* Verify that the unoccupied quarry is unproductive */
+        // Verify that the unoccupied quarry is unproductive
         for (int i = 0; i < 1000; i++) {
             assertEquals(quarry0.getProductivity(), 0);
 
@@ -2278,27 +2179,25 @@ public class TestQuarry {
     @Test
     public void testStonemasonDoesNotGoToUnreachableStone() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        // Place headquarter
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place quarry */
-        Point point26 = new Point(15, 5);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        // Place quarry
+        var point26 = new Point(15, 5);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
-        /* Surround the quarry with water the stonemason cannot cross */
-        Point point2 = new Point(15, 7);
-        Point point3 = new Point(18, 6);
-        Point point4 = new Point(18, 4);
-        Point point5 = new Point(15, 3);
-        Point point6 = new Point(12, 4);
-        Point point7 = new Point(12, 6);
+        // Surround the quarry with water the stonemason cannot cross
+        var point2 = new Point(15, 7);
+        var point3 = new Point(18, 6);
+        var point4 = new Point(18, 4);
+        var point5 = new Point(15, 3);
+        var point6 = new Point(12, 4);
+        var point7 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point2, WATER, map);
         Utils.surroundPointWithVegetation(point3, WATER, map);
         Utils.surroundPointWithVegetation(point4, WATER, map);
@@ -2306,17 +2205,17 @@ public class TestQuarry {
         Utils.surroundPointWithVegetation(point6, WATER, map);
         Utils.surroundPointWithVegetation(point7, WATER, map);
 
-        /* Construct the quarry */
+        // Construct the quarry
         constructHouse(quarry0);
 
-        /* Put a stone on the other side of the water */
-        Point point8 = new Point(15, 9);
+        // Put a stone on the other side of the water
+        var point8 = new Point(15, 9);
         map.placeStone(point8, STONE_1, 7);
 
-        /* Occupy the quarry */
-        Stonemason stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
+        // Occupy the quarry
+        var stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
-        /* Verify that the stonemason doesn't try to the stone */
+        // Verify that the stonemason doesn't try to the stone
         for (int i = 0; i < 2000; i++) {
 
             map.stepTime();
@@ -2329,51 +2228,47 @@ public class TestQuarry {
     @Test
     public void testQuarryCanProduce() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(10, 10);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(10, 10);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Finish construction of the quarry */
+        // Finish construction of the quarry
         constructHouse(quarry0);
 
-        /* Populate the quarry */
+        // Populate the quarry
         Worker stonemason0 = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
-        /* Verify that the quarry can produce */
+        // Verify that the quarry can produce
         assertTrue(quarry0.canProduce());
     }
 
     @Test
     public void testQuarryReportsCorrectOutput() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(6, 12);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(6, 12);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Construct the quarry */
+        // Construct the quarry
         constructHouse(quarry0);
 
-        /* Verify that the reported output is correct */
+        // Verify that the reported output is correct
         assertEquals(quarry0.getProducedMaterial().length, 1);
         assertEquals(quarry0.getProducedMaterial()[0], STONE);
     }
@@ -2381,21 +2276,19 @@ public class TestQuarry {
     @Test
     public void testQuarryReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(6, 12);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(6, 12);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Verify that the reported needed construction material is correct */
+        // Verify that the reported needed construction material is correct
         assertEquals(quarry0.getTypesOfMaterialNeeded().size(), 1);
         assertTrue(quarry0.getTypesOfMaterialNeeded().contains(PLANK));
         assertEquals(quarry0.getCanHoldAmount(PLANK), 2);
@@ -2412,24 +2305,22 @@ public class TestQuarry {
     @Test
     public void testQuarryReportsCorrectMaterialsNeededForProduction() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(6, 12);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(6, 12);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Construct the quarry */
+        // Construct the quarry
         constructHouse(quarry0);
 
-        /* Verify that the reported needed construction material is correct */
+        // Verify that the reported needed construction material is correct
         assertEquals(quarry0.getTypesOfMaterialNeeded().size(), 0);
 
         for (Material material : Material.values()) {
@@ -2440,27 +2331,25 @@ public class TestQuarry {
     @Test
     public void testTearingDownQuarryAndThenFlag() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(6, 12);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(6, 12);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Construct the quarry */
+        // Construct the quarry
         constructHouse(quarry0);
 
-        /* Tear down the quarry */
+        // Tear down the quarry
         quarry0.tearDown();
 
-        /* Verify that tearing down the flag doesn't cause any problem */
+        // Verify that tearing down the flag doesn't cause any problem
         map.removeFlag(quarry0.getFlag());
 
         assertFalse(map.getFlags().contains(quarry0.getFlag()));
@@ -2470,49 +2359,46 @@ public class TestQuarry {
     @Test
     public void testQuarryWaitsWhenFlagIsFull() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        GameMap map = new GameMap(players, 20, 20);
+        // Place headquarter
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        // Place quarry
+        var point1 = new Point(16, 6);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Place quarry */
-        Point point1 = new Point(16, 6);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        // Place stone
+        var point2 = new Point(18, 6);
+        var stone = map.placeStone(point2, STONE_1, 7);
 
-        /* Place stone */
-        Point point2 = new Point(18, 6);
-        Stone stone = map.placeStone(point2, STONE_1, 7);
+        // Connect the quarry with the headquarter
+        var road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
 
-        /* Connect the quarry with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
-
-        /* Wait for the quarry to get constructed and assigned a worker */
+        // Wait for the quarry to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(quarry);
         Utils.waitForNonMilitaryBuildingToGetPopulated(quarry);
 
-        /* Fill the flag with flour cargos */
+        // Fill the flag with flour cargos
         Utils.placeCargos(map, FLOUR, 8, quarry.getFlag(), headquarter);
 
-        /* Remove the road */
+        // Remove the road
         map.removeRoad(road0);
 
-        /* Verify that the quarry waits for the flag to get empty and produces nothing */
+        // Verify that the quarry waits for the flag to get empty and produces nothing
         for (int i = 0; i < 300; i++) {
             assertEquals(quarry.getFlag().getStackedCargo().size(), 8);
 
             map.stepTime();
         }
 
-        /* Reconnect the quarry with the headquarter */
-        Road road1 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
+        // Reconnect the quarry with the headquarter
+        var road1 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
 
-        /* Wait for the courier to pick up one of the cargos */
+        // Wait for the courier to pick up one of the cargos
         Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
@@ -2528,56 +2414,53 @@ public class TestQuarry {
 
         assertEquals(quarry.getFlag().getStackedCargo().size(), 7);
 
-        /* Verify that the worker produces a cargo of flour and puts it on the flag */
+        // Verify that the worker produces a cargo of flour and puts it on the flag
         Utils.fastForwardUntilWorkerCarriesCargo(map, quarry.getWorker(), STONE);
     }
 
     @Test
     public void testQuarryDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        GameMap map = new GameMap(players, 20, 20);
+        // Place headquarter
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        // Place quarry
+        var point1 = new Point(16, 6);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Place quarry */
-        Point point1 = new Point(16, 6);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        // Place stone
+        var point2 = new Point(18, 6);
+        var stone = map.placeStone(point2, STONE_1, 7);
 
-        /* Place stone */
-        Point point2 = new Point(18, 6);
-        Stone stone = map.placeStone(point2, STONE_1, 7);
+        // Connect the quarry with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
 
-        /* Connect the quarry with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
-
-        /* Wait for the quarry to get constructed and assigned a worker */
+        // Wait for the quarry to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(quarry);
         Utils.waitForNonMilitaryBuildingToGetPopulated(quarry);
 
-        /* Fill the flag with cargos */
+        // Fill the flag with cargos
         Utils.placeCargos(map, FLOUR, 8, quarry.getFlag(), headquarter);
 
-        /* Remove the road */
+        // Remove the road
         map.removeRoad(road0);
 
-        /* The quarry waits for the flag to get empty and produces nothing */
+        // The quarry waits for the flag to get empty and produces nothing
         for (int i = 0; i < 800; i++) {
             assertEquals(quarry.getFlag().getStackedCargo().size(), 8);
 
             map.stepTime();
         }
 
-        /* Reconnect the quarry with the headquarter */
-        Road road1 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
+        // Reconnect the quarry with the headquarter
+        var road1 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
 
-        /* Wait for the courier to pick up one of the cargos */
+        // Wait for the courier to pick up one of the cargos
         Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
@@ -2593,20 +2476,20 @@ public class TestQuarry {
 
         assertEquals(quarry.getFlag().getStackedCargo().size(), 7);
 
-        /* Remove the road */
+        // Remove the road
         map.removeRoad(road1);
 
-        /* The worker produces a cargo and puts it on the flag */
+        // The worker produces a cargo and puts it on the flag
         Utils.fastForwardUntilWorkerCarriesCargo(map, quarry.getWorker(), STONE);
 
-        /* Wait for the worker to put the cargo on the flag */
+        // Wait for the worker to put the cargo on the flag
         Utils.waitForFlagToGetStackedCargo(map, quarry.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, quarry.getWorker(), quarry.getFlag().getPosition());
 
         assertEquals(quarry.getFlag().getStackedCargo().size(), 8);
 
-        /* Verify that the quarry doesn't produce anything because the flag is full */
+        // Verify that the quarry doesn't produce anything because the flag is full
         for (int i = 0; i < 800; i++) {
             assertEquals(quarry.getFlag().getStackedCargo().size(), 8);
 
@@ -2617,30 +2500,28 @@ public class TestQuarry {
     @Test
     public void testWhenStoneDeliveryAreBlockedQuarryFillsUpFlagAndThenStops() throws Exception {
 
-        /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Start new game with one player only
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place Quarry */
-        Point point1 = new Point(7, 9);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        // Place Quarry
+        var point1 = new Point(7, 9);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Place stones */
-        Point point2 = new Point(9, 9);
-        Point point3 = new Point(10, 8);
-        Stone stone0 = map.placeStone(point2, STONE_1, 7);
-        Stone stone1 = map.placeStone(point3, STONE_1, 7);
+        // Place stones
+        var point2 = new Point(9, 9);
+        var point3 = new Point(10, 8);
+        var stone0 = map.placeStone(point2, STONE_1, 7);
+        var stone1 = map.placeStone(point3, STONE_1, 7);
 
-        /* Place road to connect the quarry with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
+        // Place road to connect the quarry with the headquarter
+        var road0 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the quarry to get constructed and occupied */
+        // Wait for the quarry to get constructed and occupied
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
@@ -2652,10 +2533,10 @@ public class TestQuarry {
         assertEquals(stonemason0.getHome(), quarry0);
         assertEquals(quarry0.getWorker(), stonemason0);
 
-        /* Block storage of stones */
+        // Block storage of stones
         headquarter0.blockDeliveryOfMaterial(STONE);
 
-        /* Verify that the quarry puts eight stones on the flag and then stops */
+        // Verify that the quarry puts eight stones on the flag and then stops
         Utils.waitForFlagToGetStackedCargo(map, quarry0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason0, quarry0.getPosition());
@@ -2674,38 +2555,36 @@ public class TestQuarry {
     @Test
     public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndQuarryIsTornDown() throws Exception {
 
-        /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Start new game with one player only
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place storehouse */
-        Point point1 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        // Place storehouse
+        var point1 = new Point(5, 5);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
-        /* Place quarry */
-        Point point2 = new Point(18, 6);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point2);
+        // Place quarry
+        var point2 = new Point(18, 6);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point2);
 
-        /* Place road to connect the storehouse with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+        // Place road to connect the storehouse with the headquarter
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        /* Place road to connect the headquarter with the quarry */
-        Road road1 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
+        // Place road to connect the headquarter with the quarry
+        var road1 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
 
-        /* Add a lot of planks and stones to the headquarter */
+        // Add a lot of planks and stones to the headquarter
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        /* Wait for the quarry and the storehouse to get constructed */
+        // Wait for the quarry and the storehouse to get constructed
         Utils.waitForBuildingsToBeConstructed(storehouse, quarry0);
 
-        /* Wait for the quarry and the storage to get occupied */
+        // Wait for the quarry and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, quarry0);
 
         Worker stonemason0 = quarry0.getWorker();
@@ -2714,7 +2593,7 @@ public class TestQuarry {
         assertEquals(stonemason0.getHome(), quarry0);
         assertEquals(quarry0.getWorker(), stonemason0);
 
-        /* Verify that the worker goes to the storage when the quarry is torn down */
+        // Verify that the worker goes to the storage when the quarry is torn down
         headquarter0.blockDeliveryOfMaterial(STONEMASON);
 
         quarry0.tearDown();
@@ -2735,38 +2614,36 @@ public class TestQuarry {
     @Test
     public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndQuarryIsTornDown() throws Exception {
 
-        /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Start new game with one player only
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place storehouse */
-        Point point1 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        // Place storehouse
+        var point1 = new Point(5, 5);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
-        /* Place quarry */
-        Point point2 = new Point(18, 6);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point2);
+        // Place quarry
+        var point2 = new Point(18, 6);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point2);
 
-        /* Place road to connect the storehouse with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+        // Place road to connect the storehouse with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        /* Place road to connect the headquarters with the quarry */
-        Road road1 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
+        // Place road to connect the headquarters with the quarry
+        var road1 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
 
-        /* Add a lot of planks and stones to the headquarters */
+        // Add a lot of planks and stones to the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        /* Wait for the quarry and the storehouse to get constructed */
+        // Wait for the quarry and the storehouse to get constructed
         Utils.waitForBuildingsToBeConstructed(storehouse, quarry0);
 
-        /* Wait for the quarry and the storage to get occupied */
+        // Wait for the quarry and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, quarry0);
 
         Worker stonemason0 = quarry0.getWorker();
@@ -2775,7 +2652,7 @@ public class TestQuarry {
         assertEquals(stonemason0.getHome(), quarry0);
         assertEquals(quarry0.getWorker(), stonemason0);
 
-        /* Verify that the worker goes to the storage off-road when the quarry is torn down */
+        // Verify that the worker goes to the storage off-road when the quarry is torn down
         headquarter0.blockDeliveryOfMaterial(STONEMASON);
 
         quarry0.tearDown();
@@ -2798,17 +2675,15 @@ public class TestQuarry {
     @Test
     public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
 
-        /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Start new game with one player only
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, STONEMASON, 1);
 
         assertEquals(headquarter0.getAmount(STONEMASON), 1);
@@ -2816,7 +2691,7 @@ public class TestQuarry {
         headquarter0.pushOutAll(STONEMASON);
 
         for (int i = 0; i < 10; i++) {
-            Worker worker = Utils.waitForWorkerOutsideBuilding(Stonemason.class, player0);
+            var worker = Utils.waitForWorkerOutsideBuilding(Stonemason.class, player0);
 
             assertEquals(headquarter0.getAmount(STONEMASON), 0);
             assertEquals(worker.getPosition(), headquarter0.getPosition());
@@ -2836,23 +2711,21 @@ public class TestQuarry {
     @Test
     public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
 
-        /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Start new game with one player only
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, STONEMASON, 1);
 
         headquarter0.blockDeliveryOfMaterial(STONEMASON);
         headquarter0.pushOutAll(STONEMASON);
 
-        Worker worker = Utils.waitForWorkerOutsideBuilding(Stonemason.class, player0);
+        var worker = Utils.waitForWorkerOutsideBuilding(Stonemason.class, player0);
 
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
@@ -2881,36 +2754,34 @@ public class TestQuarry {
     @Test
     public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
 
-        /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Start new game with one player only
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(7, 9);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(7, 9);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Place road to connect the quarry with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
+        // Place road to connect the quarry with the headquarter
+        var road0 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        /* Wait for the quarry to get constructed and occupied */
+        // Wait for the quarry to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(quarry0);
         Utils.waitForNonMilitaryBuildingToGetPopulated(quarry0);
 
         /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
-           blocked in the headquarter
-        */
+           blocked in the headquarter */
+       
         headquarter0.blockDeliveryOfMaterial(STONEMASON);
 
-        Worker worker = quarry0.getWorker();
+        var worker = quarry0.getWorker();
 
         quarry0.tearDown();
 
@@ -2941,38 +2812,36 @@ public class TestQuarry {
     @Test
     public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
 
-        /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Start new game with one player only
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarter
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(7, 9);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(7, 9);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Place road to connect the quarry with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
+        // Place road to connect the quarry with the headquarter
+        var road0 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        /* Wait for the quarry to get constructed */
+        // Wait for the quarry to get constructed
         Utils.waitForBuildingToBeConstructed(quarry0);
 
-        /* Wait for a stonemason to start walking to the quarry */
-        Stonemason stonemason = Utils.waitForWorkerOutsideBuilding(Stonemason.class, player0);
+        // Wait for a stonemason to start walking to the quarry
+        var stonemason = Utils.waitForWorkerOutsideBuilding(Stonemason.class, player0);
 
-        /* Wait for the stonemason to go past the headquarter's flag */
+        // Wait for the stonemason to go past the headquarter's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
-        /* Verify that the stonemason goes away and dies when the house has been torn down and storage is not possible */
+        // Verify that the stonemason goes away and dies when the house has been torn down and storage is not possible
         assertEquals(stonemason.getTarget(), quarry0.getPosition());
 
         headquarter0.blockDeliveryOfMaterial(STONEMASON);
@@ -2989,7 +2858,7 @@ public class TestQuarry {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, stonemason.getTarget());
 
-        Point point = stonemason.getPosition();
+        var point = stonemason.getPosition();
         for (int i = 0; i < 100; i++) {
             assertTrue(stonemason.isDead());
             assertEquals(stonemason.getPosition(), point);
@@ -3004,27 +2873,158 @@ public class TestQuarry {
     @Test
     public void testThereAreTwoTypesOfStone() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarter */
-        Point point0 = new Point(10, 10);
+        // Place headquarter
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point1 = new Point(10, 4);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        // Place quarry
+        var point1 = new Point(10, 4);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        /* Verify that stones can be place with both types */
-        Point point2 = new Point(11, 5);
-        Point point3 = new Point(13, 5);
-        Stone stone0 = map.placeStone(point2, STONE_1, 7);
-        Stone stone1 = map.placeStone(point3, STONE_2, 3);
+        // Verify that stones can be place with both types
+        var point2 = new Point(11, 5);
+        var point3 = new Point(13, 5);
+        var stone0 = map.placeStone(point2, STONE_1, 7);
+        var stone1 = map.placeStone(point3, STONE_2, 3);
 
         assertEquals(stone0.getStoneType(), STONE_1);
         assertEquals(stone1.getStoneType(), STONE_2);
     }
+
+    @Test
+    public void testStonemasonDoesGoesOutToCutStoneThatIsAlreadyBeingCut() throws InvalidUserActionException {
+
+        // Start new game with one player only
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
+
+        // Place headquarters
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place two woodcutters and connect them to the headquarters
+        var point2 = new Point(10, 10);
+        var point3 = new Point(14, 10);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point2);
+        var quarry1 = map.placeBuilding(new Quarry(player0), point3);
+        var road1 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, quarry1.getFlag(), headquarter0.getFlag());
+
+        // Place a single stone for both woodcutters
+        var point4 = new Point(12, 10);
+
+        map.placeStone(point4, STONE_2, 7);
+
+        // Wait for the quarries to get constructed and occupied
+        Utils.waitForBuildingsToBeConstructed(quarry0, quarry1);
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(quarry0, quarry1);
+
+        // Wait for the first stonemason to start cutting down the stone
+        var stonemason0 = (Stonemason) quarry0.getWorker();
+
+        for (int i = 0; i < 2_000; i++) {
+            if (stonemason0.isGettingStone()) {
+                break;
+            }
+
+            stonemason0.stepTime();
+        }
+
+        assertTrue(stonemason0.isGettingStone());
+
+        // Verify that the second stonemason goes out to cut down the stone. Cheat by only stepping its time.
+        var stonemason1 = (Stonemason) quarry1.getWorker();
+
+        for (int i = 0; i < 2_000; i++) {
+            assertTrue(stonemason0.isGettingStone());
+
+            if (stonemason1.isGettingStone()) {
+                break;
+            }
+
+            stonemason1.stepTime();
+        }
+
+        assertTrue(stonemason1.isGettingStone());
+    }
+
+    @Test
+    public void testStonemasonCutsStoneThatIsAlreadyBeingCut() throws InvalidUserActionException {
+
+        // Start new game with one player only
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
+
+        // Place headquarters
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place two woodcutters and connect them to the headquarters
+        var point2 = new Point(10, 10);
+        var point3 = new Point(14, 10);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point2);
+        var quarry1 = map.placeBuilding(new Quarry(player0), point3);
+        var road1 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, quarry1.getFlag(), headquarter0.getFlag());
+
+        // Place one stone for them to want to cut
+        var point4 = new Point(12, 10);
+
+        map.placeStone(point4, STONE_2, 7);
+
+        // Wait for the quarries to get constructed and occupied
+        Utils.waitForBuildingsToBeConstructed(quarry0, quarry1);
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(quarry0, quarry1);
+
+        var stonemason0 = (Stonemason) quarry0.getWorker();
+
+        // Wait for the second stonemason to go out to cut the stone. Cheat by only stepping its time
+        var stonemason1 = (Stonemason) quarry1.getWorker();
+
+        for (int i = 0; i < 2_000; i++) {
+            if (!stonemason1.isInsideBuilding()) {
+                break;
+            }
+
+            stonemason1.stepTime();
+        }
+
+        assertFalse(stonemason1.isInsideBuilding());
+        assertEquals(stonemason1.getTarget(), point4);
+
+        // Wait for the first stonemason to start cutting the stone. Cheat by only stepping its time
+        for (int i = 0; i < 2_000; i++) {
+            if (stonemason0.isGettingStone()) {
+                break;
+            }
+
+            stonemason0.stepTime();
+        }
+
+        assertTrue(stonemason0.isGettingStone());
+        assertEquals(stonemason0.getPosition(), point4);
+
+        // Verify that the second stonemason starts cutting the stone. Cheat by only stepping its time.
+        for (int i = 0; i < 2_000; i++) {
+            if (stonemason1.getPosition().equals(point4)) {
+                break;
+            }
+
+            assertEquals(stonemason1.getTarget(), point4);
+
+            stonemason1.stepTime();
+        }
+
+        assertTrue(stonemason0.isGettingStone());
+        assertEquals(stonemason0.getPosition(), point4);
+        assertEquals(stonemason1.getPosition(), point4);
+        assertTrue(stonemason1.isGettingStone());
+    }
+
+    // TODO: test stonemason goes out to cut stone and when it reaches the stone someone else already removed it.
+    // - can be empty, flag, house, crop, road instead
 }
