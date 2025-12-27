@@ -5,6 +5,8 @@ import org.appland.settlers.model.buildings.Building;
 
 import java.util.List;
 
+import static java.lang.String.format;
+
 public class TestCaseGenerator {
     public void recordPlaceBuilding(Building building, Point point) {
         printStartTry();
@@ -230,11 +232,9 @@ public class TestCaseGenerator {
     public void recordSetCoalQuota(Player player, Class<? extends Building> buildingClass, int quota) {
         printStartTry();
 
-        System.out.println(
-                "    " + player.getName() + ".setCoalQuota(" +
-                        buildingClass == null ? "null" : buildingClass.getSimpleName() +
-                        ", " + quota + ");"
-        );
+        System.out.println(buildingClass == null
+                ? format("    %s.setCoalQuota(null, %d);", player.getName(), quota)
+                : format("    %s.setCoalQuota(%s, %d);", player.getName(), buildingClass.getSimpleName(), quota));
 
         printEndTry();
     }

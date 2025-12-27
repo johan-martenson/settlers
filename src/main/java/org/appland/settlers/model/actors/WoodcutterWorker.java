@@ -261,8 +261,8 @@ public class WoodcutterWorker extends Worker {
     @Override
     public String toString() {
         return isTraveling()
-                ? format("Woodcutter worker at %s walking to , state: ", position, getNextPoint(), state)
-                : format("Woodcutter worker at %s, state: ", position, state);
+                ? format("Woodcutter worker at %s walking to , state: %s", position, getNextPoint(), state)
+                : format("Woodcutter worker at %s, state: %s", position, state);
     }
 
     @Override

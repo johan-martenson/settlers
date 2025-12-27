@@ -243,6 +243,8 @@ public class Scout extends Worker {
     }
 
     record EntityAndScore<T>(T entity, double score) {
+
+        @Override
         public String toString() {
                 return entity + ", " + score;
             }

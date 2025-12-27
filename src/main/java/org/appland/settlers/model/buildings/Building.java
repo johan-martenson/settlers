@@ -101,7 +101,7 @@ public class Building implements EndPoint {
     private Flag flag = new Flag(null);
     private Set<Point> defendedLand = null;
     private long generation;
-    public State state = State.PLANNED;
+    public State state = State.PLANNED; // TODO: make private again
     private Worker worker = null;
     private Worker promisedWorker = null;
     private Point position = null;

@@ -1,6 +1,8 @@
 package org.appland.settlers.model.statistics;
 
-public class LandDataPoint {
+public record LandDataPoint (long time, int[] values) {}
+
+/*public class LandDataPoint {
     private final long time;
     private final int[] measurement;
 
@@ -9,11 +11,11 @@ public class LandDataPoint {
         this.measurement = measurement;
     }
 
-    public int[] getValues() {
+    public int[] values() {
         return measurement;
     }
 
-    public long getTime() {
+    public long time() {
         return time;
     }
-}
+}*/

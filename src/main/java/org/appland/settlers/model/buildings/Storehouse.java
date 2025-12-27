@@ -461,7 +461,7 @@ public class Storehouse extends Building {
                 })
                 .findFirst() // Find the first suitable road
                 .map(road -> {
-                    Donkey donkey = retrieveDonkey();
+                    var donkey = retrieveDonkey();
                     map.placeWorker(donkey, getFlag());
                     donkey.assignToRoad(road);
                     return true;

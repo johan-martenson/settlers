@@ -244,7 +244,8 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 house.resumeProduction();
             }
             case DELETE_GAME -> {
-                GAME_RESOURCES.removeGame(game);
+                var gameToDelete = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
+                GAME_RESOURCES.removeGame(gameToDelete);
             }
             case FIND_NEW_ROAD -> {
                 var start = jsonUtils.jsonToPoint((JSONObject) jsonBody.get("from"));
@@ -537,8 +538,10 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
             case START_GAME -> {
-                synchronized (game) {
-                    startGame(game, gameTicker);
+                var gameToStart = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
+
+                synchronized (gameToStart) {
+                    startGame(gameToStart, gameTicker);
                 }
             }
             case SET_MAP -> {
@@ -710,13 +713,17 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
             case PAUSE_GAME -> {
-                synchronized (game) {
-                    game.setStatus(GameStatus.PAUSED);
+                var gameToPause = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
+
+                synchronized (gameToPause) {
+                    gameToPause.setStatus(GameStatus.PAUSED);
                 }
             }
             case RESUME_GAME -> {
-                synchronized (game) {
-                    game.setStatus(GameStatus.STARTED);
+                var gameToResume = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
+
+                synchronized (gameToResume) {
+                    gameToResume.setStatus(GameStatus.STARTED);
                 }
             }
             case SET_IRON_BAR_QUOTAS -> {
@@ -840,18 +847,14 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
             case REMOVE_MESSAGE -> {
-                String messageId = (String) jsonBody.get("messageId");
-
-                Message gameMessage = (Message) idManager.getObject(messageId);
+                var gameMessage = (Message) idManager.getObject((String) jsonBody.get("messageId"));
 
                 synchronized (player.getMap()) {
                     player.removeMessage(gameMessage);
                 }
             }
             case START_DETAILED_MONITORING -> {
-                String id = (String) jsonBody.get("id");
-                Object object = idManager.getObject(id);
-
+                var object = idManager.getObject((String) jsonBody.get("id"));
                 var jsonPlayerViewChanges = new JSONObject();
 
                 var jsonUpdate = new JSONObject(Map.of(
@@ -863,7 +866,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     synchronized (map) {
                         player.addDetailedMonitoring(building);
 
-                        JSONArray jsonUpdatedBuildings = new JSONArray();
+                        var jsonUpdatedBuildings = new JSONArray();
 
                         jsonPlayerViewChanges.put("changedBuildings", jsonUpdatedBuildings);
 
@@ -873,7 +876,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     synchronized (map) {
                         player.addDetailedMonitoring(flag);
 
-                        JSONArray jsonUpdatedFlags = new JSONArray();
+                        var jsonUpdatedFlags = new JSONArray();
 
                         jsonPlayerViewChanges.put("changedFlags", jsonUpdatedFlags);
 
