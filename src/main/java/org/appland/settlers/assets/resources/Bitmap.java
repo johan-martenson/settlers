@@ -440,12 +440,13 @@ public class Bitmap {
         );
     }
 
-    public Point getOrigin() {
+    /**
+     * Returns the offsets to the center point for the visible area of the image.
+     * @return
+     */
+    public Point getOffsetsForVisibleImage() {
         Area visibleArea = getVisibleArea();
-        int originX = this.nx - visibleArea.x();
-        int originY = this.ny - visibleArea.y();
-
-        return new Point(originX, originY);
+        return new Point(this.nx - visibleArea.x(), this.ny - visibleArea.y());
     }
 
     public boolean isTransparent(int x, int y) {

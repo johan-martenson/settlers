@@ -13,7 +13,9 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static hqx.Hqx_2x.hq2x_32_rb;
 import static hqx.Hqx_4x.hq4x_32_rb;
@@ -43,27 +45,31 @@ public class ImageUtils {
         }
     }
 
-    public static Bitmap mergeImages(Bitmap under, Bitmap over) {
-        // TODO: handle player bitmaps
+    public static void markCenterPoint(Bitmap b) {
+        for (int i = 0; i < b.getWidth(); i++) {
+            b.setPixelValue(i, b.getNy(), (byte) 0, (byte) 0, (byte) 255, (byte) 255);
+        }
 
+        for (int i = 0; i < b.getHeight(); i++) {
+            b.setPixelValue(b.getNx(), i, (byte) 0, (byte) 0, (byte) 255, (byte) 255);
+        }
+    }
+
+    public static Bitmap mergeImages(Bitmap under, Bitmap over, int overOffsetX, int overOffsetY) {
+        // TODO: handle player bitmaps
+        // TODO: extend the merged image if the overOffsets push the overlay outside the image
+
+        // Find the subset of each image that's non-transparent
         var underVisibleArea = under.getVisibleArea();
         var overVisibleArea = over.getVisibleArea();
 
-        var underVisibilityStartX = underVisibleArea.x();
-        var underVisibilityStartY = underVisibleArea.y();
-        var underVisibilityEndX = underVisibleArea.width() + underVisibilityStartX;
-        var underVisibilityEndY = underVisibleArea.height() + underVisibilityStartY;
+        // Distances from the center point to the edges of the combined image
+        var left = max(under.getOffsetsForVisibleImage().x, over.getOffsetsForVisibleImage().x);
+        var right = max(underVisibleArea.width() - under.getOffsetsForVisibleImage().x, overVisibleArea.width() - over.getOffsetsForVisibleImage().x);
+        var up = max(under.getOffsetsForVisibleImage().y, over.getOffsetsForVisibleImage().y);
+        var down = max(underVisibleArea.height() - under.getOffsetsForVisibleImage().y, overVisibleArea.height() - over.getOffsetsForVisibleImage().y);
 
-        var overVisibilityStartX = overVisibleArea.x();
-        var overVisibilityStartY = overVisibleArea.y();
-        var overVisibilityEndX = overVisibleArea.width() + overVisibilityStartX;
-        var overVisibilityEndY = overVisibleArea.height() + overVisibilityStartY;
-
-        var left = max(under.getOrigin().x - underVisibilityStartX, over.getOrigin().x - overVisibilityStartX);
-        var right = max(underVisibilityEndX - under.getOrigin().x, overVisibilityEndX - over.getOrigin().x);
-        var up = max(under.getOrigin().y - underVisibilityStartY, over.getOrigin().y - overVisibilityStartY);
-        var down = max(underVisibilityEndY - under.getOrigin().y, overVisibilityEndY - over.getOrigin().y);
-
+        // Create blank combined image
         var merged = new Bitmap(
                 left + right,
                 up + down,
@@ -73,26 +79,132 @@ public class ImageUtils {
                 TextureFormat.BGRA
         );
 
+        // Copy the images unto the combined image
         merged.copyNonTransparentPixels(
                 under,
                 new Point(
-                        left - (under.getOrigin().x - underVisibilityStartX),
-                        up - (under.getOrigin().y - underVisibilityStartY)),
-                new Point(
-                        underVisibilityStartX,
-                        underVisibilityStartY),
+                        left - under.getOffsetsForVisibleImage().x,
+                        up - under.getOffsetsForVisibleImage().y),
+                underVisibleArea.getUpperLeftCoordinate(),
                 underVisibleArea.getDimension());
 
         merged.copyNonTransparentPixels(
                 over,
                 new Point(
-                        left - (over.getOrigin().x - overVisibilityStartX),
-                        up - (over.getOrigin().y - overVisibilityStartY)
+                        left - over.getOffsetsForVisibleImage().x + overOffsetX,
+                        up - over.getOffsetsForVisibleImage().y + overOffsetY
                 ),
+                overVisibleArea.getUpperLeftCoordinate(),
+                overVisibleArea.getDimension());
+
+        return merged;
+    }
+
+    public static Bitmap mergeImages(Bitmap... images) {
+        if (images == null || images.length == 0) {
+            throw new IllegalArgumentException("At least one bitmap must be provided");
+        }
+
+        if (images.length == 1) {
+            return images[0];
+        }
+
+        // TODO: handle player bitmaps
+
+        // Find the subset of each image that's non-transparent
+        var visibles = Arrays.stream(images)
+                .map(bitmap -> Map.entry(bitmap, bitmap.getVisibleArea()))
+                .toList();
+
+        // Distances from the center point to the edges of the combined image
+        var left = visibles.stream()
+                .mapToInt(e -> e.getKey().getOffsetsForVisibleImage().x)
+                .max()
+                .orElseThrow();
+
+        var right = visibles.stream()
+                .mapToInt(e -> e.getValue().width() - e.getKey().getOffsetsForVisibleImage().x)
+                .max()
+                .orElseThrow();
+
+        var up = visibles.stream()
+                .mapToInt(e -> e.getKey().getOffsetsForVisibleImage().y)
+                .max()
+                .orElseThrow();
+
+        var down = visibles.stream()
+                .mapToInt(e -> e.getValue().height() - e.getKey().getOffsetsForVisibleImage().y)
+                .max()
+                .orElseThrow();
+
+        // Create blank combined image
+        var base = images[0];
+
+        var merged = new Bitmap(
+                left + right,
+                up + down,
+                left,
+                up,
+                base.getPalette(),
+                TextureFormat.BGRA
+        );
+
+        // Copy the images unto the combined image
+        for (var entry : visibles) {
+            var bitmap = entry.getKey();
+            var visible = entry.getValue();
+            var offset = bitmap.getOffsetsForVisibleImage();
+
+            merged.copyNonTransparentPixels(
+                    bitmap,
+                    new Point(left - offset.x, up - offset.y),
+                    visible.getUpperLeftCoordinate(),
+                    visible.getDimension()
+            );
+        }
+
+        return merged;
+    }
+
+    public static Bitmap mergeImages(Bitmap under, Bitmap over) {
+        // TODO: handle player bitmaps
+
+        // Find the subset of each image that's non-transparent
+        var underVisibleArea = under.getVisibleArea();
+        var overVisibleArea = over.getVisibleArea();
+
+        // Distances from the center point to the edges of the combined image
+        var left = max(under.getOffsetsForVisibleImage().x, over.getOffsetsForVisibleImage().x);
+        var right = max(underVisibleArea.width() - under.getOffsetsForVisibleImage().x, overVisibleArea.width() - over.getOffsetsForVisibleImage().x);
+        var up = max(under.getOffsetsForVisibleImage().y, over.getOffsetsForVisibleImage().y);
+        var down = max(underVisibleArea.height() - under.getOffsetsForVisibleImage().y, overVisibleArea.height() - over.getOffsetsForVisibleImage().y);
+
+        // Create blank combined image
+        var merged = new Bitmap(
+                left + right,
+                up + down,
+                left,
+                up,
+                under.getPalette(),
+                TextureFormat.BGRA
+        );
+
+        // Copy the images unto the combined image
+        merged.copyNonTransparentPixels(
+                under,
                 new Point(
-                        overVisibilityStartX,
-                        overVisibilityStartY
+                        left - under.getOffsetsForVisibleImage().x,
+                        up - under.getOffsetsForVisibleImage().y),
+                underVisibleArea.getUpperLeftCoordinate(),
+                underVisibleArea.getDimension());
+
+        merged.copyNonTransparentPixels(
+                over,
+                new Point(
+                        left - over.getOffsetsForVisibleImage().x,
+                        up - over.getOffsetsForVisibleImage().y
                 ),
+                overVisibleArea.getUpperLeftCoordinate(),
                 overVisibleArea.getDimension());
 
         return merged;
@@ -130,6 +242,19 @@ public class ImageUtils {
             var overlayAnimation = ImageUtils.getBitmapFromResource(gameResources.get(overlayIndex + stride * i));
             var merged = ImageUtils.mergeImages(staticImage, overlayAnimation);
 
+            animation.add(merged);
+        }
+
+        return animation;
+    }
+
+    public static List<Bitmap> composeBuildingAnimation(List<GameResource> gameResources, int baseIndex, List<GameResource> overlayResources, int overlayIndex, int frames, int stride, int overlayOffsetX, int overlayOffsetY) {
+        var animation = new ArrayList<Bitmap>();
+        var staticImage = ImageUtils.getBitmapFromResource(gameResources.get(baseIndex));
+
+        for (int i = 0; i < frames; i++) {
+            var overlayAnimationFrame = ImageUtils.getBitmapFromResource(overlayResources.get(overlayIndex + stride * i));
+            var merged = ImageUtils.mergeImages(staticImage, overlayAnimationFrame, overlayOffsetX, overlayOffsetY);
             animation.add(merged);
         }
 

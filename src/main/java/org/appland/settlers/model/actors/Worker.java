@@ -680,4 +680,3 @@ public abstract class Worker {
         return false;
     }
 }
-

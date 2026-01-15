@@ -69,6 +69,8 @@ public class Carpenter extends Worker {
                     countdown.countFrom(PRODUCTION_TIME);
 
                     productivityMeasurer.nextProductivityCycle();
+
+                    player.reportChangedBuilding(getHome());
                 } else {
                     countdown.step();
                 }
@@ -259,5 +261,10 @@ public class Carpenter extends Worker {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());
+    }
+
+    @Override
+    public boolean isWorking() {
+        return state == State.CUTTING_WOOD;
     }
 }

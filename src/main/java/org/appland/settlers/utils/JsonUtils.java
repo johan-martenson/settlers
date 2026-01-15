@@ -3,7 +3,6 @@ package org.appland.settlers.utils;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.chat.ChatManager;
 import org.appland.settlers.maps.MapFile;
-import org.appland.settlers.maps.MapFilePoint;
 import org.appland.settlers.maps.MapLoader;
 import org.appland.settlers.model.BorderChange;
 import org.appland.settlers.model.Cargo;
@@ -20,7 +19,6 @@ import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sign;
-import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.TransportCategory;
 import org.appland.settlers.model.Tree;
@@ -151,7 +149,7 @@ public class JsonUtils {
                 "othersCanJoin", gameResource.getOthersCanJoin()
         ));
 
-        MapFile mapFile = gameResource.getMapFile();
+        var mapFile = gameResource.getMapFile();
         if (mapFile != null) {
             jsonGame.put("mapId", idManager.getId(mapFile));
             jsonGame.put("map", mapFileToJson(mapFile));
@@ -222,9 +220,9 @@ public class JsonUtils {
             return (Player) idManager.getObject((String) jsonPlayer.get("id"));
         }
 
-        String name = (String) jsonPlayer.get("name");
-        PlayerColor color = jsonToPlayerColor((String) jsonPlayer.get("color"));
-        Nation nation = Nation.valueOf((String) jsonPlayer.get("nation"));
+        var name = (String) jsonPlayer.get("name");
+        var color = jsonToPlayerColor((String) jsonPlayer.get("color"));
+        var nation = Nation.valueOf((String) jsonPlayer.get("nation"));
 
         return new Player(name, color, nation, PlayerType.HUMAN);
     }
@@ -234,18 +232,18 @@ public class JsonUtils {
     }
 
     JSONObject terrainToJson(GameMap map) {
-        JSONArray jsonTrianglesBelow = new JSONArray();
-        JSONArray jsonTrianglesBelowRight = new JSONArray();
-        JSONArray jsonHeights = new JSONArray();
+        var jsonTrianglesBelow = new JSONArray();
+        var jsonTrianglesBelowRight = new JSONArray();
+        var jsonHeights = new JSONArray();
 
         int start = 1;
 
         for (int y = 1; y < map.getHeight(); y++) {
             for (int x = start; x + 1 < map.getWidth(); x += 2) {
-                Point point = new Point(x, y);
+                var point = new Point(x, y);
 
-                Vegetation below = map.getVegetationBelow(point);
-                Vegetation downRight = map.getVegetationDownRight(point);
+                var below = map.getVegetationBelow(point);
+                var downRight = map.getVegetationDownRight(point);
 
                 jsonTrianglesBelow.add(below.toInt());
                 jsonTrianglesBelowRight.add(downRight.toInt());
@@ -265,7 +263,7 @@ public class JsonUtils {
     }
 
     public JSONObject pointToDetailedJson(Point point, Player player, GameMap map) throws InvalidUserActionException {
-        JSONObject jsonPointInfo = pointToJson(point);
+        var jsonPointInfo = pointToJson(point);
 
         if (player.getDiscoveredLand().contains(point)) {
             if (map.isBuildingAtPoint(point)) {
@@ -281,7 +279,7 @@ public class JsonUtils {
                 jsonPointInfo.put("roadId", idManager.getId(map.getRoadAtPoint(point)));
             }
 
-            JSONArray canBuild = new JSONArray();
+            var canBuild = new JSONArray();
             jsonPointInfo.put("canBuild", canBuild);
 
             try {
@@ -293,7 +291,7 @@ public class JsonUtils {
                     canBuild.add("MINE");
                 }
 
-                Size size = map.isAvailableHousePoint(player, point);
+                var size = map.isAvailableHousePoint(player, point);
                 if (size != null) {
                     switch (size) {
                         case LARGE -> canBuild.addAll(List.of("LARGE", "MEDIUM", "SMALL"));
@@ -302,7 +300,7 @@ public class JsonUtils {
                     }
                 }
 
-                /* Fill in available connections for a new road */
+                // Fill in available connections for a new road
                 jsonPointInfo.put("possibleRoadConnections", pointsToJson(
                         map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player, point))
                 );
@@ -337,14 +335,14 @@ public class JsonUtils {
     }
 
     public JSONObject houseToJson(Building building, Player player) throws InvalidUserActionException {
-        JSONObject jsonResources = new JSONObject();
+        var jsonResources = new JSONObject();
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             int amountCanHold = building.getCanHoldAmount(material);
             int amountAvailable = building.getAmount(material);
 
             if (amountAvailable > 0 || amountCanHold > 0) {
-                JSONObject jsonResource = new JSONObject();
+                var jsonResource = new JSONObject();
 
                 jsonResource.put("has", amountAvailable);
 
@@ -368,12 +366,12 @@ public class JsonUtils {
         ));
 
         if (building.canProduce()) {
-            JSONArray jsonProduces = new JSONArray();
+            var jsonProduces = new JSONArray();
 
             jsonHouse.put("productivity", building.getProductivity());
             jsonHouse.put("produces", jsonProduces);
 
-            for (Material material : building.getProducedMaterial()) {
+            for (var material : building.getProducedMaterial()) {
                 jsonProduces.add(material.name().toUpperCase());
             }
 
@@ -387,7 +385,7 @@ public class JsonUtils {
             jsonHouse.put("door", building.isDoorClosed() ? "CLOSED" : "OPEN");
         }
 
-        /* Add amount of hosted soldiers for military buildings */
+        // Add amount of hosted soldiers for military buildings
         if (building.isMilitaryBuilding() && building.isReady()) {
             var jsonSoldiers = toJsonArray(building.getHostedSoldiers(), soldier -> soldier.getRank().name().toUpperCase());
 
@@ -402,8 +400,8 @@ public class JsonUtils {
         }
 
         if (building instanceof Headquarter headquarter) {
-            JSONObject jsonReserved = new JSONObject();
-            JSONObject jsonInReserve = new JSONObject();
+            var jsonReserved = new JSONObject();
+            var jsonInReserve = new JSONObject();
 
             jsonHouse.put("reserved", jsonReserved);
             jsonHouse.put("inReserve", jsonInReserve);
@@ -425,9 +423,9 @@ public class JsonUtils {
     }
 
     <T> List<T> jsonArrayToList(JSONArray jsonArray, Function<JSONObject, T> jsonToObject) {
-        List<T> points = new ArrayList<>();
+        var points = new ArrayList<T>();
 
-        for (Object point : jsonArray) {
+        for (var point : jsonArray) {
             points.add(jsonToObject.apply((JSONObject) point));
         }
 
@@ -450,7 +448,7 @@ public class JsonUtils {
     }
 
     public Building buildingFactory(JSONObject jsonHouse, Player player) {
-        String buildingType = (String)jsonHouse.get("type");
+        var buildingType = (String)jsonHouse.get("type");
 
         return buildingFactory(buildingType, player);
     }
@@ -543,7 +541,7 @@ public class JsonUtils {
         }
 
         if (worker.getCargo() != null) {
-            jsonWorker.put("cargo", worker.getCargo().getMaterial().getSimpleName().toUpperCase());
+            jsonWorker.put("cargo", worker.getCargo().getMaterial().name().toUpperCase());
         }
 
         return jsonWorker;
@@ -578,12 +576,13 @@ public class JsonUtils {
     }
 
     private JSONArray cargosToMaterialJson(Collection<Cargo> cargos) {
-        return toJsonArray(cargos, cargo -> cargo.getMaterial().getSimpleName().toUpperCase());
+        return toJsonArray(cargos, cargo -> cargo.getMaterial().name().toUpperCase());
     }
 
     JSONObject roadToJson(Road road) {
         return new JSONObject(Map.of(
                 "id", idManager.getId(road),
+                "playerId", idManager.getId(road.getPlayer()),
                 "points", toJsonArray(road.getWayPoints(), this::pointToJson),
                 "type", road.isMainRoad() ? "MAIN" : "NORMAL"
         ));
@@ -658,9 +657,9 @@ public class JsonUtils {
     }
 
     JSONArray housesToJson(Collection<Building> buildings, Player player) throws InvalidUserActionException {
-        JSONArray jsonHouses = new JSONArray();
+        var jsonHouses = new JSONArray();
 
-        for (Building building : buildings) {
+        for (var building : buildings) {
             jsonHouses.add(houseToJson(building, player));
         }
 
@@ -668,13 +667,13 @@ public class JsonUtils {
     }
 
     public JSONObject mapFileTerrainToJson(MapFile mapFile) throws Exception {
-        GameMap map = mapLoader.convertMapFileToGameMap(mapFile);
+        var map = mapLoader.convertMapFileToGameMap(mapFile);
 
         return terrainToJson(map);
     }
 
     public JSONObject buildingLostMessageToJson(BuildingLostMessage buildingLostMessage) {
-        Building building = buildingLostMessage.building();
+        var building = buildingLostMessage.building();
 
         return new JSONObject(Map.of(
                 "id", idManager.getId(buildingLostMessage),
@@ -687,7 +686,7 @@ public class JsonUtils {
     }
 
     public JSONObject buildingCapturedMessageToJson(BuildingCapturedMessage buildingCapturedMessage) {
-        Building building = buildingCapturedMessage.building();
+        var building = buildingCapturedMessage.building();
 
         return new JSONObject(Map.of(
                 "id", idManager.getId(buildingCapturedMessage),
@@ -700,7 +699,7 @@ public class JsonUtils {
     }
 
     public JSONObject storeHouseIsReadyMessageToJson(StoreHouseIsReadyMessage storeHouseIsReadyMessage) {
-        Building building = storeHouseIsReadyMessage.building();
+        var building = storeHouseIsReadyMessage.building();
 
         return new JSONObject(Map.of(
                 "id", idManager.getId(storeHouseIsReadyMessage),
@@ -713,7 +712,7 @@ public class JsonUtils {
     }
 
     JSONObject militaryBuildingReadyMessageToJson(MilitaryBuildingReadyMessage militaryBuildingReadyMessage) {
-        Building building = militaryBuildingReadyMessage.building();
+        var building = militaryBuildingReadyMessage.building();
 
         return new JSONObject(Map.of(
                 "id", idManager.getId(militaryBuildingReadyMessage),
@@ -726,7 +725,7 @@ public class JsonUtils {
     }
 
     JSONObject noMoreResourcesMessageToJson(NoMoreResourcesMessage noMoreResourcesMessage) {
-        Building building = noMoreResourcesMessage.building();
+        var building = noMoreResourcesMessage.building();
 
         return new JSONObject(Map.of(
                 "id", idManager.getId(noMoreResourcesMessage),
@@ -739,7 +738,7 @@ public class JsonUtils {
     }
 
     JSONObject militaryBuildingOccupiedMessageToJson(MilitaryBuildingOccupiedMessage militaryBuildingOccupiedMessage) {
-        Building building = militaryBuildingOccupiedMessage.building();
+        var building = militaryBuildingOccupiedMessage.building();
 
         return new JSONObject(Map.of(
                 "id", idManager.getId(militaryBuildingOccupiedMessage),
@@ -752,7 +751,7 @@ public class JsonUtils {
     }
 
     JSONObject underAttackMessageToJson(UnderAttackMessage underAttackMessage) {
-        Building building = underAttackMessage.building();
+        var building = underAttackMessage.building();
 
         return new JSONObject(Map.of(
                 "id", idManager.getId(underAttackMessage),
@@ -765,7 +764,7 @@ public class JsonUtils {
     }
 
     JSONObject geologistFindMessageToJson(GeologistFindMessage geologistFindMessage) {
-        JSONObject jsonGeologistFindPoint = pointToJson(geologistFindMessage.point());
+        var jsonGeologistFindPoint = pointToJson(geologistFindMessage.point());
 
         return new JSONObject(Map.of(
                 "id", idManager.getId(geologistFindMessage),
@@ -777,11 +776,11 @@ public class JsonUtils {
     }
 
     public JSONObject gameMonitoringEventToJson(GameChangesList gameChangesList, Player player) throws InvalidUserActionException {
-        JSONObject jsonMonitoringEvents = new JSONObject();
+        var jsonMonitoringEvents = new JSONObject();
 
         jsonMonitoringEvents.put("time", gameChangesList.time());
 
-        Set<Building> allChangedBuildings = new HashSet<>(gameChangesList.changedBuildings());
+        var allChangedBuildings = new HashSet<>(gameChangesList.changedBuildings());
 
         if (gameChangesList.transportPriorityChanged()) {
             jsonMonitoringEvents.put("transportPriority", transportPriorityToJson(player.getTransportPriorities()));
@@ -1076,7 +1075,7 @@ public class JsonUtils {
     }
 
     private JSONObject bombardedByCatapultMessageToJson(BombardedByCatapultMessage message) {
-        Building building = message.building();
+        var building = message.building();
 
         return new JSONObject(Map.of(
                 "type", BOMBARDED_BY_CATAPULT.name().toUpperCase(),
@@ -1088,7 +1087,7 @@ public class JsonUtils {
     }
 
     private JSONObject harborFinishedMessageToJson(HarborIsFinishedMessage message) {
-        Building harbor = message.harbor();
+        var harbor = message.harbor();
 
         return new JSONObject(Map.of(
                 "type", HARBOR_IS_FINISHED.name().toUpperCase(),
@@ -1099,7 +1098,7 @@ public class JsonUtils {
     }
 
     private JSONObject militaryBuildingCausedLostLandMessageToJson(MilitaryBuildingCausedLostLandMessage message) {
-        Building building = message.building();
+        var building = message.building();
 
         return new JSONObject(Map.of(
                 "type", MILITARY_BUILDING_CAUSED_LOST_LAND.toString(),
@@ -1128,20 +1127,20 @@ public class JsonUtils {
     }
 
     private JSONArray availableConstructionChangesToJson(Collection<Point> changedAvailableConstruction, Player player) {
-        GameMap map = player.getMap();
+        var map = player.getMap();
 
-        JSONArray jsonChangedAvailableConstruction = new JSONArray();
+        var jsonChangedAvailableConstruction = new JSONArray();
 
         synchronized (map) {
-            for (Point point : changedAvailableConstruction) {
-                JSONObject jsonPointAndAvailableConstruction = pointToJson(point);
-                JSONArray jsonAvailableConstruction = new JSONArray();
+            for (var point : changedAvailableConstruction) {
+                var jsonPointAndAvailableConstruction = pointToJson(point);
+                var jsonAvailableConstruction = new JSONArray();
 
                 if (map.isAvailableFlagPoint(player, point)) {
                     jsonAvailableConstruction.add("FLAG");
                 }
 
-                Size size = map.isAvailableHousePoint(player, point);
+                var size = map.isAvailableHousePoint(player, point);
 
                 if (size != null) {
                     jsonAvailableConstruction.add(size.name().toUpperCase());
@@ -1238,13 +1237,13 @@ public class JsonUtils {
     }
 
     private <T> JSONArray toJsonArrayWithFilter(Iterable<T> fromList, Function<T, Object> mapFunction, Function<T, Boolean> filterFunction) {
-        JSONArray jsonResult = new JSONArray();
+        var jsonResult = new JSONArray();
 
         if (fromList == null) {
             return jsonResult;
         }
 
-        for (T t : fromList) {
+        for (var t : fromList) {
             if (filterFunction.apply(t)) {
                 jsonResult.add(mapFunction.apply(t));
             }
@@ -1254,13 +1253,13 @@ public class JsonUtils {
     }
 
     public <T> JSONArray toJsonArray(Iterable<T> fromList, Function<T, Object> mapFunction) {
-        JSONArray jsonResult = new JSONArray();
+        var jsonResult = new JSONArray();
 
         if (fromList == null) {
             return jsonResult;
         }
 
-        for (T t : fromList) {
+        for (var t : fromList) {
             jsonResult.add(mapFunction.apply(t));
         }
 
@@ -1289,7 +1288,7 @@ public class JsonUtils {
     }
 
     public <T> List<T> jsonToList(JSONArray jsonArray, Function<JSONObject, T> fromJson) {
-        List<T> list = new ArrayList<>();
+        var list = new ArrayList<T>();
 
         for (var json : jsonArray) {
             list.add(fromJson.apply((JSONObject) json));
@@ -1299,7 +1298,7 @@ public class JsonUtils {
     }
 
     public <T> Set<T> jsonToSet(JSONArray jsonArray, Function<JSONObject, T> fromJson) {
-        Set<T> set = new HashSet<>();
+        var set = new HashSet<T>();
 
         for (var json : jsonArray) {
             set.add(fromJson.apply((JSONObject) json));
@@ -1406,7 +1405,7 @@ public class JsonUtils {
                     discoveredLand::contains);
 
             // Fill in available construction
-            for (Point point : map.getAvailableFlagPoints(player)) {
+            for (var point : map.getAvailableFlagPoints(player)) {
                 if (!player.getDiscoveredLand().contains(point)) {
                     continue;
                 }
@@ -1416,24 +1415,24 @@ public class JsonUtils {
                 ((JSONArray)jsonAvailableConstruction.computeIfAbsent(key, k -> new JSONArray())).add("FLAG");
             }
 
-            for (Map.Entry<Point, Size> site : map.getAvailableHousePoints(player).entrySet()) {
+            for (var site : map.getAvailableHousePoints(player).entrySet()) {
                 if (!player.getDiscoveredLand().contains(site.getKey())) {
                     continue;
                 }
 
-                String key = site.getKey().x + "," + site.getKey().y;
+                var key = site.getKey().x + "," + site.getKey().y;
 
                 ((JSONArray)jsonAvailableConstruction
                         .computeIfAbsent(key, k -> new JSONArray()))
                         .add(site.getValue().toString().toUpperCase());
             }
 
-            for (Point point : map.getAvailableMinePoints(player)) {
+            for (var point : map.getAvailableMinePoints(player)) {
                 if (!player.getDiscoveredLand().contains(point)) {
                     continue;
                 }
 
-                String key = point.x + "," + point.y;
+                var key = point.x + "," + point.y;
 
                 ((JSONArray)jsonAvailableConstruction
                         .computeIfAbsent(key, k -> new JSONArray()))
@@ -1441,9 +1440,9 @@ public class JsonUtils {
             }
 
             // Fill in decorations
-            for (Map.Entry<Point, DecorationType> entry : map.getDecorations().entrySet()) {
-                Point point = entry.getKey();
-                DecorationType decorationType = entry.getValue();
+            for (var entry : map.getDecorations().entrySet()) {
+                var point = entry.getKey();
+                var decorationType = entry.getValue();
 
                 if (!player.getDiscoveredLand().contains(point)) {
                     continue;
@@ -1453,15 +1452,15 @@ public class JsonUtils {
             }
 
             // Add terrain information
-            JSONArray jsonTrianglesBelow = new JSONArray();
-            JSONArray jsonTrianglesBelowRight = new JSONArray();
-            JSONArray jsonHeights = new JSONArray();
+            var jsonTrianglesBelow = new JSONArray();
+            var jsonTrianglesBelowRight = new JSONArray();
+            var jsonHeights = new JSONArray();
 
             int start = 1;
 
             for (int y = 1; y < map.getHeight(); y++) {
                 for (int x = start; x + 1 < map.getWidth(); x += 2) {
-                    Point point = new Point(x, y);
+                    var point = new Point(x, y);
 
                     Vegetation below = map.getVegetationBelow(point);
                     Vegetation downRight = map.getVegetationDownRight(point);
@@ -1556,9 +1555,9 @@ public class JsonUtils {
     }
 
     public JSONObject mapFileToDetailedJson(MapFile mapFile) {
-        JSONArray jsonMapPoints = new JSONArray();
+        var jsonMapPoints = new JSONArray();
 
-        JSONObject jsonMap = new JSONObject(Map.of(
+        var jsonMap = new JSONObject(Map.of(
                 "title", mapFile.getTitle(),
                 "author", mapFile.getAuthor(),
                 "width", mapFile.getWidth(),
@@ -1568,8 +1567,8 @@ public class JsonUtils {
                 "points", jsonMapPoints
         ));
 
-        for (MapFilePoint mapFilePoint : mapFile.getMapFilePoints()) {
-            Point gamePoint = mapFilePoint.getGamePointPosition();
+        for (var mapFilePoint : mapFile.getMapFilePoints()) {
+            var gamePoint = mapFilePoint.getGamePointPosition();
 
             var jsonMapFilePoint = new JSONObject(Map.of(
                     "x", gamePoint.x,

@@ -68,10 +68,14 @@ public class Armorer extends Worker {
         switch (state) {
             case RESTING_IN_HOUSE -> {
                 if (countdown.hasReachedZero()) {
-                    state = PRODUCING_WEAPON;
-                    countdown.countFrom(PRODUCTION_TIME);
+                    if (home.getAmount(IRON_BAR) > 0 && home.getAmount(COAL) > 0) {
+                        state = PRODUCING_WEAPON;
+                        countdown.countFrom(PRODUCTION_TIME);
 
-                    productivityMeasurer.nextProductivityCycle();
+                        productivityMeasurer.nextProductivityCycle();
+
+                        player.reportChangedBuilding(home);
+                    }
                 } else {
                     countdown.step();
                 }
@@ -99,6 +103,8 @@ public class Armorer extends Worker {
                         home.consumeOne(COAL);
 
                         map.getStatisticsManager().weaponProduced(player, map.getTime());
+
+                        player.reportChangedBuilding(home);
 
                         // Handle transportation
                         if (!home.getFlag().hasPlaceForMoreCargo()) {
@@ -251,5 +257,10 @@ public class Armorer extends Worker {
         state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());
+    }
+
+    @Override
+    public boolean isWorking() {
+        return state == State.PRODUCING_WEAPON;
     }
 }

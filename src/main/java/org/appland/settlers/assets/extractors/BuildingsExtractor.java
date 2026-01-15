@@ -5,6 +5,7 @@ import org.appland.settlers.assets.UnknownResourceTypeException;
 import org.appland.settlers.assets.collectors.BuildingsImageCollection;
 import org.appland.settlers.assets.decoders.LstDecoder;
 import org.appland.settlers.assets.gamefiles.AfrZLst;
+import org.appland.settlers.assets.gamefiles.CbobRomBobsLst;
 import org.appland.settlers.assets.gamefiles.JapZLst;
 import org.appland.settlers.assets.gamefiles.RomZLst;
 import org.appland.settlers.assets.gamefiles.VikZLst;
@@ -12,6 +13,7 @@ import org.appland.settlers.assets.resources.Palette;
 
 import java.io.IOException;
 
+import static java.lang.String.format;
 import static org.appland.settlers.assets.Nation.*;
 import static org.appland.settlers.assets.Utils.getImageAt;
 import static org.appland.settlers.assets.utils.ImageUtils.composeBuildingAnimation;
@@ -35,6 +37,8 @@ public class BuildingsExtractor {
         var japZLst = LstDecoder.loadLstFile(String.format("%s/%s", fromDir, JapZLst.FILENAME), palette);
         var afrZLst = LstDecoder.loadLstFile(String.format("%s/%s", fromDir, AfrZLst.FILENAME), palette);
         var vikZLst = LstDecoder.loadLstFile(String.format("%s/%s", fromDir, VikZLst.FILENAME), palette);
+
+        var cbobRomBobsLst = LstDecoder.loadLstFile(format("%s/%s", fromDir, CbobRomBobsLst.FILENAME), palette);
 
         // Load roman buildings
         buildingsImageCollection.addImagesForBuilding(romZLst, ROMANS, RomZLst.HEADQUARTER);
@@ -73,6 +77,11 @@ public class BuildingsExtractor {
         var romanHarborAnimation = composeBuildingAnimation(romZLst, RomZLst.HARBOR.index(), RomZLst.HARBOR_ANIMATION, 8, 1);
 
         buildingsImageCollection.addBuildingWorkingAnimation(ROMANS, RomZLst.HARBOR.name(), romanHarborAnimation);
+
+        // Compose the armory animation
+        var romanArmoryAnimation = composeBuildingAnimation(romZLst, RomZLst.ARMORY.index(), cbobRomBobsLst, CbobRomBobsLst.HAMMERING_ARMOR.index(), CbobRomBobsLst.HAMMERING_ARMOR.length(), 1, -12, 15);
+
+        buildingsImageCollection.addBuildingWorkingAnimation(ROMANS, RomZLst.ARMORY.name(), romanArmoryAnimation);
 
         // Compose the mill animation
         var romanMillAnimation = composeBuildingAnimation(romZLst, RomZLst.MILL.index(), RomZLst.MILL_SAIL_ANIMATION, 8, 2);

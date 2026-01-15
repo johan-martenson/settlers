@@ -29,5 +29,5 @@ public enum WorkerAction {
     STAND_ASIDE,
     HIT,
     SHIELD_UP,
-    TOUCH_NOSE
+    HAMMERING_ARMOR, TOUCH_NOSE
 }

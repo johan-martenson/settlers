@@ -21,6 +21,7 @@ import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.actors.Builder;
+import org.appland.settlers.model.actors.Carpenter;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Donkey;
 import org.appland.settlers.model.actors.Farmer;
@@ -3126,6 +3127,30 @@ public class Utils {
 
         assertTrue(map.isCropAtPoint(point));
         assertNotNull(map.getCropAtPoint(point));
+    }
+
+    public static void waitForCarpenterToBeSawing(Carpenter carpenter, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 2_000; i++) {
+            if (carpenter.isWorking()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(carpenter.isWorking());
+    }
+
+    public static void waitForCarpenterToStopSawing(Carpenter carpenter, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 2_000; i++) {
+            if (!carpenter.isWorking()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(carpenter.isWorking());
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor, StatisticsListener {

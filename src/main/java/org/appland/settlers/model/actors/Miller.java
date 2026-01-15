@@ -1,19 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.appland.settlers.model.actors;
 
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
 
 import static org.appland.settlers.model.Material.*;
@@ -49,6 +41,7 @@ public class Miller extends Worker {
 
     public Miller(Player player, GameMap map) {
         super(player, map);
+
         countdown = new Countdown();
         state = State.WALKING_TO_TARGET;
 
@@ -78,7 +71,7 @@ public class Miller extends Worker {
             }
         } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
             if (getHome().getFlag().hasPlaceForMoreCargo()) {
-                Cargo cargo = new Cargo(FLOUR, map);
+                var cargo = new Cargo(FLOUR, map);
 
                 setCargo(cargo);
 
@@ -93,15 +86,14 @@ public class Miller extends Worker {
             if (getHome().getAmount(WHEAT) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.hasReachedZero()) {
 
-                    /* Consume the wheat */
+                    // Consume the wheat
                     getHome().consumeOne(WHEAT);
 
                     player.reportChangedBuilding(getHome());
 
-                    /* Go out to the flag to deliver the flour */
+                    // Go out to the flag to deliver the flour
                     if (getHome().getFlag().hasPlaceForMoreCargo()) {
-
-                        Cargo cargo = new Cargo(FLOUR, map);
+                        var cargo = new Cargo(FLOUR, map);
 
                         cargo.setPosition(getPosition());
 
@@ -113,12 +105,12 @@ public class Miller extends Worker {
 
                         getHome().getFlag().promiseCargo(getCargo());
 
-                    /* Wait for space on the flag if it's full */
+                    // Wait for space on the flag if it's full
                     } else {
                         state = WAITING_FOR_SPACE_ON_FLAG;
                     }
 
-                    /* Report that the miller produced flour */
+                    // Report that the miller produced flour
                     productivityMeasurer.reportProductivity();
                     productivityMeasurer.nextProductivityCycle();
                 } else {
@@ -126,7 +118,7 @@ public class Miller extends Worker {
                 }
             } else {
 
-                /* Report that the miller couldn't produce flour because it had no wheat */
+                // Report that the miller couldn't produce flour because it had no wheat
                 productivityMeasurer.reportUnproductivity();
             }
         } else if (state == State.DEAD) {
@@ -153,8 +145,8 @@ public class Miller extends Worker {
     @Override
     protected void onArrival() {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
-            Flag flag = getHome().getFlag();
-            Cargo cargo = getCargo();
+            var flag = getHome().getFlag();
+            var cargo = getCargo();
 
             cargo.setPosition(getPosition());
             cargo.transportToReceivingBuilding(this::isFlourReceiver);
@@ -172,12 +164,12 @@ public class Miller extends Worker {
             state = RESTING_IN_HOUSE;
             countdown.countFrom(RESTING_TIME);
         } else if (state == RETURNING_TO_STORAGE) {
-            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
+            var storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
         } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
-            /* Go to the closest storage */
+            // Go to the closest storage
             Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, MILLER);
 
             if (storehouse != null) {
@@ -187,7 +179,7 @@ public class Miller extends Worker {
             } else {
                 state = State.GOING_TO_DIE;
 
-                Point point = findPlaceToDie();
+                var point = findPlaceToDie();
 
                 setOffroadTarget(point);
             }
@@ -209,7 +201,6 @@ public class Miller extends Worker {
 
             setTarget(storage.getPosition());
         } else {
-
             storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), MILLER);
 
             if (storage != null) {
@@ -217,7 +208,7 @@ public class Miller extends Worker {
 
                 setOffroadTarget(storage.getPosition());
             } else {
-                Point point = findPlaceToDie();
+                var point = findPlaceToDie();
 
                 setOffroadTarget(point, getPosition().downRight());
 
@@ -229,15 +220,15 @@ public class Miller extends Worker {
     @Override
     protected void onWalkingAndAtFixedPoint() {
 
-        /* Return to storage if the planned path no longer exists */
+        // Return to storage if the planned path no longer exists
         if (state == WALKING_TO_TARGET &&
             map.isFlagAtPoint(getPosition()) &&
             !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
 
-            /* Don't try to enter the mill upon arrival */
+            // Don't try to enter the mill upon arrival
             clearTargetBuilding();
 
-            /* Go back to the storage */
+            // Go back to the storage
             returnToStorage();
         }
     }
@@ -245,7 +236,7 @@ public class Miller extends Worker {
     @Override
     public int getProductivity() {
 
-        /* Measure productivity across the length of four rest-work periods */
+        // Measure productivity across the length of four rest-work periods
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
                         (productivityMeasurer.getNumberOfCycles())) * 100);

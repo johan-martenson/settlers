@@ -124,7 +124,7 @@ public class WorkersExtractor {
                                 hasPlayerColor = true;
 
                                 var bitmapVisibleArea = bitmap.getVisibleArea();
-                                var bitmapOrigin = bitmap.getOrigin();
+                                var bitmapOrigin = bitmap.getOffsetsForVisibleImage();
 
                                 maxOrigin.x = Math.max(maxOrigin.x, bitmapOrigin.x);
                                 maxOrigin.y = Math.max(maxOrigin.y, bitmapOrigin.y);
@@ -196,6 +196,7 @@ public class WorkersExtractor {
         WorkerImageCollection hunterCollector = workerCollectors.get(JobType.HUNTER);
         WorkerImageCollection shipwrightCollector = workerCollectors.get(JobType.SHIP_WRIGHT);
         WorkerImageCollection brewerCollector = workerCollectors.get(JobType.BREWER);
+        WorkerImageCollection armorerCollector = workerCollectors.get(JobType.ARMORER);
         WorkerImageCollection foresterCollector = workerCollectors.get(JobType.FORESTER);
         WorkerImageCollection planerCollector = workerCollectors.get(JobType.PLANER);
         WorkerImageCollection geologistCollector = workerCollectors.get(JobType.GEOLOGIST);
@@ -601,7 +602,7 @@ public class WorkersExtractor {
 
         // Draw the body
         var bodyVisibleArea = body.getVisibleArea();
-        var bodyToUpperLeft = new Point(maxOrigin.x - body.getOrigin().x, maxOrigin.y - body.getOrigin().y);
+        var bodyToUpperLeft = new Point(maxOrigin.x - body.getOffsetsForVisibleImage().x, maxOrigin.y - body.getOffsetsForVisibleImage().y);
         var bodyFromUpperLeft = bodyVisibleArea.getUpperLeftCoordinate();
 
         if (hasPlayerColor) {
@@ -621,7 +622,7 @@ public class WorkersExtractor {
         // Draw the head
         var headVisibleArea = head.getVisibleArea();
 
-        var headToUpperLeft = new Point(maxOrigin.x - head.getOrigin().x, maxOrigin.y - head.getOrigin().y);
+        var headToUpperLeft = new Point(maxOrigin.x - head.getOffsetsForVisibleImage().x, maxOrigin.y - head.getOffsetsForVisibleImage().y);
         var headFromUpperLeft = headVisibleArea.getUpperLeftCoordinate();
 
         merged.copyNonTransparentPixels(head, headToUpperLeft, headFromUpperLeft, headVisibleArea.getDimension());

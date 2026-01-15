@@ -267,4 +267,5 @@ public class CbobRomBobsLst {
     public static final Animation JUMP_SKIP_ROPE = new Animation(1745, 7);
     public static final Animation READ_NEWSPAPER = new Animation(1759, 7);
     public static final Animation TOUCH_NOSE = new Animation(1770, 5);
+    public static final Animation HAMMERING_ARMOR = new Animation(16, 8);
 }
