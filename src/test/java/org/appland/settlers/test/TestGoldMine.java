@@ -2349,10 +2349,10 @@ public class TestGoldMine {
         Utils.waitForNonMilitaryBuildingToGetPopulated(goldMine);
 
         /* Give material to the gold mine */
-        Utils.putCargoToBuilding(goldMine, BREAD);
-        Utils.putCargoToBuilding(goldMine, BREAD);
-        Utils.putCargoToBuilding(goldMine, FISH);
-        Utils.putCargoToBuilding(goldMine, FISH);
+        Utils.deliverCargo(goldMine, BREAD);
+        Utils.deliverCargo(goldMine, BREAD);
+        Utils.deliverCargo(goldMine, FISH);
+        Utils.deliverCargo(goldMine, FISH);
 
         /* Fill the flag with flour cargos */
         Utils.placeCargos(map, FLOUR, 8, goldMine.getFlag(), headquarter);
@@ -2422,10 +2422,10 @@ public class TestGoldMine {
         Utils.waitForNonMilitaryBuildingToGetPopulated(goldMine);
 
         /* Give material to the gold mine */
-        Utils.putCargoToBuilding(goldMine, BREAD);
-        Utils.putCargoToBuilding(goldMine, BREAD);
-        Utils.putCargoToBuilding(goldMine, FISH);
-        Utils.putCargoToBuilding(goldMine, FISH);
+        Utils.deliverCargo(goldMine, BREAD);
+        Utils.deliverCargo(goldMine, BREAD);
+        Utils.deliverCargo(goldMine, FISH);
+        Utils.deliverCargo(goldMine, FISH);
 
         /* Fill the flag with cargos */
         Utils.placeCargos(map, FLOUR, 8, goldMine.getFlag(), headquarter);

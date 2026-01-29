@@ -98,6 +98,7 @@ public class PigBreeder extends Worker {
 
                         state = GOING_OUT_TO_PUT_CARGO;
                         setTarget(home.getFlag().getPosition());
+                        player.reportChangedBuilding(home);
                     } else {
                         state = WAITING_FOR_SPACE_ON_FLAG;
                     }
@@ -237,5 +238,17 @@ public class PigBreeder extends Worker {
     public void goToOtherStorage(Building building) {
         state = PigBreeder.State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
         setTarget(building.getFlag().getPosition());
+    }
+
+    @Override
+    public boolean isWorking() {
+        return state == GOING_OUT_TO_FEED ||
+                state == FEEDING ||
+                state == GOING_BACK_TO_HOUSE_AFTER_FEEDING ||
+                state == PREPARING_PIG_FOR_DELIVERY;
+    }
+
+    public boolean isPreparingPigForDelivery() {
+        return state == PREPARING_PIG_FOR_DELIVERY;
     }
 }

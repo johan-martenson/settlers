@@ -63,47 +63,48 @@ public class Minter extends Worker {
     protected void onIdle() {
         if (state == RESTING_IN_HOUSE) {
             if (countdown.hasReachedZero()) {
-                state = MAKING_COIN;
-                countdown.countFrom(PRODUCTION_TIME);
+                if (home.getAmount(GOLD) > 0 && home.getAmount(COAL) > 0 && home.isProductionEnabled()) {
+                    state = MAKING_COIN;
+                    countdown.countFrom(PRODUCTION_TIME);
+                    player.reportChangedBuilding(home);
+                } else {
+
+                    // Report that the minter lacked resources and couldn't produce a coin
+                    productivityMeasurer.reportUnproductivity();
+                }
             } else {
                 countdown.step();
             }
         } else if (state == MAKING_COIN) {
-            if (home.getAmount(GOLD) > 0 && home.getAmount(COAL) > 0 && home.isProductionEnabled()) {
-                if (countdown.hasReachedZero()) {
+            if (countdown.hasReachedZero()) {
 
-                    // Consume resources
-                    home.consumeOne(GOLD);
-                    home.consumeOne(COAL);
+                // Consume resources
+                home.consumeOne(GOLD);
+                home.consumeOne(COAL);
 
-                    // Report that the minter produced a coin
-                    productivityMeasurer.reportProductivity();
-                    productivityMeasurer.nextProductivityCycle();
+                // Report that the minter produced a coin
+                productivityMeasurer.reportProductivity();
+                productivityMeasurer.nextProductivityCycle();
 
-                    map.getStatisticsManager().coinProduced(player, map.getTime());
+                map.getStatisticsManager().coinProduced(player, map.getTime());
 
-                    // Handle transportation
-                    if (home.getFlag().hasPlaceForMoreCargo()) {
-                        Cargo cargo = new Cargo(COIN, map);
+                // Handle transportation
+                if (home.getFlag().hasPlaceForMoreCargo()) {
+                    Cargo cargo = new Cargo(COIN, map);
 
-                        setCargo(cargo);
+                    setCargo(cargo);
 
-                        // Go out to the flag to deliver the coin
-                        state = State.GOING_TO_FLAG_WITH_CARGO;
+                    // Go out to the flag to deliver the coin
+                    state = State.GOING_TO_FLAG_WITH_CARGO;
 
-                        setTarget(home.getFlag().getPosition());
+                    setTarget(home.getFlag().getPosition());
 
-                        home.getFlag().promiseCargo(getCargo());
-                    } else {
-                        state = WAITING_FOR_SPACE_ON_FLAG;
-                    }
+                    home.getFlag().promiseCargo(getCargo());
                 } else {
-                    countdown.step();
+                    state = WAITING_FOR_SPACE_ON_FLAG;
                 }
             } else {
-
-                // Report that the minter lacked resources and couldn't produce a coin
-                productivityMeasurer.reportUnproductivity();
+                countdown.step();
             }
         } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
             if (home.getFlag().hasPlaceForMoreCargo()) {
@@ -258,5 +259,10 @@ public class Minter extends Worker {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());
+    }
+
+    @Override
+    public boolean isWorking() {
+        return state == MAKING_COIN;
     }
 }

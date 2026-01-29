@@ -18,7 +18,7 @@ import static org.appland.settlers.model.actors.IronFounder.State.*;
 @Walker(speed = 10)
 public class IronFounder extends Worker {
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
-    private static final int PRODUCTION_TIME = 49;
+    private static final int PRODUCTION_TIME = 48;
     private static final int RESTING_TIME = 99;
 
     private final Countdown countdown = new Countdown();
@@ -56,43 +56,44 @@ public class IronFounder extends Worker {
         switch (state) {
             case RESTING_IN_HOUSE -> {
                 if (countdown.hasReachedZero()) {
-                    state = MELTING_IRON;
-                    countdown.countFrom(PRODUCTION_TIME);
+                    if (home.getAmount(COAL) > 0 && home.getAmount(IRON) > 0 && home.isProductionEnabled()) {
+                        state = MELTING_IRON;
+                        countdown.countFrom(PRODUCTION_TIME);
+                        player.reportChangedBuilding(home);
+                    } else {
+                        // Report lack of resources
+                        productivityMeasurer.reportUnproductivity();
+                    }
                 } else {
                     countdown.step();
                 }
             }
 
             case MELTING_IRON -> {
-                if (home.getAmount(COAL) > 0 && home.getAmount(IRON) > 0 && home.isProductionEnabled()) {
-                    if (countdown.hasReachedZero()) {
+                if (countdown.hasReachedZero()) {
 
-                        // Consume the resources
-                        home.consumeOne(COAL);
-                        home.consumeOne(IRON);
+                    // Consume the resources
+                    home.consumeOne(COAL);
+                    home.consumeOne(IRON);
 
-                        // Report production
-                        productivityMeasurer.reportProductivity();
-                        productivityMeasurer.nextProductivityCycle();
-                        map.getStatisticsManager().ironBarProduced(player, map.getTime());
+                    // Report production
+                    productivityMeasurer.reportProductivity();
+                    productivityMeasurer.nextProductivityCycle();
+                    map.getStatisticsManager().ironBarProduced(player, map.getTime());
 
-                        // Handle transportation
-                        var flag = home.getFlag();
-                        if (flag.hasPlaceForMoreCargo()) {
-                            var cargo = new Cargo(IRON_BAR, map);
-                            setCargo(cargo);
-                            state = GOING_TO_FLAG_WITH_CARGO;
-                            setTarget(flag.getPosition());
-                            flag.promiseCargo(cargo);
-                        } else {
-                            state = State.WAITING_FOR_SPACE_ON_FLAG;
-                        }
+                    // Handle transportation
+                    var flag = home.getFlag();
+                    if (flag.hasPlaceForMoreCargo()) {
+                        var cargo = new Cargo(IRON_BAR, map);
+                        setCargo(cargo);
+                        state = GOING_TO_FLAG_WITH_CARGO;
+                        setTarget(flag.getPosition());
+                        flag.promiseCargo(cargo);
                     } else {
-                        countdown.step();
+                        state = State.WAITING_FOR_SPACE_ON_FLAG;
                     }
                 } else {
-                    // Report lack of resources
-                    productivityMeasurer.reportUnproductivity();
+                    countdown.step();
                 }
             }
 
@@ -233,5 +234,10 @@ public class IronFounder extends Worker {
     public void goToOtherStorage(Building building) {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
         setTarget(building.getFlag().getPosition());
+    }
+
+    @Override
+    public boolean isWorking() {
+        return state == State.MELTING_IRON;
     }
 }

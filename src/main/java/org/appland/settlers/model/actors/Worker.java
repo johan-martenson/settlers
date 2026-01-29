@@ -45,6 +45,7 @@ public abstract class Worker {
     protected final Player player;
     protected final GameMap map;
 
+    protected Point       target = null;
     protected Point     position = null;
     protected Building  home = null;
     protected Cargo     carriedCargo;
@@ -56,66 +57,78 @@ public abstract class Worker {
     private List<Point> path = null;
     private State       state = State.IDLE_OUTSIDE;
     private Building    targetBuilding = null;
-    private Point       target = null;
 
     static class ProductivityMeasurer {
-        private final int   cycleLength;
-        private final int[] productiveTime;
+        private final int cycleLength;
+        private final int[] productiveTime = {0, 0, 0, 0};
 
         private Building building;
-        private int      currentProductivityMeasurement;
-        private int      productionCycle;
-        private int      currentUnproductivityMeasurement;
+        private int currentProductivityMeasurement = 0;
+        private int currentUnproductivityMeasurement = 0;
+        private int productionCycle;
 
         ProductivityMeasurer(int cycleLength, Building building) {
             this.cycleLength = cycleLength;
             this.building = building;
-
-            currentProductivityMeasurement = 0;
-            productiveTime = new int[] {0, 0, 0, 0};
-            productionCycle = 0;
-            currentUnproductivityMeasurement = 0;
         }
 
+        /** Advances to the next productivity cycle and notifies the player if values changed. */
         void nextProductivityCycle() {
+            // Read the previous value for this cycle slot
             int previousMeasurement = productiveTime[productionCycle];
+
+            // Store the current measurement into the cycle buffer
             productiveTime[productionCycle] = currentProductivityMeasurement;
 
+            // Notify only if the value changed and the building still exists
             if (previousMeasurement != currentProductivityMeasurement && building != null) {
                 building.getPlayer().reportChangedBuilding(building);
             }
 
+            // Reset counters for the next cycle
             currentProductivityMeasurement = 0;
             currentUnproductivityMeasurement = 0;
 
+            // Move to the next slot in the ring buffer
             productionCycle = (productionCycle + 1) % productiveTime.length;
         }
 
+        /** Returns whether the configured cycle length has been reached. */
         boolean isProductivityCycleReached() {
+            // Total measured time is productive + unproductive
             int measuredLength = currentProductivityMeasurement + currentUnproductivityMeasurement;
             return measuredLength >= cycleLength;
         }
 
+        /** Reports one unit of productive work. */
         void reportProductivity() {
+            // Increase productive counter only
             currentProductivityMeasurement++;
         }
 
+        /** Reports one unit of unproductive time and advances the cycle if needed. */
         void reportUnproductivity() {
+            // Increase unproductive counter
             currentUnproductivityMeasurement++;
 
+            // Advance the cycle once the total length is reached
             if (isProductivityCycleReached()) {
                 nextProductivityCycle();
             }
         }
 
+        /** Returns the sum of all measured productive time across cycles. */
         int getSumMeasured() {
             return Arrays.stream(productiveTime).sum();
         }
 
+        /** Returns the number of stored cycles. */
         int getNumberOfCycles() {
+            // Each slot in the array represents one cycle
             return productiveTime.length;
         }
 
+        /** Updates the building associated with this measurer. */
         public void setBuilding(Building building) {
             this.building = building;
         }
@@ -490,7 +503,7 @@ public abstract class Worker {
 
     void setTarget(Point point, Point via) {
         this.target = point;
-
+        System.out.printf("Set target %s%n", point);
         if (state == State.IDLE_INSIDE) {
             if (!map.isBuildingAtPoint(position)) {
                 System.out.println("No building at point!");
@@ -678,5 +691,13 @@ public abstract class Worker {
 
     public boolean isWorking() {
         return false;
+    }
+
+    void goOutside() {
+        player.reportWorkerOutside(this);
+        state = State.IDLE_OUTSIDE;
+    }
+    void goInside() {
+        state = State.IDLE_INSIDE;
     }
 }

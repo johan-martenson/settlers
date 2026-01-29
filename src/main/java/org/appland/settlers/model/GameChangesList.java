@@ -51,7 +51,9 @@ public record GameChangesList(
         Collection<Tree> newFallingTrees,
         boolean transportPriorityChanged,
         Collection<Message> readMessages,
-        Set<Material> toolQuotaChanged
+        Set<Material> toolQuotaChanged,
+        Collection<Worker> newWorkersOutside,
+        Collection<Worker> newWorkersInside
 ) {
     @Override
     public String toString() {
@@ -96,6 +98,8 @@ public record GameChangesList(
                 (isNonEmpty(newFallingTrees) ? ", newFallingTrees=" + newFallingTrees : "") +
                 (transportPriorityChanged ? ", transportPriorityChanged" : "") +
                 (isNonEmpty(readMessages) ? ", readMessages=" + readMessages : "") +
+                (isNonEmpty(newWorkersOutside) ? ", newWorkersOutside=" + newWorkersOutside : "") +
+                (isNonEmpty(newWorkersInside) ? ", newWorkersInside=" + newWorkersInside : "") +
                 '}';
     }
 

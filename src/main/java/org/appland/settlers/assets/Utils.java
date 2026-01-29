@@ -7,6 +7,7 @@ package org.appland.settlers.assets;
 
 import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.PlayerBitmap;
+import org.appland.settlers.assets.utils.Animation;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -264,6 +265,10 @@ public class Utils {
         return IntStream.range(startLocation, startLocation + amount)
                 .mapToObj(i -> getImageAt(gameResourceList, i))
                 .collect(Collectors.toList());
+    }
+
+    public static List<Bitmap> getImagesAt(List<GameResource> gameResources, Animation animation) {
+        return getImagesAt(gameResources, animation.index(), animation.length());
     }
 
     /**

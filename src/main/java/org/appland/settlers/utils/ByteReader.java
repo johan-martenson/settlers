@@ -51,4 +51,6 @@ public interface ByteReader {
     int getUint16(ByteOrder endian) throws IOException;
 
     String getRemainingBytesAsString() throws IOException;
+
+    int length();
 }

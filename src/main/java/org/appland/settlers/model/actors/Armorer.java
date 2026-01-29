@@ -72,10 +72,10 @@ public class Armorer extends Worker {
                         state = PRODUCING_WEAPON;
                         countdown.countFrom(PRODUCTION_TIME);
 
-                        productivityMeasurer.nextProductivityCycle();
-
                         player.reportChangedBuilding(home);
                     }
+
+                    productivityMeasurer.nextProductivityCycle();
                 } else {
                     countdown.step();
                 }

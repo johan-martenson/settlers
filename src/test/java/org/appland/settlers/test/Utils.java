@@ -21,6 +21,7 @@ import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.actors.Builder;
+import org.appland.settlers.model.actors.Butcher;
 import org.appland.settlers.model.actors.Carpenter;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Donkey;
@@ -29,6 +30,7 @@ import org.appland.settlers.model.actors.Fisherman;
 import org.appland.settlers.model.actors.Forester;
 import org.appland.settlers.model.actors.Hunter;
 import org.appland.settlers.model.actors.Miller;
+import org.appland.settlers.model.actors.PigBreeder;
 import org.appland.settlers.model.actors.Ship;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.Stonemason;
@@ -1595,11 +1597,6 @@ public class Utils {
         assertEquals(building.getAmount(material), targetAmount);
     }
 
-    public static void putCargoToBuilding(Building mill, Material material) {
-        mill.promiseDelivery(material);
-        mill.putCargo(new Cargo(material, mill.getMap()));
-    }
-
     public static void waitForFlagToGetStackedCargo(GameMap map, Flag flag, int amount) throws InvalidUserActionException {
         for (int i = 0; i < 20000; i++) {
             if (flag.getStackedCargo().size() == amount) {
@@ -3153,6 +3150,54 @@ public class Utils {
         assertFalse(carpenter.isWorking());
     }
 
+    public static void waitForButcherToWork(Butcher butcher, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 2_000; i++) {
+            if (butcher.isWorking()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(butcher.isWorking());
+    }
+
+    public static void waitForBuildingToStopWorking(Building building) throws InvalidUserActionException {
+        for (int i = 0; i < 2_000; i++) {
+            if (!building.isWorking()) {
+                break;
+            }
+
+            building.getMap().stepTime();
+        }
+
+        assertFalse(building.isWorking());
+    }
+
+    public static void waitForPigBreederToBeFeedingPigs(PigBreeder pigBreeder, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 2_000; i++) {
+            if (pigBreeder.isFeeding()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(pigBreeder.isFeeding());
+    }
+
+    public static void waitForPigBreederToNotBeFeedingPigs(PigBreeder pigBreeder, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 2_000; i++) {
+            if (!pigBreeder.isFeeding()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(pigBreeder.isFeeding());
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor, StatisticsListener {
         private final List<GameChangesList> gameChanges;
         private final HashMap<Point, AvailableConstruction> availableConstruction;
@@ -3436,7 +3481,9 @@ public class Utils {
                 new ArrayList<>(gameChangesList.newFallingTrees()),
                 gameChangesList.transportPriorityChanged(),
                 new ArrayList<>(gameChangesList.readMessages()),
-                new HashSet<>(gameChangesList.toolQuotaChanged()));
+                new HashSet<>(gameChangesList.toolQuotaChanged()),
+                new HashSet<>(gameChangesList.newWorkersOutside()),
+                new HashSet<>(gameChangesList.newWorkersInside()));
     }
 
     static Set<Point> getAreaInsideHexagon(int radius, Point position) {

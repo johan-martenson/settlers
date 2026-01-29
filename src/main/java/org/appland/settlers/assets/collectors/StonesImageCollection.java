@@ -44,12 +44,12 @@ public class StonesImageCollection {
      * @throws IOException if an I/O error occurs
      */
     public void writeImageAtlas(String toDir, Palette palette) throws IOException {
-        ImageBoard imageBoard = new ImageBoard();
+        var imageBoard = new ImageBoard();
 
-        for (Stone.StoneType stoneType : Stone.StoneType.values()) {
-            for (StoneAmount stoneAmount : StoneAmount.values()) {
-                Bitmap image = stoneMap.get(stoneType).get(stoneAmount);
-                Bitmap shadowImage = stoneShadowMap.get(stoneType).get(stoneAmount);
+        for (var stoneType : Stone.StoneType.values()) {
+            for (var stoneAmount : StoneAmount.values()) {
+                var image = stoneMap.get(stoneType).get(stoneAmount);
+                var shadowImage = stoneShadowMap.get(stoneType).get(stoneAmount);
 
                 imageBoard.placeImageBottom(
                         image,

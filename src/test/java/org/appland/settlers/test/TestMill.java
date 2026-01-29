@@ -2122,7 +2122,7 @@ public class TestMill {
         Utils.waitForNonMilitaryBuildingToGetPopulated(mill);
 
         // Give wheat to the mill
-        Utils.putCargoToBuilding(mill, WHEAT);
+        Utils.deliverCargo(mill, WHEAT);
 
         // Fill the flag with flour cargos
         Utils.placeCargos(map, FLOUR, 8, mill.getFlag(), headquarter);
@@ -2188,8 +2188,8 @@ public class TestMill {
         Utils.waitForNonMilitaryBuildingToGetPopulated(mill);
 
         // Give wheat to the mill
-        Utils.putCargoToBuilding(mill, WHEAT);
-        Utils.putCargoToBuilding(mill, WHEAT);
+        Utils.deliverCargo(mill, WHEAT);
+        Utils.deliverCargo(mill, WHEAT);
 
         // Fill the flag with flour cargos
         Utils.placeCargos(map, FLOUR, 8, mill.getFlag(), headquarter);

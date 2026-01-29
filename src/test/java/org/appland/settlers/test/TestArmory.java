@@ -657,8 +657,11 @@ public class TestArmory {
         // Verify that it takes 50 steps for the armory worker to produce the plank
         for (int i = 0; i < 50; i++) {
             assertNull(armorer0.getCargo());
+
             map.stepTime();
         }
+
+        map.stepTime();
 
         assertNotNull(armorer0.getCargo());
     }
@@ -2095,8 +2098,8 @@ public class TestArmory {
         Utils.waitForNonMilitaryBuildingToGetPopulated(armory);
 
         // Give material to the armory
-        Utils.putCargoToBuilding(armory, IRON_BAR);
-        Utils.putCargoToBuilding(armory, COAL);
+        Utils.deliverCargo(armory, IRON_BAR);
+        Utils.deliverCargo(armory, COAL);
 
         // Fill the flag with flour cargos
         Utils.placeCargos(map, FLOUR, 8, armory.getFlag(), headquarter);
@@ -2162,10 +2165,10 @@ public class TestArmory {
         Utils.waitForNonMilitaryBuildingToGetPopulated(armory);
 
         // Give material to the armory
-        Utils.putCargoToBuilding(armory, IRON_BAR);
-        Utils.putCargoToBuilding(armory, IRON_BAR);
-        Utils.putCargoToBuilding(armory, COAL);
-        Utils.putCargoToBuilding(armory, COAL);
+        Utils.deliverCargo(armory, IRON_BAR);
+        Utils.deliverCargo(armory, IRON_BAR);
+        Utils.deliverCargo(armory, COAL);
+        Utils.deliverCargo(armory, COAL);
 
         // Fill the flag with cargos
         Utils.placeCargos(map, FLOUR, 8, armory.getFlag(), headquarter);

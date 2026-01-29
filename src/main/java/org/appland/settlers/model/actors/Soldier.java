@@ -157,8 +157,8 @@ public class Soldier extends Worker {
     @Override
     public String toString() {
         return isExactlyAtPoint() ?
-                String.format("%s soldier %s", rank.getSimpleName(), getPosition()) :
-                String.format("%s soldier %s - %s", rank.getSimpleName(), getPosition(), getNextPoint());
+                String.format("%s soldier %s (%s)", rank.getSimpleName(), getPosition(), state) :
+                String.format("%s soldier %s - %s (%s)", rank.getSimpleName(), getPosition(), getNextPoint(), state);
     }
 
     @Override

@@ -116,6 +116,7 @@ public class GameMap {
     private final Set<Tree> treesToRemove = new HashSet<>();
     private final Map<Point, DecorationType> addedDecorations = new HashMap<>();
     private final Set<Tree> newFallingTrees = new HashSet<>();
+    private final Collection<Worker> newWorkersOutside = new HashSet<>();
 
     private Player winner = null;
     private long time = 1;
@@ -455,6 +456,10 @@ public class GameMap {
                 continue;
             }
 
+            newWorkersOutside.stream()
+                            .filter(worker -> player.getDiscoveredLand().contains(worker.getPosition()))
+                                    .forEach(player::reportWorkerOutside);
+
             newFallingTrees.stream()
                     .filter(tree -> player.getDiscoveredLand().contains(tree.getPosition()))
                     .forEach(player::reportNewFallingTree);
@@ -614,6 +619,7 @@ public class GameMap {
         changedStones.clear();
         addedDecorations.clear();
         newFallingTrees.clear();
+        newWorkersOutside.clear();
 
         duration.after("Clear monitoring tracking lists");
 
@@ -3354,5 +3360,9 @@ public class GameMap {
 
     public void reportChangedBuilding(Building building) {
         changedBuildings.add(building);
+    }
+
+    public void reportWorkerWentOutside(Worker worker) {
+        newWorkersOutside.add(worker);
     }
 }

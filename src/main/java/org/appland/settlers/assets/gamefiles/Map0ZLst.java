@@ -5,6 +5,10 @@ import org.appland.settlers.assets.utils.Animation;
 public class Map0ZLst {
     public static final String FILENAME = "DATA/MAP_0_Z.LST";
 
+    public static final Animation SMALL_SMOKE_1 = new Animation(411, 8);
+    public static final Animation SMALL_SMOKE_2 = new Animation(419, 8);
+    public static final Animation MEDIUM_SMOKE = new Animation(427, 8);
+    public static final Animation LARGE_SMOKE = new Animation(435, 8);
     public static final Animation WALKING_EAST_SHADOW = new Animation(451, 8);
     public static final Animation WALKING_SOUTH_EAST_SHADOW = new Animation(459, 8);
     public static final Animation WALKING_SOUTH_WEST_SHADOW = new Animation(467, 8);

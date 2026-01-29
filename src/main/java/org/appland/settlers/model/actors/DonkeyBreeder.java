@@ -70,6 +70,7 @@ public class DonkeyBreeder extends Worker {
                     if (home.getAmount(WATER) > 0 && home.getAmount(WHEAT) > 0) {
                         setOffroadTarget(home.getPosition().downLeft());
                         state = State.GOING_OUT_TO_FEED;
+                        player.reportChangedBuilding(home);
                     } else {
                         productivityMeasurer.reportUnproductivity();
                     }
@@ -217,5 +218,10 @@ public class DonkeyBreeder extends Worker {
     public void goToOtherStorage(Building building) {
         state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
         setTarget(building.getFlag().getPosition());
+    }
+
+    @Override
+    public boolean isWorking() {
+        return state == State.FEEDING || state == State.PREPARING_DONKEY_FOR_DELIVERY || state == GOING_OUT_TO_FEED;
     }
 }

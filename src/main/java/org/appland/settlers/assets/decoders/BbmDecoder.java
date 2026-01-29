@@ -36,28 +36,28 @@ public class BbmDecoder {
      * @throws InvalidFormatException if the file format is invalid
      */
     public static List<GameResource> loadBbmFile(String filename) throws IOException, InvalidFormatException {
-        try (StreamReader streamReader = new StreamReader(new FileInputStream(filename), ByteOrder.BIG_ENDIAN)) {
+        try (var streamReader = new StreamReader(new FileInputStream(filename), ByteOrder.BIG_ENDIAN)) {
 
             // Validate the header
-            String header = streamReader.getUint8ArrayAsString(4);
+            var header = streamReader.getUint8ArrayAsString(4);
             if (!header.equals("FORM")) {
                 throw new InvalidFormatException(String.format("Must match 'FORM'. Not %s", header));
             }
 
             long length = streamReader.getUint32();
 
-            String pbm = streamReader.getUint8ArrayAsString(4);
+            var pbm = streamReader.getUint8ArrayAsString(4);
             if (!pbm.equals("PBM ")) {
                 throw new InvalidFormatException(String.format("Must match 'PBM '. Not %s", pbm));
             }
 
             // Read the palettes
-            List<GameResource> palettes = new ArrayList<>();
+            var palettes = new ArrayList<GameResource>();
             long i = 0;
 
             // Read chunks until EOF
             while (!streamReader.isEof()) {
-                String chunkId = streamReader.getUint8ArrayAsString(4);
+                var chunkId = streamReader.getUint8ArrayAsString(4);
 
                 if (chunkId.equals("CMAP")) {
                     length = streamReader.getUint32();
@@ -71,7 +71,7 @@ public class BbmDecoder {
                         throw new InvalidFormatException(String.format("Length must match %d. Not %d", PALETTE_LENGTH, length));
                     }
 
-                    Palette palette = Palette.loadPalette(streamReader, false);
+                    var palette = Palette.loadPalette(streamReader, false);
                     int lastSeparator = filename.lastIndexOf("/");
 
                     palette.setName(String.format("%s(%d)", filename.substring(lastSeparator + 1), i));

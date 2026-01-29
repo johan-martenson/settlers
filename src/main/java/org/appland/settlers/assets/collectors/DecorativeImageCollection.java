@@ -43,8 +43,7 @@ public class DecorativeImageCollection {
      * @throws IOException if an I/O error occurs
      */
     public void writeImageAtlas(String dir, Palette palette) throws IOException {
-        ImageBoard imageBoard = new ImageBoard();
-
+        var imageBoard = new ImageBoard();
         var list = new ArrayList<ImageBoard.ImagePathPair>();
 
         decorationImages.forEach((decoration, decorationImages) -> {

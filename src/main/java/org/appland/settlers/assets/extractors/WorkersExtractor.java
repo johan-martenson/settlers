@@ -182,30 +182,32 @@ public class WorkersExtractor {
         }
 
         // Add cargo carrying images and animations
-        WorkerImageCollection woodcutterCollector = workerCollectors.get(JobType.WOODCUTTER);
-        WorkerImageCollection carpenterCollector = workerCollectors.get(JobType.CARPENTER);
-        WorkerImageCollection fishermanCollector = workerCollectors.get(JobType.FISHER);
-        WorkerImageCollection stonemasonCollector = workerCollectors.get(JobType.STONEMASON);
-        WorkerImageCollection minterCollector = workerCollectors.get(JobType.MINTER);
-        WorkerImageCollection minerCollector = workerCollectors.get(JobType.MINER);
-        WorkerImageCollection farmerCollector = workerCollectors.get(JobType.FARMER);
-        WorkerImageCollection pigBreederCollector = workerCollectors.get(JobType.PIG_BREEDER);
-        WorkerImageCollection millerCollector = workerCollectors.get(JobType.MILLER);
-        WorkerImageCollection bakerCollector = workerCollectors.get(JobType.BAKER);
-        WorkerImageCollection metalWorkerCollector = workerCollectors.get(JobType.METALWORKER);
-        WorkerImageCollection hunterCollector = workerCollectors.get(JobType.HUNTER);
-        WorkerImageCollection shipwrightCollector = workerCollectors.get(JobType.SHIP_WRIGHT);
-        WorkerImageCollection brewerCollector = workerCollectors.get(JobType.BREWER);
-        WorkerImageCollection armorerCollector = workerCollectors.get(JobType.ARMORER);
-        WorkerImageCollection foresterCollector = workerCollectors.get(JobType.FORESTER);
-        WorkerImageCollection planerCollector = workerCollectors.get(JobType.PLANER);
-        WorkerImageCollection geologistCollector = workerCollectors.get(JobType.GEOLOGIST);
-        WorkerImageCollection builderCollector = workerCollectors.get(JobType.BUILDER);
-        WorkerImageCollection privateCollector = workerCollectors.get(JobType.PRIVATE);
-        WorkerImageCollection privateFirstClassCollector = workerCollectors.get(JobType.PRIVATE_FIRST_CLASS);
-        WorkerImageCollection sergeantCollector = workerCollectors.get(JobType.SERGEANT);
-        WorkerImageCollection officerCollector = workerCollectors.get(JobType.OFFICER);
-        WorkerImageCollection generalCollector = workerCollectors.get(JobType.GENERAL);
+        var woodcutterCollector = workerCollectors.get(JobType.WOODCUTTER);
+        var carpenterCollector = workerCollectors.get(JobType.CARPENTER);
+        var fishermanCollector = workerCollectors.get(JobType.FISHER);
+        var stonemasonCollector = workerCollectors.get(JobType.STONEMASON);
+        var minterCollector = workerCollectors.get(JobType.MINTER);
+        var minerCollector = workerCollectors.get(JobType.MINER);
+        var farmerCollector = workerCollectors.get(JobType.FARMER);
+        var pigBreederCollector = workerCollectors.get(JobType.PIG_BREEDER);
+        var millerCollector = workerCollectors.get(JobType.MILLER);
+        var bakerCollector = workerCollectors.get(JobType.BAKER);
+        var metalWorkerCollector = workerCollectors.get(JobType.METALWORKER);
+        var butcherWorkerCollector = workerCollectors.get(JobType.BUTCHER);
+        var ironFounderCollector = workerCollectors.get(JobType.IRON_FOUNDER);
+        var hunterCollector = workerCollectors.get(JobType.HUNTER);
+        var shipwrightCollector = workerCollectors.get(JobType.SHIP_WRIGHT);
+        var brewerCollector = workerCollectors.get(JobType.BREWER);
+        var armorerCollector = workerCollectors.get(JobType.ARMORER);
+        var foresterCollector = workerCollectors.get(JobType.FORESTER);
+        var planerCollector = workerCollectors.get(JobType.PLANER);
+        var geologistCollector = workerCollectors.get(JobType.GEOLOGIST);
+        var builderCollector = workerCollectors.get(JobType.BUILDER);
+        var privateCollector = workerCollectors.get(JobType.PRIVATE);
+        var privateFirstClassCollector = workerCollectors.get(JobType.PRIVATE_FIRST_CLASS);
+        var sergeantCollector = workerCollectors.get(JobType.SERGEANT);
+        var officerCollector = workerCollectors.get(JobType.OFFICER);
+        var generalCollector = workerCollectors.get(JobType.GENERAL);
 
         var bob = jobsBobResource.getBob();
 
@@ -428,6 +430,12 @@ public class WorkersExtractor {
         builderCollector.addAnimation(WorkerAction.INSPECTING_HOUSE_CONSTRUCTION, cbobRomBobsLst, CbobRomBobsLst.INSPECTING_HOUSE_CONSTRUCTION);
 
         minterCollector.readCargoImagesFromBob(COIN, MINTER_BOB.getBodyType(), MINTER_WITH_COIN_CARGO_BOB_ID, bob);
+
+        metalWorkerCollector.addAnimation(WorkerAction.HAMMER_TO_MAKE_TOOL, cbobRomBobsLst, CbobRomBobsLst.HAMMER_TO_MAKE_TOOL);
+        metalWorkerCollector.addAnimation(WorkerAction.SAWING_TO_MAKE_TOOL, cbobRomBobsLst, CbobRomBobsLst.SAWING_TO_MAKE_TOOL);
+        metalWorkerCollector.addAnimation(WorkerAction.WIPE_OFF_SWEAT_TO_MAKE_TOOL, cbobRomBobsLst, CbobRomBobsLst.WIPE_OFF_SWEAT_TO_MAKE_TOOL);
+
+        butcherWorkerCollector.addAnimation(WorkerAction.SLAUGHTERING, cbobRomBobsLst, CbobRomBobsLst.SLAUGHTERING);
 
         // TODO: add work animation for minter
 

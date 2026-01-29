@@ -268,4 +268,12 @@ public class CbobRomBobsLst {
     public static final Animation READ_NEWSPAPER = new Animation(1759, 7);
     public static final Animation TOUCH_NOSE = new Animation(1770, 5);
     public static final Animation HAMMERING_ARMOR = new Animation(16, 8);
+    public static final Animation DIGGING_FOR_ORE = new Animation(92, 8);
+    public static final Animation IRON_FOUNDER_WORKING = new Animation(100, 8);
+    public static final Animation SLAUGHTERING = new Animation(160, 6);
+    public static final Animation MAKING_TOOLS = new Animation(190, 23); // TODO: split into multiple animations
+    public static final Animation HAMMER_TO_MAKE_TOOL = new Animation(190, 8);
+    public static final Animation SAWING_TO_MAKE_TOOL = new Animation(198, 8);
+    public static final Animation WIPE_OFF_SWEAT_TO_MAKE_TOOL = new Animation(206, 7);
+    public static final Animation MINTING_COIN = new Animation(84, 8);
 }

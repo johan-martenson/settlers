@@ -12,6 +12,8 @@ import org.appland.settlers.assets.ResourceType;
 import org.appland.settlers.assets.UnknownResourceTypeException;
 import org.appland.settlers.assets.WaveGameResource;
 import org.appland.settlers.assets.resources.Palette;
+import org.appland.settlers.utils.ByteArrayReader;
+import org.appland.settlers.utils.ByteReader;
 import org.appland.settlers.utils.StreamReader;
 
 import java.io.FileInputStream;
@@ -61,7 +63,8 @@ public class DatDecoder {
 
         // Load only from the DAT file if the IDX file is missing
         if (!Files.exists(Paths.get(idxFilename))) {
-            StreamReader datReader = new StreamReader(new FileInputStream(datFilename), LITTLE_ENDIAN);
+            //StreamReader datReader = new StreamReader(new FileInputStream(datFilename), LITTLE_ENDIAN);
+            var datReader = new ByteArrayReader(Files.newInputStream(Paths.get(filename)).readAllBytes(), LITTLE_ENDIAN);
             short datBobtype = datReader.getInt16();
 
             // Load as wave data without header
@@ -76,7 +79,7 @@ public class DatDecoder {
                 // TODO: add decoding of song (?), e.g. "SNG_0010.DAT"
                 return new ArrayList<>();
             } else if (datBobtype == 21111) {
-                // TODO: add decoding of animation, e.g. "ROM_ANIM.DAT"
+                debugPrint("Detected ROM_ANIM.DAT animation container");
                 return new ArrayList<>();
             } else if (datBobtype == -28416) {
                 // TODO: add decoding of texture, e.g. "GOURAUD0.DAT"
@@ -143,7 +146,7 @@ public class DatDecoder {
      * @throws InvalidFormatException       If the format is invalid.
      * @throws UnknownResourceTypeException If the resource type is unknown.
      */
-    public static GameResource loadType(StreamReader streamReader, ResourceType resourceType, Palette palette) throws IOException, InvalidFormatException, UnknownResourceTypeException {
+    public static GameResource loadType(ByteReader streamReader, ResourceType resourceType, Palette palette) throws IOException, InvalidFormatException, UnknownResourceTypeException {
         return switch (resourceType) {
             case BITMAP_PLAYER -> new PlayerBitmapResource(PlayerBitmapDecoder.loadPlayerBitmapFromStream(streamReader, palette));
             case FONT -> new FontResource(FontDecoder.loadFontFromStream(streamReader, palette));

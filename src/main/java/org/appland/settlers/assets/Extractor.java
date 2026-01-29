@@ -22,6 +22,7 @@ import org.appland.settlers.assets.extractors.IconsExtractor;
 import org.appland.settlers.assets.extractors.ShipExtractor;
 import org.appland.settlers.assets.extractors.TreeExtractor;
 import org.appland.settlers.assets.extractors.WorkersExtractor;
+import org.appland.settlers.assets.gamefiles.Map0ZLst;
 import org.appland.settlers.assets.gamefiles.MapBobs0Lst;
 import org.appland.settlers.assets.gamefiles.MapBobsLst;
 import org.appland.settlers.assets.gamefiles.MbobAfrBobsLst;
@@ -33,6 +34,7 @@ import org.appland.settlers.assets.gamefiles.Tex7Lbm;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.DecorationType;
+import org.appland.settlers.model.SmokeType;
 import org.appland.settlers.model.StoneAmount;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -41,6 +43,7 @@ import org.kohsuke.args4j.Option;
 import java.io.IOException;
 import java.util.Map;
 
+import static java.lang.String.format;
 import static org.appland.settlers.assets.Nation.*;
 import static org.appland.settlers.assets.Utils.*;
 import static org.appland.settlers.model.Material.*;
@@ -134,12 +137,13 @@ public class Extractor {
     private void populateNatureAndUIElements(String fromDir, String toDir) throws InvalidFormatException, UnknownResourceTypeException, IOException {
 
         // Load from the map asset file
-        var mapBobsLst = LstDecoder.loadLstFile(fromDir + "/" + MapBobsLst.FILENAME, defaultPalette);
-        var mapBobs0Lst = LstDecoder.loadLstFile(fromDir + "/" + MapBobs0Lst.FILENAME, defaultPalette);
+        var mapBobsLst = LstDecoder.loadLstFile(format("%s/%s", fromDir, MapBobsLst.FILENAME), defaultPalette);
+        var mapBobs0Lst = LstDecoder.loadLstFile(format("%s/%s", fromDir, MapBobs0Lst.FILENAME), defaultPalette);
+        var map0ZLst = LstDecoder.loadLstFile(format("%s/%s", fromDir, Map0ZLst.FILENAME), defaultPalette);
 
         // Extract the terrains
-        var greenlandGameResource = (LBMGameResource) LbmDecoder.loadLBMFile(fromDir + "/" + Tex5Lbm.FILENAME, defaultPalette);
-        var winterGameResource = (LBMGameResource) LbmDecoder.loadLBMFile(fromDir + "/" + Tex7Lbm.FILENAME, defaultPalette);
+        var greenlandGameResource = (LBMGameResource) LbmDecoder.loadLBMFile(format("%s/%s", fromDir, Tex5Lbm.FILENAME), defaultPalette);
+        var winterGameResource = (LBMGameResource) LbmDecoder.loadLBMFile(format("%s/%s", fromDir, Tex7Lbm.FILENAME), defaultPalette);
 
         var greenlandTextureBitmap = greenlandGameResource.getLbmFile();
         var winterTextureBitmap = winterGameResource.getLbmFile();
@@ -303,7 +307,7 @@ public class Extractor {
         cargoImageCollection.addCargoImage(BOW, getImageAt(mapBobsLst, MapBobsLst.BOW_CARGO));
         cargoImageCollection.addCargoImage(BOAT, getImageAt(mapBobsLst, MapBobsLst.BOAT_CARGO));
         cargoImageCollection.addCargoImage(SWORD, getImageAt(mapBobsLst, MapBobsLst.SWORD_CARGO));
-        // - anvil at 911
+        cargoImageCollection.addCargoImage(IRON_BAR, getImageAt(mapBobsLst, MapBobsLst.IRON_BAR_CARGO));
 
         cargoImageCollection.addCargoImage(FLOUR, getImageAt(mapBobsLst, MapBobsLst.FLOUR_CARGO));
         cargoImageCollection.addCargoImage(FISH, getImageAt(mapBobsLst, MapBobsLst.FISH_CARGO));
@@ -391,6 +395,11 @@ public class Extractor {
         fireImageCollection.addBurntDownImage(SMALL, getImageAt(mapBobsLst, MapBobsLst.SMALL_BURNT_DOWN));
         fireImageCollection.addBurntDownImage(MEDIUM, getImageAt(mapBobsLst, MapBobsLst.MEDIUM_BURNT_DOWN));
         fireImageCollection.addBurntDownImage(LARGE, getImageAt(mapBobsLst, MapBobsLst.LARGE_BURNT_DOWN));
+
+        fireImageCollection.addSmokeAnimation(SmokeType.SMOKE_TYPE_1, getImagesAt(map0ZLst, Map0ZLst.SMALL_SMOKE_1));
+        fireImageCollection.addSmokeAnimation(SmokeType.SMOKE_TYPE_2, getImagesAt(map0ZLst, Map0ZLst.SMALL_SMOKE_2));
+        fireImageCollection.addSmokeAnimation(SmokeType.SMOKE_TYPE_3, getImagesAt(map0ZLst, Map0ZLst.MEDIUM_SMOKE));
+        fireImageCollection.addSmokeAnimation(SmokeType.SMOKE_TYPE_4, getImagesAt(map0ZLst, Map0ZLst.LARGE_SMOKE));
 
         fireImageCollection.writeImageAtlas(toDir, defaultPalette);
 

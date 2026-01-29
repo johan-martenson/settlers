@@ -8,7 +8,6 @@ import org.appland.settlers.model.Material;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +45,7 @@ public class InventoryImageCollection {
      * @throws IOException if an I/O error occurs
      */
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
-        ImageBoard imageBoard = new ImageBoard();
+        var imageBoard = new ImageBoard();
 
         icons.forEach((material, image) -> imageBoard.placeImageBottom(
                 image,
@@ -63,7 +62,7 @@ public class InventoryImageCollection {
         imageBoard.writeBoard(directory, "image-atlas-inventory-icons", palette);
 
         // Write inventory icons
-        Path inventoryIconDir = Paths.get(directory, "inventory-icons");
+        var inventoryIconDir = Paths.get(directory, "inventory-icons");
 
         Files.createDirectory(inventoryIconDir);
 

@@ -465,11 +465,13 @@ public class TestFarm {
         Utils.fastForward(99, map);
 
         assertTrue(farmer.isInsideBuilding());
+        assertFalse(farm.isWorking());
 
         // Step once and make sure the farmer goes out of the farm
         map.stepTime();
 
         assertFalse(farmer.isInsideBuilding());
+        assertTrue(farm.isWorking());
 
         var point = farmer.getTarget();
 
@@ -567,6 +569,7 @@ public class TestFarm {
 
         assertTrue(farmer.isArrived());
         assertTrue(farmer.isInsideBuilding());
+        assertFalse(farm.isWorking());
     }
 
     @Test
@@ -604,11 +607,13 @@ public class TestFarm {
         Utils.fastForward(99, map);
 
         assertTrue(farmer.isInsideBuilding());
+        assertFalse(farm.isWorking());
 
         // Step once to let the farmer go out to harvest
         map.stepTime();
 
         assertFalse(farmer.isInsideBuilding());
+        assertTrue(farm.isWorking());
 
         var point = farmer.getTarget();
 
@@ -747,6 +752,7 @@ public class TestFarm {
         assertTrue(farmer.isAt(point));
         assertTrue(farmer.isHarvesting());
         assertFalse(farmer.isPlanting());
+        assertTrue(farm.isWorking());
 
         // Wait for the farmer to plant a new crop
         Utils.fastForward(19, map);
@@ -758,6 +764,7 @@ public class TestFarm {
         // Farmer is walking back to farm with cargo of wheat
         assertFalse(farmer.isHarvesting());
         assertEquals(farmer.getTarget(), farm.getPosition());
+        assertTrue(farm.isWorking());
 
         // Let the farmer reach the farm
         Utils.fastForwardUntilWorkersReachTarget(map, farmer);
@@ -774,6 +781,7 @@ public class TestFarm {
         assertTrue(farm.getFlag().getStackedCargo().isEmpty());
         assertNotNull(farmer.getCargo());
         assertEquals(farmer.getTarget(), farm.getFlag().getPosition());
+        assertFalse(farm.isWorking());
 
         // Let the farmer reach the flag
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getFlag().getPosition());
@@ -800,6 +808,9 @@ public class TestFarm {
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
+        // Ensure there are no farmers in the headquarters
+        Utils.adjustInventoryTo(headquarter, FARMER, 0);
+
         // Place farm
         var point3 = new Point(10, 6);
         var farm = map.placeBuilding(new Farm(player0), point3);
@@ -816,6 +827,8 @@ public class TestFarm {
         // Verify that the farm does not produce any wheat
         for (int i = 0; i < 200; i++) {
             assertTrue(farm.getFlag().getStackedCargo().isEmpty());
+            assertNull(farm.getWorker());
+            assertFalse(farm.isWorking());
 
             map.stepTime();
         }

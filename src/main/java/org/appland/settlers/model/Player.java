@@ -140,6 +140,8 @@ public class Player {
     private final Collection<PlayerChangeListener> playerChangeListeners = new HashSet<>();
     private final Set<Message> readMessages = new HashSet<>();
     private final Set<Material> toolQuotasChanged = new HashSet<>();
+    private final Collection<Worker> newWorkersOutside = new HashSet<>();
+    private final Collection<Worker> newWorkersInside = new HashSet<>();
 
     public Player(String name, PlayerColor color, Nation nation, PlayerType playerType) {
         this.name = name;
@@ -801,7 +803,7 @@ public class Player {
                 removedSigns, newCrops, removedCrops, newDiscoveredLand, addedBorder, removedBorder,
                 workersWithNewTargets, changedBorders, newStones, newMessages, promotedRoads, changedFlags,
                 removedDeadTrees, harvestedCrops, newShips, finishedShips, shipsWithNewTargets,
-                removedDecorations, upgradedBuildings, changedAvailableConstruction, toolQuotasChanged) &&
+                removedDecorations, upgradedBuildings, changedAvailableConstruction, toolQuotasChanged, newWorkersOutside) &&
             GameUtils.allMapsEmpty(workersWithStartedActions, newDecorations) &&
             !transportPriorityChanged) {
             return;
@@ -985,7 +987,9 @@ public class Player {
                 newFallingTrees,
                 transportPriorityChanged,
                 readMessages,
-                toolQuotasChanged);
+                toolQuotasChanged,
+                newWorkersOutside,
+                newWorkersInside);
 
         // Send the event to all monitors
         gameViewMonitors.forEach(monitor -> monitor.onViewChangesForPlayer(this, gameChangesToReport));
@@ -1035,6 +1039,7 @@ public class Player {
         readMessages.clear();
         transportPriorityChanged = false;
         toolQuotasChanged.clear();
+        newWorkersOutside.clear();
     }
 
     private void addChangedAvailableConstructionForStone(Stone stone) {
@@ -1728,5 +1733,9 @@ public class Player {
         }
 
         message.isRead = true;
+    }
+
+    public void reportWorkerOutside(Worker worker) {
+        newWorkersOutside.add(worker);
     }
 }

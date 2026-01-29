@@ -9,6 +9,7 @@ import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.resources.AnimatedPalette;
 import org.appland.settlers.utils.StreamReader;
 
+import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteOrder;
@@ -58,7 +59,15 @@ public class LbmDecoder {
             List<AnimatedPalette> animatedPaletteList = new ArrayList<>();
 
             while (!streamReader.isEof()) {
-                String chunkId = streamReader.getUint8ArrayAsString(4);
+                String chunkId;
+
+                // The stream reader sometimes can't tell if it's by the end of the file until it tries and fails to read
+                try {
+                    chunkId = streamReader.getUint8ArrayAsString(4);
+                } catch (EOFException e) {
+                    break;
+                }
+
                 long chunkLength = streamReader.getUint32();
 
                 if ((chunkLength & 1) == 1) {
@@ -67,7 +76,6 @@ public class LbmDecoder {
 
                 switch (chunkId) {
                     case "BMHD" -> {
-
                         if (headerRead) {
                             throw new InvalidFormatException("Should only read the header once.");
                         }

@@ -62,7 +62,7 @@ public class RoadBuildingImageCollection {
      * @throws IOException if an I/O error occurs
      */
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
-        ImageBoard imageBoard = new ImageBoard();
+        var imageBoard = new ImageBoard();
 
         imageBoard.placeImagesAsRow(
                 List.of(

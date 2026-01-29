@@ -6,6 +6,7 @@ import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.assets.utils.ImageTransformer;
 import org.appland.settlers.model.Size;
+import org.appland.settlers.model.SmokeType;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -17,6 +18,7 @@ public class FireImageCollection {
     private final Map<FireSize, List<Bitmap>> fireMap = new EnumMap<>(FireSize.class);
     private final Map<Size, Bitmap> burntDownMap = new EnumMap<>(Size.class);
     private final Map<FireSize, List<Bitmap>> fireShadowMap = new EnumMap<>(FireSize.class);
+    private final Map<SmokeType, List<Bitmap>> smokeAnimations = new EnumMap<>(SmokeType.class);
 
     /**
      * Writes the image atlas to the specified directory using the given palette.
@@ -26,7 +28,7 @@ public class FireImageCollection {
      * @throws IOException if an I/O error occurs
      */
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
-        ImageBoard imageBoard = new ImageBoard();
+        var imageBoard = new ImageBoard();
 
         Arrays.stream(FireSize.values()).forEach(fireSize -> {
                     imageBoard.placeImageSeriesBottom(
@@ -51,6 +53,12 @@ public class FireImageCollection {
                                         "burntDown",
                                         entry.getKey().name().toUpperCase()))
                         .toList());
+
+        smokeAnimations.entrySet().forEach(entry ->
+                imageBoard.placeImageSeriesBottom(
+                        ImageTransformer.normalizeImageSeries(entry.getValue()),
+                        "smoke",
+                        entry.getKey().name().toUpperCase()));
 
         imageBoard.writeBoard(directory, "image-atlas-fire", palette);
     }
@@ -85,5 +93,9 @@ public class FireImageCollection {
     public void addImagesForFireWithShadow(FireSize fireSize, List<Bitmap> images, List<Bitmap> shadowImages) {
         this.fireMap.put(fireSize, images);
         this.fireShadowMap.put(fireSize, shadowImages);
+    }
+
+    public void addSmokeAnimation(SmokeType smokeType, List<Bitmap> image) {
+        smokeAnimations.put(smokeType, image);
     }
 }

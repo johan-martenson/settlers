@@ -78,7 +78,7 @@ public class Building implements EndPoint {
     private final List<Soldier> attackers = new LinkedList<>();
     private final Set<Soldier> waitingAttackers = new HashSet<>();
     private final Set<Soldier> remoteDefenders = new HashSet<>();
-    private final Countdown countdown = new Countdown();
+    public final Countdown countdown = new Countdown();
     private final Countdown upgradeCountdown = new Countdown();
     private final Map<Material, Integer> promisedDeliveries = new EnumMap<>(Material.class);
     private final List<Soldier> hostedSoldiers = new ArrayList<>();

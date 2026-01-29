@@ -2343,10 +2343,10 @@ public class TestGraniteMine {
         Utils.waitForNonMilitaryBuildingToGetPopulated(graniteMine);
 
         /* Give material to the granite mine */
-        Utils.putCargoToBuilding(graniteMine, BREAD);
-        Utils.putCargoToBuilding(graniteMine, BREAD);
-        Utils.putCargoToBuilding(graniteMine, FISH);
-        Utils.putCargoToBuilding(graniteMine, FISH);
+        Utils.deliverCargo(graniteMine, BREAD);
+        Utils.deliverCargo(graniteMine, BREAD);
+        Utils.deliverCargo(graniteMine, FISH);
+        Utils.deliverCargo(graniteMine, FISH);
 
         /* Fill the flag with flour cargos */
         Utils.placeCargos(map, FLOUR, 8, graniteMine.getFlag(), headquarter);
@@ -2416,10 +2416,10 @@ public class TestGraniteMine {
         Utils.waitForNonMilitaryBuildingToGetPopulated(graniteMine);
 
         /* Give material to the granite mine */
-        Utils.putCargoToBuilding(graniteMine, BREAD);
-        Utils.putCargoToBuilding(graniteMine, BREAD);
-        Utils.putCargoToBuilding(graniteMine, FISH);
-        Utils.putCargoToBuilding(graniteMine, FISH);
+        Utils.deliverCargo(graniteMine, BREAD);
+        Utils.deliverCargo(graniteMine, BREAD);
+        Utils.deliverCargo(graniteMine, FISH);
+        Utils.deliverCargo(graniteMine, FISH);
 
         /* Fill the flag with cargos */
         Utils.placeCargos(map, FLOUR, 8, graniteMine.getFlag(), headquarter);

@@ -390,4 +390,13 @@ public class Farmer extends Worker {
         return String.format("Farmer{countdown=%d, state=%s, position=%s}",
                 countdown.getCount(), state, position);
     }
+
+    @Override
+    public boolean isWorking() {
+        return state == GOING_OUT_TO_PLANT ||
+                state == PLANTING ||
+                state == GOING_OUT_TO_HARVEST ||
+                state == HARVESTING ||
+                state == GOING_BACK_TO_HOUSE_WITH_CARGO;
+    }
 }

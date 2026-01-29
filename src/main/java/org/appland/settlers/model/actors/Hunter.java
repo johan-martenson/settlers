@@ -67,34 +67,38 @@ public class Hunter extends Worker {
             case RESTING_IN_HOUSE -> {
                 if (home.isProductionEnabled()) {
                     if (countdown.hasReachedZero()) {
+                        if (home.getFlag().hasPlaceForMoreCargo()) {
 
-                        // Find an animal to hunt
-                        for (var animal : getMap().getWildAnimals()) {
+                            // Find an animal to hunt
+                            for (var animal : getMap().getWildAnimals()) {
 
-                            // Filter animals too far away
-                            if (animal.getPosition().distance(home.getPosition()) > DETECTION_RANGE) {
-                                continue;
+                                // Filter animals too far away
+                                if (animal.getPosition().distance(home.getPosition()) > DETECTION_RANGE) {
+                                    continue;
+                                }
+
+                                // Filter animals that can't be reached
+                                List<Point> path = getPosition().equals(home.getPosition())
+                                        ? getMap().findWayOffroad(getPosition(), animal.getPosition(), home.getFlag().getPosition(), null)
+                                        : getMap().findWayOffroad(getPosition(), animal.getPosition(), null);
+
+                                if (path == null) {
+                                    continue;
+                                }
+
+                                // Start hunting the prey
+                                prey = animal;
+                                setOffroadTargetWithPath(path.subList(0, 2));
+                                state = State.TRACKING;
+                                break;
                             }
 
-                            // Filter animals that can't be reached
-                            List<Point> path = getPosition().equals(home.getPosition())
-                                    ? getMap().findWayOffroad(getPosition(), animal.getPosition(), home.getFlag().getPosition(), null)
-                                    : getMap().findWayOffroad(getPosition(), animal.getPosition(), null);
-
-                            if (path == null) {
-                                continue;
+                            // Report if the hunter couldn't find an animal to hunt
+                            if (state == State.RESTING_IN_HOUSE) {
+                                productivityMeasurer.reportUnproductivity();
                             }
-
-                            // Start hunting the prey
-                            prey = animal;
-                            setOffroadTargetWithPath(path.subList(0, 2));
-                            state = State.TRACKING;
-                            break;
-                        }
-
-                        // Report if the hunter couldn't find an animal to hunt
-                        if (state == State.RESTING_IN_HOUSE) {
-                            productivityMeasurer.reportUnproductivity();
+                        } else {
+                            // TODO: report unproductivity properly (and test!)
                         }
                     } else {
                         countdown.step();
@@ -296,5 +300,13 @@ public class Hunter extends Worker {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());
+    }
+
+    @Override
+    public boolean isWorking() {
+        return state == State.TRACKING ||
+                state == State.SHOOTING ||
+                state == State.GOING_TO_PICK_UP_MEAT ||
+                state == State.GOING_BACK_TO_HOUSE_WITH_CARGO;
     }
 }

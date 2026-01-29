@@ -73,15 +73,34 @@ public class BuildingsExtractor {
         buildingsImageCollection.addImagesForBuilding(romZLst, ROMANS, RomZLst.DONKEY_BREEDER);
         buildingsImageCollection.addImagesForBuilding(romZLst, ROMANS, RomZLst.HARBOR);
 
-        // Compose the harbor animation -- it has no shadow!
-        var romanHarborAnimation = composeBuildingAnimation(romZLst, RomZLst.HARBOR.index(), RomZLst.HARBOR_ANIMATION, 8, 1);
+        // Compose animations
+        buildingsImageCollection.addBuildingWorkingAnimation(
+                ROMANS,
+                RomZLst.HARBOR.name(),
+                composeBuildingAnimation(romZLst, RomZLst.HARBOR.index(), RomZLst.HARBOR_ANIMATION, 8, 1));
+        buildingsImageCollection.addBuildingWorkingAnimation(
+                ROMANS,
+                RomZLst.ARMORY.name(),
+                composeBuildingAnimation(romZLst, RomZLst.ARMORY.index(), cbobRomBobsLst, CbobRomBobsLst.HAMMERING_ARMOR.index(), CbobRomBobsLst.HAMMERING_ARMOR.length(), 1, -12, 15));
+        buildingsImageCollection.addBuildingWorkingAnimation(
+                ROMANS,
+                RomZLst.IRON_SMELTER.name(),
+                composeBuildingAnimation(romZLst, RomZLst.IRON_SMELTER.index(), cbobRomBobsLst, CbobRomBobsLst.IRON_FOUNDER_WORKING.index(), CbobRomBobsLst.IRON_FOUNDER_WORKING.length(),  1, -19, 8));
+        buildingsImageCollection.addBuildingWorkingAnimation(
+                ROMANS,
+                RomZLst.MINT.name(),
+                composeBuildingAnimation(romZLst, RomZLst.MINT.index(), cbobRomBobsLst, CbobRomBobsLst.MINTING_COIN.index(), CbobRomBobsLst.MINTING_COIN.length(), 1, 22, -12));
 
-        buildingsImageCollection.addBuildingWorkingAnimation(ROMANS, RomZLst.HARBOR.name(), romanHarborAnimation);
+        // Compose the mine animations
+        var romanCoalMineAnimation = composeBuildingAnimation(romZLst, RomZLst.COAL_MINE.index(), cbobRomBobsLst, CbobRomBobsLst.DIGGING_FOR_ORE.index(), CbobRomBobsLst.DIGGING_FOR_ORE.length(), 1, 9, 5);
+        var romanIronMineAnimation = composeBuildingAnimation(romZLst, RomZLst.IRON_MINE.index(), cbobRomBobsLst, CbobRomBobsLst.DIGGING_FOR_ORE.index(), CbobRomBobsLst.DIGGING_FOR_ORE.length(), 1, 9, 5);
+        var romanGoldMineAnimation = composeBuildingAnimation(romZLst, RomZLst.GOLD_MINE.index(), cbobRomBobsLst, CbobRomBobsLst.DIGGING_FOR_ORE.index(), CbobRomBobsLst.DIGGING_FOR_ORE.length(), 1, 9, 5);
+        var romanGraniteMineAnimation = composeBuildingAnimation(romZLst, RomZLst.GRANITE_MINE.index(), cbobRomBobsLst, CbobRomBobsLst.DIGGING_FOR_ORE.index(), CbobRomBobsLst.DIGGING_FOR_ORE.length(), 1, 9, 5);
 
-        // Compose the armory animation
-        var romanArmoryAnimation = composeBuildingAnimation(romZLst, RomZLst.ARMORY.index(), cbobRomBobsLst, CbobRomBobsLst.HAMMERING_ARMOR.index(), CbobRomBobsLst.HAMMERING_ARMOR.length(), 1, -12, 15);
-
-        buildingsImageCollection.addBuildingWorkingAnimation(ROMANS, RomZLst.ARMORY.name(), romanArmoryAnimation);
+        buildingsImageCollection.addBuildingWorkingAnimation(ROMANS, RomZLst.COAL_MINE.name(), romanCoalMineAnimation);
+        buildingsImageCollection.addBuildingWorkingAnimation(ROMANS, RomZLst.IRON_MINE.name(), romanIronMineAnimation);
+        buildingsImageCollection.addBuildingWorkingAnimation(ROMANS, RomZLst.GOLD_MINE.name(), romanGoldMineAnimation);
+        buildingsImageCollection.addBuildingWorkingAnimation(ROMANS, RomZLst.GRANITE_MINE.name(), romanGraniteMineAnimation);
 
         // Compose the mill animation
         var romanMillAnimation = composeBuildingAnimation(romZLst, RomZLst.MILL.index(), RomZLst.MILL_SAIL_ANIMATION, 8, 2);

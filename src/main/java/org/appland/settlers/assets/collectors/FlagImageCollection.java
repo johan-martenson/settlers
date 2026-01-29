@@ -21,7 +21,7 @@ public class FlagImageCollection {
     private final Map<Nation, Map<Flag.FlagType, List<Bitmap>>> flagShadowMap = new EnumMap<>(Nation.class);
 
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
-        ImageBoard imageBoard = new ImageBoard();
+        var imageBoard = new ImageBoard();
 
         Arrays.stream(Nation.values()).forEach(nation ->
                 Arrays.stream(Flag.FlagType.values()).forEach(flagType -> {

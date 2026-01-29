@@ -35,7 +35,7 @@ public class ShipImageCollection {
      * @throws IOException if an I/O error occurs
      */
     public void writeImageAtlas(String toDir, Palette palette) throws IOException {
-        ImageBoard imageBoard = new ImageBoard();
+        var imageBoard = new ImageBoard();
 
         images.forEach((direction, imageAndShadow) -> imageBoard.placeImagesAsRow(
                 List.of(

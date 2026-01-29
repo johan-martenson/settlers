@@ -18,6 +18,8 @@
         <rest-assured.version>6.0.0</rest-assured.version>
         <args4j.version>2.37</args4j.version>
         <websocket-api.version>1.1</websocket-api.version>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
     </properties>
 
     <build>
@@ -177,6 +179,19 @@
             <artifactId>javax.websocket-api</artifactId>
             <version>${websocket-api.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>6.0.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.3</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <reporting>

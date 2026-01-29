@@ -67,6 +67,7 @@ public class Brewer extends Worker {
                 if (countdown.hasReachedZero()) {
                     state = BREWING_BEER;
                     countdown.countFrom(PRODUCTION_TIME);
+                    player.reportChangedBuilding(home);
 
                     productivityMeasurer.nextProductivityCycle();
                 } else {
@@ -243,5 +244,10 @@ public class Brewer extends Worker {
         state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());
+    }
+
+    @Override
+    public boolean isWorking() {
+        return state == BREWING_BEER;
     }
 }

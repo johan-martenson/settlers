@@ -7,6 +7,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
 
@@ -20,6 +21,7 @@ import static org.appland.settlers.model.actors.Metalworker.State.*;
 public class Metalworker extends Worker {
     private static final int PRODUCTION_TIME = 49;
     private static final int RESTING_TIME = 99;
+    private static final int TIME_FOR_ACTION = 29;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
     private final Countdown countdown = new Countdown();
@@ -32,7 +34,9 @@ public class Metalworker extends Worker {
     protected enum State {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
-        MAKING_TOOL,
+        HAMMERING,
+        SAWING,
+        WIPING_SWEAT,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
         WAITING_FOR_SPACE_ON_FLAG,
@@ -96,13 +100,46 @@ public class Metalworker extends Worker {
 
     @Override
     protected void onIdle() {
+        System.out.println();
+        System.out.println(state);
+        System.out.println(countdown.getCount());
+
         switch (state) {
             case RESTING_IN_HOUSE -> {
                 if (countdown.hasReachedZero()) {
-                    state = State.MAKING_TOOL;
-                    countdown.countFrom(PRODUCTION_TIME);
+                    if (home.getAmount(PLANK) > 0 &&
+                        home.getAmount(IRON_BAR) > 0 &&
+                        home.getFlag().hasPlaceForMoreCargo() &&
+                        home.isProductionEnabled()) {
+                        state = HAMMERING;
+                        countdown.countFrom(TIME_FOR_ACTION);
+                        goOutside();
+                        player.reportWorkerStartedAction(this, WorkerAction.HAMMER_TO_MAKE_TOOL);
+                        map.reportWorkerWentOutside(this);
+                        player.reportChangedBuilding(home);
+                    }
 
                     productivityMeasurer.nextProductivityCycle();
+                } else {
+                    countdown.step();
+                }
+            }
+
+            case HAMMERING -> {
+                if (countdown.hasReachedZero()) {
+                    state = SAWING;
+                    countdown.countFrom(TIME_FOR_ACTION);
+                    player.reportWorkerStartedAction(this, WorkerAction.SAWING_TO_MAKE_TOOL);
+                } else {
+                    countdown.step();
+                }
+            }
+
+            case SAWING -> {
+                if (countdown.hasReachedZero()) {
+                    state = WIPING_SWEAT;
+                    countdown.countFrom(TIME_FOR_ACTION);
+                    player.reportWorkerStartedAction(this, WorkerAction.WIPE_OFF_SWEAT_TO_MAKE_TOOL);
                 } else {
                     countdown.step();
                 }
@@ -121,55 +158,49 @@ public class Metalworker extends Worker {
                 }
             }
 
-            case MAKING_TOOL -> {
-                if (home.getAmount(PLANK) > 0 && home.getAmount(IRON_BAR) > 0 && home.isProductionEnabled()) {
-                    if (countdown.hasReachedZero()) {
+            case WIPING_SWEAT -> {
+                if (countdown.hasReachedZero()) {
 
-                        // Wait if all tool quotas are zero
-                        boolean anyToolQuotaAboveZero = false;
-                        for (var tool : TOOLS) {
-                            if (player.getProductionQuotaForTool(tool) > 0) {
-                                anyToolQuotaAboveZero = true;
+                    // Wait if all tool quotas are zero
+                    boolean anyToolQuotaAboveZero = false;
+                    for (var tool : TOOLS) {
+                        if (player.getProductionQuotaForTool(tool) > 0) {
+                            anyToolQuotaAboveZero = true;
 
-                                break;
-                            }
+                            break;
                         }
+                    }
 
-                        if (!anyToolQuotaAboveZero) {
-                            return;
-                        }
+                    if (!anyToolQuotaAboveZero) {
+                        return;
+                    }
 
-                        // Consume the ingredients
-                        home.consumeOne(PLANK);
-                        home.consumeOne(IRON_BAR);
+                    // Consume the ingredients
+                    home.consumeOne(PLANK);
+                    home.consumeOne(IRON_BAR);
 
-                        // Report the production
-                        productivityMeasurer.reportProductivity();
+                    // Report the production
+                    productivityMeasurer.reportProductivity();
 
-                        map.getStatisticsManager().toolProduced(player, map.getTime());
+                    map.getStatisticsManager().toolProduced(player, map.getTime());
 
-                        // Handle transportation of the produced tool
-                        if (!home.getFlag().hasPlaceForMoreCargo()) {
-                            state = WAITING_FOR_SPACE_ON_FLAG;
-                        } else {
-                            var nextTool = getNextTool();
-
-                            carriedCargo = new Cargo(nextTool, map);
-
-                            // Go place the tool at the flag
-                            state = GOING_TO_FLAG_WITH_CARGO;
-
-                            setTarget(home.getFlag().getPosition());
-
-                            home.getFlag().promiseCargo(getCargo());
-                        }
+                    // Handle transportation of the produced tool
+                    if (!home.getFlag().hasPlaceForMoreCargo()) {
+                        state = WAITING_FOR_SPACE_ON_FLAG;
                     } else {
-                        countdown.step();
+                        var nextTool = getNextTool();
+
+                        carriedCargo = new Cargo(nextTool, map);
+
+                        // Go place the tool at the flag
+                        state = GOING_TO_FLAG_WITH_CARGO;
+                        System.out.println("Metalworker at %s, going to %s");
+                        setTarget(home.getFlag().getPosition());
+
+                        home.getFlag().promiseCargo(getCargo());
                     }
                 } else {
-
-                    // Report the that the brewer was unproductive
-                    productivityMeasurer.reportUnproductivity();
+                    countdown.step();
                 }
             }
 
@@ -282,5 +313,22 @@ public class Metalworker extends Worker {
     public void goToOtherStorage(Building building) {
         state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
         setTarget(building.getFlag().getPosition());
+    }
+
+    public boolean isHammering() {
+        return state == HAMMERING;
+    }
+
+    public boolean isSawing() {
+        return state == SAWING;
+    }
+
+    public boolean isWipingSweat() {
+        return state == WIPING_SWEAT;
+    }
+
+    @Override
+    public boolean isWorking() {
+        return state == HAMMERING || state == SAWING || state == WIPING_SWEAT;
     }
 }

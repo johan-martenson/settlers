@@ -2,7 +2,6 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -12,11 +11,7 @@ import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Vegetation;
-import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Hunter;
-import org.appland.settlers.model.actors.WildAnimal;
-import org.appland.settlers.model.actors.Worker;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.CoalMine;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.GoldMine;
@@ -26,7 +21,6 @@ import org.appland.settlers.model.buildings.Storehouse;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
@@ -47,20 +41,20 @@ public class TestHunterHut {
         var point21 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        // Place hunter hut
+        // Place var hut
         var point22 = new Point(6, 12);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point22);
 
         // Deliver two planks
-        var cargo = new Cargo(PLANK, map);
+        var plankCargo = new Cargo(PLANK, map);
 
-        hunterHut0.putCargo(cargo);
-        hunterHut0.putCargo(cargo);
+        hunterHut0.putCargo(plankCargo);
+        hunterHut0.putCargo(plankCargo);
 
         // Assign builder
         Utils.assignBuilder(hunterHut0);
 
-        // Verify that this is enough to construct the hunter hut
+        // Verify that this is enough to construct the var hut
         for (int i = 0; i < 100; i++) {
             assertTrue(hunterHut0.isUnderConstruction());
 
@@ -81,19 +75,19 @@ public class TestHunterHut {
         var point21 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        // Place hunter hut
+        // Place var hut
         var point22 = new Point(6, 12);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point22);
 
         // Deliver two planks
-        var cargo = new Cargo(PLANK, map);
+        var plankCargo = new Cargo(PLANK, map);
 
-        hunterHut0.putCargo(cargo);
+        hunterHut0.putCargo(plankCargo);
 
         // Assign builder
         Utils.assignBuilder(hunterHut0);
 
-        // Verify that this is enough to construct the hunter hut
+        // Verify that this is enough to construct the var hut
         for (int i = 0; i < 500; i++) {
             assertTrue(hunterHut0.isUnderConstruction());
 
@@ -114,7 +108,7 @@ public class TestHunterHut {
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(10, 10);
         var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
@@ -130,7 +124,7 @@ public class TestHunterHut {
         // Verify that the forrester is unoccupied when it's newly constructed
         assertTrue(hunterHut.needsWorker());
 
-        // Verify that the hunter hut requires a worker
+        // Verify that the var hut requires a worker
         assertTrue(hunterHut.needsWorker());
 
         var hunter = new Hunter(null, null);
@@ -179,11 +173,11 @@ public class TestHunterHut {
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(15, 5);
         var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Finish construction of the hunter hut
+        // Finish construction of the var hut
         constructHouse(hunterHut);
 
         // Assign a worker
@@ -208,14 +202,14 @@ public class TestHunterHut {
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(15, 5);
         var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Finish construction of the hunter hut
+        // Finish construction of the var hut
         constructHouse(hunterHut);
 
-        // Promise a worker to the hunter hut
+        // Promise a worker to the var hut
         hunterHut.promiseWorker(new Hunter(null, null));
 
         // Verify that it's not possible to promise a second worker
@@ -237,7 +231,7 @@ public class TestHunterHut {
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(10, 10);
         var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
@@ -273,14 +267,14 @@ public class TestHunterHut {
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(10, 4);
         var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Connect the hunter hut with the headquarter
+        // Connect the var hut with the headquarter
         var road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
 
-        // Finish the hunter hut
+        // Finish the var hut
         constructHouse(hunterHut);
 
         // Run game logic twice, once to place courier and once to place hunter
@@ -300,14 +294,14 @@ public class TestHunterHut {
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(10, 4);
         var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Connect the hunter hut with the headquarter
+        // Connect the var hut with the headquarter
         var road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
 
-        // Finish the hunter hut
+        // Finish the var hut
         constructHouse(hunterHut);
 
         // Wait for a hunter to walk out
@@ -333,14 +327,14 @@ public class TestHunterHut {
         Utils.adjustInventoryTo(headquarter, HUNTER, 0);
         Utils.adjustInventoryTo(headquarter, Material.BOW, 1);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(10, 4);
         var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Connect the hunter hut with the headquarter
+        // Connect the var hut with the headquarter
         var road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
 
-        // Finish the hunter hut
+        // Finish the var hut
         constructHouse(hunterHut);
 
         // Run game logic twice, once to place courier and once to place hunter
@@ -360,14 +354,14 @@ public class TestHunterHut {
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(10, 4);
         var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Connect the hunter hut with the headquarter
+        // Connect the var hut with the headquarter
         var road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
 
-        // Construct the hunter hut
+        // Construct the var hut
         constructHouse(hunterHut);
 
         // Run game logic twice, once to place courier and once to place hunter
@@ -392,11 +386,11 @@ public class TestHunterHut {
         var point0 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(10, 4);
         var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Construct the hunter hut
+        // Construct the var hut
         constructHouse(hunterHut);
 
         // Manually place hunter
@@ -409,6 +403,8 @@ public class TestHunterHut {
         // Run the game logic 99 times and make sure the hunter stays in the hut
         for (int i = 0; i < 99; i++) {
             assertTrue(hunter.isInsideBuilding());
+            assertFalse(hunterHut.isWorking());
+
             map.stepTime();
         }
 
@@ -420,19 +416,17 @@ public class TestHunterHut {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
         var point0 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(10, 4);
         var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Construct the hunter hut
+        // Construct the var hut
         constructHouse(hunterHut);
 
         // Manually place hunter
@@ -448,7 +442,7 @@ public class TestHunterHut {
 
             // Break if there are wild animals close
             animalClose = false;
-            for (WildAnimal animal : map.getWildAnimals()) {
+            for (var animal : map.getWildAnimals()) {
                 if (animal.getPosition().distance(hunterHut.getPosition()) < 20) {
                     animalClose = true;
 
@@ -461,6 +455,7 @@ public class TestHunterHut {
             }
 
             assertTrue(hunter.isInsideBuilding());
+            assertFalse(hunterHut.isWorking());
 
             map.stepTime();
         }
@@ -471,19 +466,17 @@ public class TestHunterHut {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
         var point0 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(10, 4);
         var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Construct the hunter hut
+        // Construct the var hut
         constructHouse(hunterHut);
 
         // Manually place hunter
@@ -499,14 +492,16 @@ public class TestHunterHut {
         assertTrue(hunter.isInsideBuilding());
 
         // Wait for a wild animal to come close to the hut
-        WildAnimal animal = Utils.waitForWildAnimalCloseToPoint(hunterHut.getPosition(), map);
+        var animal = Utils.waitForWildAnimalCloseToPoint(hunterHut.getPosition(), map);
 
         // Step once and make sure the hunter goes out of the hut
         map.stepTime();
 
         assertFalse(hunter.isInsideBuilding());
+        assertTrue(hunterHut.isWorking());
 
         var point = hunter.getTarget();
+
         assertNotNull(point);
     }
 
@@ -515,19 +510,17 @@ public class TestHunterHut {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
         var point0 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(10, 4);
         var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Construct the hunter hut
+        // Construct the var hut
         constructHouse(hunterHut);
 
         // Manually place hunter
@@ -541,13 +534,15 @@ public class TestHunterHut {
         Utils.fastForward(99, map);
 
         assertTrue(hunter.isInsideBuilding());
+        assertFalse(hunterHut.isWorking());
 
         // Wait for a wild animal to come close to the hut
-        WildAnimal animal = Utils.waitForWildAnimalCloseToPoint(hunterHut.getPosition(), map);
+        var animal = Utils.waitForWildAnimalCloseToPoint(hunterHut.getPosition(), map);
 
         map.stepTime();
 
         assertNotNull(hunter.getTarget());
+        assertTrue(hunterHut.isWorking());
 
         // Wait for the hunter to go out the hut and reach the flag
         assertEquals(hunter.getTarget(), hunterHut.getFlag().getPosition());
@@ -557,7 +552,7 @@ public class TestHunterHut {
         // Verify that the hunter tracks the wild animal
         for (int i = 0; i < 1000; i++) {
 
-            // Break if the animal is too far away from the hunter hut
+            // Break if the animal is too far away from the var hut
             if (animal.getPosition().distance(hunterHut.getPosition()) > 70) {
                 break;
             }
@@ -573,6 +568,7 @@ public class TestHunterHut {
 
             // Verify that the hunter doesn't plan too far ahead
             assertTrue(hunter.getTarget().distance(hunter.getPosition()) < 3);
+            assertTrue(hunterHut.isWorking());
 
             // Wait for the hunter to reach the next spot
             Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunter.getTarget());
@@ -584,19 +580,17 @@ public class TestHunterHut {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
         var point0 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(10, 4);
         var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Construct the hunter hut
+        // Construct the var hut
         constructHouse(hunterHut);
 
         // Manually place hunter
@@ -616,7 +610,7 @@ public class TestHunterHut {
 
         map.stepTime();
 
-        WildAnimal animal = hunter.getPrey();
+        var animal = hunter.getPrey();
 
         assertNotNull(hunter.getPrey());
 
@@ -625,7 +619,6 @@ public class TestHunterHut {
         assertFalse(hunter.isShooting());
 
         for (int i = 0; i < 5000; i++) {
-
             if (hunter.isShooting()) {
                 assertTrue(hunter.getPosition().distance(animal.getPosition()) <= 2);
                 assertTrue(hunter.isExactlyAtPoint());
@@ -640,6 +633,7 @@ public class TestHunterHut {
         for (int i = 0; i < 5; i++) {
             assertTrue(hunter.isShooting());
             assertTrue(animal.isAlive());
+            assertTrue(hunterHut.isWorking());
 
             map.stepTime();
         }
@@ -650,7 +644,7 @@ public class TestHunterHut {
         assertFalse(animal.isAlive());
 
         // Verify that the animal doesn't move after it's dead
-        Point lastAnimalPoint = animal.getPosition();
+        var lastAnimalPoint = animal.getPosition();
 
         // Wait for the hunter to reach the dead animal
         assertTrue(hunter.getTarget().equals(lastAnimalPoint) || hunter.getPosition().equals(lastAnimalPoint));
@@ -662,6 +656,7 @@ public class TestHunterHut {
         assertEquals(animal.getPosition(), lastAnimalPoint);
         assertNotNull(hunter.getCargo());
         assertEquals(hunter.getCargo().getMaterial(), MEAT);
+        assertTrue(hunterHut.isWorking());
     }
 
     @Test
@@ -675,11 +670,11 @@ public class TestHunterHut {
         var point0 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(10, 4);
         var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Construct the hunter hut
+        // Construct the var hut
         constructHouse(hunterHut);
 
         // Manually place hunter
@@ -695,7 +690,7 @@ public class TestHunterHut {
         assertTrue(hunter.isInsideBuilding());
 
         // Wait for a wild animal to come close to the hut
-        WildAnimal animal = Utils.waitForWildAnimalCloseToPoint(hunterHut.getPosition(), map);
+        var animal = Utils.waitForWildAnimalCloseToPoint(hunterHut.getPosition(), map);
 
         // Wait for the hunter to reach the wild animal
         Utils.waitForActorsToGetClose(hunter, animal, 2, map);
@@ -715,8 +710,9 @@ public class TestHunterHut {
 
         assertNotNull(hunter.getCargo());
 
-        // Verify that the hunter walks home with the meat and puts it at the flag
+        // Verify that the var walks home with the meat and puts it at the flag
         assertEquals(hunter.getTarget(), hunterHut.getPosition());
+        assertTrue(hunterHut.isWorking());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunterHut.getPosition());
 
@@ -738,6 +734,7 @@ public class TestHunterHut {
 
         assertEquals(hunter.getPosition(), hunterHut.getPosition());
         assertTrue(hunter.isInsideBuilding());
+        assertFalse(hunterHut.isWorking());
     }
 
     @Test
@@ -745,9 +742,6 @@ public class TestHunterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
@@ -764,7 +758,7 @@ public class TestHunterHut {
         Utils.surroundPointWithMinableMountain(point4, map);
 
         // Place coal mine
-        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point4);
+        var coalMine = map.placeBuilding(new CoalMine(player0), point4);
 
         // Connect the coal mine to the headquarters
         var road2 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), headquarter.getFlag());
@@ -778,15 +772,15 @@ public class TestHunterHut {
         var point1 = new Point(14, 4);
         var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Connect the hunter hut with the coal mine
+        // Connect the var hut with the coal mine
         var road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), coalMine.getFlag());
 
-        // Wait for the hunter hut to get constructed and occupied
+        // Wait for the var hut to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(hunterHut);
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut);
 
-        // Wait for the courier on the road between the coal mine and the hunter hut to have a meat cargo
+        // Wait for the courier on the road between the coal mine and the var hut to have a meat cargo
         Utils.waitForFlagToGetStackedCargo(map, hunterHut.getFlag(), 1);
 
         assertEquals(hunterHut.getFlag().getStackedCargo().getFirst().getMaterial(), MEAT);
@@ -807,9 +801,6 @@ public class TestHunterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
@@ -821,27 +812,27 @@ public class TestHunterHut {
 
         // Place storehouse
         var point4 = new Point(10, 4);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point4);
 
         // Connect the storehouse to the headquarters
         var road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
-        // Place the hunter hut
+        // Place the var hut
         var point1 = new Point(14, 4);
         var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Connect the hunter hut with the storehouse
+        // Connect the var hut with the storehouse
         var road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), storehouse.getFlag());
 
-        // Deliver the needed material to construct the hunter hut
+        // Deliver the needed material to construct the var hut
         Utils.deliverCargos(hunterHut, PLANK, 2);
 
-        // Wait for the hunter hut to get constructed and occupied
+        // Wait for the var hut to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(hunterHut);
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut);
 
-        // Wait for the courier on the road between the storehouse and the hunter hut to have a meat cargo
+        // Wait for the courier on the road between the storehouse and the var hut to have a meat cargo
         Utils.waitForFlagToGetStackedCargo(map, hunterHut.getFlag(), 1);
 
         assertEquals(hunterHut.getFlag().getStackedCargo().getFirst().getMaterial(), MEAT);
@@ -867,9 +858,6 @@ public class TestHunterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
@@ -884,7 +872,7 @@ public class TestHunterHut {
         Utils.surroundPointWithMinableMountain(point4, map);
 
         // Place gold mine
-        GoldMine goldMine = map.placeBuilding(new GoldMine(player0), point4);
+        var goldMine = map.placeBuilding(new GoldMine(player0), point4);
 
         // Connect the gold mine to the headquarters
         var road2 = map.placeAutoSelectedRoad(player0, goldMine.getFlag(), headquarter.getFlag());
@@ -898,19 +886,19 @@ public class TestHunterHut {
         // Stop production in the gold mine
         goldMine.stopProduction();
 
-        // Place the hunter hut
+        // Place the var hut
         var point1 = new Point(14, 4);
         var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Connect the hunter hut with the gold mine
+        // Connect the var hut with the gold mine
         var road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), goldMine.getFlag());
 
-        // Wait for the hunter hut to get constructed and occupied
+        // Wait for the var hut to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(hunterHut);
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut);
 
-        // Wait for the flag on the road between the gold mine and the hunter hut to have a meat cargo
+        // Wait for the flag on the road between the gold mine and the var hut to have a meat cargo
         Utils.waitForFlagToGetStackedCargo(map, hunterHut.getFlag(), 1);
 
         assertEquals(hunterHut.getFlag().getStackedCargo().getFirst().getMaterial(), MEAT);
@@ -938,26 +926,24 @@ public class TestHunterHut {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        // Place hunter hut
+        // Place var hut
         var point26 = new Point(8, 8);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point26);
 
-        // Finish construction of the hunter hut
+        // Finish construction of the var hut
         constructHouse(hunterHut0);
 
-        // Occupy the hunter hut
+        // Occupy the var hut
         Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
 
-        // Destroy the hunter hut
-        Worker hunter = hunterHut0.getWorker();
+        // Destroy the var hut
+        var hunter = hunterHut0.getWorker();
 
         assertTrue(hunter.isInsideBuilding());
         assertEquals(hunter.getPosition(), hunterHut0.getPosition());
@@ -981,29 +967,27 @@ public class TestHunterHut {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        // Place hunter hut
+        // Place var hut
         var point26 = new Point(8, 8);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point26);
 
-        // Connect the hunter hut with the headquarter
+        // Connect the var hut with the headquarter
         map.placeAutoSelectedRoad(player0, hunterHut0.getFlag(), headquarter0.getFlag());
 
-        // Finish construction of the hunter hut
+        // Finish construction of the var hut
         constructHouse(hunterHut0);
 
-        // Occupy the hunter hut
+        // Occupy the var hut
         Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
 
-        // Destroy the hunter hut
-        Worker hunter = hunterHut0.getWorker();
+        // Destroy the var hut
+        var hunter = hunterHut0.getWorker();
 
         assertTrue(hunter.isInsideBuilding());
         assertEquals(hunter.getPosition(), hunterHut0.getPosition());
@@ -1031,28 +1015,26 @@ public class TestHunterHut {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(8, 6);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Connect the hunter hut and the headquarter
+        // Connect the var hut and the headquarter
         var point2 = new Point(6, 4);
         var point3 = new Point(8, 4);
         var point4 = new Point(9, 5);
         var road0 = map.placeRoad(player0, point2, point3, point4);
 
-        // Finish the hunter hut
+        // Finish the var hut
         constructHouse(hunterHut0);
 
-        // Assign a worker to the hunter hut
+        // Assign a worker to the var hut
         var hunter = new Hunter(player0, map);
 
         Utils.occupyBuilding(hunter, hunterHut0);
@@ -1081,28 +1063,26 @@ public class TestHunterHut {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(8, 6);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Connect the hunter hut and the headquarter
+        // Connect the var hut and the headquarter
         var point2 = new Point(6, 4);
         var point3 = new Point(8, 4);
         var point4 = new Point(9, 5);
         var road0 = map.placeRoad(player0, point2, point3, point4);
 
-        // Finish the hunter hut
+        // Finish the var hut
         constructHouse(hunterHut0);
 
-        // Assign a worker to the hunter hut
+        // Assign a worker to the var hut
         var hunter = new Hunter(player0, map);
 
         Utils.occupyBuilding(hunter, hunterHut0);
@@ -1112,7 +1092,7 @@ public class TestHunterHut {
         // Let the worker rest
         Utils.fastForward(100, map);
 
-        // Wait for the hunter to leave the hunter hut
+        // Wait for the hunter to leave the var hut
         for (int i = 0; i < 5000; i++) {
             if (!hunter.isInsideBuilding()) {
                 break;
@@ -1123,7 +1103,7 @@ public class TestHunterHut {
 
         assertFalse(hunter.isInsideBuilding());
 
-        // Wait for the hunter to go back to the hunter hut
+        // Wait for the hunter to go back to the var hut
         for (int i = 0; i < 300; i++) {
             if (hunter.isInsideBuilding()) {
                 break;
@@ -1164,34 +1144,30 @@ public class TestHunterHut {
 
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        // Create game map
         var map = new GameMap(List.of(player0), 50, 50);
 
         // Place headquarter
         var point0 = new Point(15, 15);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(20, 14);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Finish construction of the hunter hut
+        // Finish construction of the var hut
         constructHouse(hunterHut0);
 
-        // Connect the hunter hut with the headquarter
+        // Connect the var hut with the headquarter
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), hunterHut0.getFlag());
 
         // Wait for hunter to get assigned and leave the headquarter
-        List<Hunter> workers = Utils.waitForWorkersOutsideBuilding(Hunter.class, 1, player0);
+        var workers = Utils.waitForWorkersOutsideBuilding(Hunter.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
 
         // Verify that the player is set correctly in the worker
-        Hunter worker = workers.getFirst();
+        var worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1219,7 +1195,7 @@ public class TestHunterHut {
 
         // Place fortress for player 0
         var point2 = new Point(21, 9);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         // Finish construction of the fortress
         constructHouse(fortress0);
@@ -1227,15 +1203,15 @@ public class TestHunterHut {
         // Occupy the fortress
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
-        // Place hunter hut close to the new border
+        // Place var hut close to the new border
         var point4 = new Point(28, 18);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point4);
 
-        // Finish construction of the hunter hut
+        // Finish construction of the var hut
         constructHouse(hunterHut0);
 
-        // Occupy the hunter hut
-        Hunter worker = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
+        // Occupy the var hut
+        var worker = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
 
         // Verify that the worker goes back to its own storage when the fortress is torn down
         fortress0.tearDown();
@@ -1248,8 +1224,6 @@ public class TestHunterHut {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
@@ -1258,9 +1232,9 @@ public class TestHunterHut {
 
         // Place first flag
         var point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var flag0 = map.placeFlag(player0, point1);
 
-        // Place hunter hut
+        // Place var hut
         var point2 = new Point(14, 4);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point2.upLeft());
 
@@ -1275,7 +1249,7 @@ public class TestHunterHut {
 
         Hunter hunter = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Hunter) {
                 hunter = (Hunter) worker;
             }
@@ -1288,7 +1262,7 @@ public class TestHunterHut {
 
         map.stepTime();
 
-        // See that the hunter has started walking
+        // See that the var has started walking
         assertFalse(hunter.isExactlyAtPoint());
 
         // Remove the next road
@@ -1310,8 +1284,6 @@ public class TestHunterHut {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
@@ -1320,9 +1292,9 @@ public class TestHunterHut {
 
         // Place first flag
         var point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var flag0 = map.placeFlag(player0, point1);
 
-        // Place hunter hut
+        // Place var hut
         var point2 = new Point(14, 4);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point2.upLeft());
 
@@ -1337,7 +1309,7 @@ public class TestHunterHut {
 
         Hunter hunter = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Hunter) {
                 hunter = (Hunter) worker;
             }
@@ -1350,7 +1322,7 @@ public class TestHunterHut {
 
         map.stepTime();
 
-        // See that the hunter has started walking
+        // See that the var has started walking
         assertFalse(hunter.isExactlyAtPoint());
 
         // Remove the current road
@@ -1375,8 +1347,6 @@ public class TestHunterHut {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
@@ -1385,9 +1355,9 @@ public class TestHunterHut {
 
         // Place first flag
         var point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var flag0 = map.placeFlag(player0, point1);
 
-        // Place hunter hut
+        // Place var hut
         var point2 = new Point(14, 4);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point2.upLeft());
 
@@ -1402,7 +1372,7 @@ public class TestHunterHut {
 
         Hunter hunter = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Hunter) {
                 hunter = (Hunter) worker;
             }
@@ -1416,10 +1386,10 @@ public class TestHunterHut {
 
         map.stepTime();
 
-        // See that the hunter has started walking
+        // See that the var has started walking
         assertFalse(hunter.isExactlyAtPoint());
 
-        // Tear down the hunter hut
+        // Tear down the var hut
         hunterHut0.tearDown();
 
         // Verify that the hunter continues walking to the next flag
@@ -1436,33 +1406,31 @@ public class TestHunterHut {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        // Place hunter hut
+        // Place var hut
         var point26 = new Point(17, 17);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point26);
 
-        // Finish construction of the hunter hut
+        // Finish construction of the var hut
         constructHouse(hunterHut0);
 
-        // Occupy the hunter hut
+        // Occupy the var hut
         Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
 
-        // Place a second storage closer to the hunter hut
+        // Place a second storage closer to the var hut
         var point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         constructHouse(storehouse0);
 
-        // Destroy the hunter hut
-        Worker hunter = hunterHut0.getWorker();
+        // Destroy the var hut
+        var hunter = hunterHut0.getWorker();
 
         assertTrue(hunter.isInsideBuilding());
         assertEquals(hunter.getPosition(), hunterHut0.getPosition());
@@ -1486,27 +1454,25 @@ public class TestHunterHut {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        // Place hunter hut
+        // Place var hut
         var point26 = new Point(17, 17);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point26);
 
-        // Finish construction of the hunter hut
+        // Finish construction of the var hut
         constructHouse(hunterHut0);
 
-        // Occupy the hunter hut
+        // Occupy the var hut
         Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
 
-        // Place a second storage closer to the hunter hut
+        // Place a second storage closer to the var hut
         var point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         constructHouse(storehouse0);
@@ -1514,8 +1480,8 @@ public class TestHunterHut {
         // Destroy the storage
         storehouse0.tearDown();
 
-        // Destroy the hunter hut
-        Worker hunter = hunterHut0.getWorker();
+        // Destroy the var hut
+        var hunter = hunterHut0.getWorker();
 
         assertTrue(hunter.isInsideBuilding());
         assertEquals(hunter.getPosition(), hunterHut0.getPosition());
@@ -1539,27 +1505,25 @@ public class TestHunterHut {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        // Place hunter hut
+        // Place var hut
         var point26 = new Point(17, 17);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point26);
 
-        // Finish construction of the hunter hut
+        // Finish construction of the var hut
         constructHouse(hunterHut0);
 
-        // Occupy the hunter hut
+        // Occupy the var hut
         Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
 
-        // Place a second storage closer to the hunter hut
+        // Place a second storage closer to the var hut
         var point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         constructHouse(storehouse0);
@@ -1570,8 +1534,8 @@ public class TestHunterHut {
         // Wait for the storage to burn down
         Utils.waitForBuildingToBurnDown(storehouse0);
 
-        // Destroy the hunter hut
-        Worker hunter = hunterHut0.getWorker();
+        // Destroy the var hut
+        var hunter = hunterHut0.getWorker();
 
         assertTrue(hunter.isInsideBuilding());
         assertEquals(hunter.getPosition(), hunterHut0.getPosition());
@@ -1595,30 +1559,28 @@ public class TestHunterHut {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        // Place hunter hut
+        // Place var hut
         var point26 = new Point(17, 17);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point26);
 
-        // Finish construction of the hunter hut
+        // Finish construction of the var hut
         constructHouse(hunterHut0);
 
-        // Occupy the hunter hut
+        // Occupy the var hut
         Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
 
-        // Place a second storage closer to the hunter hut
+        // Place a second storage closer to the var hut
         var point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
-        // Destroy the hunter hut
-        Worker hunter = hunterHut0.getWorker();
+        // Destroy the var hut
+        var hunter = hunterHut0.getWorker();
 
         assertTrue(hunter.isInsideBuilding());
         assertEquals(hunter.getPosition(), hunterHut0.getPosition());
@@ -1642,26 +1604,24 @@ public class TestHunterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        // Place hunter hut
+        // Place var hut
         var point26 = new Point(17, 17);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point26);
 
-        // Place road to connect the headquarter and the hunter hut
+        // Place road to connect the headquarter and the var hut
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), hunterHut0.getFlag());
 
-        // Finish construction of the hunter hut
+        // Finish construction of the var hut
         constructHouse(hunterHut0);
 
         // Wait for a worker to start walking to the building
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Hunter.class, 1, player0).getFirst();
+        var worker = Utils.waitForWorkersOutsideBuilding(Hunter.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, hunterHut0.getFlag().getPosition());
@@ -1684,29 +1644,27 @@ public class TestHunterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(7, 9);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Finish construction of the hunter hut
+        // Finish construction of the var hut
         constructHouse(hunterHut0);
 
-        // Populate the hunter hut
-        Worker hunter = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
+        // Populate the var hut
+        var hunter = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
 
         assertTrue(hunter.isInsideBuilding());
         assertEquals(hunter.getHome(), hunterHut0);
         assertEquals(hunterHut0.getWorker(), hunter);
 
-        // Verify that the productivity is 0% when the hunter hut doesn't produce anything
+        // Verify that the productivity is 0% when the var hut doesn't produce anything
         for (int i = 0; i < 500; i++) {
             map.getWildAnimals().clear();
 
@@ -1723,39 +1681,37 @@ public class TestHunterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(5, 9);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Finish construction of the hunter hut
+        // Finish construction of the var hut
         constructHouse(hunterHut0);
 
-        // Populate the hunter hut
-        Worker hunterHut = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
+        // Populate the var hut
+        var hunterHut = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
 
         assertTrue(hunterHut.isInsideBuilding());
         assertEquals(hunterHut.getHome(), hunterHut0);
         assertEquals(hunterHut0.getWorker(), hunterHut);
 
-        // Connect the hunter hut with the headquarter
+        // Connect the var hut with the headquarter
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), hunterHut0.getFlag());
 
         // Place a wild animal on the map
         Utils.putWildAnimalOnOnePoint(map.getPointsWithinRadius(hunterHut0.getPosition(), 4), map);
 
-        // Make the hunter hut produce meat when wild animals are close by
+        // Make the var hut produce meat when wild animals are close by
         for (int i = 0; i < 2000; i++) {
             map.stepTime();
 
-            // Add a new wild animal close to the hunter hut if there is only one left
+            // Add a new wild animal close to the var hut if there is only one left
             if (map.getWildAnimals().size() < 2) {
                 Utils.putWildAnimalOnOnePoint(map.getPointsWithinRadius(hunterHut0.getPosition(), 4), map);
             }
@@ -1770,7 +1726,7 @@ public class TestHunterHut {
 
         for (int i = 0; i < 1000; i++) {
 
-            // Make sure there are two wild animals close to the hunter hut
+            // Make sure there are two wild animals close to the var hut
             if (map.getWildAnimals().size() < 2) {
                 Utils.putWildAnimalOnOnePoint(map.getPointsWithinRadius(hunterHut0.getPosition(), 4), map);
             }
@@ -1787,29 +1743,27 @@ public class TestHunterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(7, 9);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Finish construction of the hunter hut
+        // Finish construction of the var hut
         constructHouse(hunterHut0);
 
-        // Populate the hunter hut
-        Worker hunter = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
+        // Populate the var hut
+        var hunter = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
 
         assertTrue(hunter.isInsideBuilding());
         assertEquals(hunter.getHome(), hunterHut0);
         assertEquals(hunterHut0.getWorker(), hunter);
 
-        // Connect the hunter hut with the headquarter
+        // Connect the var hut with the headquarter
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), hunterHut0.getFlag());
 
         // Put a new wild animal if the current one is gone
@@ -1817,9 +1771,8 @@ public class TestHunterHut {
             Utils.putWildAnimalOnOnePoint(map.getPointsWithinRadius(hunterHut0.getPosition(), 4), map);
         }
 
-        // Make the hunter hut take down wild animals and reach full productivity
+        // Make the var hut take down wild animals and reach full productivity
         for (int i = 0; i < 5000; i++) {
-
             map.stepTime();
 
             // Put a new wild animal if the current one is gone
@@ -1836,7 +1789,6 @@ public class TestHunterHut {
 
         // Wait for the hunter to rest in the house
         for (int i = 0; i < 1000; i++) {
-
             if (hunter.getCargo() == null &&
                 hunter.getPosition().equals(hunterHut0.getFlag().getPosition()) &&
                 hunter.getTarget().equals(hunterHut0.getPosition())) {
@@ -1882,24 +1834,23 @@ public class TestHunterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(7, 9);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Finish construction of the hunter hut
+        // Finish construction of the var hut
         constructHouse(hunterHut0);
 
-        // Verify that the unoccupied hunter hut is unproductive
+        // Verify that the unoccupied var hut is unproductive
         for (int i = 0; i < 1000; i++) {
             assertEquals(hunterHut0.getProductivity(), 0);
+            assertFalse(hunterHut0.isWorking());
 
             map.stepTime();
         }
@@ -1910,19 +1861,17 @@ public class TestHunterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        // Place hunter hut
+        // Place var hut
         var point26 = new Point(15, 5);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point26);
 
-        // Surround the hunter hut with water the hunter cannot cross
+        // Surround the var hut with water the hunter cannot cross
         var point2 = new Point(15, 7);
         var point3 = new Point(18, 6);
         var point4 = new Point(18, 4);
@@ -1936,19 +1885,18 @@ public class TestHunterHut {
         Utils.surroundPointWithVegetation(point6, Vegetation.WATER, map);
         Utils.surroundPointWithVegetation(point7, Vegetation.WATER, map);
 
-        // Construct the hunter hut
+        // Construct the var hut
         constructHouse(hunterHut0);
 
         // Put a wild animal on the other side of the water
         var point8 = new Point(15, 9);
         map.placeStone(point8, Stone.StoneType.STONE_1, 7);
 
-        // Occupy the hunter hut
+        // Occupy the var hut
         var hunter = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
 
         // Verify that the hunter doesn't try to the wild animal
         for (int i = 0; i < 2000; i++) {
-
             map.stepTime();
 
             assertTrue(hunter.isInsideBuilding());
@@ -1961,25 +1909,23 @@ public class TestHunterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(10, 10);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Finish construction of the hunter hut
+        // Finish construction of the var hut
         constructHouse(hunterHut0);
 
-        // Populate the hunter hut
-        Worker hunter = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
+        // Populate the var hut
+        var hunter = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
 
-        // Verify that the hunter hut can produce
+        // Verify that the var hut can produce
         assertTrue(hunterHut0.canProduce());
     }
 
@@ -1988,19 +1934,17 @@ public class TestHunterHut {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(6, 12);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Construct the hunter hut
+        // Construct the var hut
         constructHouse(hunterHut0);
 
         // Verify that the reported output is correct
@@ -2013,15 +1957,13 @@ public class TestHunterHut {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(6, 12);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
 
@@ -2030,7 +1972,7 @@ public class TestHunterHut {
         assertTrue(hunterHut0.getTypesOfMaterialNeeded().contains(PLANK));
         assertEquals(hunterHut0.getCanHoldAmount(PLANK), 2);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == PLANK) {
                 continue;
             }
@@ -2044,25 +1986,23 @@ public class TestHunterHut {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(6, 12);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Construct the hunter hut
+        // Construct the var hut
         constructHouse(hunterHut0);
 
         // Verify that the reported needed construction material is correct
         assertEquals(hunterHut0.getTypesOfMaterialNeeded().size(), 0);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             assertEquals(hunterHut0.getCanHoldAmount(material), 0);
         }
     }
@@ -2072,23 +2012,20 @@ public class TestHunterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(16, 6);
         var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Connect the hunter hut with the headquarter
+        // Connect the var hut with the headquarter
         var road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
 
-        // Wait for the hunter hut to get constructed and assigned a worker
+        // Wait for the var hut to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(hunterHut);
         Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut);
 
@@ -2098,18 +2035,19 @@ public class TestHunterHut {
         // Remove the road
         map.removeRoad(road0);
 
-        // Verify that the hunter hut waits for the flag to get empty and produces nothing
+        // Verify that the var hut waits for the flag to get empty and produces nothing
         for (int i = 0; i < 800; i++) {
             assertEquals(hunterHut.getFlag().getStackedCargo().size(), 8);
+            assertFalse(hunterHut.isWorking());
 
             map.stepTime();
         }
 
-        // Reconnect the hunter hut with the headquarter
+        // Reconnect the var hut with the headquarter
         var road1 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 800; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2133,23 +2071,20 @@ public class TestHunterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(16, 6);
         var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Connect the hunter hut with the headquarter
+        // Connect the var hut with the headquarter
         var road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
 
-        // Wait for the hunter hut to get constructed and assigned a worker
+        // Wait for the var hut to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(hunterHut);
         Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut);
 
@@ -2159,18 +2094,18 @@ public class TestHunterHut {
         // Remove the road
         map.removeRoad(road0);
 
-        // The hunter hut waits for the flag to get empty and produces nothing
+        // The var hut waits for the flag to get empty and produces nothing
         for (int i = 0; i < 300; i++) {
             assertEquals(hunterHut.getFlag().getStackedCargo().size(), 8);
 
             map.stepTime();
         }
 
-        // Reconnect the hunter hut with the headquarter
+        // Reconnect the var hut with the headquarter
         var road1 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 800; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2196,7 +2131,7 @@ public class TestHunterHut {
 
         assertEquals(hunterHut.getFlag().getStackedCargo().size(), 8);
 
-        // Verify that the hunter hut doesn't produce anything because the flag is full
+        // Verify that the var hut doesn't produce anything because the flag is full
         for (int i = 0; i < 800; i++) {
             assertEquals(hunterHut.getFlag().getStackedCargo().size(), 8);
 
@@ -2209,41 +2144,39 @@ public class TestHunterHut {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(7, 9);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Place road to connect the hunter hut with the headquarter
+        // Place road to connect the var hut with the headquarter
         var road0 = map.placeAutoSelectedRoad(player0, hunterHut0.getFlag(), headquarter0.getFlag());
 
-        // Wait for the hunter hut to get constructed and occupied
+        // Wait for the var hut to get constructed and occupied
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
         Utils.waitForBuildingToBeConstructed(hunterHut0);
 
-        Worker hunter0 = Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut0);
+        var hunter0 = Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut0);
 
         assertTrue(hunter0.isInsideBuilding());
         assertEquals(hunter0.getHome(), hunterHut0);
         assertEquals(hunterHut0.getWorker(), hunter0);
 
-        // Add a lot of material to the headquarter for the hunter hut to consume
+        // Add a lot of material to the headquarter for the var hut to consume
         Utils.adjustInventoryTo(headquarter0, WATER, 40);
         Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
 
         // Block storage of wheat
         headquarter0.blockDeliveryOfMaterial(MEAT);
 
-        // Verify that the hunter hut puts eight wheats on the flag and then stops
+        // Verify that the var hut puts eight wheats on the flag and then stops
         Utils.waitForFlagToGetStackedCargo(map, hunterHut0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, hunter0, hunterHut0.getPosition());
@@ -2264,8 +2197,6 @@ public class TestHunterHut {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
@@ -2274,38 +2205,38 @@ public class TestHunterHut {
 
         // Place storehouse
         var point1 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
-        // Place hunter hut
+        // Place var hut
         var point2 = new Point(18, 6);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point2);
 
         // Place road to connect the storehouse with the headquarter
         var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        // Place road to connect the headquarter with the hunter hut
+        // Place road to connect the headquarter with the var hut
         var road1 = map.placeAutoSelectedRoad(player0, hunterHut0.getFlag(), headquarter0.getFlag());
 
         // Add a lot of planks and stones to the headquarter
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        // Wait for the hunter hut and the storehouse to get constructed
+        // Wait for the var hut and the storehouse to get constructed
         Utils.waitForBuildingsToBeConstructed(storehouse, hunterHut0);
 
-        // Add a lot of material to the headquarter for the hunter hut to consume
+        // Add a lot of material to the headquarter for the var hut to consume
         Utils.adjustInventoryTo(headquarter0, WATER, 40);
         Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
 
-        // Wait for the hunter hut and the storage to get occupied
+        // Wait for the var hut and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, hunterHut0);
 
-        Worker hunter0 = hunterHut0.getWorker();
+        var hunter0 = hunterHut0.getWorker();
 
         assertEquals(hunter0.getHome(), hunterHut0);
         assertEquals(hunterHut0.getWorker(), hunter0);
 
-        // Verify that the worker goes to the storage when the hunter hut is torn down
+        // Verify that the worker goes to the storage when the var hut is torn down
         Utils.waitForWorkerToBeInside(hunter0, map);
 
         headquarter0.blockDeliveryOfMaterial(HUNTER);
@@ -2330,8 +2261,6 @@ public class TestHunterHut {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
@@ -2340,38 +2269,38 @@ public class TestHunterHut {
 
         // Place storehouse
         var point1 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
-        // Place hunter hut
+        // Place var hut
         var point2 = new Point(18, 6);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point2);
 
         // Place road to connect the storehouse with the headquarter
         var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        // Place road to connect the headquarter with the hunter hut
+        // Place road to connect the headquarter with the var hut
         var road1 = map.placeAutoSelectedRoad(player0, hunterHut0.getFlag(), headquarter0.getFlag());
 
         // Add a lot of planks and stones to the headquarter
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        // Wait for the hunter hut and the storehouse to get constructed
+        // Wait for the var hut and the storehouse to get constructed
         Utils.waitForBuildingsToBeConstructed(storehouse, hunterHut0);
 
-        // Add a lot of material to the headquarter for the hunter hut to consume
+        // Add a lot of material to the headquarter for the var hut to consume
         Utils.adjustInventoryTo(headquarter0, WATER, 40);
         Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
 
-        // Wait for the hunter hut and the storage to get occupied
+        // Wait for the var hut and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, hunterHut0);
 
-        Worker hunter0 = hunterHut0.getWorker();
+        var hunter0 = hunterHut0.getWorker();
 
         assertEquals(hunter0.getHome(), hunterHut0);
         assertEquals(hunterHut0.getWorker(), hunter0);
 
-        // Verify that the worker goes to the storage off-road when the hunter hut is torn down
+        // Verify that the worker goes to the storage off-road when the var hut is torn down
         Utils.waitForWorkerToBeInside(hunter0, map);
 
         headquarter0.blockDeliveryOfMaterial(HUNTER);
@@ -2398,8 +2327,6 @@ public class TestHunterHut {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
@@ -2414,7 +2341,7 @@ public class TestHunterHut {
         headquarter0.pushOutAll(HUNTER);
 
         for (int i = 0; i < 10; i++) {
-            Worker worker = Utils.waitForWorkerOutsideBuilding(Hunter.class, player0);
+            var worker = Utils.waitForWorkerOutsideBuilding(Hunter.class, player0);
 
             assertEquals(headquarter0.getAmount(HUNTER), 0);
             assertEquals(worker.getPosition(), headquarter0.getPosition());
@@ -2436,8 +2363,6 @@ public class TestHunterHut {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
@@ -2450,7 +2375,7 @@ public class TestHunterHut {
         headquarter0.blockDeliveryOfMaterial(HUNTER);
         headquarter0.pushOutAll(HUNTER);
 
-        Worker worker = Utils.waitForWorkerOutsideBuilding(Hunter.class, player0);
+        var worker = Utils.waitForWorkerOutsideBuilding(Hunter.class, player0);
 
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
@@ -2481,25 +2406,23 @@ public class TestHunterHut {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(7, 9);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Place road to connect the hunter hut with the headquarter
+        // Place road to connect the var hut with the headquarter
         var road0 = map.placeAutoSelectedRoad(player0, hunterHut0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        // Wait for the hunter hut to get constructed and occupied
+        // Wait for the var hut to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(hunterHut0);
         Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut0);
 
@@ -2508,7 +2431,7 @@ public class TestHunterHut {
        
         headquarter0.blockDeliveryOfMaterial(HUNTER);
 
-        Worker worker = hunterHut0.getWorker();
+        var worker = hunterHut0.getWorker();
 
         hunterHut0.tearDown();
 
@@ -2541,28 +2464,26 @@ public class TestHunterHut {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place hunter hut
+        // Place var hut
         var point1 = new Point(7, 9);
         var hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Place road to connect the hunter hut with the headquarter
+        // Place road to connect the var hut with the headquarter
         var road0 = map.placeAutoSelectedRoad(player0, hunterHut0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        // Wait for the hunter hut to get constructed
+        // Wait for the var hut to get constructed
         Utils.waitForBuildingToBeConstructed(hunterHut0);
 
-        // Wait for a hunter to start walking to the hunter hut
+        // Wait for a hunter to start walking to the var hut
         var hunter = Utils.waitForWorkerOutsideBuilding(Hunter.class, player0);
 
         // Wait for the hunter to go past the headquarter's flag

@@ -73,7 +73,7 @@ public class WorkerImageCollection {
      * @throws IOException if an I/O error occurs
      */
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
-        ImageBoard imageBoard = new ImageBoard();
+        var imageBoard = new ImageBoard();
 
         // TODO: resolve obvious bug where two sets of images are written to the same path:
         //   - common / fullImagesByPlayer / <direction> / <player color>
@@ -153,7 +153,6 @@ public class WorkerImageCollection {
                         playerColor.name().toUpperCase())));
 
         // Write actions that are specific per nation and per direction (if any)
-        System.out.println(nationSpecificActionsWithDirectionByPlayer);
         nationSpecificActionsWithDirectionByPlayer.forEach((nation, actionMap) -> actionMap
                 .forEach((action, directionMap) -> directionMap
                         .forEach((direction, playerColorMap) -> playerColorMap
@@ -210,8 +209,8 @@ public class WorkerImageCollection {
 
         cargoImages.put(material, new EnumMap<>(CompassDirection.class));
 
-        for (CompassDirection compassDirection : CompassDirection.values()) {
-            List<Bitmap> cargoImagesForDirection = new ArrayList<>();
+        for (var compassDirection : CompassDirection.values()) {
+            var cargoImagesForDirection = new ArrayList<Bitmap>();
 
             for (int i = 0; i < 8; i++) {
                 int link = ((bobId * 8 + i) * 2 + fatOffset) * 6 + compassDirection.ordinal();
@@ -234,8 +233,8 @@ public class WorkerImageCollection {
     public void readHeadImagesWithoutCargoFromBob(Courier.BodyType bodyType, int bobId, Bob jobsBob) {
         int fatOffset = (bodyType == FAT) ? 1 : 0;
 
-        for (CompassDirection compassDirection : CompassDirection.values()) {
-            List<Bitmap> cargoImagesForDirection = new ArrayList<>();
+        for (var compassDirection : CompassDirection.values()) {
+            var cargoImagesForDirection = new ArrayList<Bitmap>();
 
             for (int i = 0; i < 8; i++) {
                 int link = ((bobId * 8 + i) * 2 + fatOffset) * 6 + compassDirection.ordinal();
@@ -255,26 +254,26 @@ public class WorkerImageCollection {
      */
     public void mergeBodyAndHeadImages(Palette palette) {
         bodyImages.forEach((direction, bodyImagesForDirection) -> {
-            List<Bitmap> headImagesForDirection = imagesWithoutCargo.get(direction);
-            List<Bitmap> mergedBodyAndHeadImagesForDirection = new ArrayList<>();
+            var headImagesForDirection = imagesWithoutCargo.get(direction);
+            var mergedBodyAndHeadImagesForDirection = new ArrayList<Bitmap>();
 
             // Merge the head images with the body images
             for (int i = 0; i < 8; i++) {
-                Bitmap bodyImage = bodyImagesForDirection.get(i);
-                Bitmap headImage = headImagesForDirection.get(i);
+                var bodyImage = bodyImagesForDirection.get(i);
+                var headImage = headImagesForDirection.get(i);
 
                 var imageList = List.of(bodyImage, headImage);
 
-                NormalizedImageList normalizedImageList = new NormalizedImageList(imageList);
-                List<Bitmap> normalizedImages = normalizedImageList.getNormalizedImages();
+                var normalizedImageList = new NormalizedImageList(imageList);
+                var normalizedImages = normalizedImageList.getNormalizedImages();
 
-                Bitmap normalizedBodyImage = normalizedImages.get(0);
-                Bitmap normalizedHeadImage = normalizedImages.get(1);
+                var normalizedBodyImage = normalizedImages.get(0);
+                var normalizedHeadImage = normalizedImages.get(1);
 
                 Bitmap combinedImage;
 
                 if (normalizedBodyImage instanceof PlayerBitmap normalizedBodyImagePlayer) {
-                    PlayerBitmap playerCombinedImage = new PlayerBitmap(
+                    var playerCombinedImage = new PlayerBitmap(
                             normalizedImageList.getImageWidth(),
                             normalizedImageList.getImageHeight(),
                             palette,
@@ -317,6 +316,7 @@ public class WorkerImageCollection {
             }
 
             imagesPerPlayer.put(direction, new EnumMap<>(PlayerColor.class));
+
             for (var playerColor : PlayerColor.values()) {
                 imagesPerPlayer.get(direction).put(playerColor, ImageTransformer.drawForPlayer(playerColor, mergedBodyAndHeadImagesForDirection));
             }
@@ -330,11 +330,11 @@ public class WorkerImageCollection {
      * @param carrierBob the BOB resource
      */
     public void readBodyImagesFromBob(Courier.BodyType bodyType, Bob carrierBob) {
-        for (CompassDirection direction : CompassDirection.values()) {
-            List<Bitmap> bodyImagesForDirection = new ArrayList<>();
+        for (var direction : CompassDirection.values()) {
+            var bodyImagesForDirection = new ArrayList<Bitmap>();
 
             for (int animationIndex = 0; animationIndex < 8; animationIndex++) {
-                PlayerBitmap body = carrierBob.getBody(bodyType == FAT, direction.ordinal(), animationIndex);
+                var body = carrierBob.getBody(bodyType == FAT, direction.ordinal(), animationIndex);
                 bodyImagesForDirection.add(body);
             }
 
@@ -454,7 +454,7 @@ public class WorkerImageCollection {
     }
 
     public void addNationSpecificAnimationInDirection(Nation nation, CompassDirection compassDirection, WorkerAction workerAction, List<GameResource> resources, Animation animation) {
-        List<PlayerBitmap> images = new ArrayList<>();
+        var images = new ArrayList<PlayerBitmap>();
 
         for (int i = animation.index(); i < animation.index() + animation.length(); i++) {
             images.add((PlayerBitmap) ImageUtils.getBitmapFromResource(resources.get(i)));

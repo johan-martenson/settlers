@@ -43,7 +43,7 @@ public class BorderImageCollector {
      * @throws IOException if an I/O error occurs
      */
     public void writeImageAtlas(String toDir, Palette palette) throws IOException {
-        ImageBoard imageBoard = new ImageBoard();
+        var imageBoard = new ImageBoard();
 
         Arrays.stream(Nation.values())
                 .forEach(nation -> Arrays.stream(PlayerColor.values())

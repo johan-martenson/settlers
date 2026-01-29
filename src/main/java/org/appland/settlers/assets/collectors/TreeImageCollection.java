@@ -33,7 +33,7 @@ public class TreeImageCollection {
      * @throws IOException if an I/O error occurs
      */
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
-        ImageBoard imageBoard = new ImageBoard();
+        var imageBoard = new ImageBoard();
 
         grownTreeMap.forEach((treeType, images) -> imageBoard.placeImageSeriesBottom(
                 ImageTransformer.normalizeImageSeries(images),

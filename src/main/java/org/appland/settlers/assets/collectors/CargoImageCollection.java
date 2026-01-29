@@ -34,7 +34,7 @@ public class CargoImageCollection {
      */
     public void addCargoImageForNation(Nation nation, Material material, Bitmap image) {
         nationCargos.computeIfAbsent(nation, k -> new EnumMap<>(Material.class))
-                        .put(material, image);
+                    .put(material, image);
     }
 
     /**
@@ -45,10 +45,10 @@ public class CargoImageCollection {
      * @throws IOException if an I/O error occurs
      */
     public void writeImageAtlas(String toDir, Palette palette) throws IOException {
-        ImageBoard imageBoard = new ImageBoard();
+        var imageBoard = new ImageBoard();
 
         // Fill in the image atlas
-        Point cursor = new Point(0, 0);
+        var cursor = new Point(0, 0);
 
         // Generic (non-nation specific) cargo images
         imageBoard.placeImagesAsColumn(
@@ -62,15 +62,16 @@ public class CargoImageCollection {
         cursor.y = 0;
         cursor.x = imageBoard.getCurrentWidth();
 
-        for (Nation nation : Nation.values()) {
-            for (Map.Entry<Material, Bitmap> entry : nationCargos.get(nation).entrySet()) {
-                Material material = entry.getKey();
-                Bitmap image = entry.getValue();
+        for (var nation : Nation.values()) {
+            for (var entry : nationCargos.get(nation).entrySet()) {
+                var material = entry.getKey();
+                var image = entry.getValue();
 
                 imageBoard.placeImage(
                         image,
                         cursor,
                         "nationSpecific",
+                        nation.name().toUpperCase(),
                         material.name().toUpperCase()
                 );
 

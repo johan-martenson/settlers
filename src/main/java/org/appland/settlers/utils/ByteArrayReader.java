@@ -41,14 +41,13 @@ public class ByteArrayReader implements ByteReader {
     public int getUint16() {
         this.offset = this.offset + 2;
 
-        return (short)(this.byteArray.order(order).getShort() & 0xffff);
+        return this.byteArray.order(order).getShort() & 0xffff;
     }
 
     @Override
     public int getUint16(ByteOrder endian) {
-        this.offset = this.offset + 2;
-
-        return (short)(this.byteArray.order(endian).getShort() & 0xffff);
+        this.offset += 2;
+        return this.byteArray.order(endian).getShort() & 0xFFFF;
     }
 
     @Override
@@ -230,5 +229,10 @@ public class ByteArrayReader implements ByteReader {
     @Override
     public void setPosition(int position) {
         byteArray.position(position);
+    }
+
+    @Override
+    public int length() {
+        return byteArray.array().length;
     }
 }

@@ -68,10 +68,10 @@ public class BitmapDecoder {
      * @throws InvalidFormatException if the file format is invalid
      */
     public static BitmapFile loadBitmapFile(String filename, Palette defaultPalette, Optional<TextureFormat> wantedTextureFormat) throws IOException, InvalidFormatException {
-        try (StreamReader streamReader = new StreamReader(new FileInputStream(filename), LITTLE_ENDIAN)) {
+        try (var streamReader = new StreamReader(new FileInputStream(filename), LITTLE_ENDIAN)) {
 
             // Read the BMP header
-            String headerId = streamReader.getUint8ArrayAsString(2);
+            var headerId = streamReader.getUint8ArrayAsString(2);
             long fileSize = streamReader.getUint32();
             long reserved = streamReader.getUint32();
             long pixelOffset = streamReader.getUint32();
@@ -134,7 +134,7 @@ public class BitmapDecoder {
 
             debugPrint(String.format("COLORS USED: %d", numberColorsUsed));
 
-            Palette palette = bitsPerPixel == 8
+            var palette = bitsPerPixel == 8
                     ? Palette.loadFromBgra(streamReader, numberColorsUsed)
                     : defaultPalette;
 
@@ -145,7 +145,7 @@ public class BitmapDecoder {
             debugPrint(String.format(" ---- Width * bytes per pixel: %d", width * sourceBytesPerPixel));
             debugPrint(String.format("    - Bytes per pixel: %d", sourceBytesPerPixel));
 
-            TextureFormat sourceFormat = TextureFormat.PALETTED;
+            var sourceFormat = TextureFormat.PALETTED;
 
             if (sourceBytesPerPixel == 4) {
                 sourceFormat = TextureFormat.BGRA;
@@ -155,7 +155,7 @@ public class BitmapDecoder {
 
             debugPrint(String.format("Wanted texture output format: %s", TextureFormat.BGRA));
 
-            BitmapFile bitmap = new BitmapFile(width, height, palette, TextureFormat.BGRA);
+            var bitmap = new BitmapFile(width, height, palette, TextureFormat.BGRA);
 
             bitmap.setFileSize(fileSize);
             bitmap.setReserved(reserved);

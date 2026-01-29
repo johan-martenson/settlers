@@ -508,7 +508,7 @@ public class MapBobsLst {
     public static final int BOW_CARGO = 908;
     public static final int BOAT_CARGO = 909;
     public static final int SWORD_CARGO = 910;
-    public static final int ANVIL_CARGO = 911;
+    public static final int IRON_BAR_CARGO = 911;
     public static final int FLOUR_CARGO = 912;
     public static final int FISH_CARGO = 913;
     public static final int BREAD_CARGO = 914;

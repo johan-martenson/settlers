@@ -128,7 +128,7 @@ public class UIElementsImageCollection {
      * @throws IOException if an I/O error occurs
      */
     public void writeImageAtlas(String toDir, Palette palette) throws IOException {
-        ImageBoard imageBoard = new ImageBoard();
+        var imageBoard = new ImageBoard();
 
         imageBoard.placeImageRightOf(selectedPointImage, "selectedPoint");
         imageBoard.placeImageRightOf(hoverPointImage, "hoverPoint");

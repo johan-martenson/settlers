@@ -34,7 +34,7 @@ public class SignImageCollection {
      * @throws IOException if an I/O error occurs
      */
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
-        ImageBoard imageBoard = new ImageBoard();
+        var imageBoard = new ImageBoard();
 
         signTypeToImageMap.forEach((signType, sizeBitmapMap) ->
                 sizeBitmapMap.forEach((size, image) ->

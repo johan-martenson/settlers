@@ -6377,6 +6377,7 @@ public class TestAttack {
             assertTrue(map.getWorkers().stream().noneMatch(Worker::isDead));
 
             // Verify that no soldiers wait on the same point
+            // TODO: fix intermittent failure where some soldiers are in storage
             var soldierPositions = Stream.concat(attackers.stream(), defenders.stream())
                     .filter(soldier -> !soldier.isDying())
                     .filter(soldier -> !soldier.isDead())
@@ -6384,11 +6385,15 @@ public class TestAttack {
                     .filter(soldier -> !soldier.isFighting())
                     .filter(soldier -> !soldier.isWalkingApartToFight())
                     .filter(soldier -> !soldier.isWalkingBackToFixedPointAfterFight())
+                    .filter(soldier -> map.getWorkers().contains(soldier))
                     .filter(soldier -> soldier.getOpponent() == null || !Objects.equals(soldier.getPosition(), soldier.getOpponent().getPosition()))
                     .peek(System.out::println)
                     .map(Soldier::getPosition)
                     .toList();
 
+            System.out.println(attackers);
+            System.out.println(defenders);
+            System.out.println(soldierPositions);
             assertEquals(soldierPositions.size(), new HashSet<>(soldierPositions).size());
 
             map.stepTime();

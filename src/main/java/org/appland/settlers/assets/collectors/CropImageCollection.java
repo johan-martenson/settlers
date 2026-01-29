@@ -35,7 +35,7 @@ public class CropImageCollection {
      * @throws IOException if an I/O error occurs
      */
     public void writeImageAtlas(String toDir, Palette palette) throws IOException {
-        ImageBoard imageBoard = new ImageBoard();
+        var imageBoard = new ImageBoard();
 
         cropMap.forEach((cropType, growthMap) -> {
                     List<ImageBoard.ImagePathPair> imagePairs = new ArrayList<>();

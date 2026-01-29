@@ -2436,10 +2436,10 @@ public class TestCoalMine {
         Utils.waitForNonMilitaryBuildingToGetPopulated(coalMine);
 
         /* Give material to the coal mine */
-        Utils.putCargoToBuilding(coalMine, BREAD);
-        Utils.putCargoToBuilding(coalMine, BREAD);
-        Utils.putCargoToBuilding(coalMine, FISH);
-        Utils.putCargoToBuilding(coalMine, FISH);
+        Utils.deliverCargo(coalMine, BREAD);
+        Utils.deliverCargo(coalMine, BREAD);
+        Utils.deliverCargo(coalMine, FISH);
+        Utils.deliverCargo(coalMine, FISH);
 
         /* Fill the flag with flour cargos */
         Utils.placeCargos(map, FLOUR, 8, coalMine.getFlag(), headquarter);
@@ -2509,10 +2509,10 @@ public class TestCoalMine {
         Utils.waitForNonMilitaryBuildingToGetPopulated(coalMine);
 
         /* Give material to the coal mine */
-        Utils.putCargoToBuilding(coalMine, BREAD);
-        Utils.putCargoToBuilding(coalMine, BREAD);
-        Utils.putCargoToBuilding(coalMine, FISH);
-        Utils.putCargoToBuilding(coalMine, FISH);
+        Utils.deliverCargo(coalMine, BREAD);
+        Utils.deliverCargo(coalMine, BREAD);
+        Utils.deliverCargo(coalMine, FISH);
+        Utils.deliverCargo(coalMine, FISH);
 
         /* Fill the flag with cargos */
         Utils.placeCargos(map, FLOUR, 8, coalMine.getFlag(), headquarter);

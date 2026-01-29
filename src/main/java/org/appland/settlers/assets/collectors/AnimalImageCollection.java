@@ -24,7 +24,7 @@ public class AnimalImageCollection {
     public AnimalImageCollection(String name) {
         this.name = name;
 
-        for (CompassDirection compassDirection : CompassDirection.values()) {
+        for (var compassDirection : CompassDirection.values()) {
             this.directionToImageMap.put(compassDirection, new ArrayList<>());
         }
     }
@@ -49,7 +49,7 @@ public class AnimalImageCollection {
      * @throws IOException if an I/O error occurs
      */
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
-        ImageBoard imageBoard = new ImageBoard();
+        var imageBoard = new ImageBoard();
 
         directionToImageMap.forEach((direction, images) -> imageBoard.placeImageSeriesBottom(
                 ImageTransformer.normalizeImageSeries(images),

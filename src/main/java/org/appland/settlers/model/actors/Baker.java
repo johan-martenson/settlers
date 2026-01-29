@@ -11,6 +11,7 @@ import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
 
@@ -67,9 +68,16 @@ public class Baker extends Worker {
         switch (state) {
             case RESTING_IN_HOUSE -> {
                 if (countdown.hasReachedZero()) {
-                    state = BAKING_BREAD;
-                    countdown.countFrom(PRODUCTION_TIME);
-                    productivityMeasurer.nextProductivityCycle();
+                    if (home.getAmount(WATER) > 0 && home.getAmount(FLOUR) > 0 && home.isProductionEnabled() && home.getFlag().hasPlaceForMoreCargo()) {
+                        state = BAKING_BREAD;
+                        countdown.countFrom(PRODUCTION_TIME);
+                        productivityMeasurer.nextProductivityCycle();
+                        player.reportWorkerStartedAction(this, WorkerAction.BAKING);
+                        player.reportChangedBuilding(home);
+                        goOutside();
+                    } else {
+                        productivityMeasurer.reportUnproductivity();
+                    }
                 } else {
                     countdown.step();
                 }
@@ -86,29 +94,25 @@ public class Baker extends Worker {
                 }
             }
             case BAKING_BREAD -> {
-                if (home.getAmount(WATER) > 0 && home.getAmount(FLOUR) > 0 && home.isProductionEnabled()) {
-                    if (countdown.hasReachedZero()) {
-                        home.consumeOne(WATER);
-                        home.consumeOne(FLOUR);
-                        productivityMeasurer.reportProductivity();
-                        map.getStatisticsManager().breadProduced(player, map.getTime());
+                if (countdown.hasReachedZero()) {
+                    home.consumeOne(WATER);
+                    home.consumeOne(FLOUR);
+                    productivityMeasurer.reportProductivity();
+                    map.getStatisticsManager().breadProduced(player, map.getTime());
 
-                        if (!home.getFlag().hasPlaceForMoreCargo()) {
-                            state = WAITING_FOR_SPACE_ON_FLAG;
-                        } else {
-                            var cargo = new Cargo(BREAD, map);
-                            setCargo(cargo);
-                            home.getFlag().promiseCargo(getCargo());
-
-                            state = GOING_TO_FLAG_WITH_CARGO;
-                            setTarget(home.getFlag().getPosition());
-
-                        }
+                    if (!home.getFlag().hasPlaceForMoreCargo()) {
+                        state = WAITING_FOR_SPACE_ON_FLAG;
                     } else {
-                        countdown.step();
+                        var cargo = new Cargo(BREAD, map);
+                        setCargo(cargo);
+                        home.getFlag().promiseCargo(getCargo());
+
+                        state = GOING_TO_FLAG_WITH_CARGO;
+                        setTarget(home.getFlag().getPosition());
+
                     }
                 } else {
-                    productivityMeasurer.reportUnproductivity();
+                    countdown.step();
                 }
             }
             case DEAD -> {
@@ -229,5 +233,14 @@ public class Baker extends Worker {
     public void goToOtherStorage(Building building) {
         state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
         setTarget(building.getFlag().getPosition());
+    }
+
+    public boolean isBaking() {
+        return state == BAKING_BREAD;
+    }
+
+    @Override
+    public boolean isWorking() {
+        return isBaking();
     }
 }

@@ -786,6 +786,10 @@ public class JsonUtils {
             jsonMonitoringEvents.put("transportPriority", transportPriorityToJson(player.getTransportPriorities()));
         }
 
+        if (!gameChangesList.newWorkersOutside().isEmpty()) {
+            jsonMonitoringEvents.put("newWorkersOutside", workersToJson(gameChangesList.newWorkersOutside()));
+        }
+
         if (!gameChangesList.newFallingTrees().isEmpty()) {
             jsonMonitoringEvents.put("newFallingTrees", treesToJson(gameChangesList.newFallingTrees()));
         }
@@ -952,6 +956,10 @@ public class JsonUtils {
         }
 
         return jsonMonitoringEvents;
+    }
+
+    private JSONArray workersToJson(Collection<Worker> workers) {
+        return toJsonArray(workers, this::workerToJson);
     }
 
     private JSONArray removedMessagesToJson(Collection<Message> removedMessages) {
