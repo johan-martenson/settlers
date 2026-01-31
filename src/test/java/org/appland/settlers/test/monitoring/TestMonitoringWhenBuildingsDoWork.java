@@ -5,42 +5,56 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.actors.Baker;
 import org.appland.settlers.model.actors.Brewer;
 import org.appland.settlers.model.actors.Butcher;
 import org.appland.settlers.model.actors.Carpenter;
 import org.appland.settlers.model.actors.DonkeyBreeder;
 import org.appland.settlers.model.actors.Farmer;
+import org.appland.settlers.model.actors.Fisherman;
+import org.appland.settlers.model.actors.Forester;
 import org.appland.settlers.model.actors.IronFounder;
 import org.appland.settlers.model.actors.Metalworker;
 import org.appland.settlers.model.actors.Miller;
 import org.appland.settlers.model.actors.Minter;
 import org.appland.settlers.model.actors.PigBreeder;
+import org.appland.settlers.model.actors.Stonemason;
+import org.appland.settlers.model.actors.WoodcutterWorker;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Bakery;
 import org.appland.settlers.model.buildings.Brewery;
 import org.appland.settlers.model.buildings.DonkeyFarm;
 import org.appland.settlers.model.buildings.Farm;
+import org.appland.settlers.model.buildings.Fishery;
+import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.IronSmelter;
 import org.appland.settlers.model.buildings.Metalworks;
 import org.appland.settlers.model.buildings.Mill;
 import org.appland.settlers.model.buildings.Mint;
 import org.appland.settlers.model.buildings.PigFarm;
+import org.appland.settlers.model.buildings.Quarry;
 import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.buildings.SlaughterHouse;
+import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.appland.settlers.model.Material.*;
+import static org.appland.settlers.model.Stone.StoneType.STONE_1;
+import static org.appland.settlers.model.Vegetation.WATER;
+import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.*;
 
 public class TestMonitoringWhenBuildingsDoWork {
@@ -414,7 +428,7 @@ public class TestMonitoringWhenBuildingsDoWork {
         assertEquals(bakery.getWorker(), baker);
 
         // Deliver material to the bakery
-        Utils.deliverCargo(bakery, WATER);
+        Utils.deliverCargo(bakery, Material.WATER);
         Utils.deliverCargo(bakery, FLOUR);
 
         // Start monitoring
@@ -555,7 +569,7 @@ public class TestMonitoringWhenBuildingsDoWork {
 
         // Deliver wheat and water to the brewery
         Utils.deliverCargo(brewery, WHEAT);
-        Utils.deliverCargo(brewery, WATER);
+        Utils.deliverCargo(brewery, Material.WATER);
 
         // Let the brewer rest
         for (int i = 0; i < 99; i++) {
@@ -673,7 +687,7 @@ public class TestMonitoringWhenBuildingsDoWork {
         Utils.constructHouse(donkeyFarm);
 
         // Deliver resources to the donkey farm
-        Cargo waterCargo = new Cargo(WATER, map);
+        Cargo waterCargo = new Cargo(Material.WATER, map);
         Cargo wheatCargo = new Cargo(WHEAT, map);
 
         donkeyFarm.putCargo(waterCargo);
@@ -859,7 +873,7 @@ public class TestMonitoringWhenBuildingsDoWork {
         assertTrue(pigBreeder.isInsideBuilding());
 
         // Deliver resources to the pig farm
-        Utils.deliverCargo(pigFarm, WATER);
+        Utils.deliverCargo(pigFarm, Material.WATER);
         Utils.deliverCargo(pigFarm, WHEAT);
 
         // Start monitoring
@@ -1004,5 +1018,332 @@ public class TestMonitoringWhenBuildingsDoWork {
         map.stepTime();
 
         assertTrue(monitor.getEvents().size() == 0 || !monitor.getLastEvent().changedBuildings().contains(slaughterHouse));
+    }
+
+
+    @Test
+    public void testMonitoringEventWhenForesterHutIsWorking() throws Exception {
+
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        var map = new GameMap(List.of(player0), 20, 20);
+
+        // Place headquarters
+        var point0 = new Point(15, 9);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place forester hut
+        var point1 = new Point(10, 4);
+        var foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
+
+        // Connect the forester hut with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
+
+        // Wait for the forester hut to get constructed
+        Utils.waitForBuildingToBeConstructed(foresterHut);
+
+        // Wait for the forester hut to get occupied
+        var forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut);
+
+        // Start monitoring
+        var monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        // Let the forester rest
+        Utils.fastForward(99, map);
+
+        assertTrue(forester.isInsideBuilding());
+
+        // Verify that an event is sent when the forester hut starts to work
+        map.stepTime();
+
+        assertFalse(forester.isInsideBuilding());
+        assertTrue(foresterHut.isWorking());
+        assertTrue(monitor.getEvents().size() > 0);
+        assertTrue(monitor.getEvents().getLast().changedBuildings().size() > 0);
+        assertTrue(monitor.getEvents().getLast().changedBuildings().contains(foresterHut));
+
+        // Verify that the event is only sent once
+        monitor.clearEvents();
+
+        map.stepTime();
+
+        assertTrue(monitor.getEvents().size() == 0 || !monitor.getLastEvent().changedBuildings().contains(foresterHut));
+
+        // Let the forester reach the point and plant
+        Utils.waitForForesterToBePlantingTree(forester, map);
+
+        assertTrue(forester.isPlanting());
+
+        Utils.waitForForesterToStopPlantingTree(forester, map);
+
+        assertEquals(forester.getTarget(), foresterHut.getPosition());
+        assertTrue(foresterHut.isWorking());
+
+        // Verify that an event is sent when the forester comes back to the forester hut and it stops working
+        assertEquals(forester.getTarget(), foresterHut.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, foresterHut.getPosition());
+
+        assertTrue(monitor.getEvents().size() > 0);
+        assertTrue(monitor.getEvents().getLast().changedBuildings().size() > 0);
+        assertTrue(monitor.getEvents().getLast().changedBuildings().contains(foresterHut));
+
+        // Verify that the event is only sent once
+        monitor.clearEvents();
+
+        map.stepTime();
+
+        assertTrue(monitor.getEvents().size() == 0 || !monitor.getLastEvent().changedBuildings().contains(foresterHut));
+    }
+
+
+    @Test
+    public void testMonitoringEventWhenQuarryWorks() throws Exception {
+
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
+
+        // Place headquarters
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
+
+        // Place quarry
+        var point2 = new Point(10, 4);
+        var quarry = map.placeBuilding(new Quarry(player0), point2);
+
+        // Connect the quarry with the headquarters
+        map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
+
+        // Place stone
+        var point3 = new Point(13, 5);
+        var stone = map.placeStone(point3, STONE_1, 7);
+
+        // Construct the quarry
+        constructHouse(quarry);
+
+        // Assign a stonemason to the quarry
+        var stonemason = new Stonemason(player0, map);
+
+        Utils.occupyBuilding(stonemason, quarry);
+
+        // Start monitoring
+        var monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        // Wait for the stonemason to rest
+        Utils.fastForward(99, map);
+
+        assertTrue(stonemason.isInsideBuilding());
+
+        // Verify that an event is sent when the stonemason steps out to get stone (and thus the quarry is working)
+        monitor.clearEvents();
+
+        map.stepTime();
+
+        assertFalse(stonemason.isInsideBuilding());
+        assertEquals(stonemason.getTarget(), stone.getPosition());
+        assertTrue(stonemason.isTraveling());
+        assertTrue(monitor.getEvents().size() > 0);
+        assertTrue(monitor.getEvents().getLast().changedBuildings().size() > 0);
+        assertTrue(monitor.getEvents().getLast().changedBuildings().contains(quarry));
+
+        // Verify that the event is only sent once
+        monitor.clearEvents();
+
+        map.stepTime();
+
+        assertTrue(monitor.getEvents().size() == 0 || !monitor.getLastEvent().changedBuildings().contains(stonemason));
+
+        // Verify that an event is sent when the stonemason goes to leave the stone on the flag
+        for (int i = 0; i < 2_000; i++) {
+            if (Objects.equals(stonemason.getTarget(), quarry.getFlag().getPosition()) && stonemason.getCargo() != null) {
+                break;
+            }
+
+            assertTrue(quarry.isWorking());
+
+            monitor.clearEvents();
+
+            map.stepTime();
+        }
+
+        assertTrue(monitor.getEvents().size() > 0);
+        assertTrue(monitor.getEvents().getLast().changedBuildings().size() > 0);
+        assertTrue(monitor.getEvents().getLast().changedBuildings().contains(quarry));
+
+        // Verify that the event is only sent once
+        monitor.clearEvents();
+
+        map.stepTime();
+
+        assertTrue(monitor.getEvents().size() == 0 || !monitor.getLastEvent().changedBuildings().contains(stonemason));
+    }
+
+
+    @Test
+    public void testMonitoringEventWhenFisheryIsWorking() throws Exception {
+
+        // Create a single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
+
+        // Place fish on one tile
+        var point2 = new Point(5, 5);
+
+        map.setVegetationBelow(point2, WATER);
+
+        // Place headquarters
+        var point3 = new Point(15, 9);
+        map.placeBuilding(new Headquarter(player0), point3);
+
+        var point4 = new Point(7, 5);
+        var fishery = map.placeBuilding(new Fishery(player0), point4);
+
+        // Construct the fisherman hut
+        constructHouse(fishery);
+
+        // Manually place fisherman
+        var fisherman = new Fisherman(player0, map);
+
+        Utils.occupyBuilding(fisherman, fishery);
+
+        // Start monitoring
+        var monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        // Let the fisherman rest
+        Utils.fastForward(99, map);
+
+        assertTrue(fisherman.isInsideBuilding());
+        assertFalse(fishery.isWorking());
+
+        // Step once and make sure the fisherman goes out of the house
+        monitor.clearEvents();
+
+        map.stepTime();
+
+        assertFalse(fisherman.isInsideBuilding());
+        assertTrue(fishery.isWorking());
+        assertTrue(monitor.getEvents().size() > 0);
+        assertTrue(monitor.getEvents().getLast().changedBuildings().size() > 0);
+        assertTrue(monitor.getEvents().getLast().changedBuildings().contains(fishery));
+
+        // Verify that the event is only sent once
+        monitor.clearEvents();
+
+        map.stepTime();
+
+        assertTrue(monitor.getEvents().size() == 0 || !monitor.getLastEvent().changedBuildings().contains(fisherman));
+
+        // Verify that an event is sent when the fisherman is going out to put the caught fish on the flag
+        for (int i = 0; i < 2_000; i++) {
+            if (Objects.equals(fisherman.getTarget(), fishery.getFlag().getPosition()) && fisherman.getCargo() != null) {
+                break;
+            }
+
+            assertTrue(fishery.isWorking());
+
+            map.stepTime();
+        }
+
+        assertEquals(fisherman.getTarget(), fishery.getFlag().getPosition());
+        assertNotNull(fisherman.getCargo());
+        assertFalse(fishery.isWorking());
+        assertTrue(monitor.getEvents().size() > 0);
+        assertTrue(monitor.getEvents().getLast().changedBuildings().size() > 0);
+        assertTrue(monitor.getEvents().getLast().changedBuildings().contains(fishery));
+
+        // Verify that the event is only sent once
+        monitor.clearEvents();
+
+        map.stepTime();
+
+        assertTrue(monitor.getEvents().size() == 0 || !monitor.getLastEvent().changedBuildings().contains(fisherman));
+    }
+
+
+    @Test
+    public void testMonitoringEventWhenWoodcutterIsWorking() throws Exception {
+
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
+
+        // Place headquarters
+        var point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place and grow the tree
+        var point2 = new Point(12, 4);
+        var tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+
+        Utils.fastForwardUntilTreeIsGrown(tree, map);
+
+        // Place the woodcutter
+        var point1 = new Point(10, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        // Construct the forester hut
+        constructHouse(woodcutter);
+
+        // Manually place forester
+        var woodcutterWorker = new WoodcutterWorker(player0, map);
+        Utils.occupyBuilding(woodcutterWorker, woodcutter);
+
+        // Start monitoring
+        var monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        // Wait for the woodcutter to rest
+        Utils.fastForward(99, map);
+
+        assertTrue(woodcutterWorker.isInsideBuilding());
+        assertTrue(map.isTreeAtPoint(point2));
+
+        // Verify that a monitoring event is sent when the woodcutter goes out to cut down a tree
+        assertTrue(woodcutterWorker.isInsideBuilding());
+        assertFalse(woodcutter.isWorking());
+
+        map.stepTime();
+
+        assertFalse(woodcutterWorker.isInsideBuilding());
+        assertTrue(monitor.getEvents().size() > 0);
+        assertTrue(monitor.getEvents().getLast().changedBuildings().size() > 0);
+        assertTrue(monitor.getEvents().getLast().changedBuildings().contains(woodcutter));
+
+        // Verify that the event is only sent once
+        monitor.clearEvents();
+
+        map.stepTime();
+
+        assertTrue(monitor.getEvents().size() == 0 || !monitor.getLastEvent().changedBuildings().contains(woodcutter));
+
+        // Verify that an event is sent when the woodcutter goes out to leave the tree at the flag
+        for (int i = 0; i < 2_000; i++) {
+            if (Objects.equals(woodcutterWorker.getTarget(), woodcutter.getFlag().getPosition()) && woodcutterWorker.getCargo() != null) {
+                break;
+            }
+
+            monitor.clearEvents();
+
+            map.stepTime();
+        }
+
+        assertEquals(woodcutterWorker.getTarget(), woodcutter.getFlag().getPosition());
+        assertNotNull(woodcutterWorker.getCargo());
+        assertTrue(monitor.getEvents().size() > 0);
+        assertTrue(monitor.getEvents().getLast().changedBuildings().size() > 0);
+        assertTrue(monitor.getEvents().getLast().changedBuildings().contains(woodcutter));
+
+        // Verify that the event is only sent once
+        monitor.clearEvents();
+
+        map.stepTime();
+
+        assertTrue(monitor.getEvents().size() == 0 || !monitor.getLastEvent().changedBuildings().contains(woodcutter));
     }
 }

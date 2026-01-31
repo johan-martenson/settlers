@@ -54,11 +54,10 @@ public class FireImageCollection {
                                         entry.getKey().name().toUpperCase()))
                         .toList());
 
-        smokeAnimations.entrySet().forEach(entry ->
-                imageBoard.placeImageSeriesBottom(
-                        ImageTransformer.normalizeImageSeries(entry.getValue()),
-                        "smoke",
-                        entry.getKey().name().toUpperCase()));
+        smokeAnimations.forEach((key, value) -> imageBoard.placeImageSeriesBottom(
+                ImageTransformer.normalizeImageSeries(value),
+                "smoke",
+                key.name().toUpperCase()));
 
         imageBoard.writeBoard(directory, "image-atlas-fire", palette);
     }

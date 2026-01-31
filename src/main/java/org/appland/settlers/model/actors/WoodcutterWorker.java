@@ -99,6 +99,7 @@ public class WoodcutterWorker extends Worker {
 
                         state = State.GOING_OUT_TO_CUT_TREE;
                         setOffroadTarget(point);
+                        player.reportChangedBuilding(home);
                     } else {
                         countdown.step();
                     }
@@ -332,5 +333,14 @@ public class WoodcutterWorker extends Worker {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());
+    }
+
+    @Override
+    public boolean isWorking() {
+        return state == State.GOING_OUT_TO_CUT_TREE ||
+                state == State.CUTTING_TREE ||
+                state == State.WAITING_FOR_TREE_TO_FALL ||
+                state == State.GOING_BACK_TO_HOUSE_WITH_CARGO ||
+                state == State.IN_HOUSE_WITH_CARGO;
     }
 }

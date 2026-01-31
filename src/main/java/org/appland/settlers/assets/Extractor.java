@@ -75,7 +75,7 @@ public class Extractor {
         parser.parseArgument(args);
 
         if (!Utils.isDirectory(toDir) || !Utils.isEmptyDirectory(toDir)) {
-            System.out.println("Must specify an empty directory to extract assets into: " + toDir);
+            System.out.printf("Must specify an empty directory to extract assets into: %s\n", toDir);
         }
 
         // Load the palettes

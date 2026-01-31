@@ -2,15 +2,12 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.AttackStrength;
-import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.WoodcutterWorker;
@@ -28,11 +25,9 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -60,14 +55,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(5, 5);
@@ -90,14 +78,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(5, 5);
@@ -128,14 +109,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(5, 15);
@@ -165,14 +139,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(5, 15);
@@ -202,14 +169,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -251,14 +211,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -306,14 +259,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -329,7 +275,7 @@ public class TestAttack {
 
         // Place guard house for player 0
         var point2 = new Point(21, 5);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point2);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point2);
 
         // Place barracks for player 1
         var point3 = new Point(21, 15);
@@ -354,14 +300,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -401,14 +340,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(5, 5);
@@ -449,14 +381,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(15, 5);
@@ -501,14 +426,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -560,7 +478,7 @@ public class TestAttack {
         // Verify that a soldier leaves the barracks before the attack when initiated
         map.stepTime();
 
-        List<Soldier> militaryOutside = Utils.findWorkersOfTypeOutsideForPlayer(Soldier.class, player0);
+        var militaryOutside = Utils.findWorkersOfTypeOutsideForPlayer(Soldier.class, player0);
 
         assertEquals(militaryOutside.size(), 1);
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 1);
@@ -572,14 +490,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -634,14 +545,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -695,14 +599,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -729,7 +626,7 @@ public class TestAttack {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks1);
 
         // Empty barracks 1
-        Road road0 = map.placeAutoSelectedRoad(player1, barracks1.getFlag(), headquarter1.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player1, barracks1.getFlag(), headquarter1.getFlag());
 
         barracks1.evacuate();
 
@@ -783,14 +680,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -864,14 +754,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1055,14 +938,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1162,14 +1038,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1276,14 +1145,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1376,14 +1238,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1479,14 +1334,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1590,14 +1438,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1714,14 +1555,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1737,7 +1571,7 @@ public class TestAttack {
 
         // Place barracks for player 1
         var point3 = new Point(23, 15);
-        Building fortress0 = map.placeBuilding(new Fortress(player1), point3);
+        var fortress0 = map.placeBuilding(new Fortress(player1), point3);
 
         // Finish construction
         Utils.constructHouse(barracks0);
@@ -1822,14 +1656,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1845,7 +1672,7 @@ public class TestAttack {
 
         // Place barracks for player 1
         var point3 = new Point(23, 15);
-        Building fortress0 = map.placeBuilding(new Fortress(player1), point3);
+        var fortress0 = map.placeBuilding(new Fortress(player1), point3);
 
         // Finish construction
         Utils.constructHouse(barracks0);
@@ -1937,14 +1764,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1960,7 +1780,7 @@ public class TestAttack {
 
         // Place barracks for player 1
         var point3 = new Point(23, 15);
-        Building fortress0 = map.placeBuilding(new Fortress(player1), point3);
+        var fortress0 = map.placeBuilding(new Fortress(player1), point3);
 
         // Finish construction
         Utils.constructHouse(barracks0);
@@ -2052,14 +1872,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -2075,7 +1888,7 @@ public class TestAttack {
 
         // Place barracks for player 1
         var point3 = new Point(23, 15);
-        Building fortress0 = map.placeBuilding(new Fortress(player1), point3);
+        var fortress0 = map.placeBuilding(new Fortress(player1), point3);
 
         // Finish construction
         Utils.constructHouse(barracks0);
@@ -2166,14 +1979,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -2185,7 +1991,7 @@ public class TestAttack {
 
         // Place guard house for player 0
         var point2 = new Point(21, 5);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point2);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point2);
 
         // Place barracks for player 1
         var point3 = new Point(23, 15);
@@ -2220,7 +2026,7 @@ public class TestAttack {
         player0.attack(barracks1, 2, AttackStrength.STRONG);
 
         // Verify that two soldiers leave the guard house
-        List<Soldier> attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
+        var attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
 
         assertNotNull(attackers);
         assertEquals(attackers.size(), 2);
@@ -2232,14 +2038,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -2251,7 +2050,7 @@ public class TestAttack {
 
         // Place guard house for player 0
         var point2 = new Point(21, 5);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point2);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point2);
 
         // Place barracks for player 1
         var point3 = new Point(23, 15);
@@ -2284,7 +2083,7 @@ public class TestAttack {
         player0.attack(barracks1, 2, AttackStrength.STRONG);
 
         // Wait for two soldiers to leave the guard house
-        List<Soldier> attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
+        var attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
 
         assertNotNull(attackers);
         assertEquals(attackers.size(), 2);
@@ -2309,14 +2108,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -2328,7 +2120,7 @@ public class TestAttack {
 
         // Place guard house for player 0
         var point2 = new Point(21, 5);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point2);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point2);
 
         // Place barracks for player 1
         var point3 = new Point(23, 15);
@@ -2357,7 +2149,7 @@ public class TestAttack {
         player0.attack(barracks1, 2, AttackStrength.STRONG);
 
         // Wait for two soldiers to leave the guard house
-        List<Soldier> attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
+        var attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
 
         assertNotNull(attackers);
         assertEquals(attackers.size(), 2);
@@ -2454,14 +2246,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -2500,7 +2285,7 @@ public class TestAttack {
         player0.attack(headquarter1, 3, AttackStrength.STRONG);
 
         // Wait for three soldiers to leave the watch tower
-        List<Soldier> attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 3, player0);
+        var attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 3, player0);
 
         assertNotNull(attackers);
         assertEquals(attackers.size(), 3);
@@ -2512,7 +2297,7 @@ public class TestAttack {
         assertEquals(watchTower0.getNumberOfHostedSoldiers(), 5);
 
         // Get the first attacker
-        Soldier firstAttacker = Utils.getMainAttacker(headquarter1, attackers);
+        var firstAttacker = Utils.getMainAttacker(headquarter1, attackers);
 
         // Wait for the first attacker to reach its position
         assertEquals(firstAttacker.getTarget(), headquarter1.getFlag().getPosition());
@@ -2554,14 +2339,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -2605,13 +2383,13 @@ public class TestAttack {
         player0.attack(barracks1, 3, AttackStrength.STRONG);
 
         // Wait for two soldiers to leave the watch tower
-        List<Soldier> attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 3, player0);
+        var attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 3, player0);
 
         assertNotNull(attackers);
         assertEquals(attackers.size(), 3);
 
         // Get the first attacker
-        Soldier firstAttacker = Utils.getMainAttacker(barracks1, attackers);
+        var firstAttacker = Utils.getMainAttacker(barracks1, attackers);
 
         assertNotNull(firstAttacker);
 
@@ -2702,14 +2480,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -2758,10 +2529,10 @@ public class TestAttack {
         player0.attack(barracks1, 3, AttackStrength.STRONG);
 
         // Wait for two soldiers to leave the guard house
-        List<Soldier> attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 3, player0);
+        var attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 3, player0);
 
         // Wait for the first attacker to reach its position
-        Soldier firstAttacker = Utils.getMainAttacker(barracks1, attackers);
+        var firstAttacker = Utils.getMainAttacker(barracks1, attackers);
 
         assertNotNull(firstAttacker);
         assertTrue(firstAttacker.isTraveling());
@@ -2846,14 +2617,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -2904,10 +2668,10 @@ public class TestAttack {
         player0.attack(barracks1, 3, AttackStrength.STRONG);
 
         // Wait for two soldiers to leave the watch tower
-        List<Soldier> attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 3, player0);
+        var attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 3, player0);
 
         // Get the first attacker
-        Soldier firstAttacker = Utils.getMainAttacker(barracks1, attackers);
+        var firstAttacker = Utils.getMainAttacker(barracks1, attackers);
 
         assertNotNull(firstAttacker);
 
@@ -2944,14 +2708,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -2971,10 +2728,10 @@ public class TestAttack {
 
         // Place flag
         var point4 = new Point(56, 12);
-        Flag flag0 = map.placeFlag(player1, point4);
+        var flag0 = map.placeFlag(player1, point4);
 
         // Connect the flag with the barracks
-        Road road0 = map.placeAutoSelectedRoad(player1, flag0, barracks1.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player1, flag0, barracks1.getFlag());
 
         // Finish construction
         Utils.constructHouse(barracks0);
@@ -3073,14 +2830,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -3104,13 +2854,13 @@ public class TestAttack {
 
         // Place flags
         var point4 = new Point(56, 12);
-        Flag flag0 = map.placeFlag(player1, point4);
+        var flag0 = map.placeFlag(player1, point4);
         var point5 = new Point(40, 18);
-        Flag flag1 = map.placeFlag(player1, point5);
+        var flag1 = map.placeFlag(player1, point5);
 
         // Connect the flag with the barracks
-        Road road0 = map.placeAutoSelectedRoad(player1, flag0, flag1);
-        Road road1 = map.placeAutoSelectedRoad(player1, flag1, barracks1.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player1, flag0, flag1);
+        var road1 = map.placeAutoSelectedRoad(player1, flag1, barracks1.getFlag());
 
         // Finish construction
         Utils.constructHouse(barracks0);
@@ -3198,14 +2948,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -3217,7 +2960,7 @@ public class TestAttack {
 
         // Place guard house for player 0
         var point2 = new Point(21, 5);
-        Building guardHouse = map.placeBuilding(new GuardHouse(player0), point2);
+        var guardHouse = map.placeBuilding(new GuardHouse(player0), point2);
 
         // Place barracks for player 1
         var point3 = new Point(23, 15);
@@ -3225,10 +2968,10 @@ public class TestAttack {
 
         // Place flag
         var point4 = new Point(53, 15);
-        Flag flag0 = map.placeFlag(player1, point4);
+        var flag0 = map.placeFlag(player1, point4);
 
         // Connect the flag with the barracks
-        Road road0 = map.placeAutoSelectedRoad(player1, flag0, barracks1.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player1, flag0, barracks1.getFlag());
 
         // Finish construction
         Utils.constructHouse(guardHouse);
@@ -3259,7 +3002,7 @@ public class TestAttack {
         // Find the military that was chosen to attack
         map.stepTime();
 
-        List<Soldier> attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
+        var attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
 
         assertNotNull(attackers);
         assertEquals(attackers.size(), 2);
@@ -3316,14 +3059,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -3335,7 +3071,7 @@ public class TestAttack {
 
         // Place guard house for player 0
         var point2 = new Point(21, 5);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         // Place barracks for player 1
         var point3 = new Point(23, 19);
@@ -3343,10 +3079,10 @@ public class TestAttack {
 
         // Place flag
         var point4 = new Point(53, 19);
-        Flag flag0 = map.placeFlag(player1, point4);
+        var flag0 = map.placeFlag(player1, point4);
 
         // Connect the flag with the barracks
-        Road road0 = map.placeAutoSelectedRoad(player1, flag0, barracks1.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player1, flag0, barracks1.getFlag());
 
         // Finish construction
         Utils.constructHouse(fortress0);
@@ -3372,13 +3108,13 @@ public class TestAttack {
         // Find the military that was chosen to attack
         map.stepTime();
 
-        List<Soldier> attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 8, player0);
+        var attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 8, player0);
 
         assertNotNull(attackers);
         assertEquals(attackers.size(), 8);
 
         // Get the first attacker to fight
-        Soldier fightingAttacker = Utils.getMainAttacker(barracks1, attackers);
+        var fightingAttacker = Utils.getMainAttacker(barracks1, attackers);
 
         assertNotNull(fightingAttacker);
 
@@ -3444,14 +3180,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -3463,7 +3192,7 @@ public class TestAttack {
 
         // Place guard house for player 0
         var point2 = new Point(21, 5);
-        Building guardHouse = map.placeBuilding(new GuardHouse(player0), point2);
+        var guardHouse = map.placeBuilding(new GuardHouse(player0), point2);
 
         // Place barracks for player 1
         var point3 = new Point(23, 15);
@@ -3471,10 +3200,10 @@ public class TestAttack {
 
         // Place flag
         var point4 = new Point(53, 15);
-        Flag flag0 = map.placeFlag(player1, point4);
+        var flag0 = map.placeFlag(player1, point4);
 
         // Connect the flag with the barracks
-        Road road0 = map.placeAutoSelectedRoad(player1, flag0, barracks1.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player1, flag0, barracks1.getFlag());
 
         // Finish construction
         Utils.constructHouse(guardHouse);
@@ -3535,7 +3264,7 @@ public class TestAttack {
         map.stepTime();
 
         // Send a reinforcement to the attacked building
-        Soldier reinforcement = new Soldier(player1, PRIVATE_RANK, map);
+        var reinforcement = new Soldier(player1, PRIVATE_RANK, map);
 
         map.placeWorker(reinforcement, barracks1.getFlag());
 
@@ -3570,14 +3299,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -3593,14 +3315,14 @@ public class TestAttack {
 
         // Place guard house for player 0
         var point2 = new Point(21, 5);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point2);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point2);
 
         // Place barracks for player 1
         var point3 = new Point(23, 15);
         var barracks1 = map.placeBuilding(new Barracks(player1), point3);
 
         // Connect the barracks with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player1, barracks1.getFlag(), headquarter1.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player1, barracks1.getFlag(), headquarter1.getFlag());
 
         // Finish construction
         Utils.constructHouse(guardHouse0);
@@ -3624,13 +3346,13 @@ public class TestAttack {
         player0.attack(barracks1, 2, AttackStrength.STRONG);
 
         // Wait for two soldiers to leave the guard house
-        List<Soldier> attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
+        var attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
 
         assertNotNull(attackers);
         assertEquals(attackers.size(), 2);
 
         // Get the first attacker
-        Soldier firstAttacker = Utils.getMainAttacker(barracks1, attackers);
+        var firstAttacker = Utils.getMainAttacker(barracks1, attackers);
 
         // Wait for the first attacker to reach the attacked building
         Utils.fastForwardUntilWorkerReachesPoint(map, firstAttacker, barracks1.getFlag().getPosition());
@@ -3661,8 +3383,8 @@ public class TestAttack {
         Utils.waitForSoldierToBeDying(defender, map);
 
         // Send two reinforcements from far away
-        Soldier reinforcement1 = new Soldier(player1, GENERAL_RANK, map);
-        Soldier reinforcement2 = new Soldier(player1, GENERAL_RANK, map);
+        var reinforcement1 = new Soldier(player1, GENERAL_RANK, map);
+        var reinforcement2 = new Soldier(player1, GENERAL_RANK, map);
 
         map.placeWorker(reinforcement1, headquarter1.getFlag());
         map.placeWorker(reinforcement2, headquarter1.getFlag());
@@ -3709,15 +3431,7 @@ public class TestAttack {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-        players.add(player2);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1, player2), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -3733,7 +3447,7 @@ public class TestAttack {
 
         // Place fortress for player 0
         var point2 = new Point(21, 5);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         // Finish construction of the fortress
         Utils.constructHouse(fortress0);
@@ -3742,7 +3456,7 @@ public class TestAttack {
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress0);
 
         // Connect the fortress with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
         // Occupy the road
         Utils.occupyRoad(road0, map);
@@ -3759,7 +3473,7 @@ public class TestAttack {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
         // Connect the barracks with the headquarters
-        Road road1 = map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), barracks0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), barracks0.getFlag());
 
         // Occupy the road
         Utils.occupyRoad(road1, map);
@@ -3771,7 +3485,6 @@ public class TestAttack {
 
         // Wait for player 0 to take over the barracks
         for (int i = 0; i < 2000; i++) {
-
             if (barracks0.getPlayer().equals(player0) && barracks0.getNumberOfHostedSoldiers() > 0) {
                 break;
             }
@@ -3788,14 +3501,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -3815,7 +3521,7 @@ public class TestAttack {
 
         // Place fortress for player 0
         var point2 = new Point(21, 5);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         // Finish construction of the fortress
         Utils.constructHouse(fortress0);
@@ -3832,10 +3538,10 @@ public class TestAttack {
         player0.attack(headquarter1, 8, AttackStrength.STRONG);
 
         // Get attackers
-        List<Soldier> attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 8, player0);
+        var attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 8, player0);
 
         // Get the main attacker
-        Soldier firstAttacker = Utils.getMainAttacker(headquarter1, attackers);
+        var firstAttacker = Utils.getMainAttacker(headquarter1, attackers);
 
         // Wait for the main attacker to get to the flag
         assertEquals(firstAttacker.getTarget(), headquarter1.getFlag().getPosition());
@@ -3844,7 +3550,6 @@ public class TestAttack {
 
         // Verify that the headquarters remains intact until the main attacker enters
         for (int i = 0; i < 100; i++) {
-
             if (firstAttacker.getPosition().equals(headquarter1.getPosition())) {
                 break;
             }
@@ -3875,14 +3580,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -3902,7 +3600,7 @@ public class TestAttack {
 
         // Place fortress for player 0
         var point2 = new Point(21, 5);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         // Finish construction of the fortress
         Utils.constructHouse(fortress0);
@@ -3919,10 +3617,10 @@ public class TestAttack {
         player0.attack(headquarter1, 8, AttackStrength.STRONG);
 
         // Get attackers
-        List<Soldier> attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 8, player0);
+        var attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 8, player0);
 
         // Get the main attacker
-        Soldier firstAttacker = Utils.getMainAttacker(headquarter1, attackers);
+        var firstAttacker = Utils.getMainAttacker(headquarter1, attackers);
 
         // Wait for the main attacker to get to the flag
         assertEquals(firstAttacker.getTarget(), headquarter1.getFlag().getPosition());
@@ -3932,7 +3630,6 @@ public class TestAttack {
         // Verify that the headquarters remains intact until the main attacker enters
         assertTrue(headquarter1.isMilitaryBuilding());
         for (int i = 0; i < 100; i++) {
-
             if (firstAttacker.getPosition().equals(headquarter1.getPosition())) {
                 break;
             }
@@ -3959,14 +3656,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -3986,7 +3676,7 @@ public class TestAttack {
 
         // Place fortress for player 0
         var point2 = new Point(21, 5);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         // Finish construction of the fortress
         Utils.constructHouse(fortress0);
@@ -4003,10 +3693,10 @@ public class TestAttack {
         player0.attack(headquarter1, 8, AttackStrength.STRONG);
 
         // Get attackers
-        List<Soldier> attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 8, player0);
+        var attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 8, player0);
 
         // Get the main attacker
-        Soldier firstAttacker = Utils.getMainAttacker(headquarter1, attackers);
+        var firstAttacker = Utils.getMainAttacker(headquarter1, attackers);
 
         // Wait for the main attacker to get to the flag
         assertEquals(firstAttacker.getTarget(), headquarter1.getFlag().getPosition());
@@ -4020,7 +3710,6 @@ public class TestAttack {
 
         // Wait for the attackers to get to the headquarters and start to walk home
         for (int i = 0; i < 200; i++) {
-
             boolean allWalkingBack = true;
 
             for (var attacker : attackers) {
@@ -4052,14 +3741,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -4153,7 +3835,6 @@ public class TestAttack {
         assertTrue(headquarter0.getAmount(PRIVATE) > 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (barracks0.getNumberOfHostedSoldiers() == 2) {
                 break;
             }
@@ -4171,14 +3852,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -4298,7 +3972,7 @@ public class TestAttack {
         var worker = headquarter0.getWorker();
         Utils.fastForwardUntilWorkerCarriesCargo(map, worker, STONE);
 
-        Cargo cargo = worker.getCargo();
+        var cargo = worker.getCargo();
 
         assertEquals(cargo.getTarget(), barracks1);
 
@@ -4308,7 +3982,6 @@ public class TestAttack {
 
         // Wait for the upgrade to happen
         for (int i = 0; i < 1000; i++) {
-
             assertTrue(barracks1.isUpgrading());
 
             if (map.getBuildingAtPoint(point3) instanceof GuardHouse) {
@@ -4327,14 +4000,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -4432,14 +4098,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(13, 5);
@@ -4451,7 +4110,7 @@ public class TestAttack {
 
         // Place fortress for player 0
         var point2 = new Point(17, 5);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         // Remove all soldiers in the headquarters
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 0);
@@ -4514,9 +4173,8 @@ public class TestAttack {
         player0.attack(barracks1, 16, AttackStrength.STRONG);
 
         // Verify that 16 attackers leave
-        Set<Worker> soldiersOutside = new HashSet<>();
+        var soldiersOutside = new HashSet<Worker>();
         for (int i = 0; i < 1000; i++) {
-
             for (var worker : map.getWorkers()) {
                 if (!worker.getPlayer().equals(player0)) {
                     continue;
@@ -4565,14 +4223,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -4596,7 +4247,7 @@ public class TestAttack {
 
         // Place additional flag close to player 1's barracks
         var point4 = new Point(25, 17);
-        Flag flag0 = map.placeFlag(player1, point4);
+        var flag0 = map.placeFlag(player1, point4);
 
         assertTrue(map.isFlagAtPoint(point4));
         assertEquals(map.getFlagAtPoint(point4), flag0);
@@ -4662,7 +4313,7 @@ public class TestAttack {
     //  - Test several soldiers can defend
     //  - Test soldiers rally from several buildings
     //  - Test no attack possible with only one military in the building
-    //  - Test that the attacked building gets filled fully
+    //  - Test that the attacked var gets filled fully
     //    go back to their original buildings
     //  - Test that promised soldiers walking to the building return home when
     //    it is captured
@@ -4673,14 +4324,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -4700,7 +4344,7 @@ public class TestAttack {
 
         // Place barracks for player 1
         var point3 = new Point(23, 15);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player1), point3);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player1), point3);
 
         // Finish construction
         Utils.constructHouse(barracks0);
@@ -4795,14 +4439,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -4822,7 +4459,7 @@ public class TestAttack {
 
         // Place fortress for player 0
         var point2 = new Point(21, 5);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         // Finish construction of the fortress
         Utils.constructHouse(fortress0);
@@ -4840,10 +4477,10 @@ public class TestAttack {
         player0.attack(headquarter1, 8, AttackStrength.STRONG);
 
         // Get attackers
-        List<Soldier> attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 8, player0);
+        var attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 8, player0);
 
         // Get the main attacker
-        Soldier firstAttacker = Utils.getMainAttacker(headquarter1, attackers);
+        var firstAttacker = Utils.getMainAttacker(headquarter1, attackers);
 
         assertEquals(firstAttacker.getTarget(), headquarter1.getFlag().getPosition());
 
@@ -4864,14 +4501,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -4914,7 +4544,7 @@ public class TestAttack {
         // Verify that the strong soldier comes out to attack
         map.stepTime();
 
-        List<Soldier> militaryOutside = Utils.findWorkersOfTypeOutsideForPlayer(Soldier.class, player0);
+        var militaryOutside = Utils.findWorkersOfTypeOutsideForPlayer(Soldier.class, player0);
 
         assertEquals(militaryOutside.size(), 1);
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 1);
@@ -4927,14 +4557,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -4976,7 +4599,7 @@ public class TestAttack {
         // Verify that the strong soldier comes out to attack
         map.stepTime();
 
-        List<Soldier> militaryOutside = Utils.findWorkersOfTypeOutsideForPlayer(Soldier.class, player0);
+        var militaryOutside = Utils.findWorkersOfTypeOutsideForPlayer(Soldier.class, player0);
 
         assertEquals(militaryOutside.size(), 1);
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 1);
@@ -4989,14 +4612,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -5040,7 +4656,7 @@ public class TestAttack {
         // Verify that the close soldier comes out to attack
         map.stepTime();
 
-        List<Soldier> soldiersOutside = Utils.findWorkersOfTypeOutsideForPlayer(Soldier.class, player0);
+        var soldiersOutside = Utils.findWorkersOfTypeOutsideForPlayer(Soldier.class, player0);
 
         assertEquals(soldiersOutside.size(), 1);
 
@@ -5058,14 +4674,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -5135,8 +4744,8 @@ public class TestAttack {
         // Verify that the defenders go to the right places to wait to fight
         Utils.fastForward(8, map);
 
-        List<Soldier> defenders = Utils.findSoldiersOutsideWithHome(player1, fortress);
-        List<Soldier> homeDefender = Utils.findSoldiersOutsideWithHome(player1, barracks1);
+        var defenders = Utils.findSoldiersOutsideWithHome(player1, fortress);
+        var homeDefender = Utils.findSoldiersOutsideWithHome(player1, barracks1);
 
         assertEquals(homeDefender.size(), 1);
         assertEquals(defenders.size(), 8);
@@ -5145,7 +4754,7 @@ public class TestAttack {
 
         Utils.waitForSoldiersToReachTargets(map, defenders);
 
-        Set<Point> defenderPositions = new HashSet<>();
+        var defenderPositions = new HashSet<>();
 
         defenders.forEach(soldier -> defenderPositions.add(soldier.getPosition()));
 
@@ -5182,14 +4791,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -5266,8 +4868,8 @@ public class TestAttack {
         // Verify that the defenders go to the right places to wait to fight
         Utils.fastForward(8, map);
 
-        List<Soldier> defenders = Utils.findSoldiersOutsideWithHome(player1, fortress);
-        List<Soldier> homeDefender = Utils.findSoldiersOutsideWithHome(player1, barracks1);
+        var defenders = Utils.findSoldiersOutsideWithHome(player1, fortress);
+        var homeDefender = Utils.findSoldiersOutsideWithHome(player1, barracks1);
 
         assertEquals(homeDefender.size(), 1);
         assertEquals(defenders.size(), 8);
@@ -5276,7 +4878,7 @@ public class TestAttack {
 
         Utils.waitForSoldiersToReachTargets(map, defenders);
 
-        Set<Point> defenderPositions = new HashSet<>();
+        var defenderPositions = new HashSet<>();
 
         defenders.forEach(soldier -> defenderPositions.add(soldier.getPosition()));
 
@@ -5313,14 +4915,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -5387,7 +4982,7 @@ public class TestAttack {
         // Wait for defenders to come out from the fortress and from the attacked barracks
         var defenders = Utils.waitForAliveSoldiersOutsideBuilding(player1, 9);
 
-        //List<Soldier> homeDefender = Utils.findSoldiersOutsideWithHome(player1, barracks1);
+        //var homeDefender = Utils.findSoldiersOutsideWithHome(player1, barracks1);
 
         //assertEquals(homeDefender.size(), 1);
         assertEquals(defenders.size(), 9);
@@ -5441,14 +5036,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -5552,7 +5140,7 @@ public class TestAttack {
 
         Utils.waitForSoldiersToReachTargets(map, remoteDefenders);
 
-        Set<Point> defenderPositions = new HashSet<>();
+        var defenderPositions = new HashSet<>();
 
         remoteDefenders.forEach(soldier -> {
             defenderPositions.add(soldier.getPosition());
@@ -5597,14 +5185,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -5652,14 +5233,14 @@ public class TestAttack {
         // Find the military that was chosen to attack
         Utils.fastForward(20, map);
 
-        List<Soldier> attackers = Utils.findSoldiersOutsideBuilding(player1);
+        var attackers = Utils.findSoldiersOutsideBuilding(player1);
 
         // Verify that the defenders go to the right places to wait to fight
         assertEquals(attackers.size(), 8);
 
         Utils.waitForSoldiersToReachTargets(map, attackers);
 
-        Set<Point> attackerPositions = new HashSet<>();
+        var attackerPositions = new HashSet<>();
 
         attackers.forEach(soldier -> attackerPositions.add(soldier.getPosition()));
 
@@ -5684,13 +5265,7 @@ public class TestAttack {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -5738,7 +5313,7 @@ public class TestAttack {
         // Find the military that was chosen to attack
         Utils.fastForward(20, map);
 
-        List<Soldier> attackers = Utils.waitForAliveSoldiersOutsideBuilding(player1, 8);
+        var attackers = Utils.waitForAliveSoldiersOutsideBuilding(player1, 8);
 
         attackers.forEach(attacker -> assertFalse(attacker.isDead()));
 
@@ -5749,7 +5324,7 @@ public class TestAttack {
 
         attackers.forEach(attacker -> assertFalse(attacker.isDead()));
 
-        Set<Point> attackerPositions = attackers.stream().map(Worker::getPosition).collect(Collectors.toSet());
+        var attackerPositions = attackers.stream().map(Worker::getPosition).collect(Collectors.toSet());
 
         // middle of lake (point 5) is down-right of the flag of barracks 1
 
@@ -5770,14 +5345,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -5821,7 +5389,7 @@ public class TestAttack {
         // Find the soldiers that were chosen to attack
         Utils.fastForward(20, map);
 
-        List<Soldier> attackers = Utils.findSoldiersOutsideBuilding(player1);
+        var attackers = Utils.findSoldiersOutsideBuilding(player1);
 
         // Find the main attacker
         var optionalMainAttacker = map.getWorkers()
@@ -5852,7 +5420,7 @@ public class TestAttack {
         Utils.waitForSoldierToBeDying(defender0, map);
 
         for (int i = 0; i < 30; i++) {
-            List<Soldier> defenders = Utils.findSoldiersOutsideBuilding(player0).stream()
+            var defenders = Utils.findSoldiersOutsideBuilding(player0).stream()
                     .filter(soldier -> !soldier.isInsideBuilding())
                     .filter(soldier -> soldier.getHome().equals(barracks0))
                     .filter(soldier -> !soldier.isDying())
@@ -5883,14 +5451,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -5934,7 +5495,7 @@ public class TestAttack {
         // Find the soldiers that were chosen to attack
         Utils.fastForward(20, map);
 
-        List<Soldier> attackers = Utils.findSoldiersOutsideBuilding(player1);
+        var attackers = Utils.findSoldiersOutsideBuilding(player1);
 
         // Find the main attacker
         var optionalMainAttacker = map.getWorkers()
@@ -5998,14 +5559,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -6084,7 +5638,7 @@ public class TestAttack {
         Utils.waitForSoldierToBeDying(defender0, map);
 
         for (int i = 0; i < 30; i++) {
-            List<Soldier> defenders = Utils.findSoldiersOutsideBuilding(player0).stream()
+            var defenders = Utils.findSoldiersOutsideBuilding(player0).stream()
                     .filter(soldier -> !soldier.isInsideBuilding())
                     .filter(soldier -> soldier.getHome().equals(headquarter0))
                     .filter(soldier -> !soldier.isDying())
@@ -6117,14 +5671,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -6164,7 +5711,7 @@ public class TestAttack {
         // Find the soldiers that were chosen to attack
         Utils.fastForward(20, map);
 
-        List<Soldier> attackers = Utils.findSoldiersOutsideBuilding(player1);
+        var attackers = Utils.findSoldiersOutsideBuilding(player1);
 
         // Find the main attacker
         var optionalMainAttacker = map.getWorkers()
@@ -6229,14 +5776,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -6284,8 +5824,8 @@ public class TestAttack {
          - If a soldier is fighting another soldier, this should be reflexive
          */
         
-        List<Soldier> attackers = Utils.waitForAliveSoldiersOutsideBuilding(player0, 9);
-        List<Soldier> defenders = Utils.waitForAliveSoldiersOutsideBuilding(player1, 9);
+        var attackers = Utils.waitForAliveSoldiersOutsideBuilding(player0, 9);
+        var defenders = Utils.waitForAliveSoldiersOutsideBuilding(player1, 9);
 
         assertNotNull(attackers);
         assertNotNull(defenders);
@@ -6447,14 +5987,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -6501,11 +6034,11 @@ public class TestAttack {
         Utils.waitForSoldierToBeFighting(attacker, map);
 
         // Verify that nothing is transported from the barracks' flag and that nothing is transported to it
-        Cargo cargo0 = Utils.placeCargo(map, PLANK, barracks1.getFlag(), headquarter1);
+        var cargo0 = Utils.placeCargo(map, PLANK, barracks1.getFlag(), headquarter1);
 
         assertTrue(barracks1.getFlag().getStackedCargo().contains(cargo0));
 
-        Cargo cargo1 = Utils.placeCargo(map, STONE, flag, headquarter1);
+        var cargo1 = Utils.placeCargo(map, STONE, flag, headquarter1);
 
         for (int i = 0; i < 5000; i++) {
             if (attacker.isDying() || attacker.getOpponent().isDying()) {
@@ -6530,14 +6063,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);

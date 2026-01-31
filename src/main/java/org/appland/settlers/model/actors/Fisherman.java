@@ -333,4 +333,14 @@ public class Fisherman extends Worker {
 
         return null;
     }
+
+    @Override
+    public boolean isWorking() {
+        return state == GOING_OUT_TO_FISH ||
+                state == LOWERING_FISHING_ROD ||
+                state == FISHING ||
+                state == PULLING_UP_FISH ||
+                state == GOING_BACK_TO_HOUSE_WITH_FISH ||
+                state == IN_HOUSE_WITH_FISH;
+    }
 }

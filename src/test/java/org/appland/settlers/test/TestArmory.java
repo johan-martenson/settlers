@@ -2,7 +2,6 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -12,16 +11,12 @@ import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.actors.Armorer;
 import org.appland.settlers.model.actors.Courier;
-import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Armory;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
@@ -39,11 +34,9 @@ public class TestArmory {
 
         // Starting new game */
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -73,11 +66,9 @@ public class TestArmory {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -107,11 +98,9 @@ public class TestArmory {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -141,11 +130,9 @@ public class TestArmory {
 
         // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -177,11 +164,9 @@ public class TestArmory {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -189,7 +174,7 @@ public class TestArmory {
         var point1 = new Point(7, 9);
         var armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        // Place road to connect the armory with the headquarter
+        // Place road to connect the armory with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         // Wait for the armory to get constructed
@@ -197,7 +182,7 @@ public class TestArmory {
 
         assertTrue(armory0.needsWorker());
 
-        // Verify that a armory worker leaves the headquarter
+        // Verify that a armory worker leaves the headquarters
         Utils.fastForward(3, map);
 
         assertTrue(map.getWorkers().size() >= 3);
@@ -226,11 +211,9 @@ public class TestArmory {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -238,7 +221,7 @@ public class TestArmory {
         var point1 = new Point(7, 9);
         var armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        // Place road to connect the armory with the headquarter
+        // Place road to connect the armory with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         // Wait for the armory to get constructed
@@ -246,7 +229,7 @@ public class TestArmory {
 
         assertTrue(armory0.needsWorker());
 
-        // Verify that a armory worker leaves the headquarter
+        // Verify that a armory worker leaves the headquarters
         Utils.fastForward(3, map);
 
         assertTrue(map.getWorkers().size() >= 3);
@@ -269,15 +252,13 @@ public class TestArmory {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Remove all armorers from the headquarter and add tongs
+        // Remove all armorers from the headquarters and add tongs
         Utils.adjustInventoryTo(headquarter0, ARMORER, 0);
         Utils.adjustInventoryTo(headquarter0, Material.TONGS, 1);
 
@@ -285,7 +266,7 @@ public class TestArmory {
         var point1 = new Point(7, 9);
         var armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        // Place road to connect the armory with the headquarter
+        // Place road to connect the armory with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         // Wait for the armory to get constructed
@@ -293,7 +274,7 @@ public class TestArmory {
 
         assertTrue(armory0.needsWorker());
 
-        // Verify that a armory worker leaves the headquarter
+        // Verify that a armory worker leaves the headquarters
         Utils.fastForward(3, map);
 
         assertTrue(map.getWorkers().size() >= 3);
@@ -322,15 +303,13 @@ public class TestArmory {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Empty coal and iron bars from the headquarter
+        // Empty coal and iron bars from the headquarters
         Utils.adjustInventoryTo(headquarter0, COAL, 0);
         Utils.adjustInventoryTo(headquarter0, IRON_BAR, 0);
 
@@ -338,13 +317,13 @@ public class TestArmory {
         var point1 = new Point(7, 9);
         var armory = map.placeBuilding(new Armory(player0), point1);
 
-        // Connect the armory with the headquarter
+        // Connect the armory with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, armory.getFlag(), headquarter0.getFlag());
 
         // Wait for the armory to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(armory);
 
-        Worker armorer0 = Utils.waitForNonMilitaryBuildingToGetPopulated(armory);
+        var armorer0 = Utils.waitForNonMilitaryBuildingToGetPopulated(armory);
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), armory);
@@ -365,12 +344,9 @@ public class TestArmory {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        var map = new GameMap(players, 40, 40);
-
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -394,11 +370,9 @@ public class TestArmory {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -406,7 +380,7 @@ public class TestArmory {
         var point1 = new Point(7, 9);
         var armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        // Place road to connect the armory with the headquarter
+        // Place road to connect the armory with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         // Wait for the armory to get constructed and occupied
@@ -414,7 +388,7 @@ public class TestArmory {
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(armory0);
 
-        Worker armorer0 = armory0.getWorker();
+        var armorer0 = armory0.getWorker();
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), armory0);
@@ -456,11 +430,9 @@ public class TestArmory {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -468,7 +440,7 @@ public class TestArmory {
         var point1 = new Point(7, 9);
         var armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        // Place road to connect the armory with the headquarter
+        // Place road to connect the armory with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         // Wait for the armory to get constructed and occupied
@@ -476,7 +448,7 @@ public class TestArmory {
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(armory0);
 
-        Worker armorer0 = armory0.getWorker();
+        var armorer0 = armory0.getWorker();
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), armory0);
@@ -489,6 +461,7 @@ public class TestArmory {
         // Verify that the armory produces weapons
         for (int i = 0; i < 149; i++) {
             map.stepTime();
+
             assertTrue(armory0.getFlag().getStackedCargo().isEmpty());
             assertNull(armorer0.getCargo());
         }
@@ -519,12 +492,9 @@ public class TestArmory {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        var map = new GameMap(players, 20, 20);
-
-        // Place headquarter
+        // Place headquarters
         var point3 = new Point(6, 4);
         var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -533,7 +503,7 @@ public class TestArmory {
 
         // Place storehouse
         var point4 = new Point(10, 4);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point4);
 
         // Connect the storehouse to the headquarters
         var road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
@@ -584,15 +554,13 @@ public class TestArmory {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Empty coal and iron bars from the headquarter
+        // Empty coal and iron bars from the headquarters
         Utils.adjustInventoryTo(headquarter0, COAL, 0);
         Utils.adjustInventoryTo(headquarter0, IRON_BAR, 0);
 
@@ -600,7 +568,7 @@ public class TestArmory {
         var point1 = new Point(7, 9);
         var armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        // Place road to connect the armory with the headquarter
+        // Place road to connect the armory with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         // Wait for the armory to get constructed and occupied
@@ -627,11 +595,9 @@ public class TestArmory {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -643,9 +609,9 @@ public class TestArmory {
         Utils.constructHouse(armory0);
 
         // Populate the armory
-        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory0);
+        var armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory0);
 
-        // Fast forward so that the armory worker would have produced weapons if it had had the ingredients
+        // Fast forward so that the armory var would have produced weapons if it had had the ingredients
         Utils.fastForward(150, map);
 
         assertNull(armorer0.getCargo());
@@ -671,11 +637,9 @@ public class TestArmory {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -683,7 +647,7 @@ public class TestArmory {
         var point1 = new Point(7, 9);
         var armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        // Place road to connect the armory with the headquarter
+        // Place road to connect the armory with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         // Wait for the armory to get constructed and occupied
@@ -691,7 +655,7 @@ public class TestArmory {
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(armory0);
 
-        Worker armorer0 = armory0.getWorker();
+        var armorer0 = armory0.getWorker();
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), armory0);
@@ -728,11 +692,9 @@ public class TestArmory {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -756,7 +718,7 @@ public class TestArmory {
         // Wait for the armorer to produce a new weapon cargo
         Utils.fastForward(50, map);
 
-        Worker armorer0 = armory0.getWorker();
+        var armorer0 = armory0.getWorker();
 
         assertNotNull(armorer0.getCargo());
 
@@ -793,11 +755,9 @@ public class TestArmory {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -821,7 +781,7 @@ public class TestArmory {
         // Wait for the armorer to produce a new weapon cargo
         Utils.fastForward(50, map);
 
-        Worker armorer0 = armory0.getWorker();
+        var armorer0 = armory0.getWorker();
 
         assertNotNull(armorer0.getCargo());
 
@@ -841,15 +801,15 @@ public class TestArmory {
 
         assertEquals(cargo.getPosition(), armory0.getFlag().getPosition());
 
-        // Remove material the armory needs from the headquarter
+        // Remove material the armory needs from the headquarters
         Utils.adjustInventoryTo(headquarter0, IRON_BAR, 0);
         Utils.adjustInventoryTo(headquarter0, COAL, 0);
 
-        // Connect the armory with the headquarter
+        // Connect the armory with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory0.getFlag());
 
         // Assign a courier to the road
-        Courier courier = new Courier(player0, map);
+        var courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
 
@@ -872,15 +832,15 @@ public class TestArmory {
         assertEquals(courier.getCargo(), cargo);
         assertTrue(cargo.getMaterial() == SWORD || cargo.getMaterial() == SHIELD);
 
-        // Verify that the courier delivers the cargo to the headquarter
+        // Verify that the courier delivers the cargo to the headquarters
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        Material material = cargo.getMaterial();
+        var material = cargo.getMaterial();
         int amount = headquarter0.getAmount(material);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
-        // Verify that the courier has delivered the cargo to the headquarter
+        // Verify that the courier has delivered the cargo to the headquarters
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(material), amount + 1);
     }
@@ -890,11 +850,9 @@ public class TestArmory {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -909,14 +867,14 @@ public class TestArmory {
         Utils.occupyBuilding(new Armorer(player0, map), armory0);
 
         // Destroy the armory
-        Worker armorer0 = armory0.getWorker();
+        var armorer0 = armory0.getWorker();
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getPosition(), armory0.getPosition());
 
         armory0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(armorer0.isInsideBuilding());
         assertEquals(armorer0.getTarget(), headquarter0.getPosition());
 
@@ -924,7 +882,7 @@ public class TestArmory {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getPosition());
 
-        // Verify that the armorer is stored correctly in the headquarter
+        // Verify that the armorer is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(ARMORER), amount + 1);
     }
 
@@ -933,11 +891,9 @@ public class TestArmory {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -945,7 +901,7 @@ public class TestArmory {
         var point1 = new Point(8, 8);
         var armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        // Connect the armory with the headquarter
+        // Connect the armory with the headquarters
         map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         // Finish construction of the armory
@@ -955,14 +911,14 @@ public class TestArmory {
         Utils.occupyBuilding(new Armorer(player0, map), armory0);
 
         // Destroy the armory
-        Worker armorer0 = armory0.getWorker();
+        var armorer0 = armory0.getWorker();
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getPosition(), armory0.getPosition());
 
         armory0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(armorer0.isInsideBuilding());
         assertEquals(armorer0.getTarget(), headquarter0.getPosition());
 
@@ -983,11 +939,9 @@ public class TestArmory {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -995,7 +949,7 @@ public class TestArmory {
         var point1 = new Point(12, 8);
         var armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        // Connect the armory and the headquarter
+        // Connect the armory and the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         // Finish the armory
@@ -1006,7 +960,7 @@ public class TestArmory {
         Utils.deliverCargos(armory0, COAL, 2);
 
         // Assign a worker to the armory
-        Armorer armorer0 = new Armorer(player0, map);
+        var armorer0 = new Armorer(player0, map);
 
         Utils.occupyBuilding(armorer0, armory0);
 
@@ -1040,11 +994,9 @@ public class TestArmory {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1052,14 +1004,14 @@ public class TestArmory {
         var point1 = new Point(12, 8);
         var armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        // Connect the armory and the headquarter
+        // Connect the armory and the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         // Finish the armory
         Utils.constructHouse(armory0);
 
         // Assign a worker to the armory
-        Armorer armorer0 = new Armorer(player0, map);
+        var armorer0 = new Armorer(player0, map);
 
         Utils.occupyBuilding(armorer0, armory0);
 
@@ -1104,13 +1056,9 @@ public class TestArmory {
 
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 50, 50);
 
-        // Create game map
-        var map = new GameMap(players, 50, 50);
-
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(15, 15);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1121,17 +1069,17 @@ public class TestArmory {
         // Finish construction of the armory
         Utils.constructHouse(armory0);
 
-        // Connect the armory with the headquarter
+        // Connect the armory with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory0.getFlag());
 
-        // Wait for armorer to get assigned and leave the headquarter
+        // Wait for armorer to get assigned and leave the headquarters
         List<Armorer> workers = Utils.waitForWorkersOutsideBuilding(Armorer.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
 
         // Verify that the player is set correctly in the worker
-        Armorer worker = workers.getFirst();
+        var worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1143,31 +1091,23 @@ public class TestArmory {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1, player2), 100, 100);
 
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-        players.add(player2);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
-
-        // Place player 2's headquarter
+        // Place player 2's headquarters
         var point0 = new Point(70, 70);
         var headquarter2 = map.placeBuilding(new Headquarter(player2), point0);
 
-        // Place player 0's headquarter
+        // Place player 0's headquarters
         var point1 = new Point(9, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
-        // Place player 1's headquarter
+        // Place player 1's headquarters
         var point2 = new Point(45, 5);
         var headquarter1 = map.placeBuilding(new Headquarter(player1), point2);
 
         // Place fortress for player 0
         var point3 = new Point(21, 9);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point3);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point3);
 
         // Finish construction of the fortress
         Utils.constructHouse(fortress0);
@@ -1183,9 +1123,9 @@ public class TestArmory {
         Utils.constructHouse(armory0);
 
         // Occupy the armory
-        Armorer worker = Utils.occupyBuilding(new Armorer(player0, map), armory0);
+        var worker = Utils.occupyBuilding(new Armorer(player0, map), armory0);
 
-        // Verify that the enemy's headquarter is closer
+        // Verify that the enemy's headquarters is closer
         assertTrue(armory0.getPosition().distance(headquarter0.getPosition()) >
                    armory0.getPosition().distance(headquarter1.getPosition()));
 
@@ -1202,13 +1142,9 @@ public class TestArmory {
 
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 50, 50);
 
-        // Create game map
-        var map = new GameMap(players, 50, 50);
-
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(15, 15);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1232,23 +1168,21 @@ public class TestArmory {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
         var point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place armory
         var point2 = new Point(14, 4);
         var armory0 = map.placeBuilding(new Armory(player0), point2.upLeft());
 
-        // Connect headquarter and first flag
+        // Connect headquarters and first flag
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
@@ -1294,23 +1228,21 @@ public class TestArmory {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
         var point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place armory
         var point2 = new Point(14, 4);
         var armory0 = map.placeBuilding(new Armory(player0), point2.upLeft());
 
-        // Connect headquarter and first flag
+        // Connect headquarters and first flag
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
@@ -1359,23 +1291,21 @@ public class TestArmory {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
         var point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place armory
         var point2 = new Point(14, 4);
         var armory0 = map.placeBuilding(new Armory(player0), point2.upLeft());
 
-        // Connect headquarter and first flag
+        // Connect headquarters and first flag
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
@@ -1433,11 +1363,9 @@ public class TestArmory {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1445,7 +1373,7 @@ public class TestArmory {
         var point1 = new Point(14, 4);
         var armory0 = map.placeBuilding(new Armory(player0), point1.upLeft());
 
-        // Connect armory with the headquarter
+        // Connect armory with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory0.getFlag());
 
         // Wait for the armory to get constructed
@@ -1457,6 +1385,7 @@ public class TestArmory {
         // Verify that it cannot be torn down twice
         try {
             armory0.tearDown();
+
             fail();
         } catch (Throwable t) {
             assertEquals(t.getClass(), InvalidUserActionException.class);
@@ -1468,11 +1397,9 @@ public class TestArmory {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1488,20 +1415,20 @@ public class TestArmory {
 
         // Place a second storage closer to the armory
         var point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
 
         // Destroy the armory
-        Worker armorer0 = armory0.getWorker();
+        var armorer0 = armory0.getWorker();
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getPosition(), armory0.getPosition());
 
         armory0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(armorer0.isInsideBuilding());
         assertEquals(armorer0.getTarget(), storehouse0.getPosition());
 
@@ -1509,7 +1436,7 @@ public class TestArmory {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, storehouse0.getPosition());
 
-        // Verify that the armorer is stored correctly in the headquarter
+        // Verify that the armorer is stored correctly in the headquarters
         assertEquals(storehouse0.getAmount(ARMORER), amount + 1);
     }
 
@@ -1518,11 +1445,9 @@ public class TestArmory {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1538,7 +1463,7 @@ public class TestArmory {
 
         // Place a second storage closer to the armory
         var point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -1547,14 +1472,14 @@ public class TestArmory {
         storehouse0.tearDown();
 
         // Destroy the armory
-        Worker armorer0 = armory0.getWorker();
+        var armorer0 = armory0.getWorker();
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getPosition(), armory0.getPosition());
 
         armory0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(armorer0.isInsideBuilding());
         assertEquals(armorer0.getTarget(), headquarter0.getPosition());
 
@@ -1562,7 +1487,7 @@ public class TestArmory {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getPosition());
 
-        // Verify that the armorer is stored correctly in the headquarter
+        // Verify that the armorer is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(ARMORER), amount + 1);
     }
 
@@ -1571,11 +1496,9 @@ public class TestArmory {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1591,7 +1514,7 @@ public class TestArmory {
 
         // Place a second storage closer to the armory
         var point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -1603,14 +1526,14 @@ public class TestArmory {
         Utils.waitForBuildingToBurnDown(storehouse0);
 
         // Destroy the armory
-        Worker armorer0 = armory0.getWorker();
+        var armorer0 = armory0.getWorker();
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getPosition(), armory0.getPosition());
 
         armory0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(armorer0.isInsideBuilding());
         assertEquals(armorer0.getTarget(), headquarter0.getPosition());
 
@@ -1618,7 +1541,7 @@ public class TestArmory {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getPosition());
 
-        // Verify that the armorer is stored correctly in the headquarter
+        // Verify that the armorer is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(ARMORER), amount + 1);
     }
 
@@ -1627,11 +1550,9 @@ public class TestArmory {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1647,10 +1568,10 @@ public class TestArmory {
 
         // Place a second storage closer to the armory
         var point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Destroy the armory
-        Worker armorer0 = armory0.getWorker();
+        var armorer0 = armory0.getWorker();
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getPosition(), armory0.getPosition());
@@ -1659,7 +1580,7 @@ public class TestArmory {
 
         armory0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(armorer0.isInsideBuilding());
         assertEquals(armorer0.getTarget(), headquarter0.getPosition());
 
@@ -1667,7 +1588,7 @@ public class TestArmory {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getPosition());
 
-        // Verify that the armorer is stored correctly in the headquarter
+        // Verify that the armorer is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(ARMORER), amount + 1);
     }
 
@@ -1676,11 +1597,9 @@ public class TestArmory {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1688,14 +1607,14 @@ public class TestArmory {
         var point1 = new Point(17, 17);
         var armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        // Place road to connect the headquarter and the armory
+        // Place road to connect the headquarters and the armory
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory0.getFlag());
 
         // Finish construction of the armory
         Utils.constructHouse(armory0);
 
         // Wait for a worker to start walking to the building
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Armorer.class, 1, player0).getFirst();
+        var worker = Utils.waitForWorkersOutsideBuilding(Armorer.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, armory0.getFlag().getPosition());
@@ -1703,7 +1622,7 @@ public class TestArmory {
         // Tear down the building
         armory0.tearDown();
 
-        // Verify that the worker goes to the building and then returns to the headquarter instead of entering
+        // Verify that the worker goes to the building and then returns to the headquarters instead of entering
         assertEquals(worker.getTarget(), armory0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, armory0.getPosition());
@@ -1718,11 +1637,9 @@ public class TestArmory {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1734,7 +1651,7 @@ public class TestArmory {
         Utils.constructHouse(armory);
 
         // Populate the armory
-        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory);
+        var armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory);
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), armory);
@@ -1755,11 +1672,9 @@ public class TestArmory {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1771,18 +1686,17 @@ public class TestArmory {
         Utils.constructHouse(armory);
 
         // Populate the armory
-        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory);
+        var armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory);
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), armory);
         assertEquals(armory.getWorker(), armorer0);
 
-        // Connect the armory with the headquarter
+        // Connect the armory with the headquarters
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory.getFlag());
 
         // Make the armory create some weapons with full resources available
         for (int i = 0; i < 1000; i++) {
-
             map.stepTime();
 
             if (armory.needsMaterial(COAL)) {
@@ -1798,7 +1712,6 @@ public class TestArmory {
         assertEquals(armory.getProductivity(), 100);
 
         for (int i = 0; i < 1000; i++) {
-
             map.stepTime();
 
             if (armory.needsMaterial(COAL)) {
@@ -1818,11 +1731,9 @@ public class TestArmory {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1834,22 +1745,21 @@ public class TestArmory {
         Utils.constructHouse(armory);
 
         // Populate the armory
-        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory);
+        var armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory);
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), armory);
         assertEquals(armory.getWorker(), armorer0);
 
-        // Remove the resources the armory needs from the headquarter
+        // Remove the resources the armory needs from the headquarters
         Utils.adjustInventoryTo(headquarter0, IRON_BAR, 0);
         Utils.adjustInventoryTo(headquarter0, COAL, 0);
 
-        // Connect the armory with the headquarter
+        // Connect the armory with the headquarters
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory.getFlag());
 
         // Make the armory create some weapons with full resources available
         for (int i = 0; i < 1000; i++) {
-
             map.stepTime();
 
             if (armory.needsMaterial(COAL) && armory.getAmount(COAL) < 2) {
@@ -1876,11 +1786,9 @@ public class TestArmory {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1904,11 +1812,9 @@ public class TestArmory {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1920,7 +1826,7 @@ public class TestArmory {
         Utils.constructHouse(armory);
 
         // Populate the armory
-        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory);
+        var armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory);
 
         // Verify that the armory can produce
         assertTrue(armory.canProduce());
@@ -1931,11 +1837,9 @@ public class TestArmory {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1957,11 +1861,9 @@ public class TestArmory {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1976,7 +1878,7 @@ public class TestArmory {
         assertEquals(armory0.getCanHoldAmount(PLANK), 2);
         assertEquals(armory0.getCanHoldAmount(STONE), 2);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
@@ -1990,11 +1892,9 @@ public class TestArmory {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2012,7 +1912,7 @@ public class TestArmory {
         assertEquals(armory0.getCanHoldAmount(COAL), 2);
         assertEquals(armory0.getCanHoldAmount(IRON_BAR), 2);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == COAL || material == IRON_BAR) {
                 continue;
             }
@@ -2026,11 +1926,9 @@ public class TestArmory {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2038,17 +1936,17 @@ public class TestArmory {
         var point1 = new Point(6, 12);
         var armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        // Remove all armorers from the headquarter
+        // Remove all armorers from the headquarters
         Utils.adjustInventoryTo(headquarter0, ARMORER, 0);
 
-        // Add extra resources to the headquarter
+        // Add extra resources to the headquarters
         Utils.adjustInventoryTo(headquarter0, COAL, 10);
         Utils.adjustInventoryTo(headquarter0, IRON_BAR, 10);
 
         // Construct the armory
         Utils.constructHouse(armory0);
 
-        // Connect the armory to the headquarter
+        // Connect the armory to the headquarters
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory0.getFlag());
 
         // Wait for the maximum amount of resources to get delivered
@@ -2077,12 +1975,9 @@ public class TestArmory {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        var map = new GameMap(players, 20, 20);
-
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2090,7 +1985,7 @@ public class TestArmory {
         var point1 = new Point(16, 6);
         var armory = map.placeBuilding(new Armory(player0), point1);
 
-        // Connect the armory with the headquarter
+        // Connect the armory with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, armory.getFlag(), headquarter.getFlag());
 
         // Wait for the armory to get constructed and assigned a worker
@@ -2115,11 +2010,11 @@ public class TestArmory {
             map.stepTime();
         }
 
-        // Reconnect the armory with the headquarter
+        // Reconnect the armory with the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, armory.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2144,12 +2039,9 @@ public class TestArmory {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        var map = new GameMap(players, 20, 20);
-
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2157,7 +2049,7 @@ public class TestArmory {
         var point1 = new Point(16, 6);
         var armory = map.placeBuilding(new Armory(player0), point1);
 
-        // Connect the armory with the headquarter
+        // Connect the armory with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, armory.getFlag(), headquarter.getFlag());
 
         // Wait for the armory to get constructed and assigned a worker
@@ -2184,11 +2076,11 @@ public class TestArmory {
             map.stepTime();
         }
 
-        // Reconnect the armory with the headquarter
+        // Reconnect the armory with the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, armory.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2231,11 +2123,9 @@ public class TestArmory {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2243,7 +2133,7 @@ public class TestArmory {
         var point1 = new Point(7, 9);
         var armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        // Place road to connect the armory with the headquarter
+        // Place road to connect the armory with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         // Wait for the armory to get constructed and occupied
@@ -2252,13 +2142,13 @@ public class TestArmory {
 
         Utils.waitForBuildingToBeConstructed(armory0);
 
-        Worker armorer0 = Utils.waitForNonMilitaryBuildingToGetPopulated(armory0);
+        var armorer0 = Utils.waitForNonMilitaryBuildingToGetPopulated(armory0);
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), armory0);
         assertEquals(armory0.getWorker(), armorer0);
 
-        // Add a lot of material to the headquarter for the armory to consume
+        // Add a lot of material to the headquarters for the armory to consume
         Utils.adjustInventoryTo(headquarter0, IRON_BAR, 40);
         Utils.adjustInventoryTo(headquarter0, COAL, 40);
 
@@ -2289,43 +2179,41 @@ public class TestArmory {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
         var point1 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Place armory
         var point2 = new Point(18, 6);
         var armory0 = map.placeBuilding(new Armory(player0), point2);
 
-        // Place road to connect the storehouse with the headquarter
+        // Place road to connect the storehouse with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        // Place road to connect the headquarter with the armory
+        // Place road to connect the headquarters with the armory
         var road1 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
-        // Add a lot of planks and stones to the headquarter
+        // Add a lot of planks and stones to the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
         // Wait for the armory and the storehouse to get constructed
         Utils.waitForBuildingsToBeConstructed(storehouse, armory0);
 
-        // Add a lot of material to the headquarter for the armory to consume
+        // Add a lot of material to the headquarters for the armory to consume
         Utils.adjustInventoryTo(headquarter0, IRON_BAR, 40);
         Utils.adjustInventoryTo(headquarter0, COAL, 40);
 
         // Wait for the armory and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, armory0);
 
-        Worker armorer0 = armory0.getWorker();
+        var armorer0 = armory0.getWorker();
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), armory0);
@@ -2354,43 +2242,41 @@ public class TestArmory {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
         var point1 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Place armory
         var point2 = new Point(18, 6);
         var armory0 = map.placeBuilding(new Armory(player0), point2);
 
-        // Place road to connect the storehouse with the headquarter
+        // Place road to connect the storehouse with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        // Place road to connect the headquarter with the armory
+        // Place road to connect the headquarters with the armory
         var road1 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
-        // Add a lot of planks and stones to the headquarter
+        // Add a lot of planks and stones to the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
         // Wait for the armory and the storehouse to get constructed
         Utils.waitForBuildingsToBeConstructed(storehouse, armory0);
 
-        // Add a lot of material to the headquarter for the armory to consume
+        // Add a lot of material to the headquarters for the armory to consume
         Utils.adjustInventoryTo(headquarter0, IRON_BAR, 40);
         Utils.adjustInventoryTo(headquarter0, COAL, 40);
 
         // Wait for the armory and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, armory0);
 
-        Worker armorer0 = armory0.getWorker();
+        var armorer0 = armory0.getWorker();
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), armory0);
@@ -2421,11 +2307,9 @@ public class TestArmory {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2437,7 +2321,7 @@ public class TestArmory {
         headquarter0.pushOutAll(ARMORER);
 
         for (int i = 0; i < 10; i++) {
-            Worker worker = Utils.waitForWorkerOutsideBuilding(Armorer.class, player0);
+            var worker = Utils.waitForWorkerOutsideBuilding(Armorer.class, player0);
 
             assertEquals(headquarter0.getAmount(ARMORER), 0);
             assertEquals(worker.getPosition(), headquarter0.getPosition());
@@ -2459,11 +2343,9 @@ public class TestArmory {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2473,7 +2355,7 @@ public class TestArmory {
         headquarter0.blockDeliveryOfMaterial(ARMORER);
         headquarter0.pushOutAll(ARMORER);
 
-        Worker worker = Utils.waitForWorkerOutsideBuilding(Armorer.class, player0);
+        var worker = Utils.waitForWorkerOutsideBuilding(Armorer.class, player0);
 
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
@@ -2504,11 +2386,9 @@ public class TestArmory {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2516,7 +2396,7 @@ public class TestArmory {
         var point1 = new Point(7, 9);
         var armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        // Place road to connect the armory with the headquarter
+        // Place road to connect the armory with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2527,11 +2407,11 @@ public class TestArmory {
         Utils.waitForNonMilitaryBuildingToGetPopulated(armory0);
 
         /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
-           blocked in the headquarter
+           blocked in the headquarters
        */
         headquarter0.blockDeliveryOfMaterial(ARMORER);
 
-        Worker worker = armory0.getWorker();
+        var worker = armory0.getWorker();
 
         armory0.tearDown();
 
@@ -2564,11 +2444,9 @@ public class TestArmory {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2576,7 +2454,7 @@ public class TestArmory {
         var point1 = new Point(7, 9);
         var armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        // Place road to connect the armory with the headquarter
+        // Place road to connect the armory with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2588,7 +2466,7 @@ public class TestArmory {
         // Wait for a armorer to start walking to the armory
         var armorer = Utils.waitForWorkerOutsideBuilding(Armorer.class, player0);
 
-        // Wait for the armorer to go past the headquarter's flag
+        // Wait for the armorer to go past the headquarters's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, armorer, headquarter0.getFlag().getPosition());
 
         map.stepTime();

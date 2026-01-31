@@ -280,4 +280,11 @@ public class Forester extends Worker {
 
         setTarget(building.getFlag().getPosition());
     }
+
+    @Override
+    public boolean isWorking() {
+        return state == State.GOING_OUT_TO_PLANT ||
+                state == State.PLANTING ||
+                state == State.GOING_BACK_TO_HOUSE;
+    }
 }

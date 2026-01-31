@@ -303,4 +303,12 @@ public class Stonemason extends Worker {
 
         setTarget(building.getFlag().getPosition());
     }
+
+    @Override
+    public boolean isWorking() {
+        return state == State.GOING_OUT_TO_GET_STONE ||
+                state == State.GETTING_STONE ||
+                state == State.GOING_BACK_TO_HOUSE_WITH_CARGO ||
+                state == State.IN_HOUSE_WITH_CARGO;
+    }
 }

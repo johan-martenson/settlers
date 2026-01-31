@@ -1,7 +1,6 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -13,8 +12,6 @@ import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Fisherman;
-import org.appland.settlers.model.actors.Worker;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.CoalMine;
 import org.appland.settlers.model.buildings.Fishery;
 import org.appland.settlers.model.buildings.Fortress;
@@ -25,7 +22,6 @@ import org.junit.Test;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Vegetation.*;
@@ -59,10 +55,8 @@ public class TestFishery {
         var fishery0 = map.placeBuilding(new Fishery(player0), point22);
 
         // Deliver two planks and two stones
-        Cargo plankCargo = new Cargo(PLANK, map);
-
-        fishery0.putCargo(plankCargo);
-        fishery0.putCargo(plankCargo);
+        Utils.deliverCargo(fishery0, PLANK);
+        Utils.deliverCargo(fishery0, PLANK);
 
         // Assign builder
         Utils.assignBuilder(fishery0);
@@ -93,9 +87,7 @@ public class TestFishery {
         var fishery0 = map.placeBuilding(new Fishery(player0), point22);
 
         // Deliver one plank
-        Cargo plankCargo = new Cargo(PLANK, map);
-
-        fishery0.putCargo(plankCargo);
+        Utils.deliverCargo(fishery0, PLANK);
 
         // Assign builder
         Utils.assignBuilder(fishery0);
@@ -691,7 +683,7 @@ public class TestFishery {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point3 = new Point(6, 4);
         var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -703,7 +695,7 @@ public class TestFishery {
         Utils.surroundPointWithMinableMountain(point4, map);
 
         // Place coal mine
-        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point4);
+        var coalMine = map.placeBuilding(new CoalMine(player0), point4);
 
         // Connect the coal mine to the headquarters
         var road2 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), headquarter.getFlag());
@@ -752,7 +744,7 @@ public class TestFishery {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point3 = new Point(6, 4);
         var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -761,7 +753,7 @@ public class TestFishery {
 
         // Place storehouse
         var point4 = new Point(10, 4);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point4);
 
         // Connect the storehouse to the headquarters
         var road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
@@ -813,7 +805,7 @@ public class TestFishery {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point3 = new Point(6, 4);
         var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -825,7 +817,7 @@ public class TestFishery {
         Utils.surroundPointWithMinableMountain(point4, map);
 
         // Place gold mine
-        GoldMine goldMine = map.placeBuilding(new GoldMine(player0), point4);
+        var goldMine = map.placeBuilding(new GoldMine(player0), point4);
 
         // Construct the gold mine
         Utils.constructHouse(goldMine);
@@ -1013,6 +1005,7 @@ public class TestFishery {
         // Verify that the fisherman stays in the hut
         for (int i = 0; i < 200; i++) {
             assertTrue(fisherman.isInsideBuilding());
+
             map.stepTime();
         }
     }
@@ -1060,11 +1053,11 @@ public class TestFishery {
 
         // Place stone
         var point19 = new Point(12, 12);
-        Stone stone0 = map.placeStone(point19, Stone.StoneType.STONE_1, 7);
+        var stone0 = map.placeStone(point19, Stone.StoneType.STONE_1, 7);
 
         // Place stone
         var point20 = new Point(13, 11);
-        Stone stone1 = map.placeStone(point20, Stone.StoneType.STONE_1, 7);
+        var stone1 = map.placeStone(point20, Stone.StoneType.STONE_1, 7);
 
         // Place headquarters
         var point21 = new Point(5, 5);
@@ -1092,7 +1085,7 @@ public class TestFishery {
         Utils.fastForward(100, map);
 
         // Verify that the fisherman leaves the hut
-        Worker fisher = fishery0.getWorker();
+        var fisher = fishery0.getWorker();
 
         assertNotNull(fisher.getTarget());
     }
@@ -1233,7 +1226,7 @@ public class TestFishery {
         Utils.fastForward(100, map);
 
         // Wait for the fisherman to produce a new fish cargo
-        Worker fisherman = fishery0.getWorker();
+        var fisherman = fishery0.getWorker();
 
         for (int i = 0; i < 1000; i++) {
             if (fisherman.getCargo() != null && fisherman.isAt(fishery0.getPosition())) {
@@ -1315,7 +1308,7 @@ public class TestFishery {
         Utils.fastForward(100, map);
 
         // Wait for the fisherman to produce a new fish cargo
-        Worker fisherman = fishery0.getWorker();
+        var fisherman = fishery0.getWorker();
 
         for (int i = 0; i < 1000; i++) {
             if (fisherman.getCargo() != null && fisherman.isAt(fishery0.getPosition())) {
@@ -1357,7 +1350,6 @@ public class TestFishery {
         assertNotEquals(courier.getTarget(), headquarter0.getFlag().getPosition());
         assertNotEquals(courier.getTarget(), fishery0.getFlag().getPosition());
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
-
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
 
@@ -1406,7 +1398,7 @@ public class TestFishery {
         Utils.occupyBuilding(new Fisherman(player0, map), fishery0);
 
         // Destroy the fishery
-        Worker fisherman = fishery0.getWorker();
+        var fisherman = fishery0.getWorker();
 
         assertTrue(fisherman.isInsideBuilding());
         assertEquals(fisherman.getPosition(), fishery0.getPosition());
@@ -1450,7 +1442,7 @@ public class TestFishery {
         Utils.occupyBuilding(new Fisherman(player0, map), fishery0);
 
         // Destroy the fishery
-        Worker fisherman = fishery0.getWorker();
+        var fisherman = fishery0.getWorker();
 
         assertTrue(fisherman.isInsideBuilding());
         assertEquals(fisherman.getPosition(), fishery0.getPosition());
@@ -1640,13 +1632,13 @@ public class TestFishery {
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fishery0.getFlag());
 
         // Wait for fisherman to get assigned and leave the headquarters
-        List<Fisherman> workers = Utils.waitForWorkersOutsideBuilding(Fisherman.class, 1, player0);
+        var workers = Utils.waitForWorkersOutsideBuilding(Fisherman.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
 
         // Verify that the player is set correctly in the worker
-        Fisherman worker = workers.getFirst();
+        var worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1674,7 +1666,7 @@ public class TestFishery {
 
         // Place fortress for player 0
         var point2 = new Point(21, 9);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         // Finish construction of the fortress
         constructHouse(fortress0);
@@ -1690,7 +1682,7 @@ public class TestFishery {
         constructHouse(fishery0);
 
         // Occupy the fishery
-        Fisherman worker = Utils.occupyBuilding(new Fisherman(player0, map), fishery0);
+        var worker = Utils.occupyBuilding(new Fisherman(player0, map), fishery0);
 
         // Verify that the worker goes back to its own storage when the fortress is torn down
         fortress0.tearDown();
@@ -1717,7 +1709,7 @@ public class TestFishery {
         var point2 = new Point(14, 4);
         var fishery0 = map.placeBuilding(new Fishery(player0), point2.upLeft());
 
-        // Connect headquarter and first flag
+        // Connect headquarters and first flag
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
@@ -1728,7 +1720,7 @@ public class TestFishery {
 
         Fisherman fisherman = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Fisherman) {
                 fisherman = (Fisherman) worker;
             }
@@ -1777,7 +1769,7 @@ public class TestFishery {
         var point2 = new Point(14, 4);
         var fishery0 = map.placeBuilding(new Fishery(player0), point2.upLeft());
 
-        // Connect headquarter and first flag
+        // Connect headquarters and first flag
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
@@ -1788,7 +1780,7 @@ public class TestFishery {
 
         Fisherman fisherman = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Fisherman) {
                 fisherman = (Fisherman) worker;
             }
@@ -1840,7 +1832,7 @@ public class TestFishery {
         var point2 = new Point(14, 4);
         var fishery0 = map.placeBuilding(new Fishery(player0), point2.upLeft());
 
-        // Connect headquarter and first flag
+        // Connect headquarters and first flag
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
@@ -1851,7 +1843,7 @@ public class TestFishery {
 
         Fisherman fisherman = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Fisherman) {
                 fisherman = (Fisherman) worker;
             }
@@ -1903,13 +1895,13 @@ public class TestFishery {
 
         // Place a second storage closer to the fishery
         var point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         constructHouse(storehouse0);
 
         // Destroy the fishery
-        Worker fisherman = fishery0.getWorker();
+        var fisherman = fishery0.getWorker();
 
         assertTrue(fisherman.isInsideBuilding());
         assertEquals(fisherman.getPosition(), fishery0.getPosition());
@@ -1951,7 +1943,7 @@ public class TestFishery {
 
         // Place a second storage closer to the fishery
         var point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         constructHouse(storehouse0);
@@ -1960,7 +1952,7 @@ public class TestFishery {
         storehouse0.tearDown();
 
         // Destroy the fishery
-        Worker fisherman = fishery0.getWorker();
+        var fisherman = fishery0.getWorker();
 
         assertTrue(fisherman.isInsideBuilding());
         assertEquals(fisherman.getPosition(), fishery0.getPosition());
@@ -2002,7 +1994,7 @@ public class TestFishery {
 
         // Place a second storage closer to the fishery
         var point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         constructHouse(storehouse0);
@@ -2014,7 +2006,7 @@ public class TestFishery {
         Utils.waitForBuildingToBurnDown(storehouse0);
 
         // Destroy the fishery
-        Worker fisherman = fishery0.getWorker();
+        var fisherman = fishery0.getWorker();
 
         assertTrue(fisherman.isInsideBuilding());
         assertEquals(fisherman.getPosition(), fishery0.getPosition());
@@ -2056,10 +2048,10 @@ public class TestFishery {
 
         // Place a second storage closer to the fishery
         var point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Destroy the fishery
-        Worker fisherman = fishery0.getWorker();
+        var fisherman = fishery0.getWorker();
 
         assertTrue(fisherman.isInsideBuilding());
         assertEquals(fisherman.getPosition(), fishery0.getPosition());
@@ -2093,14 +2085,14 @@ public class TestFishery {
         var point26 = new Point(17, 17);
         var fishery0 = map.placeBuilding(new Fishery(player0), point26);
 
-        // Place road to connect the headquarter and the fishery
+        // Place road to connect the headquarters and the fishery
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fishery0.getFlag());
 
         // Finish construction of the fishery
         constructHouse(fishery0);
 
         // Wait for a worker to start walking to the building
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Fisherman.class, 1, player0).getFirst();
+        var worker = Utils.waitForWorkersOutsideBuilding(Fisherman.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, fishery0.getFlag().getPosition());
@@ -2108,7 +2100,7 @@ public class TestFishery {
         // Tear down the building
         fishery0.tearDown();
 
-        // Verify that the worker goes to the building and then returns to the headquarter instead of entering
+        // Verify that the worker goes to the building and then returns to the headquarters instead of entering
         assertEquals(worker.getTarget(), fishery0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, fishery0.getPosition());
@@ -2137,7 +2129,7 @@ public class TestFishery {
         constructHouse(fishery);
 
         // Populate the fishery
-        Worker fisherman0 = Utils.occupyBuilding(new Fisherman(player0, map), fishery);
+        var fisherman0 = Utils.occupyBuilding(new Fisherman(player0, map), fishery);
 
         assertTrue(fisherman0.isInsideBuilding());
         assertEquals(fisherman0.getHome(), fishery);
@@ -2148,6 +2140,7 @@ public class TestFishery {
             assertTrue(fishery.getFlag().getStackedCargo().isEmpty());
             assertNull(fisherman0.getCargo());
             assertEquals(fishery.getProductivity(), 0);
+
             map.stepTime();
         }
     }
@@ -2175,7 +2168,7 @@ public class TestFishery {
         constructHouse(fishery);
 
         // Populate the fishery
-        Worker fisherman0 = Utils.occupyBuilding(new Fisherman(player0, map), fishery);
+        var fisherman0 = Utils.occupyBuilding(new Fisherman(player0, map), fishery);
 
         assertTrue(fisherman0.isInsideBuilding());
         assertEquals(fisherman0.getHome(), fishery);
@@ -2186,7 +2179,6 @@ public class TestFishery {
 
         // Make the fishery catch some fish with full resources available
         for (int i = 0; i < 10000; i++) {
-
             if (fishery.getProductivity() == 100) {
                 break;
             }
@@ -2198,7 +2190,6 @@ public class TestFishery {
         assertEquals(fishery.getProductivity(), 100);
 
         for (int i = 0; i < 1000; i++) {
-
             map.stepTime();
 
             assertEquals(fishery.getProductivity(), 100);
@@ -2239,7 +2230,6 @@ public class TestFishery {
 
         // Make the fishery catch some fish with full resources available
         for (int i = 0; i < 10000; i++) {
-
             if (fishery.getProductivity() == 100) {
                 break;
             }
@@ -2310,7 +2300,7 @@ public class TestFishery {
         constructHouse(fishery);
 
         // Populate the fishery
-        Worker fisherman0 = Utils.occupyBuilding(new Fisherman(player0, map), fishery);
+        var fisherman0 = Utils.occupyBuilding(new Fisherman(player0, map), fishery);
 
         // Verify that the fishery can produce
         assertTrue(fishery.canProduce());
@@ -2359,7 +2349,7 @@ public class TestFishery {
         assertTrue(fisher0.getTypesOfMaterialNeeded().contains(PLANK));
         assertEquals(fisher0.getCanHoldAmount(PLANK), 2);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == PLANK) {
                 continue;
             }
@@ -2389,7 +2379,7 @@ public class TestFishery {
         // Verify that the reported needed construction material is correct
         assertEquals(fishery0.getTypesOfMaterialNeeded().size(), 0);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             assertEquals(fishery0.getCanHoldAmount(material), 0);
         }
     }
@@ -2568,7 +2558,7 @@ public class TestFishery {
 
         Utils.waitForBuildingToBeConstructed(fishery0);
 
-        Worker fisherman0 = Utils.waitForNonMilitaryBuildingToGetPopulated(fishery0);
+        var fisherman0 = Utils.waitForNonMilitaryBuildingToGetPopulated(fishery0);
 
         assertTrue(fisherman0.isInsideBuilding());
         assertEquals(fisherman0.getHome(), fishery0);
@@ -2606,7 +2596,7 @@ public class TestFishery {
 
         // Place storehouse
         var point1 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Place fishery
         var point2 = new Point(18, 6);
@@ -2638,7 +2628,7 @@ public class TestFishery {
         // Wait for the fishery to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(fishery0);
 
-        Worker fisherman0 = fishery0.getWorker();
+        var fisherman0 = fishery0.getWorker();
 
         assertTrue(fisherman0.isInsideBuilding());
         assertEquals(fisherman0.getHome(), fishery0);
@@ -2675,7 +2665,7 @@ public class TestFishery {
 
         // Place storehouse
         var point1 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Place fishery
         var point2 = new Point(18, 6);
@@ -2698,7 +2688,7 @@ public class TestFishery {
         // Wait for the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse);
 
-        // Place road to connect the headquarter with the fishery
+        // Place road to connect the headquarters with the fishery
         var road1 = map.placeAutoSelectedRoad(player0, fishery0.getFlag(), headquarter0.getFlag());
 
         // Wait for the fishery to get constructed
@@ -2707,7 +2697,7 @@ public class TestFishery {
         // Wait for the fishery to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(fishery0);
 
-        Worker fisherman0 = fishery0.getWorker();
+        var fisherman0 = fishery0.getWorker();
 
         assertTrue(fisherman0.isInsideBuilding());
         assertEquals(fisherman0.getHome(), fishery0);
@@ -2756,7 +2746,7 @@ public class TestFishery {
         headquarter0.pushOutAll(FISHERMAN);
 
         for (int i = 0; i < 10; i++) {
-            Worker worker = Utils.waitForWorkerOutsideBuilding(Fisherman.class, player0);
+            var worker = Utils.waitForWorkerOutsideBuilding(Fisherman.class, player0);
 
             assertEquals(headquarter0.getAmount(FISHERMAN), 0);
             assertEquals(worker.getPosition(), headquarter0.getPosition());
@@ -2794,7 +2784,7 @@ public class TestFishery {
         headquarter0.blockDeliveryOfMaterial(FISHERMAN);
         headquarter0.pushOutAll(FISHERMAN);
 
-        Worker worker = Utils.waitForWorkerOutsideBuilding(Fisherman.class, player0);
+        var worker = Utils.waitForWorkerOutsideBuilding(Fisherman.class, player0);
 
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
@@ -2850,11 +2840,11 @@ public class TestFishery {
         Utils.waitForNonMilitaryBuildingToGetPopulated(fishery0);
 
         /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
-           blocked in the headquarter */
+           blocked in the headquarters */
        
         headquarter0.blockDeliveryOfMaterial(FISHERMAN);
 
-        Worker worker = fishery0.getWorker();
+        var worker = fishery0.getWorker();
 
         fishery0.tearDown();
 
@@ -2913,7 +2903,7 @@ public class TestFishery {
         // Wait for a fisherman to start walking to the fishery
         var fisherman = Utils.waitForWorkerOutsideBuilding(Fisherman.class, player0);
 
-        // Wait for the fisherman to go past the headquarter's flag
+        // Wait for the fisherman to go past the headquarters's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, headquarter0.getFlag().getPosition());
 
         map.stepTime();
@@ -2978,7 +2968,7 @@ public class TestFishery {
         Utils.removeAllFishExceptOne(map, point0.downRight());
 
         // Verify that the fisherman fishes from the three points around the small lake and then has no more fish
-        Set<Point> visited = new HashSet<>();
+        var visited = new HashSet<Point>();
 
         for (int i = 0; i < 3; i++) {
 
@@ -3061,7 +3051,7 @@ public class TestFishery {
         Utils.removeAllFishExceptOne(map, point0.upRight());
 
         // Verify that the fisherman fishes from the three points around the small lake and then has no more fish
-        Set<Point> visited = new HashSet<>();
+        var visited = new HashSet<Point>();
 
         for (int i = 0; i < 3; i++) {
 
@@ -3144,7 +3134,7 @@ public class TestFishery {
         Utils.removeAllFishExceptOne(map, point0.downRight());
 
         // Verify that the fisherman fishes from the three points around the small lake and then has no more fish
-        Set<Point> visited = new HashSet<>();
+        var visited = new HashSet<Point>();
 
         for (int i = 0; i < 3; i++) {
 
@@ -3227,7 +3217,7 @@ public class TestFishery {
         Utils.removeAllFishExceptOne(map, point0.upRight());
 
         // Verify that the fisherman fishes from the three points around the small lake and then has no more fish
-        Set<Point> visited = new HashSet<>();
+        var visited = new HashSet<Point>();
 
         for (int i = 0; i < 3; i++) {
 
@@ -3310,7 +3300,7 @@ public class TestFishery {
         Utils.removeAllFishExceptOne(map, point0.downRight());
 
         // Verify that the fisherman fishes from the three points around the small lake and then has no more fish
-        Set<Point> visited = new HashSet<>();
+        var visited = new HashSet<Point>();
 
         for (int i = 0; i < 3; i++) {
 
@@ -3393,7 +3383,7 @@ public class TestFishery {
         Utils.removeAllFishExceptOne(map, point0.upRight());
 
         // Verify that the fisherman fishes from the three points around the small lake and then has no more fish
-        Set<Point> visited = new HashSet<>();
+        var visited = new HashSet<Point>();
 
         for (int i = 0; i < 3; i++) {
 

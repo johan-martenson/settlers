@@ -44,7 +44,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point21 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -80,7 +80,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point21 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -115,7 +115,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -137,7 +137,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -145,7 +145,7 @@ public class TestQuarry {
         var point1 = new Point(8, 6);
         var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        // Connect the quarry with the headquarter
+        // Connect the quarry with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
 
         // Finish the woodcutter
@@ -168,7 +168,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -176,7 +176,7 @@ public class TestQuarry {
         var point1 = new Point(8, 6);
         var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        // Connect the quarry with the headquarter
+        // Connect the quarry with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
 
         // Finish the woodcutter
@@ -196,11 +196,11 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Remove all stonemasons from the headquarter and add a pick axe
+        // Remove all stonemasons from the headquarters and add a pick axe
         Utils.adjustInventoryTo(headquarter, STONEMASON, 0);
         Utils.adjustInventoryTo(headquarter, Material.PICK_AXE, 1);
 
@@ -208,7 +208,7 @@ public class TestQuarry {
         var point1 = new Point(8, 6);
         var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        // Connect the quarry with the headquarter
+        // Connect the quarry with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
 
         // Finish the woodcutter
@@ -231,7 +231,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -252,10 +252,12 @@ public class TestQuarry {
         Utils.occupyBuilding(stonemason, quarry);
 
         assertTrue(stonemason.isInsideBuilding());
+        assertFalse(quarry.isWorking());
 
         // Run the game logic 99 times and make sure the forester stays in the hut
         for (int i = 0; i < 99; i++) {
             assertTrue(stonemason.isInsideBuilding());
+            assertFalse(quarry.isWorking());
 
             map.stepTime();
         }
@@ -266,6 +268,7 @@ public class TestQuarry {
         map.stepTime();
 
         assertFalse(stonemason.isInsideBuilding());
+        assertTrue(quarry.isWorking());
     }
 
     @Test
@@ -275,7 +278,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -325,7 +328,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -382,7 +385,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -428,10 +431,13 @@ public class TestQuarry {
         assertTrue(stonemason.isArrived());
         assertEquals(stonemason.getPosition(), stone.getPosition());
         assertTrue(stonemason.isGettingStone());
+        assertTrue(quarry.isWorking());
 
         // Verify that the stonemason gets stone
         for (int i = 0; i < 49; i++) {
             assertTrue(stonemason.isGettingStone());
+            assertTrue(quarry.isWorking());
+
             map.stepTime();
         }
 
@@ -446,6 +452,7 @@ public class TestQuarry {
         assertFalse(stonemason.isGettingStone());
         assertNotNull(stonemason.getCargo());
         assertEquals(stonemason.getCargo().getMaterial(), STONE);
+        assertTrue(quarry.isWorking());
     }
 
     @Test
@@ -455,7 +462,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -536,7 +543,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point1 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
@@ -544,7 +551,7 @@ public class TestQuarry {
         var point2 = new Point(10, 4);
         var quarry = map.placeBuilding(new Quarry(player0), point2);
 
-        // Connect the quarry with the headquarter
+        // Connect the quarry with the headquarters
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
 
         // Place stone
@@ -592,6 +599,7 @@ public class TestQuarry {
 
         // Stonemason has the stone and goes back to the quarry
         assertFalse(stonemason.isGettingStone());
+        assertTrue(quarry.isWorking());
 
         assertEquals(stonemason.getTarget(), quarry.getPosition());
         assertNotNull(stonemason.getCargo());
@@ -600,6 +608,7 @@ public class TestQuarry {
 
         assertTrue(stonemason.isInsideBuilding());
         assertNotNull(stonemason.getCargo());
+        assertTrue(quarry.isWorking());
 
         // Stonemason leaves the hut and goes to the flag to drop the cargo
         map.stepTime();
@@ -628,7 +637,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point3 = new Point(6, 4);
         var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -683,7 +692,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point3 = new Point(6, 4);
         var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -750,7 +759,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point3 = new Point(6, 4);
         var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -817,7 +826,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -852,7 +861,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -894,7 +903,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 15, 15);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -928,7 +937,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1019,7 +1028,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1075,7 +1084,7 @@ public class TestQuarry {
 
         assertEquals(cargo.getPosition(), quarry0.getFlag().getPosition());
 
-        // Connect the quarry with the headquarter
+        // Connect the quarry with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
 
         // Assign a courier to the road
@@ -1101,14 +1110,14 @@ public class TestQuarry {
         assertNotNull(courier.getCargo());
         assertEquals(courier.getCargo(), cargo);
 
-        // Verify that the courier delivers the cargo to the headquarter
+        // Verify that the courier delivers the cargo to the headquarters
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(STONE);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
-        // Verify that the courier has delivered the cargo to the headquarter
+        // Verify that the courier has delivered the cargo to the headquarters
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(STONE), amount + 1);
     }
@@ -1120,7 +1129,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1142,7 +1151,7 @@ public class TestQuarry {
 
         quarry0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(stonemason.isInsideBuilding());
         assertEquals(stonemason.getTarget(), headquarter0.getPosition());
 
@@ -1150,7 +1159,7 @@ public class TestQuarry {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
 
-        // Verify that the stonemason is stored correctly in the headquarter
+        // Verify that the stonemason is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(STONEMASON), amount + 1);
     }
 
@@ -1161,7 +1170,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1169,7 +1178,7 @@ public class TestQuarry {
         var point26 = new Point(8, 8);
         var quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
-        // Connect the quarry with the headquarter
+        // Connect the quarry with the headquarters
         map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
 
         // Finish construction of the quarry
@@ -1186,7 +1195,7 @@ public class TestQuarry {
 
         quarry0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(stonemason.isInsideBuilding());
         assertEquals(stonemason.getTarget(), headquarter0.getPosition());
 
@@ -1209,7 +1218,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1217,7 +1226,7 @@ public class TestQuarry {
         var point26 = new Point(8, 8);
         var quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
-        // Connect the quarry with the headquarter
+        // Connect the quarry with the headquarters
         map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
 
         // Finish construction of the quarry
@@ -1252,7 +1261,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1278,7 +1287,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1304,7 +1313,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1316,7 +1325,7 @@ public class TestQuarry {
         var point1 = new Point(8, 6);
         var quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
-        // Connect the quarry and the headquarter
+        // Connect the quarry and the headquarters
         var point2 = new Point(6, 4);
         var point3 = new Point(8, 4);
         var point4 = new Point(9, 5);
@@ -1371,7 +1380,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1383,7 +1392,7 @@ public class TestQuarry {
         var point1 = new Point(8, 6);
         var quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
-        // Connect the quarry and the headquarter
+        // Connect the quarry and the headquarters
         var point2 = new Point(6, 4);
         var point3 = new Point(8, 4);
         var point4 = new Point(9, 5);
@@ -1445,7 +1454,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 50, 50);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(15, 15);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1456,10 +1465,10 @@ public class TestQuarry {
         // Finish construction of the quarry
         constructHouse(quarry0);
 
-        // Connect the quarry with the headquarter
+        // Connect the quarry with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
 
-        // Wait for stonemason to get assigned and leave the headquarter
+        // Wait for stonemason to get assigned and leave the headquarters
         List<Stonemason> workers = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0);
 
         assertNotNull(workers);
@@ -1480,11 +1489,11 @@ public class TestQuarry {
         var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0, player1, player2), 100, 100);
 
-        // Place player 2's headquarter
+        // Place player 2's headquarters
         var point10 = new Point(70, 70);
         var headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
-        // Place player 0's headquarter
+        // Place player 0's headquarters
         var point0 = new Point(9, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1527,7 +1536,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1539,7 +1548,7 @@ public class TestQuarry {
         var point2 = new Point(14, 4);
         var quarry0 = map.placeBuilding(new Quarry(player0), point2.upLeft());
 
-        // Connect headquarter and first flag
+        // Connect headquarters and first flag
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
@@ -1574,7 +1583,7 @@ public class TestQuarry {
 
         assertEquals(stoneMason.getPosition(), flag0.getPosition());
 
-        // Verify that the stonemason returns to the headquarter when it reaches the flag
+        // Verify that the stonemason returns to the headquarters when it reaches the flag
         assertEquals(stoneMason.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, headquarter0.getPosition());
@@ -1587,7 +1596,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1599,7 +1608,7 @@ public class TestQuarry {
         var point2 = new Point(14, 4);
         var quarry0 = map.placeBuilding(new Quarry(player0), point2.upLeft());
 
-        // Connect headquarter and first flag
+        // Connect headquarters and first flag
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
@@ -1650,7 +1659,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1662,7 +1671,7 @@ public class TestQuarry {
         var point2 = new Point(14, 4);
         var quarry0 = map.placeBuilding(new Quarry(player0), point2.upLeft());
 
-        // Connect headquarter and first flag
+        // Connect headquarters and first flag
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
@@ -1709,7 +1718,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1738,7 +1747,7 @@ public class TestQuarry {
 
         quarry0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(stonemason.isInsideBuilding());
         assertEquals(stonemason.getTarget(), storehouse0.getPosition());
 
@@ -1746,7 +1755,7 @@ public class TestQuarry {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, storehouse0.getPosition());
 
-        // Verify that the stonemason is stored correctly in the headquarter
+        // Verify that the stonemason is stored correctly in the headquarters
         assertEquals(storehouse0.getAmount(STONEMASON), amount + 1);
     }
 
@@ -1757,7 +1766,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1789,7 +1798,7 @@ public class TestQuarry {
 
         quarry0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(stonemason.isInsideBuilding());
         assertEquals(stonemason.getTarget(), headquarter0.getPosition());
 
@@ -1797,7 +1806,7 @@ public class TestQuarry {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
 
-        // Verify that the stonemason is stored correctly in the headquarter
+        // Verify that the stonemason is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(STONEMASON), amount + 1);
     }
 
@@ -1808,7 +1817,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1843,7 +1852,7 @@ public class TestQuarry {
 
         quarry0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(stonemason.isInsideBuilding());
         assertEquals(stonemason.getTarget(), headquarter0.getPosition());
 
@@ -1851,7 +1860,7 @@ public class TestQuarry {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
 
-        // Verify that the stonemason is stored correctly in the headquarter
+        // Verify that the stonemason is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(STONEMASON), amount + 1);
     }
 
@@ -1862,7 +1871,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1888,7 +1897,7 @@ public class TestQuarry {
 
         quarry0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(stonemason.isInsideBuilding());
         assertEquals(stonemason.getTarget(), headquarter0.getPosition());
 
@@ -1896,7 +1905,7 @@ public class TestQuarry {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
 
-        // Verify that the stonemason is stored correctly in the headquarter
+        // Verify that the stonemason is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(STONEMASON), amount + 1);
     }
 
@@ -1907,7 +1916,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1915,7 +1924,7 @@ public class TestQuarry {
         var point26 = new Point(17, 17);
         var quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
-        // Place road to connect the headquarter and the quarry
+        // Place road to connect the headquarters and the quarry
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
 
         // Finish construction of the quarry
@@ -1930,7 +1939,7 @@ public class TestQuarry {
         // Tear down the building
         quarry0.tearDown();
 
-        // Verify that the worker goes to the building and then returns to the headquarter instead of entering
+        // Verify that the worker goes to the building and then returns to the headquarters instead of entering
         assertEquals(worker.getTarget(), quarry0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, quarry0.getPosition());
@@ -1947,7 +1956,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 12);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2013,7 +2022,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2047,7 +2056,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2065,7 +2074,7 @@ public class TestQuarry {
         assertEquals(quarry.getHome(), quarry0);
         assertEquals(quarry0.getWorker(), quarry);
 
-        // Connect the quarry with the headquarter
+        // Connect the quarry with the headquarters
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
 
         // Place a stone on the map
@@ -2104,7 +2113,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2122,7 +2131,7 @@ public class TestQuarry {
         assertEquals(stonemason.getHome(), quarry0);
         assertEquals(quarry0.getWorker(), stonemason);
 
-        // Connect the quarry with the headquarter
+        // Connect the quarry with the headquarters
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
 
         // Put a new stone if the current one is gone
@@ -2157,7 +2166,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2183,7 +2192,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -2232,7 +2241,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2257,7 +2266,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2280,7 +2289,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2309,7 +2318,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2335,7 +2344,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2363,7 +2372,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2375,7 +2384,7 @@ public class TestQuarry {
         var point2 = new Point(18, 6);
         var stone = map.placeStone(point2, STONE_1, 7);
 
-        // Connect the quarry with the headquarter
+        // Connect the quarry with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
 
         // Wait for the quarry to get constructed and assigned a worker
@@ -2395,7 +2404,7 @@ public class TestQuarry {
             map.stepTime();
         }
 
-        // Reconnect the quarry with the headquarter
+        // Reconnect the quarry with the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
@@ -2425,7 +2434,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2457,7 +2466,7 @@ public class TestQuarry {
             map.stepTime();
         }
 
-        // Reconnect the quarry with the headquarter
+        // Reconnect the quarry with the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
@@ -2504,7 +2513,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2518,7 +2527,7 @@ public class TestQuarry {
         var stone0 = map.placeStone(point2, STONE_1, 7);
         var stone1 = map.placeStone(point3, STONE_1, 7);
 
-        // Place road to connect the quarry with the headquarter
+        // Place road to connect the quarry with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
 
         // Wait for the quarry to get constructed and occupied
@@ -2559,7 +2568,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2571,13 +2580,13 @@ public class TestQuarry {
         var point2 = new Point(18, 6);
         var quarry0 = map.placeBuilding(new Quarry(player0), point2);
 
-        // Place road to connect the storehouse with the headquarter
+        // Place road to connect the storehouse with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        // Place road to connect the headquarter with the quarry
+        // Place road to connect the headquarters with the quarry
         var road1 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
 
-        // Add a lot of planks and stones to the headquarter
+        // Add a lot of planks and stones to the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
@@ -2618,7 +2627,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2679,7 +2688,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2715,7 +2724,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2758,7 +2767,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2766,7 +2775,7 @@ public class TestQuarry {
         var point1 = new Point(7, 9);
         var quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
-        // Place road to connect the quarry with the headquarter
+        // Place road to connect the quarry with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2777,7 +2786,7 @@ public class TestQuarry {
         Utils.waitForNonMilitaryBuildingToGetPopulated(quarry0);
 
         /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
-           blocked in the headquarter */
+           blocked in the headquarters */
        
         headquarter0.blockDeliveryOfMaterial(STONEMASON);
 
@@ -2816,7 +2825,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2824,7 +2833,7 @@ public class TestQuarry {
         var point1 = new Point(7, 9);
         var quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
-        // Place road to connect the quarry with the headquarter
+        // Place road to connect the quarry with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2836,7 +2845,7 @@ public class TestQuarry {
         // Wait for a stonemason to start walking to the quarry
         var stonemason = Utils.waitForWorkerOutsideBuilding(Stonemason.class, player0);
 
-        // Wait for the stonemason to go past the headquarter's flag
+        // Wait for the stonemason to go past the headquarters's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getFlag().getPosition());
 
         map.stepTime();
@@ -2877,7 +2886,7 @@ public class TestQuarry {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
