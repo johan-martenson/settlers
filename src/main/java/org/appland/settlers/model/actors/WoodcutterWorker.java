@@ -1,16 +1,15 @@
 package org.appland.settlers.model.actors;
 
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.buildings.Storehouse;
-import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.WorkerAction;
 
 import java.util.Objects;
 
@@ -18,6 +17,7 @@ import static java.lang.String.format;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
 import static org.appland.settlers.model.Tree.TREE_TYPES_THAT_CAN_BE_CUT_DOWN;
+import static org.appland.settlers.model.WorkerAction.CUTTING;
 
 /*
  *
@@ -217,7 +217,7 @@ public class WoodcutterWorker extends Worker {
                         && Objects.equals(woodcutterWorker.position, position)
                         && woodcutterWorker.isCuttingTree())) {
                     state = State.CUTTING_TREE;
-                    map.reportWorkerStartedAction(this, WorkerAction.CUTTING);
+                    doAction(CUTTING);
                     countdown.countFrom(TIME_TO_CUT_TREE);
                 } else {
                     state = State.GOING_BACK_TO_HOUSE;

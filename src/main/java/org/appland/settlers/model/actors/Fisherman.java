@@ -13,6 +13,8 @@ import org.appland.settlers.model.buildings.Storehouse;
 
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.FISHERMAN;
+import static org.appland.settlers.model.WorkerAction.LOWER_FISHING_ROD;
+import static org.appland.settlers.model.WorkerAction.PULL_UP_FISHING_ROD;
 import static org.appland.settlers.model.actors.Fisherman.State.*;
 
 /**
@@ -141,7 +143,7 @@ public class Fisherman extends Worker {
             case LOWERING_FISHING_ROD -> {
                 if (countdown.hasReachedZero()) {
                     state = FISHING;
-                    map.reportWorkerStartedAction(this, WorkerAction.FISHING);
+                    doAction(WorkerAction.FISHING);
                     countdown.countFrom(TIME_TO_FISH);
                 } else {
                     countdown.step();
@@ -151,7 +153,7 @@ public class Fisherman extends Worker {
             case FISHING -> {
                 if (countdown.hasReachedZero()) {
                     state = PULLING_UP_FISH;
-                    map.reportWorkerStartedAction(this, WorkerAction.PULL_UP_FISHING_ROD);
+                    doAction(PULL_UP_FISHING_ROD);
                     countdown.countFrom(TIME_TO_PULL_UP_FISH);
                 } else {
                     countdown.step();
@@ -206,7 +208,7 @@ public class Fisherman extends Worker {
                     direction = Direction.DOWN_LEFT;
                 }
 
-                map.reportWorkerStartedAction(this, WorkerAction.LOWER_FISHING_ROD);
+                doAction(LOWER_FISHING_ROD);
 
                 countdown.countFrom(TIME_TO_LOWER_FISHING_ROD);
             }
@@ -342,5 +344,13 @@ public class Fisherman extends Worker {
                 state == PULLING_UP_FISH ||
                 state == GOING_BACK_TO_HOUSE_WITH_FISH ||
                 state == IN_HOUSE_WITH_FISH;
+    }
+
+    public boolean isLoweringFishingRod() {
+        return state == LOWERING_FISHING_ROD;
+    }
+
+    public boolean isPullingUpFish() {
+        return state == PULLING_UP_FISH;
     }
 }

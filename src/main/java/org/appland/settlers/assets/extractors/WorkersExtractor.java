@@ -93,7 +93,6 @@ public class WorkersExtractor {
         workerDetailsMap.put(JobType.SCOUT, new WorkerDetails(false, JobsBob.SCOUT_BOB_ID));
         workerDetailsMap.put(JobType.PACK_DONKEY, new WorkerDetails(false, JobsBob.PACK_DONKEY_BOB_ID));
         workerDetailsMap.put(JobType.BOAT_CARRIER, new WorkerDetails(false, JobsBob.BOAT_CARRIER_BOB_ID));
-        workerDetailsMap.put(JobType.CHAR_BURNER, new WorkerDetails(false, JobsBob.CHAR_BURNER_BOB_ID));
 
         // Compose the worker images and animations
         var renderedWorkers = BobDecoder.renderWorkerImages(jobsBobResource.getBob(), workerDetailsMap);
@@ -182,6 +181,7 @@ public class WorkersExtractor {
         }
 
         // Add cargo carrying images and animations
+        var helperCollector = workerCollectors.get(JobType.HELPER);
         var woodcutterCollector = workerCollectors.get(JobType.WOODCUTTER);
         var carpenterCollector = workerCollectors.get(JobType.CARPENTER);
         var fishermanCollector = workerCollectors.get(JobType.FISHER);
@@ -212,7 +212,7 @@ public class WorkersExtractor {
         var bob = jobsBobResource.getBob();
 
         woodcutterCollector.readCargoImagesFromBob(WOOD, WOODCUTTER_BOB.getBodyType(), WOODCUTTER_WITH_WOOD_CARGO_BOB_ID, bob);
-        woodcutterCollector.addAnimation(WorkerAction.CUTTING, cbobRomBobsLst, CbobRomBobsLst.CUTTING);
+        woodcutterCollector.addAnimation(WorkerAction.CUTTING, cbobRomBobsLst, CbobRomBobsLst.CUTTING_TREE);
 
         // Add roman military attacking
         privateCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_ATTACKING_EAST);
@@ -448,6 +448,10 @@ public class WorkersExtractor {
 
         // TODO: job id 69 == carrying crucible/anvil?
 
+        helperCollector.addAnimation(WorkerAction.DRAW_WATER_1, cbobRomBobsLst, CbobRomBobsLst.DRAWING_WATER_1);
+        helperCollector.addAnimation(WorkerAction.DRAW_WATER_2, cbobRomBobsLst, CbobRomBobsLst.DRAWING_WATER_2);
+        helperCollector.addAnimation(WorkerAction.DRAW_WATER_3, cbobRomBobsLst, CbobRomBobsLst.DRAWING_WATER_3);
+
         fishermanCollector.readCargoImagesFromBob(FISH, FISHERMAN_BOB.getBodyType(), FISHERMAN_WITH_FISH_CARGO_BOB_ID, bob);
 
         // Lower fishing rod
@@ -485,7 +489,7 @@ public class WorkersExtractor {
 
         bakerCollector.readCargoImagesFromBob(BREAD, BAKER_BOB.getBodyType(), BAKER_WITH_BREAD_CARGO_BOB_ID, bob);
 
-        bakerCollector.addAnimation(BAKING, cbobRomBobsLst, CbobRomBobsLst.BAKING);
+        bakerCollector.addAnimation(OPEN_OVEN, cbobRomBobsLst, CbobRomBobsLst.BAKING);
 
         // TODO: Handle brewer and/or well worker
 

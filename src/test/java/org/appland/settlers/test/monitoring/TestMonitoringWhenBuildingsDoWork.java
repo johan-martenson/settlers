@@ -441,21 +441,27 @@ public class TestMonitoringWhenBuildingsDoWork {
 
             assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
             assertNull(baker.getCargo());
-            assertFalse(baker.isBaking());
+            assertFalse(baker.isPuttingDoughIntoOven());
+            assertFalse(baker.isTakingBreadOutOfOven());
+            assertTrue(baker.isInsideBuilding());
+
             assertFalse(bakery.isWorking());
         }
 
-        // Verify that an event is sent when the bakery starts working
+        // Verify that an event is sent when the bakery starts working. (smoke comes already when the baker is walking!)
         assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
         assertNull(baker.getCargo());
-        assertFalse(baker.isBaking());
+        assertFalse(baker.isPuttingDoughIntoOven());
+        assertFalse(baker.isTakingBreadOutOfOven());
+        assertTrue(baker.isInsideBuilding());
+
         assertFalse(bakery.isWorking());
 
         monitor.clearEvents();
 
         map.stepTime();
 
-        assertTrue(baker.isBaking());
+        assertFalse(baker.isInsideBuilding());
         assertTrue(bakery.isWorking());
         assertTrue(monitor.getEvents().size() > 0);
         assertTrue(monitor.getLastEvent().changedBuildings().contains(bakery));

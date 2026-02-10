@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
@@ -15,21 +9,14 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Soldier;
-import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.buildings.GuardHouse;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.*;
@@ -47,13 +34,13 @@ public class TestBarracks {
     add test for upgrade of non-occupied barracks!!
 
     player's list of buildings is correct
-    gamemap mappoint, gamemap buildings
+    var mappoint, gamemap buildings
 
     percentage of upgrade progress is getting updated
     is possible to see if upgrades are possible
     promotion timers are running through upgrades
     it's not possible to deliver too much material to the barracks during upgrade
-    barracks being upgraded can be attacked and won
+    var being upgraded can be attacked and won
     upgrades finish (and state goes back to normal)
 
     lack of space can hinder upgrades
@@ -65,30 +52,26 @@ public class TestBarracks {
     @Test
     public void testBarracksOnlyNeedsTwoPlanksForConstruction() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Deliver two planks */
-        Cargo cargo = new Cargo(PLANK, map);
+        // Deliver two planks
+        Utils.deliverCargo(barracks0, PLANK);
+        Utils.deliverCargo(barracks0, PLANK);
 
-        barracks0.putCargo(cargo);
-        barracks0.putCargo(cargo);
-
-        /* Assign builder */
+        // Assign builder
         Utils.assignBuilder(barracks0);
 
-        /* Verify that this is enough to construct the barracks */
+        // Verify that this is enough to construct the barracks
         for (int i = 0; i < 100; i++) {
             assertTrue(barracks0.isUnderConstruction());
 
@@ -101,29 +84,25 @@ public class TestBarracks {
     @Test
     public void testBarracksCannotBeConstructedWithOnePlank() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Deliver two planks */
-        Cargo cargo = new Cargo(PLANK, map);
+        // Deliver two planks
+        Utils.deliverCargo(barracks0, PLANK);
 
-        barracks0.putCargo(cargo);
-
-        /* Assign builder */
+        // Assign builder
         Utils.assignBuilder(barracks0);
 
-        /* Verify that this is enough to construct the barracks */
+        // Verify that this is enough to construct the barracks
         for (int i = 0; i < 500; i++) {
             assertTrue(barracks0.isUnderConstruction());
 
@@ -136,33 +115,31 @@ public class TestBarracks {
     @Test
     public void testBarracksGetPopulatedWhenFinished() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place road between (7, 21) and (6, 4) */
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
+        // Place road between (7, 21) and (6, 4)
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the barracks to finish construction */
+        // Wait for the barracks to finish construction
         Utils.fastForwardUntilBuildingIsConstructed(barracks0);
 
-        /* Verify that a military is sent from the headquarters */
+        // Verify that a military is sent from the headquarters
         map.stepTime();
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
         Soldier military = null;
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier) {
                 military = (Soldier)worker;
             }
@@ -170,7 +147,7 @@ public class TestBarracks {
 
         assertNotNull(military);
 
-        /* Wait for the military to reach the barracks */
+        // Wait for the military to reach the barracks
         assertEquals(military.getTarget(), barracks0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
@@ -181,27 +158,23 @@ public class TestBarracks {
     @Test
     public void testBorderIsNotExtendedWhenBarracksIsFinished() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(6, 16);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(6, 16);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(5, 23);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(5, 23);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place road
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
-        /* Place road */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
-
-        /* Wait for the barracks to finish construction */
-        Point point2 = new Point(5, 25);
+        // Wait for the barracks to finish construction
+        var point2 = new Point(5, 25);
 
         assertTrue(player0.getBorderPoints().contains(point2));
 
@@ -213,33 +186,29 @@ public class TestBarracks {
     @Test
     public void testCanHoldCoinAmountIsCorrect() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(6, 16);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(6, 16);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(5, 23);
+        var guardHouse = map.placeBuilding(new GuardHouse(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(5, 23);
-        GuardHouse guardHouse = map.placeBuilding(new GuardHouse(player0), point1);
+        // Place road
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse.getFlag());
 
-        /* Place road */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse.getFlag());
-
-        /* Wait for the guard house to finish construction */
+        // Wait for the guard house to finish construction
         Utils.fastForwardUntilBuildingIsConstructed(guardHouse);
 
-        /* Verify that the guard house can hold the right amount of coins */
+        // Verify that the guard house can hold the right amount of coins
         assertEquals(guardHouse.getCanHoldAmount(COIN), 2);
         assertTrue(guardHouse.isPromotionEnabled());
 
-        /* Verify that the guard house can still hold the right amount of coins when promotions are disabled */
+        // Verify that the guard house can still hold the right amount of coins when promotions are disabled
         guardHouse.disablePromotions();
 
         assertEquals(guardHouse.getCanHoldAmount(COIN), 2);
@@ -249,29 +218,25 @@ public class TestBarracks {
     @Test
     public void testBorderIsExtendedWhenBarracksIsPopulated() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(6, 16);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(6, 16);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(5, 23);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(5, 23);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place road
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
-        /* Place road */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
-
-        /* Wait for the barracks to finish construction */
+        // Wait for the barracks to finish construction
         Utils.fastForwardUntilBuildingIsConstructed(barracks0);
 
-        /* Verify that a military is sent from the headquarter */
+        // Verify that a military is sent from the headquarters
         assertTrue(headquarter0.getAmount(PRIVATE) > 0);
 
         map.stepTime();
@@ -279,7 +244,7 @@ public class TestBarracks {
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
         Soldier military = null;
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier) {
                 military = (Soldier)worker;
             }
@@ -287,9 +252,9 @@ public class TestBarracks {
 
         assertNotNull(military);
 
-        /* Verify that the border is extended when the military reaches the barracks */
-        Point point2 = new Point(5, 25);
-        Point point3 = new Point(9, 31);
+        // Verify that the border is extended when the military reaches the barracks
+        var point2 = new Point(5, 25);
+        var point3 = new Point(9, 31);
 
         assertEquals(military.getTarget(), barracks0.getPosition());
         assertTrue(player0.getBorderPoints().contains(point2));
@@ -304,51 +269,47 @@ public class TestBarracks {
     @Test
     public void testBarracksOnlyNeedsTwoSoldiers() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks with two soldiers */
+        // Occupy the barracks with two soldiers
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Verify that the barracks does not need another military */
+        // Verify that the barracks does not need another military
         assertFalse(barracks0.needsMilitaryManning());
     }
 
     @Test
     public void testBarracksCannotHoldSoldiersBeforeFinished() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Verify that the barracks can't hold soldiers before it's finished */
+        // Verify that the barracks can't hold soldiers before it's finished
         assertFalse(barracks0.needsMilitaryManning());
 
-        Soldier military = new Soldier(player0, PRIVATE_RANK, map);
+        var military = new Soldier(player0, PRIVATE_RANK, map);
 
         map.placeWorker(military, barracks0);
 
@@ -362,28 +323,26 @@ public class TestBarracks {
     @Test
     public void testBarracksCannotHoldMoreThanTwoSoldiers() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks with two soldiers */
+        // Occupy the barracks with two soldiers
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Verify that the barracks does not need another military */
-        Soldier military = new Soldier(player0, PRIVATE_RANK, map);
+        // Verify that the barracks does not need another military
+        var military = new Soldier(player0, PRIVATE_RANK, map);
 
         map.placeWorker(military, barracks0);
 
@@ -397,19 +356,17 @@ public class TestBarracks {
     @Test
     public void testBarracksNeedsCoin() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
@@ -419,19 +376,17 @@ public class TestBarracks {
     @Test
     public void testUnfinishedBarracksNotNeedsCoin() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         assertFalse(barracks0.needsMaterial(COIN));
     }
@@ -439,36 +394,32 @@ public class TestBarracks {
     @Test
     public void testBarracksCanHoldOnlyOneCoin() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
         assertTrue(barracks0.needsMaterial(COIN));
 
-        /* Deliver one coin to the barracks */
-        Cargo cargo = new Cargo(COIN, map);
+        // Deliver one coin to the barracks
+        Utils.deliverCargo(barracks0, COIN);
 
-        barracks0.promiseDelivery(COIN);
-        barracks0.putCargo(cargo);
-
-        /* Verify that the barracks can't hold another coin */
+        // Verify that the barracks can't hold another coin
         assertFalse(barracks0.needsMaterial(COIN));
         assertEquals(barracks0.getAmount(COIN), 1);
 
         try {
-            barracks0.putCargo(cargo);
+            barracks0.putCargo(new Cargo(COIN, map));
+
             fail();
         } catch (Exception e) {}
 
@@ -478,29 +429,27 @@ public class TestBarracks {
     @Test
     public void testStorageStopsDeliveringCoinsWhenBarracksIsFull() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
-        /* Connect the barracks with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
-        /* Fill up headquarter with coins */
+        // Fill up headquarters with coins
         Utils.adjustInventoryTo(headquarter0, COIN, 10);
 
-        /* Wait for the barracks to get a coin */
+        // Wait for the barracks to get a coin
         for (int i = 0; i < 1000; i++) {
             if (barracks0.getAmount(COIN) == 1) {
                 break;
@@ -511,11 +460,11 @@ public class TestBarracks {
 
         assertEquals(barracks0.getAmount(COIN), 1);
 
-        /* Disable promotion */
+        // Disable promotion
         barracks0.disablePromotions();
 
-        /* Verify that no more coin is delivered */
-        Courier courier = road0.getCourier();
+        // Verify that no more coin is delivered
+        var courier = road0.getCourier();
         for (int i = 0; i < 1000; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial().equals(COIN)) {
                 fail();
@@ -528,31 +477,27 @@ public class TestBarracks {
     @Test
     public void testPrivateIsPromotedWhenCoinIsAvailable() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
-        /* Deliver one coin to the barracks */
-        Cargo cargo = new Cargo(COIN, map);
+        // Deliver one coin to the barracks
+        Utils.deliverCargo(barracks0, COIN);
 
-        barracks0.putCargo(cargo);
+        // Occupy the barracks with one private
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Occupy the barracks with one private */
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
-
-        /* Verify that the private is promoted at the right time */
+        // Verify that the private is promoted at the right time
         for (int i = 0; i < 100; i++) {
             assertEquals(military.getRank(), PRIVATE_RANK);
             map.stepTime();
@@ -564,32 +509,28 @@ public class TestBarracks {
     @Test
     public void testOnlyOnePrivateIsPromoted() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
-        /* Deliver one coin to the barracks */
-        Cargo cargo = new Cargo(COIN, map);
+        // Deliver one coin to the barracks
+        Utils.deliverCargo(barracks0, COIN);
 
-        barracks0.putCargo(cargo);
+        // Occupy the barracks with one private
+        var military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        var military2 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Occupy the barracks with one private */
-        Soldier military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
-        Soldier military2 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
-
-        /* Wait for the promotion to happen */
+        // Wait for the promotion to happen
         Utils.fastForward(100, map);
 
         assertTrue((military1.getRank() == PRIVATE_FIRST_CLASS_RANK && military2.getRank() == PRIVATE_RANK) ||
@@ -599,34 +540,30 @@ public class TestBarracks {
     @Test
     public void testTimeSpentWithCoinButNoMilitaryDoesNotSpeedUpPromotion() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
-        /* Deliver one coin to the barracks */
-        Cargo cargo = new Cargo(COIN, map);
+        // Deliver one coin to the barracks
+        Utils.deliverCargo(barracks0, COIN);
 
-        barracks0.putCargo(cargo);
-
-        /* Wait before the barracks is populated */
+        // Wait before the barracks is populated
         Utils.fastForward(200, map);
 
-        /* Occupy the barracks with one private */
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        // Occupy the barracks with one private
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Verify that it still takes the same time for the private to get promoted */
+        // Verify that it still takes the same time for the private to get promoted
         Utils.fastForward(99, map);
 
         assertEquals(military.getRank(), PRIVATE_RANK);
@@ -639,31 +576,27 @@ public class TestBarracks {
     @Test
     public void testPromotionConsumesCoin() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
-        /* Deliver one coin to the barracks */
-        Cargo cargo = new Cargo(COIN, map);
+        // Deliver one coin to the barracks
+        Utils.deliverCargo(barracks0, COIN);
 
-        barracks0.putCargo(cargo);
+        // Occupy the barracks with one private
+        var military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Occupy the barracks with one private */
-        Soldier military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
-
-        /* Verify that the promotion consumes the coin */
+        // Verify that the promotion consumes the coin
         assertEquals(barracks0.getAmount(COIN), 1);
 
         Utils.fastForward(100, map);
@@ -674,32 +607,28 @@ public class TestBarracks {
     @Test
     public void testBarracksWithNoPromotionPossibleDoesNotConsumeCoin() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
-        /* Deliver one coin to the barracks */
-        Cargo cargo = new Cargo(COIN, map);
+        // Deliver one coin to the barracks
+        Utils.deliverCargo(barracks0, COIN);
 
-        barracks0.putCargo(cargo);
+        // Occupy the barracks with one private
+        var military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+        var military2 = Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
 
-        /* Occupy the barracks with one private */
-        Soldier military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
-        Soldier military2 = Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
-
-        /* Verify that the promotion consumes the coin */
+        // Verify that the promotion consumes the coin
         assertEquals(barracks0.getAmount(COIN), 1);
 
         Utils.fastForward(100, map);
@@ -710,122 +639,116 @@ public class TestBarracks {
     @Test
     public void testCanDisableCoinsToBarracks() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Add coins to the headquarter */
-        headquarter0.putCargo(new Cargo(COIN, map));
+        // Add coins to the headquarters
+        Utils.deliverCargo(headquarter0, COIN);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
-        /* Connect the barracks with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
-        /* Occupy the road */
-        Courier courier = Utils.occupyRoad(road0, map);
+        // Occupy the road
+        var courier = Utils.occupyRoad(road0, map);
 
-        /* Verify that promotions are enabled initially */
+        // Verify that promotions are enabled initially
         assertTrue(barracks0.isPromotionEnabled());
 
-        /* Disable coins to the barracks and verify that it doesn't need coins */
+        // Disable coins to the barracks and verify that it doesn't need coins
         barracks0.disablePromotions();
 
         assertFalse(barracks0.needsMaterial(COIN));
 
-        /* Verify that promotions are disabled */
+        // Verify that promotions are disabled
         assertFalse(barracks0.isPromotionEnabled());
 
-        /* Verify that no coins are delivered */
+        // Verify that no coins are delivered
         Utils.verifyNoDeliveryOfMaterial(map, road0);
     }
 
     @Test
     public void testCanResumeDeliveryOfCoinsToBarracks() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Add coins to the headquarter */
-        headquarter0.putCargo(new Cargo(COIN, map));
+        // Add coins to the headquarters
+        Utils.deliverCargo(headquarter0, COIN);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
-        /* Connect the barracks with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
-        /* Occupy the road */
-        Courier courier = Utils.occupyRoad(road0, map);
+        // Occupy the road
+        var courier = Utils.occupyRoad(road0, map);
 
-        /* Disable coins to the barracks and verify that it doesn't need coins */
+        // Disable coins to the barracks and verify that it doesn't need coins
         barracks0.disablePromotions();
 
         assertFalse(barracks0.needsMaterial(COIN));
 
-        /* Verify that no coins are delivered */
+        // Verify that no coins are delivered
         Utils.verifyNoDeliveryOfMaterial(map, road0);
 
-        /* Resume delivery of coins to the barracks */
+        // Resume delivery of coins to the barracks
         barracks0.enablePromotions();
 
-        /* Verify that the barracks needs coins again */
+        // Verify that the barracks needs coins again
         assertTrue(barracks0.needsMaterial(COIN));
 
-        /* Verify that promotions are enabled again */
+        // Verify that promotions are enabled again
         assertTrue(barracks0.isPromotionEnabled());
 
-        /* Verify that a coin is delivered to the barracks */
+        // Verify that a coin is delivered to the barracks
         Utils.verifyDeliveryOfMaterial(map, road0);
     }
 
     @Test
     public void testOccupiedBarracksCanBeEvacuated() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Connect headquarter and barracks */
+        // Connect headquarters and barracks
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks */
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        // Occupy the barracks
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Evacuate the barracks and verify that the military leaves the barracks */
+        // Evacuate the barracks and verify that the military leaves the barracks
         assertTrue(military.isInsideBuilding());
 
         barracks0.evacuate();
@@ -838,30 +761,28 @@ public class TestBarracks {
     @Test
     public void testEvacuatedMilitaryReturnsToStorage() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Connect headquarter and barracks */
+        // Connect headquarters and barracks
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks */
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        // Occupy the barracks
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Evacuate the barracks */
+        // Evacuate the barracks
         assertTrue(military.isInsideBuilding());
 
         barracks0.evacuate();
@@ -871,7 +792,7 @@ public class TestBarracks {
         assertFalse(military.isInsideBuilding());
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 0);
 
-        /* Verify that the evacuated military returns to the storage */
+        // Verify that the evacuated military returns to the storage
         assertEquals(military.getTarget(), headquarter0.getPosition());
         int amount = headquarter0.getAmount(PRIVATE);
 
@@ -884,27 +805,25 @@ public class TestBarracks {
     @Test
     public void testEvacuatedSoldierReturnsOffroadWhenNotConnected() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks */
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        // Occupy the barracks
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Evacuate the barracks */
+        // Evacuate the barracks
         assertTrue(military.isInsideBuilding());
 
         barracks0.evacuate();
@@ -913,7 +832,7 @@ public class TestBarracks {
 
         assertFalse(military.isInsideBuilding());
 
-        /* Verify that the evacuated military returns to the storage */
+        // Verify that the evacuated military returns to the storage
         assertEquals(military.getTarget(), headquarter0.getPosition());
         int amount = headquarter0.getAmount(PRIVATE);
 
@@ -926,38 +845,37 @@ public class TestBarracks {
     @Test
     public void testNoMilitaryIsDispatchedToEvacuatedBarracks() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Connect headquarters and barracks */
+        // Connect headquarters and barracks
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Verify that the barracks are evacuated */
+        // Verify that the barracks are evacuated
         assertFalse(barracks0.isEvacuated());
 
-        /* Evacuate the barracks */
+        // Evacuate the barracks
         barracks0.evacuate();
 
-        /* Verify that the barracks are evacuated */
+        // Verify that the barracks are evacuated
         assertTrue(barracks0.isEvacuated());
 
-        /* Verify that no soldiers are assigned to the barracks */
+        // Verify that no soldiers are assigned to the barracks
         for (int i = 0; i < 200; i++) {
             assertEquals(barracks0.getNumberOfHostedSoldiers(), 0);
+
             map.stepTime();
         }
     }
@@ -965,27 +883,25 @@ public class TestBarracks {
     @Test
     public void testEvacuationCanBeCanceled() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks */
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        // Occupy the barracks
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Evacuate the barracks */
+        // Evacuate the barracks
         assertTrue(military.isInsideBuilding());
 
         barracks0.evacuate();
@@ -994,7 +910,7 @@ public class TestBarracks {
 
         assertFalse(military.isInsideBuilding());
 
-        /* Wait for the evacuated military to return to the storage */
+        // Wait for the evacuated military to return to the storage
         assertEquals(military.getTarget(), headquarter0.getPosition());
         int amount = headquarter0.getAmount(PRIVATE);
 
@@ -1003,47 +919,45 @@ public class TestBarracks {
         assertTrue(military.isInsideBuilding());
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
 
-        /* Cancel evacuation */
+        // Cancel evacuation
         assertFalse(barracks0.needsMilitaryManning());
 
         barracks0.cancelEvacuation();
 
         assertTrue(barracks0.needsMilitaryManning());
 
-        /* Verify that the barracks are not evacuated */
+        // Verify that the barracks are not evacuated
         assertFalse(barracks0.isEvacuated());
     }
 
     @Test
     public void testMilitaryGoesBackToStorageWhenBarracksIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(8, 8);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(8, 8);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks */
+        // Occupy the barracks
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Destroy the barracks */
+        // Destroy the barracks
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 1);
 
         barracks0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
-        Soldier military = Utils.waitForSoldierOutsideBuilding(player0);
+        // Verify that the worker leaves the building and goes back to the headquarters
+        var military = Utils.waitForSoldierOutsideBuilding(player0);
 
         int amount = headquarter0.getAmount(PRIVATE);
 
@@ -1052,50 +966,48 @@ public class TestBarracks {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, headquarter0.getPosition());
 
-        /* Verify that the military is stored correctly in the headquarter */
+        // Verify that the military is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
     }
 
     @Test
     public void testMilitaryGoesBackOnToStorageOnRoadsIfPossibleWhenBarracksIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(8, 8);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(8, 8);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Connect the barracks with the headquarter */
+        // Connect the barracks with the headquarters
         map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks */
+        // Occupy the barracks
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Destroy the barracks */
+        // Destroy the barracks
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 1);
 
         barracks0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
-        Soldier military = Utils.waitForSoldierOutsideBuilding(player0);
+        // Verify that the worker leaves the building and goes back to the headquarters
+        var military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
 
-        /* Verify that the military plans to use the roads */
+        // Verify that the military plans to use the roads
         boolean firstStep = true;
-        for (Point point : military.getPlannedPath()) {
+        for (var point : military.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -1108,24 +1020,22 @@ public class TestBarracks {
     @Test
     public void testProductionCannotBeResumedInBarracks() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(8, 8);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(8, 8);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Verify that production cannot be resumed in barracks */
+        // Verify that production cannot be resumed in barracks
         try {
             barracks0.resumeProduction();
 
@@ -1136,31 +1046,27 @@ public class TestBarracks {
     @Test
     public void testFieldOfViewIsExtendedWhenBarracksIsOccupied() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 50, 50);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 50, 50);
+        // Place headquarters
+        var point0 = new Point(7, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(21, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
-        /* Connect the barracks with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Verify that the field of view remains the same until the barracks gets occupied */
-        Point pointInOldFOV = new Point(33, 5);
-        Point pointInNewFOV = new Point(45, 5);
+        // Verify that the field of view remains the same until the barracks gets occupied
+        var pointInOldFOV = new Point(33, 5);
+        var pointInNewFOV = new Point(45, 5);
 
         for (int i = 0; i < 1000; i++) {
             if (barracks0.getNumberOfHostedSoldiers() == 0) {
@@ -1173,7 +1079,7 @@ public class TestBarracks {
             map.stepTime();
         }
 
-        /* Verify that the field of view is updated when a military has entered the barracks */
+        // Verify that the field of view is updated when a military has entered the barracks
         assertTrue(barracks0.getNumberOfHostedSoldiers() > 0);
         assertTrue(player0.getDiscoveredLand().contains(pointInNewFOV));
         assertTrue(player0. getDiscoveredLand().contains(pointInOldFOV));
@@ -1182,57 +1088,46 @@ public class TestBarracks {
     @Test
     public void testBarracksCanBeUpgraded() throws Exception {
 
-        /* Creating new player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(21, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
-        /* Connect the barracks with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks */
+        // Occupy the barracks
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
-        /* Upgrade the barracks */
+        // Upgrade the barracks
         assertFalse(barracks0.isUpgrading());
 
         barracks0.upgrade();
 
-        /* Add materials for the upgrade */
-        Cargo stoneCargo = new Cargo(STONE, map);
+        // Add materials for the upgrade
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
 
-        barracks0.promiseDelivery(STONE);
-        barracks0.promiseDelivery(STONE);
-        barracks0.promiseDelivery(STONE);
-
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
-
-        /* Verify that the upgrade isn't too quick */
+        // Verify that the upgrade isn't too quick
         for (int i = 0; i < 100; i++) {
-
             assertTrue(barracks0.isUpgrading());
             assertEquals(barracks0, map.getBuildingAtPoint(barracks0.getPosition()));
 
             map.stepTime();
         }
 
-        Building upgradedBuilding = map.getBuildingAtPoint(barracks0.getPosition());
+        var upgradedBuilding = map.getBuildingAtPoint(barracks0.getPosition());
 
         assertFalse(map.getBuildings().contains(barracks0));
         assertTrue(map.getBuildings().contains(upgradedBuilding));
@@ -1246,26 +1141,22 @@ public class TestBarracks {
     @Test
     public void testUnfinishedBarracksCannotBeUpgraded() throws Exception {
 
-        /* Creating new player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(13, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(13, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
-        /* Connect the barracks with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
-
-        /* Upgrade the barracks */
+        // Upgrade the barracks
         try {
             barracks0.upgrade();
 
@@ -1276,32 +1167,28 @@ public class TestBarracks {
     @Test
     public void testBurningBarracksCannotBeUpgraded() throws Exception {
 
-        /* Creating new player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(13, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(13, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
-        /* Connect the barracks with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Tear down the barracks so it's on fire */
+        // Tear down the barracks so it's on fire
         barracks0.tearDown();
 
-        /* Upgrade the barracks */
+        // Upgrade the barracks
         try {
             barracks0.upgrade();
 
@@ -1312,54 +1199,44 @@ public class TestBarracks {
     @Test
     public void testCannotUpgradeBarracksWithoutMaterial() throws Exception {
 
-        /* Creating new player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(21, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks */
+        // Occupy the barracks
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
-        /* Upgrade the barracks */
+        // Upgrade the barracks
         barracks0.upgrade();
 
-        /* Add materials but not enough for the upgrade */
-        Cargo stoneCargo = new Cargo(STONE, map);
+        // Add materials but not enough for the upgrade
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
 
-        barracks0.promiseDelivery(STONE);
-        barracks0.promiseDelivery(STONE);
-
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
-
-        /* Verify that the upgrade cannot happen without the required material */
+        // Verify that the upgrade cannot happen without the required material
         for (int i = 0; i < 1000; i++) {
-
             assertEquals(barracks0, map.getBuildingAtPoint(barracks0.getPosition()));
 
             map.stepTime();
         }
 
-        /* Add the last required material for the upgrade */
+        // Add the last required material for the upgrade
         barracks0.promiseDelivery(STONE);
 
-        barracks0.putCargo(stoneCargo);
+        Utils.deliverCargo(barracks0, STONE);
 
-        /* Step time once and verify that the barracks is upgraded */
+        // Step time once and verify that the barracks is upgraded
         map.stepTime();
 
         assertNotEquals(barracks0, map.getBuildingAtPoint(barracks0.getPosition()));
@@ -1369,35 +1246,31 @@ public class TestBarracks {
     @Test
     public void testCannotUpgradeBarracksBeingUpgraded() throws Exception {
 
-        /* Creating new player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(13, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(13, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
-        /* Connect the barracks with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks */
+        // Occupy the barracks
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
-        /* Upgrade the barracks */
+        // Upgrade the barracks
         barracks0.upgrade();
 
-        /* Verify that the barracks can't get upgraded again */
+        // Verify that the barracks can't get upgraded again
         try {
             barracks0.upgrade();
 
@@ -1408,91 +1281,86 @@ public class TestBarracks {
     @Test
     public void testUpgradingCausesMaterialToGetDelivered() throws Exception {
 
-        /* Creating new player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
-
-        /* Make sure there is material for upgrading */
+        // Make sure there is material for upgrading
         Utils.adjustInventoryTo(headquarter0, PLANK, 10);
         Utils.adjustInventoryTo(headquarter0, STONE, 10);
 
-        /* Place barracks */
-        Point point1 = new Point(21, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Connect the barracks with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks */
+        // Occupy the barracks
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0);
 
         assertFalse(barracks0.needsMilitaryManning());
         assertFalse(barracks0.needsMaterial(PRIVATE));
 
-        /* Place the courier on the road */
+        // Place the courier on the road
         assertNotNull(road0.getCourier());
 
-        Courier courier0 = road0.getCourier();
+        var courier0 = road0.getCourier();
 
-        /* Verify that the barracks doesn't need stone before the upgrade */
+        // Verify that the barracks doesn't need stone before the upgrade
         assertFalse(barracks0.needsMaterial(STONE));
 
-        /* Upgrade the barracks */
+        // Upgrade the barracks
         barracks0.upgrade();
 
-        /* Verify that the barracks needs stone */
+        // Verify that the barracks needs stone
         assertTrue(barracks0.needsMaterial(STONE));
 
-        /* Verify that the courier picks up a stone */
+        // Verify that the courier picks up a stone
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier0);
 
         assertEquals(courier0.getCargo().getMaterial(), STONE);
 
-        /* Verify that the courier delivers the stone */
+        // Verify that the courier delivers the stone
         assertEquals(courier0.getCargo().getTarget(), barracks0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier0, barracks0.getPosition());
 
         assertNull(courier0.getCargo());
 
-        /* Verify that the courier picks up the second stone */
+        // Verify that the courier picks up the second stone
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier0);
 
         assertEquals(courier0.getCargo().getMaterial(), STONE);
 
-        /* Verify that the courier delivers the stone */
+        // Verify that the courier delivers the stone
         assertEquals(courier0.getCargo().getTarget(), barracks0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier0, barracks0.getPosition());
 
         assertNull(courier0.getCargo());
 
-        /* Verify that the courier picks up the third stone */
+        // Verify that the courier picks up the third stone
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier0);
 
         assertEquals(courier0.getCargo().getMaterial(), STONE);
 
-        /* Verify that the courier delivers the stone */
+        // Verify that the courier delivers the stone
         assertEquals(courier0.getCargo().getTarget(), barracks0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier0, barracks0.getPosition());
 
         assertNull(courier0.getCargo());
 
-        /* Verify that the courier doesn't deliver anything else to the barracks */
+        // Verify that the courier doesn't deliver anything else to the barracks
         for (int i = 0; i < 1000; i++) {
-
             assertTrue(courier0.getCargo() == null || !courier0.getCargo().getTarget().equals(barracks0));
 
             map.stepTime();
@@ -1502,54 +1370,49 @@ public class TestBarracks {
     @Test
     public void testOccupiedBarracksIsOccupiedAfterUpgrade() throws Exception {
 
-        /* Creating new player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(21, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks */
+        // Occupy the barracks
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
         assertTrue(barracks0.isOccupied());
 
-        /* Upgrade the barracks */
+        // Upgrade the barracks
         barracks0.upgrade();
 
-        /* Add materials for the upgrade */
+        // Add materials for the upgrade
         Cargo stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
 
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
 
-        /* Verify that the upgrade isn't too quick */
+        // Verify that the upgrade isn't too quick
         for (int i = 0; i < 100; i++) {
-
             assertEquals(barracks0, map.getBuildingAtPoint(barracks0.getPosition()));
 
             map.stepTime();
         }
 
-        /* Verify that the upgraded building is also occupied */
-        Building guardHouse0 = map.getBuildingAtPoint(barracks0.getPosition());
+        // Verify that the upgraded building is also occupied
+        var guardHouse0 = map.getBuildingAtPoint(barracks0.getPosition());
 
         assertTrue(guardHouse0.isOccupied());
         assertEquals(guardHouse0.getNumberOfHostedSoldiers(), 1);
@@ -1558,58 +1421,53 @@ public class TestBarracks {
     @Test
     public void testCoinRemainsAfterUpgrade() throws Exception {
 
-        /* Creating new player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(21, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Upgrade the barracks */
+        // Upgrade the barracks
         barracks0.upgrade();
 
-        /* Add materials for the upgrade */
+        // Add materials for the upgrade
         Cargo stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
 
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
 
-        /* Put a coin in the building */
+        // Put a coin in the building
         Cargo coinCargo = new Cargo(COIN, map);
 
         barracks0.promiseDelivery(COIN);
 
-        barracks0.putCargo(coinCargo);
+        Utils.deliverCargo(barracks0, COIN);
 
         assertEquals(barracks0.getAmount(COIN), 1);
 
-        /* Wait for the upgrade */
+        // Wait for the upgrade
         for (int i = 0; i < 100; i++) {
-
             assertEquals(barracks0, map.getBuildingAtPoint(barracks0.getPosition()));
 
             map.stepTime();
         }
 
-        /* Verify that the coin is still in the building */
-        Building guardHouse0 = map.getBuildingAtPoint(barracks0.getPosition());
+        // Verify that the coin is still in the building
+        var guardHouse0 = map.getBuildingAtPoint(barracks0.getPosition());
 
         assertEquals(guardHouse0.getAmount(COIN), 1);
     }
@@ -1617,53 +1475,48 @@ public class TestBarracks {
     @Test
     public void testBuildingDuringUpgradeCanBeDestroyed() throws Exception {
 
-        /* Creating new player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(21, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks */
+        // Occupy the barracks
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
         assertTrue(barracks0.isOccupied());
 
-        /* Upgrade the barracks */
+        // Upgrade the barracks
         barracks0.upgrade();
 
-        /* Add materials for the upgrade */
+        // Add materials for the upgrade
         Cargo stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
 
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
 
-        /* Upgrade for a while */
+        // Upgrade for a while
         for (int i = 0; i < 10; i++) {
-
             assertEquals(barracks0, map.getBuildingAtPoint(barracks0.getPosition()));
 
             map.stepTime();
         }
 
-        /* Verify that the building can be destroyed */
+        // Verify that the building can be destroyed
         barracks0.tearDown();
 
         assertTrue(barracks0.isBurningDown());
@@ -1672,66 +1525,60 @@ public class TestBarracks {
     @Test
     public void testPlayerIsCorrectAfterUpgrade() throws Exception {
 
-        /* Creating new player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        Player player2 = new Player("Player 2", PlayerColor.GRAY, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player2);
-        players.add(player0);
-        players.add(player1);
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.GRAY, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(21, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks */
+        // Occupy the barracks
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
         assertTrue(barracks0.isOccupied());
 
-        /* Upgrade the barracks */
+        // Upgrade the barracks
         barracks0.upgrade();
 
-        /* Add materials for the upgrade */
+        // Add materials for the upgrade
         Cargo stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
 
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
 
-        /* Put a coin in the building */
+        // Put a coin in the building
         Cargo coinCargo = new Cargo(COIN, map);
 
         barracks0.promiseDelivery(COIN);
 
-        barracks0.putCargo(coinCargo);
+        Utils.deliverCargo(barracks0, COIN);
 
         assertEquals(barracks0.getAmount(COIN), 1);
 
-        /* Wait for the upgrade */
+        // Wait for the upgrade
         for (int i = 0; i < 100; i++) {
             assertEquals(barracks0, map.getBuildingAtPoint(barracks0.getPosition()));
 
             map.stepTime();
         }
 
-        /* Verify that the player is set correctly in the upgraded building */
-        Building guardHouse0 = map.getBuildingAtPoint(barracks0.getPosition());
+        // Verify that the player is set correctly in the upgraded building
+        var guardHouse0 = map.getBuildingAtPoint(barracks0.getPosition());
 
         assertEquals(guardHouse0.getPlayer(), player0);
     }
@@ -1739,54 +1586,49 @@ public class TestBarracks {
     @Test
     public void testCanHostRightNumberOfSoldiersAfterUpgraded() throws Exception {
 
-        /* Creating new player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(21, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks */
+        // Occupy the barracks
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
         assertTrue(barracks0.isOccupied());
 
-        /* Upgrade the barracks */
+        // Upgrade the barracks
         barracks0.upgrade();
 
-        /* Add materials for the upgrade */
+        // Add materials for the upgrade
         Cargo stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
 
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
 
-        /* Wait for the upgrade */
+        // Wait for the upgrade
         for (int i = 0; i < 100; i++) {
-
             assertEquals(barracks0, map.getBuildingAtPoint(barracks0.getPosition()));
 
             map.stepTime();
         }
 
-        /* Verify that two more soldiers can be hosted in the building */
-        Building guardHouse0 = map.getBuildingAtPoint(barracks0.getPosition());
+        // Verify that two more soldiers can be hosted in the building
+        var guardHouse0 = map.getBuildingAtPoint(barracks0.getPosition());
 
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
@@ -1795,61 +1637,56 @@ public class TestBarracks {
     @Test
     public void testBorderIsExpandedAfterUpgrade() throws Exception {
 
-        /* Creating new player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(7, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(21, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks */
+        // Occupy the barracks
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
         assertTrue(barracks0.isOccupied());
 
-        /* Upgrade the barracks */
+        // Upgrade the barracks
         barracks0.upgrade();
 
-        /* Add materials for the upgrade */
+        // Add materials for the upgrade
         Cargo stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
 
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
 
-        /* Verify the border before the upgrade */
-        Point point2 = new Point(37, 5);
-        Point point3 = new Point(39, 5);
+        // Verify the border before the upgrade
+        var point2 = new Point(37, 5);
+        var point3 = new Point(39, 5);
 
         assertTrue(player0.getBorderPoints().contains(point2));
         assertFalse(player0.getBorderPoints().contains(point3));
         assertFalse(player0.isWithinBorder(point2));
 
-        /* Wait for the upgrade */
+        // Wait for the upgrade
         for (int i = 0; i < 100; i++) {
-
             assertEquals(barracks0, map.getBuildingAtPoint(barracks0.getPosition()));
 
             map.stepTime();
         }
 
-        /* Verify that the border is expanded after the upgrade */
+        // Verify that the border is expanded after the upgrade
         assertFalse(player0.getBorderPoints().contains(point2));
         assertTrue(player0.getBorderPoints().contains(point3));
         assertTrue(player0.isWithinBorder(point2));
@@ -1858,54 +1695,49 @@ public class TestBarracks {
     @Test
     public void testFlagIsCorrectAfterUpgrade() throws Exception {
 
-        /* Creating new player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(21, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks */
+        // Occupy the barracks
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
         assertTrue(barracks0.isOccupied());
 
-        /* Upgrade the barracks */
+        // Upgrade the barracks
         barracks0.upgrade();
 
-        /* Add materials for the upgrade */
+        // Add materials for the upgrade
         Cargo stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
 
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
 
-        /* Wait for the upgrade */
+        // Wait for the upgrade
         for (int i = 0; i < 100; i++) {
-
             assertEquals(barracks0, map.getBuildingAtPoint(barracks0.getPosition()));
 
             map.stepTime();
         }
 
-        /* Verify that the flag is correct after the upgrade */
-        Building buildingAfterUpgrade = map.getBuildingAtPoint(point1);
+        // Verify that the flag is correct after the upgrade
+        var buildingAfterUpgrade = map.getBuildingAtPoint(point1);
 
         assertNotNull(buildingAfterUpgrade);
         assertNotNull(buildingAfterUpgrade.getFlag());
@@ -1915,51 +1747,45 @@ public class TestBarracks {
     @Test
     public void testOccupiedBuildingRemainsOccupiedDuringUpgrade() throws Exception {
 
-        /* Creating new player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(21, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks */
+        // Occupy the barracks
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
         assertTrue(barracks0.isOccupied());
 
-        /* Upgrade the barracks */
+        // Upgrade the barracks
         barracks0.upgrade();
 
-        /* Verify that the barracks is still occupied */
+        // Verify that the barracks is still occupied
         assertTrue(barracks0.isOccupied());
 
-        /* Add materials for the upgrade */
+        // Add materials for the upgrade
         Cargo stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
 
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
 
-        /* Verify that the barracks is occupied during the upgrade */
+        // Verify that the barracks is occupied during the upgrade
         for (int i = 0; i < 100; i++) {
-
-            /* Verify that the barracks is still occupied */
             assertTrue(barracks0.isOccupied());
 
             map.stepTime();
@@ -1969,36 +1795,34 @@ public class TestBarracks {
     @Test
     public void testEvacuatedBuildingKeepsSendingHomeMilitary() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Evacuate the barracks */
+        // Evacuate the barracks
         barracks0.evacuate();
 
         assertTrue(barracks0.isEvacuated());
         assertFalse(barracks0.needsMilitaryManning());
 
-        /* Connect headquarter and barracks */
+        // Connect headquarters and barracks
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
-        /* Occupy the barracks */
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        // Occupy the barracks
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Verify that the military comes out immediately */
+        // Verify that the military comes out immediately
 
         map.stepTime();
 
@@ -2009,59 +1833,54 @@ public class TestBarracks {
     @Test
     public void testCanUpgradeAfterDisablingPromotions() throws Exception {
 
-        /* Creating new player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(21, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks */
+        // Occupy the barracks
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
         assertTrue(barracks0.isOccupied());
 
-        /* Disable promotions */
+        // Disable promotions
         barracks0.disablePromotions();
 
         assertFalse(barracks0.isPromotionEnabled());
 
-        /* Verify that the barracks can be upgraded */
+        // Verify that the barracks can be upgraded
         barracks0.upgrade();
 
-        /* Add materials for the upgrade */
+        // Add materials for the upgrade
         Cargo stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
 
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
 
-        /* Wait for the upgrade */
+        // Wait for the upgrade
         for (int i = 0; i < 100; i++) {
-
             assertEquals(barracks0, map.getBuildingAtPoint(barracks0.getPosition()));
 
             map.stepTime();
         }
 
-        /* Verify that the barracks is upgraded */
-        Building buildingAfterUpgrade = map.getBuildingAtPoint(point1);
+        // Verify that the barracks is upgraded
+        var buildingAfterUpgrade = map.getBuildingAtPoint(point1);
 
         assertNotNull(buildingAfterUpgrade);
         assertEquals(buildingAfterUpgrade.getClass(), GuardHouse.class);
@@ -2070,35 +1889,31 @@ public class TestBarracks {
     @Test
     public void testEvacuatedMilitaryGetsAddedCorrectlyInStorage() throws Exception {
 
-        /* Creating new player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(21, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
-        /* Connect the barracks with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
-
-        /* Keep track of the original amount of soldiers */
+        // Keep track of the original amount of soldiers
         int originalAmount = Utils.getAmountMilitary(headquarter0);
 
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Wait for a military to start walking to the barracks */
+        // Wait for a military to start walking to the barracks
         Soldier military = null;
         for (int i = 0; i < 1000; i++) {
-            for (Worker worker : map.getWorkers()) {
+            for (var worker : map.getWorkers()) {
                 if (worker instanceof Soldier && worker.getTarget().equals(barracks0.getPosition())) {
                     military = (Soldier)worker;
                     break;
@@ -2115,10 +1930,10 @@ public class TestBarracks {
         assertNotNull(military);
         assertTrue(Utils.getAmountMilitary(headquarter0) < originalAmount);
 
-        /* Evacuate the barracks */
+        // Evacuate the barracks
         barracks0.evacuate();
 
-        /* Wait for the military to reach the barracks */
+        // Wait for the military to reach the barracks
         assertEquals(military.getTarget(), barracks0.getPosition());
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 0);
         assertFalse(barracks0.isOccupied());
@@ -2127,7 +1942,7 @@ public class TestBarracks {
 
         assertTrue(barracks0.isOccupied());
 
-        /* Verify that the military walks back and the barracks remains occupied */
+        // Verify that the military walks back and the barracks remains occupied
         for (int i = 0; i < 1000; i++) {
             if (barracks0.getNumberOfHostedSoldiers() == 0) {
                 break;
@@ -2137,49 +1952,44 @@ public class TestBarracks {
         }
 
         for (int i = 0; i < 100; i++) {
-
             assertTrue(barracks0.isOccupied());
             assertEquals(barracks0.getNumberOfHostedSoldiers(), 0);
 
             map.stepTime();
         }
 
-        /* Verify that the evacuated soldiers are added correctly */
+        // Verify that the evacuated soldiers are added correctly
         assertEquals(Utils.getAmountMilitary(headquarter0), originalAmount);
     }
 
     @Test
     public void testCanCancelEvacuationAndRefillBarracks() throws Exception {
 
-        /* Creating new player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(21, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
-        /* Connect the barracks with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
-
-        /* Add extra soldiers to inventory */
+        // Add extra soldiers to inventory
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 10);
 
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Wait for a military to start walking to the barracks */
+        // Wait for a military to start walking to the barracks
         Soldier military = null;
         for (int i = 0; i < 1000; i++) {
-            for (Worker worker : map.getWorkers()) {
+            for (var worker : map.getWorkers()) {
                 if (worker instanceof Soldier && worker.getTarget().equals(barracks0.getPosition())) {
                     military = (Soldier)worker;
                     break;
@@ -2195,10 +2005,10 @@ public class TestBarracks {
 
         assertNotNull(military);
 
-        /* Evacuate the barracks */
+        // Evacuate the barracks
         barracks0.evacuate();
 
-        /* Wait for the military to reach the barracks */
+        // Wait for the military to reach the barracks
         assertEquals(military.getTarget(), barracks0.getPosition());
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 0);
         assertFalse(barracks0.isOccupied());
@@ -2207,7 +2017,7 @@ public class TestBarracks {
 
         assertTrue(barracks0.isOccupied());
 
-        /* Wait for the military to walk out */
+        // Wait for the military to walk out
         for (int i = 0; i < 1000; i++) {
             if (barracks0.getNumberOfHostedSoldiers() == 0) {
                 break;
@@ -2220,13 +2030,12 @@ public class TestBarracks {
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 0);
         assertEquals(military.getTarget(), headquarter0.getPosition());
 
-        /* Verify that it's possible to cancel evacuation and fill up with soldiers again */
+        // Verify that it's possible to cancel evacuation and fill up with soldiers again
         barracks0.cancelEvacuation();
 
         assertFalse(barracks0.isEvacuated());
 
         for (int i = 0; i < 500; i++) {
-
             if (barracks0.getNumberOfHostedSoldiers() == 2) {
                 break;
             }
@@ -2240,50 +2049,45 @@ public class TestBarracks {
     @Test
     public void testUpgradeDoesNotDestroyNearbyHouses() throws Exception {
 
-        /* Creating new player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(21, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks */
+        // Occupy the barracks
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
-        /* Place a second barracks */
-        Point point2 = new Point(26, 6);
-        Barracks barracks1 = map.placeBuilding(new Barracks(player0), point2);
+        // Place a second barracks
+        var point2 = new Point(26, 6);
+        var barracks1 = map.placeBuilding(new Barracks(player0), point2);
 
-        /* Construct the barracks */
+        // Construct the barracks
         Utils.constructHouse(barracks1);
 
-        /* Occupy the barracks */
+        // Occupy the barracks
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks1);
 
-        /* Place regular building */
-        Point point3 = new Point(30, 6);
-        ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point3);
+        // Place regular building
+        var point3 = new Point(30, 6);
+        var foresterHut0 = map.placeBuilding(new ForesterHut(player0), point3);
 
-        /* Connect the buildings with a road */
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks1.getFlag(), foresterHut0.getFlag());
+        // Connect the buildings with a road
+        var road0 = map.placeAutoSelectedRoad(player0, barracks1.getFlag(), foresterHut0.getFlag());
 
-        /* Evacuate the barracks and wait for the barracks to become empty */
+        // Evacuate the barracks and wait for the barracks to become empty
         barracks1.evacuate();
 
         for (int i = 0; i < 1000; i++) {
-
             if (barracks1.getNumberOfHostedSoldiers() == 0) {
                 break;
             }
@@ -2293,29 +2097,22 @@ public class TestBarracks {
 
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
-        /* Upgrade the barracks */
+        // Upgrade the barracks
         barracks1.upgrade();
 
-        /* Add materials for the upgrade */
-        Cargo stoneCargo = new Cargo(STONE, map);
+        // Add materials for the upgrade
+        Utils.deliverCargo(barracks1, STONE);
+        Utils.deliverCargo(barracks1, STONE);
+        Utils.deliverCargo(barracks1, STONE);
 
-        barracks1.promiseDelivery(STONE);
-        barracks1.promiseDelivery(STONE);
-        barracks1.promiseDelivery(STONE);
-
-        barracks1.putCargo(stoneCargo);
-        barracks1.putCargo(stoneCargo);
-        barracks1.putCargo(stoneCargo);
-
-        /* Wait for the upgrade */
+        // Wait for the upgrade
         for (int i = 0; i < 100; i++) {
-
             assertEquals(barracks1, map.getBuildingAtPoint(barracks1.getPosition()));
 
             map.stepTime();
         }
 
-        /* Verify that the forester hut and the road remains */
+        // Verify that the forester hut and the var remains
         assertEquals(map.getBuildingAtPoint(barracks1.getPosition()).getClass(), GuardHouse.class);
         assertTrue(map.isBuildingAtPoint(foresterHut0.getPosition()));
         assertEquals(map.getBuildingAtPoint(foresterHut0.getPosition()), foresterHut0);
@@ -2325,51 +2122,45 @@ public class TestBarracks {
     @Test
     public void testUnoccupiedBuildingRemainsUnoccupiedDuringAndAfterUpgrade() throws Exception {
 
-        /* Creating new player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(7, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(21, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Upgrade the barracks */
+        // Upgrade the barracks
         assertFalse(barracks0.isOccupied());
 
         barracks0.upgrade();
 
-        /* Verify that the barracks is still unoccupied */
+        // Verify that the barracks is still unoccupied
         assertFalse(barracks0.isOccupied());
 
-        /* Add materials for the upgrade */
+        // Add materials for the upgrade
         Cargo stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
 
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
 
-        /* Verify that the barracks is unoccupied during and after the upgrade */
-        Point point2 = new Point(25, 5);
-        Point point3 = new Point(27, 5);
+        // Verify that the barracks is unoccupied during and after the upgrade
+        var point2 = new Point(25, 5);
+        var point3 = new Point(27, 5);
 
         for (int i = 0; i < 100; i++) {
-
-            /* Verify that the barracks is still occupied */
             assertFalse(barracks0.isOccupied());
             assertTrue(player0.getBorderPoints().contains(point2));
             assertFalse(player0.isWithinBorder(point3));
@@ -2386,67 +2177,62 @@ public class TestBarracks {
     @Test
     public void testUpgradeOfBuildingWithMilitaryDoesNotCauseOverAllocation() throws Exception {
 
-        /* Creating new player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(21, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
-        /* Connect the barracks with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Fill the barracks with soldiers */
+        // Fill the barracks with soldiers
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 2, barracks0);
 
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 2);
 
-        /* Make sure there are enough soldiers in the headquarter */
+        // Make sure there are enough soldiers in the headquarters
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 200);
 
-        /* Upgrade the barracks */
+        // Upgrade the barracks
         barracks0.upgrade();
 
-        /* Add materials for the upgrade */
+        // Add materials for the upgrade
         Cargo stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
 
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
 
-        /* Wait for the upgrade to happen */
+        // Wait for the upgrade to happen
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 2);
 
-        Building guardHouse0 = Utils.waitForBuildingToGetUpgraded(barracks0);
+        var guardHouse0 = Utils.waitForBuildingToGetUpgraded(barracks0);
 
         assertEquals(guardHouse0.getNumberOfHostedSoldiers(), 2);
         assertEquals(map.getBuildingAtPoint(barracks0.getPosition()), guardHouse0);
         assertEquals(guardHouse0.getMaxHostedSoldiers(), 3);
-        /* Verify that only one military is sent out to occupy the building */
+        // Verify that only one military is sent out to occupy the building
 
-        /* Wait for the military */
+        // Wait for the military
         assertTrue(guardHouse0.needsMilitaryManning());
         assertEquals(guardHouse0.getNumberOfHostedSoldiers(), 2);
 
         Soldier military0 = null;
         for (int i = 0; i < 2000; i++) {
-
             military0 = Utils.findSoldierOutsideBuilding(player0);
 
             if (military0 != null) {
@@ -2459,9 +2245,8 @@ public class TestBarracks {
         assertNotNull(military0);
         assertFalse(guardHouse0.needsMilitaryManning());
 
-        /* Wait for the military to get to the guard house and verify no other military is sent out */
+        // Wait for the military to get to the guard house and verify no other military is sent out
         for (int i = 0; i < 2000; i++) {
-
             if (military0.getPosition().equals(guardHouse0.getPosition())) {
                 break;
             }
@@ -2473,9 +2258,8 @@ public class TestBarracks {
 
         assertEquals(guardHouse0.getNumberOfHostedSoldiers(), 3);
 
-        /* Verify that no more soldiers are sent */
+        // Verify that no more soldiers are sent
         for (int i = 0; i < 2000; i++) {
-
             assertNull(Utils.findSoldierOutsideBuilding(player0));
 
             map.stepTime();
@@ -2485,32 +2269,30 @@ public class TestBarracks {
     @Test
     public void testSoldiersOfDifferentTypesArePromotedInParallel() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
-        /* Deliver one coin to the barracks */
-        Cargo cargo = new Cargo(COIN, map);
+        // Deliver one coin to the barracks
+        Cargo coinCargo = new Cargo(COIN, map);
 
-        barracks0.putCargo(cargo);
+        Utils.deliverCargo(barracks0, COIN);
 
-        /* Occupy the barracks with one private */
-        Soldier military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
-        Soldier military2 = Utils.occupyMilitaryBuilding(SERGEANT_RANK, barracks0);
+        // Occupy the barracks with one private
+        var military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        var military2 = Utils.occupyMilitaryBuilding(SERGEANT_RANK, barracks0);
 
-        /* Wait for the promotion to happen */
+        // Wait for the promotion to happen
         Utils.fastForward(100, map);
 
         assertTrue((military1.getRank() == OFFICER_RANK && military2.getRank() == PRIVATE_FIRST_CLASS_RANK) ||
@@ -2520,31 +2302,28 @@ public class TestBarracks {
     @Test
     public void testUpgradedBarracksGetsPopulatedFully() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Add privates to the headquarter */
+        // Add privates to the headquarters
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 20);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
-        /* Connect the barracks to the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
+        // Connect the barracks to the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the barracks to get occupied */
+        // Wait for the barracks to get occupied
         for (int i = 0; i < 1000; i++) {
-
             if (barracks0.getNumberOfHostedSoldiers() == 2) {
                 break;
             }
@@ -2554,29 +2333,28 @@ public class TestBarracks {
 
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 2);
 
-        /* Upgrade the barracks */
+        // Upgrade the barracks
         barracks0.upgrade();
 
-        /* Add materials for the upgrade */
+        // Add materials for the upgrade
         Cargo stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
 
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
-        barracks0.putCargo(stoneCargo);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
+        Utils.deliverCargo(barracks0, STONE);
 
-        /* Wait for the upgrade to happen */
-        Building guardHouse0 = Utils.waitForBuildingToGetUpgraded(barracks0);
+        // Wait for the upgrade to happen
+        var guardHouse0 = Utils.waitForBuildingToGetUpgraded(barracks0);
 
         assertEquals(map.getBuildingAtPoint(barracks0.getPosition()), guardHouse0);
         assertEquals(guardHouse0.getMaxHostedSoldiers(), 3);
 
-        /* Verify that the building gets fully occupied */
+        // Verify that the var gets fully occupied
         for (int i = 0; i < 500; i++) {
-
             if (guardHouse0.getNumberOfHostedSoldiers() == 3) {
                 break;
             }
@@ -2590,34 +2368,31 @@ public class TestBarracks {
     @Test
     public void testCannotStopProductionInBarracks() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point0 = new Point(5, 17);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 17);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place barracks
+        var point1 = new Point(5, 23);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Place barracks */
-        Point point1 = new Point(5, 23);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place road
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
-        /* Place road */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
-
-        /* Wait for the barracks to finish construction */
+        // Wait for the barracks to finish construction
         Utils.fastForwardUntilBuildingIsConstructed(barracks0);
 
-        /* Occupy the barracks */
+        // Occupy the barracks
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Verify that it's not possible to stop production */
+        // Verify that it's not possible to stop production
         try {
             barracks0.stopProduction();
+
             fail();
         } catch (Exception e) {}
     }
@@ -2625,27 +2400,25 @@ public class TestBarracks {
     @Test
     public void testBarracksCannotProduce() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(7, 9);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(7, 9);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Populate the barracks */
+        // Populate the barracks
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Verify that the barracks can't produce */
+        // Verify that the barracks can't produce
         assertFalse(barracks0.canProduce());
     }
 
@@ -2653,50 +2426,46 @@ public class TestBarracks {
     @Test
     public void testBarracksReportsCorrectOutput() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Construct the barracks */
+        // Construct the barracks
         Utils.constructHouse(barracks0);
 
-        /* Verify that the reported output is correct */
+        // Verify that the reported output is correct
         assertEquals(barracks0.getProducedMaterial().length, 0);
     }
 
     @Test
     public void testBarracksReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Verify that the reported needed construction material is correct */
+        // Verify that the reported needed construction material is correct
         assertEquals(barracks0.getTypesOfMaterialNeeded().size(), 1);
         assertTrue(barracks0.getTypesOfMaterialNeeded().contains(PLANK));
         assertEquals(barracks0.getCanHoldAmount(PLANK), 2);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == PLANK) {
                 continue;
             }
@@ -2708,28 +2477,26 @@ public class TestBarracks {
     @Test
     public void testBarracksReportsCorrectMaterialsNeededForProduction() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Construct the barracks */
+        // Construct the barracks
         Utils.constructHouse(barracks0);
 
-        /* Verify that the reported needed construction material is correct */
+        // Verify that the reported needed construction material is correct
         assertEquals(barracks0.getTypesOfMaterialNeeded().size(), 1);
         assertEquals(barracks0.getCanHoldAmount(COIN), 1);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == COIN) {
                 continue;
             }
@@ -2741,72 +2508,66 @@ public class TestBarracks {
     @Test
     public void testHostedMilitaryListIsEmptyForBarracksUnderConstruction() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Verify that the list of hosted soldiers is empty */
+        // Verify that the list of hosted soldiers is empty
         assertEquals(0, barracks0.getHostedSoldiers().size());
     }
 
     @Test
     public void testHostedMilitaryListIsEmptyForEmptyBarracks() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Construct barracks */
+        // Construct barracks
         Utils.constructHouse(barracks0);
 
-        /* Verify that the list of hosted soldiers is empty */
+        // Verify that the list of hosted soldiers is empty
         assertEquals(0, barracks0.getHostedSoldiers().size());
     }
 
     @Test
     public void testAddingMilitaryUpsHostedMilitaryList() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Construct barracks */
+        // Construct barracks
         Utils.constructHouse(barracks0);
 
-        /* Add one military */
+        // Add one military
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
-        /* Verify that the list of hosted soldiers increased empty */
+        // Verify that the list of hosted soldiers increased empty
         assertEquals(1, barracks0.getHostedSoldiers().size());
         assertEquals(barracks0.getHostedSoldiers().getFirst().getRank(), PRIVATE_RANK);
     }
@@ -2814,52 +2575,48 @@ public class TestBarracks {
     @Test
     public void testRankIsCorrectInHostedMilitaryList() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Construct barracks */
+        // Construct barracks
         Utils.constructHouse(barracks0);
 
-        /* Add one military */
+        // Add one military
         Utils.occupyMilitaryBuilding(SERGEANT_RANK, 1, barracks0);
 
-        /* Verify that the rank for the hosted military is correct */
+        // Verify that the rank for the hosted military is correct
         assertEquals(barracks0.getHostedSoldiers().getFirst().getRank(), SERGEANT_RANK);
     }
 
     @Test
     public void testBorderForBarracksIsCorrect() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 80, 80);
 
-        /* Place headquarter */
-        Point point0 = new Point(30, 30);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(30, 30);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(25, 23);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(25, 23);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Construct and occupy the barracks */
+        // Construct and occupy the barracks
         Utils.constructHouse(barracks0);
         Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
 
-        /* Verify that the border around the barracks is hexagon shaped and the middle of each line is 8 steps away from the center of the headquarter
+        /* Verify that the border around the barracks is hexagon shaped and the middle of each line is 8 steps away from the center of the headquarters
         Border:
 
                 -8, +8  -------  +8, +8
@@ -2867,18 +2624,18 @@ public class TestBarracks {
             -16, 0        H          16, 0
                   \                  /
                 -8, -8  -------  +8, +8
-
-         */
+        */
+        
 
         int radius = 8;
-        Set<Point> barracksHexagonBorder = Utils.getHexagonBorder(barracks0.getPosition(), radius);
-        Set<Point> headquarterHexagonBorder = Utils.getHexagonBorder(headquarter0.getPosition(), 9);
+        var barracksHexagonBorder = Utils.getHexagonBorder(barracks0.getPosition(), radius);
+        var headquarterHexagonBorder = Utils.getHexagonBorder(headquarter0.getPosition(), 9);
 
-        /* Verify that all points in the hexagon are part of the actual border */
-        Set<Point> border = player0.getBorderPoints();
-        for (Point point : barracksHexagonBorder) {
+        // Verify that all points in the hexagon are part of the actual border
+        var border = player0.getBorderPoints();
+        for (var point : barracksHexagonBorder) {
 
-            /* Ignore points that are within the player's land */
+            // Ignore points that are within the player's land
             if (player0.getOwnedLand().contains(point)) {
                 continue;
             }
@@ -2886,10 +2643,10 @@ public class TestBarracks {
             assertTrue(border.contains(point));
         }
 
-        /* Verify that all points in the actual border are part of the hexagon border */
-        for (Point point : border) {
+        // Verify that all points in the actual border are part of the hexagon border
+        for (var point : border) {
 
-            /* Ignore points that are part of the hexagon around the headquarter */
+            // Ignore points that are part of the hexagon around the headquarters
             if (headquarterHexagonBorder.contains(point)) {
                 continue;
             }
@@ -2901,25 +2658,23 @@ public class TestBarracks {
     @Test
     public void testLandForBarracksIsCorrect() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 80, 80);
 
-        /* Place headquarter */
-        Point point0 = new Point(30, 30);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(30, 30);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(25, 23);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(25, 23);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Construct and occupy the barracks */
+        // Construct and occupy the barracks
         Utils.constructHouse(barracks0);
         Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
 
-        /* Verify that the land of the headquarter is hexagon shaped and the middle of each line is 9 steps away from the center of the headquarter
+        /* Verify that the land of the headquarters is hexagon shaped and the middle of each line is 9 steps away from the center of the headquarters
         Land
 
                 -8, +8  -------  +8, +8
@@ -2927,15 +2682,15 @@ public class TestBarracks {
             -16, 0        H          16, 0
                   \                  /
                 -8, -8  -------  +8, +8
+        */
+        
+        var area = Utils.getAreaInsideHexagon(7, barracks0.getPosition());
 
-         */
-        Set<Point> area = Utils.getAreaInsideHexagon(7, barracks0.getPosition());
+        // Verify that all points in the hexagon land are part of the actual land
+        var land = barracks0.getDefendedLand();
+        for (var point : land) {
 
-        /* Verify that all points in the hexagon land are part of the actual land */
-        Collection<Point> land = barracks0.getDefendedLand();
-        for (Point point : land) {
-
-            /* Ignore points that are part of the headquarters land */
+            // Ignore points that are part of the headquarters land
             if (headquarter0.getDefendedLand().contains(point)) {
                 continue;
             }
@@ -2943,8 +2698,8 @@ public class TestBarracks {
             assertTrue(area.contains(point));
         }
 
-        /* Verify that all points in the actual land are part of the hexagon land */
-        for (Point point : area) {
+        // Verify that all points in the actual land are part of the hexagon land
+        for (var point : area) {
             assertTrue(land.contains(point));
         }
     }
@@ -2952,26 +2707,24 @@ public class TestBarracks {
     @Test
     public void testDiscoveredLandForBarracksIsCorrect() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 80, 80);
 
-        /* Place headquarter */
-        Point point0 = new Point(30, 30);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(30, 30);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(25, 23);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(25, 23);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Construct and occupy the barracks */
+        // Construct and occupy the barracks
         Utils.constructHouse(barracks0);
         Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
 
         /* Verify that the discovered land of the barracks is hexagon shaped and the middle of each line is 8 + 4 steps away
-        from the center of the headquarter
+        from the center of the headquarters
 
          Land
 
@@ -2980,16 +2733,16 @@ public class TestBarracks {
             -16, 0        H          16, 0
                   \                  /
                 -8, -8  -------  +8, +8
+        */
+        
+        var barracksHexagonDiscoveredArea = Utils.getAreaInsideHexagon(12, barracks0.getPosition());
+        var headquarterDiscoveredLand = Utils.getAreaInsideHexagon(13, headquarter0.getPosition());
 
-         */
-        Set<Point> barracksHexagonDiscoveredArea = Utils.getAreaInsideHexagon(12, barracks0.getPosition());
-        Set<Point> headquarterDiscoveredLand = Utils.getAreaInsideHexagon(13, headquarter0.getPosition());
+        // Verify that all points in the hexagon land are part of the actual land
+        var discoveredLand = player0.getDiscoveredLand();
+        for (var point : discoveredLand) {
 
-        /* Verify that all points in the hexagon land are part of the actual land */
-        Collection<Point> discoveredLand = player0.getDiscoveredLand();
-        for (Point point : discoveredLand) {
-
-            /* Ignore points within the discovered land for the headquarter */
+            // Ignore points within the discovered land for the headquarters
             if (headquarterDiscoveredLand.contains(point)) {
                 continue;
             }
@@ -2997,8 +2750,8 @@ public class TestBarracks {
             assertTrue(barracksHexagonDiscoveredArea.contains(point));
         }
 
-        /* Verify that all points in the actual land are part of the hexagon land */
-        for (Point point : barracksHexagonDiscoveredArea) {
+        // Verify that all points in the actual land are part of the hexagon land
+        for (var point : barracksHexagonDiscoveredArea) {
             assertTrue(discoveredLand.contains(point));
         }
     }
@@ -3006,26 +2759,24 @@ public class TestBarracks {
     @Test
     public void testDiscoveredLandForPlayerCannotBeOutsideTheMap() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 80, 80);
 
-        /* Place headquarter */
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(10, 10);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(3, 3);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(3, 3);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Construct and occupy the barracks */
+        // Construct and occupy the barracks
         Utils.constructHouse(barracks0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Verify that the discovered land is only inside the map */
-        for (Point point : player0.getDiscoveredLand()) {
+        // Verify that the discovered land is only inside the map
+        for (var point : player0.getDiscoveredLand()) {
             assertTrue(point.x >= 0);
             assertTrue(point.y >= 0);
         }
@@ -3034,26 +2785,24 @@ public class TestBarracks {
     @Test
     public void testOwnedLandForPlayerCannotBeOutsideTheMap() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 80, 80);
 
-        /* Place headquarter */
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(10, 10);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
-        Point point1 = new Point(3, 3);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(3, 3);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Construct and occupy the barracks */
+        // Construct and occupy the barracks
         Utils.constructHouse(barracks0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Verify that the discovered land is only inside the map */
-        for (Point point : player0.getOwnedLand()) {
+        // Verify that the discovered land is only inside the map
+        for (var point : player0.getOwnedLand()) {
             assertTrue(point.x >= 0);
             assertTrue(point.y >= 0);
         }

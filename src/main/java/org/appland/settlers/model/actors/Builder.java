@@ -55,8 +55,8 @@ public class Builder extends Worker {
         } else if (state == State.HAMMERING) {
             if (countdown.hasReachedZero()) {
                 Point nextHammerPoint;
-                Point buildingPoint = building.getPosition();
-                Point position = getPosition();
+                var buildingPoint = building.getPosition();
+                var position = getPosition();
 
                 if (position.equals(buildingPoint.downLeft())) {
                     nextHammerPoint = buildingPoint.downLeft().left();
@@ -70,7 +70,6 @@ public class Builder extends Worker {
 
                 if (map.findWayOffroad(position, nextHammerPoint, null) != null) {
                     setOffroadTarget(nextHammerPoint);
-
                     state = State.GOING_TO_HAMMER;
                 } else {
                     countdown.countFrom(TIME_TO_HAMMER);
@@ -101,7 +100,7 @@ public class Builder extends Worker {
                         state = State.GOING_TO_HAMMER;
                     } else {
                         countdown.countFrom(TIME_TO_HAMMER);
-                        map.reportWorkerStartedAction(this, WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW);
+                        doAction(WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW);
                         state = State.HAMMERING;
                     }
                 } else {
@@ -111,7 +110,7 @@ public class Builder extends Worker {
             case GOING_TO_HAMMER -> {
                 if (!building.isReady()) {
                     state = State.HAMMERING;
-                    map.reportWorkerStartedAction(this, WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW);
+                    doAction(WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW);
                     countdown.countFrom(TIME_TO_HAMMER);
                 } else {
                     setOffroadTarget(building.getFlag().getPosition());
@@ -120,7 +119,7 @@ public class Builder extends Worker {
             }
             case WALKING_TO_FLAG_TO_GO_BACK_TO_STORAGE -> returnToStorage();
             case RETURNING_TO_STORAGE -> {
-                Storehouse storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
+                var storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
                 storehouse.depositWorker(this);
             }
             case GOING_TO_DIE -> {
@@ -147,7 +146,7 @@ public class Builder extends Worker {
     @Override
     protected void onReturnToStorage() {
 
-        /* Wait until next flag to find out that the building is gone and then go back */
+        // Wait until next flag to find out that the building is gone and then go back
         if (state == State.WALKING_TO_BUILDING_TO_CONSTRUCT &&
             (!isExactlyAtPoint() || !map.isFlagAtPoint(getPosition()))) {
             return;
@@ -164,20 +163,16 @@ public class Builder extends Worker {
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
-
                 setOffroadTarget(storage.getPosition());
             } else {
                 Point point = findPlaceToDie();
 
                 if (!Objects.equals(getPosition(), point)) {
                     state = State.GOING_TO_DIE;
-
                     setOffroadTarget(point, getPosition());
                 } else {
                     setDead();
-
                     state = State.DEAD;
-
                     countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
                 }
             }
@@ -211,20 +206,20 @@ public class Builder extends Worker {
 
     @Override
     protected void onWalkingAndAtFixedPoint() {
-        Point position = getPosition();
+        var position = getPosition();
 
-        /* Return to storage if the planned path no longer exists */
+        // Return to storage if the planned path no longer exists
         if (state == State.WALKING_TO_BUILDING_TO_CONSTRUCT &&
                 map.isFlagAtPoint(position) &&
                 !map.arePointsConnectedByRoads(position, getTarget())) {
 
-            /* Cancel the promise to the building */
+            // Cancel the promise to the building
             getTargetBuilding().cancelPromisedBuilder(this);
 
-            /* Don't try to start construction upon arrival */
+            // Don't try to start construction upon arrival
             clearTargetBuilding();
 
-            /* Go back to the storage */
+            // Go back to the storage
             returnToStorage();
         }
     }

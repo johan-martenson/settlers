@@ -7,7 +7,6 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
-import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
 
@@ -15,6 +14,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import static org.appland.settlers.model.Material.*;
+import static org.appland.settlers.model.WorkerAction.*;
 import static org.appland.settlers.model.actors.Metalworker.State.*;
 
 @Walker(speed = 10)
@@ -114,8 +114,7 @@ public class Metalworker extends Worker {
                         state = HAMMERING;
                         countdown.countFrom(TIME_FOR_ACTION);
                         goOutside();
-                        player.reportWorkerStartedAction(this, WorkerAction.HAMMER_TO_MAKE_TOOL);
-                        map.reportWorkerWentOutside(this);
+                        doAction(HAMMER_TO_MAKE_TOOL);
                         player.reportChangedBuilding(home);
                     }
 
@@ -127,9 +126,9 @@ public class Metalworker extends Worker {
 
             case HAMMERING -> {
                 if (countdown.hasReachedZero()) {
-                    state = SAWING;
+                    state = State.SAWING;
                     countdown.countFrom(TIME_FOR_ACTION);
-                    player.reportWorkerStartedAction(this, WorkerAction.SAWING_TO_MAKE_TOOL);
+                    doAction(SAWING_TO_MAKE_TOOL);
                 } else {
                     countdown.step();
                 }
@@ -139,7 +138,7 @@ public class Metalworker extends Worker {
                 if (countdown.hasReachedZero()) {
                     state = WIPING_SWEAT;
                     countdown.countFrom(TIME_FOR_ACTION);
-                    player.reportWorkerStartedAction(this, WorkerAction.WIPE_OFF_SWEAT_TO_MAKE_TOOL);
+                    doAction(WIPE_OFF_SWEAT_TO_MAKE_TOOL);
                 } else {
                     countdown.step();
                 }
@@ -320,7 +319,7 @@ public class Metalworker extends Worker {
     }
 
     public boolean isSawing() {
-        return state == SAWING;
+        return state == State.SAWING;
     }
 
     public boolean isWipingSweat() {
@@ -329,6 +328,6 @@ public class Metalworker extends Worker {
 
     @Override
     public boolean isWorking() {
-        return state == HAMMERING || state == SAWING || state == WIPING_SWEAT;
+        return state == HAMMERING || state == State.SAWING || state == WIPING_SWEAT;
     }
 }

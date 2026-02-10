@@ -4,14 +4,17 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
+import org.appland.settlers.model.OffroadOption;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
 
+import static java.lang.String.format;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WELL_WORKER;
+import static org.appland.settlers.model.WorkerAction.DRAW_WATER_1;
 
 /**
  *
@@ -22,6 +25,7 @@ public class WellWorker extends Worker {
     private static final int PRODUCTION_TIME = 49;
     private static final int RESTING_TIME = 99;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
+    private static final int TIME_IN_HOUSE_WITH_CARGO = 9;
 
     private final Countdown countdown = new Countdown();
     private final ProductivityMeasurer productivityMeasurer;
@@ -37,6 +41,7 @@ public class WellWorker extends Worker {
     private enum State {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
+        GOING_OUT_TO_DRAW_WATER,
         DRAWING_WATER,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
@@ -44,6 +49,8 @@ public class WellWorker extends Worker {
         GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
         GOING_TO_DIE,
         DEAD,
+        IN_HOUSE_WITH_CARGO,
+        GOING_TO_HOUSE_WITH_CARGO,
         RETURNING_TO_STORAGE
     }
 
@@ -61,8 +68,8 @@ public class WellWorker extends Worker {
         switch (state) {
             case RESTING_IN_HOUSE -> {
                 if (countdown.hasReachedZero() && home.isProductionEnabled() && isWaterInGround()) {
-                    state = State.DRAWING_WATER;
-                    countdown.countFrom(PRODUCTION_TIME);
+                    state = State.GOING_OUT_TO_DRAW_WATER;
+                    walkHalfWayOffroadTo(home.getPosition().downLeft(), OffroadOption.CAN_END_ON_STONE, OffroadOption.DONT_WALK_VIA_FLAG);
                 } else if (home.isProductionEnabled()) {
                     countdown.step();
                 } else {
@@ -72,18 +79,31 @@ public class WellWorker extends Worker {
 
             case DRAWING_WATER -> {
                 if (countdown.hasReachedZero()) {
+                    carriedCargo = new Cargo(WATER, map);
+
+                    state = State.GOING_TO_HOUSE_WITH_CARGO;
+                    returnToFixedPoint();
+
+                    map.reportWorkerWithNewTarget(this);
+                } else {
+                    countdown.step();
+                }
+            }
+
+            case IN_HOUSE_WITH_CARGO -> {
+                if (countdown.hasReachedZero()) {
                     productivityMeasurer.reportProductivity();
                     productivityMeasurer.nextProductivityCycle();
                     map.getStatisticsManager().waterProduced(player, map.getTime());
 
                     if (home.getFlag().hasPlaceForMoreCargo()) {
-                        var cargo = new Cargo(WATER, map);
-                        setCargo(cargo);
+                        //var cargo = new Cargo(WATER, map);
+                        //setCargo(cargo);
 
                         setTarget(home.getFlag().getPosition());
                         state = State.GOING_TO_FLAG_WITH_CARGO;
 
-                        home.getFlag().promiseCargo(cargo);
+                        home.getFlag().promiseCargo(carriedCargo);
                     } else {
                         state = State.WAITING_FOR_SPACE_ON_FLAG;
                     }
@@ -127,8 +147,26 @@ public class WellWorker extends Worker {
     }
 
     @Override
+    void onWalkedHalfWay() {
+        switch (state) {
+            case State.GOING_OUT_TO_DRAW_WATER -> {
+                state = State.DRAWING_WATER;
+                countdown.countFrom(PRODUCTION_TIME);
+                doAction(DRAW_WATER_1);
+            }
+        }
+    }
+
+    @Override
     protected void onArrival() {
         switch (state) {
+            case GOING_TO_HOUSE_WITH_CARGO -> {
+                enterBuilding(home);
+
+                state = State.IN_HOUSE_WITH_CARGO;
+                countdown.countFrom(TIME_IN_HOUSE_WITH_CARGO);
+            }
+
             case GOING_TO_FLAG_WITH_CARGO -> {
                 var flag = home.getFlag();
                 var cargo = getCargo();
@@ -234,7 +272,20 @@ public class WellWorker extends Worker {
     @Override
     public void goToOtherStorage(Building building) {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
-
         setTarget(building.getFlag().getPosition());
+    }
+
+    public boolean isPumpingWater() {
+        return state == State.DRAWING_WATER;
+    }
+
+    @Override
+    public boolean isWorking() {
+        return state == State.GOING_OUT_TO_DRAW_WATER;
+    }
+
+    @Override
+    public String toString() {
+        return format("WellWorker (%s) (%d) (%d)", state, getPercentageOfDistanceTraveled(), countdown.getCount());
     }
 }

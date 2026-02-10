@@ -181,6 +181,10 @@ public class GameUtils {
         collectionToSet.addAll(source);
     }
 
+    public static void discoverFullMap(Player player) {
+        player.getMap().getPointsInMap().forEach(player::discover);
+    }
+
     /**
      * Enum for types of allocation that can be controlled.
      */

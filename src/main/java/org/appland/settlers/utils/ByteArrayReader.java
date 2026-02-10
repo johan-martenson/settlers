@@ -5,18 +5,16 @@ import org.appland.settlers.maps.ByteArray;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
-import java.util.Stack;
 
 public class ByteArrayReader implements ByteReader {
-
     private final ByteBuffer byteArray;
-    private final Stack<ByteOrder> byteOrderStack = new Stack<>();
+    private final Deque<ByteOrder> byteOrderStack = new ArrayDeque<>();
 
     private ByteOrder order;
-    private long offset = 0;
-    private boolean isEof = false;
 
     public ByteArrayReader(byte[] byteArray, ByteOrder byteOrder) {
         this.byteArray = ByteBuffer.wrap(byteArray).order(byteOrder);
@@ -25,29 +23,28 @@ public class ByteArrayReader implements ByteReader {
 
     @Override
     public short getUint8() {
-        offset = offset + 1;
-
-        return (short)(this.byteArray.order(order).get() & (short)0xff);
+        return (short)(byteArray.get() & (short)0xff);
     }
 
     @Override
     public byte getInt8() {
-        offset = offset + 1;
-
-        return this.byteArray.order(order).get();
+        return this.byteArray.get();
     }
 
     @Override
     public int getUint16() {
-        this.offset = this.offset + 2;
-
-        return this.byteArray.order(order).getShort() & 0xffff;
+        return this.byteArray.getShort() & 0xffff;
     }
 
     @Override
     public int getUint16(ByteOrder endian) {
-        this.offset += 2;
-        return this.byteArray.order(endian).getShort() & 0xFFFF;
+        ByteOrder previous = byteArray.order();
+        byteArray.order(endian);
+
+        int value = byteArray.getShort() & 0xFFFF;
+
+        byteArray.order(previous);
+        return value;
     }
 
     @Override
@@ -64,84 +61,79 @@ public class ByteArrayReader implements ByteReader {
             bytes[i] = byteList.get(i);
         }
 
-        offset = offset + bytes.length;
-
         return new String(bytes, StandardCharsets.US_ASCII);
     }
 
     @Override
     public short getInt16() {
-        offset = offset + 2;
-
-        return this.byteArray.order(order).getShort();
+        return this.byteArray.getShort();
     }
 
     @Override
     public long getUint32() {
-        offset = offset + 4;
-
-        return (long) this.byteArray.order(order).getInt() & 0xffffffffL;
+        return this.byteArray.getInt() & 0xffffffffL;
     }
 
     @Override
     public long getUint32(ByteOrder byteOrder) {
-        offset = offset + 4;
+        ByteOrder previous = byteArray.order();
+        byteArray.order(byteOrder);
 
-        return (long) this.byteArray.order(byteOrder).getInt() & 0xffffffffL;
+        long value = byteArray.getInt() & 0xFFFFFFFFL;
+
+        byteArray.order(previous);
+        return value;
     }
 
     @Override
     public int getInt32() {
-        offset = offset + 4;
-
-        return this.byteArray.order(this.order).getInt();
+        return this.byteArray.getInt();
     }
 
     @Override
-    public short[] getUint8Array(int lengthInBytes) {
-        short[] shorts = new short[lengthInBytes];
+    public short[] getUint8Array(int length) {
+        short[] result = new short[length];
 
-        for (int i = 0; i < lengthInBytes; i++) {
-            shorts[i] = getUint8();
+        for (int i = 0; i < length; i++) {
+            result[i] = getUint8();
         }
 
-        return shorts;
+        return result;
     }
 
     @Override
     public long[] getUint32Array(int length) {
-        long[] longArray = new long[length];
+        long[] result = new long[length];
 
         for (int i = 0; i < length; i++) {
-            longArray[i] = getUint32();
+            result[i] = getUint32();
         }
 
-        return longArray;
+        return result;
     }
 
     @Override
-    public char[] getUint8ArrayAsChar(int lengthInBytes) {
-        char[] chars = new char[lengthInBytes];
+    public char[] getUint8ArrayAsChar(int length) {
+        char[] chars = new char[length];
 
-        for (int i = 0; i < lengthInBytes; i++) {
-            chars[i] = (char)(this.byteArray.order(order).getShort(i) & 0xffff);
+        for (int i = 0; i < length; i++) {
+            chars[i] = (char) (this.byteArray.get() & 0xffff);
         }
-
-        offset = offset + lengthInBytes;
 
         return chars;
     }
 
     @Override
-    public void pushByteOrder(ByteOrder order) {
+    public void pushByteOrder(ByteOrder newOrder) {
         this.byteOrderStack.push(this.order);
-
-        this.order = order;
+        this.order = newOrder;
+        byteArray.order(newOrder);
     }
 
     @Override
     public void popByteOrder() {
         this.order = this.byteOrderStack.pop();
+        byteArray.order(this.order);
     }
 
     public ByteBuffer getByteArray() {
@@ -151,43 +143,20 @@ public class ByteArrayReader implements ByteReader {
     @Override
     public String getUint8ArrayAsString(int i) {
         byte[] bytes = getUint8ArrayAsBytes(i);
-
-        String string = new String(bytes, StandardCharsets.US_ASCII);
-
-        offset = offset + i;
-
-        return string;
+        return new String(bytes, StandardCharsets.US_ASCII);
     }
 
     @Override
     public byte[] getRemainingBytes() {
-        List<Byte> byteList = new ArrayList<>();
-
-        while (byteArray.position() < byteArray.array().length) {
-            byteList.add(byteArray.get());
-        }
-
-        byte[] bytes = new byte[byteList.size()];
-
-        for (int i = 0; i < byteList.size(); i++) {
-            bytes[i] = byteList.get(i);
-        }
-
-        offset = offset + bytes.length;
-
+        byte[] bytes = new byte[byteArray.remaining()];
+        byteArray.get(bytes);
         return bytes;
     }
 
     @Override
     public byte[] getUint8ArrayAsBytes(int length) {
         byte[] bytes = new byte[length];
-
-        for (int i = 0; i < length; i++) {
-            bytes[i] = this.byteArray.order(order).get();
-        }
-
-        offset = offset + length;
-
+        byteArray.get(bytes);
         return bytes;
     }
 
@@ -204,14 +173,12 @@ public class ByteArrayReader implements ByteReader {
 
     @Override
     public boolean isEof() {
-        return isEof;
+        return !byteArray.hasRemaining();
     }
 
     @Override
     public ByteArray getUint8ArrayAsByteArray(int length) {
-        byte[] bytes =  getUint8ArrayAsBytes(length);
-
-        return new ByteArray(bytes, this.order);
+        return new ByteArray(getUint8ArrayAsBytes(length), order);
     }
 
     @Override
@@ -221,9 +188,7 @@ public class ByteArrayReader implements ByteReader {
 
     @Override
     public void skip(int length) {
-        for (int i = 0; i < length; i++) {
-            byteArray.get();
-        }
+        byteArray.position(byteArray.position() + length);
     }
 
     @Override
@@ -233,6 +198,23 @@ public class ByteArrayReader implements ByteReader {
 
     @Override
     public int length() {
-        return byteArray.array().length;
+        return byteArray.limit();
+    }
+
+    @Override
+    public String getUint8ArrayAsNullTerminatedString(int maxLength) {
+        byte[] bytes = getUint8ArrayAsBytes(maxLength);
+
+        int end = 0;
+        while (end < bytes.length && bytes[end] != 0) {
+            end++;
+        }
+
+        return new String(bytes, 0, end, StandardCharsets.US_ASCII);
+    }
+
+    @Override
+    public void close() throws Exception {
+
     }
 }

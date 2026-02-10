@@ -1,6 +1,5 @@
 package org.appland.settlers.model.actors;
 
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.EndPoint;
@@ -8,13 +7,11 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.InvalidGameLogicException;
-import org.appland.settlers.model.MapPoint;
-import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
-import org.appland.settlers.model.WorkerAction;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,9 +20,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+import static org.appland.settlers.model.WorkerAction.*;
 import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
 import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
-import static org.appland.settlers.model.WorkerAction.*;
 import static org.appland.settlers.model.actors.Courier.States.*;
 
 @Walker(speed = 10)
@@ -79,8 +76,8 @@ public class Courier extends Worker {
     protected void onIdle() {
         switch (state) {
             case IDLE_AT_ROAD, IDLE_CHEWING_GUM, IDLE_READING_PAPER, IDLE_TOUCHING_NOSE, IDLE_JUMPING_SKIP_ROPE, IDLE_SITTING_DOWN -> {
-                Flag start = map.getFlagAtPoint(assignedRoad.getStart());
-                Flag end   = map.getFlagAtPoint(assignedRoad.getEnd());
+                var start = map.getFlagAtPoint(assignedRoad.getStart());
+                var end = map.getFlagAtPoint(assignedRoad.getEnd());
 
                 // TODO: REMOVE!
                 if (start == null || end == null) {
@@ -94,8 +91,8 @@ public class Courier extends Worker {
                 }
 
                 // Find cargo to carry
-                Cargo cargoAtStart = findCargoToCarry(start);
-                Cargo cargoAtEnd = findCargoToCarry(end);
+                var cargoAtStart = findCargoToCarry(start);
+                var cargoAtEnd = findCargoToCarry(end);
 
                 // Pick up cargo if available
                 if (cargoAtStart != null && !(start.isFightingAtFlag() && start.getPosition().distance(getPosition()) == 1)) {
@@ -115,34 +112,24 @@ public class Courier extends Worker {
                 // Handle special actions
                 if (shouldDoSpecialActions && state == IDLE_AT_ROAD) {
                     if (RANDOM.nextInt(135) == 5 && bodyType == FAT) {
+                        doAction(CHEW_GUM);
                         state = IDLE_CHEWING_GUM;
-
-                        map.reportWorkerStartedAction(this, WorkerAction.CHEW_GUM);
-
                         countdown.countFrom(TIME_TO_CHEW_GUM);
                     } else if (RANDOM.nextInt(135) == 5 && bodyType == THIN) {
+                        doAction(READ_NEWSPAPER);
                         state = IDLE_READING_PAPER;
-
-                        map.reportWorkerStartedAction(this, READ_NEWSPAPER);
-
                         countdown.countFrom(TIME_TO_READ_PAPER);
                     } else if (RANDOM.nextInt(135) == 5 && bodyType == THIN) {
+                        doAction(TOUCH_NOSE);
                         state = IDLE_TOUCHING_NOSE;
-
-                        map.reportWorkerStartedAction(this, TOUCH_NOSE);
-
                         countdown.countFrom(TIME_TO_TOUCH_NOSE);
                     } else if (RANDOM.nextInt(115) == 5 && bodyType == THIN) {
+                        doAction(JUMP_SKIP_ROPE);
                         state = IDLE_JUMPING_SKIP_ROPE;
-
-                        map.reportWorkerStartedAction(this, JUMP_SKIP_ROPE);
-
                         countdown.countFrom(TIME_TO_JUMP_SKIP_ROPE);
                     } else if (RANDOM.nextInt(115) == 5 && bodyType == FAT) {
+                        doAction(SIT_DOWN);
                         state = IDLE_SITTING_DOWN;
-
-                        map.reportWorkerStartedAction(this, SIT_DOWN);
-
                         countdown.countFrom(TIME_TO_SIT_DOWN);
                     }
                 } else {
@@ -184,27 +171,21 @@ public class Courier extends Worker {
                     if (getCargo() != null) {
                         if (waitToGoToFlag.hasPlaceForMoreCargo()) {
                             state = GOING_TO_FLAG_TO_DELIVER_CARGO;
-
                             setTarget(waitToGoToFlag.getPosition());
-
                             waitToGoToFlag.promiseCargo(getCargo());
                         } else {
                             state = WAITING_FOR_SPACE_ON_FLAG;
                         }
                     } else {
-                        Cargo cargo = findCargoToCarry(waitToGoToFlag);
-
+                        var cargo = findCargoToCarry(waitToGoToFlag);
                         intendedCargo = cargo;
 
                         if (cargo != null) {
                             cargo.promisePickUp();
-
                             state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
-
                             setTarget(waitToGoToFlag.getPosition());
                         } else {
                             state = RETURNING_TO_IDLE_SPOT;
-
                             setTarget(idlePoint);
                         }
                     }
@@ -213,9 +194,7 @@ public class Courier extends Worker {
             case WAITING_FOR_SPACE_ON_FLAG -> {
                 if (waitToGoToFlag.hasPlaceForMoreCargo()) {
                     state = GOING_TO_FLAG_TO_DELIVER_CARGO;
-
                     setTarget(waitToGoToFlag.getPosition());
-
                     waitToGoToFlag.promiseCargo(getCargo());
                 }
             }
@@ -231,11 +210,11 @@ public class Courier extends Worker {
     }
 
     public void assignToRoad(Road newRoad) {
-        if (getTargetBuilding() != null) {
+        if (targetBuilding != null) {
             throw new InvalidGameLogicException("Can't set road as target while flag or building are already targeted");
         }
 
-        Road previousRoad = assignedRoad;
+        var previousRoad = assignedRoad;
 
         assignedRoad = newRoad;
         idlePoint = findIdlePointAtRoad(newRoad);
@@ -245,9 +224,8 @@ public class Courier extends Worker {
         switch (state) {
             case GOING_TO_FLAG_TO_DELIVER_CARGO -> {
 
-                /* Change the target if it doesn't match any of the end points of the new road */
+                // Change the target if it doesn't match any of the end points of the new road
                 if (!getTarget().equals(newRoad.getStart()) && !getTarget().equals(newRoad.getEnd())) {
-
                     if (newRoad.getStart().equals(previousRoad.getStart()) || newRoad.getStart().equals(previousRoad.getEnd())) {
                         setTarget(newRoad.getEnd());
                     } else {
@@ -256,9 +234,9 @@ public class Courier extends Worker {
                 }
             }
             case GOING_TO_BUILDING_TO_DELIVER_CARGO -> {
-                List<Point> plannedPath = getPlannedPath();
+                var plannedPath = getPlannedPath();
 
-                /* Deliver cargo to the closest flag in the road if none of the flags are next to the current targeted building */
+                // Deliver cargo to the closest flag in the road if none of the flags are next to the current targeted building
                 if (!getTarget().equals(newRoad.getStart().upLeft()) && !getTarget().equals(newRoad.getEnd().upLeft())) {
                     int indexOfStart = plannedPath.indexOf(newRoad.getStart());
                     int indexOfEnd = plannedPath.indexOf(newRoad.getEnd());
@@ -274,16 +252,13 @@ public class Courier extends Worker {
             }
             case GOING_TO_FLAG_TO_PICK_UP_CARGO -> {
                 intendedCargo.cancelPromisedPickUp();
-
                 intendedCargo = null;
 
                 state = WALKING_TO_ROAD;
-
                 setTarget(idlePoint);
             }
             default -> {
                 state = WALKING_TO_ROAD;
-
                 setTarget(idlePoint);
             }
         }
@@ -294,12 +269,11 @@ public class Courier extends Worker {
         switch (state) {
             case WALKING_TO_ROAD, RETURNING_TO_IDLE_SPOT -> state = IDLE_AT_ROAD;
             case GOING_TO_FLAG_TO_PICK_UP_CARGO -> {
-                Flag flag = map.getFlagAtPoint(getPosition());
-                Cargo cargoToPickUp = findCargoToCarry(flag);
+                var flag = map.getFlagAtPoint(getPosition());
+                var cargoToPickUp = findCargoToCarry(flag);
 
                 if (intendedCargo != null) {
                     intendedCargo.cancelPromisedPickUp();
-
                     intendedCargo = null;
                 }
 
@@ -307,46 +281,42 @@ public class Courier extends Worker {
                     pickUpCargoAndGoDeliver(cargoToPickUp);
                 } else {
                     setTarget(idlePoint);
-
                     state = RETURNING_TO_IDLE_SPOT;
                 }
             }
             case GOING_TO_BUILDING_TO_DELIVER_CARGO -> {
                 var building = map.getBuildingAtPoint(getPosition());
 
-                /* Cannot deliver if the building has just been torn down */
+                // Cannot deliver if the building has just been torn down
                 if (building == null || building.isBurningDown() || building.isDestroyed()) {
 
-                    /* Return to the headquarters off-road because the driveway is gone */
+                    // Return to the headquarters off-road because the driveway is gone
                     state = GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO;
-
                     setOffroadTarget(getPosition().downRight());
 
-                    /* Deliver the cargo normally */
+                    // Deliver the cargo normally
                 } else {
                     deliverCargo();
 
                     state = GOING_BACK_TO_ROAD;
-
                     setTarget(getPosition().downRight());
                 }
             }
             case GOING_TO_FLAG_TO_DELIVER_CARGO -> {
                 deliverCargo();
 
-                Cargo cargoToPickUp = findCargoToCarry(map.getFlagAtPoint(getPosition()));
+                var cargoToPickUp = findCargoToCarry(map.getFlagAtPoint(getPosition()));
 
                 if (cargoToPickUp != null) {
                     pickUpCargoAndGoDeliver(cargoToPickUp);
                 } else {
-
                     state = RETURNING_TO_IDLE_SPOT;
                     setTarget(idlePoint);
                 }
             }
             case GOING_BACK_TO_ROAD -> {
-                Flag flag = map.getFlagAtPoint(getPosition());
-                Cargo cargoToPickUp = findCargoToCarry(flag);
+                var flag = map.getFlagAtPoint(getPosition());
+                var cargoToPickUp = findCargoToCarry(flag);
 
                 if (cargoToPickUp != null) {
                     pickUpCargoAndGoDeliver(cargoToPickUp);
@@ -356,16 +326,15 @@ public class Courier extends Worker {
                 }
             }
             case RETURNING_TO_STORAGE -> {
-                Storehouse storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
-
+                var storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
                 storehouse.depositWorker(this);
             }
             case GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO -> {
-                state = GOING_TO_BUILDING_TO_DELIVER_CARGO;
 
-                /* Return the cargo to the headquarters */
+                // Return the cargo to the headquarters
                 getCargo().transportToStorage();
 
+                state = GOING_TO_BUILDING_TO_DELIVER_CARGO;
                 setTarget(getCargo().getTarget().getPosition());
             }
         }
@@ -389,7 +358,6 @@ public class Courier extends Worker {
 
                     if (!flag.hasPlaceForMoreCargo()) {
                         state = WAITING_FOR_SPACE_ON_FLAG;
-
                         waitToGoToFlag = flag;
 
                         stopWalkingToTarget();
@@ -408,18 +376,18 @@ public class Courier extends Worker {
                                     targetBuilding.isDestroyed() ||
                                     !targetBuilding.equals(map.getBuildingAtPoint(getCargo().getTarget().getPosition())))) {
 
-                        Material material = getCargo().getMaterial();
+                        var material = getCargo().getMaterial();
 
-                        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, material);
+                        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, material);
 
-                        /* Return the cargo to the storage if possible */
+                        // Return the cargo to the storage if possible
                         if (storage != null) {
                             cargo.setTarget(storage);
 
-                            /* Deliver the cargo either to the storage's flag or directly to the storage */
+                            // Deliver the cargo either to the storage's flag or directly to the storage
                             deliverToFlagOrBuilding(cargo);
 
-                            /* Drop the cargo if it cannot be delivered or returned */
+                            // Drop the cargo if it cannot be delivered or returned
                         } else  {
                             setCargo(null);
 
@@ -462,23 +430,22 @@ public class Courier extends Worker {
                                     targetBuilding.isDestroyed() ||
                                     !targetBuilding.equals(map.getBuildingAtPoint(getCargo().getTarget().getPosition())))) {
 
-                        Material material = getCargo().getMaterial();
+                        var material = getCargo().getMaterial();
 
-                        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, material);
+                        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, material);
 
-                        /* Return the cargo to the storage if possible */
+                        // Return the cargo to the storage if possible
                         if (storage != null) {
                             cargo.setTarget(storage);
 
-                            /* Deliver the cargo either to the storage's flag or directly to the storage */
+                            // Deliver the cargo either to the storage's flag or directly to the storage
                             deliverToFlagOrBuilding(cargo);
 
-                            /* Drop the cargo if it cannot be delivered or returned */
+                            // Drop the cargo if it cannot be delivered or returned
                         } else  {
                             setCargo(null);
 
                             state = RETURNING_TO_IDLE_SPOT;
-
                             setTarget(idlePoint);
                         }
                     }
@@ -491,19 +458,19 @@ public class Courier extends Worker {
     @Override
     protected void onReturnToStorage() {
 
-        /* Cancel any promised deliveries */
-        Cargo cargo = getCargo();
+        // Cancel any promised deliveries
+        var cargo = getCargo();
 
         if (cargo != null && cargo.getTarget() != null) {
-            Building building = cargo.getTarget();
+            var building = cargo.getTarget();
 
             if (!building.isStorehouse()) {
                 building.cancelPromisedDelivery(cargo);
             }
         }
 
-        /* Return to storage */
-        Building storage = getPlayer().getClosestStorage(getPosition(), null);
+        // Return to storage
+        var storage = getPlayer().getClosestStorage(getPosition(), null);
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
 
@@ -532,10 +499,10 @@ public class Courier extends Worker {
 
     private void deliverCargo() {
 
-        /* Deliver cargo */
-        Cargo cargo = getCargo();
-        Point currentPosition = getPosition();
-        EndPoint endPoint = getEndPointAtPoint(currentPosition);
+        // Deliver cargo
+        var cargo = getCargo();
+        var currentPosition = getPosition();
+        var endPoint = getEndPointAtPoint(currentPosition);
 
         endPoint.putCargo(cargo);
         cargo.setPosition(currentPosition);
@@ -546,17 +513,17 @@ public class Courier extends Worker {
     }
 
     private void pickUpCargoAndGoDeliver(Cargo cargoToPickUp) {
-        Point point = getPosition();
-        Flag endPoint = map.getFlagAtPoint(point);
+        var point = getPosition();
+        var endPoint = map.getFlagAtPoint(point);
 
-        /* Pick up the right cargo if we have promised to do so */
+        // Pick up the right cargo if we have promised to do so
         if (intendedCargo != null) {
             setCargo(endPoint.retrieveCargo(intendedCargo));
 
             intendedCargo = null;
             getCargo().cancelPromisedPickUp();
 
-        /* Pick up the cargo where we stand if needed */
+        // Pick up the cargo where we stand if needed
         } else if (cargoToPickUp != null) {
             if (!point.equals(endPoint.getPosition())) {
                 throw new InvalidGameLogicException(String.format("Not at %s", endPoint));
@@ -566,19 +533,19 @@ public class Courier extends Worker {
             setCargo(cargoToPickUp);
         }
 
-        /* Deliver the cargo to the other flag or all the way to the building */
+        // Deliver the cargo to the other flag or all the way to the building
         deliverToFlagOrBuilding(getCargo());
     }
 
     private void deliverToFlagOrBuilding(Cargo cargo) {
-        Point cargoTarget = cargo.getTarget().getPosition();
+        var cargoTarget = cargo.getTarget().getPosition();
 
         if (cargoTarget.downRight().equals(assignedRoad.getStart()) ||
             cargoTarget.downRight().equals(assignedRoad.getEnd())) {
             state = GOING_TO_BUILDING_TO_DELIVER_CARGO;
 
-            List<Point> roadPoints = assignedRoad.getWayPoints();
-            List<Point> toWalk = new ArrayList<>(roadPoints);
+            var roadPoints = assignedRoad.getWayPoints();
+            var toWalk = new ArrayList<>(roadPoints);
 
             if (!roadPoints.getFirst().equals(getPosition())) {
                 Collections.reverse(toWalk);
@@ -593,7 +560,7 @@ public class Courier extends Worker {
             if (assignedRoad.getWayPoints().getFirst().equals(getPosition())) {
                 setTargetWithPath(assignedRoad.getWayPoints());
             } else {
-                List<Point> toWalk = new LinkedList<>(assignedRoad.getWayPoints());
+                var toWalk = new LinkedList<>(assignedRoad.getWayPoints());
 
                 Collections.reverse(toWalk);
 
@@ -603,7 +570,7 @@ public class Courier extends Worker {
     }
 
     private Point findIdlePointAtRoad(Road road) {
-        List<Point> wayPoints = road.getWayPoints();
+        var wayPoints = road.getWayPoints();
 
         return wayPoints.get(wayPoints.size() / 2);
     }
@@ -626,24 +593,23 @@ public class Courier extends Worker {
     }
 
     private EndPoint getEndPointAtPoint(Point point) {
-        MapPoint mapPoint = map.getMapPoint(point);
-
+        var mapPoint = map.getMapPoint(point);
         return mapPoint.isFlag() ? mapPoint.getFlag() : mapPoint.getBuilding();
     }
 
     public Cargo findCargoToCarry(Flag flag) {
-        GameMap map = getMap();
-        Point point = flag.getPosition();
-        MapPoint mapPoint = map.getMapPoint(point);
+        var map = getMap();
+        var point = flag.getPosition();
+        var mapPoint = map.getMapPoint(point);
 
         // Look for the most prioritized cargo. Lower is better.
         int priority = Integer.MAX_VALUE;
         Cargo waitingCargo = null;
 
-        EndPoint otherEndOfRoad = getAssignedRoad().getOtherEndPoint(flag);
+        var otherEndOfRoad = getAssignedRoad().getOtherEndPoint(flag);
 
-        for (Cargo cargo : flag.getStackedCargo()) {
-            Building target = cargo.getTarget();
+        for (var cargo : flag.getStackedCargo()) {
+            var target = cargo.getTarget();
 
             // Filter cargos where pickup is already planned
             if (cargo.isPickupPromised() && !Objects.equals(cargo, intendedCargo)) {
@@ -667,8 +633,8 @@ public class Courier extends Worker {
             }
 
             // Filter cargos that will not benefit from going through the courier's road
-            List<Point> bestPath = map.findDetailedWayWithExistingRoadsInFlagsAndBuildings(flag, target);
-            List<Point> pathThroughRoad = map.findDetailedWayWithExistingRoadsInFlagsAndBuildings(otherEndOfRoad, target, point);
+            var bestPath = map.findDetailedWayWithExistingRoadsInFlagsAndBuildings(flag, target);
+            var pathThroughRoad = map.findDetailedWayWithExistingRoadsInFlagsAndBuildings(otherEndOfRoad, target, point);
 
             // Filter cargos where there is no road available
             if (bestPath == null) {
@@ -681,9 +647,9 @@ public class Courier extends Worker {
             }
 
             // Let the best courier do the delivery if it's available
-            Road optimalRoad = map.getRoadAtPoint(bestPath.get(1));
-            Courier courierForOptimalRoad = optimalRoad.getCourier();
-            Donkey donkeyForOptimalRoad = optimalRoad.getDonkey();
+            var optimalRoad = map.getRoadAtPoint(bestPath.get(1));
+            var courierForOptimalRoad = optimalRoad.getCourier();
+            var donkeyForOptimalRoad = optimalRoad.getDonkey();
 
             if (!getAssignedRoad().equals(optimalRoad)) {
                 if ((courierForOptimalRoad != null && courierForOptimalRoad.isIdle()) ||
@@ -737,7 +703,6 @@ public class Courier extends Worker {
 
     public void returnToStorage(Building building) {
         setTarget(building.getPosition());
-
         state = RETURNING_TO_STORAGE;
     }
 

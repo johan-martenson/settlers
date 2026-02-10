@@ -176,7 +176,6 @@ public class JobsBob {
     public static final int SCOUT_BOB_ID = -35;
     public static final int PACK_DONKEY_BOB_ID = 37;
     public static final int BOAT_CARRIER_BOB_ID = 37;
-    public static final int CHAR_BURNER_BOB_ID = 37;
 
     public static final int WOODCUTTER_WITH_WOOD_CARGO_BOB_ID = 61;
     public static final int CARPENTER_WITH_PLANK_BOB_ID = 62;

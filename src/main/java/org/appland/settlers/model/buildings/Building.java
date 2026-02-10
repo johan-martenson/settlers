@@ -175,8 +175,18 @@ public class Building implements EndPoint {
         return defendedLand;
     }
 
+    public boolean has(Material... materials) {
+        return Arrays.stream(materials).allMatch(material ->inventory.getOrDefault(material, 0) > 0);
+    }
+
     public int getAmount(Material material) {
         return inventory.getOrDefault(material, 0);
+    }
+
+    public void consume(Material... materials) {
+        for (var material : materials) {
+            consumeOne(material);
+        }
     }
 
     public void consumeOne(Material material) {

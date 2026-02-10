@@ -6,22 +6,38 @@ public class CbobRomBobsLst {
     public static final String FILENAME = "DATA/CBOB/ROM_BOBS.LST";
 
     public static final Animation DRINKING_BEER = new Animation(0, 8);
-    public static final Animation CUTTING = new Animation(24, 8);
+    public static final Animation HAMMERING_ARMOR = new Animation(16, 8);
+    public static final Animation CUTTING_TREE = new Animation(24, 8);
+    public static final Animation FEEDING_PIGS_MAYBE = new Animation(32, 8);
     public static final Animation HACKING_STONE = new Animation(40, 8);
     public static final Animation DIGGING_AND_PLANTING = new Animation(48, 36);
+    public static final Animation MINTING_COIN = new Animation(84, 8);
+    public static final Animation DIGGING_FOR_ORE = new Animation(92, 8);
+    public static final Animation IRON_FOUNDER_WORKING = new Animation(100, 8);
     public static final Animation LOWERING_FISHING_ROD_EAST = new Animation(108, 8);
     public static final Animation LOWERING_FISHING_ROD_SOUTH_EAST = new Animation(116, 8);
     public static final Animation LOWERING_FISHING_ROD_SOUTH_WEST = new Animation(124, 8);
     public static final Animation SOWING = new Animation(132, 8);
     public static final Animation HARVESTING = new Animation(140, 8);
+
     public static final Animation SAWING = new Animation(160, 6);
+    public static final Animation SLAUGHTERING = new Animation(160, 6);
+    public static final Animation WORKER_SLEEPING = new Animation(166, 16);
     public static final Animation BAKING = new Animation(182, 8);
+    public static final Animation HAMMER_TO_MAKE_TOOL = new Animation(190, 8);
+    public static final Animation SAWING_TO_MAKE_TOOL = new Animation(198, 8);
+    public static final Animation WIPE_OFF_SWEAT_TO_MAKE_TOOL = new Animation(206, 7);
+
     public static final Animation HUNTING = new Animation(219, 13);
     public static final Animation PICKING_UP_MEAT = new Animation(232, 12);
+    public static final Animation PUT_MEAT_IN_BACKPACK = new Animation(244, 8);
     public static final Animation DIGGING_AND_STOMPING = new Animation(253, 26);
     public static final Animation HAMMERING_HOUSE_HIGH_AND_LOW = new Animation(279, 8);
     public static final Animation INSPECTING_HOUSE_CONSTRUCTION = new Animation(287, 4);
     public static final Animation INVESTIGATING = new Animation(314, 16);
+    public static final Animation DRAWING_WATER_1 = new Animation(330, 8);
+    public static final Animation DRAWING_WATER_2 = new Animation(338, 8);
+    public static final Animation DRAWING_WATER_3 = new Animation(346, 8);
 
     public static final Animation ROMAN_PRIVATE_ATTACKING_EAST = new Animation(364, 8);
     public static final Animation ROMAN_PRIVATE_FIRST_CLASS_ATTACKING_EAST = new Animation(372, 8);
@@ -267,13 +283,5 @@ public class CbobRomBobsLst {
     public static final Animation JUMP_SKIP_ROPE = new Animation(1745, 7);
     public static final Animation READ_NEWSPAPER = new Animation(1759, 7);
     public static final Animation TOUCH_NOSE = new Animation(1770, 5);
-    public static final Animation HAMMERING_ARMOR = new Animation(16, 8);
-    public static final Animation DIGGING_FOR_ORE = new Animation(92, 8);
-    public static final Animation IRON_FOUNDER_WORKING = new Animation(100, 8);
-    public static final Animation SLAUGHTERING = new Animation(160, 6);
-    public static final Animation MAKING_TOOLS = new Animation(190, 23); // TODO: split into multiple animations
-    public static final Animation HAMMER_TO_MAKE_TOOL = new Animation(190, 8);
-    public static final Animation SAWING_TO_MAKE_TOOL = new Animation(198, 8);
-    public static final Animation WIPE_OFF_SWEAT_TO_MAKE_TOOL = new Animation(206, 7);
-    public static final Animation MINTING_COIN = new Animation(84, 8);
+
 }

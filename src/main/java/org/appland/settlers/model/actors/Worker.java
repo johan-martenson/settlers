@@ -11,6 +11,7 @@ import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.OffroadOption;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.utils.Duration;
@@ -19,6 +20,7 @@ import org.appland.settlers.utils.StatsConstants;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -45,18 +47,18 @@ public abstract class Worker {
     protected final Player player;
     protected final GameMap map;
 
-    protected Point       target = null;
+    protected Point     target = null;
     protected Point     position = null;
     protected Building  home = null;
     protected Cargo     carriedCargo;
     protected Direction direction = Direction.DOWN_RIGHT;
+    protected Building   targetBuilding = null;
 
     private final Countdown walkCountdown = new Countdown();
 
     private boolean     dead = false;
     private List<Point> path = null;
     private State       state = State.IDLE_OUTSIDE;
-    private Building    targetBuilding = null;
 
     static class ProductivityMeasurer {
         private final int cycleLength;
@@ -390,8 +392,8 @@ public abstract class Worker {
         return carriedCargo;
     }
 
-    void setOffroadTarget(Point point, OffroadOption offroadOption) {
-        setOffroadTarget(point, null, offroadOption);
+    void setOffroadTarget(Point point, OffroadOption... offroadOptions) {
+        setOffroadTarget(point, null, offroadOptions);
     }
 
     void setOffroadTarget(Point point) {
@@ -403,31 +405,46 @@ public abstract class Worker {
     }
 
     // FIXME: HOTSPOT - allocations
-    void setOffroadTarget(Point point, Point via, OffroadOption offroadOption) {
-        boolean wasInside = false;
+    void setOffroadTarget(Point point, Point via, OffroadOption... offroadOptions) {
+        System.out.println();
+        System.out.println(this);
+        System.out.println("Set offroad target");
+
+        var offroadOptionsSet = offroadOptions == null ? new HashSet<>() : new HashSet<>(List.of(offroadOptions));
+        var wasInside = false;
 
         target = point;
 
         if (state == State.IDLE_INSIDE && map.getBuildingAtPoint(position).isReady()) {
             wasInside = true;
 
-            getHome().openDoor(10);
+            home.openDoor(10);
         }
+
+        System.out.println(wasInside);
+        System.out.println(offroadOptionsSet);
+        System.out.println(target);
 
         if (position.equals(point)) {
             state = State.IDLE_OUTSIDE;
 
             handleArrival();
         } else {
-            if (wasInside && !target.equals(home.getFlag().getPosition())) {
-
+            if (wasInside && !target.equals(home.getFlag().getPosition()) &&
+                !offroadOptionsSet.contains(OffroadOption.DONT_WALK_VIA_FLAG)) {
+                System.out.println("Find way via flag");
                 // Get from the flag to the target
-                path = map.findWayOffroad(home.getFlag().getPosition(), via, point, null, offroadOption);
+                path = map.findWayOffroad(home.getFlag().getPosition(), via, point, null, offroadOptions);
 
                 // Add the initial step of going from the home to the flag
                 path.addFirst(home.getPosition());
             } else {
-                path = map.findWayOffroad(position, via, point, null, offroadOption);
+                System.out.println("Find way without flag");
+                System.out.println("I'm at: " + position);
+                System.out.println(via);
+                System.out.println(point);
+                path = map.findWayOffroad(position, via, point, null, offroadOptions);
+                System.out.println(path);
             }
 
             // Remove the current position so the path only contains the steps to take
@@ -609,10 +626,10 @@ public abstract class Worker {
         // Empty method for subclasses to override if needed
     }
 
-    void walkHalfWayOffroadTo(Point point, OffroadOption offroadOption) {
+    void walkHalfWayOffroadTo(Point point, OffroadOption... offroadOptions) {
 
         // Walk halfway to the given target
-        setOffroadTarget(point, OffroadOption.CAN_END_ON_STONE);
+        setOffroadTarget(point, offroadOptions);
 
         state = State.WALKING_HALFWAY_AND_EXACTLY_AT_POINT;
     }
@@ -624,6 +641,13 @@ public abstract class Worker {
     void returnToFixedPoint() {
         var previousTarget = target;
         var previousLastPoint = getLastPoint();
+
+        System.out.println();
+        System.out.println("Return to fixed point.");
+        System.out.println("Previous target: " + previousTarget);
+        System.out.println("Previous last point: " + previousLastPoint);
+        System.out.println("Progress: " + getPercentageOfDistanceTraveled());
+        System.out.println("Direction: " + getDirection());
 
         // Change the previous position to make the worker leave the previous target
         position = previousTarget;
@@ -637,6 +661,13 @@ public abstract class Worker {
 
         // Set the state to be walking between two fixed points
         state = State.WALKING_BETWEEN_POINTS;
+        direction = GameUtils.getDirectionBetweenPoints(position, path.getFirst());
+
+        System.out.println("New target: " + target);
+        System.out.println("New position: " + position);
+        System.out.println("New next point: " + getNextPoint());
+        System.out.println(path);
+        System.out.println("New direction: " + getDirection());
     }
 
     GameMap getMap() {
@@ -694,10 +725,15 @@ public abstract class Worker {
     }
 
     void goOutside() {
-        player.reportWorkerOutside(this);
+        map.reportWorkerWentOutside(this);
         state = State.IDLE_OUTSIDE;
     }
     void goInside() {
         state = State.IDLE_INSIDE;
+        map.reportWorkerEnteredBuilding(this);
+    }
+
+    void doAction(WorkerAction action) {
+        map.reportWorkerStartedAction(this, action);
     }
 }

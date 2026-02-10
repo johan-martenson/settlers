@@ -5,7 +5,7 @@ import org.appland.settlers.maps.ByteArray;
 import java.io.IOException;
 import java.nio.ByteOrder;
 
-public interface ByteReader {
+public interface ByteReader extends AutoCloseable {
     short getUint8() throws IOException;
 
     byte getInt8() throws IOException;
@@ -53,4 +53,6 @@ public interface ByteReader {
     String getRemainingBytesAsString() throws IOException;
 
     int length();
+
+    String getUint8ArrayAsNullTerminatedString(int length) throws IOException;
 }

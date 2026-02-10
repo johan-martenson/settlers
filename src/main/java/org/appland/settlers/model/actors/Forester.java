@@ -8,7 +8,6 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Vegetation;
-import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
 
@@ -16,6 +15,7 @@ import java.util.Objects;
 import java.util.Random;
 
 import static org.appland.settlers.model.Material.FORESTER;
+import static org.appland.settlers.model.WorkerAction.PLANTING_TREE;
 
 @Walker(speed = 10)
 public class Forester extends Worker {
@@ -197,7 +197,7 @@ public class Forester extends Worker {
                 !map.isFlagAtPoint(position) &&
                 !map.isRoadAtPoint(position)) {
                     state = State.PLANTING;
-                    map.reportWorkerStartedAction(this, WorkerAction.PLANTING_TREE);
+                    doAction(PLANTING_TREE);
                     countdown.countFrom(TIME_TO_PLANT);
                 } else {
                     state = State.GOING_BACK_TO_HOUSE;

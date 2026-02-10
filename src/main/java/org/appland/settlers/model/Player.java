@@ -803,7 +803,8 @@ public class Player {
                 removedSigns, newCrops, removedCrops, newDiscoveredLand, addedBorder, removedBorder,
                 workersWithNewTargets, changedBorders, newStones, newMessages, promotedRoads, changedFlags,
                 removedDeadTrees, harvestedCrops, newShips, finishedShips, shipsWithNewTargets,
-                removedDecorations, upgradedBuildings, changedAvailableConstruction, toolQuotasChanged, newWorkersOutside) &&
+                removedDecorations, upgradedBuildings, changedAvailableConstruction, toolQuotasChanged, newWorkersOutside,
+                newFallingTrees) &&
             GameUtils.allMapsEmpty(workersWithStartedActions, newDecorations) &&
             !transportPriorityChanged) {
             return;
@@ -1707,6 +1708,8 @@ public class Player {
     }
 
     public void reportNewFallingTree(Tree tree) {
+        System.out.println("Got new falling tree reported for " + name);
+
         newFallingTrees.add(tree);
     }
 

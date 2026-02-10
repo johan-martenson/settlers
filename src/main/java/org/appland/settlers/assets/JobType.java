@@ -31,6 +31,5 @@ public enum JobType {
     SHIP_WRIGHT,        // 27
     SCOUT,             // 28
     PACK_DONKEY,        // 29
-    BOAT_CARRIER,       // 30
-    CHAR_BURNER         // 31
+    BOAT_CARRIER
 }

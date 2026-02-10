@@ -461,6 +461,9 @@ public class GameMap {
                                     .forEach(player::reportWorkerOutside);
 
             newFallingTrees.stream()
+                            .forEach(tree -> System.out.println(player.getDiscoveredLand().contains(tree.getPosition())));
+
+            newFallingTrees.stream()
                     .filter(tree -> player.getDiscoveredLand().contains(tree.getPosition()))
                     .forEach(player::reportNewFallingTree);
 
@@ -1863,17 +1866,17 @@ public class GameMap {
         return findShortestPath(start, goal, avoid, OFFROAD_CONNECTIONS_PROVIDER);
     }
 
-    public List<Point> findWayOffroad(Point start, Point via, Point goal, Set<Point> avoid, OffroadOption offroadOption) {
+    public List<Point> findWayOffroad(Point start, Point via, Point goal, Set<Point> avoid, OffroadOption... offroadOptions) {
+        var offroadOptionsSet = new HashSet<>(offroadOptions == null ? Collections.emptyList() : List.of(offroadOptions));
         var offroadConnectionsWithOptions = new ConnectionsProvider() {
 
             @Override
             public Iterable<Point> getPossibleConnections(Point start, Point end) {
-                List<Point>  possibleAdjacentOffRoadConnections = new ArrayList<>();
-
+                var possibleAdjacentOffRoadConnections = new ArrayList<Point>();
                 var mapPointStart = getMapPoint(start);
 
                 // Houses can only be left via the driveway so handle this case separately
-                if (mapPointStart.isBuilding()) {
+                if (mapPointStart.isBuilding() && !offroadOptionsSet.contains(OffroadOption.DONT_WALK_VIA_FLAG)) {
                     possibleAdjacentOffRoadConnections.add(start.downRight());
 
                     return possibleAdjacentOffRoadConnections;
@@ -1905,7 +1908,7 @@ public class GameMap {
                         .filter(adjacentPoint -> !adjacentPoint.isDownRightOf(start) || canWalkOnTileDownRight || canWalkOnTileBelow)
                         .filter(adjacentPoint -> !adjacentPoint.isDownLeftOf(start) || canWalkOnTileDownLeft || canWalkOnTileBelow)
                         .map(GameMap.this::getMapPoint)
-                        .filter(mapPoint -> !mapPoint.isStone() || (offroadOption == OffroadOption.CAN_END_ON_STONE && Objects.equals(mapPoint.getPoint(), end)))
+                        .filter(mapPoint -> !mapPoint.isStone() || (offroadOptionsSet.contains(OffroadOption.CAN_END_ON_STONE) && Objects.equals(mapPoint.getPoint(), end)))
                         .filter(mapPoint -> !mapPoint.isBuilding() || Objects.equals(mapPoint.getPoint().downRight(), start))
                         .map(MapPoint::getPoint)
                         .toList();
@@ -3364,5 +3367,19 @@ public class GameMap {
 
     public void reportWorkerWentOutside(Worker worker) {
         newWorkersOutside.add(worker);
+    }
+
+    public Collection<Point> getPointsInMap() {
+        var result = new ArrayList<Point>();
+
+        for (int y = 0; y < height; y++) {
+            var xStart = (y % 2 == 0) ? 0 : 1;
+
+            for (int x = xStart; x < width; x += 2) {
+                result.add(new Point(x, y));
+            }
+        }
+
+        return result;
     }
 }

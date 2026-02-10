@@ -54,6 +54,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -1112,6 +1113,30 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                         .stream().map(messageId -> idManager.getObject((String) messageId))
                         .forEach(readMessage -> player.markMessageAsRead((Message) readMessage));
             }
+
+            case CHEAT -> {
+                var cheatCode = (String) jsonBody.get("cheatCode");
+
+                if (cheatCode.equals("GIVE_ME_SOME_MORE")) {
+                    var headquarters = map.getBuildings().stream()
+                            .filter(building -> Objects.equals(building.getPlayer(), player))
+                            .filter(building -> building instanceof Headquarter)
+                            .findFirst();
+
+                    if (headquarters.isPresent()) {
+                        synchronized (map) {
+                            for (var material : Material.values()) {
+                                GameUtils.deliver(material, 10, (Headquarter) headquarters.get());
+                            }
+                        }
+                    }
+                } else if (cheatCode.equals("SHOW_ME_THE_WORLD")) {
+                    synchronized (map) {
+                        org.appland.settlers.model.GameUtils.discoverFullMap(player);
+                    }
+                }
+            }
+
             default -> throw new RuntimeException("Message contains unknown command: " + message);
         }
     }

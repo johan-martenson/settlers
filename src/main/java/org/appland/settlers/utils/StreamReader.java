@@ -160,8 +160,15 @@ public class StreamReader implements ByteReader, AutoCloseable {
         return new String(bytes, 0, nullPos == -1 ? bytes.length : nullPos, StandardCharsets.US_ASCII);
     }
 
-    public String getUint8ArrayAsNullTerminatedString(int length) throws IOException {
-        return getUint8ArrayAsString(length);
+    public String getUint8ArrayAsNullTerminatedString(int maxLength) throws IOException {
+            byte[] bytes = getUint8ArrayAsBytes(maxLength);
+
+            int end = 0;
+            while (end < bytes.length && bytes[end] != 0) {
+                end++;
+            }
+
+            return new String(bytes, 0, end, StandardCharsets.US_ASCII);
     }
 
     public String getRemainingBytesAsString() throws IOException {
@@ -192,8 +199,6 @@ public class StreamReader implements ByteReader, AutoCloseable {
     }
 
     public void setPosition(long target) throws IOException {
-        System.out.println(target);
-        System.out.println(offset);
         if (target < offset) {
             throw new IOException("Cannot seek backwards in forward-only StreamReader");
         }

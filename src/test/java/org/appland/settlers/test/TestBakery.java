@@ -2,6 +2,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Direction;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -19,9 +20,8 @@ import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
@@ -33,16 +33,25 @@ import static org.junit.Assert.*;
  */
 public class TestBakery {
 
+    /*
+     * Baking:
+     *  1. Baker goes out to oven, carrying dough
+     *  2. Baker puts the bread into the oven and the smoke starts coming from the bakery's chimney
+     *  3. Baker waits outside the oven
+     *  4. Bread is done - baker takes out the bread and the smoke stops
+     *  5. Baker goes back to the bakery
+     *  6. Baker waits a little bit inside the bakery ??
+     *  7. Baker goes out to place the bread at the flag
+     */
+
     @Test
     public void testBakeryOnlyNeedsTwoPlanksAndTwoStonesForConstruction() throws Exception {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point21 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -72,11 +81,9 @@ public class TestBakery {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point21 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -106,11 +113,9 @@ public class TestBakery {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point21 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -140,11 +145,9 @@ public class TestBakery {
 
         // Create new single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -152,7 +155,7 @@ public class TestBakery {
         var point3 = new Point(7, 9);
         var bakery = map.placeBuilding(new Bakery(player0), point3);
 
-        // Connect the bakery with the headquarter
+        // Connect the bakery with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         // Unfinished sawmill doesn't need worker
@@ -176,11 +179,9 @@ public class TestBakery {
 
         // Create new single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -188,7 +189,7 @@ public class TestBakery {
         var point3 = new Point(7, 9);
         var bakery = map.placeBuilding(new Bakery(player0), point3);
 
-        // Connect the bakery with the headquarter
+        // Connect the bakery with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         // Finish construction of the bakery
@@ -196,7 +197,7 @@ public class TestBakery {
 
         assertTrue(bakery.needsWorker());
 
-        // Verify that a bakery worker leaves the headquarter
+        // Verify that a bakery worker leaves the headquarters
         Utils.fastForward(3, map);
 
         assertTrue(map.getWorkers().size() >= 3);
@@ -225,11 +226,9 @@ public class TestBakery {
 
         // Create new single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -237,7 +236,7 @@ public class TestBakery {
         var point3 = new Point(7, 9);
         var bakery = map.placeBuilding(new Bakery(player0), point3);
 
-        // Connect the bakery with the headquarter
+        // Connect the bakery with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         // Finish construction of the bakery
@@ -245,7 +244,7 @@ public class TestBakery {
 
         assertTrue(bakery.needsWorker());
 
-        // Verify that a bakery worker leaves the headquarter
+        // Verify that a bakery worker leaves the headquarters
         Utils.fastForward(3, map);
 
         assertTrue(map.getWorkers().size() >= 3);
@@ -268,15 +267,13 @@ public class TestBakery {
 
         // Create new single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Remove all bakers from the headquarter and add one rolling pin
+        // Remove all bakers from the headquarters and add one rolling pin
         Utils.adjustInventoryTo(headquarter, BAKER, 0);
         Utils.adjustInventoryTo(headquarter, Material.ROLLING_PIN, 1);
 
@@ -284,7 +281,7 @@ public class TestBakery {
         var point3 = new Point(7, 9);
         var bakery = map.placeBuilding(new Bakery(player0), point3);
 
-        // Connect the bakery with the headquarter
+        // Connect the bakery with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         // Finish construction of the bakery
@@ -292,7 +289,7 @@ public class TestBakery {
 
         assertTrue(bakery.needsWorker());
 
-        // Verify that a bakery worker leaves the headquarter
+        // Verify that a bakery worker leaves the headquarters
         Utils.fastForward(3, map);
 
         assertTrue(map.getWorkers().size() >= 3);
@@ -321,11 +318,9 @@ public class TestBakery {
 
         // Create new single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -347,7 +342,9 @@ public class TestBakery {
         for (int i = 0; i < 500; i++) {
             assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
             assertNull(baker.getCargo());
-            assertFalse(baker.isBaking());
+            assertFalse(baker.isPuttingDoughIntoOven());
+            assertFalse(baker.isTakingBreadOutOfOven());
+            assertTrue(baker.isInsideBuilding());
             assertFalse(bakery.isWorking());
 
             map.stepTime();
@@ -359,11 +356,9 @@ public class TestBakery {
 
         // Create new single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -388,11 +383,9 @@ public class TestBakery {
 
         // Create new single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -400,7 +393,7 @@ public class TestBakery {
         var point3 = new Point(7, 9);
         var bakery = map.placeBuilding(new Bakery(player0), point3);
 
-        // Connect the bakery with the headquarter
+        // Connect the bakery with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         // Finish construction of the bakery
@@ -412,38 +405,176 @@ public class TestBakery {
         assertTrue(baker.isInsideBuilding());
         assertEquals(baker.getHome(), bakery);
         assertEquals(bakery.getWorker(), baker);
+        assertFalse(bakery.isWorking());
+        assertFalse(baker.isPuttingDoughIntoOven());
+        assertFalse(baker.isTakingBreadOutOfOven());
 
-        // Deliver wood to the bakery
+        // Deliver material to the bakery
         Utils.deliverCargo(bakery, WATER);
         Utils.deliverCargo(bakery, FLOUR);
 
-        // Let the baker rest
+        // Verify that the baker rests
         for (int i = 0; i < 99; i++) {
             map.stepTime();
 
             assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
             assertNull(baker.getCargo());
-            assertFalse(baker.isBaking());
             assertFalse(bakery.isWorking());
+            assertFalse(baker.isPuttingDoughIntoOven());
+            assertFalse(baker.isTakingBreadOutOfOven());
+            assertTrue(baker.isInsideBuilding());
         }
 
-        // Verify that the bakery produces bread
-        for (int i = 0; i < 50; i++) {
+        // Verify that the baker goes out to oven, carrying dough (halfway down-left) and the smoke starts coming from the bakery's chimney
+        map.stepTime();
+
+        assertEquals(baker.getTarget(), bakery.getPosition().downLeft());
+        assertEquals(baker.getNextPoint(), bakery.getPosition().downLeft());
+        assertTrue(bakery.isWorking());
+
+        for (int i = 0; i < 2_000; i++) {
+            if (baker.getPercentageOfDistanceTraveled() == 50) {
+                break;
+            }
+
+            assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
+            assertNull(baker.getCargo());
+            assertTrue(bakery.isWorking());
+            assertFalse(baker.isPuttingDoughIntoOven());
+            assertFalse(baker.isTakingBreadOutOfOven());
+            assertFalse(baker.isInsideBuilding());
+
+            map.stepTime();
+        }
+
+        // Verify that the baker puts the bread into the oven
+        assertTrue(bakery.isWorking());
+        assertTrue(baker.isPuttingDoughIntoOven());
+        assertFalse(baker.isTakingBreadOutOfOven());
+        assertEquals(baker.getPercentageOfDistanceTraveled(), 50);
+
+        for (int i = 0; i < 29; i++) {
             map.stepTime();
 
             assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
             assertNull(baker.getCargo());
-            assertTrue(baker.isBaking());
+            assertFalse(baker.isInsideBuilding());
             assertTrue(bakery.isWorking());
+            assertTrue(baker.isPuttingDoughIntoOven());
+            assertFalse(baker.isTakingBreadOutOfOven());
+            assertEquals(baker.getPercentageOfDistanceTraveled(), 50);
+        }
+
+        // Verify that the baker waits outside the oven
+        for (int i = 0; i < 30; i++) {
+            map.stepTime();
+
+            assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
+            assertNull(baker.getCargo());
+            assertFalse(baker.isInsideBuilding());
+            assertFalse(baker.isPuttingDoughIntoOven());
+            assertFalse(baker.isTakingBreadOutOfOven());
+            assertTrue(bakery.isWorking());
+            assertEquals(baker.getPercentageOfDistanceTraveled(), 50);
+            assertEquals(baker.getDirection(), Direction.LEFT);
+        }
+
+        // Verify that bread is done - baker takes out the bread and the smoke stops
+        map.stepTime();
+
+        assertFalse(bakery.isWorking());
+        assertFalse(baker.isPuttingDoughIntoOven());
+        assertTrue(baker.isTakingBreadOutOfOven());
+
+        for (int i = 0; i < 29; i++) {
+            map.stepTime();
+
+            assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
+            assertNull(baker.getCargo());
+            assertFalse(baker.isInsideBuilding());
+            assertFalse(bakery.isWorking());
+            assertFalse(baker.isPuttingDoughIntoOven());
+            assertTrue(baker.isTakingBreadOutOfOven());
+        }
+
+        // Verify that the baker goes back to the bakery
+        map.stepTime();
+
+        assertEquals(baker.getTarget(), bakery.getPosition());
+        assertEquals(baker.getNextPoint(), bakery.getPosition());
+        assertEquals(baker.getCargo().getMaterial(), BREAD);
+        assertFalse(bakery.isWorking());
+        assertFalse(baker.isPuttingDoughIntoOven());
+        assertFalse(baker.isTakingBreadOutOfOven());
+
+        for (int i = 0; i < 29; i++) {
+            if (baker.getPosition().equals(bakery.getPosition())) {
+                break;
+            }
+
+            assertEquals(baker.getTarget(), bakery.getPosition());
+            assertEquals(baker.getNextPoint(), bakery.getPosition());
+            assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
+            assertEquals(baker.getCargo().getMaterial(), BREAD);
+            assertFalse(bakery.isWorking());
+            assertFalse(baker.isPuttingDoughIntoOven());
+            assertFalse(baker.isTakingBreadOutOfOven());
+
+            map.stepTime();
+        }
+
+        assertTrue(baker.isInsideBuilding());
+
+        // Verify that the baker waits a little bit inside the bakery ??
+        for (int i = 0; i < 30; i++) {
+            assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
+            assertTrue(baker.isInsideBuilding());
+            assertFalse(bakery.isWorking());
+            assertFalse(baker.isPuttingDoughIntoOven());
+            assertFalse(baker.isTakingBreadOutOfOven());
+
+            map.stepTime();
+        }
+
+        // Verify that the baker goes out to place the bread at the flag
+        assertEquals(baker.getTarget(), bakery.getFlag().getPosition());
+
+        for (int i = 0; i < 2_000; i++) {
+            if (Objects.equals(baker.getPosition(), bakery.getFlag().getPosition())) {
+                break;
+            }
+
+            assertEquals(baker.getTarget(), bakery.getFlag().getPosition());
+            assertFalse(bakery.isWorking());
+            assertFalse(baker.isPuttingDoughIntoOven());
+            assertFalse(baker.isTakingBreadOutOfOven());
+
+            map.stepTime();
+        }
+
+        assertEquals(baker.getPercentageOfDistanceTraveled(), 100);
+        assertFalse(bakery.getFlag().getStackedCargo().isEmpty());
+        assertNull(baker.getCargo());
+
+        // Verify that the baker goes back to the bakery
+        assertEquals(baker.getTarget(), bakery.getPosition());
+
+        for (int i = 0; i < 2_000; i++) {
+            if (Objects.equals(baker.getPosition(), bakery.getPosition())) {
+                break;
+            }
+
+            map.stepTime();
+
+            assertEquals(baker.getTarget(), bakery.getPosition());
         }
 
         map.stepTime();
 
-        assertNotNull(baker.getCargo());
-        assertEquals(baker.getCargo().getMaterial(), BREAD);
-        assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
-        assertFalse(baker.isBaking());
-        assertFalse(bakery.isWorking());
+        assertEquals(baker.getPercentageOfDistanceTraveled(), 100);
+        assertEquals(baker.getPosition(), bakery.getPosition());
+        assertNull(baker.getCargo());
+        assertTrue(baker.isInsideBuilding());
     }
 
     @Test
@@ -451,11 +582,9 @@ public class TestBakery {
 
         // Create new single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -463,7 +592,7 @@ public class TestBakery {
         var point3 = new Point(7, 9);
         var bakery = map.placeBuilding(new Bakery(player0), point3);
 
-        // Connect the bakery with the headquarter
+        // Connect the bakery with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         // Finish construction of the bakery
@@ -510,16 +639,13 @@ public class TestBakery {
     }
 
     @Test
-    public void testBreadCargoIsDeliveredToMineWhichIsCloserThanHeadquarters() throws Exception {
+    public void testBreadCargoIsDeliveredToMineWhichIsCloserThanheadquarter() throws Exception {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        var map = new GameMap(players, 20, 20);
-
-        // Place headquarter
+        // Place headquarters
         var point3 = new Point(6, 4);
         var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -577,12 +703,9 @@ public class TestBakery {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        var map = new GameMap(players, 20, 20);
-
-        // Place headquarter
+        // Place headquarters
         var point3 = new Point(6, 4);
         var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -640,12 +763,9 @@ public class TestBakery {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        var map = new GameMap(players, 20, 20);
-
-        // Place headquarter
+        // Place headquarters
         var point3 = new Point(6, 4);
         var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -717,11 +837,9 @@ public class TestBakery {
 
         // Create new single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -754,11 +872,9 @@ public class TestBakery {
 
         // Create new single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -798,11 +914,9 @@ public class TestBakery {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -863,11 +977,9 @@ public class TestBakery {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -911,7 +1023,7 @@ public class TestBakery {
 
         assertEquals(cargo.getPosition(), bakery0.getFlag().getPosition());
 
-        // Connect the bakery with the headquarter
+        // Connect the bakery with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), bakery0.getFlag());
 
         // Assign a courier to the road
@@ -937,14 +1049,14 @@ public class TestBakery {
         assertNotNull(courier.getCargo());
         assertEquals(courier.getCargo(), cargo);
 
-        // Verify that the courier delivers the cargo to the headquarter
+        // Verify that the courier delivers the cargo to the headquarters
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(BREAD);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
-        // Verify that the courier has delivered the cargo to the headquarter
+        // Verify that the courier has delivered the cargo to the headquarters
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(BREAD), amount + 1);
     }
@@ -954,11 +1066,9 @@ public class TestBakery {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -980,7 +1090,7 @@ public class TestBakery {
 
         bakery0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(baker.isInsideBuilding());
         assertEquals(baker.getTarget(), headquarter0.getPosition());
 
@@ -988,7 +1098,7 @@ public class TestBakery {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getPosition());
 
-        // Verify that the baker is stored correctly in the headquarter
+        // Verify that the baker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(BAKER), amount + 1);
     }
 
@@ -997,11 +1107,9 @@ public class TestBakery {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1009,7 +1117,7 @@ public class TestBakery {
         var point26 = new Point(8, 8);
         var bakery0 = map.placeBuilding(new Bakery(player0), point26);
 
-        // Connect the bakery with the headquarter
+        // Connect the bakery with the headquarters
         map.placeAutoSelectedRoad(player0, bakery0.getFlag(), headquarter0.getFlag());
 
         // Finish construction of the bakery
@@ -1026,7 +1134,7 @@ public class TestBakery {
 
         bakery0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(baker.isInsideBuilding());
         assertEquals(baker.getTarget(), headquarter0.getPosition());
 
@@ -1047,11 +1155,9 @@ public class TestBakery {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1059,7 +1165,7 @@ public class TestBakery {
         var point1 = new Point(12, 8);
         var bakery0 = map.placeBuilding(new Bakery(player0), point1);
 
-        // Connect the bakery and the headquarter
+        // Connect the bakery and the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, bakery0.getFlag(), headquarter.getFlag());
 
         // Finish the bakery
@@ -1106,11 +1212,9 @@ public class TestBakery {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1118,7 +1222,7 @@ public class TestBakery {
         var point1 = new Point(12, 8);
         var bakery0 = map.placeBuilding(new Bakery(player0), point1);
 
-        // Connect the bakery and the headquarter
+        // Connect the bakery and the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, bakery0.getFlag(), headquarter.getFlag());
 
         // Finish the bakery
@@ -1172,13 +1276,9 @@ public class TestBakery {
 
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 50, 50);
 
-        // Create game map
-        var map = new GameMap(players, 50, 50);
-
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(15, 15);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1189,10 +1289,10 @@ public class TestBakery {
         // Finish construction of the bakery
         Utils.constructHouse(bakery0);
 
-        // Connect the bakery with the headquarter
+        // Connect the bakery with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), bakery0.getFlag());
 
-        // Wait for baker to get assigned and leave the headquarter
+        // Wait for baker to get assigned and leave the headquarters
         var workers = Utils.waitForWorkersOutsideBuilding(Baker.class, 1, player0);
 
         assertNotNull(workers);
@@ -1211,25 +1311,17 @@ public class TestBakery {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1, player2), 100, 100);
 
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-        players.add(player2);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
-
-        // Place player 2's headquarter
+        // Place player 2's headquarters
         var point10 = new Point(70, 70);
         var headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
-        // Place player 0's headquarter
+        // Place player 0's headquarters
         var point0 = new Point(9, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place player 1's headquarter
+        // Place player 1's headquarters
         var point1 = new Point(45, 5);
         var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1264,11 +1356,9 @@ public class TestBakery {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1280,7 +1370,7 @@ public class TestBakery {
         var point2 = new Point(14, 4);
         var bakery0 = map.placeBuilding(new Bakery(player0), point2.upLeft());
 
-        // Connect headquarter and first flag
+        // Connect headquarters and first flag
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
@@ -1315,7 +1405,7 @@ public class TestBakery {
 
         assertEquals(baker.getPosition(), flag0.getPosition());
 
-        // Verify that the baker returns to the headquarter when it reaches the flag
+        // Verify that the baker returns to the headquarters when it reaches the flag
         assertEquals(baker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getPosition());
@@ -1326,11 +1416,9 @@ public class TestBakery {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1342,7 +1430,7 @@ public class TestBakery {
         var point2 = new Point(14, 4);
         var bakery0 = map.placeBuilding(new Bakery(player0), point2.upLeft());
 
-        // Connect headquarter and first flag
+        // Connect headquarters and first flag
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
@@ -1391,11 +1479,9 @@ public class TestBakery {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1407,7 +1493,7 @@ public class TestBakery {
         var point2 = new Point(14, 4);
         var bakery0 = map.placeBuilding(new Bakery(player0), point2.upLeft());
 
-        // Connect headquarter and first flag
+        // Connect headquarters and first flag
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
@@ -1452,11 +1538,9 @@ public class TestBakery {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1485,7 +1569,7 @@ public class TestBakery {
 
         bakery0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(baker.isInsideBuilding());
         assertEquals(baker.getTarget(), storehouse0.getPosition());
 
@@ -1493,7 +1577,7 @@ public class TestBakery {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, baker, storehouse0.getPosition());
 
-        // Verify that the baker is stored correctly in the headquarter
+        // Verify that the baker is stored correctly in the headquarters
         assertEquals(storehouse0.getAmount(BAKER), amount + 1);
     }
 
@@ -1502,11 +1586,9 @@ public class TestBakery {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1538,7 +1620,7 @@ public class TestBakery {
 
         bakery0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(baker.isInsideBuilding());
         assertEquals(baker.getTarget(), headquarter0.getPosition());
 
@@ -1546,7 +1628,7 @@ public class TestBakery {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getPosition());
 
-        // Verify that the baker is stored correctly in the headquarter
+        // Verify that the baker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(BAKER), amount + 1);
     }
 
@@ -1555,11 +1637,9 @@ public class TestBakery {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1594,7 +1674,7 @@ public class TestBakery {
 
         bakery0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(baker.isInsideBuilding());
         assertEquals(baker.getTarget(), headquarter0.getPosition());
 
@@ -1602,7 +1682,7 @@ public class TestBakery {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getPosition());
 
-        // Verify that the baker is stored correctly in the headquarter
+        // Verify that the baker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(BAKER), amount + 1);
     }
 
@@ -1611,11 +1691,9 @@ public class TestBakery {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1641,7 +1719,7 @@ public class TestBakery {
 
         bakery0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(baker.isInsideBuilding());
         assertEquals(baker.getTarget(), headquarter0.getPosition());
 
@@ -1649,7 +1727,7 @@ public class TestBakery {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getPosition());
 
-        // Verify that the baker is stored correctly in the headquarter
+        // Verify that the baker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(BAKER), amount + 1);
     }
 
@@ -1658,11 +1736,9 @@ public class TestBakery {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1670,7 +1746,7 @@ public class TestBakery {
         var point26 = new Point(17, 17);
         var bakery0 = map.placeBuilding(new Bakery(player0), point26);
 
-        // Place road to connect the headquarter and the bakery
+        // Place road to connect the headquarters and the bakery
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), bakery0.getFlag());
 
         // Finish construction of the bakery
@@ -1685,7 +1761,7 @@ public class TestBakery {
         // Tear down the building
         bakery0.tearDown();
 
-        // Verify that the worker goes to the building and then returns to the headquarter instead of entering
+        // Verify that the worker goes to the building and then returns to the headquarters instead of entering
         assertEquals(worker.getTarget(), bakery0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, bakery0.getPosition());
@@ -1700,11 +1776,9 @@ public class TestBakery {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1737,11 +1811,9 @@ public class TestBakery {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1759,7 +1831,7 @@ public class TestBakery {
         assertEquals(baker0.getHome(), bakery);
         assertEquals(bakery.getWorker(), baker0);
 
-        // Connect the bakery with the headquarter
+        // Connect the bakery with the headquarters
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), bakery.getFlag());
 
         // Make the bakery create some bread with full resources available
@@ -1798,11 +1870,9 @@ public class TestBakery {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1820,7 +1890,7 @@ public class TestBakery {
         assertEquals(baker0.getHome(), bakery);
         assertEquals(bakery.getWorker(), baker0);
 
-        // Connect the bakery with the headquarter
+        // Connect the bakery with the headquarters
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), bakery.getFlag());
 
         // Make the bakery create some bread with full resources available
@@ -1828,11 +1898,11 @@ public class TestBakery {
             map.stepTime();
 
             if (bakery.needsMaterial(WATER) && bakery.getAmount(WATER) < 2) {
-                bakery.putCargo(new Cargo(WATER, map));
+                Utils.deliverCargo(bakery, WATER);
             }
 
             if (bakery.needsMaterial(FLOUR) && bakery.getAmount(FLOUR) < 2) {
-                bakery.putCargo(new Cargo(FLOUR, map));
+                Utils.deliverCargo(bakery, FLOUR);
             }
         }
 
@@ -1851,11 +1921,9 @@ public class TestBakery {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1879,11 +1947,9 @@ public class TestBakery {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1906,11 +1972,9 @@ public class TestBakery {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1931,11 +1995,9 @@ public class TestBakery {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1964,11 +2026,9 @@ public class TestBakery {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2000,12 +2060,9 @@ public class TestBakery {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        var map = new GameMap(players, 20, 20);
-
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2013,7 +2070,7 @@ public class TestBakery {
         var point1 = new Point(16, 6);
         var bakery = map.placeBuilding(new Bakery(player0), point1);
 
-        // Connect the bakery with the headquarter
+        // Connect the bakery with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         // Wait for the bakery to get constructed and assigned a worker
@@ -2038,7 +2095,7 @@ public class TestBakery {
             map.stepTime();
         }
 
-        // Reconnect the bakery with the headquarter
+        // Reconnect the bakery with the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
@@ -2067,12 +2124,9 @@ public class TestBakery {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        var map = new GameMap(players, 20, 20);
-
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2080,7 +2134,7 @@ public class TestBakery {
         var point1 = new Point(16, 6);
         var bakery = map.placeBuilding(new Bakery(player0), point1);
 
-        // Connect the bakery with the headquarter
+        // Connect the bakery with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         // Wait for the bakery to get constructed and assigned a worker
@@ -2107,7 +2161,7 @@ public class TestBakery {
             map.stepTime();
         }
 
-        // Reconnect the bakery with the headquarter
+        // Reconnect the bakery with the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
@@ -2154,11 +2208,9 @@ public class TestBakery {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2166,7 +2218,7 @@ public class TestBakery {
         var point1 = new Point(7, 9);
         var bakery0 = map.placeBuilding(new Bakery(player0), point1);
 
-        // Place road to connect the bakery with the headquarter
+        // Place road to connect the bakery with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, bakery0.getFlag(), headquarter0.getFlag());
 
         // Wait for the bakery to get constructed and occupied
@@ -2181,7 +2233,7 @@ public class TestBakery {
         assertEquals(baker0.getHome(), bakery0);
         assertEquals(bakery0.getWorker(), baker0);
 
-        // Add a lot of material to the headquarter for the bakery to consume
+        // Add a lot of material to the headquarters for the bakery to consume
         Utils.adjustInventoryTo(headquarter0, WATER, 40);
         Utils.adjustInventoryTo(headquarter0, FLOUR, 40);
 
@@ -2210,11 +2262,9 @@ public class TestBakery {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2226,20 +2276,20 @@ public class TestBakery {
         var point2 = new Point(18, 6);
         var bakery0 = map.placeBuilding(new Bakery(player0), point2);
 
-        // Place road to connect the storehouse with the headquarter
+        // Place road to connect the storehouse with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        // Place road to connect the headquarter with the bakery
+        // Place road to connect the headquarters with the bakery
         var road1 = map.placeAutoSelectedRoad(player0, bakery0.getFlag(), headquarter0.getFlag());
 
-        // Add a lot of planks and stones to the headquarter
+        // Add a lot of planks and stones to the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
         // Wait for the bakery and the storehouse to get constructed
         Utils.waitForBuildingsToBeConstructed(storehouse, bakery0);
 
-        // Add a lot of material to the headquarter for the bakery to consume
+        // Add a lot of material to the headquarters for the bakery to consume
         Utils.adjustInventoryTo(headquarter0, WATER, 40);
         Utils.adjustInventoryTo(headquarter0, FLOUR, 40);
 
@@ -2275,11 +2325,9 @@ public class TestBakery {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2291,20 +2339,20 @@ public class TestBakery {
         var point2 = new Point(18, 6);
         var bakery0 = map.placeBuilding(new Bakery(player0), point2);
 
-        // Place road to connect the storehouse with the headquarter
+        // Place road to connect the storehouse with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        // Place road to connect the headquarter with the bakery
+        // Place road to connect the headquarters with the bakery
         var road1 = map.placeAutoSelectedRoad(player0, bakery0.getFlag(), headquarter0.getFlag());
 
-        // Add a lot of planks and stones to the headquarter
+        // Add a lot of planks and stones to the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
         // Wait for the bakery and the storehouse to get constructed
         Utils.waitForBuildingsToBeConstructed(storehouse, bakery0);
 
-        // Add a lot of material to the headquarter for the bakery to consume
+        // Add a lot of material to the headquarters for the bakery to consume
         Utils.adjustInventoryTo(headquarter0, WATER, 40);
         Utils.adjustInventoryTo(headquarter0, FLOUR, 40);
 
@@ -2342,11 +2390,9 @@ public class TestBakery {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2380,11 +2426,9 @@ public class TestBakery {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2425,11 +2469,9 @@ public class TestBakery {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2437,7 +2479,7 @@ public class TestBakery {
         var point1 = new Point(7, 9);
         var bakery0 = map.placeBuilding(new Bakery(player0), point1);
 
-        // Place road to connect the bakery with the headquarter
+        // Place road to connect the bakery with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, bakery0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2448,7 +2490,7 @@ public class TestBakery {
         Utils.waitForNonMilitaryBuildingToGetPopulated(bakery0);
 
         /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
-           blocked in the headquarter */
+           blocked in the headquarters */
        
         headquarter0.blockDeliveryOfMaterial(BAKER);
 
@@ -2485,11 +2527,9 @@ public class TestBakery {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2497,7 +2537,7 @@ public class TestBakery {
         var point1 = new Point(7, 9);
         var bakery0 = map.placeBuilding(new Bakery(player0), point1);
 
-        // Place road to connect the bakery with the headquarter
+        // Place road to connect the bakery with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, bakery0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2509,7 +2549,7 @@ public class TestBakery {
         // Wait for a baker to start walking to the bakery
         var baker = Utils.waitForWorkerOutsideBuilding(Baker.class, player0);
 
-        // Wait for the baker to go past the headquarter's flag
+        // Wait for the baker to go past the headquarters's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getFlag().getPosition());
 
         map.stepTime();

@@ -839,12 +839,8 @@ public class Utils {
     }
 
     public static void deliverCargo(Building building, Material material) {
-        var map = building.getMap();
-        Cargo cargo = new Cargo(material, map);
-
         building.promiseDelivery(material);
-
-        building.putCargo(cargo);
+        building.putCargo(new Cargo(material, building.getMap()));
     }
 
     static Cargo fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker) throws InvalidUserActionException {
@@ -3198,6 +3194,18 @@ public class Utils {
         assertFalse(pigBreeder.isFeeding());
     }
 
+    public static void removeStonePieces(Stone stone, int remaining) {
+        for (int i = 0; i < 2_000; i++) {
+            if (stone.getAmount() == remaining) {
+                break;
+            }
+
+            stone.removeOnePart();
+        }
+
+        assertEquals(stone.getAmount(), remaining);
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor, StatisticsListener {
         private final List<GameChangesList> gameChanges;
         private final HashMap<Point, AvailableConstruction> availableConstruction;
@@ -3544,13 +3552,10 @@ public class Utils {
     public static int countMonitoredWorkerActionForWorker(Worker worker, WorkerAction workerAction, GameViewMonitor monitor) {
         int count = 0;
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
-            for (Map.Entry<Worker, WorkerAction> entry : gameChangesList.workersWithStartedActions().entrySet()) {
-                Worker worker1 = entry.getKey();
-                WorkerAction workerAction1 = entry.getValue();
-
-                if (worker.equals(worker1) && workerAction.equals(workerAction1)) {
-                    count = count + 1;
+        for (var gameChangesList : monitor.getEvents()) {
+            for (var entry : gameChangesList.workersWithStartedActions().entrySet()) {
+                if (Objects.equals(entry.getKey(), worker) && Objects.equals(entry.getValue(), workerAction)) {
+                    count++;
                 }
             }
         }

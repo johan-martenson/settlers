@@ -115,7 +115,7 @@ public class Geologist extends Worker {
             }
             case GOING_TO_NEXT_SITE -> {
                 state = INVESTIGATING;
-                map.reportWorkerStartedAction(this, WorkerAction.INVESTIGATING);
+                doAction(WorkerAction.INVESTIGATING);
                 countdown.countFrom(TIME_TO_INVESTIGATE);
             }
             case RETURNING_TO_FLAG -> {

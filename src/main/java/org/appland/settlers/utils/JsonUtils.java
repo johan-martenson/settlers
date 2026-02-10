@@ -527,7 +527,7 @@ public class JsonUtils {
                 "nation", worker.getPlayer().getNation().name().toUpperCase()
         ));
 
-        if (!worker.isExactlyAtPoint()) {
+        if (!worker.isExactlyAtPoint() || (worker.getPosition().x + worker.getPosition().y) % 2 != 0 ) {
             jsonWorker.put("previous", pointToJson(worker.getLastPoint()));
             jsonWorker.put("next", pointToJson(worker.getNextPoint()));
             jsonWorker.put("percentageTraveled", worker.getPercentageOfDistanceTraveled());

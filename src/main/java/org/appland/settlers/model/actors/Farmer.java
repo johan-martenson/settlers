@@ -22,6 +22,7 @@ import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Material.FARMER;
 import static org.appland.settlers.model.Material.WHEAT;
+import static org.appland.settlers.model.WorkerAction.PLANTING_WHEAT;
 import static org.appland.settlers.model.actors.Farmer.State.*;
 
 /**
@@ -227,7 +228,7 @@ public class Farmer extends Worker {
                     returnHomeOffroad();
                 } else {
                     state = PLANTING;
-                    map.reportWorkerStartedAction(this, WorkerAction.PLANTING_WHEAT);
+                    doAction(PLANTING_WHEAT);
                     countdown.countFrom(TIME_TO_PLANT);
 
                 }
@@ -237,7 +238,7 @@ public class Farmer extends Worker {
                         .noneMatch(worker -> worker instanceof Farmer farmer &&
                                 (farmer.getPosition().equals(position) && farmer.isHarvesting()))) {
                     state = HARVESTING;
-                    map.reportWorkerStartedAction(this, WorkerAction.HARVESTING);
+                    doAction(WorkerAction.HARVESTING);
                     countdown.countFrom(TIME_TO_HARVEST);
                 } else {
                     state = GOING_BACK_TO_HOUSE;
