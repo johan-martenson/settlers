@@ -17,6 +17,7 @@ import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.actors.Baker;
 import org.appland.settlers.model.actors.Builder;
 import org.appland.settlers.model.actors.Butcher;
+import org.appland.settlers.model.actors.Carpenter;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Farmer;
 import org.appland.settlers.model.actors.Fisherman;
@@ -35,6 +36,7 @@ import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Metalworks;
 import org.appland.settlers.model.buildings.Quarry;
+import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.buildings.SlaughterHouse;
 import org.appland.settlers.model.buildings.Well;
 import org.appland.settlers.model.buildings.Woodcutter;
@@ -2689,5 +2691,127 @@ public class TestGameMonitoringOfWorkerActions {
         assertTrue(monitor0.getEvents().isEmpty() || !monitor0.getLastEvent().workersWithStartedActions().containsKey(wellWorker));
         assertTrue(monitor1.getEvents().isEmpty() || !monitor1.getLastEvent().workersWithStartedActions().containsKey(wellWorker));
         assertTrue(monitor2.getEvents().isEmpty() || !monitor2.getLastEvent().workersWithStartedActions().containsKey(wellWorker));
+    }
+
+
+    @Test
+    public void testMonitoringEventWhenSawmillWorkerWorks() throws Exception {
+
+        // Create player list with two players
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1, player2), 100, 100);
+
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var point1 = new Point(37, 15);
+        var point2 = new Point(90, 90);
+
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var headquarter2 = map.placeBuilding(new Headquarter(player2), point2);
+
+        // Let player 1 discover the full world
+        GameUtils.discoverFullMap(player1);
+
+        // Place sawmill
+        var point3 = new Point(7, 9);
+        var sawmill = map.placeBuilding(new Sawmill(player0), point3);
+
+        // Finish construction of the sawmill
+        Utils.constructHouse(sawmill);
+
+        // Occupy the sawmill
+        var sawmillWorker0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
+
+        assertTrue(sawmillWorker0.isInsideBuilding());
+        assertEquals(sawmillWorker0.getHome(), sawmill);
+        assertEquals(sawmill.getWorker(), sawmillWorker0);
+
+        // Deliver wood to the sawmill
+        Utils.deliverCargo(sawmill, WOOD);
+        Utils.deliverCargo(sawmill, WOOD);
+
+        // Start monitoring
+        var monitor0 = new Utils.GameViewMonitor();
+        var monitor1 = new Utils.GameViewMonitor();
+        var monitor2 = new Utils.GameViewMonitor();
+
+        player0.monitorGameView(monitor0);
+        player1.monitorGameView(monitor1);
+        player2.monitorGameView(monitor2);
+
+        // Verify that an event is sent when the sawmill worker starts sawing
+        assertFalse(sawmill.isWorking());
+
+        for (int i = 0; i < 2_000; i++) {
+            if (sawmillWorker0.isWorking()) {
+                break;
+            }
+
+            assertFalse(sawmill.isWorking());
+            assertFalse(sawmillWorker0.isWorking());
+
+            map.stepTime();
+        }
+
+        assertTrue(sawmillWorker0.isWorking());
+        assertEquals(monitor0.getLastEvent().workersWithStartedActions().get(sawmillWorker0), SAWING);
+        assertTrue(monitor0.getLastEvent().newWorkersOutside().contains(sawmillWorker0));
+        assertTrue(monitor0.getLastEvent().changedBuildings().contains(sawmill));
+        assertEquals(monitor1.getLastEvent().workersWithStartedActions().get(sawmillWorker0), SAWING);
+        assertTrue(monitor1.getLastEvent().newWorkersOutside().contains(sawmillWorker0));
+        assertTrue(monitor1.getLastEvent().changedBuildings().contains(sawmill));
+        assertTrue(monitor2.getEvents().isEmpty() ||
+                (!monitor2.getLastEvent().workersWithStartedActions().containsKey(sawmillWorker0) &&
+                        !monitor2.getLastEvent().newWorkersOutside().contains(sawmillWorker0) &&
+                        !monitor2.getLastEvent().changedBuildings().contains(sawmill)));
+
+        // Verify that the event is only sent once
+        monitor0.clearEvents();
+        monitor1.clearEvents();
+        monitor2.clearEvents();
+
+        map.stepTime();
+
+        assertTrue(monitor0.getEvents().isEmpty() ||
+                (!monitor0.getLastEvent().workersWithStartedActions().containsKey(sawmillWorker0) &&
+                        !monitor0.getLastEvent().newWorkersOutside().contains(sawmillWorker0) &&
+                        !monitor0.getLastEvent().changedBuildings().contains(sawmill)));
+        assertTrue(monitor1.getEvents().isEmpty() ||
+                (!monitor1.getLastEvent().workersWithStartedActions().containsKey(sawmillWorker0) &&
+                        !monitor1.getLastEvent().newWorkersOutside().contains(sawmillWorker0) &&
+                        !monitor1.getLastEvent().changedBuildings().contains(sawmill)));
+        assertTrue(monitor2.getEvents().isEmpty() ||
+                (!monitor2.getLastEvent().workersWithStartedActions().containsKey(sawmillWorker0) &&
+                        !monitor2.getLastEvent().newWorkersOutside().contains(sawmillWorker0) &&
+                        !monitor2.getLastEvent().changedBuildings().contains(sawmill)));
+
+        // Verify that an event is sent when the carpenter is done sawing
+        for (int i = 0; i < 2_000; i++) {
+            if (!sawmillWorker0.isWorking()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(sawmillWorker0.isWorking());
+        assertFalse(sawmillWorker0.isInsideBuilding());
+        assertTrue(monitor0.getLastEvent().workersWithNewTargets().contains(sawmillWorker0));
+        assertTrue(monitor1.getLastEvent().workersWithNewTargets().contains(sawmillWorker0));
+        assertTrue(monitor2.getEvents().isEmpty() || !monitor2.getLastEvent().workersWithNewTargets().contains(sawmillWorker0));
+
+        // Verify that the event is only sent once
+        monitor0.clearEvents();
+        monitor1.clearEvents();
+        monitor2.clearEvents();
+
+        map.stepTime();
+
+        assertTrue(monitor0.getEvents().isEmpty() || !monitor0.getLastEvent().workersWithNewTargets().contains(sawmillWorker0));
+        assertTrue(monitor1.getEvents().isEmpty() || !monitor1.getLastEvent().workersWithNewTargets().contains(sawmillWorker0));
+        assertTrue(monitor2.getEvents().isEmpty() || !monitor2.getLastEvent().workersWithNewTargets().contains(sawmillWorker0));
     }
 }

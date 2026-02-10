@@ -1,7 +1,6 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -19,8 +18,6 @@ import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
@@ -38,11 +35,9 @@ public class TestSawmill {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point21 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -51,9 +46,6 @@ public class TestSawmill {
         var sawmill0 = map.placeBuilding(new Sawmill(player0), point22);
 
         // Deliver two plank and two stone
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
-
         Utils.deliverCargo(sawmill0, PLANK);
         Utils.deliverCargo(sawmill0, PLANK);
         Utils.deliverCargo(sawmill0, STONE);
@@ -77,11 +69,9 @@ public class TestSawmill {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point21 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -90,9 +80,6 @@ public class TestSawmill {
         var sawmill0 = map.placeBuilding(new Sawmill(player0), point22);
 
         // Deliver one plank and two stone
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
-
         Utils.deliverCargo(sawmill0, PLANK);
         Utils.deliverCargo(sawmill0, STONE);
         Utils.deliverCargo(sawmill0, STONE);
@@ -115,11 +102,9 @@ public class TestSawmill {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point21 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -150,11 +135,9 @@ public class TestSawmill {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -176,11 +159,9 @@ public class TestSawmill {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -222,11 +203,9 @@ public class TestSawmill {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -234,7 +213,7 @@ public class TestSawmill {
         var point3 = new Point(7, 9);
         var sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
-        // Place a road between the headquarter and the sawmill
+        // Place a road between the headquarters and the sawmill
         var road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
 
         // Finish construction of the sawmill
@@ -242,7 +221,7 @@ public class TestSawmill {
 
         assertTrue(sawmill.needsWorker());
 
-        // Verify that a sawmill worker leaves the headquarter
+        // Verify that a sawmill worker leaves the headquarters
         var sawmillWorker0 = Utils.waitForWorkerOutsideBuilding(Carpenter.class, player0);
 
         // Let the sawmill worker reach the sawmill
@@ -261,11 +240,9 @@ public class TestSawmill {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -273,7 +250,7 @@ public class TestSawmill {
         var point3 = new Point(7, 9);
         var sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
-        // Place a road between the headquarter and the sawmill
+        // Place a road between the headquarters and the sawmill
         var road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
 
         // Finish construction of the sawmill
@@ -281,7 +258,7 @@ public class TestSawmill {
 
         assertTrue(sawmill.needsWorker());
 
-        // Verify that a sawmill worker leaves the headquarter
+        // Verify that a sawmill worker leaves the headquarters
         var sawmillWorker0 = Utils.waitForWorkerOutsideBuilding(Carpenter.class, player0);
 
         // Verify that the sawmill worker is not a soldier
@@ -294,15 +271,13 @@ public class TestSawmill {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Remove all sawmill workers from the headquarter and add a saw
+        // Remove all sawmill workers from the headquarters and add a saw
         Utils.adjustInventoryTo(headquarter, CARPENTER, 0);
         Utils.adjustInventoryTo(headquarter, Material.SAW, 1);
 
@@ -310,7 +285,7 @@ public class TestSawmill {
         var point3 = new Point(7, 9);
         var sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
-        // Place a road between the headquarter and the sawmill
+        // Place a road between the headquarters and the sawmill
         var road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
 
         // Finish construction of the sawmill
@@ -318,7 +293,7 @@ public class TestSawmill {
 
         assertTrue(sawmill.needsWorker());
 
-        // Verify that a sawmill worker leaves the headquarter
+        // Verify that a sawmill worker leaves the headquarters
         var sawmillWorker0 = Utils.waitForWorkerOutsideBuilding(Carpenter.class, player0);
 
         // Let the sawmill worker reach the sawmill
@@ -337,11 +312,9 @@ public class TestSawmill {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -373,11 +346,9 @@ public class TestSawmill {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -402,11 +373,9 @@ public class TestSawmill {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -460,11 +429,9 @@ public class TestSawmill {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -472,7 +439,7 @@ public class TestSawmill {
         var point3 = new Point(7, 9);
         var sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
-        // Place a road between the headquarter and the sawmill
+        // Place a road between the headquarters and the sawmill
         var road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
 
         // Finish construction of the sawmill
@@ -522,12 +489,9 @@ public class TestSawmill {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        var map = new GameMap(players, 20, 20);
-
-        // Place headquarter
+        // Place headquarters
         var point3 = new Point(6, 4);
         var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -583,12 +547,9 @@ public class TestSawmill {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        var map = new GameMap(players, 20, 20);
-
-        // Place headquarter
+        // Place headquarters
         var point3 = new Point(6, 4);
         var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -653,12 +614,9 @@ public class TestSawmill {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        var map = new GameMap(players, 20, 20);
-
-        // Place headquarter
+        // Place headquarters
         var point3 = new Point(6, 4);
         var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -729,11 +687,9 @@ public class TestSawmill {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -764,11 +720,9 @@ public class TestSawmill {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -803,13 +757,11 @@ public class TestSawmill {
     @Test
     public void testSawmillWithoutConnectedStorageKeepsProducing() throws Exception {
 
-        // Creating new game map with size 40x40
+        // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -824,8 +776,6 @@ public class TestSawmill {
         Utils.occupyBuilding(new Carpenter(player0, map), sawmill0);
 
         // Deliver material to the sawmill
-        Cargo woodCargo = new Cargo(WOOD, map);
-
         Utils.deliverCargo(sawmill0, WOOD);
         Utils.deliverCargo(sawmill0, WOOD);
 
@@ -870,13 +820,11 @@ public class TestSawmill {
     @Test
     public void testCargoProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
-        // Creating new game map with size 40x40
+        // Creating new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -920,7 +868,7 @@ public class TestSawmill {
 
         assertEquals(cargo.getPosition(), sawmill0.getFlag().getPosition());
 
-        // Connect the sawmill with the headquarter
+        // Connect the sawmill with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill0.getFlag());
 
         // Assign a courier to the road
@@ -952,14 +900,14 @@ public class TestSawmill {
         assertNotNull(courier.getCargo());
         assertEquals(courier.getCargo(), cargo);
 
-        // Verify that the courier delivers the cargo to the headquarter
+        // Verify that the courier delivers the cargo to the headquarters
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(PLANK);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
-        // Verify that the courier has delivered the cargo to the headquarter
+        // Verify that the courier has delivered the cargo to the headquarters
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(PLANK), amount + 1);
     }
@@ -967,13 +915,11 @@ public class TestSawmill {
     @Test
     public void testSawmillWorkerGoesBackToStorageWhenSawmillIsDestroyed() throws Exception {
 
-        // Creating new game map with size 40x40
+        // Creating new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -995,7 +941,7 @@ public class TestSawmill {
 
         sawmill0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(sawmillWorker.isInsideBuilding());
         assertEquals(sawmillWorker.getTarget(), headquarter0.getPosition());
 
@@ -1003,20 +949,18 @@ public class TestSawmill {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, headquarter0.getPosition());
 
-        // Verify that the sawmill worker is stored correctly in the headquarter
+        // Verify that the sawmill worker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(CARPENTER), amount + 1);
     }
 
     @Test
     public void testSawmillWorkerGoesBackOnToStorageOnRoadsIfPossibleWhenSawmillIsDestroyed() throws Exception {
 
-        // Creating new game map with size 40x40
+        // Creating new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1024,7 +968,7 @@ public class TestSawmill {
         var point26 = new Point(8, 8);
         var sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
 
-        // Connect the sawmill with the headquarter
+        // Connect the sawmill with the headquarters
         map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), headquarter0.getFlag());
 
         // Finish construction of the sawmill
@@ -1041,7 +985,7 @@ public class TestSawmill {
 
         sawmill0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(sawmillWorker.isInsideBuilding());
         assertEquals(sawmillWorker.getTarget(), headquarter0.getPosition());
 
@@ -1060,13 +1004,11 @@ public class TestSawmill {
     @Test
     public void testDestroyedSawmillIsRemovedAfterSomeTime() throws Exception {
 
-        // Creating new game map with size 40x40
+        // Creating new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1074,7 +1016,7 @@ public class TestSawmill {
         var point26 = new Point(8, 8);
         var sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
 
-        // Connect the sawmill with the headquarter
+        // Connect the sawmill with the headquarters
         map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), headquarter0.getFlag());
 
         // Finish construction of the sawmill
@@ -1105,13 +1047,11 @@ public class TestSawmill {
     @Test
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
-        // Creating new game map with size 40x40
+        // Creating new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1133,13 +1073,11 @@ public class TestSawmill {
     @Test
     public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
 
-        // Creating new game map with size 40x40
+        // Creating new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1163,11 +1101,9 @@ public class TestSawmill {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1175,7 +1111,7 @@ public class TestSawmill {
         var point1 = new Point(10, 8);
         var sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
-        // Connect the sawmill and the headquarter
+        // Connect the sawmill and the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), headquarter.getFlag());
 
         // Finish the sawmill
@@ -1189,7 +1125,7 @@ public class TestSawmill {
         assertTrue(carpenter.isInsideBuilding());
 
         // Deliver wood to the sawmill
-        sawmill0.putCargo(new Cargo(WOOD, map));
+        Utils.deliverCargo(sawmill0, WOOD);
 
         // Let the worker rest
         Utils.fastForward(100, map);
@@ -1221,11 +1157,9 @@ public class TestSawmill {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1233,7 +1167,7 @@ public class TestSawmill {
         var point1 = new Point(10, 8);
         var sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
-        // Connect the sawmill and the headquarter
+        // Connect the sawmill and the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), headquarter.getFlag());
 
         // Finish the sawmill
@@ -1247,7 +1181,7 @@ public class TestSawmill {
         assertTrue(carpenter.isInsideBuilding());
 
         // Deliver wood to the sawmill
-        sawmill0.putCargo(new Cargo(WOOD, map));
+        Utils.deliverCargo(sawmill0, WOOD);
 
         // Let the worker rest
         Utils.fastForward(100, map);
@@ -1286,13 +1220,9 @@ public class TestSawmill {
 
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 50, 50);
 
-        // Create game map
-        var map = new GameMap(players, 50, 50);
-
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(15, 15);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1303,10 +1233,10 @@ public class TestSawmill {
         // Finish construction of the sawmill
         Utils.constructHouse(sawmill0);
 
-        // Connect the sawmill with the headquarter
+        // Connect the sawmill with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill0.getFlag());
 
-        // Wait for sawmill worker to get assigned and leave the headquarter
+        // Wait for sawmill worker to get assigned and leave the headquarters
         var workers = Utils.waitForWorkersOutsideBuilding(Carpenter.class, 1, player0);
 
         assertNotNull(workers);
@@ -1325,25 +1255,17 @@ public class TestSawmill {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1, player2), 100, 100);
 
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-        players.add(player2);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
-
-        // Place player 2's headquarter
+        // Place player 2's headquarters
         var point10 = new Point(70, 70);
         var headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
-        // Place player 0's headquarter
+        // Place player 0's headquarters
         var point0 = new Point(11, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place player 1's headquarter
+        // Place player 1's headquarters
         var point1 = new Point(45, 5);
         var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1378,11 +1300,9 @@ public class TestSawmill {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1394,7 +1314,7 @@ public class TestSawmill {
         var point2 = new Point(14, 4);
         var sawmill0 = map.placeBuilding(new Sawmill(player0), point2.upLeft());
 
-        // Connect headquarter and first flag
+        // Connect headquarters and first flag
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
@@ -1429,7 +1349,7 @@ public class TestSawmill {
 
         assertEquals(carpenter.getPosition(), flag0.getPosition());
 
-        // Verify that the sawmill worker returns to the headquarter when it reaches the flag
+        // Verify that the sawmill worker returns to the headquarters when it reaches the flag
         assertEquals(carpenter.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, carpenter, headquarter0.getPosition());
@@ -1440,11 +1360,9 @@ public class TestSawmill {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1456,7 +1374,7 @@ public class TestSawmill {
         var point2 = new Point(14, 4);
         var sawmill0 = map.placeBuilding(new Sawmill(player0), point2.upLeft());
 
-        // Connect headquarter and first flag
+        // Connect headquarters and first flag
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
@@ -1505,11 +1423,9 @@ public class TestSawmill {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1521,7 +1437,7 @@ public class TestSawmill {
         var point2 = new Point(14, 4);
         var sawmill0 = map.placeBuilding(new Sawmill(player0), point2.upLeft());
 
-        // Connect headquarter and first flag
+        // Connect headquarters and first flag
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
@@ -1564,13 +1480,11 @@ public class TestSawmill {
     @Test
     public void testSawmillWorkerGoesOffroadBackToClosestStorageWhenSawmillIsDestroyed() throws Exception {
 
-        // Creating new game map with size 40x40
+        // Creating new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1599,7 +1513,7 @@ public class TestSawmill {
 
         sawmill0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(sawmillWorker.isInsideBuilding());
         assertEquals(sawmillWorker.getTarget(), storehouse0.getPosition());
 
@@ -1607,20 +1521,18 @@ public class TestSawmill {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, storehouse0.getPosition());
 
-        // Verify that the sawmill worker is stored correctly in the headquarter
+        // Verify that the sawmill worker is stored correctly in the headquarters
         assertEquals(storehouse0.getAmount(CARPENTER), amount + 1);
     }
 
     @Test
     public void testSawmillWorkerReturnsOffroadAndAvoidsBurningStorageWhenSawmillIsDestroyed() throws Exception {
 
-        // Creating new game map with size 40x40
+        // Creating new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(9, 17);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1652,7 +1564,7 @@ public class TestSawmill {
 
         sawmill0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(sawmillWorker.isInsideBuilding());
         assertEquals(sawmillWorker.getTarget(), headquarter0.getPosition());
 
@@ -1660,20 +1572,18 @@ public class TestSawmill {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, headquarter0.getPosition());
 
-        // Verify that the sawmill worker is stored correctly in the headquarter
+        // Verify that the sawmill worker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(CARPENTER), amount + 1);
     }
 
     @Test
     public void testSawmillWorkerReturnsOffroadAndAvoidsDestroyedStorageWhenSawmillIsDestroyed() throws Exception {
 
-        // Creating new game map with size 40x40
+        // Creating new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1708,7 +1618,7 @@ public class TestSawmill {
 
         sawmill0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(sawmillWorker.isInsideBuilding());
         assertEquals(sawmillWorker.getTarget(), headquarter0.getPosition());
 
@@ -1716,20 +1626,18 @@ public class TestSawmill {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, headquarter0.getPosition());
 
-        // Verify that the sawmill worker is stored correctly in the headquarter
+        // Verify that the sawmill worker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(CARPENTER), amount + 1);
     }
 
     @Test
     public void testSawmillWorkerReturnsOffroadAndAvoidsUnfinishedStorageWhenSawmillIsDestroyed() throws Exception {
 
-        // Creating new game map with size 40x40
+        // Creating new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1755,7 +1663,7 @@ public class TestSawmill {
 
         sawmill0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(sawmillWorker.isInsideBuilding());
         assertEquals(sawmillWorker.getTarget(), headquarter0.getPosition());
 
@@ -1763,7 +1671,7 @@ public class TestSawmill {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, headquarter0.getPosition());
 
-        // Verify that the sawmill worker is stored correctly in the headquarter
+        // Verify that the sawmill worker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(CARPENTER), amount + 1);
     }
 
@@ -1772,11 +1680,9 @@ public class TestSawmill {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1784,7 +1690,7 @@ public class TestSawmill {
         var point26 = new Point(17, 17);
         var sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
 
-        // Place road to connect the headquarter and the sawmill
+        // Place road to connect the headquarters and the sawmill
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill0.getFlag());
 
         // Finish construction of the sawmill
@@ -1799,7 +1705,7 @@ public class TestSawmill {
         // Tear down the building
         sawmill0.tearDown();
 
-        // Verify that the worker goes to the building and then returns to the headquarter instead of entering
+        // Verify that the worker goes to the building and then returns to the headquarters instead of entering
         assertEquals(worker.getTarget(), sawmill0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, sawmill0.getPosition());
@@ -1814,11 +1720,9 @@ public class TestSawmill {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1851,11 +1755,9 @@ public class TestSawmill {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1873,7 +1775,7 @@ public class TestSawmill {
         assertEquals(sawmillWorker0.getHome(), sawmill);
         assertEquals(sawmill.getWorker(), sawmillWorker0);
 
-        // Connect the sawmill with the headquarter
+        // Connect the sawmill with the headquarters
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill.getFlag());
 
         // Make the sawmill create some bread with full resources available
@@ -1904,11 +1806,9 @@ public class TestSawmill {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1926,7 +1826,7 @@ public class TestSawmill {
         assertEquals(sawmillWorker0.getHome(), sawmill);
         assertEquals(sawmill.getWorker(), sawmillWorker0);
 
-        // Connect the sawmill with the headquarter
+        // Connect the sawmill with the headquarters
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill.getFlag());
 
         // Make the sawmill create some planks with full resources available
@@ -1953,11 +1853,9 @@ public class TestSawmill {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1981,11 +1879,9 @@ public class TestSawmill {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2008,11 +1904,9 @@ public class TestSawmill {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2033,11 +1927,9 @@ public class TestSawmill {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2066,11 +1958,9 @@ public class TestSawmill {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2100,12 +1990,9 @@ public class TestSawmill {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        var map = new GameMap(players, 20, 20);
-
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2113,7 +2000,7 @@ public class TestSawmill {
         var point1 = new Point(16, 6);
         var sawmill = map.placeBuilding(new Sawmill(player0), point1);
 
-        // Connect the sawmill with the headquarter
+        // Connect the sawmill with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
 
         // Wait for the sawmill to get constructed and assigned a worker
@@ -2139,7 +2026,7 @@ public class TestSawmill {
             map.stepTime();
         }
 
-        // Reconnect the sawmill with the headquarter
+        // Reconnect the sawmill with the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
@@ -2168,12 +2055,9 @@ public class TestSawmill {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        var map = new GameMap(players, 20, 20);
-
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2181,7 +2065,7 @@ public class TestSawmill {
         var point1 = new Point(16, 6);
         var sawmill = map.placeBuilding(new Sawmill(player0), point1);
 
-        // Connect the sawmill with the headquarter
+        // Connect the sawmill with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
 
         // Wait for the sawmill to get constructed and assigned a worker
@@ -2207,7 +2091,7 @@ public class TestSawmill {
             map.stepTime();
         }
 
-        // Reconnect the sawmill with the headquarter
+        // Reconnect the sawmill with the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
@@ -2254,11 +2138,9 @@ public class TestSawmill {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2266,7 +2148,7 @@ public class TestSawmill {
         var point1 = new Point(7, 9);
         var sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
-        // Place road to connect the sawmill with the headquarter
+        // Place road to connect the sawmill with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), headquarter0.getFlag());
 
         // Wait for the sawmill to get constructed and occupied
@@ -2281,7 +2163,7 @@ public class TestSawmill {
         assertEquals(sawmillWorker0.getHome(), sawmill0);
         assertEquals(sawmill0.getWorker(), sawmillWorker0);
 
-        // Add a lot of material to the headquarter for the sawmill to consume
+        // Add a lot of material to the headquarters for the sawmill to consume
         Utils.adjustInventoryTo(headquarter0, WOOD, 40);
 
         // Block storage of planks
@@ -2309,11 +2191,9 @@ public class TestSawmill {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2325,20 +2205,20 @@ public class TestSawmill {
         var point2 = new Point(18, 6);
         var sawmill0 = map.placeBuilding(new Sawmill(player0), point2);
 
-        // Place road to connect the storehouse with the headquarter
+        // Place road to connect the storehouse with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        // Place road to connect the headquarter with the sawmill
+        // Place road to connect the headquarters with the sawmill
         var road1 = map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), headquarter0.getFlag());
 
-        // Add a lot of planks and stones to the headquarter
+        // Add a lot of planks and stones to the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
         // Wait for the sawmill and the storehouse to get constructed
         Utils.waitForBuildingsToBeConstructed(storehouse, sawmill0);
 
-        // Add a lot of material to the headquarter for the sawmill to consume
+        // Add a lot of material to the headquarters for the sawmill to consume
         Utils.adjustInventoryTo(headquarter0, WOOD, 40);
 
         // Wait for the sawmill and the storage to get occupied
@@ -2373,11 +2253,9 @@ public class TestSawmill {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2389,20 +2267,20 @@ public class TestSawmill {
         var point2 = new Point(18, 6);
         var sawmill0 = map.placeBuilding(new Sawmill(player0), point2);
 
-        // Place road to connect the storehouse with the headquarter
+        // Place road to connect the storehouse with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        // Place road to connect the headquarter with the sawmill
+        // Place road to connect the headquarters with the sawmill
         var road1 = map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), headquarter0.getFlag());
 
-        // Add a lot of planks and stones to the headquarter
+        // Add a lot of planks and stones to the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
         // Wait for the sawmill and the storehouse to get constructed
         Utils.waitForBuildingsToBeConstructed(storehouse, sawmill0);
 
-        // Add a lot of material to the headquarter for the sawmill to consume
+        // Add a lot of material to the headquarters for the sawmill to consume
         Utils.adjustInventoryTo(headquarter0, WOOD, 40);
 
         // Wait for the sawmill and the storage to get occupied
@@ -2439,11 +2317,9 @@ public class TestSawmill {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2477,11 +2353,9 @@ public class TestSawmill {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2522,11 +2396,9 @@ public class TestSawmill {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2534,7 +2406,7 @@ public class TestSawmill {
         var point1 = new Point(7, 9);
         var sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
-        // Place road to connect the sawmill with the headquarter
+        // Place road to connect the sawmill with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2583,11 +2455,9 @@ public class TestSawmill {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2595,7 +2465,7 @@ public class TestSawmill {
         var point1 = new Point(7, 9);
         var sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
-        // Place road to connect the sawmill with the headquarter
+        // Place road to connect the sawmill with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2607,7 +2477,7 @@ public class TestSawmill {
         // Wait for a sawmill worker to start walking to the sawmill
         Carpenter carpenter = Utils.waitForWorkerOutsideBuilding(Carpenter.class, player0);
 
-        // Wait for the sawmill worker to go past the headquarter's flag
+        // Wait for the sawmill worker to go past the headquarters's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, carpenter, headquarter0.getFlag().getPosition());
 
         map.stepTime();

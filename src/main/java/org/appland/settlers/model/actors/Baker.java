@@ -67,6 +67,7 @@ public class Baker extends Worker {
         if (building.isReady()) {
             state = RESTING_IN_HOUSE;
             countdown.countFrom(RESTING_TIME);
+
             productivityMeasurer.setBuilding(building);
         } else {
             state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
@@ -76,8 +77,6 @@ public class Baker extends Worker {
 
     @Override
     protected void onIdle() {
-        System.out.println("on idle " + countdown.getCount() + " " + state);
-
         if (countdown.isActive() && !countdown.hasReachedZero()) {
             countdown.step();
         } else {
@@ -259,9 +258,7 @@ public class Baker extends Worker {
 
     @Override
     protected void onWalkingAndAtFixedPoint() {
-        if (state == WALKING_TO_TARGET &&
-            map.isFlagAtPoint(position) &&
-            !map.arePointsConnectedByRoads(position, getTarget())) {
+        if (state == WALKING_TO_TARGET && map.isFlagAtPoint(position) && !map.arePointsConnectedByRoads(position, getTarget())) {
             clearTargetBuilding();
             returnToStorage();
         }
@@ -270,7 +267,7 @@ public class Baker extends Worker {
     @Override
     public int getProductivity() {
 
-        /* Measure productivity across the length of four rest-work periods */
+        // Measure productivity across the length of four rest-work periods
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
                         (productivityMeasurer.getNumberOfCycles())) * 100);
