@@ -194,7 +194,7 @@ public class Stats {
                     variable.getLatestValue(),
                     variable.getAverage(),
                     variable.getHighestValue(),
-                    variable.getLatestValue());
+                    variable.getLowestValue());
 
             System.out.println(valueRow);
         }

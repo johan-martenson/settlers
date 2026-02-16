@@ -117,7 +117,7 @@ public class ByteArrayReader implements ByteReader {
         char[] chars = new char[length];
 
         for (int i = 0; i < length; i++) {
-            chars[i] = (char) (this.byteArray.get() & 0xffff);
+            chars[i] = (char) (this.byteArray.get() & 0xFF);
         }
 
         return chars;

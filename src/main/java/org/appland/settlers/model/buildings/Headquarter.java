@@ -468,6 +468,7 @@ public class Headquarter extends Storehouse {
     @Override
     public Soldier retrieveHostedSoldier(Soldier soldier) {
         inventory.merge(soldier.getRank().toMaterial(), -1, Integer::sum);
+        getPlayer().reportSoldierLeftBuilding(this);
         soldier.setHome(this);
         map.placeWorkerFromStepTime(soldier, this);
 
@@ -484,6 +485,7 @@ public class Headquarter extends Storehouse {
 
             if (isInStock(material)) {
                 var defender = (Soldier) retrieveWorker(material, null);
+                getPlayer().reportSoldierLeftBuilding(this);
                 map.placeWorker(defender, this);
                 defender.setHome(this);
                 defender.setPosition(getPosition());

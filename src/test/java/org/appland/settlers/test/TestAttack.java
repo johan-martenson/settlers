@@ -254,6 +254,54 @@ public class TestAttack {
     }
 
     @Test
+    public void testAttackThrowsForUnoccupiedBarracks() throws Exception {
+
+        // Create player list with two players
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
+
+        // Place player 0's headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place player 1's headquarters
+        var point1 = new Point(37, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        // Clear soldiers from both headquarters
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
+        // Place barracks for player 0
+        var point2 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        // Place barracks for player 1
+        var point3 = new Point(23, 15);
+        var barracks1 = map.placeBuilding(new Barracks(player1), point3);
+
+        // Finish construction
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
+
+        // Populate player 0's barracks
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+
+        // Verify that attacking an unoccupied military building is not allowed
+        assertTrue(barracks1.isReady());
+        assertFalse(barracks1.isOccupied());
+        assertFalse(player0.canAttack(barracks1));
+
+        try {
+            player0.attack(barracks1, 1, AttackStrength.STRONG);
+
+            fail();
+        } catch (Exception e) {}
+    }
+
+    @Test
     public void testTwoAvailableAttackersForGuardHouseCloseToEnemyBarracks() throws Exception {
 
         // Create player list with two players

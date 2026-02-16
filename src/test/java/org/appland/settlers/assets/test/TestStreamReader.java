@@ -131,6 +131,18 @@ class StreamReaderTest {
         }
     }
 
+    @ParameterizedTest
+    @MethodSource("readers")
+    void testUint8ArrayAsCharMasksToUnsignedByte(BiFunction<byte[], ByteOrder, ByteReader> readerFactory) throws Exception {
+        try (var r = readerFactory.apply(new byte[]{(byte) 0xff, 0x00, 0x7f}, ByteOrder.LITTLE_ENDIAN)) {
+            var chars = r.getUint8ArrayAsChar(3);
+
+            assertEquals(255, (int) chars[0]);
+            assertEquals(0, (int) chars[1]);
+            assertEquals(127, (int) chars[2]);
+        }
+    }
+
     // ---------------------------------------------------------------------
     // Strings
     // ---------------------------------------------------------------------

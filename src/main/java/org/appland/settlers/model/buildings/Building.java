@@ -33,7 +33,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -748,7 +747,7 @@ public class Building implements EndPoint {
     }
 
     public void evacuate() {
-        for (Soldier military : hostedSoldiers) {
+        for (var military : hostedSoldiers) {
             military.returnToStorage();
 
             player.reportSoldierLeftBuilding(this);
@@ -812,6 +811,7 @@ public class Building implements EndPoint {
 
     public Soldier retrieveHostedSoldier(Soldier soldier) {
         hostedSoldiers.remove(soldier);
+        player.reportSoldierLeftBuilding(this);
 
         return soldier;
     }
@@ -822,6 +822,7 @@ public class Building implements EndPoint {
 
             if (maybeSoldier.isPresent()) {
                 hostedSoldiers.remove(maybeSoldier.get());
+                player.reportSoldierLeftBuilding(this);
 
                 return maybeSoldier.get();
             }
@@ -834,6 +835,7 @@ public class Building implements EndPoint {
         var optionalMilitary = hostedSoldiers.stream().filter(soldier -> soldier.getRank() == rank).findFirst();
 
         hostedSoldiers.remove(optionalMilitary.get());
+        player.reportSoldierLeftBuilding(this);
 
         return optionalMilitary.get();
     }

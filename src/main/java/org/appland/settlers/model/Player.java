@@ -285,6 +285,10 @@ public class Player {
             throw new InvalidUserActionException("Can only attack other players");
         }
 
+        if (buildingToAttack.isUnoccupied()) {
+            throw new InvalidUserActionException("Cannot attack unoccupied building");
+        }
+
         // Find buildings that can support the attack
         var eligibleBuildings = getBuildings().stream()
                 .filter(building -> building.isMilitaryBuilding()

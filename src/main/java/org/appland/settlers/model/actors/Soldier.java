@@ -202,7 +202,7 @@ public class Soldier extends Worker {
                         };
 
                         returnToFixedPoint();
-                    } else if (opponent != null && opponent.isReadyToFight()) {
+                    } else if (opponent.isReadyToFight()) {
 
                         // Needed to prevent always getting defenders to make first hit
                         random.nextBoolean();
