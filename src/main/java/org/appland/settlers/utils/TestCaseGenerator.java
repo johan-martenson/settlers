@@ -258,7 +258,13 @@ public class TestCaseGenerator {
     public void recordRemoveRoad(Road road) {
         printStartTry();
 
-        System.out.println("    map.removeRoadAtPoint(" + road.getWayPoints() + ");");
+        System.out.println(
+                "    map.removeRoad(map.getRoad(" +
+                        printPoint(road.getWayPoints().getFirst()) +
+                        ", " +
+                        printPoint(road.getWayPoints().getLast()) +
+                        "));"
+        );
 
         printEndTry();
     }
@@ -266,7 +272,7 @@ public class TestCaseGenerator {
     public void recordTearDownBuilding(Building building) {
         printStartTry();
 
-        System.out.println("    map.getBuildingAtPoint(" + building.getPosition() + ".tearDown());");
+        System.out.println("    map.getBuildingAtPoint(" + printPoint(building.getPosition()) + ").tearDown();");
 
         printEndTry();
     }
@@ -274,7 +280,7 @@ public class TestCaseGenerator {
     public void recordStopProduction(Building building) {
         printStartTry();
 
-        System.out.println("    map.getBuildingAtPoint(" + building.getPosition() + ".stopProduction());");
+        System.out.println("    map.getBuildingAtPoint(" + printPoint(building.getPosition()) + ").stopProduction();");
 
         printEndTry();
     }
@@ -282,7 +288,7 @@ public class TestCaseGenerator {
     public void recordResumeProduction(Building building) {
         printStartTry();
 
-        System.out.println("    map.getBuildingAtPoint(" + building.getPosition() + ".resumeProduction());");
+        System.out.println("    map.getBuildingAtPoint(" + printPoint(building.getPosition()) + ").resumeProduction();");
 
         printEndTry();
     }
