@@ -26,7 +26,7 @@ public class NormalizedImageList {
 
         // Calculate the normalized width, height, nx, and ny
         for (Bitmap image : images) {
-            Area visibleArea = image.getVisibleArea();
+            var visibleArea = image.getVisibleArea();
 
             maxWidthBeforeNx = Math.max(maxWidthBeforeNx, image.getNx() - visibleArea.x());
             maxWidthAfterNx = Math.max(maxWidthAfterNx, visibleArea.width() - image.getNx() + visibleArea.x());
@@ -55,8 +55,8 @@ public class NormalizedImageList {
                 normalizedImage = new Bitmap(width, height, originalImages.getFirst().getPalette(), TextureFormat.BGRA);
             }
 
-            Point copyTo = new Point(0, 0);
-            Point copyFrom = new Point(0, 0);
+            var copyTo = new Point(0, 0);
+            var copyFrom = new Point(0, 0);
 
             // TODO: rewrite to use Math.max() instead of ifs
             if (originalImage.getNx() < nx) {
@@ -87,8 +87,8 @@ public class NormalizedImageList {
             normalizedImage.setNy(ny);
 
             if (originalImage instanceof PlayerBitmap playerBitmap) {
-                Bitmap originalPlayerTexture = playerBitmap.getTextureBitmap();
-                Bitmap normalizedPlayerTexture = ((PlayerBitmap) normalizedImage).getTextureBitmap();
+                var originalPlayerTexture = playerBitmap.getTextureBitmap();
+                var normalizedPlayerTexture = ((PlayerBitmap) normalizedImage).getTextureBitmap();
 
                 normalizedPlayerTexture.copyNonTransparentPixels(
                         originalPlayerTexture,

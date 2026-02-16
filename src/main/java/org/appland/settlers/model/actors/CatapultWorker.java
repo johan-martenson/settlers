@@ -59,11 +59,11 @@ public class CatapultWorker extends Worker {
             if (getHome().getAmount(STONE) > 0) {
 
                 if (countdown.hasReachedZero()) {
-                    Building target = findReachableTarget();
+                    var target = findReachableTarget();
 
                     // Fire a projectile if there was a suitable target
                     if (target != null) {
-                        Projectile projectile = new Projectile((Catapult)getHome(), target, map);
+                        var projectile = new Projectile((Catapult)getHome(), target, map);
 
                         map.placeProjectile(projectile);
 
@@ -85,7 +85,7 @@ public class CatapultWorker extends Worker {
     @Override
     protected void onArrival() {
         if (state == State.RETURNING_TO_STORAGE) {
-            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
+            var storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
         }
@@ -102,7 +102,7 @@ public class CatapultWorker extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
+        var storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
@@ -124,14 +124,14 @@ public class CatapultWorker extends Worker {
 
         for (Point point : map.getPointsWithinRadius(getPosition(), MAX_RANGE)) {
 
-            MapPoint mapPoint = map.getMapPoint(point);
+            var mapPoint = map.getMapPoint(point);
 
             // Filter points without a building
             if (!mapPoint.isBuilding()) {
                 continue;
             }
 
-            Building building = mapPoint.getBuilding();
+            var building = mapPoint.getBuilding();
 
             // Filter buildings belonging to the same player
             if (building.getPlayer().equals(getPlayer())) {

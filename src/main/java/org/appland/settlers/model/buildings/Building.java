@@ -124,12 +124,12 @@ public class Building implements EndPoint {
     }
 
     private int initMaxHostedSoldiers() {
-        MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
+        var militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
         return militaryBuilding != null ? militaryBuilding.maxHostedSoldiers() : 0;
     }
 
     private int initDefenceRadius() {
-        MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
+        var militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
         return militaryBuilding != null ? militaryBuilding.defenceRadius() : 0;
     }
 
@@ -194,7 +194,7 @@ public class Building implements EndPoint {
     }
 
     private int initDiscoveryRadius() {
-        MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
+        var militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
         return militaryBuilding != null ? militaryBuilding.discoveryRadius() : 0;
     }
 
@@ -207,7 +207,7 @@ public class Building implements EndPoint {
     }
 
     private int initCanStoreAmountCoins() {
-        MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
+        var militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
         return militaryBuilding != null ? militaryBuilding.maxCoins() : 0;
     }
 
@@ -244,7 +244,7 @@ public class Building implements EndPoint {
     }
 
     private Material initWorkerType() {
-        RequiresWorker requiresWorker = getClass().getAnnotation(RequiresWorker.class);
+        var requiresWorker = getClass().getAnnotation(RequiresWorker.class);
         return requiresWorker != null ? requiresWorker.workerType() : null;
     }
 
@@ -309,7 +309,7 @@ public class Building implements EndPoint {
             throw new InvalidGameLogicException(format("Cannot host military, %s already hosting %d soldiers", this, hostedSoldiers.size()));
         }
 
-        State previousState = state;
+        var previousState = state;
         state = State.OCCUPIED;
 
         if (previousState == State.UNOCCUPIED) {
@@ -596,7 +596,7 @@ public class Building implements EndPoint {
     }
 
     public Size getSize() {
-        HouseSize hs = getClass().getAnnotation(HouseSize.class);
+        var hs = getClass().getAnnotation(HouseSize.class);
 
         return hs.size();
     }
@@ -610,7 +610,7 @@ public class Building implements EndPoint {
 
     // FIXME: HOTSPOT - allocations
     private PlanksAndStones getMaterialsToBuildHouse() {
-        HouseSize houseSize = this.getClass().getAnnotation(HouseSize.class);
+        var houseSize = this.getClass().getAnnotation(HouseSize.class);
 
         int planks = 0;
         int stones = 0;
@@ -627,7 +627,7 @@ public class Building implements EndPoint {
     }
 
     private int getConstructionCountdown() {
-        HouseSize sizeAnnotation = getClass().getAnnotation(HouseSize.class);
+        var sizeAnnotation = getClass().getAnnotation(HouseSize.class);
 
         return switch (sizeAnnotation.size()) {
             case SMALL -> TIME_TO_BUILD_SMALL_HOUSE;
@@ -698,7 +698,7 @@ public class Building implements EndPoint {
     }
 
     private void doPromotion() {
-        Collection<Soldier> promoted = new LinkedList<>();
+        var promoted = new LinkedList<Soldier>();
 
         for (var rank : Rank.values()) {
             if (rank == GENERAL_RANK) {
@@ -818,7 +818,7 @@ public class Building implements EndPoint {
 
     public Soldier retrieveHostedSoldier() {
         for (var rank : GameUtils.strengthToRank(player.getDefenseStrength())) {
-            Optional<Soldier> maybeSoldier = hostedSoldiers.stream().filter(soldier -> soldier.getRank() == rank).findFirst();
+            var maybeSoldier = hostedSoldiers.stream().filter(soldier -> soldier.getRank() == rank).findFirst();
 
             if (maybeSoldier.isPresent()) {
                 hostedSoldiers.remove(maybeSoldier.get());
@@ -831,7 +831,7 @@ public class Building implements EndPoint {
     }
 
     Soldier retrieveHostedSoldierWithRank(Rank rank) {
-        Optional<Soldier> optionalMilitary = hostedSoldiers.stream().filter(soldier -> soldier.getRank() == rank).findFirst();
+        var optionalMilitary = hostedSoldiers.stream().filter(soldier -> soldier.getRank() == rank).findFirst();
 
         hostedSoldiers.remove(optionalMilitary.get());
 
@@ -1087,7 +1087,7 @@ public class Building implements EndPoint {
     private boolean isMaterialForUpgradeAvailable() {
 
         // Get the cost for upgrade
-        UpgradeCost upgradeCost = getClass().getAnnotation(UpgradeCost.class);
+        var upgradeCost = getClass().getAnnotation(UpgradeCost.class);
 
         int planksNeeded = upgradeCost.planks();
         int stoneNeeded = upgradeCost.stones();
@@ -1105,7 +1105,7 @@ public class Building implements EndPoint {
     }
 
     private int getTotalAmountNeededForUpgrade(Material material) {
-        UpgradeCost upgrade = getClass().getAnnotation(UpgradeCost.class);
+        var upgrade = getClass().getAnnotation(UpgradeCost.class);
 
         // Only need material for upgrades if the building is actually being upgraded
         if (!isUpgrading()) {
@@ -1155,7 +1155,7 @@ public class Building implements EndPoint {
     }
 
     public Material[] getProducedMaterial() {
-        Production production = getClass().getAnnotation(Production.class);
+        var production = getClass().getAnnotation(Production.class);
 
         return production == null
                 ? new Material[]{}
@@ -1194,10 +1194,10 @@ public class Building implements EndPoint {
         var result = EnumSet.noneOf(Material.class);
 
         if (state == State.UNDER_CONSTRUCTION || state == State.PLANNED) {
-            HouseSize houseSize = getClass().getAnnotation(HouseSize.class);
+            var houseSize = getClass().getAnnotation(HouseSize.class);
             result.addAll(Arrays.asList(houseSize.material()));
         } else if (isReady()) {
-            Production production = getClass().getAnnotation(Production.class);
+            var production = getClass().getAnnotation(Production.class);
 
             if (production != null) {
                 result.addAll(Arrays.asList(production.requiredGoods()));

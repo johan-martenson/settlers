@@ -48,7 +48,7 @@ public class WaveDecoder {
 
         // Read the header if it exists
         if (hasHeader) {
-            String formatId = streamReader.getUint8ArrayAsString(4);
+            var formatId = streamReader.getUint8ArrayAsString(4);
             long formatSize = streamReader.getUint32();
             int formatTag = streamReader.getUint16();
             int numberChannels = streamReader.getUint16();
@@ -56,7 +56,7 @@ public class WaveDecoder {
             long bytesPerSec = streamReader.getUint32();
             int frameSize = streamReader.getUint16();
             int bitsPerSample = streamReader.getUint16();
-            String dataId = streamReader.getUint8ArrayAsString(4);
+            var dataId = streamReader.getUint8ArrayAsString(4);
             long dataSize = streamReader.getUint32();
 
             debugPrint(String.format("""
@@ -94,7 +94,7 @@ public class WaveDecoder {
 
         // Create default header
         } else {
-            String formatId = "fmt ";
+            var formatId = "fmt ";
             long formatSize = 16;
             int formatTag = 1;
             int numberChannels = 1;
@@ -102,7 +102,7 @@ public class WaveDecoder {
             long bytesPerSec = 11_025;
             int frameSize = 1;
             int bitsPerSample = 8;
-            String dataId = "data";
+            var dataId = "data";
 
             waveFile = new WaveFile(
                     formatId,
@@ -126,13 +126,13 @@ public class WaveDecoder {
     }
 
     public static GameResource loadSoundWaveFile(String filename) throws IOException, InvalidFormatException {
-        InputStream fileInputStream = Files.newInputStream(Paths.get(filename));
+        var fileInputStream = Files.newInputStream(Paths.get(filename));
         byte[] bytes = fileInputStream.readAllBytes();
-        ByteArrayReader byteArrayReader = new ByteArrayReader(bytes, LITTLE_ENDIAN);
+        var byteArrayReader = new ByteArrayReader(bytes, LITTLE_ENDIAN);
 
         debugPrint("Loading sound from file: " + filename);
 
-        GameResource soundGameResource = SoundLoader.loadSoundFromStream(byteArrayReader);
+        var soundGameResource = SoundLoader.loadSoundFromStream(byteArrayReader);
 
         debugPrint("Loaded sound");
 

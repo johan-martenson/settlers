@@ -32,7 +32,7 @@ public class ArgumentsHandler {
             throw new EOFException();
         }
 
-        String remaining = new String(bytes, StandardCharsets.ISO_8859_1);
+        var remaining = new String(bytes, StandardCharsets.ISO_8859_1);
 
         if (remaining.length() < 3) {
             throw new SettlersModelDriverException();
@@ -51,7 +51,7 @@ public class ArgumentsHandler {
             throw new EOFException();
         }
 
-        String remaining = new String(bytes, StandardCharsets.ISO_8859_1);
+        var remaining = new String(bytes, StandardCharsets.ISO_8859_1);
 
         if (remaining.length() < 2) {
             throw new SettlersModelDriverException();
@@ -94,7 +94,7 @@ public class ArgumentsHandler {
     public Player getPlayerFromChar(GameMap map) throws IOException {
         int playerIndex = getUnsignedIntFor1Chars();
 
-        List<Player> players = map.getPlayers();
+        var players = map.getPlayers();
 
         return players.get(playerIndex % players.size());
     }
@@ -124,7 +124,7 @@ public class ArgumentsHandler {
     }
 
     public Building getBuildingFromCharByPoint(GameMap map) throws IOException {
-        Point point = getPointForChars();
+        var point = getPointForChars();
 
         return map.getBuildingAtPoint(point);
     }

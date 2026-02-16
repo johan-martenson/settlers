@@ -28,7 +28,7 @@ public class RenderedWorker {
      * @param animationStep The step in the animation sequence.
      */
     public void addAnimationStep(Nation nation, CompassDirection compassDirection, StackedBitmaps bitmaps, int animationStep) {
-        AnimationKey animationKey = new AnimationKey(nation, compassDirection);
+        var animationKey = new AnimationKey(nation, compassDirection);
 
         animations.computeIfAbsent(animationKey, k -> new StackedBitmaps[8])[animationStep] = bitmaps;
     }

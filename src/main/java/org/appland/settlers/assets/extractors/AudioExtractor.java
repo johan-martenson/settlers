@@ -40,7 +40,7 @@ public class AudioExtractor {
         var jsonSongs = new JSONArray();
 
         for (TitleAndFilename titleAndFilename : MUSIC_TITLE_AND_FILENAMES) {
-            JSONObject jsonSong = new JSONObject();
+            var jsonSong = new JSONObject();
 
             jsonSong.put("path", toDir + "/" + titleAndFilename.filename);
             jsonSong.put("title", titleAndFilename.title);
@@ -61,18 +61,18 @@ public class AudioExtractor {
 
         // Save each wave file, so we can try to figure out when they are used
         for (int i = 0; i < gameResources.size(); i++) {
-            GameResource gameResource = gameResources.get(i);
+            var gameResource = gameResources.get(i);
 
             if (gameResource.getType() == GameResourceType.WAVE_SOUND) {
-                WaveGameResource waveGameResource = (WaveGameResource) gameResource;
-                WaveFile waveFile1 = waveGameResource.getWaveFile();
+                var waveGameResource = (WaveGameResource) gameResource;
+                var waveFile1 = waveGameResource.getWaveFile();
 
                 waveFile1.writeToFile(toDir + "/wavefile-" + i + ".wave");
             }
         }
 
         // Write sounds
-        Map<String, Integer> sounds = new HashMap<>();
+        var sounds = new HashMap<String, Integer>();
 
         sounds.put(toDir + "/audio/fire.wave", SoundLst.FIRE);
         sounds.put(toDir + "/audio/fighting-hit-0.wave", SoundLst.FIGHTING_HIT_0);

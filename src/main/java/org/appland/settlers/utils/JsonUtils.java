@@ -267,7 +267,7 @@ public class JsonUtils {
 
         if (player.getDiscoveredLand().contains(point)) {
             if (map.isBuildingAtPoint(point)) {
-                Building building = map.getBuildingAtPoint(point);
+                var building = map.getBuildingAtPoint(point);
                 jsonPointInfo.put("building", houseToJson(building, player));
                 jsonPointInfo.put("is", "BUILDING");
                 jsonPointInfo.put("buildingId", idManager.getId(building));
@@ -1350,7 +1350,7 @@ public class JsonUtils {
         var jsonDecorations = new JSONArray();
 
         synchronized (map) {
-            Set<Point> discoveredLand = player.getDiscoveredLand();
+            var discoveredLand = player.getDiscoveredLand();
 
             for (Building building : map.getBuildings()) {
                 if (!discoveredLand.contains(building.getPosition())) {
@@ -1418,7 +1418,7 @@ public class JsonUtils {
                     continue;
                 }
 
-                String key = point.x + "," + point.y;
+                var key = point.x + "," + point.y;
 
                 ((JSONArray)jsonAvailableConstruction.computeIfAbsent(key, k -> new JSONArray())).add("FLAG");
             }
@@ -1470,8 +1470,8 @@ public class JsonUtils {
                 for (int x = start; x + 1 < map.getWidth(); x += 2) {
                     var point = new Point(x, y);
 
-                    Vegetation below = map.getVegetationBelow(point);
-                    Vegetation downRight = map.getVegetationDownRight(point);
+                    var below = map.getVegetationBelow(point);
+                    var downRight = map.getVegetationDownRight(point);
 
                     jsonTrianglesBelow.add(below.toInt());
                     jsonTrianglesBelowRight.add(downRight.toInt());

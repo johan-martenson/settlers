@@ -267,7 +267,7 @@ public abstract class Worker {
              * Soldiers enter on their own and builders should not enter.
              * */
             if (!isSoldier() && !(this instanceof Builder)) {
-                Building building = targetBuilding;
+                var building = targetBuilding;
 
                 // Go back to storage if the building is not ok to enter
                 if (building.isBurningDown() || building.isDestroyed()) {
@@ -691,7 +691,7 @@ public abstract class Worker {
     }
 
     protected Point findPlaceToDie() {
-        Collection<Point> area = GameUtils.getHexagonAreaAroundPoint(position, 8, map);
+        var area = GameUtils.getHexagonAreaAroundPoint(position, 8, map);
 
         return area.stream()
                 .map(point -> map.findWayOffroad(position, point, null))

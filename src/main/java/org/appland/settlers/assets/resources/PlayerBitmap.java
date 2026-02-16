@@ -63,7 +63,7 @@ public class PlayerBitmap extends Bitmap {
     public static PlayerBitmap loadFrom(int nx, short ny, int width, ColorBlock colorBlock, int[] starts, boolean absoluteStarts, Palette palette, TextureFormat format) {
         int height = starts.length;
 
-        PlayerBitmap playerBitmap = new PlayerBitmap(width, height, nx, ny, palette, format);
+        var playerBitmap = new PlayerBitmap(width, height, nx, ny, palette, format);
 
         playerBitmap.loadImageFromData(colorBlock.pixels(), starts, absoluteStarts);
 
@@ -82,7 +82,7 @@ public class PlayerBitmap extends Bitmap {
             System.out.println("       - Height based on start list size: " + height);
         }
 
-        ByteBuffer sourceByteBuffer = ByteBuffer.wrap(sourceData).order(ByteOrder.LITTLE_ENDIAN);
+        var sourceByteBuffer = ByteBuffer.wrap(sourceData).order(ByteOrder.LITTLE_ENDIAN);
 
         // Build the image, line by line
         for (int y = 0; y < height; y++) {
@@ -142,7 +142,7 @@ public class PlayerBitmap extends Bitmap {
      * @return A new Bitmap customized for the player.
      */
     public Bitmap getBitmapForPlayer(PlayerColor playerColor) {
-        Bitmap bitmap = new Bitmap(width, height, nx, ny, getPalette(), TextureFormat.BGRA);
+        var bitmap = new Bitmap(width, height, nx, ny, getPalette(), TextureFormat.BGRA);
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {

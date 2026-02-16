@@ -70,15 +70,15 @@ public class CoinProducer implements ComputerPlayer {
             }
             case MINT_NEEDED -> {
                 // Find a point to build a mint
-                Point pointForMint = findPointForMint();
+                var pointForMint = findPointForMint();
 
                 if (pointForMint != null) {
                     // Build the mint
-                    Mint mint = map.placeBuilding(new Mint(controlledPlayer), pointForMint);
+                    var mint = map.placeBuilding(new Mint(controlledPlayer), pointForMint);
                     mints.add(mint);
 
                     // Connect the mint with the headquarter
-                    Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, mint.getFlag().getPosition(), headquarter);
+                    var road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, mint.getFlag().getPosition(), headquarter);
                     GamePlayUtils.fillRoadWithFlags(map, road);
 
                     state = State.WAITING_FOR_MINT;

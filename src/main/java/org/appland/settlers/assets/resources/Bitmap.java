@@ -84,7 +84,7 @@ public class Bitmap {
                 if (palette.isColorIndexTransparent(colorIndex)) {
                     imageData[(y * width + x) * 4 + 3] = 0;
                 } else {
-                    RGBColor colorRGB = palette.getColorForIndex(colorIndex);
+                    var colorRGB = palette.getColorForIndex(colorIndex);
 
                     imageData[(y * width + x) * 4] = colorRGB.blue();
                     imageData[(y * width + x) * 4 + 1] = colorRGB.green();
@@ -93,7 +93,7 @@ public class Bitmap {
                 }
             }
             case BGR -> {
-                RGBColor colorRGB = palette.getColorForIndex(colorIndex);
+                var colorRGB = palette.getColorForIndex(colorIndex);
 
                 imageData[(y * width + x) * 3] = colorRGB.blue();
                 imageData[(y * width + x) * 3 + 1] = colorRGB.green();
@@ -145,21 +145,21 @@ public class Bitmap {
             int samplesPerPixel = 4;
             int[] bandOffsets = {0, 1, 2, 3};
 
-            DataBuffer buffer = new DataBufferByte(rgbArray, rgbArray.length);
+            var buffer = new DataBufferByte(rgbArray, rgbArray.length);
             raster = Raster.createInterleavedRaster(buffer, width, height, samplesPerPixel * width, samplesPerPixel, bandOffsets, null);
             colorModel = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB), true, false, Transparency.TRANSLUCENT, DataBuffer.TYPE_BYTE);
         } else if (format == BGRA){
             int samplesPerPixel = 4;
             int[] bandOffsets = {2, 1, 0, 3};
 
-            DataBuffer buffer = new DataBufferByte(imageData, imageData.length);
+            var buffer = new DataBufferByte(imageData, imageData.length);
             raster = Raster.createInterleavedRaster(buffer, width, height, samplesPerPixel * width, samplesPerPixel, bandOffsets, null);
             colorModel = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB), true, false, Transparency.TRANSLUCENT, DataBuffer.TYPE_BYTE);
         } else {
             throw new RuntimeException(format("Can't write file with format %s", format.name()));
         }
 
-        BufferedImage image = new BufferedImage(colorModel, raster, colorModel.isAlphaPremultiplied(), null);
+        var image = new BufferedImage(colorModel, raster, colorModel.isAlphaPremultiplied(), null);
 
         if (debug) {
             System.out.println("image: " + image);
@@ -285,7 +285,7 @@ public class Bitmap {
             }
         }
 
-        Bitmap subBitmap = new Bitmap(subImageWidth, subImageHeight, palette, TextureFormat.BGRA);
+        var subBitmap = new Bitmap(subImageWidth, subImageHeight, palette, TextureFormat.BGRA);
         subBitmap.setImageDataFromBuffer(subImage);
 
         return subBitmap;
@@ -331,7 +331,7 @@ public class Bitmap {
             dy = dy + 1;
         }
 
-        Bitmap subBitmap = new Bitmap(destinationWidth, destinationHeight, palette, TextureFormat.BGRA);
+        var subBitmap = new Bitmap(destinationWidth, destinationHeight, palette, TextureFormat.BGRA);
 
         subBitmap.setImageDataFromBuffer(subImage);
 
@@ -339,7 +339,7 @@ public class Bitmap {
     }
 
     public void copyNonTransparentPixels(Bitmap bitmap, Point toUpperLeft, Point fromUpperLeft, Dimension fromSize) {
-        Point toIterator = new Point(toUpperLeft.x, toUpperLeft.y);
+        var toIterator = new Point(toUpperLeft.x, toUpperLeft.y);
 
         for (int fromY = fromUpperLeft.y; fromY < fromSize.height + fromUpperLeft.y; fromY++) {
             for (int fromX = fromUpperLeft.x; fromX < fromSize.width + fromUpperLeft.x; fromX++) {
@@ -445,7 +445,7 @@ public class Bitmap {
      * @return
      */
     public Point getOffsetsForVisibleImage() {
-        Area visibleArea = getVisibleArea();
+        var visibleArea = getVisibleArea();
         return new Point(this.nx - visibleArea.x(), this.ny - visibleArea.y());
     }
 
@@ -478,7 +478,7 @@ public class Bitmap {
     }
 
     public Bitmap getMirror() {
-        Bitmap mirror = new Bitmap(width, height, width - nx, ny, palette, format);
+        var mirror = new Bitmap(width, height, width - nx, ny, palette, format);
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {

@@ -26,17 +26,17 @@ public class ImageUtils {
     public static void writeImageResourceToFile(GameResource gameResource, String outFilename) throws IOException {
         switch (gameResource.getType()) {
             case BITMAP_RLE:
-                BitmapRLEResource headquarterRLEBitmapResource = (BitmapRLEResource) gameResource;
+                var headquarterRLEBitmapResource = (BitmapRLEResource) gameResource;
                 headquarterRLEBitmapResource.getBitmap().writeToFile(outFilename);
                 break;
 
             case PLAYER_BITMAP_RESOURCE:
-                PlayerBitmapResource playerBitmapResource = (PlayerBitmapResource) gameResource;
+                var playerBitmapResource = (PlayerBitmapResource) gameResource;
                 playerBitmapResource.getBitmap().writeToFile(outFilename);
                 break;
 
             case BITMAP_RESOURCE:
-                BitmapResource bitmapResource = (BitmapResource) gameResource;
+                var bitmapResource = (BitmapResource) gameResource;
                 bitmapResource.getBitmap().writeToFile(outFilename);
                 break;
 

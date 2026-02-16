@@ -91,7 +91,7 @@ public class PrintUtils {
      * @return a string representing a tree, stone, or empty
      */
     public String treeOrStoneOrNoneToString(MapFile mapFile, Point point) {
-        MapFilePoint mapFilePoint = mapFile.getMapFilePoint(point);
+        var mapFilePoint = mapFile.getMapFilePoint(point);
 
         if (mapFilePoint.hasTree()) {
             return "tree ";
@@ -133,7 +133,7 @@ public class PrintUtils {
         String[][] mapFileRender = renderMapFileToStringArray(mapFile, mapFile.getGamePointStartingPoints(), debug);
 
         // Print the render of the map file
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
         for (String[] row : mapFileRender) {
             for (int index = 0; index < consoleWidth && index < row.length; index++) {
                 sb.append(Objects.requireNonNullElse(row[index], " "));
@@ -170,14 +170,14 @@ public class PrintUtils {
         System.out.println("All spots in the map file");
 
         for (MapFilePoint mapFilePoint : mapFile.getMapFilePoints()) {
-            Point point = mapFilePoint.getGamePointPosition();
+            var point = mapFilePoint.getGamePointPosition();
 
-            MapFilePoint spotLeft = mapFile.getMapFilePoint(point.left());
-            MapFilePoint spotUpLeft = mapFile.getMapFilePoint(point.upLeft());
-            MapFilePoint spotDownLeft = mapFile.getMapFilePoint(point.downLeft());
-            MapFilePoint spotRight = mapFile.getMapFilePoint(point.right());
-            MapFilePoint spotUpRight = mapFile.getMapFilePoint(point.upRight());
-            MapFilePoint spotDownRight = mapFile.getMapFilePoint(point.downRight());
+            var spotLeft = mapFile.getMapFilePoint(point.left());
+            var spotUpLeft = mapFile.getMapFilePoint(point.upLeft());
+            var spotDownLeft = mapFile.getMapFilePoint(point.downLeft());
+            var spotRight = mapFile.getMapFilePoint(point.right());
+            var spotUpRight = mapFile.getMapFilePoint(point.upRight());
+            var spotDownRight = mapFile.getMapFilePoint(point.downRight());
 
             System.out.print(" - " + point + " available: " + mapFilePoint.getBuildableSite() +
                     ", height: " + mapFilePoint.getHeight() +

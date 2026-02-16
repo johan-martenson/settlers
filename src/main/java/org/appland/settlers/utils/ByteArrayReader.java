@@ -38,7 +38,7 @@ public class ByteArrayReader implements ByteReader {
 
     @Override
     public int getUint16(ByteOrder endian) {
-        ByteOrder previous = byteArray.order();
+        var previous = byteArray.order();
         byteArray.order(endian);
 
         int value = byteArray.getShort() & 0xFFFF;
@@ -49,7 +49,7 @@ public class ByteArrayReader implements ByteReader {
 
     @Override
     public String getRemainingBytesAsString() {
-        List<Byte> byteList = new ArrayList<>();
+        var byteList = new ArrayList<Byte>();
 
         while (byteArray.position() < byteArray.array().length) {
             byteList.add(byteArray.get());
@@ -76,7 +76,7 @@ public class ByteArrayReader implements ByteReader {
 
     @Override
     public long getUint32(ByteOrder byteOrder) {
-        ByteOrder previous = byteArray.order();
+        var previous = byteArray.order();
         byteArray.order(byteOrder);
 
         long value = byteArray.getInt() & 0xFFFFFFFFL;

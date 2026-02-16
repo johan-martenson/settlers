@@ -38,7 +38,7 @@ public class CropImageCollection {
         var imageBoard = new ImageBoard();
 
         cropMap.forEach((cropType, growthMap) -> {
-                    List<ImageBoard.ImagePathPair> imagePairs = new ArrayList<>();
+                    var imagePairs = new ArrayList<ImageBoard.ImagePathPair>();
 
             Stream.of(Crop.GrowthState.values()).forEach(
                     (growthState -> {

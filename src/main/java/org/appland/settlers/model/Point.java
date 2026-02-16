@@ -32,9 +32,9 @@ public class Point extends java.awt.Point {
 
         // Uncomment below to track allocations of points
         /*StackTraceElement frame1 = Thread.currentThread().getStackTrace()[2];
-        StackTraceElement frame2 = Thread.currentThread().getStackTrace()[3];
-        String method1 = frame1.getClassName() + "::" + frame1.getMethodName();
-        String method2 = frame2.getClassName() + "::" + frame2.getMethodName();
+        var frame2 = Thread.currentThread().getStackTrace()[3];
+        var method1 = frame1.getClassName() + "::" + frame1.getMethodName();
+        var method2 = frame2.getClassName() + "::" + frame2.getMethodName();
 
         allocators.put(method1, allocators.getOrDefault(method1, 0) + 1);
         allocators.put(method2, allocators.getOrDefault(method2, 0) + 1);
@@ -134,7 +134,7 @@ public class Point extends java.awt.Point {
     }
 
     public Point[] getAdjacentPoints() {
-        Point[] adjacentPoints = new Point[8];
+        var adjacentPoints = new Point[8];
 
         adjacentPoints[0] = new Point(x - 2, y    );
         adjacentPoints[1] = new Point(x - 1, y + 1);
@@ -149,7 +149,7 @@ public class Point extends java.awt.Point {
     }
 
     public Point[] getAdjacentPointsExceptAboveAndBelow() {
-        Point[] adjacentPoints = new Point[6];
+        var adjacentPoints = new Point[6];
 
         adjacentPoints[0] = new Point(x - 2, y    );
         adjacentPoints[1] = new Point(x - 1, y + 1);

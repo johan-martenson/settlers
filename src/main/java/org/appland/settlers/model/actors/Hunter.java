@@ -239,21 +239,21 @@ public class Hunter extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, HUNTER);
+        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, HUNTER);
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
 
             setTarget(storage.getPosition());
         } else {
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), HUNTER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), HUNTER);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
             } else {
-                Point point = findPlaceToDie();
+                var point = findPlaceToDie();
 
                 setOffroadTarget(point, getPosition().downRight());
 

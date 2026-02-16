@@ -56,15 +56,15 @@ public class Reader {
     private Palette palette;
 
     public static void main(String[] args) throws CmdLineException, IOException, InvalidFormatException {
-        Reader reader = new Reader();
-        CmdLineParser parser = new CmdLineParser(reader);
+        var reader = new Reader();
+        var parser = new CmdLineParser(reader);
 
         parser.parseArgument(args);
 
         // Load the default palette
         reader.loadDefaultPalette();
 
-        Map<String, List<GameResource>> gameResourceMap = new HashMap<>();
+        var gameResourceMap = new HashMap<String, List<GameResource>>();
 
         // Load file if specified
         if (!Objects.equals(assetFilename, "")) {
@@ -105,7 +105,7 @@ public class Reader {
      * @throws InvalidFormatException if the file format is invalid
      */
     private Map<String, List<GameResource>> loadDirectory(String assetDir, String type) throws IOException, InvalidFormatException {
-        Map<String, List<GameResource>> gameResourceMap = new HashMap<>();
+        var gameResourceMap = new HashMap<String, List<GameResource>>();
 
         // List all files
         List<Path> paths = Files.find(
@@ -116,7 +116,7 @@ public class Reader {
 
         for (Path path : paths) {
             if (!Files.isDirectory(path)) {
-                String filename = path.toString();
+                var filename = path.toString();
                 gameResourceMap.put(filename, loadFile(filename));
             }
         }
@@ -139,7 +139,7 @@ public class Reader {
             for (GameResource gameResource : gameResourceList) {
                 switch (gameResource.getType()) {
                     case PLAYER_BITMAP_RESOURCE -> {
-                        PlayerBitmap playerBitmap = ((PlayerBitmapResource) gameResource).getBitmap();
+                        var playerBitmap = ((PlayerBitmapResource) gameResource).getBitmap();
                         System.out.printf("""
                              + Player bitmap
                                 - Width: %d
@@ -150,8 +150,8 @@ public class Reader {
                              """, playerBitmap.getWidth(), playerBitmap.getHeight(), playerBitmap.getNx(), playerBitmap.getNy(), playerBitmap.getLength());
                     }
                     case PALETTE_RESOURCE -> {
-                        Palette palette = ((PaletteResource) gameResource).getPalette();
-                        RGBColor rgbColor = palette.getColorForIndex(palette.getTransparentIndex());
+                        var palette = ((PaletteResource) gameResource).getPalette();
+                        var rgbColor = palette.getColorForIndex(palette.getTransparentIndex());
                         System.out.printf("""
                              + Palette
                                 - Number colors: %d
@@ -160,7 +160,7 @@ public class Reader {
                              """, palette.getNumberColors(), palette.getTransparentIndex(), rgbColor.red(), rgbColor.green(), rgbColor.blue());
                     }
                     case BITMAP_RLE -> {
-                        BitmapRLE bitmapRLE = ((BitmapRLEResource) gameResource).getBitmap();
+                        var bitmapRLE = ((BitmapRLEResource) gameResource).getBitmap();
                         System.out.printf("""
                              + RLE bitmap
                                 - Width: %d
@@ -168,7 +168,7 @@ public class Reader {
                              """, bitmapRLE.getWidth(), bitmapRLE.getHeight());
                     }
                     case BITMAP_RESOURCE -> {
-                        Bitmap bitmap = ((BitmapResource) gameResource).getBitmap();
+                        var bitmap = ((BitmapResource) gameResource).getBitmap();
                         System.out.printf("""
                              + Bitmap
                                 - Width: %d
@@ -178,7 +178,7 @@ public class Reader {
                              """, bitmap.getWidth(), bitmap.getHeight(), bitmap.getBytesPerPixel(), bitmap.getFormat());
                     }
                     case WAVE_SOUND -> {
-                        WaveFile waveFile = ((WaveGameResource) gameResource).getWaveFile();
+                        var waveFile = ((WaveGameResource) gameResource).getWaveFile();
                         System.out.printf("""
                              + Wave
                                 - Format id: %s
@@ -196,7 +196,7 @@ public class Reader {
                                 waveFile.getDataId(), waveFile.getDataSize());
                     }
                     case BITMAP_RAW -> {
-                        Bitmap bitmapRaw = ((BitmapRawResource) gameResource).getBitmap();
+                        var bitmapRaw = ((BitmapRawResource) gameResource).getBitmap();
                         System.out.printf("""
                              + Raw bitmap
                                 - Width: %d
@@ -206,7 +206,7 @@ public class Reader {
                              """, bitmapRaw.getWidth(), bitmapRaw.getHeight(), bitmapRaw.getFormat(), bitmapRaw.getBytesPerPixel());
                     }
                     case BOB_RESOURCE -> {
-                        Bob bob = ((BobResource) gameResource).getBob();
+                        var bob = ((BobResource) gameResource).getBob();
                         System.out.printf("""
                              + Bob
                                 - Number of body images: %d
@@ -214,11 +214,11 @@ public class Reader {
                              """, bob.getNumberBodyImages(), bob.getNumberOverlayImages());
                     }
                     case FONT_RESOURCE -> {
-                        FontResource fontResource = (FontResource) gameResource;
+                        var fontResource = (FontResource) gameResource;
                         System.out.printf(" + Font%n     - Number of letters: %d%n", fontResource.getLetterMap().size());
                     }
                     case TEXT_RESOURCE -> {
-                        TextResource textResource = (TextResource) gameResource;
+                        var textResource = (TextResource) gameResource;
                         System.out.println(" + Text");
                         textResource.getStrings().forEach(text -> System.out.println("     - " + text));
                     }
@@ -237,24 +237,24 @@ public class Reader {
      */
     private static void writeToDirectory(Map<String, List<GameResource>> gameResourceMap, String dirToWrite) throws IOException {
         for (var entry : gameResourceMap.entrySet()) {
-            String inputFilename = entry.getKey();
-            List<GameResource> gameResourceList = entry.getValue();
+            var inputFilename = entry.getKey();
+            var gameResourceList = entry.getValue();
 
             int i = 0;
 
-            String filenameWithoutPath = inputFilename.substring(inputFilename.lastIndexOf("/") + 1);
+            var filenameWithoutPath = inputFilename.substring(inputFilename.lastIndexOf("/") + 1);
 
             for (GameResource gameResource : gameResourceList) {
                 String outFile;
 
                 if (gameResource.isNameSet()) {
-                    String utf8EncodedString = new String(gameResource.getName().strip().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
+                    var utf8EncodedString = new String(gameResource.getName().strip().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
                     outFile = format("%s/%s-%s-%d.png", dirToWrite, filenameWithoutPath, utf8EncodedString, i);
                 } else {
                     outFile = format("%s/%s-%d.png", dirToWrite, filenameWithoutPath, i);
                 }
 
-                String outSoundFile = format("%s/%s-%d.wav", dirToWrite, filenameWithoutPath, i);
+                var outSoundFile = format("%s/%s-%d.wav", dirToWrite, filenameWithoutPath, i);
                 i++;
 
                 switch (gameResource.getType()) {
@@ -263,7 +263,7 @@ public class Reader {
                     case BITMAP_RLE -> ((BitmapRLEResource) gameResource).getBitmap().writeToFile(outFile);
                     case PALETTE_RESOURCE -> createBitmapFromPalette(((PaletteResource) gameResource).getPalette()).writeToFile(outFile);
                     case PLAYER_BITMAP_RESOURCE -> {
-                        PlayerBitmap playerBitmap = ((PlayerBitmapResource) gameResource).getBitmap();
+                        var playerBitmap = ((PlayerBitmapResource) gameResource).getBitmap();
 
                         // Write the underlay only
                         playerBitmap.writeToFile(outFile);
@@ -280,13 +280,13 @@ public class Reader {
                     }
                     case WAVE_SOUND -> ((WaveGameResource) gameResource).getWaveFile().writeToFile(outSoundFile);
                     case BOB_RESOURCE -> {
-                        Bob bob = ((BobResource) gameResource).getBob();
+                        var bob = ((BobResource) gameResource).getBob();
                         int j = 0;
                         for (PlayerBitmap playerBitmap1 : bob.getAllBitmaps()) {
                             playerBitmap1.writeToFile(format("%s/%d-%s-%d.png", dirToWrite, j++, filenameWithoutPath, i));
                         }
 
-                        StringBuilder linksAsStr = new StringBuilder();
+                        var linksAsStr = new StringBuilder();
                         int[] links = bob.getLinks();
                         for (int linkIndex = 0; linkIndex < links.length; linkIndex++) {
                             if (linkIndex % NUMBER_LINKS_PER_OVERLAY == 0) {
@@ -313,7 +313,7 @@ public class Reader {
      * @throws IOException if there's an error during file operations
      */
     private static void writeTextFile(String outTextFile, List<String> strings) throws IOException {
-        PrintWriter printWriter = new PrintWriter(new FileWriter(outTextFile));
+        var printWriter = new PrintWriter(new FileWriter(outTextFile));
 
         for (String text : strings) {
             printWriter.println(text);
@@ -350,7 +350,7 @@ public class Reader {
             offset += bitmap.getWidth();
         }
 
-        Bitmap bitmap = new Bitmap(width, height, null, TextureFormat.BGRA);
+        var bitmap = new Bitmap(width, height, null, TextureFormat.BGRA);
         bitmap.setImageDataFromBuffer(data);
 
         return bitmap;
@@ -367,7 +367,7 @@ public class Reader {
 
         for (int i = 0; i < 10; i++) {
             for (int x = 0; x < palette.getNumberColors(); x++) {
-                RGBColor rgbColor = palette.getColorForIndex(x);
+                var rgbColor = palette.getColorForIndex(x);
 
                 data[(i * palette.getNumberColors() + x) * 4] = rgbColor.blue();
                 data[(i * palette.getNumberColors() + x) * 4 + 1] = rgbColor.green();
@@ -376,7 +376,7 @@ public class Reader {
             }
         }
 
-        Bitmap bitmap = new Bitmap(palette.getNumberColors(), 10, palette, TextureFormat.BGRA);
+        var bitmap = new Bitmap(palette.getNumberColors(), 10, palette, TextureFormat.BGRA);
         bitmap.setImageDataFromBuffer(data);
 
         return bitmap;
@@ -396,9 +396,9 @@ public class Reader {
      */
     private List<GameResource> loadFile(String filename) throws IOException, InvalidFormatException {
         int lastSeparator = filename.lastIndexOf("/");
-        String filenameWithoutPath = filename.substring(lastSeparator + 1);
+        var filenameWithoutPath = filename.substring(lastSeparator + 1);
 
-        String fileSuffix = filename.substring(filename.lastIndexOf('.') + 1);
+        var fileSuffix = filename.substring(filename.lastIndexOf('.') + 1);
 
         System.out.printf("Asset filename and path: %s", filename);
         System.out.printf("Asset filename: %s", filenameWithoutPath);
@@ -435,7 +435,7 @@ public class Reader {
                 return BbmDecoder.loadBbmFile(filename);
             }
             case "GER", "ENG" -> {
-                List<String> strings = TextDecoder.loadTextFromFile(filename);
+                var strings = TextDecoder.loadTextFromFile(filename);
                 return List.of(new TextResource(strings));
             }
             default -> throw new RuntimeException(format("Not supporting %s", type));

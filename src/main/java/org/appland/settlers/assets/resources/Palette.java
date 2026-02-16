@@ -70,7 +70,7 @@ public class Palette {
         byte[] colors = streamReader.getUint8ArrayAsBytes(256 * 3);
         streamReader.popByteOrder();
 
-        Palette palette = new Palette(colors);
+        var palette = new Palette(colors);
         palette.setDefaultTransparentIdx();
 
         return palette;
@@ -97,7 +97,7 @@ public class Palette {
             streamReader.getInt8();                            // alpha, not used
         }
 
-        Palette palette = new Palette(paletteColors);
+        var palette = new Palette(paletteColors);
         palette.setDefaultTransparentIdx();
         return palette;
     }

@@ -109,7 +109,7 @@ public class Inspector {
         }
 
         if (inspector.isPointsSurroundingTypeSelected()) {
-            InformationType informationType = InformationType.fromString(inspector.informationAroundType);
+            var informationType = InformationType.fromString(inspector.informationAroundType);
 
             if (inspector.isFileSelected()) {
                 inspector.printPointsSurroundingPointTypeInFile(informationType);
@@ -364,8 +364,8 @@ public class Inspector {
         System.out.printf("Max players: %d%n", mapFile.getMaxNumberOfPlayers());
         System.out.printf("Starting positions: %s%n", mapFile.getGamePointStartingPoints());
 
-        List<Point> startingPoints = map.getStartingPoints();
-        List<Player> players = new ArrayList<>();
+        var startingPoints = map.getStartingPoints();
+        var players = new ArrayList<Player>();
 
         for (int i = 0; i < startingPoints.size(); i++) {
             players.add(new Player("" + i, COLORS.get(i), Nation.ROMANS, PlayerType.HUMAN));
@@ -377,8 +377,8 @@ public class Inspector {
                 System.out.println("No starting points found in map file");
             } else {
                 for (int i = 0; i < startingPoints.size(); i++) {
-                    Point point = startingPoints.get(i);
-                    Player player = players.get(i);
+                    var point = startingPoints.get(i);
+                    var player = players.get(i);
 
                     try {
                         map.placeBuilding(new Headquarter(player), point);
@@ -401,7 +401,7 @@ public class Inspector {
         System.out.println();
         System.out.printf("Detailed information about %s%n", infoPoint);
 
-        MapFilePoint mapFilePoint = mapFile.getMapFilePoint(point);
+        var mapFilePoint = mapFile.getMapFilePoint(point);
 
         System.out.println();
         System.out.println("Map file point:");
@@ -487,8 +487,8 @@ public class Inspector {
         int filtered = 0;
 
         for (Map.Entry<Point, AvailableBuildingComparison> pointAndComparison : mismatched.entrySet()) {
-            Point point = pointAndComparison.getKey();
-            AvailableBuildingComparison comparison = pointAndComparison.getValue();
+            var point = pointAndComparison.getKey();
+            var comparison = pointAndComparison.getValue();
 
             int distanceToBorder = GameUtils.getDistanceToBorder(point, player);
             int distanceToHeadquarter = GameUtils.distanceInGameSteps(point, headquarter.getPosition());
@@ -500,13 +500,13 @@ public class Inspector {
                 continue;
             }
 
-            MapFilePoint spot = mapFile.getMapFilePoint(point);
-            MapFilePoint spotLeft = mapFile.getMapFilePoint(point.left());
-            MapFilePoint spotUpLeft = mapFile.getMapFilePoint(point.upLeft());
-            MapFilePoint spotDownLeft = mapFile.getMapFilePoint(point.downLeft());
-            MapFilePoint spotRight = mapFile.getMapFilePoint(point.right());
-            MapFilePoint spotUpRight = mapFile.getMapFilePoint(point.upRight());
-            MapFilePoint spotDownRight = mapFile.getMapFilePoint(point.downRight());
+            var spot = mapFile.getMapFilePoint(point);
+            var spotLeft = mapFile.getMapFilePoint(point.left());
+            var spotUpLeft = mapFile.getMapFilePoint(point.upLeft());
+            var spotDownLeft = mapFile.getMapFilePoint(point.downLeft());
+            var spotRight = mapFile.getMapFilePoint(point.right());
+            var spotUpRight = mapFile.getMapFilePoint(point.upRight());
+            var spotDownRight = mapFile.getMapFilePoint(point.downRight());
 
             System.out.printf("- %s - game: %s, file: %s, distance to border: %d, distance to headquarter: %d, height differences: %d, %d, %d, %d, %d, %d",
                     point,

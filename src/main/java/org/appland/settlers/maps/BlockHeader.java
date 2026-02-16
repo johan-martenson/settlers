@@ -29,7 +29,7 @@ public class BlockHeader {
             return false;
         }
 
-        BlockHeader that = (BlockHeader) o;
+        var that = (BlockHeader) o;
 
         return id == that.id &&
                 mustBeZero == that.mustBeZero &&

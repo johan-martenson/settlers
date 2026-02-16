@@ -128,14 +128,14 @@ public class Builder extends Worker {
                 countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
             }
             case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
-                Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BUILDER);
+                var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BUILDER);
 
                 if (storehouse != null) {
                     state = State.RETURNING_TO_STORAGE;
                     setTarget(storehouse.getPosition());
                 } else {
                     state = State.GOING_TO_DIE;
-                    Point point = findPlaceToDie();
+                    var point = findPlaceToDie();
                     setOffroadTarget(point);
                 }
             }
@@ -152,20 +152,20 @@ public class Builder extends Worker {
             return;
         }
 
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BUILDER);
+        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BUILDER);
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
 
             setTarget(storage.getPosition());
         } else {
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), BUILDER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), BUILDER);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
                 setOffroadTarget(storage.getPosition());
             } else {
-                Point point = findPlaceToDie();
+                var point = findPlaceToDie();
 
                 if (!Objects.equals(getPosition(), point)) {
                     state = State.GOING_TO_DIE;

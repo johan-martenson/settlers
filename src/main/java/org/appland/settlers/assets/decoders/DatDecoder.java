@@ -54,12 +54,12 @@ public class DatDecoder {
     public static List<GameResource> loadDatFile(String filename, Palette defaultPalette) throws IOException, UnknownResourceTypeException, InvalidFormatException {
         debugPrint("Loading DAT file");
 
-        String baseFile = filename.substring(0, filename.length() - 4);
+        var baseFile = filename.substring(0, filename.length() - 4);
 
         debugPrint(baseFile);
 
-        String datFilename = baseFile + ".DAT";
-        String idxFilename = baseFile + ".IDX";
+        var datFilename = baseFile + ".DAT";
+        var idxFilename = baseFile + ".IDX";
 
         // Load only from the DAT file if the IDX file is missing
         if (!Files.exists(Paths.get(idxFilename))) {
@@ -92,10 +92,10 @@ public class DatDecoder {
                 return new ArrayList<>();
             }
 
-            ResourceType resourceType = ResourceType.fromInt(datBobtype);
-            GameResource gameResource = loadType(datReader, resourceType, defaultPalette);
+            var resourceType = ResourceType.fromInt(datBobtype);
+            var gameResource = loadType(datReader, resourceType, defaultPalette);
 
-            List<GameResource> result = new ArrayList<>();
+            var result = new ArrayList<GameResource>();
             result.add(gameResource);
 
             return result;
@@ -105,12 +105,12 @@ public class DatDecoder {
         try (StreamReader datReader = new StreamReader(new FileInputStream(datFilename), LITTLE_ENDIAN);
              StreamReader idxReader = new StreamReader(new FileInputStream(idxFilename), LITTLE_ENDIAN)) {
             long count = idxReader.getUint32();
-            List<GameResource> gameResourceList = new ArrayList<>();
+            var gameResourceList = new ArrayList<GameResource>();
 
             for (long i = 0; i < count; i++) {
-                String name = idxReader.getUint8ArrayAsString(16);
+                var name = idxReader.getUint8ArrayAsString(16);
                 long offset = idxReader.getUint32();
-                String unknown = idxReader.getUint8ArrayAsString(6);
+                var unknown = idxReader.getUint8ArrayAsString(6);
                 int idxBobType = idxReader.getInt16();
 
                 datReader.setPosition(offset);
@@ -125,7 +125,7 @@ public class DatDecoder {
                     continue;
                 }
 
-                ResourceType resourceType = ResourceType.fromInt(datBobtype);
+                var resourceType = ResourceType.fromInt(datBobtype);
                 var gameResource = loadType(datReader, resourceType, defaultPalette);
                 gameResource.setName(name);
                 gameResourceList.add(gameResource);

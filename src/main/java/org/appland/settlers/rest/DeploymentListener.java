@@ -30,11 +30,11 @@ class DeploymentListener implements ServletContextListener {
         GameTicker.GAME_TICKER.activate();
 
         // Load all maps and put them into the servlet context
-        String largeMapDirectoryPath = "maps/WORLDS/";
+        var largeMapDirectoryPath = "maps/WORLDS/";
 
-        File largeMapDirectory = new File(largeMapDirectoryPath);
+        var largeMapDirectory = new File(largeMapDirectoryPath);
 
-        MapLoader mapLoader = new MapLoader();
+        var mapLoader = new MapLoader();
 
         if (largeMapDirectory.exists()) {
 
@@ -44,7 +44,7 @@ class DeploymentListener implements ServletContextListener {
             Arrays.stream(mapFilenames).parallel().forEach(mapFilename ->
                     {
                         try {
-                            MapFile mapFile = mapLoader.loadMapFromFile(mapFilename.toString());
+                            var mapFile = mapLoader.loadMapFromFile(mapFilename.toString());
 
                             synchronized (mapFiles) {
                                 mapFiles.add(mapFile);
@@ -59,10 +59,10 @@ class DeploymentListener implements ServletContextListener {
         }
 
         // Pick the single reference map
-        File mapFile = Paths.get("src/test/resources/000.SWD").toFile();
+        var mapFile = Paths.get("src/test/resources/000.SWD").toFile();
 
         try {
-            MapFile loadedMapFile = mapLoader.loadMapFromFile(mapFile.toString());
+            var loadedMapFile = mapLoader.loadMapFromFile(mapFile.toString());
 
             mapFiles.addFirst(loadedMapFile);
         } catch (Exception e) {
@@ -75,7 +75,7 @@ class DeploymentListener implements ServletContextListener {
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
         System.out.println("Context destroyed event");
 
-        GameTicker gameTicker = (GameTicker) servletContextEvent.getServletContext().getAttribute("gameTicker");
+        var gameTicker = (GameTicker) servletContextEvent.getServletContext().getAttribute("gameTicker");
 
         gameTicker.deactivate();
     }

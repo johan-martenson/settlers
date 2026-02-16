@@ -80,13 +80,13 @@ public class SettlersModelDriver {
 
     public static void main(String[] args) throws Exception {
 
-        final String filename = args[0];
+        final var filename = args[0];
 
         System.out.println("Reading: " + filename);
 
-        File file = new File(filename);
+        var file = new File(filename);
 
-        FileInputStream inputStream = new FileInputStream(file);
+        var inputStream = new FileInputStream(file);
 
         // Set up the building class map
         buildingClassMap.put(0, Armory.class);
@@ -123,13 +123,13 @@ public class SettlersModelDriver {
         }
 
         // Create game map
-        List<Player> players = new ArrayList<>();
+        var players = new ArrayList<Player>();
 
         for (int i = 0; i < mapFile.getStartingPoints().size(); i++) {
             players.add(new Player("Player " + i, PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN));
         }
 
-        GameMap map = mapLoader.convertMapFileToGameMap(mapFile);
+        var map = mapLoader.convertMapFileToGameMap(mapFile);
 
         map.setPlayers(players);
 
@@ -141,7 +141,7 @@ public class SettlersModelDriver {
         }
 
         // Execute the commands from the input file
-        ArgumentsHandler arguments = new ArgumentsHandler(inputStream);
+        var arguments = new ArgumentsHandler(inputStream);
 
         while (true) {
 
@@ -552,7 +552,7 @@ public class SettlersModelDriver {
         Building building;
 
         try {
-            Point point = arguments.getPointForChars();
+            var point = arguments.getPointForChars();
 
             building = map.getBuildingAtPoint(point);
 
@@ -572,7 +572,7 @@ public class SettlersModelDriver {
         Building building;
 
         try {
-            Point point = arguments.getPointForChars();
+            var point = arguments.getPointForChars();
 
             building = map.getBuildingAtPoint(point);
 
@@ -592,7 +592,7 @@ public class SettlersModelDriver {
         Building building;
 
         try {
-            Point point = arguments.getPointForChars();
+            var point = arguments.getPointForChars();
 
             building = map.getBuildingAtPoint(point);
 
@@ -612,7 +612,7 @@ public class SettlersModelDriver {
         Building building;
 
         try {
-            Point point = arguments.getPointForChars();
+            var point = arguments.getPointForChars();
 
             building = map.getBuildingAtPoint(point);
 
@@ -632,7 +632,7 @@ public class SettlersModelDriver {
         Building building;
 
         try {
-            Point point = arguments.getPointForChars();
+            var point = arguments.getPointForChars();
 
             building = map.getBuildingAtPoint(point);
 
@@ -695,7 +695,7 @@ public class SettlersModelDriver {
 
     private static void placeManualRoad(GameMap map, ArgumentsHandler arguments) throws SettlersModelDriverException, InvalidUserActionException {
         Player player;
-        List<Point> points = new ArrayList<>();
+        var points = new ArrayList<Point>();
 
         try {
             player = arguments.getPlayerFromChar(map);
@@ -859,7 +859,7 @@ public class SettlersModelDriver {
         Flag flag;
 
         try {
-            Point point = arguments.getPointForChars();
+            var point = arguments.getPointForChars();
 
             flag = map.getFlagAtPoint(point);
 
@@ -884,7 +884,7 @@ public class SettlersModelDriver {
         Flag flag;
 
         try {
-            Point point = arguments.getPointForChars();
+            var point = arguments.getPointForChars();
 
             flag = map.getFlagAtPoint(point);
 
@@ -1011,7 +1011,7 @@ public class SettlersModelDriver {
         Building building;
 
         try {
-            Point point = arguments.getPointForChars();
+            var point = arguments.getPointForChars();
             building = map.getBuildingAtPoint(point);
 
             if (building == null) {
@@ -1042,7 +1042,7 @@ public class SettlersModelDriver {
         Point point;
 
         try {
-            Player player = arguments.getPlayerFromChar(map);
+            var player = arguments.getPlayerFromChar(map);
             building = createBuilding(player, arguments.getUnsignedIntFor1Chars() % buildingClassMap.size());
             point = arguments.getPointForChars();
         } catch (Throwable t) {
@@ -1061,11 +1061,11 @@ public class SettlersModelDriver {
     }
 
     private static Building createBuilding(Player player, int parseInt) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        Class<? extends Building> buildingClass = buildingClassMap.get(parseInt);
+        var buildingClass = buildingClassMap.get(parseInt);
 
-        Constructor<?> constructor = buildingClass.getConstructor(Player.class);
+        var constructor = buildingClass.getConstructor(Player.class);
 
-        Building building = (Building)constructor.newInstance(player);
+        var building = (Building)constructor.newInstance(player);
 
         return building;
     }
@@ -1104,7 +1104,7 @@ public class SettlersModelDriver {
         Flag flag;
 
         try {
-            Point point = arguments.getPointForChars();
+            var point = arguments.getPointForChars();
 
             flag = map.getFlagAtPoint(point);
         } catch (Throwable t) {
@@ -1157,7 +1157,7 @@ public class SettlersModelDriver {
         Road road;
 
         try {
-            Point point = arguments.getPointForChars();
+            var point = arguments.getPointForChars();
 
             road = map.getRoadAtPoint(point);
 

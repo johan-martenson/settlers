@@ -16,7 +16,7 @@ public class ByteArray {
     }
 
     public String getNullTerminatedString(int length) {
-        ByteBuffer tempViewToFindNullChar = bytes.asReadOnlyBuffer();
+        var tempViewToFindNullChar = bytes.asReadOnlyBuffer();
 
         byte[] stringAsBytes = new byte[length];
         bytes.asReadOnlyBuffer().get(stringAsBytes, 0, length);

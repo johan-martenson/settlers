@@ -15,7 +15,7 @@ record Resource(ResourceType type, int amount) {
     private static final int GRANITE_OFFSET = 88; // 0x58
 
     public static Resource resourceFromInt(int i) {
-        ResourceType type = ResourceType.resourceTypeFromInt(i);
+        var type = ResourceType.resourceTypeFromInt(i);
 
         int amount = 0;
 

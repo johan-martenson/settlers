@@ -111,7 +111,7 @@ public class MapPoint {
             connectedFlagsAndBuildings.remove(road.getEnd());
         }
 
-        Point previous = null;
+        var previous = (Point) null;
 
         for (Point current : road.getWayPoints()) {
             if (current.equals(point) && previous != null) {

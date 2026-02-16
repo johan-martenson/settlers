@@ -90,7 +90,7 @@ public class Minter extends Worker {
 
                 // Handle transportation
                 if (home.getFlag().hasPlaceForMoreCargo()) {
-                    Cargo cargo = new Cargo(COIN, map);
+                    var cargo = new Cargo(COIN, map);
 
                     setCargo(cargo);
 
@@ -109,7 +109,7 @@ public class Minter extends Worker {
         } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
             if (home.getFlag().hasPlaceForMoreCargo()) {
 
-                Cargo cargo = new Cargo(COIN, map);
+                var cargo = new Cargo(COIN, map);
 
                 setCargo(cargo);
 
@@ -145,9 +145,9 @@ public class Minter extends Worker {
     @Override
     protected void onArrival() {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
-            Flag flag = map.getFlagAtPoint(position);
+            var flag = map.getFlagAtPoint(position);
 
-            Cargo cargo = getCargo();
+            var cargo = getCargo();
 
             cargo.setPosition(position);
             cargo.transportToReceivingBuilding(this::isCoinReceiver);
@@ -166,13 +166,13 @@ public class Minter extends Worker {
 
             countdown.countFrom(RESTING_TIME);
         } else if (state == RETURNING_TO_STORAGE) {
-            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(position);
+            var storehouse = (Storehouse)map.getBuildingAtPoint(position);
 
             storehouse.depositWorker(this);
         } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
             // Go to the closest storage
-            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, MINTER);
+            var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, MINTER);
 
             if (storehouse != null) {
                 state = RETURNING_TO_STORAGE;
@@ -181,7 +181,7 @@ public class Minter extends Worker {
             } else {
                 state = State.GOING_TO_DIE;
 
-                Point point = findPlaceToDie();
+                var point = findPlaceToDie();
 
                 setOffroadTarget(point);
             }
@@ -205,7 +205,7 @@ public class Minter extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, MINTER);
+        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, MINTER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
@@ -213,14 +213,14 @@ public class Minter extends Worker {
             setTarget(storage.getPosition());
         } else {
 
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), MINTER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), MINTER);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
             } else {
-                Point point = findPlaceToDie();
+                var point = findPlaceToDie();
 
                 setOffroadTarget(point, position.downRight());
 

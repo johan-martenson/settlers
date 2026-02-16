@@ -42,13 +42,13 @@ public class FontDecoder {
             dy = streamReader.getUint8();
         }
 
-        Map<String, PlayerBitmap> letterMap = new HashMap<>();
+        var letterMap = new HashMap<String, PlayerBitmap>();
 
         // Load the characters into the letter map
         for (long i = 32; i < numberChars; ++i) {
             short bobType = streamReader.getInt16();
 
-            ResourceType resourceType = ResourceType.fromInt(bobType);
+            var resourceType = ResourceType.fromInt(bobType);
 
             if (resourceType == NONE) {
                 continue;

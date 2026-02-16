@@ -36,7 +36,7 @@ public class DatLoader {
      */
     public void load(String assetFilename) throws IOException {
         try (StreamReader streamReader = new StreamReader(Files.newInputStream(Path.of(assetFilename)), ByteOrder.LITTLE_ENDIAN)) {
-            List<Chunk> chunks = new ArrayList<>();
+            var chunks = new ArrayList<Chunk>();
 
             while (!streamReader.isEof()) {
                 chunks.add(loadChunkFromStream(streamReader));
@@ -55,8 +55,8 @@ public class DatLoader {
 
     // Prints all loaded chunks in a hierarchical structure
     private void printChunks(List<Chunk> chunks) {
-        Stack<Chunk> toPrint = new Stack<>();
-        Map<Chunk, Integer> depth = new HashMap<>();
+        var toPrint = new Stack<Chunk>();
+        var depth = new HashMap<Chunk, Integer>();
 
         Collections.reverse(chunks); // Reverse for correct order
 
@@ -67,13 +67,13 @@ public class DatLoader {
 
         // Process and print each chunk and its children
         while (!toPrint.isEmpty()) {
-            Chunk chunk = toPrint.pop();
+            var chunk = toPrint.pop();
             int chunkDepth = depth.get(chunk);
 
             // Indentation for nested chunks
             System.out.printf("%s%s (%d)%n", " ".repeat(chunkDepth), chunk.getTypeId(), chunk.getTotalSize());
 
-            List<Chunk> children = new ArrayList<>(chunk.getChildren());
+            var children = new ArrayList<Chunk>(chunk.getChildren());
             Collections.reverse(children); // Reverse for correct order
 
             // Add children to the stack
@@ -85,10 +85,10 @@ public class DatLoader {
     }
 
     private Chunk loadChunkFromByteArray(byte[] data, int offset) {
-        ByteBuffer byteBuffer = ByteBuffer.wrap(data, offset + 4, data.length - offset - 4);
+        var byteBuffer = ByteBuffer.wrap(data, offset + 4, data.length - offset - 4);
 
         // Get the type id
-        String typeId = new String(data, offset, 4, StandardCharsets.US_ASCII);
+        var typeId = new String(data, offset, 4, StandardCharsets.US_ASCII);
 
         if (debug) {
             System.out.println("\nNew chunk. (byte array)");
@@ -97,7 +97,7 @@ public class DatLoader {
             System.out.printf("Type id: %s%n", typeId);
         }
 
-        Chunk chunk = new Chunk(typeId);
+        var chunk = new Chunk(typeId);
 
         // Set the size if there is no content
         if (TYPE_ID_ONLY.contains(typeId)) {
@@ -139,7 +139,7 @@ public class DatLoader {
             long bytesRead = 0;
 
             while (bytesRead < chunk.getContent().length) {
-                Chunk childChunk = loadChunkFromByteArray(chunk.getContent(), (int)bytesRead);
+                var childChunk = loadChunkFromByteArray(chunk.getContent(), (int)bytesRead);
 
                 chunk.addChild(childChunk);
 
@@ -157,14 +157,14 @@ public class DatLoader {
     private Chunk loadChunkFromStream(StreamReader streamReader) throws IOException {
 
         // Get the type id
-        String typeId = streamReader.getUint8ArrayAsString(4);
+        var typeId = streamReader.getUint8ArrayAsString(4);
 
         if (debug) {
             System.out.println("\nNew chunk. (stream)");
             System.out.printf("Type id: %s%n", typeId);
         }
 
-        Chunk chunk = new Chunk(typeId);
+        var chunk = new Chunk(typeId);
 
         // Set the size if there is no content
         if (TYPE_ID_ONLY.contains(typeId)) {
@@ -203,7 +203,7 @@ public class DatLoader {
             long bytesRead = 0;
 
             while (bytesRead < chunk.getContent().length) {
-                Chunk childChunk = loadChunkFromByteArray(chunk.getContent(), (int)bytesRead);
+                var childChunk = loadChunkFromByteArray(chunk.getContent(), (int)bytesRead);
                 chunk.addChild(childChunk);
                 bytesRead += childChunk.getTotalSize();
 

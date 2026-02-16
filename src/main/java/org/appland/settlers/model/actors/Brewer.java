@@ -164,7 +164,7 @@ public class Brewer extends Worker {
             case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
 
                 // Go to the closest storage
-                Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BREWER);
+                var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BREWER);
 
                 if (storehouse != null) {
                     state = RETURNING_TO_STORAGE;
@@ -173,7 +173,7 @@ public class Brewer extends Worker {
                 } else {
                     state = GOING_TO_DIE;
 
-                    Point point = findPlaceToDie();
+                    var point = findPlaceToDie();
 
                     setOffroadTarget(point);
                 }
@@ -190,7 +190,7 @@ public class Brewer extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BREWER);
+        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BREWER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
@@ -198,14 +198,14 @@ public class Brewer extends Worker {
             setTarget(storage.getPosition());
         } else {
 
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), BREWER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), BREWER);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
             } else {
-                Point point = findPlaceToDie();
+                var point = findPlaceToDie();
 
                 setOffroadTarget(point, getPosition().downRight());
 

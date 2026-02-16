@@ -7,6 +7,7 @@ import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Storehouse;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -253,10 +254,10 @@ public class Scout extends Worker {
     private Point findNextPoint() {
 
         // 1. Get list of available next adjacent off-road points
-        Collection<Point> possibleAdjacentNextSteps = map.getPossibleAdjacentOffRoadConnections(position);
+        var possibleAdjacentNextSteps = map.getPossibleAdjacentOffRoadConnections(position);
 
         // 2. Calculate scores for each point based on how closely they match the existing direction
-        List<EntityAndScore<Point>> pointsAndScores = new ArrayList<>();
+        var pointsAndScores = new ArrayList<EntityAndScore<Point>>();
 
         double angleForExistingDirection = calculateAngle(directionX, directionY);
 
@@ -309,14 +310,14 @@ public class Scout extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, SCOUT);
+        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, SCOUT);
         clearTargetBuilding();
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
             setTarget(storage.getPosition());
         } else {
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), SCOUT);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), SCOUT);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;

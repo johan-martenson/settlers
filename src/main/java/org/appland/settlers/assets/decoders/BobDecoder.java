@@ -41,10 +41,10 @@ public class BobDecoder {
      * @throws InvalidFormatException  In case the format is invalid.
      */
     public static Bob loadBobFromStream(ByteReader streamReader, Palette palette) throws IOException, InvalidFormatException {
-        PlayerBitmap[] playerBitmaps = new PlayerBitmap[(int)NUM_BODY_IMAGES];
+        var playerBitmaps = new PlayerBitmap[(int)NUM_BODY_IMAGES];
 
         // Read the color block for the body
-        ColorBlock colorBlock = ColorBlock.readColorBlockFromStream(streamReader);
+        var colorBlock = ColorBlock.readColorBlockFromStream(streamReader);
 
         // Read body images
         for (long i = 0; i < NUM_BODY_IMAGES; i++) {
@@ -62,7 +62,7 @@ public class BobDecoder {
         }
 
         // Read color blocks for each direction
-        ColorBlock[] colorBlocks = new ColorBlock[6];
+        var colorBlocks = new ColorBlock[6];
         for (int i = 0; i < 6; i++) {
             colorBlocks[i] = ColorBlock.readColorBlockFromStream(streamReader);
         }
@@ -72,7 +72,7 @@ public class BobDecoder {
         int[][] overlayImageStarts = new int[numberOverlayImages][];
         short[] overlayImageNy = new short[numberOverlayImages];
 
-        PlayerBitmap[] allPlayerBitmaps = new PlayerBitmap[(int)(NUM_BODY_IMAGES + numberOverlayImages)];
+        var allPlayerBitmaps = new PlayerBitmap[(int)(NUM_BODY_IMAGES + numberOverlayImages)];
         System.arraycopy(playerBitmaps, 0, allPlayerBitmaps, 0, playerBitmaps.length);
 
         for (int i = 0; i < numberOverlayImages; i++) {
@@ -158,20 +158,20 @@ public class BobDecoder {
      * @return Map of job type to rendered worker images.
      */
     public static Map<JobType, RenderedWorker> renderWorkerImages(Bob jobsBob, Map<JobType, WorkerDetails> workerDetailsMap) {
-        Map<JobType, RenderedWorker> workerImages = new EnumMap<>(JobType.class);
+        var workerImages = new EnumMap<JobType, RenderedWorker>(JobType.class);
 
         // Go through each job type
         for (JobType job : JobType.values()) {
-            RenderedWorker worker = new RenderedWorker(job);
+            var worker = new RenderedWorker(job);
 
             for (Nation nation : Nation.values()) {
                 for (CompassDirection compassDirection : CompassDirection.values()) {
                     for (int animationStep = 0; animationStep < 8; animationStep++) {
-                        WorkerDetails workerDetails = workerDetailsMap.get(job);
+                        var workerDetails = workerDetailsMap.get(job);
                         int id = workerDetails.getBobId(nation);
                         boolean fat = workerDetails.getBodyType() == FAT;
 
-                        StackedBitmaps bitmaps = new StackedBitmaps();
+                        var bitmaps = new StackedBitmaps();
                         bitmaps.add(jobsBob.getBody(fat, compassDirection.ordinal(), animationStep));
                         bitmaps.add(jobsBob.getOverlay(id, fat, compassDirection.ordinal(), animationStep));
 

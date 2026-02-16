@@ -34,7 +34,7 @@ public class GuardHouse extends Building {
 
     @Override
     public void doUpgradeBuilding() {
-        Building upgraded = new WatchTower(getPlayer());
+        var upgraded = new WatchTower(getPlayer());
 
         GameUtils.upgradeMilitaryBuilding(this, upgraded);
     }

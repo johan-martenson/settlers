@@ -217,21 +217,21 @@ public class WellWorker extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, WELL_WORKER);
+        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, WELL_WORKER);
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
 
             setTarget(storage.getPosition());
         } else {
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), WELL_WORKER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), WELL_WORKER);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
             } else {
-                Point point = findPlaceToDie();
+                var point = findPlaceToDie();
 
                 setOffroadTarget(point, position.downRight());
 

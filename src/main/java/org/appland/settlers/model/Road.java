@@ -34,11 +34,11 @@ public class Road {
 
         steps = Collections.unmodifiableList(wayPoints);
 
-        Point pointStart = steps.getFirst();
-        Point pointEnd = steps.getLast();
+        var pointStart = steps.getFirst();
+        var pointEnd = steps.getLast();
 
-        MapPoint mapPointStart = map.getMapPoint(pointStart);
-        MapPoint mapPointEnd = map.getMapPoint(pointEnd);
+        var mapPointStart = map.getMapPoint(pointStart);
+        var mapPointEnd = map.getMapPoint(pointEnd);
 
         if (mapPointStart.isFlag()) {
             start = mapPointStart.getFlag();
@@ -100,7 +100,7 @@ public class Road {
     }
 
     private boolean areRoadStepsTooLong(List<Point> wayPoints) {
-        Point previous = null;
+        var previous = (Point) null;
 
         for (Point current : wayPoints) {
             if (previous == null) {
@@ -168,8 +168,8 @@ public class Road {
 
             map.reportPromotedRoad(this);
 
-            Flag startFlag = map.getFlagAtPoint(start.getPosition());
-            Flag endFlag = map.getFlagAtPoint(end.getPosition());
+            var startFlag = map.getFlagAtPoint(start.getPosition());
+            var endFlag = map.getFlagAtPoint(end.getPosition());
 
             if (startFlag != null) {
                 startFlag.setType(MAIN);

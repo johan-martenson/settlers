@@ -130,9 +130,9 @@ public class StorehouseWorker extends Worker {
             if (ownStorehouse.isPushedOut(material)) {
 
                 // Find receiving storehouse
-                Storehouse receivingStorehouse = getPlayer().getClosestStorage(getHome().getPosition(), getHome());
+                var receivingStorehouse = getPlayer().getClosestStorage(getHome().getPosition(), getHome());
 
-                Cargo cargo = ownStorehouse.retrieve(material);
+                var cargo = ownStorehouse.retrieve(material);
 
                 // Deliver to the building if it exists, otherwise just put the cargo on the flag
                 if (receivingStorehouse != null) {
@@ -191,7 +191,7 @@ public class StorehouseWorker extends Worker {
                 // Deliver to the building
                 building.promiseDelivery(material);
 
-                Cargo cargo = ownStorehouse.retrieve(material);
+                var cargo = ownStorehouse.retrieve(material);
                 cargo.setTarget(building);
 
                 // Track allocation
@@ -216,7 +216,7 @@ public class StorehouseWorker extends Worker {
         if (state == State.RESTING_IN_HOUSE) {
             if (countdown.hasReachedZero()) {
                 if (getHome().getFlag().hasPlaceForMoreCargo() && !getHome().getFlag().isFightingAtFlag()) {
-                    Cargo cargo = tryToStartDelivery();
+                    var cargo = tryToStartDelivery();
 
                     if (cargo != null) {
                         setCargo(cargo);
@@ -260,7 +260,7 @@ public class StorehouseWorker extends Worker {
     @Override
     protected void onArrival() {
         if (state == State.DELIVERING_CARGO_TO_FLAG) {
-            Flag flag = getHome().getFlag();
+            var flag = getHome().getFlag();
 
             flag.putCargo(getCargo());
 
@@ -276,7 +276,7 @@ public class StorehouseWorker extends Worker {
 
             countdown.countFrom(RESTING_TIME);
         } else if (state == State.RETURNING_TO_STORAGE) {
-            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
+            var storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
         } else if (state == State.WALKING_TO_FLAG_TO_PICK_UP_RETURNED_CARGO) {
@@ -300,7 +300,7 @@ public class StorehouseWorker extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
+        var storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
@@ -323,7 +323,7 @@ public class StorehouseWorker extends Worker {
         if (material.isFood()) {
 
         // Reset count if all building types have reached their quota
-            Set<Building> reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
+            var reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
 
             if ((!needyConsumerExists(reachableBuildings, GoldMine.class, material) || overQuota(GoldMine.class, material)) &&
                 (!needyConsumerExists(reachableBuildings, IronMine.class, material) || overQuota(IronMine.class, material)) &&
@@ -339,7 +339,7 @@ public class StorehouseWorker extends Worker {
         } else if (material == COAL) {
 
             // Reset count if all building types have reached their quota
-            Set<Building> reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
+            var reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
 
             if ((!needyConsumerExists(reachableBuildings, IronSmelter.class, COAL) || overQuota(IronSmelter.class, material)) &&
                 (!needyConsumerExists(reachableBuildings, Mint.class, COAL) || overQuota(Mint.class, material)) &&
@@ -353,7 +353,7 @@ public class StorehouseWorker extends Worker {
         } else if (material == WHEAT) {
 
             // Reset count if all type of buildings have reached their quota
-            Set<Building> reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
+            var reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
 
             if ((!needyConsumerExists(reachableBuildings, Mill.class, WHEAT) || overQuota(Mill.class, WHEAT)) &&
                 (!needyConsumerExists(reachableBuildings, DonkeyFarm.class, WHEAT) || overQuota(DonkeyFarm.class, WHEAT)) &&
@@ -369,7 +369,7 @@ public class StorehouseWorker extends Worker {
         } else if (material == WATER) {
 
             // Reset count if all type of buildings have reached their quota
-            Set<Building> reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
+            var reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
 
             if ((!needyConsumerExists(reachableBuildings, Bakery.class, WATER) || overQuota(Bakery.class, WATER)) &&
                 (!needyConsumerExists(reachableBuildings, DonkeyFarm.class, WATER) || overQuota(DonkeyFarm.class, WATER)) &&
@@ -385,7 +385,7 @@ public class StorehouseWorker extends Worker {
         } else if (material == IRON_BAR) {
 
             // Reset count if all type of buildings have reached their quota
-            Set<Building> reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
+            var reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
 
             if ((!needyConsumerExists(reachableBuildings, Armory.class, IRON_BAR) || overQuota(Armory.class, IRON_BAR)) &&
                 (!needyConsumerExists(reachableBuildings, Metalworks.class, IRON_BAR) || overQuota(Metalworks.class, IRON_BAR))) {

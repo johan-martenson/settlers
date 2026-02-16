@@ -19,11 +19,11 @@ public class GameUtils {
 
         // Create the game map
         gameResource.createGameMap();
-        GameMap map = gameResource.getGameMap();
+        var map = gameResource.getGameMap();
 
         // Limit the amount of wild animals to make performance bearable -- temporary!
-        List<WildAnimal> wildAnimals = map.getWildAnimals();
-        List<WildAnimal> reducedWildAnimals = new ArrayList<>(wildAnimals);
+        var wildAnimals = map.getWildAnimals();
+        var reducedWildAnimals = (List<WildAnimal>) new ArrayList<WildAnimal>(wildAnimals);
 
         if (reducedWildAnimals.size() > 10) {
             reducedWildAnimals = reducedWildAnimals.subList(0, 10);
@@ -34,8 +34,8 @@ public class GameUtils {
         wildAnimals.addAll(reducedWildAnimals);
 
         // Place a headquarters for each player
-        List<Player> players = map.getPlayers();
-        List<Point> startingPoints = map.getStartingPoints();
+        var players = map.getPlayers();
+        var startingPoints = map.getStartingPoints();
 
         for (int i = 0; i < startingPoints.size(); i++) {
             if (i == players.size()) {
@@ -55,8 +55,8 @@ public class GameUtils {
     }
 
     public static GameMap gamePlaceholderToGame(GameResource gamePlaceholder) throws Exception {
-        MapLoader mapLoader = new MapLoader();
-        GameMap map = mapLoader.convertMapFileToGameMap(gamePlaceholder.getMapFile());
+        var mapLoader = new MapLoader();
+        var map = mapLoader.convertMapFileToGameMap(gamePlaceholder.getMapFile());
 
         map.setPlayers(gamePlaceholder.getPlayers());
 
@@ -65,7 +65,7 @@ public class GameUtils {
 
     public static void adjustResources(GameMap map, ResourceLevel resources) {
         for (Player player : map.getPlayers()) {
-            Headquarter headquarter = (Headquarter) player.getBuildings().getFirst();
+            var headquarter = (Headquarter) player.getBuildings().getFirst();
 
             headquarter.setInitialResources(resources);
         }

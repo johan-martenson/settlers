@@ -90,7 +90,7 @@ public class FoodProducer implements ComputerPlayer {
         } else if (state == State.BUILD_FISHERY) {
 
             // Find a spot to build a fishery on
-            Point pointForFishery = findPointForFishery();
+            var pointForFishery = findPointForFishery();
 
             if (pointForFishery == null) {
                 System.out.println(" -- No place available for fishery");
@@ -102,12 +102,12 @@ public class FoodProducer implements ComputerPlayer {
             }
 
             // Build the fishery
-            Fishery fishery = map.placeBuilding(new Fishery(controlledPlayer), pointForFishery);
+            var fishery = map.placeBuilding(new Fishery(controlledPlayer), pointForFishery);
 
             fisheries.add(fishery);
 
             // Connect the fishery with the headquarter
-            Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, fishery.getFlag().getPosition(), headquarter);
+            var road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, fishery.getFlag().getPosition(), headquarter);
 
             // Fill the road with flags
             GamePlayUtils.fillRoadWithFlags(map, road);
@@ -116,19 +116,19 @@ public class FoodProducer implements ComputerPlayer {
         } else if (state == State.BUILD_HUNTER_HUT) {
 
             // Find a spot to build a hunter hut on
-            Point pointForHunterHut = findPointForHunterHut();
+            var pointForHunterHut = findPointForHunterHut();
 
             if (pointForHunterHut == null) {
                 return;
             }
 
             // Build the hunter hut
-            HunterHut hunterHut = map.placeBuilding(new HunterHut(controlledPlayer), pointForHunterHut);
+            var hunterHut = map.placeBuilding(new HunterHut(controlledPlayer), pointForHunterHut);
 
             hunterHuts.add(hunterHut);
 
             // Connect the hunter hut with the headquarter
-            Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, hunterHut.getFlag().getPosition(), headquarter);
+            var road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, hunterHut.getFlag().getPosition(), headquarter);
 
             // Fill the road with flags
             GamePlayUtils.fillRoadWithFlags(map, road);
@@ -219,7 +219,7 @@ public class FoodProducer implements ComputerPlayer {
     private Point findPointForHunterHut() {
 
         // Find a good point to build on, close to the headquarter
-        Point site = null;
+        var site = (Point) null;
         double distance = Double.MAX_VALUE;
 
         for (Point point : controlledPlayer.getOwnedLand()) {

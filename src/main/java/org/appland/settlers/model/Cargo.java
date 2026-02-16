@@ -36,21 +36,21 @@ public class Cargo {
     // FIXME: HOTSPOT
     public void setPosition(Point point) {
 
-        MapPoint mapPoint = map.getMapPoint(point);
+        var mapPoint = map.getMapPoint(point);
 
         if (mapPoint.isFlag() || mapPoint.isBuilding()) {
             if (position != null && position != point) {
 
-                MapPoint mapPointCurrent = map.getMapPoint(position);
+                var mapPointCurrent = map.getMapPoint(position);
 
                 if (mapPointCurrent.isFlag() || mapPointCurrent.isBuilding()) {
-                    Road road = map.getRoad(point, position);
+                    var road = map.getRoad(point, position);
 
                     if (road != null) {
                         road.registerUsage();
                     }
                 } else {
-                    Road road = map.getRoadAtPoint(position);
+                    var road = map.getRoadAtPoint(position);
 
                     if (road != null) {
                         road.registerUsage();
@@ -65,14 +65,14 @@ public class Cargo {
     @Override
     public String toString() {
 
-        String materialName = material.getSimpleName();
+        var materialName = material.getSimpleName();
 
         if (target == null) {
             return "Cargo of " + materialName + " to unknown, at " + position;
         }
 
-        Point housePosition = target.getPosition();
-        String houseName = target.getSimpleName();
+        var housePosition = target.getPosition();
+        var houseName = target.getSimpleName();
 
         return "Cargo of " + materialName + " to " + houseName + " " + housePosition + ", at " + position;
     }
@@ -94,7 +94,7 @@ public class Cargo {
     }
 
     public void transportToReceivingBuilding(Function<Building, Boolean> func) {
-        Building receivingBuilding = GameUtils.getClosestBuildingConnectedByRoads(position, null, map, func);
+        var receivingBuilding = GameUtils.getClosestBuildingConnectedByRoads(position, null, map, func);
 
         setTarget(receivingBuilding);
 
@@ -104,7 +104,7 @@ public class Cargo {
     }
 
     public void transportToStorage() {
-        Storehouse storehouse0 = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, material);
+        var storehouse0 = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, material);
 
         if (storehouse0 != null) {
             setTarget(storehouse0);
@@ -114,7 +114,7 @@ public class Cargo {
     }
 
     private void returnToClosestStorage() {
-        Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, getMaterial());
+        var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, getMaterial());
 
         if (storehouse != null) {
             setTarget(storehouse);
@@ -122,7 +122,7 @@ public class Cargo {
     }
 
     private void returnToStorage() {
-        Storehouse storehouse0 = GameUtils.getClosestStorageConnectedByRoads(getPosition(), map);
+        var storehouse0 = GameUtils.getClosestStorageConnectedByRoads(getPosition(), map);
 
         if (storehouse0 != null) {
             setTarget(storehouse0);
@@ -150,8 +150,8 @@ public class Cargo {
             if (!map.isValidRouteThroughFlagsAndBuildingsViaRoads(getPosition(), target.getPosition())) {
 
                 // Find the best way from this flag
-                Flag flag = map.getFlagAtPoint(getPosition());
-                List<Point> closestPath = map.findWayWithExistingRoadsInFlagsAndBuildings(flag, getTarget());
+                var flag = map.getFlagAtPoint(getPosition());
+                var closestPath = map.findWayWithExistingRoadsInFlagsAndBuildings(flag, getTarget());
 
                 // Return the cargo to storage if there is no available route to the target
                 if (closestPath == null) {

@@ -604,7 +604,7 @@ public class Courier extends Worker {
 
         // Look for the most prioritized cargo. Lower is better.
         int priority = Integer.MAX_VALUE;
-        Cargo waitingCargo = null;
+        var waitingCargo = (Cargo) null;
 
         var otherEndOfRoad = getAssignedRoad().getOtherEndPoint(flag);
 
@@ -624,7 +624,7 @@ public class Courier extends Worker {
             // Try to avoid picking up the cargo that the courier just dropped off
             if (cargo.equals(lastCargo)) {
                 if (mapPoint.getConnectedRoads().size() > 1) {
-                    List<Point> otherRoute = map.findDetailedWayWithExistingRoadsInFlagsAndBuildings(flag, target, otherEndOfRoad.getPosition());
+                    var otherRoute = map.findDetailedWayWithExistingRoadsInFlagsAndBuildings(flag, target, otherEndOfRoad.getPosition());
 
                     if (otherRoute != null) {
                         continue;

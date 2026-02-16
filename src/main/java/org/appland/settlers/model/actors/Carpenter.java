@@ -166,12 +166,12 @@ public class Carpenter extends Worker {
             }
 
             case RETURNING_TO_STORAGE -> {
-                Storehouse storehouse = (Storehouse) map.getBuildingAtPoint(position);
+                var storehouse = (Storehouse) map.getBuildingAtPoint(position);
                 storehouse.depositWorker(this);
             }
 
             case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
-                Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, CARPENTER);
+                var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, CARPENTER);
 
                 if (storehouse != null) {
                     state = RETURNING_TO_STORAGE;
@@ -199,19 +199,19 @@ public class Carpenter extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, CARPENTER);
+        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, CARPENTER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
             setTarget(storage.getPosition());
         } else {
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), CARPENTER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), CARPENTER);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;
                 setOffroadTarget(storage.getPosition());
             } else {
-                Point point = findPlaceToDie();
+                var point = findPlaceToDie();
 
                 setOffroadTarget(findPlaceToDie(), position.downRight());
 

@@ -160,7 +160,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             throw new RuntimeException(e);
         }
 
-        Command command = Command.valueOf((String) jsonBody.get("command"));
+        var command = Command.valueOf((String) jsonBody.get("command"));
 
         switch (command) {
             case GET_TRANSPORT_PRIORITY -> {
@@ -251,7 +251,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             case FIND_NEW_ROAD -> {
                 var start = jsonUtils.jsonToPoint((JSONObject) jsonBody.get("from"));
                 var goal = jsonUtils.jsonToPoint((JSONObject) jsonBody.get("to"));
-                Set<Point> avoid = null;
+                var avoid = (Set<Point>) null;
 
                 if (jsonBody.containsKey("avoid")) {
                     avoid = jsonUtils.jsonToPointsSet((JSONArray) jsonBody.get("avoid"));
@@ -551,7 +551,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
             case SET_INITIAL_RESOURCES -> {
-                ResourceLevel resourceLevel = ResourceLevel.valueOf((String) jsonBody.get("resources"));
+                var resourceLevel = ResourceLevel.valueOf((String) jsonBody.get("resources"));
 
                 synchronized (game) {
                     game.setResource(resourceLevel);
@@ -578,15 +578,15 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
             case UPGRADE -> {
-                Building building = (Building) idManager.getObject((String) jsonBody.get("houseId"));
+                var building = (Building) idManager.getObject((String) jsonBody.get("houseId"));
 
                 synchronized (map) {
                     building.upgrade();
                 }
             }
             case FLAG_DEBUG_INFORMATION -> {
-                String flagId = (String) jsonBody.get("flagId");
-                Flag flag = (Flag) idManager.getObject(flagId);
+                var flagId = (String) jsonBody.get("flagId");
+                var flag = (Flag) idManager.getObject(flagId);
 
                 synchronized (map) {
                     sendToSession(session, new JSONObject(Map.of(
@@ -652,7 +652,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
             case SET_GAME_SPEED -> {
-                GameSpeed gameSpeed = GameSpeed.valueOf((String) jsonBody.get("speed"));
+                var gameSpeed = GameSpeed.valueOf((String) jsonBody.get("speed"));
 
                 game.setGameSpeed(gameSpeed);
             }
@@ -728,8 +728,8 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
             case SET_IRON_BAR_QUOTAS -> {
-                Long armoryAmount = (Long) jsonBody.get("armory");
-                Long metalworksAmount = (Long) jsonBody.get("metalworks");
+                var armoryAmount = (Long) jsonBody.get("armory");
+                var metalworksAmount = (Long) jsonBody.get("metalworks");
 
                 synchronized (map) {
                     player.setIronBarQuota(Armory.class, armoryAmount.intValue());
@@ -768,10 +768,10 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
             case SET_WATER_QUOTAS -> {
-                Long donkeyFarmAmount = (Long) jsonBody.get("donkeyFarm");
-                Long pigFarmAmount = (Long) jsonBody.get("pigFarm");
-                Long bakeryAmount = (Long) jsonBody.get("bakery");
-                Long breweryAmount = (Long) jsonBody.get("brewery");
+                var donkeyFarmAmount = (Long) jsonBody.get("donkeyFarm");
+                var pigFarmAmount = (Long) jsonBody.get("pigFarm");
+                var bakeryAmount = (Long) jsonBody.get("bakery");
+                var breweryAmount = (Long) jsonBody.get("brewery");
 
                 synchronized (map) {
                     player.setWaterQuota(DonkeyFarm.class, donkeyFarmAmount.intValue());
@@ -781,10 +781,10 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
             case SET_WHEAT_QUOTAS -> {
-                Long donkeyFarmAmount = (Long) jsonBody.get("donkeyFarm");
-                Long pigFarmAmount = (Long) jsonBody.get("pigFarm");
-                Long millAmount = (Long) jsonBody.get("mill");
-                Long breweryAmount = (Long) jsonBody.get("brewery");
+                var donkeyFarmAmount = (Long) jsonBody.get("donkeyFarm");
+                var pigFarmAmount = (Long) jsonBody.get("pigFarm");
+                var millAmount = (Long) jsonBody.get("mill");
+                var breweryAmount = (Long) jsonBody.get("brewery");
 
                 synchronized (map) {
                     player.setWheatQuota(DonkeyFarm.class, donkeyFarmAmount.intValue());
@@ -815,10 +815,10 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
             case SET_FOOD_QUOTAS -> {
-                Long ironMineAmount = (Long) jsonBody.get("ironMine");
-                Long coalMineAmount = (Long) jsonBody.get("coalMine");
-                Long goldMineAmount = (Long) jsonBody.get("goldMine");
-                Long graniteMineAmount = (Long) jsonBody.get("graniteMine");
+                var ironMineAmount = (Long) jsonBody.get("ironMine");
+                var coalMineAmount = (Long) jsonBody.get("coalMine");
+                var goldMineAmount = (Long) jsonBody.get("goldMine");
+                var graniteMineAmount = (Long) jsonBody.get("graniteMine");
 
                 synchronized (map) {
                     player.setFoodQuota(IronMine.class, ironMineAmount.intValue());
@@ -828,9 +828,9 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
             case SET_COAL_QUOTAS -> {
-                Long mintAmount = (Long) jsonBody.get("mint");
-                Long armoryAmount = (Long) jsonBody.get("armory");
-                Long ironSmelterAmount = (Long) jsonBody.get("ironSmelter");
+                var mintAmount = (Long) jsonBody.get("mint");
+                var armoryAmount = (Long) jsonBody.get("armory");
+                var ironSmelterAmount = (Long) jsonBody.get("ironSmelter");
 
                 synchronized (map) {
                     player.setCoalQuota(Mint.class, mintAmount.intValue());
@@ -841,7 +841,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             case REMOVE_MESSAGES -> {
                 synchronized (player.getMap()) {
                     for (var messageId : (JSONArray) jsonBody.get("messageIds")) {
-                        Message gameMessage = (Message) idManager.getObject((String) messageId);
+                        var gameMessage = (Message) idManager.getObject((String) messageId);
 
                         player.removeMessage(gameMessage);
                     }
@@ -902,15 +902,15 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             }
             case SET_RESERVED_IN_HEADQUARTERS -> {
                 synchronized (map) {
-                    Optional<Building> optionalHeadquarter = player.getHeadquarter();
+                    var optionalHeadquarter = player.getHeadquarter();
 
                     if (optionalHeadquarter.isPresent()) {
-                        Headquarter headquarter = (Headquarter) optionalHeadquarter.get();
+                        var headquarter = (Headquarter) optionalHeadquarter.get();
 
                         Arrays.stream(Soldier.Rank.values()).iterator().forEachRemaining(
                                 rank -> {
                                     if (jsonBody.containsKey(rank.name().toUpperCase())) {
-                                        Long amountLong = (Long) jsonBody.get(rank.name().toUpperCase());
+                                        var amountLong = (Long) jsonBody.get(rank.name().toUpperCase());
                                         int amount = amountLong.intValue();
                                         headquarter.setReservedSoldiers(rank, amount);
                                     }
@@ -922,9 +922,9 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
             case INFORMATION_ON_POINTS -> {
-                JSONArray jsonPointsInformation = new JSONArray();
+                var jsonPointsInformation = new JSONArray();
 
-                List<Point> points = jsonUtils.jsonToPoints((JSONArray) jsonBody.get("points"));
+                var points = jsonUtils.jsonToPoints((JSONArray) jsonBody.get("points"));
 
                 synchronized (map) {
                     for (Point point : points) {
@@ -961,28 +961,28 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
             case CALL_SCOUT -> {
-                JSONObject jsonPoint = (JSONObject) jsonBody.get("point");
-                Point point = jsonUtils.jsonToPoint(jsonPoint);
+                var jsonPoint = (JSONObject) jsonBody.get("point");
+                var point = jsonUtils.jsonToPoint(jsonPoint);
 
                 synchronized (map) {
-                    Flag flag = map.getFlagAtPoint(point);
+                    var flag = map.getFlagAtPoint(point);
 
                     flag.callScout();
                 }
             }
             case CALL_GEOLOGIST -> {
-                JSONObject jsonPoint = (JSONObject) jsonBody.get("point");
-                Point point = jsonUtils.jsonToPoint(jsonPoint);
+                var jsonPoint = (JSONObject) jsonBody.get("point");
+                var point = jsonUtils.jsonToPoint(jsonPoint);
 
                 synchronized (map) {
-                    Flag flag = map.getFlagAtPoint(point);
+                    var flag = map.getFlagAtPoint(point);
 
                     flag.callGeologist();
                 }
             }
             case PLACE_BUILDING -> {
-                Point point = jsonUtils.jsonToPoint(jsonBody);
-                Building building = jsonUtils.buildingFactory(jsonBody, player);
+                var point = jsonUtils.jsonToPoint(jsonBody);
+                var building = jsonUtils.buildingFactory(jsonBody, player);
 
                 synchronized (map) {
                     try {
@@ -993,24 +993,24 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
             case PLACE_ROAD -> {
-                JSONArray jsonRoadPoints = (JSONArray) jsonBody.get("road");
-                List<Point> roadPoints = jsonUtils.jsonToPoints(jsonRoadPoints);
+                var jsonRoadPoints = (JSONArray) jsonBody.get("road");
+                var roadPoints = jsonUtils.jsonToPoints(jsonRoadPoints);
 
                 synchronized (map) {
                     try {
-                        Road road = map.placeRoad(player, roadPoints);
+                        var road = map.placeRoad(player, roadPoints);
                     } catch (InvalidUserActionException e) {
                         System.out.printf("Refusing to place invalid road: %s", roadPoints);
                     }
                 }
             }
             case PLACE_FLAG -> {
-                JSONObject jsonFlag = (JSONObject) jsonBody.get("flag");
-                Point flagPoint = jsonUtils.jsonToPoint(jsonFlag);
+                var jsonFlag = (JSONObject) jsonBody.get("flag");
+                var flagPoint = jsonUtils.jsonToPoint(jsonFlag);
 
                 synchronized (map) {
                     try {
-                        Flag flag = map.placeFlag(player, flagPoint);
+                        var flag = map.placeFlag(player, flagPoint);
                     } catch (InvalidUserActionException e) {
                         throw new RuntimeException(e);
                     }
@@ -1019,18 +1019,18 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             case PLACE_FLAG_AND_ROAD -> {
                 // TODO: handle case where the flag already exists
 
-                JSONObject jsonFlag = (JSONObject) jsonBody.get("flag");
-                JSONArray jsonRoadPoints = (JSONArray) jsonBody.get("road");
+                var jsonFlag = (JSONObject) jsonBody.get("flag");
+                var jsonRoadPoints = (JSONArray) jsonBody.get("road");
 
-                Point flagPoint = jsonUtils.jsonToPoint(jsonFlag);
+                var flagPoint = jsonUtils.jsonToPoint(jsonFlag);
 
-                List<Point> roadPoints = jsonUtils.jsonToPoints(jsonRoadPoints);
+                var roadPoints = jsonUtils.jsonToPoints(jsonRoadPoints);
 
                 // Handle the case where the last point overlaps with the flag point
-                Point lastPoint = roadPoints.getLast();
+                var lastPoint = roadPoints.getLast();
 
                 if (lastPoint.equals(flagPoint)) {
-                    Point secondLastPoint = roadPoints.get(roadPoints.size() - 2);
+                    var secondLastPoint = roadPoints.get(roadPoints.size() - 2);
                     int gapX = Math.abs(lastPoint.x - secondLastPoint.x);
                     int gapY = Math.abs(lastPoint.y - secondLastPoint.y);
 
@@ -1046,9 +1046,9 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
                 synchronized (map) {
                     try {
-                        Flag flag = map.placeFlag(player, flagPoint);
+                        var flag = map.placeFlag(player, flagPoint);
 
-                        Point lastPointInRoad = roadPoints.getLast();
+                        var lastPointInRoad = roadPoints.getLast();
 
                         if (flagPoint.distance(lastPointInRoad) > 2) {
                             List<Point> additionalRoad = map.findAutoSelectedRoad(
@@ -1065,7 +1065,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                         }
 
                         if (map.isFlagAtPoint(flagPoint)) {
-                            Road road = map.placeRoad(player, roadPoints);
+                            var road = map.placeRoad(player, roadPoints);
                         }
                     } catch (InvalidUserActionException e) {
                         throw new RuntimeException(e);
@@ -1073,8 +1073,8 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
             case REMOVE_ROAD -> {
-                String roadId = (String) jsonBody.get("id");
-                Road road = (Road) idManager.getObject(roadId);
+                var roadId = (String) jsonBody.get("id");
+                var road = (Road) idManager.getObject(roadId);
 
                 try {
                     synchronized (map) {
@@ -1085,8 +1085,8 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
             case REMOVE_FLAG -> {
-                String flagId = (String) jsonBody.get("id");
-                Flag flag = (Flag) idManager.getObject(flagId);
+                var flagId = (String) jsonBody.get("id");
+                var flag = (Flag) idManager.getObject(flagId);
 
                 try {
                     synchronized (map) {
@@ -1097,8 +1097,8 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
             case REMOVE_BUILDING -> {
-                String buildingId = (String) jsonBody.get("id");
-                Building building = (Building) idManager.getObject(buildingId);
+                var buildingId = (String) jsonBody.get("id");
+                var building = (Building) idManager.getObject(buildingId);
 
                 try {
                     synchronized (map) {
@@ -1163,7 +1163,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
         gameInfoListeners.forEach((game, listeners) -> listeners.remove(session));
         chatRoomListeners.forEach((chatRoom, listeners) -> listeners.remove(session));
 
-        Player player = (Player) session.getUserProperties().get("PLAYER");
+        var player = (Player) session.getUserProperties().get("PLAYER");
 
         if (player != null) {
             System.out.println("Removing session for player: " + player);
@@ -1184,7 +1184,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
         gameInfoListeners.forEach((game, listeners) -> listeners.remove(session));
         chatRoomListeners.forEach((chatRoom, listeners) -> listeners.remove(session));
 
-        Player player = (Player) session.getUserProperties().get("PLAYER");
+        var player = (Player) session.getUserProperties().get("PLAYER");
 
         if (player != null) {
             System.out.println("Removing session for player: " + player);
@@ -1212,7 +1212,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
         //       No part of gameMonitoringEventsToJson can use synchronization - this will cause a deadlock.
 
         try {
-            Session session = playerToSession.get(player);
+            var session = playerToSession.get(player);
 
             if (session != null) {
                 sendToSession(session, new JSONObject(Map.of(

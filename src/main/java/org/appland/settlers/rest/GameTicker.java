@@ -46,9 +46,9 @@ public class GameTicker {
         handle = scheduler.scheduleAtFixedRate(() -> {
             boolean runComputers = false;
 
-            Group group = null;
-            CumulativeDuration duration = null;
-            Variable computerPlayerTurns = null;
+            var group = (Group) null;
+            var duration = (CumulativeDuration) null;
+            var computerPlayerTurns = (Variable) null;
 
             try {
                 group = stats.createVariableGroupIfAbsent("GameTickGroup");
@@ -80,9 +80,9 @@ public class GameTicker {
                     continue;
                 }
 
-                GameMap map = game.getGameMap();
+                var map = game.getGameMap();
 
-                Collection<ComputerPlayer> computerPlayers = game.getComputerPlayers();
+                var computerPlayers = game.getComputerPlayers();
 
                 synchronized (map) {
                     try {
@@ -105,11 +105,11 @@ public class GameTicker {
                                 try {
                                     computerPlayer.turn();
 
-                                    Stats computerPlayerStats = ((CompositePlayer)computerPlayer).getStats();
+                                    var computerPlayerStats = ((CompositePlayer)computerPlayer).getStats();
 
                                     computerPlayerTurns.reportValue(1);
 
-                                    Variable totalTurn = computerPlayerStats.getVariable("CompositePlayer.turn.total");
+                                    var totalTurn = computerPlayerStats.getVariable("CompositePlayer.turn.total");
 
                                     if (totalTurn.isLatestValueHighest()) {
                                         stats.printVariablesAsTable();
@@ -134,9 +134,9 @@ public class GameTicker {
 
                     boolean printStats = false;
 
-                    Variable mapStepTime = stats.getVariable("GameTicker.tick.Map.stepTime");
-                    Variable computerPlayerTurn = stats.getVariable("GameTicker.tick.ComputerPlayer.turn");
-                    Variable fullTick = stats.getVariable("GameTicker.tick.total");
+                    var mapStepTime = stats.getVariable("GameTicker.tick.Map.stepTime");
+                    var computerPlayerTurn = stats.getVariable("GameTicker.tick.ComputerPlayer.turn");
+                    var fullTick = stats.getVariable("GameTicker.tick.total");
 
                     if (mapStepTime.isLatestValueHighest()) {
                         System.out.println("\nNew highest time for map.stepTime(): " + mapStepTime.getHighestValue() + " (ms)");
@@ -193,7 +193,7 @@ public class GameTicker {
     public void startGame(GameResource gameResource) {
         games.add(gameResource);
 
-        GameMap map = gameResource.getGameMap();
+        var map = gameResource.getGameMap();
 
         for (Building building : map.getBuildings()) {
             if (building instanceof Headquarter headquarter) {

@@ -85,7 +85,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
 
     @Override
     public void turn() throws Exception {
-        Duration duration = stats.measureOneShotDuration("ExpandLandPlayer.turn");
+        var duration = stats.measureOneShotDuration("ExpandLandPlayer.turn");
 
         if (counter % MAINTENANCE_PERIOD == 0) {
             evacuateWherePossible(player);
@@ -123,7 +123,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
             }
 
             // Find the spot for the next barracks
-            Point site = findSpotForNextBarracks(player, impossibleSpots);
+            var site = findSpotForNextBarracks(player, impossibleSpots);
 
             duration.after("Find spot for next barracks");
 
@@ -136,7 +136,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
             unfinishedBarracks = map.placeBuilding(new Barracks(player), site);
 
             // Connect the barracks with the headquarters
-            Road road = GamePlayUtils.connectPointToBuilding(player, map, unfinishedBarracks.getFlag().getPosition(), headquarter);
+            var road = GamePlayUtils.connectPointToBuilding(player, map, unfinishedBarracks.getFlag().getPosition(), headquarter);
 
             if (!map.getRoads().contains(road)) {
                 System.out.println("\nBarracks at " + site + " is not connected!");
@@ -249,18 +249,18 @@ public class ExpandLandPlayer implements ComputerPlayer {
 
     private Point findSpotForNextBarracks(Player player, Set<Point> ignore) {
 
-        CumulativeDuration duration = stats.measureCumulativeDuration("ExpandLandPlayer.findSpotForNextBarracks", collectEachTurnGroup);
+        var duration = stats.measureCumulativeDuration("ExpandLandPlayer.findSpotForNextBarracks", collectEachTurnGroup);
 
-        Set<Point> candidates = new HashSet<>();
-        Set<Point> investigated = new HashSet<>();
+        var candidates = new HashSet<Point>();
+        var investigated = new HashSet<Point>();
 
-        Set<Building> ownMilitaryBuildings = GamePlayUtils.getMilitaryBuildingsForPlayer(player);
-        Set<Building> enemyMilitaryBuildings = GamePlayUtils.getDiscoveredEnemyMilitaryBuildingsForPlayer(player);
-        Set<Flag> flagsReachableFromHeadquarter = GameUtils.findFlagsReachableFromPoint(player, headquarter.getPosition());
+        var ownMilitaryBuildings = GamePlayUtils.getMilitaryBuildingsForPlayer(player);
+        var enemyMilitaryBuildings = GamePlayUtils.getDiscoveredEnemyMilitaryBuildingsForPlayer(player);
+        var flagsReachableFromHeadquarter = GameUtils.findFlagsReachableFromPoint(player, headquarter.getPosition());
 
         // Score the candidates and pick the one with the best score
         int bestScore = 0;
-        Point bestPoint = null;
+        var bestPoint = (Point) null;
 
         // First collect all possible points to build on
         for (Point borderPoint : player.getBorderPoints()) {
@@ -274,7 +274,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
             // Go through points for construction close to the border point
             for (Point point : map.getPointsWithinRadius(borderPoint, MAX_DISTANCE_FROM_BORDER)) {
 
-                CumulativeDuration innerDuration = stats.measureCumulativeDuration("ExpandLandPlayer.findSpotForNextBarracks.innerFor", collectEachTurnGroup);
+                var innerDuration = stats.measureCumulativeDuration("ExpandLandPlayer.findSpotForNextBarracks.innerFor", collectEachTurnGroup);
 
                 // Filter out border too close to the edge of the map
                 if (point.x < MIN_DISTANCE_TO_EDGE || point.x > map.getWidth() - MIN_DISTANCE_TO_EDGE ||
@@ -379,13 +379,13 @@ public class ExpandLandPlayer implements ComputerPlayer {
                 innerDuration.after("Far from own military building");
 
                 // Filter points that cannot be connected to the headquarters
-                Point pointDownRight = point.downRight();
+                var pointDownRight = point.downRight();
 
                 // Can a road be placed directly to the headquarters?
-                Set<Point> avoid = new HashSet<>();
+                var avoid = new HashSet<Point>();
                 avoid.add(point);
 
-                List<Point> wayPoints = map.findAutoSelectedRoad(player, pointDownRight, headquarter.getFlag().getPosition().downRightDownRight(), avoid);
+                var wayPoints = map.findAutoSelectedRoad(player, pointDownRight, headquarter.getFlag().getPosition().downRightDownRight(), avoid);
 
                 boolean canPlaceRoadToHeadquarter = wayPoints != null;
 
@@ -393,7 +393,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
                 boolean canReachClosestFlag = false;
 
                 if (!canPlaceRoadToHeadquarter) {
-                    Flag closestFlag = null;
+                    var closestFlag = (Flag) null;
                     int distanceToClosestFlag = Integer.MAX_VALUE;
 
                     for (Flag flag : flagsReachableFromHeadquarter) {
@@ -453,7 +453,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
         duration.report();
 
         // Track the score
-        Variable scoreVariable = stats.addVariableIfMissing("ExpandLandPlayer.NewBarracks.score");
+        var scoreVariable = stats.addVariableIfMissing("ExpandLandPlayer.NewBarracks.score");
 
         scoreVariable.reportValue(bestScore);
 
@@ -467,7 +467,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
         for (Building storedBuilding : placedBarracks) {
 
             // Cater for upgrades
-            Building building = map.getBuildingAtPoint(storedBuilding.getPosition());
+            var building = map.getBuildingAtPoint(storedBuilding.getPosition());
 
             // Only investigate military buildings
             if (!building.isMilitaryBuilding()) {
@@ -524,7 +524,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
             // Connect the building to the headquarters if it's not already done
             try {
                 if (!map.areFlagsOrBuildingsConnectedViaRoads(headquarter, building)) {
-                    Road road = GamePlayUtils.connectPointToBuilding(player, map, building.getFlag().getPosition(), headquarter);
+                    var road = GamePlayUtils.connectPointToBuilding(player, map, building.getFlag().getPosition(), headquarter);
 
                     if (road != null) {
                         GamePlayUtils.fillRoadWithFlags(map, road);

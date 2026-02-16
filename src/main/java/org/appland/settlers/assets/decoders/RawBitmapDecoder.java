@@ -65,7 +65,7 @@ public class RawBitmapDecoder {
         }
 
         // Get wanted format
-        TextureFormat wantedFormat = wantedTextureFormat.orElse(TextureFormat.BGRA);
+        var wantedFormat = wantedTextureFormat.orElse(TextureFormat.BGRA);
 
         debugPrint(" - Loading format: " + wantedFormat);
 
@@ -92,7 +92,7 @@ public class RawBitmapDecoder {
         debugPrint(String.format(" - Source format: %s", sourceFormat));
         debugPrint(String.format(" - Wanted format: %s", wantedFormat));
 
-        BitmapRaw bitmapRaw = new BitmapRaw(width, height, nx, ny, length, palette, wantedFormat);
+        var bitmapRaw = new BitmapRaw(width, height, nx, ny, length, palette, wantedFormat);
 
         // Return the file directly if no conversion is required
         if (wantedFormat == TextureFormat.PALETTED) {

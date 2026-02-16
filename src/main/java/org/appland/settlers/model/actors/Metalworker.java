@@ -217,7 +217,7 @@ public class Metalworker extends Worker {
     protected void onArrival() {
         switch (state) {
             case GOING_TO_FLAG_WITH_CARGO -> {
-                Flag flag = map.getFlagAtPoint(position);
+                var flag = map.getFlagAtPoint(position);
 
                 carriedCargo.setPosition(position);
                 carriedCargo.transportToStorage();
@@ -264,14 +264,14 @@ public class Metalworker extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, METALWORKER);
+        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, METALWORKER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
 
             setTarget(storage.getPosition());
         } else {
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, METALWORKER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, METALWORKER);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;

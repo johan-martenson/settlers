@@ -17,10 +17,10 @@ public class Land {
     }
 
     private static List<List<Point>> calculateBorders(Collection<Point> pointsInLand, Set<Point> borderPoints) {
-        List<List<Point>> calculatedBorders = new ArrayList<>();
+        var calculatedBorders = new ArrayList<List<Point>>();
 
         // Prune outliers
-        List<Point> borderPointsToPrune = new LinkedList<>();
+        var borderPointsToPrune = new LinkedList<Point>();
 
         for (var borderPoint : borderPoints) {
             boolean keepPoint = false;
@@ -43,7 +43,7 @@ public class Land {
         // Separate border points into consistent borders
         while (!borderPoints.isEmpty()) {
             var root = borderPoints.iterator().next();
-            List<Point> collectingBorder = new LinkedList<>();
+            var collectingBorder = new LinkedList<Point>();
 
             collectingBorder.add(root);
             borderPoints.remove(root);

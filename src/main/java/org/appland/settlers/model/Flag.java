@@ -57,7 +57,7 @@ public class Flag implements EndPoint {
 
         // Report that the flag has changed
         if (player != null) {
-            GameMap map = player.getMap();
+            var map = player.getMap();
 
             if (map != null) {
                 player.getMap().reportChangedFlag(this);
@@ -79,7 +79,7 @@ public class Flag implements EndPoint {
         if (stackedCargo.isEmpty()) {
             return "Flag " + position;
         } else {
-            StringBuilder stringBuilder = new StringBuilder("Flag " + position + " (stacked cargo:");
+            var stringBuilder = new StringBuilder("Flag " + position + " (stacked cargo:");
 
             for (Cargo cargo : stackedCargo) {
                 stringBuilder.append(" ").append(cargo.getMaterial().name());
@@ -98,7 +98,7 @@ public class Flag implements EndPoint {
             stackedCargo.remove(cargo);
 
             if (player != null) {
-                GameMap map = player.getMap();
+                var map = player.getMap();
 
                 if (map != null) {
                     player.getMap().reportChangedFlag(this);
@@ -160,7 +160,7 @@ public class Flag implements EndPoint {
                 continue;
             }
 
-            Building building = cargo.getTarget();
+            var building = cargo.getTarget();
 
             building.cancelPromisedDelivery(cargo);
         }

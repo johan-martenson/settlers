@@ -81,14 +81,14 @@ public class MapLoader {
     );
 
     public static void main(String[] args) {
-        MapLoader mapLoader = new MapLoader();
-        CmdLineParser parser = new CmdLineParser(mapLoader);
+        var mapLoader = new MapLoader();
+        var parser = new CmdLineParser(mapLoader);
 
         try {
             parser.parseArgument(args);
 
-            MapFile mapFile = mapLoader.loadMapFromFile(mapLoader.filename);
-            GameMap gameMap = mapLoader.convertMapFileToGameMap(mapFile);
+            var mapFile = mapLoader.loadMapFromFile(mapLoader.filename);
+            var gameMap = mapLoader.convertMapFileToGameMap(mapFile);
 
             if (mapLoader.printInfo) {
                 mapLoader.printMapInformation(mapFile);
@@ -172,17 +172,17 @@ public class MapLoader {
      * @throws InvalidMapException         if the map is invalid
      */
     public MapFile loadMapFromStream(InputStream inputStream) throws SettlersMapLoadingException, IOException, InvalidMapException {
-        StreamReader streamReader = new StreamReader(inputStream, ByteOrder.LITTLE_ENDIAN);
-        MapFile mapFile = new MapFile();
+        var streamReader = new StreamReader(inputStream, ByteOrder.LITTLE_ENDIAN);
+        var mapFile = new MapFile();
 
         // Read file header
-        String fileHeader = streamReader.getUint8ArrayAsString(10);
+        var fileHeader = streamReader.getUint8ArrayAsString(10);
         printlnIfDebug(String.format(" -- File header: %s", fileHeader));
         mapFile.setHeader(fileHeader);
 
         // Read title and dimensions.
         // Next 24 bytes are either 20 byte title + 2 byte width + 2 byte height, or 24 bytes title
-        ByteArray titleAndMaybeWidthAndHeight = streamReader.getUint8ArrayAsByteArray(24);
+        var titleAndMaybeWidthAndHeight = streamReader.getUint8ArrayAsByteArray(24);
         int maybeWidth = titleAndMaybeWidthAndHeight.getUint16(20);
         int maybeHeight = titleAndMaybeWidthAndHeight.getUint16(22);
         printlnIfDebug(String.format(" -- Maybe width x height: %d x %d", maybeWidth, maybeHeight));
@@ -204,7 +204,7 @@ public class MapLoader {
         printlnIfDebug(String.format(" -- Author: %s", mapFile.getAuthor()));
 
         // Read starting positions
-        List<Point> tmpStartingPositions = new ArrayList<>();
+        var tmpStartingPositions = new ArrayList<Point>();
 
         for (int i = 0; i < 7; i++) {
             int x = streamReader.getUint16();
@@ -234,7 +234,7 @@ public class MapLoader {
         printlnIfDebug(String.format(" -- Unlimited play: %b", mapFile.isUnlimitedPlayEnabled()));
 
         // Read player faces
-        List<PlayerFace> playerFaces = new ArrayList<>();
+        var playerFaces = new ArrayList<PlayerFace>();
         for (int i = 0; i < 7; i++) {
             short faceType = streamReader.getUint8();
             if (i < mapFile.getMaxNumberOfPlayers()) {
@@ -245,12 +245,12 @@ public class MapLoader {
         playerFaces.forEach(face -> printlnIfDebug(String.format(" -- Player: %s", face.name())));
 
         // Read starting points for unique water and land masses
-        List<UniqueMass> masses = new ArrayList<>();
+        var masses = new ArrayList<UniqueMass>();
         for (int i = 0; i < 250; i++) {
-            MassType type = MassType.massTypeFromInt(streamReader.getUint8());
+            var type = MassType.massTypeFromInt(streamReader.getUint8());
             int x = streamReader.getUint16();
             int y = streamReader.getUint16();
-            Point position = new Point(x, y);
+            var position = new Point(x, y);
             long totalMass = streamReader.getUint32();
 
             masses.add(new UniqueMass(type, position, totalMass));
@@ -298,7 +298,7 @@ public class MapLoader {
         printlnIfDebug(String.format(" -- Width x height: %d x %d", newWidth, newHeight));
 
         // Read height block header and data
-        BlockHeader heightBlockHeader = readBlockHeaderFromStream(streamReader);
+        var heightBlockHeader = readBlockHeaderFromStream(streamReader);
         printlnIfDebug(String.format(" -- Height block header: %s", heightBlockHeader));
 
         if (!heightBlockHeader.isValid()) {
@@ -329,7 +329,7 @@ public class MapLoader {
 
         // Read heights block
         for (int i = 0; i < subBlockSize; i++) {
-            MapFilePoint spot = new MapFilePoint();
+            var spot = new MapFilePoint();
             spot.setHeight(streamReader.getUint8());
             mapFile.addMapFilePoint(spot);
         }
@@ -339,7 +339,7 @@ public class MapLoader {
         int x = 0;
         int y = 0;
         for (int i = 0; i < subBlockSize; i++) {
-            MapFilePoint mapFilePoint = mapFile.getMapFilePoints().get(i);
+            var mapFilePoint = mapFile.getMapFilePoints().get(i);
             mapFilePoint.setPosition(new Point(x, y));
             x += 1;
 
@@ -354,7 +354,7 @@ public class MapLoader {
         printIfDebug("Texture block 1: ");
 
         // Read the header and verify that it matches the first header
-        BlockHeader texturesBelowBlockHeader = readBlockHeaderFromStream(streamReader);
+        var texturesBelowBlockHeader = readBlockHeaderFromStream(streamReader);
 
         if (!texturesBelowBlockHeader.equals(heightBlockHeader)) {
             throw new SettlersMapLoadingException("Header of block for upward triangles doesn't match. Exiting.");
@@ -364,9 +364,9 @@ public class MapLoader {
 
         // Read the below texture for each point on the map
         for (int i = 0; i < subBlockSize; i++) {
-            MapFilePoint mapFilePoint = mapFile.getMapFilePoint(i);
+            var mapFilePoint = mapFile.getMapFilePoint(i);
             short belowTextureShort = streamReader.getUint8();
-            Texture texture = Texture.textureFromUint8(belowTextureShort);
+            var texture = Texture.textureFromUint8(belowTextureShort);
             mapFilePoint.setVegetationBelow(texture);
 
             // Set the possible harbors
@@ -379,7 +379,7 @@ public class MapLoader {
         printIfDebug("Texture block 2: ");
 
         // Read down-right textures header
-        BlockHeader texturesDownRightBlockHeader = readBlockHeaderFromStream(streamReader);
+        var texturesDownRightBlockHeader = readBlockHeaderFromStream(streamReader);
 
         // Exit if the block fileHeader doesn't match the first fileHeader
         if (!texturesDownRightBlockHeader.equals(heightBlockHeader)) {
@@ -390,7 +390,7 @@ public class MapLoader {
 
         // Read textures
         for (int i = 0; i < subBlockSize; i++) {
-            Texture texture = Texture.textureFromUint8(streamReader.getUint8());
+            var texture = Texture.textureFromUint8(streamReader.getUint8());
             mapFile.getMapFilePoint(i).setVegetationDownRight(texture);
         }
 
@@ -398,7 +398,7 @@ public class MapLoader {
         printIfDebug("Road block: ");
 
         // Read road block -- ignore for now
-        BlockHeader roadBlockHeader = readBlockHeaderFromStream(streamReader);
+        var roadBlockHeader = readBlockHeaderFromStream(streamReader);
 
         // Exit if the block fileHeader doesn't match the first fileHeader
         if (!roadBlockHeader.equals(heightBlockHeader)) {
@@ -414,7 +414,7 @@ public class MapLoader {
         printIfDebug("Object property block: ");
 
         // Read the block header
-        BlockHeader objectPropertiesBlockHeader = readBlockHeaderFromStream(streamReader);
+        var objectPropertiesBlockHeader = readBlockHeaderFromStream(streamReader);
 
         // Exit if the block fileHeader doesn't match the first fileHeader
         if (!objectPropertiesBlockHeader.equals(heightBlockHeader)) {
@@ -430,7 +430,7 @@ public class MapLoader {
         printIfDebug("Object type block: ");
 
         // Read object types
-        BlockHeader objectTypesBlockHeader = readBlockHeaderFromStream(streamReader);
+        var objectTypesBlockHeader = readBlockHeaderFromStream(streamReader);
 
         // Exit if the block fileHeader doesn't match the first fileHeader
         if (!objectTypesBlockHeader.equals(heightBlockHeader)) {
@@ -448,7 +448,7 @@ public class MapLoader {
         printIfDebug("Animals block: ");
 
         // Read block header
-        BlockHeader wildAnimalsBlockHeader = readBlockHeaderFromStream(streamReader);
+        var wildAnimalsBlockHeader = readBlockHeaderFromStream(streamReader);
 
         // Exit if the block fileHeader doesn't match the first fileHeader
         if (!wildAnimalsBlockHeader.equals(heightBlockHeader)) {
@@ -459,7 +459,7 @@ public class MapLoader {
 
         // Read animals
         for (int i = 0; i < subBlockSize; i++) {
-            Animal animal = Animal.animalFromInt(streamReader.getUint8());
+            var animal = Animal.animalFromInt(streamReader.getUint8());
             if (animal.isWildAnimal()) {
                 mapFile.getMapFilePoint(i).setAnimal(animal);
             }
@@ -469,7 +469,7 @@ public class MapLoader {
         printIfDebug("Unknown block: ");
 
         // Read block header
-        BlockHeader ignoredBlockHeader = readBlockHeaderFromStream(streamReader);
+        var ignoredBlockHeader = readBlockHeaderFromStream(streamReader);
 
         // Exit if the block fileHeader doesn't match the first fileHeader
         if (!ignoredBlockHeader.equals(heightBlockHeader)) {
@@ -485,7 +485,7 @@ public class MapLoader {
         printIfDebug("Buildable sites block: ");
 
         // Read block header
-        BlockHeader buildableSitesBlockHeader = readBlockHeaderFromStream(streamReader);
+        var buildableSitesBlockHeader = readBlockHeaderFromStream(streamReader);
 
         // Verify that the block header matches the previous ones
         if (!buildableSitesBlockHeader.equals(heightBlockHeader)) {
@@ -496,7 +496,7 @@ public class MapLoader {
 
         // Read the buildable sites
         for (int i = 0; i < subBlockSize; i++) {
-            BuildableSite buildableSite = BuildableSite.buildableSiteFromInt(streamReader.getUint8());
+            var buildableSite = BuildableSite.buildableSiteFromInt(streamReader.getUint8());
             mapFile.getMapFilePoint(i).setBuildableSite(buildableSite);
         }
 
@@ -504,7 +504,7 @@ public class MapLoader {
         printIfDebug("Second unknown block: ");
 
         // Read block header
-        BlockHeader unknownBlockHeader = readBlockHeaderFromStream(streamReader);
+        var unknownBlockHeader = readBlockHeaderFromStream(streamReader);
 
         // Verify that the block header matches previous block headers
         if (!unknownBlockHeader.equals(heightBlockHeader)) {
@@ -520,7 +520,7 @@ public class MapLoader {
         printIfDebug("Map editor cursor position: ");
 
         // Get block header
-        BlockHeader cursorPositionsBlockHeader = readBlockHeaderFromStream(streamReader);
+        var cursorPositionsBlockHeader = readBlockHeaderFromStream(streamReader);
 
         // Exit if the block header doesn't match the first header
         if (!cursorPositionsBlockHeader.equals(heightBlockHeader)) {
@@ -536,7 +536,7 @@ public class MapLoader {
         printIfDebug("Resource block: ");
 
         // Get block header
-        BlockHeader resourcesBlockHeader = readBlockHeaderFromStream(streamReader);
+        var resourcesBlockHeader = readBlockHeaderFromStream(streamReader);
 
         // Exit if the block fileHeader doesn't match the first fileHeader
         if (!resourcesBlockHeader.equals(heightBlockHeader)) {
@@ -547,12 +547,12 @@ public class MapLoader {
 
         // Read the resources block
         for (int i = 0; i < subBlockSize; i++) {
-            Resource resource = Resource.resourceFromInt(streamReader.getUint8());
+            var resource = Resource.resourceFromInt(streamReader.getUint8());
             mapFile.getMapFilePoint(i).setResource(resource);
         }
 
         // Skip gouraud shading block
-        BlockHeader gouraudBlockHeader = readBlockHeaderFromStream(streamReader);
+        var gouraudBlockHeader = readBlockHeaderFromStream(streamReader);
 
         // Exit if the block fileHeader doesn't match the first fileHeader
         if (!gouraudBlockHeader.equals(heightBlockHeader)) {
@@ -565,7 +565,7 @@ public class MapLoader {
         streamReader.skip((int) subBlockSize);
 
         // Skip passable areas block
-        BlockHeader passableAreasBlockHeader = readBlockHeaderFromStream(streamReader);
+        var passableAreasBlockHeader = readBlockHeaderFromStream(streamReader);
 
         // Exit if the block fileHeader doesn't match the first fileHeader
         if (!passableAreasBlockHeader.equals(heightBlockHeader)) {
@@ -605,18 +605,18 @@ public class MapLoader {
      * @throws Exception if there is an error during conversion.
      */
     public GameMap convertMapFileToGameMap(MapFile mapFile) throws Exception {
-        List<Player> players = new ArrayList<>();
-        List<PlayerColor> colors = Arrays.stream(PlayerColor.values()).toList();
+        var players = new ArrayList<Player>();
+        var colors = Arrays.stream(PlayerColor.values()).toList();
 
         for (int i = 0; i < mapFile.getMaxNumberOfPlayers(); i++) {
             players.add(new Player(String.format("Player %d", i), colors.get(i), Nation.ROMANS, PlayerType.HUMAN));
         }
 
-        Dimension gamePointDimension = toGamePointDimension(mapFile.getDimension());
-        GameMap gameMap = new GameMap(players, gamePointDimension.width + 2, gamePointDimension.height + 2);
+        var gamePointDimension = toGamePointDimension(mapFile.getDimension());
+        var gameMap = new GameMap(players, gamePointDimension.width + 2, gamePointDimension.height + 2);
 
         for (MapFilePoint mapFilePoint : mapFile.getMapFilePoints()) {
-            Point mapFilePosition = mapFilePoint.getPosition();
+            var mapFilePosition = mapFilePoint.getPosition();
             org.appland.settlers.model.Point point = mapFilePositionToGamePoint(mapFilePosition, mapFile.getDimension());
 
             if (mapFilePoint.getVegetationBelow() != null) {
@@ -628,7 +628,7 @@ public class MapLoader {
             }
 
             if (mapFilePoint.hasMineral()) {
-                Material mineral = Utils.resourceTypeToMaterial(mapFilePoint.getMineralType());
+                var mineral = Utils.resourceTypeToMaterial(mapFilePoint.getMineralType());
                 gameMap.setMineralAmount(point, mineral, mapFilePoint.getMineralQuantity());
             }
 
@@ -645,7 +645,7 @@ public class MapLoader {
             }
 
             if (mapFilePoint.hasDecoration()) {
-                DecorationType decorationType = mapFilePoint.getNatureDecorationType();
+                var decorationType = mapFilePoint.getNatureDecorationType();
 
                 if (SUPPORTED_DECORATIONS.contains(decorationType)) {
                     gameMap.placeDecoration(point, decorationType);

@@ -32,7 +32,7 @@ public class SoundLoader {
 
         long length = streamReader.getUint32();
 
-        SoundType soundType = getSoundTypeFromByteReader(streamReader);
+        var soundType = getSoundTypeFromByteReader(streamReader);
 
         debugPrint(format("Got sound type: %s", soundType.name()));
 
@@ -53,18 +53,18 @@ public class SoundLoader {
     private static SoundType getSoundTypeFromByteReader(ByteReader streamReader) throws IOException {
         int position = streamReader.getPosition();
 
-        String header = streamReader.getUint8ArrayAsString(4);
+        var header = streamReader.getUint8ArrayAsString(4);
 
         debugPrint(Utils.convertBytesToHex(header.getBytes()));
 
-        SoundType soundType = null;
+        var soundType = (SoundType) null;
 
         switch (header) {
             case "FORM":
             case "RIFF":
 
                 long length = streamReader.getUint32();
-                String subHeader = streamReader.getUint8ArrayAsString(4);
+                var subHeader = streamReader.getUint8ArrayAsString(4);
 
                 soundType = switch (subHeader) {
                     case "XMID", "XDIR" -> XMIDI;

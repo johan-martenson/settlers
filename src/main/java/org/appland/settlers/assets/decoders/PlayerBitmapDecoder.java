@@ -65,7 +65,7 @@ public class PlayerBitmapDecoder {
         debugPrint(String.format("    - Image dimensions: %dx%d", width, height));
         debugPrint(String.format("    - Multiplied: %d", width * height));
 
-        PlayerBitmap playerBitmap = new PlayerBitmap(width, height, nx, ny, palette, TextureFormat.BGRA);
+        var playerBitmap = new PlayerBitmap(width, height, nx, ny, palette, TextureFormat.BGRA);
         playerBitmap.setLength(length);
 
         debugPrint(" Loading from image data");

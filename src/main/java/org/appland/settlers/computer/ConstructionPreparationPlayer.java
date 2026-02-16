@@ -92,7 +92,7 @@ public class ConstructionPreparationPlayer implements ComputerPlayer {
         } else if (noQuarry()) {
 
             // Look for stone within the border
-            Point stonePoint = findStoneWithinBorder();
+            var stonePoint = findStoneWithinBorder();
 
             // Write a warning and exit if no stone is found
             if (stonePoint == null) {
@@ -102,7 +102,7 @@ public class ConstructionPreparationPlayer implements ComputerPlayer {
             }
 
             // Find spot close to stone to place quarry
-            List<Point> points = GamePlayUtils.findAvailableHousePointsWithinRadius(map, player, stonePoint, SMALL, 5);
+            var points = GamePlayUtils.findAvailableHousePointsWithinRadius(map, player, stonePoint, SMALL, 5);
 
             // Return null if there are no available places
             if (points.isEmpty()) {
@@ -115,7 +115,7 @@ public class ConstructionPreparationPlayer implements ComputerPlayer {
             System.out.println(" - Built quarry at " + quarry.getPosition());
 
             // Connect the quarry to the headquarters
-            Road road = GamePlayUtils.connectPointToBuilding(player, map, quarry.getFlag().getPosition(), headquarter);
+            var road = GamePlayUtils.connectPointToBuilding(player, map, quarry.getFlag().getPosition(), headquarter);
 
             // Place flags on the road where possible
             if (road != null) {

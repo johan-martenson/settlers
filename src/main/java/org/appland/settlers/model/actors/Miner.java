@@ -66,7 +66,7 @@ public class Miner extends Worker {
     }
 
     private void consumeFood() {
-        Building home = getHome();
+        var home = getHome();
 
         if (home.getAmount(BREAD) > 0) {
             home.consumeOne(BREAD);
@@ -120,7 +120,7 @@ public class Miner extends Worker {
 
                         // Handle transportation
                         if (getHome().getFlag().hasPlaceForMoreCargo()) {
-                            Cargo cargo = map.mineMineralAtPoint(mineral, getPosition());
+                            var cargo = map.mineMineralAtPoint(mineral, getPosition());
 
                             setCargo(cargo);
 
@@ -148,7 +148,7 @@ public class Miner extends Worker {
             }
             case WAITING_FOR_SPACE_ON_FLAG -> {
                 if (getHome().getFlag().hasPlaceForMoreCargo()) {
-                    Cargo cargo = map.mineMineralAtPoint(mineral, getPosition());
+                    var cargo = map.mineMineralAtPoint(mineral, getPosition());
 
                     setCargo(cargo);
 
@@ -189,7 +189,7 @@ public class Miner extends Worker {
     @Override
     protected void onArrival() {
         if (state == GOING_OUT_TO_FLAG) {
-            Cargo cargo = getCargo();
+            var cargo = getCargo();
 
             cargo.setPosition(getPosition());
             cargo.transportToReceivingBuilding(this::isOreReceiver);
@@ -207,13 +207,13 @@ public class Miner extends Worker {
 
             countdown.countFrom(RESTING_TIME);
         } else if (state == RETURNING_TO_STORAGE) {
-            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
+            var storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
         } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
             // Go to the closest storage
-            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, MINER);
+            var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, MINER);
 
             if (storehouse != null) {
                 state = RETURNING_TO_STORAGE;
@@ -222,7 +222,7 @@ public class Miner extends Worker {
             } else {
                 state = State.GOING_TO_DIE;
 
-                Point point = findPlaceToDie();
+                var point = findPlaceToDie();
 
                 setOffroadTarget(point);
             }
@@ -236,14 +236,14 @@ public class Miner extends Worker {
     }
 
     private boolean hasFood() {
-        Building home = getHome();
+        var home = getHome();
 
         return home.getAmount(BREAD) > 0 || home.getAmount(FISH)  > 0 || home.getAmount(MEAT)  > 0;
     }
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, MINER);
+        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, MINER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
@@ -251,14 +251,14 @@ public class Miner extends Worker {
             setTarget(storage.getPosition());
         } else {
 
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), MINER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), MINER);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
             } else {
-                Point point = findPlaceToDie();
+                var point = findPlaceToDie();
 
                 setOffroadTarget(point, getPosition().downRight());
 

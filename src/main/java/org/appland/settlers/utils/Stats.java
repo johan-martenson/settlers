@@ -15,7 +15,7 @@ public class Stats {
     }
 
     public Variable addVariable(String name) {
-        VariableImpl variable = new VariableImpl(name);
+        var variable = new VariableImpl(name);
 
         variableMap.put(name, variable);
 
@@ -29,7 +29,7 @@ public class Stats {
     }
 
     public Variable addIncrementingVariableIfAbsent(String name) {
-        Variable variable = variableMap.get(name);
+        var variable = variableMap.get(name);
 
         if (variable == null) {
 
@@ -51,9 +51,9 @@ public class Stats {
     }
 
     public Variable addVariable(String name, String groupName) {
-        Variable variable = addVariable(name);
+        var variable = addVariable(name);
 
-        GroupImpl group = groups.get(groupName);
+        var group = groups.get(groupName);
 
         group.addVariable(name);
 
@@ -61,7 +61,7 @@ public class Stats {
     }
 
     public Variable addVariableIfMissing(String name) {
-        Variable variable = variableMap.get(name);
+        var variable = variableMap.get(name);
 
         if (variable == null) {
             variable = addVariable(name);
@@ -75,7 +75,7 @@ public class Stats {
     }
 
     public Variable addPeriodicCounterVariableIfAbsent(String name) {
-        Variable periodicVariable = variableMap.get(name);
+        var periodicVariable = variableMap.get(name);
 
         if (periodicVariable == null) {
             periodicVariable = new PeriodicCounterVariableImpl(name);
@@ -87,7 +87,7 @@ public class Stats {
     }
 
     public void resetCollectionPeriod(String name) {
-        Variable variable = variableMap.get(name);
+        var variable = variableMap.get(name);
 
 //        if (variable instanceof  PeriodicCounterVariable) {
             ((PeriodicCounterVariableImpl) variable).collectionPeriodDone();
@@ -95,43 +95,43 @@ public class Stats {
     }
 
     public void reportVariableValue(String name, long value) {
-        Variable variable = variableMap.get(name);
+        var variable = variableMap.get(name);
 
         variable.reportValue(value);
     }
 
     public boolean isVariableLatestValueHighest(String name) {
-        Variable variable = variableMap.get(name);
+        var variable = variableMap.get(name);
 
         return variable.isLatestValueHighest();
     }
 
     public boolean isVariableLatestValueLowest(String name) {
-        Variable variable = variableMap.get(name);
+        var variable = variableMap.get(name);
 
         return variable.isLatestValueLowest();
     }
 
     public double getAverageForVariable(String name) {
-        Variable variable = variableMap.get(name);
+        var variable = variableMap.get(name);
 
         return variable.getAverage();
     }
 
     public long getHighestValueForVariable(String name) {
-        Variable variable = variableMap.get(name);
+        var variable = variableMap.get(name);
 
         return variable.getHighestValue();
     }
 
     public long getLowestValueForVariable(String name) {
-        Variable variable = variableMap.get(name);
+        var variable = variableMap.get(name);
 
         return variable.getLowestValue();
     }
 
     public long getLatestValueForVariable(String name) {
-        Variable variable = variableMap.get(name);
+        var variable = variableMap.get(name);
 
         return variable.getLatestValue();
     }
@@ -139,7 +139,7 @@ public class Stats {
     public void setUpperThreshold(String name, long upperThresholdValue) {
         System.out.println("Set upper threshold for " + name + " to " + upperThresholdValue);
 
-        Variable variable = variableMap.get(name);
+        var variable = variableMap.get(name);
 
         if (variable == null) {
             System.out.println("Variable doesn't exist, storing this");
@@ -153,20 +153,20 @@ public class Stats {
     }
 
     public long getUpperThreshold(String name) {
-        Variable variable = variableMap.get(name);
+        var variable = variableMap.get(name);
 
         return variable.getUpperThreshold();
     }
 
     public boolean isVariableUpperThresholdExceeded(String name) {
-        Variable variable = variableMap.get(name);
+        var variable = variableMap.get(name);
 
         return variable.isUpperThresholdExceeded();
     }
 
     public void printVariablesAsTable() {
 
-        List<String> variableNames = new ArrayList<>(variableMap.keySet());
+        var variableNames = new ArrayList<String>(variableMap.keySet());
 
         int longestVariableName = 0;
 
@@ -178,7 +178,7 @@ public class Stats {
 
         int variableColumnLength = Math.max(longestVariableName, 60);
 
-        String header = String.format("| %-" + variableColumnLength + "s | %-10s | %-10s | %-10s | %-10s |", "Variable", "Latest", "Average", "Max", "Min");
+        var header = String.format("| %-" + variableColumnLength + "s | %-10s | %-10s | %-10s | %-10s |", "Variable", "Latest", "Average", "Max", "Min");
 
         System.out.println();
         System.out.println(header);
@@ -187,7 +187,7 @@ public class Stats {
         java.util.Collections.sort(variableNames);
 
         for (String variableName : variableNames) {
-            Variable variable = variableMap.get(variableName);
+            var variable = variableMap.get(variableName);
 
             String valueRow = String.format("| %-" + variableColumnLength + "s | %10d | %10f | %10d | %10d |",
                     variableName,
@@ -207,7 +207,7 @@ public class Stats {
     }
 
     public Collection<String> getVariablesInGroup(String groupName) {
-        GroupImpl group = groups.get(groupName);
+        var group = groups.get(groupName);
 
         return group.getVariableNames();
     }
@@ -217,19 +217,19 @@ public class Stats {
     }
 
     public void addVariableToGroup(String counterName, String groupName) {
-        GroupImpl group = groups.get(groupName);
+        var group = groups.get(groupName);
 
         group.addVariable(counterName);
     }
 
     public void addVariablesToGroup(Collection<String> variables, String groupName) {
-        GroupImpl group = groups.get(groupName);
+        var group = groups.get(groupName);
 
         group.addVariables(variables);
     }
 
     public CumulativeDuration measureCumulativeDuration(String name, String groupName) {
-        Group group = groups.get(groupName);
+        var group = groups.get(groupName);
 
         return measureCumulativeDuration(name, group);
     }

@@ -76,7 +76,7 @@ public class Shipwright extends Worker {
             if (countdown.hasReachedZero() && getHome().isProductionEnabled()) {
                 if (shipyard.isProducingShips()) {
                     if  (getHome().getAmount(PLANK) >= PLANKS_NEEDED_FOR_SHIP) {
-                        Point pointToBuildShip = findPlaceToBuildShip();
+                        var pointToBuildShip = findPlaceToBuildShip();
 
                         if (pointToBuildShip != null) {
                             state = State.GOING_OUT_TO_BUILD_SHIP;
@@ -128,7 +128,7 @@ public class Shipwright extends Worker {
             }
         } else if (state == State.WAITING_FOR_SPACE_ON_FLAG) {
             if (getHome().getFlag().hasPlaceForMoreCargo()) {
-                Cargo cargo = new Cargo(BOAT, map);
+                var cargo = new Cargo(BOAT, map);
 
                 setCargo(cargo);
 
@@ -161,7 +161,7 @@ public class Shipwright extends Worker {
 
                     // Handle transportation
                     if (getHome().getFlag().hasPlaceForMoreCargo()) {
-                        Cargo cargo = new Cargo(BOAT, map);
+                        var cargo = new Cargo(BOAT, map);
 
                         setCargo(cargo);
 
@@ -186,11 +186,11 @@ public class Shipwright extends Worker {
     }
 
     private Point findPlaceToBuildShip() {
-        Set<Point> largeSurroundingArea = GameUtils.getHexagonAreaAroundPoint(getHome().getPosition(), 8, map);
+        var largeSurroundingArea = GameUtils.getHexagonAreaAroundPoint(getHome().getPosition(), 8, map);
 
         // Find points that are on the water's edge
         for (Point point : largeSurroundingArea) {
-            List<Vegetation> surroundingVegetation = map.getSurroundingTiles(point);
+            var surroundingVegetation = map.getSurroundingTiles(point);
 
             // Filter points that are not on the water's edge
             if (!GameUtils.isSomeButNotAll(surroundingVegetation, Vegetation.WATER)) {
@@ -224,7 +224,7 @@ public class Shipwright extends Worker {
 
         if (state == State.GOING_TO_FLAG_WITH_CARGO) {
 
-            Cargo cargo = getCargo();
+            var cargo = getCargo();
 
             cargo.setPosition(getPosition());
             cargo.transportToReceivingBuilding(this::isBoatReceiver);
@@ -248,13 +248,13 @@ public class Shipwright extends Worker {
 
             countdown.countFrom(TIME_TO_HAMMER);
         } else if (state == State.RETURNING_TO_STORAGE) {
-            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
+            var storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
         } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
             // Go to the closest storage
-            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SHIPWRIGHT);
+            var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SHIPWRIGHT);
 
             if (storehouse != null) {
                 state = State.RETURNING_TO_STORAGE;
@@ -263,7 +263,7 @@ public class Shipwright extends Worker {
             } else {
                 state = State.GOING_TO_DIE;
 
-                Point point = findPlaceToDie();
+                var point = findPlaceToDie();
 
                 setOffroadTarget(point);
             }
@@ -278,7 +278,7 @@ public class Shipwright extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SHIPWRIGHT);
+        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SHIPWRIGHT);
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
@@ -286,14 +286,14 @@ public class Shipwright extends Worker {
             setTarget(storage.getPosition());
         } else {
 
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), SHIPWRIGHT);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), SHIPWRIGHT);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
             } else {
-                Point point = findPlaceToDie();
+                var point = findPlaceToDie();
 
                 setOffroadTarget(point, getPosition().downRight());
 

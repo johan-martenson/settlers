@@ -90,19 +90,19 @@ public class MilitaryProducer implements ComputerPlayer {
             } else {
 
                 // Find a spot for the iron smelter
-                Point ironSmelterPoint = GamePlayUtils.findPointForBuildingCloseToPoint(headquarter.getPosition(), MEDIUM, controlledPlayer, map);
+                var ironSmelterPoint = GamePlayUtils.findPointForBuildingCloseToPoint(headquarter.getPosition(), MEDIUM, controlledPlayer, map);
 
             	if (ironSmelterPoint == null) {
             		return;
             	}
 
             	// Build the iron smelter
-            	IronSmelter ironSmelter = map.placeBuilding(new IronSmelter(controlledPlayer), ironSmelterPoint);
+            	var ironSmelter = map.placeBuilding(new IronSmelter(controlledPlayer), ironSmelterPoint);
 
             	ironSmelters.add(ironSmelter);
 
             	// Connect the iron smelter with the headquarter
-                Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, ironSmelter.getFlag().getPosition(), headquarter);
+                var road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, ironSmelter.getFlag().getPosition(), headquarter);
 
                 // Fill the road with flags
                 GamePlayUtils.fillRoadWithFlags(map, road);
@@ -123,19 +123,19 @@ public class MilitaryProducer implements ComputerPlayer {
             } else {
 
                 // Find a spot for the armory
-                Point armoryPoint = GamePlayUtils.findPointForBuildingCloseToPoint(headquarter.getPosition(), MEDIUM, controlledPlayer, map);
+                var armoryPoint = GamePlayUtils.findPointForBuildingCloseToPoint(headquarter.getPosition(), MEDIUM, controlledPlayer, map);
 
             	if (armoryPoint == null) {
             		return;
             	}
 
             	// Build the armory
-            	Armory armory = map.placeBuilding(new Armory(controlledPlayer), armoryPoint);
+            	var armory = map.placeBuilding(new Armory(controlledPlayer), armoryPoint);
 
             	armories.add(armory);
 
                 // Connect the armory with the headquarters
-                Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, armory.getFlag().getPosition(), headquarter);
+                var road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, armory.getFlag().getPosition(), headquarter);
 
                 // Fill the road with flags
                 GamePlayUtils.fillRoadWithFlags(map, road);
@@ -156,19 +156,19 @@ public class MilitaryProducer implements ComputerPlayer {
             } else {
 
                 // Find a spot for the farm
-                Point farmSpot = GamePlayUtils.findPointForBuildingCloseToPoint(headquarter.getPosition(), LARGE, controlledPlayer, map);
+                var farmSpot = GamePlayUtils.findPointForBuildingCloseToPoint(headquarter.getPosition(), LARGE, controlledPlayer, map);
 
                 if (farmSpot == null) {
                     return;
                 }
 
                 // Build the farm
-                Farm farm = map.placeBuilding(new Farm(controlledPlayer), farmSpot);
+                var farm = map.placeBuilding(new Farm(controlledPlayer), farmSpot);
 
                 farms.add(farm);
 
                 // Connect the farm with the headquarters
-                Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, farm.getFlag().getPosition(), headquarter);
+                var road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, farm.getFlag().getPosition(), headquarter);
 
                 // Fill the road with flags
                 GamePlayUtils.fillRoadWithFlags(map, road);
@@ -189,19 +189,19 @@ public class MilitaryProducer implements ComputerPlayer {
             } else {
 
                 // Find a spot for the brewery
-                Point wellPoint = GamePlayUtils.findPointForBuildingCloseToPoint(headquarter.getPosition(), SMALL, controlledPlayer, map);
+                var wellPoint = GamePlayUtils.findPointForBuildingCloseToPoint(headquarter.getPosition(), SMALL, controlledPlayer, map);
 
                 if (wellPoint == null) {
                     return;
                 }
 
                 // Build the well
-                Well well = map.placeBuilding(new Well(controlledPlayer), wellPoint);
+                var well = map.placeBuilding(new Well(controlledPlayer), wellPoint);
 
                 wells.add(well);
 
                 // Connect the well with the headquarters
-                Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, well.getFlag().getPosition(), headquarter);
+                var road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, well.getFlag().getPosition(), headquarter);
 
                 // Fill the road with flags
                 GamePlayUtils.fillRoadWithFlags(map, road);
@@ -222,19 +222,19 @@ public class MilitaryProducer implements ComputerPlayer {
             } else {
 
                 // Find a spot for the brewery
-            	Point breweryPoint = GamePlayUtils.findPointForBuildingCloseToPoint(headquarter.getPosition(), MEDIUM, controlledPlayer, map);
+            	var breweryPoint = GamePlayUtils.findPointForBuildingCloseToPoint(headquarter.getPosition(), MEDIUM, controlledPlayer, map);
 
             	if (breweryPoint == null) {
                     return;
             	}
 
             	// Build the brewery
-            	Brewery brewery = map.placeBuilding(new Brewery(controlledPlayer), breweryPoint);
+            	var brewery = map.placeBuilding(new Brewery(controlledPlayer), breweryPoint);
 
             	breweries.add(brewery);
 
             	// Connect the brewery with the headquarters
-                Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, brewery.getFlag().getPosition(), headquarter);
+                var road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, brewery.getFlag().getPosition(), headquarter);
 
                 // Fill the road with flags
                 GamePlayUtils.fillRoadWithFlags(map, road);

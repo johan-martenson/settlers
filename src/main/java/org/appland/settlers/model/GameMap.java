@@ -442,7 +442,7 @@ public class GameMap {
         duration.after("Manage tree conservation program");
 
         // Add worker events to the players if any
-        List<BorderChange> changedBorders = null;
+        var changedBorders = (List<BorderChange>) null;
 
         if (isBorderUpdated) {
             changedBorders = players.stream()
@@ -974,7 +974,7 @@ public class GameMap {
                     try {
                         building.tearDown();
                     } catch (InvalidUserActionException e) {
-                        InvalidGameLogicException invalidGameLogicException = new InvalidGameLogicException("During update border");
+                        var invalidGameLogicException = new InvalidGameLogicException("During update border");
                         invalidGameLogicException.initCause(e);
 
                         throw invalidGameLogicException;
@@ -1280,8 +1280,8 @@ public class GameMap {
 
         // Handle the case where the flag is on an existing road that will be split
         if (mapPoint.isRoad()) {
-            Road existingRoad = mapPoint.getRoad();
-            Courier courier = existingRoad.getCourier();
+            var existingRoad = mapPoint.getRoad();
+            var courier = existingRoad.getCourier();
 
             var points = existingRoad.getWayPoints();
 
@@ -1309,7 +1309,7 @@ public class GameMap {
 
                 // If the courier is idle, place it on the road it is on
                 if (courier.isIdle()) {
-                    Point currentPosition = courier.getPosition();
+                    var currentPosition = courier.getPosition();
 
                     if (newRoad1.getWayPoints().contains(currentPosition)) {
                         roadToAssign = newRoad1;
@@ -1493,12 +1493,12 @@ public class GameMap {
             return false;
         }
 
-        Point pointRight = point.right();
-        Point pointLeft = point.left();
-        Point pointUpLeft = point.upLeft();
-        Point pointUpRight = point.upRight();
-        Point pointDownRight = point.downRight();
-        Point pointDownLeft = point.downLeft();
+        var pointRight = point.right();
+        var pointLeft = point.left();
+        var pointUpLeft = point.upLeft();
+        var pointUpRight = point.upRight();
+        var pointDownRight = point.downRight();
+        var pointDownLeft = point.downLeft();
 
         if (Stream.of(pointUpLeft, pointUpRight, pointDownRight, pointDownLeft, pointRight, pointLeft)
                 .anyMatch(p -> player.isWithinBorder(p) && getMapPoint(p).isFlag())) {
@@ -1521,11 +1521,11 @@ public class GameMap {
      * @return A list of all the places where the player can place houses
      */
     public Map<Point, Size> getAvailableHousePoints(Player player) {
-        Map<Point, Size> housePoints = new HashMap<>();
+        var housePoints = new HashMap<Point, Size>();
 
         // This iterates over a set and the order is non-deterministic
         for (Point point : player.getOwnedLand()) {
-            Size availableHouse = isAvailableHousePoint(player, point);
+            var availableHouse = isAvailableHousePoint(player, point);
 
             if (availableHouse != null) {
                 housePoints.put(point, availableHouse);
@@ -1560,7 +1560,7 @@ public class GameMap {
         }
 
         // Find out which adjacent points are possible off-road connections
-        Point[] adjacentPoints  = from.getAdjacentPointsExceptAboveAndBelow();
+        var adjacentPoints = from.getAdjacentPointsExceptAboveAndBelow();
 
         var vegetationUpLeft = getVegetationUpLeft(from);
         var vegetationAbove = getVegetationAbove(from);
@@ -1631,14 +1631,14 @@ public class GameMap {
     private MapPoint[] populateMapPoints() {
         int dataRowLength = isEven(width) ? width / 2 : (width + 1) / 2;
 
-        MapPoint[] mapPoints = new MapPoint[dataRowLength * (height + 1)];
+        var mapPoints = new MapPoint[dataRowLength * (height + 1)];
 
         // Walk row by row. Start at 0 and include the final row at #height
         for (int y = 0; y < height + 1; y++) {
             int xOffset = isEven(y) ? 0 : 1;
 
             for (int x = xOffset; x < width; x += 2) {
-                Point point = new Point(x, y);
+                var point = new Point(x, y);
 
                 if (isEven(point.y)) {
                     mapPoints[point.y * dataRowLength + point.x / 2] = new MapPoint(point);
@@ -1728,7 +1728,7 @@ public class GameMap {
             return false;
         }
 
-        Collection<Vegetation> surroundingVegetation = getSurroundingTiles(point);
+        var surroundingVegetation = getSurroundingTiles(point);
 
         return containsAny(CAN_BUILD_ROAD_ON, surroundingVegetation);
     }
@@ -1742,12 +1742,12 @@ public class GameMap {
      * @return A list of the adjacent points that it's possible to build a road to from the given point
      */
     public List<Point> getPossibleRoadConnectionsExcludingEndpoints(Player player, Point from) {
-        Point pointUpLeft = from.upLeft();
-        Point pointUpRight = from.upRight();
-        Point pointRight = from.right();
-        Point pointDownRight = from.downRight();
-        Point pointDownLeft = from.downLeft();
-        Point pointLeft = from.left();
+        var pointUpLeft = from.upLeft();
+        var pointUpRight = from.upRight();
+        var pointRight = from.right();
+        var pointDownRight = from.downRight();
+        var pointDownLeft = from.downLeft();
+        var pointLeft = from.left();
 
         return Stream.of(pointUpLeft, pointUpRight, pointRight, pointDownRight, pointDownLeft, pointLeft)
                 .filter(point -> isPossibleAsAnyPointInRoad(player, point))
@@ -1768,7 +1768,7 @@ public class GameMap {
             throw new InvalidUserActionException("Cannot get adjacent road connections from a point outside the map");
         }
 
-        List<Point> possiblePoints = List.of(from.upLeft(), from.upRight(), from.right(), from.downRight(), from.downLeft(), from.left());
+        var possiblePoints = List.of(from.upLeft(), from.upRight(), from.right(), from.downRight(), from.downLeft(), from.left());
 
         return possiblePoints.stream()
                 .filter(point -> isPossibleAsAnyPointInRoad(player, point) || isPossibleAsEndPointInRoad(player, point))
@@ -1833,8 +1833,8 @@ public class GameMap {
         }
 
         // Calculate and join each step
-        List<Point> path1 = findWayOffroad(start, via, avoid);
-        List<Point> path2 = findWayOffroad(via, goal, avoid);
+        var path1 = findWayOffroad(start, via, avoid);
+        var path2 = findWayOffroad(via, goal, avoid);
 
         // Return null if one of there is no way for one of the steps
         if (path1 == null || path2 == null) {
@@ -1880,7 +1880,7 @@ public class GameMap {
                 }
 
                 // Find out which adjacent points are possible off-road connections
-                Point[] adjacentPoints  = start.getAdjacentPointsExceptAboveAndBelow();
+                var adjacentPoints = start.getAdjacentPointsExceptAboveAndBelow();
 
                 var vegetationUpLeft = getVegetationUpLeft(start);
                 var vegetationAbove = getVegetationAbove(start);
@@ -1912,7 +1912,7 @@ public class GameMap {
             }
         };
 
-        List<Point> step0 = new ArrayList<>();
+        var step0 = (List<Point>) new ArrayList<Point>();
 
         if (via != null) {
             step0 = findShortestPath(start, via, avoid, offroadConnectionsWithOptions);
@@ -1957,7 +1957,7 @@ public class GameMap {
             throw new InvalidUserActionException(String.format("Can't place tree on %s on existing stone", point));
         }
 
-        Tree tree = new Tree(point, treeType, treeSize);
+        var tree = new Tree(point, treeType, treeSize);
 
         mapPoint.setTree(tree);
 
@@ -1987,7 +1987,7 @@ public class GameMap {
     public void removeTree(Point position) {
         var mapPoint = getMapPoint(position);
 
-        Tree tree = mapPoint.getTree();
+        var tree = mapPoint.getTree();
 
         mapPoint.removeTree();
         trees.remove(tree);
@@ -2008,7 +2008,7 @@ public class GameMap {
      */
     public Stone placeStone(Point point, Stone.StoneType stoneType, int amount) {
         var mapPoint = getMapPoint(point);
-        Stone stone = new Stone(point, stoneType, amount);
+        var stone = new Stone(point, stoneType, amount);
 
         mapPoint.setStone(stone);
         stones.add(stone);
@@ -2067,7 +2067,7 @@ public class GameMap {
      */
     public Cargo removePartOfStone(Point position) {
         var mapPoint = getMapPoint(position);
-        Stone stone = mapPoint.getStone();
+        var stone = mapPoint.getStone();
 
         if (stone.noMoreStone()) {
             return null;
@@ -2095,7 +2095,7 @@ public class GameMap {
      * @return The list of points within the radius
      */
     public List<Point> getPointsWithinRadius(Point point, int radius) {
-        List<Point> pointsWithinRadius = new ArrayList<>();
+        var pointsWithinRadius = new ArrayList<Point>();
         boolean rowFlip = false;
 
         for (int y = point.y - radius; y <= point.y + radius; y++) {
@@ -2106,7 +2106,7 @@ public class GameMap {
             }
 
             for (int x = startX; x <= point.x + radius; x += 2) {
-                Point p = new Point(x, y);
+                var p = new Point(x, y);
 
                 if (isWithinMap(p) && point.distance(p) <= radius) {
                     pointsWithinRadius.add(p);
@@ -2163,7 +2163,7 @@ public class GameMap {
 
         // Destroy the house if the flag is connected to a house
         if (mapPointUpLeft.isBuilding() && flag.equals(mapPointUpLeft.getBuilding().getFlag())) {
-            Building attachedBuilding = mapPointUpLeft.getBuilding();
+            var attachedBuilding = mapPointUpLeft.getBuilding();
 
             if (!attachedBuilding.isBurningDown() && !attachedBuilding.isDestroyed()) {
                 attachedBuilding.tearDown();
@@ -2291,7 +2291,7 @@ public class GameMap {
      * @return The placed sign
      */
     public Sign placeSign(Material mineral, Size amount, Point point) {
-        Sign sign = new Sign(mineral, amount, point, this);
+        var sign = new Sign(mineral, amount, point, this);
 
         var mapPoint = getMapPoint(point);
         mapPoint.setSign(sign);
@@ -2427,15 +2427,15 @@ public class GameMap {
     }
 
     private Size isAvailableHousePoint(Player player, Point point, BorderCheck borderCheck) {
-        Point pointDown = point.down();
-        Point pointDownRight = point.downRight();
-        Point pointUpRight = point.upRight();
-        Point pointUpRightUpRight = point.upRightUpRight();
-        Point pointDownLeftDownLeft = point.downLeftDownLeft();
-        Point pointDownRightDownRight = point.downRightDownRight();
-        Point pointDownLeftLeft = point.downLeftLeft();
+        var pointDown = point.down();
+        var pointDownRight = point.downRight();
+        var pointUpRight = point.upRight();
+        var pointUpRightUpRight = point.upRightUpRight();
+        var pointDownLeftDownLeft = point.downLeftDownLeft();
+        var pointDownRightDownRight = point.downRightDownRight();
+        var pointDownLeftLeft = point.downLeftLeft();
 
-        MapPoint houseMapPoint = getMapPoint(point);
+        var houseMapPoint = getMapPoint(point);
         var mapPointDown = getMapPoint(pointDown);
         var mapPointDownRight = getMapPoint(pointDownRight);
         var mapPointUpRight = getMapPoint(pointUpRight);
@@ -2477,8 +2477,8 @@ public class GameMap {
         }
 
         // It's not possible to build a house left/right or diagonally of a stone or building
-        List<Point> adjacentPoints = List.of(point.left(), point.right(), point.upLeft(), point.downLeft(), point.upRight(), point.downRight());
-        List<MapPoint> adjacentMapPoints = adjacentPoints.stream().map(this::getMapPoint).toList();
+        var adjacentPoints = List.of(point.left(), point.right(), point.upLeft(), point.downLeft(), point.upRight(), point.downRight());
+        var adjacentMapPoints = adjacentPoints.stream().map(this::getMapPoint).toList();
 
         for (var mapPoint : adjacentMapPoints) {
             if (mapPoint != null && (mapPoint.isBuilding() || mapPoint.isStone())) {
@@ -2524,7 +2524,7 @@ public class GameMap {
         }
 
         // Cannot place a house up-left-left of a large house
-        Point pointDownRightRight = point.downRightRight();
+        var pointDownRightRight = point.downRightRight();
         var mapPointDownRightRight = getMapPoint(pointDownRightRight);
 
         if (player.isWithinBorder(pointDownRightRight) && mapPointDownRightRight.isBuildingOfSize(LARGE)) {
@@ -2565,8 +2565,8 @@ public class GameMap {
         }
 
         // ADDITIONAL CONDITIONS FOR LARGE
-        Point pointUpLeft = point.upLeft();
-        Point pointLeft = point.left();
+        var pointUpLeft = point.upLeft();
+        var pointLeft = point.left();
 
         var mapPointUpLeft = getMapPoint(pointUpLeft);
         var mapPointLeft = getMapPoint(pointLeft);
@@ -2583,7 +2583,7 @@ public class GameMap {
             return MEDIUM;
         }
 
-        Point pointUpRightRight = point.upRightRight();
+        var pointUpRightRight = point.upRightRight();
         var mapPointUpRightRight = getMapPoint(pointUpRightRight);
 
         if (player.isWithinBorder(pointUpRightRight) && mapPointUpRightRight.isBuilding()) {
@@ -2598,7 +2598,7 @@ public class GameMap {
             }
         }
 
-        Point pointRightRight = point.rightRight();
+        var pointRightRight = point.rightRight();
         var mapPointRightRight = getMapPoint(pointRightRight);
 
         if (player.isWithinBorder(pointRightRight) && mapPointRightRight.isBuildingOfSize(LARGE)) {
@@ -2692,7 +2692,7 @@ public class GameMap {
         }
 
         // It's possible to place a mine if the flag exists or can be placed
-        Point flagPoint = point.downRight();
+        var flagPoint = point.downRight();
         var mapPointDownRight = getMapPoint(flagPoint);
 
         return mapPointDownRight.isFlag() || isAvailableFlagPoint(player, flagPoint);
@@ -2751,7 +2751,7 @@ public class GameMap {
      * @return The placed wild animal
      */
     public WildAnimal placeWildAnimal(Point point, WildAnimal.Type type) {
-        WildAnimal animal = new WildAnimal(this, type);
+        var animal = new WildAnimal(this, type);
 
         animal.setPosition(point);
         wildAnimals.add(animal);
@@ -2766,7 +2766,7 @@ public class GameMap {
             if (animalCountdown.hasReachedZero()) {
 
                 // Find point to place new wild animal on
-                Point point = findRandomPossiblePointToPlaceFreeMovingActor();
+                var point = findRandomPossiblePointToPlaceFreeMovingActor();
 
                 if (point == null) {
                     return;
@@ -2788,7 +2788,7 @@ public class GameMap {
         double x = random.nextDouble() * getWidth();
         double y = random.nextDouble() * getHeight();
 
-        Point point = getClosestPoint(x, y);
+        var point = getClosestPoint(x, y);
 
         // Go through the full map and look for a suitable point
         return getPointsWithinRadius(point, LOOKUP_RANGE_FOR_FREE_ACTOR).stream()
@@ -2816,7 +2816,7 @@ public class GameMap {
         var mapPoint = getMapPoint(position);
 
         // Plan to remove the pre-upgrade building
-        Building oldBuilding = mapPoint.getBuilding();
+        var oldBuilding = mapPoint.getBuilding();
         buildingsToRemove.add(oldBuilding);
 
         // Put the upgraded building in place
@@ -2873,11 +2873,11 @@ public class GameMap {
     }
 
     public boolean isValidRouteThroughFlagsAndBuildingsViaRoads(List<Point> points) {
-        Point previous = null;
+        var previous = (Point) null;
 
         for (Point point : points) {
             if (previous != null) {
-                MapPoint mp = getMapPoint(previous);
+                var mp = getMapPoint(previous);
 
                 if (!mp.getConnectedFlagsAndBuildings().contains(point)) {
                     return false;
@@ -3062,7 +3062,7 @@ public class GameMap {
      * @return List of tiles surrounding the given point
      */
     public List<Vegetation> getSurroundingTiles(Point point) {
-        List<Vegetation> result = new LinkedList<>();
+        var result = new LinkedList<Vegetation>();
 
         var vegetationUpLeft = getVegetationUpLeft(point);
         var vegetationAbove = getVegetationAbove(point);
@@ -3263,7 +3263,7 @@ public class GameMap {
 
     public List<Point> findWayForShip(Point from, Point to) {
         return findShortestPath(from, to, null, (point, goal) -> {
-            Set<Point> possibleConnections = new HashSet<>();
+            var possibleConnections = new HashSet<Point>();
 
             var vegetationUpLeft = getVegetationUpLeft(point);
             var vegetationAbove = getVegetationAbove(point);
@@ -3277,12 +3277,12 @@ public class GameMap {
                 possibleConnections.add(pointLeft);
             }
 
-            Point pointUpLeft = point.upLeft();
+            var pointUpLeft = point.upLeft();
             if (isWithinMap(pointUpLeft) && (vegetationUpLeft == Vegetation.WATER || vegetationAbove == Vegetation.WATER)) {
                 possibleConnections.add(pointUpLeft);
             }
 
-            Point pointUpRight = point.upRight();
+            var pointUpRight = point.upRight();
             if (isWithinMap(pointUpRight) && (vegetationAbove == Vegetation.WATER || vegetationUpRight == Vegetation.WATER)) {
                 possibleConnections.add(pointUpRight);
             }

@@ -53,7 +53,7 @@ public class PlankProductionPlayer implements ComputerPlayer {
 
     @Override
     public void turn() throws Exception {
-        State stateBefore = state;
+        var stateBefore = state;
 
         // Construct a forester
         if (state == State.NO_CONSTRUCTION) {
@@ -62,13 +62,13 @@ public class PlankProductionPlayer implements ComputerPlayer {
             headquarter = GamePlayUtils.findHeadquarter(player);
 
             // Find a site for the forester hut
-            Point site = findSpotForForesterHut();
+            var site = findSpotForForesterHut();
 
             // Place forester hut
             foresterHut = map.placeBuilding(new ForesterHut(player), site);
 
             // Connect the forester hut with the headquarter
-            Road road = map.placeAutoSelectedRoad(player, foresterHut.getFlag(), headquarter.getFlag());
+            var road = map.placeAutoSelectedRoad(player, foresterHut.getFlag(), headquarter.getFlag());
 
             // Place flags where possible
             GamePlayUtils.fillRoadWithFlags(map, road);
@@ -84,13 +84,13 @@ public class PlankProductionPlayer implements ComputerPlayer {
         } else if (state == State.FORESTER_CONSTRUCTED) {
 
             // Find a site for the woodcutter close to the forester hut
-            Point site = findSpotForWoodcutterNextToForesterHut(foresterHut);
+            var site = findSpotForWoodcutterNextToForesterHut(foresterHut);
 
             // Place the woodcutter
             woodcutter = map.placeBuilding(new Woodcutter(player), site);
 
             // Connect the forester hut with the headquarter
-            Road road = map.placeAutoSelectedRoad(player, foresterHut.getFlag(), woodcutter.getFlag());
+            var road = map.placeAutoSelectedRoad(player, foresterHut.getFlag(), woodcutter.getFlag());
 
             // Place flags where possible
             GamePlayUtils.fillRoadWithFlags(map, road);
@@ -106,13 +106,13 @@ public class PlankProductionPlayer implements ComputerPlayer {
         } else if (state == State.WOODCUTTER_CONSTRUCTED) {
 
             // Find a site for the sawmill close to the headquarter
-            Point site = findSpotForSawmill(headquarter);
+            var site = findSpotForSawmill(headquarter);
 
             // Place the sawmill
             sawmill = map.placeBuilding(new Sawmill(player), site);
 
             // Connect the sawmill with the headquarter
-            Road road = map.placeAutoSelectedRoad(player, sawmill.getFlag(), headquarter.getFlag());
+            var road = map.placeAutoSelectedRoad(player, sawmill.getFlag(), headquarter.getFlag());
 
             // Place flags where possible
             GamePlayUtils.fillRoadWithFlags(map, road);
@@ -134,7 +134,7 @@ public class PlankProductionPlayer implements ComputerPlayer {
     private Point findSpotForWoodcutterNextToForesterHut(ForesterHut foresterHut) {
 
         // Find available spots close to the forester
-        List<Point> spots = GamePlayUtils.findAvailableHousePointsWithinRadius(map, player, foresterHut.getPosition(), SMALL, 4);
+        var spots = GamePlayUtils.findAvailableHousePointsWithinRadius(map, player, foresterHut.getPosition(), SMALL, 4);
 
         // Return null if there are no available spots
         if (spots.isEmpty()) {
@@ -148,7 +148,7 @@ public class PlankProductionPlayer implements ComputerPlayer {
     private Point findSpotForSawmill(Headquarter headquarter) {
 
         // Find available spots close to the forester
-        List<Point> spots = GamePlayUtils.findAvailableHousePointsWithinRadius(map, player, headquarter.getPosition(), MEDIUM, 4);
+        var spots = GamePlayUtils.findAvailableHousePointsWithinRadius(map, player, headquarter.getPosition(), MEDIUM, 4);
 
         // Return null if there are no available spots
         if (spots.isEmpty()) {

@@ -13,13 +13,13 @@ public class Duration {
     private Stats stats;
 
     public void reportStatsAndContinueToAggregate(Stats stats) {
-        Stamp previous = null;
+        var previous = (Stamp) null;
 
         for (Stamp stamp : timestamps) {
             if (previous != null) {
-                String variableName = name + "." + stamp.name;
+                var variableName = name + "." + stamp.name;
 
-                Variable variable = stats.addPeriodicCounterVariableIfAbsent(variableName);
+                var variable = stats.addPeriodicCounterVariableIfAbsent(variableName);
 
                 variable.reportValue(stamp.timestamp - previous.timestamp);
             }
@@ -27,21 +27,21 @@ public class Duration {
             previous = stamp;
         }
 
-        String totalName = name + ".total";
+        var totalName = name + ".total";
 
-        Variable total = stats.addPeriodicCounterVariableIfAbsent(totalName);
+        var total = stats.addPeriodicCounterVariableIfAbsent(totalName);
 
         total.reportValue(previous.timestamp - timestampAtStart);
     }
 
     public Collection<String> getVariables() {
-        List<String> variables = new ArrayList<>();
+        var variables = new ArrayList<String>();
 
-        Stamp previous = null;
+        var previous = (Stamp) null;
 
         for (Stamp stamp : timestamps) {
             if (previous != null) {
-                String variableName = name + "." + stamp.name;
+                var variableName = name + "." + stamp.name;
 
                 variables.add(variableName);
             }
@@ -49,7 +49,7 @@ public class Duration {
             previous = stamp;
         }
 
-        String totalName = name + ".total";
+        var totalName = name + ".total";
 
         variables.add(totalName);
 
@@ -94,13 +94,13 @@ public class Duration {
 
     public void reportStats(Stats stats) {
 
-        Stamp previous = null;
+        var previous = (Stamp) null;
 
         for (Stamp stamp : timestamps) {
             if (previous != null) {
-                String variableName = name + "." + stamp.name;
+                var variableName = name + "." + stamp.name;
 
-                Variable variable = stats.addVariableIfMissing(variableName);
+                var variable = stats.addVariableIfMissing(variableName);
 
                 variable.reportValue(stamp.timestamp - previous.timestamp);
             }
@@ -108,9 +108,9 @@ public class Duration {
             previous = stamp;
         }
 
-        String totalName = name + ".total";
+        var totalName = name + ".total";
 
-        Variable total = stats.addVariableIfMissing(totalName);
+        var total = stats.addVariableIfMissing(totalName);
 
         total.reportValue(previous.timestamp - timestampAtStart);
     }

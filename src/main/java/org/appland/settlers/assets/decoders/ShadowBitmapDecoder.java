@@ -55,7 +55,7 @@ public class ShadowBitmapDecoder {
         }
 
         long position = height * 2L;
-        Bitmap bitmap = new Bitmap(width, height, nx, ny, palette, TextureFormat.BGRA);
+        var bitmap = new Bitmap(width, height, nx, ny, palette, TextureFormat.BGRA);
 
         // Process the pixel data row by row
         for (int y = 0; y < height; y++) {

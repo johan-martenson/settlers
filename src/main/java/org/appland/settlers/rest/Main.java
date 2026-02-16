@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        Main main = new Main();
+        var main = new Main();
 
         main.run();
     }
@@ -34,11 +34,11 @@ public class Main {
 
         // Load the maps
         System.out.println(" - Loading maps");
-        String largeMapDirectoryPath = "maps/WORLDS/";
+        var largeMapDirectoryPath = "maps/WORLDS/";
 
-        File largeMapDirectory = new File(largeMapDirectoryPath);
+        var largeMapDirectory = new File(largeMapDirectoryPath);
 
-        MapLoader mapLoader = new MapLoader();
+        var mapLoader = new MapLoader();
 
         if (largeMapDirectory.exists()) {
             File[] mapFilenames = largeMapDirectory.listFiles(
@@ -47,7 +47,7 @@ public class Main {
             Arrays.stream(mapFilenames).parallel().forEach(mapFilename ->
                     {
                         try {
-                            MapFile mapFile = mapLoader.loadMapFromFile(mapFilename.toString());
+                            var mapFile = mapLoader.loadMapFromFile(mapFilename.toString());
 
                             synchronized (MapsResource.mapsResource) {
                                 MapsResource.mapsResource.addMap(mapFile);
@@ -65,9 +65,9 @@ public class Main {
 
         System.out.printf(" - Starting server on part %s%n", port);
 
-        Server server = new Server(port);
+        var server = new Server(port);
 
-        ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        var servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         servletContextHandler.setContextPath("/");
         server.setHandler(servletContextHandler);
 
@@ -76,7 +76,7 @@ public class Main {
         {
             container.setDefaultMaxSessionIdleTimeout(1800_000); // 30 minutes
 
-            ServerEndpointConfig echoConfig = ServerEndpointConfig.Builder.create(WebsocketApi.class, "/ws/api").build();
+            var echoConfig = ServerEndpointConfig.Builder.create(WebsocketApi.class, "/ws/api").build();
             container.addEndpoint(echoConfig);
         });
 
@@ -84,14 +84,14 @@ public class Main {
 
         // Add file server for the assets
         // add special pathspec of "/alt/" content mapped to the altPath
-        Path altPath = Paths.get("assets").toRealPath();
+        var altPath = Paths.get("assets").toRealPath();
 
         System.out.printf("Serving files from %s%n", altPath);
 
-        ServletHolder holderAlt = new ServletHolder("static-alt", ResourceServlet.class);
+        var holderAlt = new ServletHolder("static-alt", ResourceServlet.class);
         // Use the String representation of the URL
         try {
-            URL url = altPath.toUri().toURL();
+            var url = altPath.toUri().toURL();
             holderAlt.setInitParameter("baseResource", url.toString());
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
@@ -103,7 +103,7 @@ public class Main {
 
         // Lastly, the default servlet for root content (always needed, to satisfy servlet spec)
         // It is important that this is last.
-        ServletHolder holderDef = new ServletHolder("default", DefaultServlet.class);
+        var holderDef = new ServletHolder("default", DefaultServlet.class);
         holderDef.setInitParameter("dirAllowed", "true");
         servletContextHandler.addServlet(holderDef, "/");
 

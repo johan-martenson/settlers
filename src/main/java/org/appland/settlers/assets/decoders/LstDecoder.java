@@ -48,11 +48,11 @@ public class LstDecoder {
      * @throws InvalidFormatException       if the file format is invalid
      */
     public static List<GameResource> loadLstFile(String filename, Palette defaultPalette) throws IOException, UnknownResourceTypeException, InvalidFormatException {
-        List<GameResource> gameResources = new ArrayList<>();
+        var gameResources = new ArrayList<GameResource>();
 
-        ByteArrayReader streamReader = new ByteArrayReader(Files.newInputStream(Paths.get(filename)).readAllBytes(), LITTLE_ENDIAN);
+        var streamReader = new ByteArrayReader(Files.newInputStream(Paths.get(filename)).readAllBytes(), LITTLE_ENDIAN);
 
-        Palette palette = defaultPalette;
+        var palette = defaultPalette;
         int header = streamReader.getUint16();
 
         debugPrint(format("Header is: %s", Integer.toHexString(header)));
@@ -87,7 +87,7 @@ public class LstDecoder {
 
                     // Load the resource type
                     int type = streamReader.getInt16();
-                    ResourceType resourceType = ResourceType.fromInt(type);
+                    var resourceType = ResourceType.fromInt(type);
 
                     debugPrint(" - Resource type number: " + type);
                     debugPrint(" - Resource type: " + resourceType);

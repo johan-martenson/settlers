@@ -63,7 +63,7 @@ public class Geologist extends Worker {
     protected void onIdle() {
         if (state == INVESTIGATING) {
             if (countdown.hasReachedZero()) {
-                Material foundMaterial = placeSignWithResult(getPosition());
+                var foundMaterial = placeSignWithResult(getPosition());
 
                 nrSitesInvestigated++;
 
@@ -81,7 +81,7 @@ public class Geologist extends Worker {
                     return;
                 }
 
-                Point nextSite = findSiteToExamine();
+                var nextSite = findSiteToExamine();
 
                 if (nextSite == null) {
                     state = RETURNING_TO_FLAG;
@@ -103,7 +103,7 @@ public class Geologist extends Worker {
         switch (state) {
             case WALKING_TO_TARGET -> {
                 flagPoint = getPosition();
-                Point point = findSiteToExamine();
+                var point = findSiteToExamine();
 
                 if (point == null) {
                     state = RETURNING_TO_STORAGE;
@@ -120,7 +120,7 @@ public class Geologist extends Worker {
             }
             case RETURNING_TO_FLAG -> {
                 state = RETURNING_TO_STORAGE;
-                Building storage = GameUtils.getClosestStorageConnectedByRoads(flagPoint, getPlayer());
+                var storage = GameUtils.getClosestStorageConnectedByRoads(flagPoint, getPlayer());
 
                 if (storage != null) {
                     setTarget(storage.getPosition());
@@ -130,7 +130,7 @@ public class Geologist extends Worker {
                 }
             }
             case RETURNING_TO_STORAGE -> {
-                Building storage = map.getBuildingAtPoint(getPosition());
+                var storage = map.getBuildingAtPoint(getPosition());
                 storage.putCargo(new Cargo(GEOLOGIST, map));
                 enterBuilding(storage);
             }
@@ -139,7 +139,7 @@ public class Geologist extends Worker {
 
     private Material placeSignWithResult(Point point) {
         boolean placedSign = false;
-        Material foundMaterial = null;
+        var foundMaterial = (Material) null;
 
         var surroundingVegetation = map.getSurroundingTiles(point);
 
@@ -192,7 +192,7 @@ public class Geologist extends Worker {
         var filteredPoints = points.stream()
                 .filter(point -> !point.equals(getPosition())) // Ignore the current position
                 .filter(point -> {
-                    MapPoint mapPoint = map.getMapPoint(point);
+                    var mapPoint = map.getMapPoint(point);
 
                     // Check if the point is clear of any signs, trees, stones, flags, or buildings
                     return !mapPoint.isSign() &&
@@ -224,7 +224,7 @@ public class Geologist extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = getPlayer().getClosestStorage(getPosition(), getHome());
+        var storage = getPlayer().getClosestStorage(getPosition(), getHome());
 
         state = RETURNING_TO_STORAGE;
 

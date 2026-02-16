@@ -233,7 +233,7 @@ public class Stonemason extends Worker {
             case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
 
                 // Go to the closest storage
-                Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, STONEMASON);
+                var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, STONEMASON);
 
                 if (storehouse != null) {
                     state = State.RETURNING_TO_STORAGE;
@@ -254,13 +254,13 @@ public class Stonemason extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, STONEMASON);
+        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, STONEMASON);
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
             setTarget(storage.getPosition());
         } else {
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, STONEMASON);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, STONEMASON);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;

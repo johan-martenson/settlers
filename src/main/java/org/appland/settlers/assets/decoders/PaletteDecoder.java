@@ -44,11 +44,11 @@ public class PaletteDecoder {
      * @throws IOException when an I/O error occurs during reading
      */
     public static Palette loadPaletteFromFile(String filename) throws IOException {
-        StreamReader streamReader = new StreamReader(new FileInputStream(filename), LITTLE_ENDIAN);
+        var streamReader = new StreamReader(new FileInputStream(filename), LITTLE_ENDIAN);
 
         byte[] colors = streamReader.getUint8ArrayAsBytes(256 * 3); // uint 8 x 3, rgb
 
-        Palette palette =  new Palette(colors);
+        var palette = new Palette(colors);
         palette.setDefaultTransparentIdx();
 
         int lastSeparator = filename.lastIndexOf("/");

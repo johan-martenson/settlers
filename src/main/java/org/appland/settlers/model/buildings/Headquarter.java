@@ -483,7 +483,7 @@ public class Headquarter extends Storehouse {
             var material = rank.toMaterial();
 
             if (isInStock(material)) {
-                Soldier defender = (Soldier) retrieveWorker(material, null);
+                var defender = (Soldier) retrieveWorker(material, null);
                 map.placeWorker(defender, this);
                 defender.setHome(this);
                 defender.setPosition(getPosition());

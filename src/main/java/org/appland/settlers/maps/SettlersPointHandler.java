@@ -20,7 +20,7 @@ public class SettlersPointHandler extends OneArgumentOptionHandler<Point> {
 
     @Override
     protected Point parse(String argument) throws CmdLineException {
-        Matcher matcher = PATTERN.matcher(argument);
+        var matcher = PATTERN.matcher(argument);
         if (!matcher.matches()) {
             throw misformattedArgumentException(argument);
         }

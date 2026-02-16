@@ -64,7 +64,7 @@ public class Harbor extends Storehouse {
         expeditionState = State.COLLECTING_MATERIAL_FOR_NEXT_EXPEDITION;
 
         for (Entry<Material, Integer> entry : REQUIRED_FOR_EXPEDITION.entrySet()) {
-            Material material = entry.getKey();
+            var material = entry.getKey();
             int requiredAmount = entry.getValue();
 
             int amountToUse = Math.min(getAmount(material), requiredAmount);
@@ -121,7 +121,7 @@ public class Harbor extends Storehouse {
 
     @Override
     public void putCargo(Cargo cargo) {
-        Material material = cargo.getMaterial();
+        var material = cargo.getMaterial();
 
         if (expeditionState == State.COLLECTING_MATERIAL_FOR_NEXT_EXPEDITION && REQUIRED_FOR_EXPEDITION.containsKey(material)) {
             int promised = promisedMaterialForNextExpedition.getOrDefault(material, 0);
@@ -144,7 +144,7 @@ public class Harbor extends Storehouse {
 
     @Override
     public void depositWorker(Worker worker) {
-        Material material = Material.workerToMaterial(worker);
+        var material = Material.workerToMaterial(worker);
 
         if (expeditionState == State.COLLECTING_MATERIAL_FOR_NEXT_EXPEDITION && REQUIRED_FOR_EXPEDITION.containsKey(material)) {
             int promised = promisedMaterialForNextExpedition.getOrDefault(material, 0);
@@ -199,10 +199,10 @@ public class Harbor extends Storehouse {
 
         // Add a storage worker manually if this is a separate settlement
         if (isOwnSettlement) {
-            Player player = getPlayer();
-            GameMap map = getMap();
+            var player = getPlayer();
+            var map = getMap();
 
-            StorehouseWorker storehouseWorker = new StorehouseWorker(player, map);
+            var storehouseWorker = new StorehouseWorker(player, map);
 
             map.placeWorker(storehouseWorker, getFlag());
             storehouseWorker.setTargetBuilding(this);
@@ -250,8 +250,8 @@ public class Harbor extends Storehouse {
     }
 
     private Stream<Material> getMaterialNeedingShippingAsStream() {
-        List<Building> buildings = getPlayer().getBuildings();
-        GameMap map = getMap();
+        var buildings = getPlayer().getBuildings();
+        var map = getMap();
 
         return Arrays.stream(Material.values())
 
@@ -289,7 +289,7 @@ public class Harbor extends Storehouse {
     }
 
     Map<Material, Integer> getShipmentNeededForSettlement() {
-        Set<Building> reachableBuildings = GameUtils.getBuildingsWithinReach(getFlag());
+        var reachableBuildings = GameUtils.getBuildingsWithinReach(getFlag());
         reachableBuildings.remove(this);
 
         return reachableBuildings.stream()

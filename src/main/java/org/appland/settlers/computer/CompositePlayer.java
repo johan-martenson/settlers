@@ -96,7 +96,7 @@ public class CompositePlayer implements ComputerPlayer {
      */
     @Override
     public void turn() throws Exception {
-        Duration duration = stats.measureOneShotDuration("CompositePlayer.turn");
+        var duration = stats.measureOneShotDuration("CompositePlayer.turn");
 
         // Periodic tasks management
         if (counter > COUNTER_MAX) {
@@ -258,7 +258,7 @@ public class CompositePlayer implements ComputerPlayer {
             }
 
             // Look for enemies close by to attack
-            Building enemyBuilding = GamePlayUtils.getCloseEnemyBuilding(player);
+            var enemyBuilding = GamePlayUtils.getCloseEnemyBuilding(player);
 
             duration.after("Look for enemy buildings to attack");
 

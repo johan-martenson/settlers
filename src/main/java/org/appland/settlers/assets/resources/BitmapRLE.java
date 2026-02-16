@@ -29,7 +29,7 @@ public class BitmapRLE extends Bitmap {
         super(width, height, nx, ny, palette, format);
 
         this.palette = palette;
-        ByteBuffer byteBufferData = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN);
+        var byteBufferData = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN);
 
         // Determine bits per pixel and the transparent index
         short bitsPerPixel = (format == TextureFormat.PALETTED) ? (short) 1 : (short) 3;

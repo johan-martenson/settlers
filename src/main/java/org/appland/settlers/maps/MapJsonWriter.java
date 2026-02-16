@@ -26,7 +26,7 @@ public class MapJsonWriter {
     public static void main(String[] args) throws Exception {
         var mapJsonWriter = new MapJsonWriter();
 
-        CmdLineParser parser = new CmdLineParser(mapJsonWriter);
+        var parser = new CmdLineParser(mapJsonWriter);
 
         parser.parseArgument(args);
 

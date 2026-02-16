@@ -18,13 +18,13 @@ public class SettlersMapLoaderDriver {
     public static void main(String[] args) throws Exception {
 
         try {
-            MapLoader mapLoader = new MapLoader();
+            var mapLoader = new MapLoader();
 
-            MapFile mapFile = mapLoader.loadMapFromFile(args[0]);
+            var mapFile = mapLoader.loadMapFromFile(args[0]);
 
-            GameMap map = mapLoader.convertMapFileToGameMap(mapFile);
+            var map = mapLoader.convertMapFileToGameMap(mapFile);
 
-            List<Player> players = new ArrayList<>();
+            var players = new ArrayList<Player>();
 
             players.add(new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN));
 

@@ -55,7 +55,7 @@ public class GamePlayUtils {
     public static List<Point> findAvailableHousePointsWithinRadius(GameMap map, Player player, Point position, Size size, int radius) {
         return map.getPointsWithinRadius(position, radius).stream()
                 .filter(point -> {
-                    Size availableSize = map.isAvailableHousePoint(player, point);
+                    var availableSize = map.isAvailableHousePoint(player, point);
                     return availableSize != null && availableSize.contains(size);
                 })
                 .collect(Collectors.toList());
@@ -84,7 +84,7 @@ public class GamePlayUtils {
      */
     public static void fillRoadWithFlags(GameMap map, Road road) throws Exception {
         if (road != null) {
-            Player player = road.getPlayer();
+            var player = road.getPlayer();
 
             for (Point point : road.getWayPoints()) {
                 if (map.isAvailableFlagPoint(player, point)) {
@@ -103,14 +103,14 @@ public class GamePlayUtils {
      */
     public static void removeRoadWithoutAffectingOthers(GameMap map, Flag flag) throws Exception {
         while (map.getRoadsFromFlag(flag).size() == 1) {
-            Road road = map.getRoadsFromFlag(flag).iterator().next();
-            EndPoint otherSide = road.getOtherEndPoint(flag);
+            var road = map.getRoadsFromFlag(flag).iterator().next();
+            var otherSide = road.getOtherEndPoint(flag);
 
             if (map.isBuildingAtPoint(otherSide.getPosition())) {
                 break;
             }
 
-            Flag otherFlag = map.getFlagAtPoint(otherSide.getPosition());
+            var otherFlag = map.getFlagAtPoint(otherSide.getPosition());
             map.removeFlag(flag);
             flag = otherFlag;
         }
@@ -141,7 +141,7 @@ public class GamePlayUtils {
      * @throws Exception If an error occurs during road placement.
      */
     public static Road connectPointToBuilding(Player player, GameMap map, Point start, Building building) throws Exception {
-        Point via = pointToConnectViaToGetToBuilding(player, map, start, building);
+        var via = pointToConnectViaToGetToBuilding(player, map, start, building);
 
         return via != null ? map.placeAutoSelectedRoad(player, start, via) : null;
     }
@@ -156,7 +156,7 @@ public class GamePlayUtils {
      * @return The best point to connect to or null if no connection is possible.
      */
     public static Point pointToConnectViaToGetToBuilding(Player player, GameMap map, Point start, Building building) {
-        Point end = building.getFlag().getPosition();
+        var end = building.getFlag().getPosition();
 
         if (map.arePointsConnectedByRoads(start, end)) {
             return null;
@@ -210,7 +210,7 @@ public class GamePlayUtils {
      * @return A list of visible opponent buildings.
      */
     public static List<Building> findVisibleOpponentBuildings(GameMap map, Player player) {
-        Set<Point> visibleLand = new HashSet<>(player.getDiscoveredLand());
+        var visibleLand = new HashSet<Point>(player.getDiscoveredLand());
         visibleLand.removeAll(player.getOwnedLand());
 
         return map.getBuildings().stream()
@@ -228,32 +228,32 @@ public class GamePlayUtils {
      * @throws Exception If an error occurs during road placement.
      */
     public static void repairConnection(GameMap map, Player player, Flag from, Flag to) throws Exception {
-        Set<Flag> fromFlags = findConnectedFlags(map, from);
-        Set<Flag> toFlags = findConnectedFlags(map, to);
+        var fromFlags = findConnectedFlags(map, from);
+        var toFlags = findConnectedFlags(map, to);
 
         int distance = Integer.MAX_VALUE;
-        Flag flag1 = null;
-        Flag flag2 = null;
+        var flag1 = (Flag) null;
+        var flag2 = (Flag) null;
 
         for (Flag fromFlag : fromFlags) {
             for (Flag toFlag : toFlags) {
                 int totalDistance = 0;
 
                 if (!fromFlag.equals(from)) {
-                    List<Point> path1 = map.findWayWithExistingRoads(from.getPosition(), fromFlag.getPosition());
+                    var path1 = map.findWayWithExistingRoads(from.getPosition(), fromFlag.getPosition());
                     if (path1 != null) {
                         totalDistance += path1.size();
                     }
                 }
 
                 if (!toFlag.equals(to)) {
-                    List<Point> path2 = map.findWayWithExistingRoads(to.getPosition(), toFlag.getPosition());
+                    var path2 = map.findWayWithExistingRoads(to.getPosition(), toFlag.getPosition());
                     if (path2 != null) {
                         totalDistance += path2.size();
                     }
                 }
 
-                List<Point> path = map.findAutoSelectedRoad(player, fromFlag.getPosition(), toFlag.getPosition(), null);
+                var path = map.findAutoSelectedRoad(player, fromFlag.getPosition(), toFlag.getPosition(), null);
                 if (path != null && totalDistance + path.size() < distance) {
                     distance = totalDistance + path.size();
                     flag1 = fromFlag;
@@ -263,19 +263,19 @@ public class GamePlayUtils {
         }
 
         if (flag1 != null && flag2 != null) {
-            Road road = map.placeAutoSelectedRoad(player, flag1, flag2);
+            var road = map.placeAutoSelectedRoad(player, flag1, flag2);
             fillRoadWithFlags(map, road);
         }
     }
 
     public static Set<Flag> findConnectedFlags(GameMap map, Flag from) {
-        Set<Flag> fromFlags = new HashSet<>();
-        LinkedList<Flag> flagsToSearch = new LinkedList<>();
-        Set<Road> searchedRoads = new HashSet<>();
+        var fromFlags = new HashSet<Flag>();
+        var flagsToSearch = new LinkedList<Flag>();
+        var searchedRoads = new HashSet<Road>();
         flagsToSearch.add(from);
 
         while (!flagsToSearch.isEmpty()) {
-            Flag flag = flagsToSearch.removeFirst();
+            var flag = flagsToSearch.removeFirst();
             fromFlags.add(flag);
 
             for (Road road : map.getRoadsFromFlag(flag)) {
@@ -284,7 +284,7 @@ public class GamePlayUtils {
                 }
 
                 searchedRoads.add(road);
-                EndPoint ep = road.getOtherEndPoint(flag);
+                var ep = road.getOtherEndPoint(flag);
 
                 if (!map.isBuildingAtPoint(ep.getPosition())) {
                     flagsToSearch.add(map.getFlagAtPoint(ep.getPosition()));
@@ -345,7 +345,7 @@ public class GamePlayUtils {
     public static Point findPointForBuildingCloseToPoint(Point point, Size neededSize, Player controlledPlayer, GameMap map) {
         return controlledPlayer.getOwnedLand().stream()
                 .filter(p -> {
-                    Size availableSize = map.isAvailableHousePoint(controlledPlayer, p);
+                    var availableSize = map.isAvailableHousePoint(controlledPlayer, p);
                     return availableSize != null && availableSize.contains(neededSize);
                 })
                 .min(Comparator.comparingDouble(p -> p.distance(point)))
@@ -405,16 +405,16 @@ public class GamePlayUtils {
      * @throws Exception If an error occurs during building placement.
      */
     public static <T extends Building> T placeBuilding(Player player, Building buildingCloseBy, T building) throws Exception {
-        GameMap map = player.getMap();
-        Size size = building.getSize();
+        var map = player.getMap();
+        var size = building.getSize();
 
-        Point location = findPointForBuildingCloseToPoint(buildingCloseBy.getPosition(), size, player, map);
+        var location = findPointForBuildingCloseToPoint(buildingCloseBy.getPosition(), size, player, map);
         if (location == null) {
             return null;
         }
 
         map.placeBuilding(building, location);
-        Road road = connectPointToBuilding(player, map, building.getFlag().getPosition(), buildingCloseBy);
+        var road = connectPointToBuilding(player, map, building.getFlag().getPosition(), buildingCloseBy);
         fillRoadWithFlags(map, road);
 
         return building;
@@ -457,18 +457,18 @@ public class GamePlayUtils {
      * @return The closest enemy military building, or null if none are close.
      */
     public static Building getCloseEnemyBuilding(Player player) {
-        GameMap map = player.getMap();
+        var map = player.getMap();
         double distanceToBorder = Double.MAX_VALUE;
-        Building closeEnemyBuilding = null;
+        var closeEnemyBuilding = (Building) null;
 
         for (Point p : player.getDiscoveredLand()) {
-            Player owner = player.getPlayerAtPoint(p);
+            var owner = player.getPlayerAtPoint(p);
 
             if (owner == null || owner.equals(player) || !map.isBuildingAtPoint(p)) {
                 continue;
             }
 
-            Building tmpBuilding = map.getBuildingAtPoint(p);
+            var tmpBuilding = map.getBuildingAtPoint(p);
 
             if (!tmpBuilding.isMilitaryBuilding()) {
                 continue;

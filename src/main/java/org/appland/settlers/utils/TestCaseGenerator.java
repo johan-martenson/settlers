@@ -85,7 +85,7 @@ public class TestCaseGenerator {
     public void recordRemoveFlag(Flag flag) {
         printStartTry();
 
-        Point point = null;
+        var point = (Point) null;
 
         if (flag != null) {
             point = flag.getPosition();
@@ -304,7 +304,7 @@ public class TestCaseGenerator {
     }
 
     public void recordPushOutMaterial(Building building, Material material) {
-        Point point = null;
+        var point = (Point) null;
 
         if (building != null) {
             point = building.getPosition();
@@ -318,7 +318,7 @@ public class TestCaseGenerator {
     }
 
     public void recordStopStorageOfMaterial(Building building, Material material) {
-        Point point = null;
+        var point = (Point) null;
 
         if (building != null) {
             point = building.getPosition();

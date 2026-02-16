@@ -179,7 +179,7 @@ PigBreeder extends Worker {
             }
 
             case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
-                Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, PIG_BREEDER);
+                var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, PIG_BREEDER);
 
                 if (storehouse != null) {
                     state = RETURNING_TO_STORAGE;
@@ -200,13 +200,13 @@ PigBreeder extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, PIG_BREEDER);
+        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, PIG_BREEDER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
             setTarget(storage.getPosition());
         } else {
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), PIG_BREEDER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), PIG_BREEDER);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;

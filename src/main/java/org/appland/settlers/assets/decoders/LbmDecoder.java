@@ -36,9 +36,9 @@ public class LbmDecoder {
      */
     public static GameResource loadLBMFile(String filename, Palette defaultPalette) throws IOException, InvalidFormatException {
         try (StreamReader streamReader = new StreamReader(new FileInputStream(filename), ByteOrder.BIG_ENDIAN)) {
-            String header = streamReader.getUint8ArrayAsString(4);
+            var header = streamReader.getUint8ArrayAsString(4);
             long length = streamReader.getUint32();
-            String pbm = streamReader.getUint8ArrayAsString(4);
+            var pbm = streamReader.getUint8ArrayAsString(4);
 
             // Check that the header is valid
             if (!header.equals("FORM") || !pbm.equals("PBM ")) {
@@ -52,11 +52,11 @@ public class LbmDecoder {
             short mask = 0;
             boolean headerRead = false;
 
-            AnimatedLBMFile lbmFile = null;
-            Palette palette = null;
+            var lbmFile = (AnimatedLBMFile) null;
+            var palette = (Palette) null;
 
             // Read sections of the file until done
-            List<AnimatedPalette> animatedPaletteList = new ArrayList<>();
+            var animatedPaletteList = new ArrayList<AnimatedPalette>();
 
             while (!streamReader.isEof()) {
                 String chunkId;

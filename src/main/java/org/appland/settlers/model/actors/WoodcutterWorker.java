@@ -240,7 +240,7 @@ public class WoodcutterWorker extends Worker {
             case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
 
                 // Go to the closest storage
-                Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, WOODCUTTER_WORKER);
+                var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, WOODCUTTER_WORKER);
 
                 if (storehouse != null) {
                     state = State.RETURNING_TO_STORAGE;
@@ -268,14 +268,14 @@ public class WoodcutterWorker extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, WOODCUTTER_WORKER);
+        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, WOODCUTTER_WORKER);
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
 
             setTarget(storage.getPosition());
         } else {
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, WOODCUTTER_WORKER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, WOODCUTTER_WORKER);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;

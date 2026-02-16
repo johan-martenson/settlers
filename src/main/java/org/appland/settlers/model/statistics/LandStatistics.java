@@ -15,7 +15,7 @@ public class LandStatistics {
     }
 
     public void addMeasurement(long time, int[] measurement) {
-        LandDataPoint landDataPoint = new LandDataPoint(time, measurement);
+        var landDataPoint = new LandDataPoint(time, measurement);
 
         dataPoints.add(landDataPoint);
     }

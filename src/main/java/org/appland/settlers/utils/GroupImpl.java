@@ -30,7 +30,7 @@ class GroupImpl implements Group {
 
     @Override
     public Collection<Variable> getVariables() {
-        Set<Variable> variableList = new HashSet<>();
+        var variableList = new HashSet<Variable>();
 
         for (String variableName : variables) {
             variableList.add(stats.getVariable(variableName));
@@ -52,7 +52,7 @@ class GroupImpl implements Group {
     @Override
     public void collectionPeriodDone() {
         for (String variableName : variables) {
-            Variable variable = stats.getVariable(variableName);
+            var variable = stats.getVariable(variableName);
 
             if (variable instanceof PeriodicCounterVariableImpl periodicCounterVariable) {
 

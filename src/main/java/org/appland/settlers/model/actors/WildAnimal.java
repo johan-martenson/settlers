@@ -82,7 +82,7 @@ public class WildAnimal extends Worker {
                     countdown.countFrom(TIME_TO_STAND);
                 } else {
 
-                    List<Point> pathToNextPoint = findNextPoint();
+                    var pathToNextPoint = findNextPoint();
 
                     // Walk if there is an available spot
                     if (pathToNextPoint != null) {
@@ -98,7 +98,7 @@ public class WildAnimal extends Worker {
     private List<Point> findNextPoint() {
         for (Point point : map.getPossibleAdjacentOffRoadConnections(getPosition())) {
 
-            MapPoint mapPoint = map.getMapPoint(point);
+            var mapPoint = map.getMapPoint(point);
 
             // Filter buildings as animals can't walk into buildings
             if (mapPoint.isBuilding()) {
@@ -106,13 +106,13 @@ public class WildAnimal extends Worker {
             }
 
             // Filter points surrounded by shallow water as animals can't walk on water
-            Collection<Vegetation> surroundingVegetation = map.getSurroundingTiles(point);
+            var surroundingVegetation = map.getSurroundingTiles(point);
 
             if (cannotWalkOnAny(surroundingVegetation)) {
                 continue;
             }
 
-            List<Point> step = new ArrayList<>();
+            var step = new ArrayList<Point>();
 
             step.add(getPosition());
             step.add(point);

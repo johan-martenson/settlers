@@ -163,7 +163,7 @@ public class Forester extends Worker {
 
                     // Place a tree if the point is still open
                     if (pointIsClearForTree(position)) {
-                        Tree.TreeType treeType = Tree.PLANTABLE_TREES[(int)(Math.floor(RANDOM.nextDouble() * Tree.PLANTABLE_TREES.length))];
+                        var treeType = Tree.PLANTABLE_TREES[(int)(Math.floor(RANDOM.nextDouble() * Tree.PLANTABLE_TREES.length))];
 
                         map.placeTree(position, treeType, Tree.TreeSize.NEWLY_PLANTED);
                     }
@@ -212,14 +212,14 @@ public class Forester extends Worker {
             }
 
             case RETURNING_TO_STORAGE -> {
-                Storehouse storehouse = (Storehouse) map.getBuildingAtPoint(position);
+                var storehouse = (Storehouse) map.getBuildingAtPoint(position);
                 storehouse.depositWorker(this);
             }
 
             case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
 
                 // Go to the closest storage
-                Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, FORESTER);
+                var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, FORESTER);
 
                 if (storehouse != null) {
                     state = State.RETURNING_TO_STORAGE;
@@ -240,13 +240,13 @@ public class Forester extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, FORESTER);
+        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, FORESTER);
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
             setTarget(storage.getPosition());
         } else {
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), FORESTER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), FORESTER);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;

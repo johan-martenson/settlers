@@ -279,7 +279,7 @@ public enum Material {
     }
 
     public String getSimpleName() {
-        String nameWithSpaces = name().replace("_", " ");
+        var nameWithSpaces = name().replace("_", " ");
 
         return nameWithSpaces.toLowerCase();
     }

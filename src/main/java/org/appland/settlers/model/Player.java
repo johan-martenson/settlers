@@ -454,7 +454,7 @@ public class Player {
     }
 
     public Storehouse getClosestStorage(Point position, Building avoid) {
-        Storehouse storehouse = null;
+        var storehouse = (Storehouse) null;
         int distance = Integer.MAX_VALUE;
 
         for (var building : getBuildings()) {
@@ -588,7 +588,7 @@ public class Player {
     }
 
     public Storehouse getClosestStorageOffroad(Point position) {
-        Building storage = null;
+        var storage = (Building) null;
         double distance = Double.MAX_VALUE;
 
         for (var building : buildings) {
@@ -1079,7 +1079,7 @@ public class Player {
     }
 
     private void addChangedAvailableConstructionForMediumBuilding(Building building) {
-        Point point = building.getPosition();
+        var point = building.getPosition();
 
         changedAvailableConstruction.add(point.downLeftLeft()); // _SEEMS LIKE_ only medium building or flag
         changedAvailableConstruction.add(point.downLeftDownLeft()); // _SEEMS LIKE_ only medium building or flag

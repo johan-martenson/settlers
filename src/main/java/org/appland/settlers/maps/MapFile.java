@@ -265,7 +265,7 @@ public class MapFile {
         int gamePointX = isEven(gamePointY) ? 0 : 1;
 
         for (MapFilePoint mapFilePoint : mapFilePoints) {
-            Point gamePoint = new Point(gamePointX, gamePointY);
+            var gamePoint = new Point(gamePointX, gamePointY);
             java.awt.Point mapFilePosition = new java.awt.Point(mapFileX, mapFileY);
 
             gamePointToMapFilePointMap.put(gamePoint, mapFilePoint);
@@ -305,7 +305,7 @@ public class MapFile {
                 System.out.println(mapFilePointToGamePointMap.get(point));
             }
 
-            MapFilePoint mapFilePoint = mapFilePointToGamePointMap.get(point);
+            var mapFilePoint = mapFilePointToGamePointMap.get(point);
             if (mapFilePoint == null) {
                 throw new InvalidMapException(String.format("The starting point %s is outside of the map.", point));
             }

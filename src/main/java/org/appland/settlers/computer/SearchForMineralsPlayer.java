@@ -107,7 +107,7 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
             lookForNewPointsToHandle();
 
             // Update points to investigate
-            List<Point> noLongerValid = new LinkedList<>();
+            var noLongerValid = new LinkedList<Point>();
 
             for (Point p : pointsToInvestigate) {
                 if (!isAvailableForSign(p)) {
@@ -145,17 +145,17 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
                     }
 
                     // Look for a suitable flag close to the point
-                    Flag flag = findFlagCloseBy(p);
+                    var flag = findFlagCloseBy(p);
 
                     if (flag == null) {
 
-                        Point flagPoint = findPointForFlagCloseBy(p);
+                        var flagPoint = findPointForFlagCloseBy(p);
 
                         if (flagPoint != null) {
                             flag = map.placeFlag(controlledPlayer, flagPoint);
 
                             // Build a road that connects with the headquarter
-                            Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, flagPoint, headquarter);
+                            var road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, flagPoint, headquarter);
 
                             // Fill the road with flags
                             GamePlayUtils.fillRoadWithFlags(map, road);
@@ -206,7 +206,7 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
             }
         } else if (state == State.WAITING_FOR_GEOLOGY_RESULTS) {
 
-            List<Point> newlyInvestigatedPoints = new LinkedList<>();
+            var newlyInvestigatedPoints = new LinkedList<Point>();
 
             // Find any new results
             for (Point p : pointsToInvestigate) {
@@ -215,7 +215,7 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
                     continue;
                 }
 
-                Sign sign = map.getSignAtPoint(p);
+                var sign = map.getSignAtPoint(p);
 
                 if (sign.getType() == null) {
                     continue;
@@ -278,8 +278,8 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
                 continue;
             }
 
-            Point hqFlagPoint = headquarter.getFlag().getPosition();
-            Point connectPoint = GamePlayUtils.findConnectionToDestinationOrExistingRoad(controlledPlayer, map, p, hqFlagPoint);
+            var hqFlagPoint = headquarter.getFlag().getPosition();
+            var connectPoint = GamePlayUtils.findConnectionToDestinationOrExistingRoad(controlledPlayer, map, p, hqFlagPoint);
 
             if (connectPoint != null) {
                 return p;
@@ -320,7 +320,7 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
             };
 
             if (activeMines.get(type) == 0) {
-                Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, p.downRight(), headquarter);
+                var road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, p.downRight(), headquarter);
 
                 GamePlayUtils.fillRoadWithFlags(map, road);
 

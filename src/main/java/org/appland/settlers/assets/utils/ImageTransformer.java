@@ -28,7 +28,7 @@ public class ImageTransformer {
     }
 
     public static List<Bitmap> normalizeImageSeries(List<Bitmap> images) {
-        NormalizedImageList normalizedImageList = new NormalizedImageList(images);
+        var normalizedImageList = new NormalizedImageList(images);
 
         return normalizedImageList.getNormalizedImages();
     }
@@ -36,7 +36,7 @@ public class ImageTransformer {
     public static List<Bitmap> makeGetHitAnimation(Bitmap image) {
         var whiteSilhouette = makeSilhouette(image);
 
-        List<Bitmap> getHitAnimation = new ArrayList<>();
+        var getHitAnimation = new ArrayList<Bitmap>();
 
         getHitAnimation.add(image);
         getHitAnimation.add(image);

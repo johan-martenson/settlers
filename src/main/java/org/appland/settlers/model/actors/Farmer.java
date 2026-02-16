@@ -186,7 +186,7 @@ public class Farmer extends Worker {
             return false;
         }
 
-        GameUtils.AllocationTracker allocationTracker = wheatAllocationTracker.get();
+        var allocationTracker = wheatAllocationTracker.get();
 
         return building.isReady() &&
                 building.needsMaterial(WHEAT) &&
@@ -275,14 +275,14 @@ public class Farmer extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, FARMER);
+        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, FARMER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
 
             setTarget(storage.getPosition());
         } else {
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, FARMER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, FARMER);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;

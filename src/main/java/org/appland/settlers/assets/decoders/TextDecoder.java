@@ -38,7 +38,7 @@ public class TextDecoder {
      * @throws InvalidFormatException If the stream format is invalid
      */
     public static List<String> loadTextFromStream(ByteReader streamReader) throws IOException, InvalidFormatException {
-        List<String> textsLoaded = new ArrayList<>();
+        var textsLoaded = new ArrayList<String>();
 
         byte[] header = streamReader.getUint8ArrayAsBytes(2);
 
@@ -55,7 +55,7 @@ public class TextDecoder {
 
             System.arraycopy(remainingBytes, 0, fullTextAsBytes, 2, remainingBytes.length);
 
-            String text = Utils.convertNullTerminatedBytesToString(fullTextAsBytes);
+            var text = Utils.convertNullTerminatedBytesToString(fullTextAsBytes);
             textsLoaded.add(text);
         } else {
             int count = streamReader.getUint16();

@@ -15,7 +15,7 @@ import org.appland.settlers.model.Material;
 class Utils {
 
     static String getHex(byte[] blockHeader1) {
-        StringBuilder hex = new StringBuilder();
+        var hex = new StringBuilder();
 
         for (byte b : blockHeader1) {
             hex.append(String.format("%02X", b & 0xff));
@@ -74,7 +74,7 @@ class Utils {
     }
 
     public static String shortAsHex(short s) {
-        String intHexString = Integer.toHexString(s);
+        var intHexString = Integer.toHexString(s);
 
         return intHexString.substring(4);
     }

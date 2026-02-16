@@ -39,7 +39,7 @@ public class WatchTower extends Building {
 
     @Override
     public void doUpgradeBuilding() {
-        Building upgraded = new Fortress(getPlayer());
+        var upgraded = new Fortress(getPlayer());
 
         GameUtils.upgradeMilitaryBuilding(this, upgraded);
     }

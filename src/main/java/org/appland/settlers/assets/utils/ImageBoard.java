@@ -60,8 +60,8 @@ public class ImageBoard {
      * @throws IOException if an I/O error occurs
      */
     public void writeBoard(String directory, String baseFilename, Palette palette) throws IOException {
-        Path pathBitmapFile = Paths.get(directory, String.format("%s.png", baseFilename));
-        Path pathJsonFile = Paths.get(directory, String.format("%s.json", baseFilename));
+        var pathBitmapFile = Paths.get(directory, String.format("%s.png", baseFilename));
+        var pathJsonFile = Paths.get(directory, String.format("%s.json", baseFilename));
 
         writeBoardToBitmap(palette).writeToFile(pathBitmapFile);
         Files.writeString(pathJsonFile, getMetadataAsJson().toJSONString());
@@ -158,7 +158,7 @@ public class ImageBoard {
         }
 
         images.put(image, new ImageOnBoard(image, x, y, metadata));
-        ImageOnBoard imageOnBoard = images.get(image);
+        var imageOnBoard = images.get(image);
 
         return new JSONObject(Map.of(
                 "x", imageOnBoard.x,
@@ -194,7 +194,7 @@ public class ImageBoard {
      * @return the JSON object representing the image series location
      */
     public JSONObject placeImageSeries(List<Bitmap> images, int x, int y, LayoutDirection layoutDirection, String... metadata) {
-        ImageSeries imageSeriesToPlace = new ImageSeries(images, x, y, layoutDirection, metadata);
+        var imageSeriesToPlace = new ImageSeries(images, x, y, layoutDirection, metadata);
 
         imageSeries.put(images, imageSeriesToPlace);
 
@@ -235,7 +235,7 @@ public class ImageBoard {
         }
 
         // Create the bitmap
-        Bitmap imageBoard = new Bitmap(width, height, palette, TextureFormat.BGRA);
+        var imageBoard = new Bitmap(width, height, palette, TextureFormat.BGRA);
 
         // Copy all images onto the board
         images.values().forEach(imageOnBoard ->
@@ -276,7 +276,7 @@ public class ImageBoard {
      * @return the JSON object representing the image location
      */
     public JSONObject imageLocationToJson(Bitmap image) {
-        ImageOnBoard imageOnBoard = images.get(image);
+        var imageOnBoard = images.get(image);
 
         return new JSONObject(Map.of(
                 "x", imageOnBoard.x,
@@ -295,7 +295,7 @@ public class ImageBoard {
      * @return the JSON object representing the image series location
      */
     public JSONObject imageSeriesLocationToJson(List<Bitmap> images) {
-        ImageSeries oneImageSeries = this.imageSeries.get(images);
+        var oneImageSeries = this.imageSeries.get(images);
 
         return new JSONObject(Map.of(
                 "startX", oneImageSeries.x,
@@ -370,7 +370,7 @@ public class ImageBoard {
             this.x = x;
             this.y = y;
 
-            Bitmap image = images.getFirst();
+            var image = images.getFirst();
 
             this.width = image.getWidth();
             this.height = image.getHeight();
@@ -459,7 +459,7 @@ public class ImageBoard {
      * @param imageOnBoard the image on the board
      */
     private void addMetadataForImageToRoot(JSONObject jsonRoot, ImageOnBoard imageOnBoard) {
-        JSONObject jsonCurrent = jsonRoot;
+        var jsonCurrent = jsonRoot;
 
         for (var label : imageOnBoard.metadata()) {
             jsonCurrent = (JSONObject) jsonCurrent.computeIfAbsent(label, k -> new JSONObject());
@@ -480,7 +480,7 @@ public class ImageBoard {
      * @param imageSeries the image series
      */
     private void addMetadataForImageSeriesToRoot(JSONObject jsonRoot, ImageSeries imageSeries) {
-        JSONObject jsonCurrent = jsonRoot;
+        var jsonCurrent = jsonRoot;
 
         for (var label : imageSeries.metadata) {
             jsonCurrent = (JSONObject) jsonCurrent.computeIfAbsent(label, k -> new JSONObject());
@@ -501,7 +501,7 @@ public class ImageBoard {
      * @return the JSON object containing the metadata
      */
     public JSONObject getMetadataAsJson() {
-        JSONObject jsonRoot = new JSONObject();
+        var jsonRoot = new JSONObject();
 
         images.values().forEach(imageOnBoard -> addMetadataForImageToRoot(jsonRoot, imageOnBoard));
         imageSeries.values().forEach(imageSeries -> addMetadataForImageSeriesToRoot(jsonRoot, imageSeries));

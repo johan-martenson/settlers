@@ -33,7 +33,7 @@ public class Barracks extends Building {
 
     @Override
     public void doUpgradeBuilding() {
-        Building upgraded = new GuardHouse(getPlayer());
+        var upgraded = new GuardHouse(getPlayer());
 
         GameUtils.upgradeMilitaryBuilding(this, upgraded);
     }

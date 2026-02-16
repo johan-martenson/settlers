@@ -39,7 +39,7 @@ public class Utils {
     }
 
     static String getHex(byte[] bytes) {
-        StringBuilder hex = new StringBuilder();
+        var hex = new StringBuilder();
 
         for (byte b : bytes) {
             hex.append(Integer.toHexString(b & 0xff));
@@ -106,7 +106,7 @@ public class Utils {
      * @throws IOException If an I/O error occurs.
      */
     public static boolean isValidGameDirectory(String fromDir) throws IOException {
-        Path fromDirPath = Paths.get(fromDir);
+        var fromDirPath = Paths.get(fromDir);
 
         if (!Files.isDirectory(fromDirPath)) {
             System.out.println("Not a directory!");
@@ -148,7 +148,7 @@ public class Utils {
      * @throws IOException If an I/O error occurs.
      */
     public static boolean isEmptyDirectory(String toDir) throws IOException {
-        Path toDirPath = Paths.get(toDir);
+        var toDirPath = Paths.get(toDir);
 
         if (!Files.isDirectory(toDirPath)) {
             System.out.println("Is not dir");
@@ -290,7 +290,7 @@ public class Utils {
      * @return The Bitmap image.
      */
     public static Bitmap getImageAt(List<GameResource> gameResourceList, int location) {
-        GameResource gameResource = gameResourceList.get(location);
+        var gameResource = gameResourceList.get(location);
 
         return getBitmapFromGameResource(gameResource);
     }
