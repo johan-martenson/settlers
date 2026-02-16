@@ -18,7 +18,13 @@ import static org.appland.settlers.assets.Utils.getImagesAt;
 import static org.appland.settlers.assets.Utils.getPlayerImagesAt;
 
 public class FlagExtractor {
+    private static void log(String log) {
+        System.out.println(log);
+    }
+
     public static void extractFlags(String fromDir, String toDir, Palette defaultPalette) throws UnknownResourceTypeException, IOException, InvalidFormatException {
+        log("");
+        log("Extracting flags:");
 
         var afrZLst = LstDecoder.loadLstFile(fromDir + "/" + AfrZLst.FILENAME, defaultPalette);
         var japZLst = LstDecoder.loadLstFile(fromDir + "/" + JapZLst.FILENAME, defaultPalette);
@@ -37,6 +43,8 @@ public class FlagExtractor {
         flagImageCollection.addImagesForFlag(AFRICANS, Flag.FlagType.MARINE, getPlayerImagesAt(afrZLst, AfrZLst.MARINE_FLAG_ANIMATION, 8));
         flagImageCollection.addImagesForFlagShadow(AFRICANS, Flag.FlagType.MARINE, getImagesAt(afrZLst, AfrZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
 
+        log(" - Africans");
+
         // Japanese
         flagImageCollection.addImagesForFlag(JAPANESE, Flag.FlagType.NORMAL, getPlayerImagesAt(japZLst, JapZLst.NORMAL_FLAG_ANIMATION, 8));
         flagImageCollection.addImagesForFlagShadow(JAPANESE, Flag.FlagType.NORMAL, getImagesAt(japZLst, JapZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
@@ -46,6 +54,8 @@ public class FlagExtractor {
 
         flagImageCollection.addImagesForFlag(JAPANESE, Flag.FlagType.MARINE, getPlayerImagesAt(japZLst, JapZLst.MARINE_FLAG_ANIMATION, 8));
         flagImageCollection.addImagesForFlagShadow(JAPANESE, Flag.FlagType.MARINE, getImagesAt(japZLst, JapZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
+
+        log(" - Japanese");
 
         // Romans
         flagImageCollection.addImagesForFlag(ROMANS, Flag.FlagType.NORMAL, getPlayerImagesAt(romZLst, RomZLst.NORMAL_FLAG_ANIMATION, 8));
@@ -57,6 +67,8 @@ public class FlagExtractor {
         flagImageCollection.addImagesForFlag(ROMANS, Flag.FlagType.MARINE, getPlayerImagesAt(romZLst, RomZLst.MARINE_FLAG_ANIMATION, 8));
         flagImageCollection.addImagesForFlagShadow(ROMANS, Flag.FlagType.MARINE, getImagesAt(romZLst, RomZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
 
+        log(" - Romans");
+
         // Vikings
         flagImageCollection.addImagesForFlag(VIKINGS, Flag.FlagType.NORMAL, getPlayerImagesAt(vikZLst, VikZLst.NORMAL_FLAG_ANIMATION, 8));
         flagImageCollection.addImagesForFlagShadow(VIKINGS, Flag.FlagType.NORMAL, getImagesAt(vikZLst, VikZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
@@ -66,6 +78,8 @@ public class FlagExtractor {
 
         flagImageCollection.addImagesForFlag(VIKINGS, Flag.FlagType.MARINE, getPlayerImagesAt(vikZLst, VikZLst.MARINE_FLAG_ANIMATION, 8));
         flagImageCollection.addImagesForFlagShadow(VIKINGS, Flag.FlagType.MARINE, getImagesAt(vikZLst, VikZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
+
+        log(" - Vikings");
 
         // Write the image atlas to file
         flagImageCollection.writeImageAtlas(toDir + "/", defaultPalette);

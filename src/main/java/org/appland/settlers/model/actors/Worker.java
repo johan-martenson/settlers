@@ -406,10 +406,6 @@ public abstract class Worker {
 
     // FIXME: HOTSPOT - allocations
     void setOffroadTarget(Point point, Point via, OffroadOption... offroadOptions) {
-        System.out.println();
-        System.out.println(this);
-        System.out.println("Set offroad target");
-
         var offroadOptionsSet = offroadOptions == null ? new HashSet<>() : new HashSet<>(List.of(offroadOptions));
         var wasInside = false;
 

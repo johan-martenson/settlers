@@ -664,9 +664,9 @@ public class TestMerchandise {
 
         Utils.waitForBuildingToBeConstructed(well);
 
-        var worker = (WellWorker) Utils.waitForNonMilitaryBuildingToGetPopulated(well);
+        var wellWorker = (WellWorker) Utils.waitForNonMilitaryBuildingToGetPopulated(well);
 
-        assertTrue(worker.isInsideBuilding());
+        assertTrue(wellWorker.isInsideBuilding());
 
         // Verify that the merchandise statistics for water are updated when water is produced
         var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
@@ -675,7 +675,9 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.water().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.water().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, worker, Material.WATER);
+        Utils.fastForwardUntilWorkerCarriesCargo(map, wellWorker, Material.WATER);
+
+        Utils.waitForWorkerToSetTarget(map, wellWorker, well.getFlag().getPosition());
 
         assertEquals(merchandiseStatistics.water().getMeasurements().size(), 2);
         assertTrue(merchandiseStatistics.water().getMeasurements().getLast().time() > 1);
@@ -1481,9 +1483,9 @@ public class TestMerchandise {
 
         Utils.waitForBuildingToBeConstructed(well);
 
-        var worker = (WellWorker) Utils.waitForNonMilitaryBuildingToGetPopulated(well);
+        var wellWorker = (WellWorker) Utils.waitForNonMilitaryBuildingToGetPopulated(well);
 
-        assertTrue(worker.isInsideBuilding());
+        assertTrue(wellWorker.isInsideBuilding());
 
         // Start listening to statistics events
         var monitor = new Utils.GameViewMonitor();
@@ -1498,7 +1500,9 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.water().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.water().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, worker, Material.WATER);
+        Utils.fastForwardUntilWorkerCarriesCargo(map, wellWorker, Material.WATER);
+
+        Utils.waitForWorkerToSetTarget(map, wellWorker, well.getFlag().getPosition());
 
         assertEquals(monitor.getStatisticsEvents().size(), 1);
         assertEquals(merchandiseStatistics.water().getMeasurements().size(), 2);

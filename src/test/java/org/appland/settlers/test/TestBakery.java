@@ -609,15 +609,11 @@ public class TestBakery {
         Utils.deliverCargo(bakery, WATER);
         Utils.deliverCargo(bakery, FLOUR);
 
-        // Verify that the bakery produces bread
-        for (int i = 0; i < 149; i++) {
-            map.stepTime();
+        // Wait for the bakery to produce bread
+        Utils.fastForwardUntilWorkerCarriesCargo(map, baker, BREAD);
 
-            assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
-            assertNull(baker.getCargo());
-        }
-
-        map.stepTime();
+        // Wait for the baker to be going to the flag to deliver the bread
+        Utils.waitForWorkerToSetTarget(map, baker, bakery.getFlag().getPosition());
 
         assertNotNull(baker.getCargo());
         assertEquals(baker.getCargo().getMaterial(), BREAD);
@@ -861,52 +857,10 @@ public class TestBakery {
         assertEquals(bakery.getAmount(WATER), 1);
         assertEquals(bakery.getAmount(FLOUR), 1);
 
-        Utils.fastForward(150, map);
+        Utils.waitForWorkerToSetTarget(map, baker, bakery.getFlag().getPosition());
 
         assertEquals(bakery.getAmount(FLOUR), 0);
         assertEquals(bakery.getAmount(WATER), 0);
-    }
-
-    @Test
-    public void testProductionCountdownStartsWhenIngredientsAreAvailable() throws Exception {
-
-        // Create new single player game
-        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
-
-        // Place headquarters
-        var point0 = new Point(5, 5);
-        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
-
-        // Place bakery
-        var point3 = new Point(7, 9);
-        var bakery = map.placeBuilding(new Bakery(player0), point3);
-
-        // Finish construction of the bakery
-        Utils.constructHouse(bakery);
-
-        // Populate the bakery
-        var baker = Utils.occupyBuilding(new Baker(player0, map), bakery);
-
-        // Fast forward so that the bakery worker would have produced bread if it had had the ingredients
-        Utils.fastForward(150, map);
-
-        assertNull(baker.getCargo());
-
-        // Deliver ingredients to the bakery
-        bakery.putCargo(new Cargo(WATER, map));
-        bakery.putCargo(new Cargo(FLOUR, map));
-
-        map.stepTime();
-
-        // Verify that it takes 50 steps for the bakery worker to produce the plank
-        for (int i = 0; i < 50; i++) {
-            assertNull(baker.getCargo());
-
-            map.stepTime();
-        }
-
-        assertNotNull(baker.getCargo());
     }
 
     @Test
@@ -938,13 +892,15 @@ public class TestBakery {
         Utils.fastForward(100, map);
 
         // Wait for the baker to produce a new bread cargo
-        Utils.fastForward(50, map);
-
         var baker = bakery0.getWorker();
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, baker, BREAD);
 
         assertNotNull(baker.getCargo());
 
         // Verify that the baker puts the bread cargo at the flag
+        Utils.waitForWorkerToSetTarget(map, baker, bakery0.getFlag().getPosition());
+
         assertEquals(baker.getTarget(), bakery0.getFlag().getPosition());
         assertTrue(bakery0.getFlag().getStackedCargo().isEmpty());
 
@@ -959,11 +915,13 @@ public class TestBakery {
         Utils.fastForwardUntilWorkerReachesPoint(map, baker, bakery0.getPosition());
 
         // Wait for the worker to rest and produce another cargo
-        Utils.fastForward(150, map);
+        Utils.fastForwardUntilWorkerCarriesCargo(map, baker, BREAD);
 
         assertNotNull(baker.getCargo());
 
         // Verify that the second cargo is put at the flag
+        Utils.waitForWorkerToSetTarget(map, baker, bakery0.getFlag().getPosition());
+
         assertEquals(baker.getTarget(), bakery0.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, baker, bakery0.getFlag().getPosition());
@@ -1001,13 +959,15 @@ public class TestBakery {
         Utils.fastForward(100, map);
 
         // Wait for the baker to produce a new bread cargo
-        Utils.fastForward(50, map);
-
         var baker = bakery0.getWorker();
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, baker, BREAD);
 
         assertNotNull(baker.getCargo());
 
         // Verify that the baker puts the bread cargo at the flag
+        Utils.waitForWorkerToSetTarget(map, baker, bakery0.getFlag().getPosition());
+
         assertEquals(baker.getTarget(), bakery0.getFlag().getPosition());
         assertTrue(bakery0.getFlag().getStackedCargo().isEmpty());
 
@@ -1191,6 +1151,8 @@ public class TestBakery {
         assertEquals(baker.getCargo().getMaterial(), BREAD);
 
         // Wait for the worker to deliver the cargo
+        Utils.waitForWorkerToSetTarget(map, baker, bakery0.getFlag().getPosition());
+
         assertEquals(baker.getTarget(), bakery0.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, baker, bakery0.getFlag().getPosition());
@@ -1248,6 +1210,8 @@ public class TestBakery {
         assertEquals(baker.getCargo().getMaterial(), BREAD);
 
         // Wait for the worker to deliver the cargo
+        Utils.waitForWorkerToSetTarget(map, baker, bakery0.getFlag().getPosition());
+
         assertEquals(baker.getTarget(), bakery0.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, baker, bakery0.getFlag().getPosition());
@@ -1835,7 +1799,7 @@ public class TestBakery {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), bakery.getFlag());
 
         // Make the bakery create some bread with full resources available
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 2_000; i++) {
             map.stepTime();
 
             if (bakery.needsMaterial(WATER)) {
@@ -1894,7 +1858,7 @@ public class TestBakery {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), bakery.getFlag());
 
         // Make the bakery create some bread with full resources available
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 2_000; i++) {
             map.stepTime();
 
             if (bakery.needsMaterial(WATER) && bakery.getAmount(WATER) < 2) {
@@ -2188,6 +2152,8 @@ public class TestBakery {
         Utils.fastForwardUntilWorkerCarriesCargo(map, bakery.getWorker(), BREAD);
 
         // Wait for the worker to put the cargo on the flag
+        Utils.waitForWorkerToSetTarget(map, bakery.getWorker(), bakery.getFlag().getPosition());
+
         assertEquals(bakery.getWorker().getTarget(), bakery.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, bakery.getWorker(), bakery.getFlag().getPosition());

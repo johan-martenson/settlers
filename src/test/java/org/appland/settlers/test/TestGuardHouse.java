@@ -43,7 +43,7 @@ import static org.junit.Assert.*;
 public class TestGuardHouse {
 
     /*
-    TODO: test upgrade
+    TODO: test upgrade, incl. not upgrading burning and destroyed guard house
      */
 
     @Test

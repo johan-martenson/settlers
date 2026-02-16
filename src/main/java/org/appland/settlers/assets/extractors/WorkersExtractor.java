@@ -485,6 +485,8 @@ public class WorkersExtractor {
 
         pigBreederCollector.readCargoImagesFromBob(PIG, PIG_BREEDER_BOB.getBodyType(), PIG_BREEDER_WITH_PIG_CARGO_BOB_ID, bob);
 
+        pigBreederCollector.addAnimation(FEED_THE_PIGS, cbobRomBobsLst, CbobRomBobsLst.FEEDING_PIGS);
+
         millerCollector.readCargoImagesFromBob(FLOUR, MILLER_BOB.getBodyType(), MILLER_WITH_FLOUR_CARGO_BOB_ID, bob);
 
         bakerCollector.readCargoImagesFromBob(BREAD, BAKER_BOB.getBodyType(), BAKER_WITH_BREAD_CARGO_BOB_ID, bob);

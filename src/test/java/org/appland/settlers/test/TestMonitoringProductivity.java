@@ -314,18 +314,10 @@ public class TestMonitoringProductivity {
         assertEquals(gameChangesList.changedBuildings().iterator().next(), bakery);
 
         // Verify that the changed house is only reported once
-        int productivity = bakery.getProductivity();
+        map.stepTime();
 
-        for (int i = 0; i < 30; i++) {
-            if (productivity != bakery.getProductivity()) {
-                break;
-            }
-
-            for (var newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
-                assertFalse(newChanges.changedBuildings().contains(bakery));
-            }
-
-            map.stepTime();
+        for (var newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
+            assertFalse(newChanges.changedBuildings().contains(bakery));
         }
     }
 

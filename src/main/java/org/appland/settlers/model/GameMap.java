@@ -461,9 +461,6 @@ public class GameMap {
                                     .forEach(player::reportWorkerOutside);
 
             newFallingTrees.stream()
-                            .forEach(tree -> System.out.println(player.getDiscoveredLand().contains(tree.getPosition())));
-
-            newFallingTrees.stream()
                     .filter(tree -> player.getDiscoveredLand().contains(tree.getPosition()))
                     .forEach(player::reportNewFallingTree);
 

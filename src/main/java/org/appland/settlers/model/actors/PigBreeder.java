@@ -5,6 +5,7 @@ import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
 
@@ -15,7 +16,8 @@ import static org.appland.settlers.model.actors.PigBreeder.State.*;
  * @author johan
  */
 @Walker(speed = 10)
-public class PigBreeder extends Worker {
+public class
+PigBreeder extends Worker {
     private static final int TIME_TO_REST = 99;
     private static final int TIME_TO_FEED = 19;
     private static final int TIME_TO_PREPARE_PIG = 19;
@@ -64,7 +66,7 @@ public class PigBreeder extends Worker {
                 if (countdown.hasReachedZero() && home.isProductionEnabled()) {
                     if (home.getAmount(WATER) > 0 && home.getAmount(WHEAT) > 0) {
                         state = State.GOING_OUT_TO_FEED;
-                        setOffroadTarget(getHome().getPosition().downLeft());
+                        setOffroadTarget(home.getPosition().downRight());
                     } else {
                         productivityMeasurer.reportUnproductivity();
                     }
@@ -168,6 +170,7 @@ public class PigBreeder extends Worker {
             case GOING_OUT_TO_FEED -> {
                 countdown.countFrom(TIME_TO_FEED);
                 state = FEEDING;
+                doAction(WorkerAction.FEED_THE_PIGS);
             }
 
             case RETURNING_TO_STORAGE -> {

@@ -1663,7 +1663,7 @@ public class Utils {
     }
 
     public static void waitForWorkerToBeInside(Worker worker, GameMap map) throws InvalidUserActionException {
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 10_000; i++) {
             if (worker.isInsideBuilding()) {
                 break;
             }

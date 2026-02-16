@@ -1,5 +1,7 @@
 package org.appland.settlers.assets.gamefiles;
 
+import org.appland.settlers.assets.utils.Animation;
+
 /**
      * Layout of data in MAPBOBS.LST
      * <p>
@@ -492,6 +494,14 @@ public class MapBobsLst {
     public static final int SHEEP_WALKING_WEST_ANIMATION = 824;
     public static final int SHEEP_WALKING_NORTH_WEST_ANIMATION = 826;
     public static final int SHEEP_WALKING_NORTH_EAST_ANIMATION = 828;
+    public static final Animation PIG_ACTION_1 = new Animation(832, 12);
+    public static final Animation PIG_ACTION_2 = new Animation(844, 12);
+    public static final Animation PIG_ACTION_3 = new Animation(856, 12);
+    public static final Animation PIG_ACTION_4 = new Animation(868, 12);
+    public static final Animation PIG_ACTION_5 = new Animation(880, 12);
+    public static final Animation PIG_ACTION_6 = new Animation(892, 12);
+    public static final int ADULT_PIG_SHADOW = 892;
+    public static final int PIGLET_SHADOW = 893;
     public static final int BEER_CARGO = 894;
     public static final int TONG_CARGO = 895;
     public static final int AXE_CARGO = 896;

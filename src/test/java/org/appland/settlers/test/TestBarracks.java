@@ -1139,6 +1139,81 @@ public class TestBarracks {
     }
 
     @Test
+    public void testCannotUpgradeBurningBarracks() throws Exception {
+
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
+
+        // Place headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place barracks
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
+
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
+
+        // Wait for the barracks to get constructed and occupied
+        Utils.waitForBuildingToBeConstructed(barracks0);
+
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
+
+        // Tear down the barracks
+        barracks0.tearDown();
+
+        // Verify that it's not possible to upgrade a burning barracks
+        assertTrue(barracks0.isBurningDown());
+
+        try {
+            barracks0.upgrade();
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+    }
+
+    @Test
+    public void testCannotUpgradeDestroyedBarracks() throws Exception {
+
+        // Creating new player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
+
+        // Place headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place barracks
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
+
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
+
+        // Wait for the barracks to get constructed and occupied
+        Utils.waitForBuildingToBeConstructed(barracks0);
+
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
+
+        // Tear down the barracks
+        barracks0.tearDown();
+
+        // Wait for the barracks to stop burning
+        Utils.waitForBuildingToBurnDown(barracks0);
+
+        // Verify that it's not possible to upgrade a burning barracks
+        assertFalse(barracks0.isBurningDown());
+
+        try {
+            barracks0.upgrade();
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+    }
+
+    @Test
     public void testUnfinishedBarracksCannotBeUpgraded() throws Exception {
 
         // Creating new player

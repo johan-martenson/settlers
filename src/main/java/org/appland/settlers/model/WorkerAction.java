@@ -38,5 +38,6 @@ public enum WorkerAction {
     SLAUGHTERING,
     DRAW_WATER_1,
     DRAW_WATER_2,
-    DRAW_WATER_3;
+    DRAW_WATER_3,
+    FEED_THE_PIGS;
 }

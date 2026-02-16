@@ -1,5 +1,7 @@
 package org.appland.settlers.assets.gamefiles;
 
+import org.appland.settlers.assets.utils.Animation;
+
 public class MapBobs0Lst {
     public static final String FILENAME = "DATA/MAPBOBS0.LST";
 
@@ -49,6 +51,8 @@ public class MapBobs0Lst {
     public static final int DONKEY_EAST_SHADOW = 833;
     public static final int DONKEY_SOUTH_EAST_SHADOW = 834;
     public static final int DONKEY_SOUTH_WEST_SHADOW = 835;
+    public static final Animation PIG_ACTION_1 = new Animation(856, 12);
+    public static final Animation PIG_ACTION_2 = new Animation(868, 12);
 
     public static final int DONKEY_BREEDER_ICON = 1012;
 }

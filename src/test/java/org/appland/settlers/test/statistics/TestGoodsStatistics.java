@@ -68,6 +68,7 @@ import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Vegetation.WATER;
@@ -705,7 +706,7 @@ public class TestGoodsStatistics {
         var nrStatisticsEventsBefore = monitor.getStatisticsEvents().size();
 
         for (int i = 0; i < 10_000; i++) {
-            if (wellWorker.getCargo() != null) {
+            if (wellWorker.getCargo() != null && Objects.equals(wellWorker.getTarget(), well.getFlag().getPosition())) {
                 break;
             }
 

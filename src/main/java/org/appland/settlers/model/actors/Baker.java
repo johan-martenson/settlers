@@ -77,20 +77,18 @@ public class Baker extends Worker {
 
     @Override
     protected void onIdle() {
-        if (countdown.isActive() && !countdown.hasReachedZero()) {
+        if (!countdown.hasReachedZero()) {
             countdown.step();
         } else {
             switch (state) {
                 case RESTING_IN_HOUSE -> {
-                    if (countdown.hasReachedZero()) {
-                        if (home.has(WATER, FLOUR) && home.isProductionEnabled() && home.getFlag().hasPlaceForMoreCargo()) {
-                            state = GOING_OUT_TO_BAKE_BREAD;
-                            countdown.countFrom(PRODUCTION_TIME);
-                            productivityMeasurer.nextProductivityCycle();
-                            walkHalfWayOffroadTo(home.getPosition().downLeft(), OffroadOption.DONT_WALK_VIA_FLAG);
-                        } else {
-                            productivityMeasurer.reportUnproductivity();
-                        }
+                    if (home.has(WATER, FLOUR) && home.isProductionEnabled() && home.getFlag().hasPlaceForMoreCargo()) {
+                        state = GOING_OUT_TO_BAKE_BREAD;
+                        countdown.countFrom(PRODUCTION_TIME);
+                        productivityMeasurer.nextProductivityCycle();
+                        walkHalfWayOffroadTo(home.getPosition().downLeft(), OffroadOption.DONT_WALK_VIA_FLAG);
+                    } else {
+                        productivityMeasurer.reportUnproductivity();
                     }
                 }
 
@@ -106,50 +104,40 @@ public class Baker extends Worker {
                 }
 
                 case PUTTING_BREAD_INTO_OVEN -> {
-                    if (countdown.hasReachedZero()) {
-                        direction = Direction.LEFT;
-                        state = WAITING_FOR_BREAD_TO_BAKE;
-                        countdown.countFrom(TIME_FOR_BREAD_TO_BAKE);
-                    }
+                    direction = Direction.LEFT;
+                    state = WAITING_FOR_BREAD_TO_BAKE;
+                    countdown.countFrom(TIME_FOR_BREAD_TO_BAKE);
                 }
 
                 case WAITING_FOR_BREAD_TO_BAKE -> {
-                    if (countdown.hasReachedZero()) {
-                        state = TAKING_BREAD_OUT_OF_OVEN;
-                        countdown.countFrom(TIME_TO_TAKE_BREAD_OUT_OF_OVEN);
-                        doAction(OPEN_OVEN);
-                        map.reportChangedBuilding(home);
-                    }
+                    state = TAKING_BREAD_OUT_OF_OVEN;
+                    countdown.countFrom(TIME_TO_TAKE_BREAD_OUT_OF_OVEN);
+                    doAction(OPEN_OVEN);
+                    map.reportChangedBuilding(home);
                 }
 
                 case TAKING_BREAD_OUT_OF_OVEN -> {
-                    if (countdown.hasReachedZero()) {
-                        home.consume(WATER, FLOUR);
-                        setCargo(new Cargo(BREAD, map));
-                        productivityMeasurer.reportProductivity();
-                        map.getStatisticsManager().breadProduced(player, map.getTime());
+                    home.consume(WATER, FLOUR);
+                    setCargo(new Cargo(BREAD, map));
+                    productivityMeasurer.reportProductivity();
+                    map.getStatisticsManager().breadProduced(player, map.getTime());
 
-                        state = GOING_BACK_TO_HOUSE_WITH_BREAD;
-                        returnToFixedPoint();
-                    }
+                    state = GOING_BACK_TO_HOUSE_WITH_BREAD;
+                    returnToFixedPoint();
                 }
 
                 case WAITING_IN_HOUSE_WITH_BREAD -> {
-                    if (countdown.hasReachedZero()) {
-                        if (home.getFlag().hasPlaceForMoreCargo()) {
-                            home.getFlag().promiseCargo(carriedCargo);
+                    if (home.getFlag().hasPlaceForMoreCargo()) {
+                        home.getFlag().promiseCargo(carriedCargo);
 
-                            state = GOING_TO_FLAG_WITH_BREAD;
-                            setTarget(home.getFlag().getPosition());
+                        state = GOING_TO_FLAG_WITH_BREAD;
+                        setTarget(home.getFlag().getPosition());
 
-                        }
                     }
                 }
 
                 case DEAD -> {
-                    if (countdown.hasReachedZero()) {
-                        map.removeWorker(this);
-                    }
+                    map.removeWorker(this);
                 }
             }
         }

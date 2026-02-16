@@ -19,7 +19,6 @@ import org.appland.settlers.model.buildings.Storehouse;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
@@ -35,13 +34,11 @@ public class TestPigFarm {
     @Test
     public void testPigFarmOnlyNeedsThreePlanksAndThreeStonesForConstruction() throws Exception {
 
-        // Starting new game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point21 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -73,13 +70,11 @@ public class TestPigFarm {
     @Test
     public void testPigFarmCannotBeConstructedWithTooFewPlanks() throws Exception {
 
-        // Starting new game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point21 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -110,13 +105,11 @@ public class TestPigFarm {
     @Test
     public void testPigFarmCannotBeConstructedWithTooFewStones() throws Exception {
 
-        // Starting new game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point21 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -147,13 +140,11 @@ public class TestPigFarm {
     @Test
     public void testUnfinishedPigFarmNeedsNoPigBreeder() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(15, 11);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -168,13 +159,11 @@ public class TestPigFarm {
     @Test
     public void testFinishedPigFarmNeedsPigBreeder() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -191,13 +180,11 @@ public class TestPigFarm {
     @Test
     public void testPigBreederIsAssignedToFinishedPigFarm() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -205,7 +192,7 @@ public class TestPigFarm {
         var point3 = new Point(10, 6);
         var farm = map.placeBuilding(new PigFarm(player0), point3);
 
-        // Connect the pig farm with the headquarter
+        // Connect the pig farm with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         // Finish the pig farm
@@ -223,13 +210,11 @@ public class TestPigFarm {
     @Test
     public void testPigBreederIsNotASoldier() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -237,7 +222,7 @@ public class TestPigFarm {
         var point3 = new Point(10, 6);
         var farm = map.placeBuilding(new PigFarm(player0), point3);
 
-        // Connect the pig farm with the headquarter
+        // Connect the pig farm with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         // Finish the pig farm
@@ -256,13 +241,11 @@ public class TestPigFarm {
     @Test
     public void testPigBreederRestsInPigFarmThenLeaves() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -270,7 +253,7 @@ public class TestPigFarm {
         var point3 = new Point(10, 6);
         var pigFarm = map.placeBuilding(new PigFarm(player0), point3);
 
-        // Connect the pig farm with the headquarter
+        // Connect the pig farm with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), headquarter.getFlag());
 
         // Wait for the pig farm to get constructed and occupied
@@ -304,13 +287,11 @@ public class TestPigFarm {
     @Test
     public void testPigBreederFeedsThePigsWhenItHasResources() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -318,7 +299,7 @@ public class TestPigFarm {
         var point3 = new Point(10, 6);
         var pigFarm = map.placeBuilding(new PigFarm(player0), point3);
 
-        // Connect the pig farm with the headquarter
+        // Connect the pig farm with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), headquarter.getFlag());
 
         // Wait for the pig farm to get constructed and occupied
@@ -377,13 +358,11 @@ public class TestPigFarm {
     @Test
     public void testPigBreederReturnsAfterFeeding() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -391,7 +370,7 @@ public class TestPigFarm {
         var point3 = new Point(10, 6);
         var pigFarm = map.placeBuilding(new PigFarm(player0), point3);
 
-        // Connect the pig farm with the headquarter
+        // Connect the pig farm with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), headquarter.getFlag());
 
         // Wait for the pig farm to get constructed and occupied
@@ -456,21 +435,19 @@ public class TestPigFarm {
     @Test
     public void testPigBreederDeliversPigToFlag() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place pig farm
-        var point3 = new Point(10, 6);
-        var pigFarm = map.placeBuilding(new PigFarm(player0), point3);
+        var point1 = new Point(10, 6);
+        var pigFarm = map.placeBuilding(new PigFarm(player0), point1);
 
-        // Connect the pig farm with the headquarter
+        // Connect the pig farm with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), headquarter.getFlag());
 
         // Wait for the pig farm to get constructed and occupied
@@ -483,53 +460,61 @@ public class TestPigFarm {
         Utils.deliverCargo(pigFarm, WATER);
         Utils.deliverCargo(pigFarm, WHEAT);
 
+        // Verify that the pig farm has a pig that's eating
+        assertFalse(pigFarm.getPigs().isEmpty());
+        //assertTrue(pigFarm.getPigs().getFirst().isEating());
+        //assertEquals(pigFarm.getPigs().getFirst().getPosition(), pigFarm.getPosition());
+
         // Let the pig breeder rest
         Utils.fastForward(99, map);
 
         assertTrue(pigBreeder.isInsideBuilding());
 
-        // Step once and to let the pig breeder go out to feed
+        // Verify that the pig breeder then goes out to feed the pigs
         map.stepTime();
 
         assertFalse(pigBreeder.isInsideBuilding());
-
-        var point = pigBreeder.getTarget();
-
         assertTrue(pigBreeder.isTraveling());
+        assertEquals(pigBreeder.getTarget(), pigFarm.getPosition().downLeft());
+        assertEquals(pigBreeder.getNextPoint(), pigBreeder.getPosition().downRight());
 
-        // Let the pig breeder reach the intended spot
-        Utils.fastForwardUntilWorkersReachTarget(map, pigBreeder);
-
-        assertTrue(pigBreeder.isArrived());
-        assertTrue(pigBreeder.isAt(point));
-        assertTrue(pigBreeder.isFeeding());
-
-        // Wait for the pig breeder to feed the pigs
-        Utils.fastForward(19, map);
-
-        assertTrue(pigBreeder.isFeeding());
-
-        map.stepTime();
-
-        // Pig breeder is walking back to farm without carrying a cargo
-        assertFalse(pigBreeder.isFeeding());
-        assertEquals(pigBreeder.getTarget(), pigFarm.getPosition());
-        assertNull(pigBreeder.getCargo());
-
-        // Let the pig breeder reach the farm
-        Utils.fastForwardUntilWorkersReachTarget(map, pigBreeder);
+        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, pigBreeder.getTarget());
 
         assertTrue(pigBreeder.isArrived());
-        assertTrue(pigBreeder.isInsideBuilding());
+        assertTrue(pigBreeder.isFeeding());
 
-        // Wait for the pig breeder to prepare the pig
+        // Verify that the pig breeder feeds the pigs
         for (int i = 0; i < 20; i++) {
-            assertNull(pigBreeder.getCargo());
+            assertTrue(pigBreeder.isFeeding());
+            assertFalse(pigBreeder.isInsideBuilding());
+            assertEquals(pigBreeder.getPercentageOfDistanceTraveled(), 50);
+            assertEquals(pigBreeder.getTarget(), pigFarm.getPosition().downRight());
 
             map.stepTime();
         }
 
-        // Pig breeder leaves the building to place the cargo at the flag
+        // Verify that the pig breeder goes back inside
+        assertFalse(pigBreeder.isFeeding());
+        assertEquals(pigBreeder.getTarget(), pigFarm.getPosition());
+        assertEquals(pigBreeder.getNextPoint(), pigFarm.getPosition());
+        assertEquals(pigBreeder.getPercentageOfDistanceTraveled(), 50);
+        assertFalse(pigBreeder.isInsideBuilding());
+        assertNull(pigBreeder.getCargo());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, pigFarm.getPosition());
+
+        assertTrue(pigBreeder.isArrived());
+        assertTrue(pigBreeder.isInsideBuilding());
+
+        // Verify that the pig breeder stays inside and prepares the pig
+        for (int i = 0; i < 20; i++) {
+            assertNull(pigBreeder.getCargo());
+            assertTrue(pigBreeder.isInsideBuilding());
+
+            map.stepTime();
+        }
+
+        // Verify that the pig breeder goes out to deliver the pig
         map.stepTime();
 
         assertFalse(pigBreeder.isInsideBuilding());
@@ -538,13 +523,12 @@ public class TestPigFarm {
         assertEquals(pigBreeder.getCargo().getMaterial(), PIG);
         assertEquals(pigBreeder.getTarget(), pigFarm.getFlag().getPosition());
 
-        // Let the pig breeder reach the flag
         Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, pigFarm.getFlag().getPosition());
 
         assertFalse(pigFarm.getFlag().getStackedCargo().isEmpty());
         assertNull(pigBreeder.getCargo());
 
-        // The pig breeder goes back to the building
+        // Verify that the pig breeder goes back to the building
         assertEquals(pigBreeder.getTarget(), pigFarm.getPosition());
 
         Utils.fastForwardUntilWorkersReachTarget(map, pigBreeder);
@@ -555,14 +539,11 @@ public class TestPigFarm {
     @Test
     public void testPigCargoIsDeliveredToGuardHouseUnderConstructionWhichIsCloserThanHeadquarters() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        var map = new GameMap(players, 20, 20);
-
-        // Place headquarter
+        // Place headquarters
         var point3 = new Point(6, 4);
         var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -610,14 +591,11 @@ public class TestPigFarm {
     @Test
     public void testPigIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        var map = new GameMap(players, 20, 20);
-
-        // Place headquarter
+        // Place headquarters
         var point3 = new Point(6, 4);
         var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -676,14 +654,11 @@ public class TestPigFarm {
     @Test
     public void testPigIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        var map = new GameMap(players, 20, 20);
-
-        // Place headquarter
+        // Place headquarters
         var point3 = new Point(6, 4);
         var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -752,13 +727,11 @@ public class TestPigFarm {
     @Test
     public void testPigFarmWithoutPigBreederProducesNothing() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -766,7 +739,7 @@ public class TestPigFarm {
         var point3 = new Point(10, 6);
         var farm = map.placeBuilding(new PigFarm(player0), point3);
 
-        // Connect the pig farm with the headquarter
+        // Connect the pig farm with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         // Construct the house
@@ -787,11 +760,9 @@ public class TestPigFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -867,11 +838,9 @@ public class TestPigFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -918,13 +887,13 @@ public class TestPigFarm {
         assertFalse(pigFarm0.getFlag().getStackedCargo().isEmpty());
 
         // Wait to let the cargo remain at the flag without any connection to the storage
-        Cargo cargo = pigFarm0.getFlag().getStackedCargo().getFirst();
+        var cargo = pigFarm0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
         assertEquals(cargo.getPosition(), pigFarm0.getFlag().getPosition());
 
-        // Connect the pig farm with the headquarter
+        // Connect the pig farm with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), pigFarm0.getFlag());
 
         // Assign a courier to the road
@@ -950,14 +919,14 @@ public class TestPigFarm {
         assertNotNull(courier.getCargo());
         assertEquals(courier.getCargo(), cargo);
 
-        // Verify that the courier delivers the cargo to the headquarter
+        // Verify that the courier delivers the cargo to the headquarters
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(PIG);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
-        // Verify that the courier has delivered the cargo to the headquarter
+        // Verify that the courier has delivered the cargo to the headquarters
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(PIG), amount + 1);
     }
@@ -967,11 +936,9 @@ public class TestPigFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -993,7 +960,7 @@ public class TestPigFarm {
 
         pigFarm0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(worker.isInsideBuilding());
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
@@ -1001,7 +968,7 @@ public class TestPigFarm {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
 
-        // Verify that the pig breeder is stored correctly in the headquarter
+        // Verify that the pig breeder is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(PIG_BREEDER), amount + 1);
     }
 
@@ -1010,11 +977,9 @@ public class TestPigFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1022,7 +987,7 @@ public class TestPigFarm {
         var point26 = new Point(8, 8);
         var pigFarm0 = map.placeBuilding(new PigFarm(player0), point26);
 
-        // Connect the pig farm with the headquarter
+        // Connect the pig farm with the headquarters
         map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter0.getFlag());
 
         // Finish construction of the pig farm
@@ -1039,7 +1004,7 @@ public class TestPigFarm {
 
         pigFarm0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(worker.isInsideBuilding());
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
@@ -1058,13 +1023,11 @@ public class TestPigFarm {
     @Test
     public void testPigBreederWithoutResourcesProducesNothing() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1097,13 +1060,11 @@ public class TestPigFarm {
     @Test
     public void testPigBreederWithoutResourcesStaysInHouse() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1136,13 +1097,11 @@ public class TestPigFarm {
     @Test
     public void testPigBreederFeedsPigsWithWaterAndWheat() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1202,11 +1161,9 @@ public class TestPigFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1214,7 +1171,7 @@ public class TestPigFarm {
         var point26 = new Point(8, 8);
         var pigFarm0 = map.placeBuilding(new PigFarm(player0), point26);
 
-        // Connect the pig farm with the headquarter
+        // Connect the pig farm with the headquarters
         map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter0.getFlag());
 
         // Finish construction of the pig farm
@@ -1247,11 +1204,9 @@ public class TestPigFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1275,11 +1230,9 @@ public class TestPigFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1303,11 +1256,9 @@ public class TestPigFarm {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1315,7 +1266,7 @@ public class TestPigFarm {
         var point1 = new Point(12, 8);
         var pigFarm0 = map.placeBuilding(new PigFarm(player0), point1);
 
-        // Connect the pig farm and the headquarter
+        // Connect the pig farm and the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter.getFlag());
 
         // Finish the pig farm
@@ -1362,11 +1313,9 @@ public class TestPigFarm {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1374,7 +1323,7 @@ public class TestPigFarm {
         var point1 = new Point(12, 8);
         var pigFarm0 = map.placeBuilding(new PigFarm(player0), point1);
 
-        // Connect the pig farm and the headquarter
+        // Connect the pig farm and the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter.getFlag());
 
         // Finish the pig farm
@@ -1429,15 +1378,11 @@ public class TestPigFarm {
     @Test
     public void testAssignedPigBreederHasCorrectlySetPlayer() throws Exception {
 
-        // Create players
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 50, 50);
 
-        // Create game map
-        var map = new GameMap(players, 50, 50);
-
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(15, 15);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1448,10 +1393,10 @@ public class TestPigFarm {
         // Finish construction of the pig farm
         Utils.constructHouse(pigFarm0);
 
-        // Connect the pig farm with the headquarter
+        // Connect the pig farm with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), pigFarm0.getFlag());
 
-        // Wait for pig breeder to get assigned and leave the headquarter
+        // Wait for pig breeder to get assigned and leave the headquarters
         var workers = Utils.waitForWorkersOutsideBuilding(PigBreeder.class, 1, player0);
 
         assertNotNull(workers);
@@ -1466,29 +1411,21 @@ public class TestPigFarm {
     @Test
     public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
 
-        // Create player list with two players
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1, player2), 100, 100);
 
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-        players.add(player2);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
-
-        // Place player 2's headquarter
+        // Place player 2's headquarters
         var point10 = new Point(70, 70);
         var headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
-        // Place player 0's headquarter
+        // Place player 0's headquarters
         var point0 = new Point(9, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place player 1's headquarter
+        // Place player 1's headquarters
         var point1 = new Point(45, 5);
         var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1521,13 +1458,11 @@ public class TestPigFarm {
     @Test
     public void testPigBreederReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
-        // Starting new game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1539,7 +1474,7 @@ public class TestPigFarm {
         var point2 = new Point(14, 4);
         var farm0 = map.placeBuilding(new PigFarm(player0), point2.upLeft());
 
-        // Connect headquarter and first flag
+        // Connect headquarters and first flag
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
@@ -1574,7 +1509,7 @@ public class TestPigFarm {
 
         assertEquals(pigBreeder.getPosition(), flag0.getPosition());
 
-        // Verify that the pig breeder returns to the headquarter when it reaches the flag
+        // Verify that the pig breeder returns to the headquarters when it reaches the flag
         assertEquals(pigBreeder.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, headquarter0.getPosition());
@@ -1583,13 +1518,11 @@ public class TestPigFarm {
     @Test
     public void testPigBreederContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
-        // Starting new game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1601,7 +1534,7 @@ public class TestPigFarm {
         var point2 = new Point(14, 4);
         var farm0 = map.placeBuilding(new PigFarm(player0), point2.upLeft());
 
-        // Connect headquarter and first flag
+        // Connect headquarters and first flag
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
@@ -1648,13 +1581,11 @@ public class TestPigFarm {
     @Test
     public void testPigBreederReturnsToStorageIfPigFarmIsDestroyed() throws Exception {
 
-        // Starting new game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1666,7 +1597,7 @@ public class TestPigFarm {
         var point2 = new Point(14, 4);
         var farm0 = map.placeBuilding(new PigFarm(player0), point2.upLeft());
 
-        // Connect headquarter and first flag
+        // Connect headquarters and first flag
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
@@ -1711,11 +1642,9 @@ public class TestPigFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1744,7 +1673,7 @@ public class TestPigFarm {
 
         pigFarm0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(pigBreeder.isInsideBuilding());
         assertEquals(pigBreeder.getTarget(), storehouse0.getPosition());
 
@@ -1752,7 +1681,7 @@ public class TestPigFarm {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, storehouse0.getPosition());
 
-        // Verify that the pig breeder is stored correctly in the headquarter
+        // Verify that the pig breeder is stored correctly in the headquarters
         assertEquals(storehouse0.getAmount(PIG_BREEDER), amount + 1);
     }
 
@@ -1761,11 +1690,9 @@ public class TestPigFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1797,7 +1724,7 @@ public class TestPigFarm {
 
         pigFarm0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(pigBreeder.isInsideBuilding());
         assertEquals(pigBreeder.getTarget(), headquarter0.getPosition());
 
@@ -1805,7 +1732,7 @@ public class TestPigFarm {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, headquarter0.getPosition());
 
-        // Verify that the pig breeder is stored correctly in the headquarter
+        // Verify that the pig breeder is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(PIG_BREEDER), amount + 1);
     }
 
@@ -1814,11 +1741,9 @@ public class TestPigFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1853,7 +1778,7 @@ public class TestPigFarm {
 
         pigFarm0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(pigBreeder.isInsideBuilding());
         assertEquals(pigBreeder.getTarget(), headquarter0.getPosition());
 
@@ -1861,7 +1786,7 @@ public class TestPigFarm {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, headquarter0.getPosition());
 
-        // Verify that the pig breeder is stored correctly in the headquarter
+        // Verify that the pig breeder is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(PIG_BREEDER), amount + 1);
     }
 
@@ -1870,11 +1795,9 @@ public class TestPigFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1900,7 +1823,7 @@ public class TestPigFarm {
 
         pigFarm0.tearDown();
 
-        // Verify that the worker leaves the building and goes back to the headquarter
+        // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(pigBreeder.isInsideBuilding());
         assertEquals(pigBreeder.getTarget(), headquarter0.getPosition());
 
@@ -1908,20 +1831,18 @@ public class TestPigFarm {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, headquarter0.getPosition());
 
-        // Verify that the pig breeder is stored correctly in the headquarter
+        // Verify that the pig breeder is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(PIG_BREEDER), amount + 1);
     }
 
     @Test
     public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point25 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1929,7 +1850,7 @@ public class TestPigFarm {
         var point26 = new Point(17, 17);
         var pigFarm0 = map.placeBuilding(new PigFarm(player0), point26);
 
-        // Place road to connect the headquarter and the pig farm
+        // Place road to connect the headquarters and the pig farm
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), pigFarm0.getFlag());
 
         // Finish construction of the pig farm
@@ -1944,7 +1865,7 @@ public class TestPigFarm {
         // Tear down the building
         pigFarm0.tearDown();
 
-        // Verify that the worker goes to the building and then returns to the headquarter instead of entering
+        // Verify that the worker goes to the building and then returns to the headquarters instead of entering
         assertEquals(worker.getTarget(), pigFarm0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, pigFarm0.getPosition());
@@ -1957,13 +1878,11 @@ public class TestPigFarm {
     @Test
     public void testPigFarmWithoutResourcesHasZeroProductivity() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1994,13 +1913,11 @@ public class TestPigFarm {
     @Test
     public void testPigFarmWithAbundantResourcesHasFullProductivity() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2018,7 +1935,7 @@ public class TestPigFarm {
         assertEquals(pigBreeder0.getHome(), pigFarm);
         assertEquals(pigFarm.getWorker(), pigBreeder0);
 
-        // Connect the pig farm with the headquarter
+        // Connect the pig farm with the headquarters
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), pigFarm.getFlag());
 
         // Make the pig farm produce some pigs with full resources available
@@ -2055,13 +1972,11 @@ public class TestPigFarm {
     @Test
     public void testPigFarmLosesProductivityWhenResourcesRunOut() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2079,7 +1994,7 @@ public class TestPigFarm {
         assertEquals(pigBreeder0.getHome(), pigFarm);
         assertEquals(pigFarm.getWorker(), pigBreeder0);
 
-        // Connect the pig farm with the headquarter
+        // Connect the pig farm with the headquarters
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), pigFarm.getFlag());
 
         // Make the pig farm produce some pigs with full resources available
@@ -2108,13 +2023,11 @@ public class TestPigFarm {
     @Test
     public void testUnoccupiedPigFarmHasNoProductivity() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2144,13 +2057,11 @@ public class TestPigFarm {
     @Test
     public void testPigFarmCanProduce() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2171,13 +2082,11 @@ public class TestPigFarm {
     @Test
     public void testPigFarmReportsCorrectOutput() throws Exception {
 
-        // Starting new game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2196,13 +2105,11 @@ public class TestPigFarm {
     @Test
     public void testPigFarmReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
-        // Starting new game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2229,13 +2136,11 @@ public class TestPigFarm {
     @Test
     public void testPigFarmReportsCorrectMaterialsNeededForProduction() throws Exception {
 
-        // Starting new game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2265,14 +2170,14 @@ public class TestPigFarm {
     @Test
     public void testPigFarmWaitsWhenFlagIsFull() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2280,7 +2185,7 @@ public class TestPigFarm {
         var point1 = new Point(16, 6);
         var pigFarm = map.placeBuilding(new PigFarm(player0), point1);
 
-        // Connect the pig farm with the headquarter
+        // Connect the pig farm with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), headquarter.getFlag());
 
         // Wait for the pig farm to get constructed and assigned a worker
@@ -2305,7 +2210,7 @@ public class TestPigFarm {
             map.stepTime();
         }
 
-        // Reconnect the pig farm with the headquarter
+        // Reconnect the pig farm with the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
@@ -2332,14 +2237,11 @@ public class TestPigFarm {
     @Test
     public void testPigFarmDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        var map = new GameMap(players, 20, 20);
-
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2347,7 +2249,7 @@ public class TestPigFarm {
         var point1 = new Point(16, 6);
         var pigFarm = map.placeBuilding(new PigFarm(player0), point1);
 
-        // Connect the pig farm with the headquarter
+        // Connect the pig farm with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), headquarter.getFlag());
 
         // Wait for the pig farm to get constructed and assigned a worker
@@ -2374,7 +2276,7 @@ public class TestPigFarm {
             map.stepTime();
         }
 
-        // Reconnect the pig farm with the headquarter
+        // Reconnect the pig farm with the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
@@ -2421,11 +2323,9 @@ public class TestPigFarm {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2433,7 +2333,7 @@ public class TestPigFarm {
         var point1 = new Point(7, 9);
         var pigFarm0 = map.placeBuilding(new PigFarm(player0), point1);
 
-        // Place road to connect the pig farm with the headquarter
+        // Place road to connect the pig farm with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter0.getFlag());
 
         // Wait for the pig farm to get constructed and occupied
@@ -2448,7 +2348,7 @@ public class TestPigFarm {
         assertEquals(pigBreeder0.getHome(), pigFarm0);
         assertEquals(pigFarm0.getWorker(), pigBreeder0);
 
-        // Add a lot of material to the headquarter for the pig farm to consume
+        // Add a lot of material to the headquarters for the pig farm to consume
         Utils.adjustInventoryTo(headquarter0, WATER, 40);
         Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
 
@@ -2476,11 +2376,9 @@ public class TestPigFarm {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2492,20 +2390,20 @@ public class TestPigFarm {
         var point2 = new Point(18, 6);
         var pigFarm0 = map.placeBuilding(new PigFarm(player0), point2);
 
-        // Place road to connect the storehouse with the headquarter
+        // Place road to connect the storehouse with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        // Place road to connect the headquarter with the pig farm
+        // Place road to connect the headquarters with the pig farm
         var road1 = map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter0.getFlag());
 
-        // Add a lot of planks and stones to the headquarter
+        // Add a lot of planks and stones to the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
         // Wait for the pig farm and the storehouse to get constructed
         Utils.waitForBuildingsToBeConstructed(storehouse, pigFarm0);
 
-        // Add a lot of material to the headquarter for the pig farm to consume
+        // Add a lot of material to the headquarters for the pig farm to consume
         Utils.adjustInventoryTo(headquarter0, WATER, 40);
         Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
 
@@ -2541,11 +2439,9 @@ public class TestPigFarm {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2557,20 +2453,20 @@ public class TestPigFarm {
         var point2 = new Point(18, 6);
         var pigFarm0 = map.placeBuilding(new PigFarm(player0), point2);
 
-        // Place road to connect the storehouse with the headquarter
+        // Place road to connect the storehouse with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        // Place road to connect the headquarter with the pig farm
+        // Place road to connect the headquarters with the pig farm
         var road1 = map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter0.getFlag());
 
-        // Add a lot of planks and stones to the headquarter
+        // Add a lot of planks and stones to the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
         // Wait for the pig farm and the storehouse to get constructed
         Utils.waitForBuildingsToBeConstructed(storehouse, pigFarm0);
 
-        // Add a lot of material to the headquarter for the pig farm to consume
+        // Add a lot of material to the headquarters for the pig farm to consume
         Utils.adjustInventoryTo(headquarter0, WATER, 40);
         Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
 
@@ -2608,11 +2504,9 @@ public class TestPigFarm {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2646,11 +2540,9 @@ public class TestPigFarm {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2691,11 +2583,9 @@ public class TestPigFarm {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2703,7 +2593,7 @@ public class TestPigFarm {
         var point1 = new Point(7, 9);
         var pigFarm0 = map.placeBuilding(new PigFarm(player0), point1);
 
-        // Place road to connect the pig farm with the headquarter
+        // Place road to connect the pig farm with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2714,7 +2604,7 @@ public class TestPigFarm {
         Utils.waitForNonMilitaryBuildingToGetPopulated(pigFarm0);
 
         /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
-           blocked in the headquarter */
+           blocked in the headquarters */
        
         headquarter0.blockDeliveryOfMaterial(PIG_BREEDER);
 
@@ -2751,11 +2641,9 @@ public class TestPigFarm {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2763,7 +2651,7 @@ public class TestPigFarm {
         var point1 = new Point(7, 9);
         var pigFarm0 = map.placeBuilding(new PigFarm(player0), point1);
 
-        // Place road to connect the pig farm with the headquarter
+        // Place road to connect the pig farm with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2775,7 +2663,7 @@ public class TestPigFarm {
         // Wait for a pig breeder to start walking to the pig farm
         var pigBreeder = Utils.waitForWorkerOutsideBuilding(PigBreeder.class, player0);
 
-        // Wait for the pig breeder to go past the headquarter's flag
+        // Wait for the pig breeder to go past the headquarters's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, headquarter0.getFlag().getPosition());
 
         map.stepTime();

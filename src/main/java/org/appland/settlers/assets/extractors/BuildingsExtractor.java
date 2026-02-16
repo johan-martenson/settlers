@@ -20,6 +20,10 @@ import static org.appland.settlers.assets.utils.ImageUtils.composeBuildingAnimat
 
 public class BuildingsExtractor {
 
+    private static void log(String log) {
+        System.out.println(log);
+    }
+
     /**
      * Extracts buildings and their construction states for different nations and writes them into an image atlas.
      *
@@ -31,6 +35,8 @@ public class BuildingsExtractor {
      * @throws InvalidFormatException If the format of the LST files is invalid
      */
     public static void extractBuildingAssets(String fromDir, String toDir, Palette palette) throws UnknownResourceTypeException, IOException, InvalidFormatException {
+        log("Extracting buildings:");
+
         var buildingsImageCollection = new BuildingsImageCollection();
 
         var romZLst = LstDecoder.loadLstFile(String.format("%s/%s", fromDir, RomZLst.FILENAME), palette);
@@ -72,6 +78,7 @@ public class BuildingsExtractor {
         buildingsImageCollection.addImagesForBuilding(romZLst, ROMANS, RomZLst.FARM);
         buildingsImageCollection.addImagesForBuilding(romZLst, ROMANS, RomZLst.DONKEY_BREEDER);
         buildingsImageCollection.addImagesForBuilding(romZLst, ROMANS, RomZLst.HARBOR);
+        log(" - Roman building images");
 
         // Compose animations
         buildingsImageCollection.addBuildingWorkingAnimation(
@@ -120,6 +127,8 @@ public class BuildingsExtractor {
         buildingsImageCollection.addConstructionJustStarted(ROMANS, getImageAt(romZLst, RomZLst.CONSTRUCTION_JUST_STARTED_INDEX));
         buildingsImageCollection.addConstructionJustStartedShadow(ROMANS, getImageAt(romZLst, RomZLst.CONSTRUCTION_JUST_STARTED_SHADOW));
 
+        log(" - Roman building animations");
+
         // Load japanese buildings
         buildingsImageCollection.addImagesForBuilding(japZLst, JAPANESE, JapZLst.HEADQUARTER);
         buildingsImageCollection.addImagesForBuilding(japZLst, JAPANESE, JapZLst.BARRACKS);
@@ -153,6 +162,8 @@ public class BuildingsExtractor {
         buildingsImageCollection.addImagesForBuilding(japZLst, JAPANESE, JapZLst.DONKEY_BREEDER);
         buildingsImageCollection.addImagesForBuilding(japZLst, JAPANESE, JapZLst.HARBOR);
 
+        log(" - Japanese building images");
+
         // Compose the harbor animation -- it has no shadow!
         var japaneseHarborAnimation = composeBuildingAnimation(japZLst, JapZLst.HARBOR.index(), JapZLst.HARBOR_ANIMATION, 8, 1);
 
@@ -175,6 +186,8 @@ public class BuildingsExtractor {
         buildingsImageCollection.addConstructionPlannedShadow(JAPANESE, getImageAt(japZLst, JapZLst.CONSTRUCTION_PLANNED_SHADOW));
         buildingsImageCollection.addConstructionJustStarted(JAPANESE, getImageAt(japZLst, JapZLst.CONSTRUCTION_JUST_STARTED_INDEX));
         buildingsImageCollection.addConstructionJustStartedShadow(JAPANESE, getImageAt(japZLst, JapZLst.CONSTRUCTION_JUST_STARTED_SHADOW));
+
+        log(" - Japanese building animations");
 
         // Load african buildings
         buildingsImageCollection.addImagesForBuilding(afrZLst, AFRICANS, AfrZLst.HEADQUARTER);
@@ -209,6 +222,8 @@ public class BuildingsExtractor {
         buildingsImageCollection.addImagesForBuilding(afrZLst, AFRICANS, AfrZLst.DONKEY_BREEDER);
         buildingsImageCollection.addImagesForBuilding(afrZLst, AFRICANS, AfrZLst.HARBOR);
 
+        log(" - African building images");
+
         // Compose the mill animation
         var africanMillAnimation = composeBuildingAnimation(afrZLst, AfrZLst.MILL.index(), AfrZLst.MILL_SAIL_ANIMATION, 8, 2);
         var africanMillAnimationShadow = composeBuildingAnimation(afrZLst, AfrZLst.MILL.index() + 1, AfrZLst.MILL_SAIL_ANIMATION + 1, 8, 2);
@@ -226,6 +241,8 @@ public class BuildingsExtractor {
         buildingsImageCollection.addConstructionPlannedShadow(AFRICANS, getImageAt(afrZLst, AfrZLst.CONSTRUCTION_PLANNED_SHADOW));
         buildingsImageCollection.addConstructionJustStarted(AFRICANS, getImageAt(afrZLst, AfrZLst.CONSTRUCTION_JUST_STARTED_INDEX));
         buildingsImageCollection.addConstructionJustStartedShadow(AFRICANS, getImageAt(afrZLst, AfrZLst.CONSTRUCTION_JUST_STARTED_SHADOW));
+
+        log(" - African building animations");
 
         // Load viking buildings
         buildingsImageCollection.addImagesForBuilding(vikZLst, VIKINGS, VikZLst.HEADQUARTER);
@@ -260,6 +277,8 @@ public class BuildingsExtractor {
         buildingsImageCollection.addImagesForBuilding(vikZLst, VIKINGS, VikZLst.DONKEY_BREEDER);
         buildingsImageCollection.addImagesForBuilding(vikZLst, VIKINGS, VikZLst.HARBOR);
 
+        log(" - Viking building images");
+
         // Compose the mill animation
         var vikingMillAnimation = composeBuildingAnimation(vikZLst, VikZLst.MILL.index(), VikZLst.MILL_SAIL_ANIMATION, 8, 2);
         var vikingMillAnimationShadow = composeBuildingAnimation(vikZLst, VikZLst.MILL.index() + 1, VikZLst.MILL_SAIL_ANIMATION + 1, 8, 2);
@@ -277,6 +296,8 @@ public class BuildingsExtractor {
         buildingsImageCollection.addConstructionPlannedShadow(VIKINGS, getImageAt(vikZLst, VikZLst.CONSTRUCTION_PLANNED_SHADOW));
         buildingsImageCollection.addConstructionJustStarted(VIKINGS, getImageAt(vikZLst, VikZLst.CONSTRUCTION_JUST_STARTED_INDEX));
         buildingsImageCollection.addConstructionJustStartedShadow(VIKINGS, getImageAt(vikZLst, VikZLst.CONSTRUCTION_JUST_STARTED_SHADOW));
+
+        log(" - Viking building animations");
 
         buildingsImageCollection.writeImageAtlas(toDir + "/", palette);
     }

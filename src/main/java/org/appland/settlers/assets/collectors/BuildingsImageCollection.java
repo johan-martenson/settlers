@@ -261,8 +261,6 @@ public class BuildingsImageCollection {
             if (house.underConstructionShadow()) {
                 addBuildingUnderConstructionShadowForNation(nation, house.name(), getImageAt(lstFile, house.index() + 3));
             }
-        } else {
-            System.out.println("No under construction for " + house.name());
         }
 
         if (house.openDoor()) {
@@ -272,10 +270,6 @@ public class BuildingsImageCollection {
             }
 
             addOpenDoorForBuilding(nation, house.name(), getImageAt(lstFile, house.index() + offset));
-        }
-
-        if (house.name().equals("Headquarter")) {
-            System.out.println(this.buildingMap.get(nation).get(house.name()));
         }
     }
 

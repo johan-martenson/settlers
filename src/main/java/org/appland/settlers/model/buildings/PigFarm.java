@@ -5,14 +5,13 @@
  */
 package org.appland.settlers.model.buildings;
 
+import org.appland.settlers.maps.Animal;
 import org.appland.settlers.model.Player;
 
-import static org.appland.settlers.model.Material.PIG;
-import static org.appland.settlers.model.Material.PIG_BREEDER;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WATER;
-import static org.appland.settlers.model.Material.WHEAT;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.LARGE;
 
 /**
@@ -24,7 +23,13 @@ import static org.appland.settlers.model.Size.LARGE;
 @RequiresWorker(workerType = PIG_BREEDER)
 public class PigFarm extends Building {
 
+    private final List<Animal> pigs = new ArrayList<>();
+
     public PigFarm(Player player0) {
         super(player0);
+    }
+
+    public List<Animal> getPigs() {
+        return pigs;
     }
 }

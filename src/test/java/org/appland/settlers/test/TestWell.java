@@ -488,25 +488,30 @@ public class TestWell {
         Utils.constructHouse(well);
 
         // Assign a worker to the well
-        var worker = new WellWorker(player0, map);
+        var wellWorker = new WellWorker(player0, map);
 
-        Utils.occupyBuilding(worker, well);
+        Utils.occupyBuilding(wellWorker, well);
 
-        assertTrue(worker.isInsideBuilding());
+        assertTrue(wellWorker.isInsideBuilding());
 
         // Let the worker rest
         Utils.fastForward(100, map);
 
         // Wait for the var worker to produce water
-        Utils.fastForward(50, map);
+        Utils.fastForwardUntilWorkerCarriesCargo(map, wellWorker, WATER);
 
-        assertNotNull(worker.getCargo());
-        assertEquals(worker.getTarget(), well.getFlag().getPosition());
+        assertNotNull(wellWorker.getCargo());
+
+        Utils.waitForWorkerToSetTarget(map, wellWorker, well.getFlag().getPosition());
+
+        assertEquals(wellWorker.getTarget(), well.getFlag().getPosition());
 
         // Let the worker reach the flag and place the cargo
+        Utils.waitForWorkerToSetTarget(map, wellWorker, well.getFlag().getPosition());
+
         assertTrue(well.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, well.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well.getFlag().getPosition());
 
         assertFalse(well.getFlag().getStackedCargo().isEmpty());
 
@@ -514,11 +519,11 @@ public class TestWell {
         assertEquals(well.getFlag().getStackedCargo().getFirst().getTarget(), headquarter);
 
         // Let the var walk back to the well
-        assertEquals(worker.getTarget(), well.getPosition());
+        assertEquals(wellWorker.getTarget(), well.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, worker);
+        Utils.fastForwardUntilWorkersReachTarget(map, wellWorker);
 
-        assertTrue(worker.isInsideBuilding());
+        assertTrue(wellWorker.isInsideBuilding());
     }
 
     @Test
@@ -727,37 +732,41 @@ public class TestWell {
         Utils.fastForward(100, map);
 
         // Wait for the var worker to produce a new water cargo
-        Utils.fastForward(50, map);
+        var wellWorker = well0.getWorker();
 
-        var worker = well0.getWorker();
+        Utils.fastForwardUntilWorkerCarriesCargo(map, wellWorker, WATER);
 
-        assertNotNull(worker.getCargo());
+        assertNotNull(wellWorker.getCargo());
 
         // Verify that the var worker puts the water cargo at the flag
-        assertEquals(worker.getTarget(), well0.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(map, wellWorker, well0.getFlag().getPosition());
+
+        assertEquals(wellWorker.getTarget(), well0.getFlag().getPosition());
         assertTrue(well0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, well0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getFlag().getPosition());
 
-        assertNull(worker.getCargo());
+        assertNull(wellWorker.getCargo());
         assertFalse(well0.getFlag().getStackedCargo().isEmpty());
 
         // Wait for the worker to go back to the well
-        assertEquals(worker.getTarget(), well0.getPosition());
+        assertEquals(wellWorker.getTarget(), well0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, well0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getPosition());
 
         // Wait for the worker to rest and produce another cargo
-        Utils.fastForward(150, map);
+        Utils.fastForwardUntilWorkerCarriesCargo(map, wellWorker, WATER);
 
-        assertNotNull(worker.getCargo());
+        assertNotNull(wellWorker.getCargo());
 
         // Verify that the second cargo is put at the flag
-        assertEquals(worker.getTarget(), well0.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(map, wellWorker, well0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, well0.getFlag().getPosition());
+        assertEquals(wellWorker.getTarget(), well0.getFlag().getPosition());
 
-        assertNull(worker.getCargo());
+        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getFlag().getPosition());
+
+        assertNull(wellWorker.getCargo());
         assertEquals(well0.getFlag().getStackedCargo().size(), 2);
     }
 
@@ -786,19 +795,21 @@ public class TestWell {
         Utils.fastForward(100, map);
 
         // Wait for the var worker to produce a new water cargo
-        Utils.fastForward(50, map);
+        var wellWorker = well0.getWorker();
 
-        var worker = well0.getWorker();
+        Utils.fastForwardUntilWorkerCarriesCargo(map, wellWorker, WATER);
 
-        assertNotNull(worker.getCargo());
+        assertNotNull(wellWorker.getCargo());
 
         // Verify that the var worker puts the water cargo at the flag
-        assertEquals(worker.getTarget(), well0.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(map, wellWorker, well0.getFlag().getPosition());
+
+        assertEquals(wellWorker.getTarget(), well0.getFlag().getPosition());
         assertTrue(well0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, well0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getFlag().getPosition());
 
-        assertNull(worker.getCargo());
+        assertNull(wellWorker.getCargo());
         assertFalse(well0.getFlag().getStackedCargo().isEmpty());
 
         // Wait to let the cargo remain at the flag without any connection to the storage
@@ -1056,24 +1067,26 @@ public class TestWell {
         Utils.constructHouse(well0);
 
         // Assign a worker to the well
-        var worker = new WellWorker(player0, map);
+        var wellWorker = new WellWorker(player0, map);
 
-        Utils.occupyBuilding(worker, well0);
+        Utils.occupyBuilding(wellWorker, well0);
 
-        assertTrue(worker.isInsideBuilding());
+        assertTrue(wellWorker.isInsideBuilding());
 
         // Let the worker rest
         Utils.fastForward(100, map);
 
         // Wait for the var worker to produce cargo
-        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
+        Utils.fastForwardUntilWorkerProducesCargo(map, wellWorker);
 
-        assertEquals(worker.getCargo().getMaterial(), WATER);
+        assertEquals(wellWorker.getCargo().getMaterial(), WATER);
 
         // Wait for the worker to deliver the cargo
-        assertEquals(worker.getTarget(), well0.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(map, wellWorker, well0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, well0.getFlag().getPosition());
+        assertEquals(wellWorker.getTarget(), well0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getFlag().getPosition());
 
         // Stop production and verify that no water is produced
         well0.stopProduction();
@@ -1081,7 +1094,7 @@ public class TestWell {
         assertFalse(well0.isProductionEnabled());
 
         for (int i = 0; i < 300; i++) {
-            assertNull(worker.getCargo());
+            assertNull(wellWorker.getCargo());
 
             map.stepTime();
         }
@@ -1112,30 +1125,32 @@ public class TestWell {
         Utils.constructHouse(well0);
 
         // Assign a worker to the well
-        var worker = new WellWorker(player0, map);
+        var wellWorker = new WellWorker(player0, map);
 
-        Utils.occupyBuilding(worker, well0);
+        Utils.occupyBuilding(wellWorker, well0);
 
-        assertTrue(worker.isInsideBuilding());
+        assertTrue(wellWorker.isInsideBuilding());
 
         // Let the worker rest
         Utils.fastForward(100, map);
 
         // Wait for the var worker to produce water
-        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
+        Utils.fastForwardUntilWorkerProducesCargo(map, wellWorker);
 
-        assertEquals(worker.getCargo().getMaterial(), WATER);
+        assertEquals(wellWorker.getCargo().getMaterial(), WATER);
 
         // Wait for the worker to deliver the cargo
-        assertEquals(worker.getTarget(), well0.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(map, wellWorker, well0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, well0.getFlag().getPosition());
+        assertEquals(wellWorker.getTarget(), well0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getFlag().getPosition());
 
         // Stop production
         well0.stopProduction();
 
         for (int i = 0; i < 300; i++) {
-            assertNull(worker.getCargo());
+            assertNull(wellWorker.getCargo());
 
             map.stepTime();
         }
@@ -1145,9 +1160,9 @@ public class TestWell {
 
         assertTrue(well0.isProductionEnabled());
 
-        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
+        Utils.fastForwardUntilWorkerProducesCargo(map, wellWorker);
 
-        assertNotNull(worker.getCargo());
+        assertNotNull(wellWorker.getCargo());
     }
 
     @Test
@@ -1889,6 +1904,8 @@ public class TestWell {
         Utils.waitForBuildingToBeConstructed(well);
         Utils.waitForNonMilitaryBuildingToGetPopulated(well);
 
+        var wellWorker = well.getWorker();
+
         // Fill the flag with flour cargos
         Utils.placeCargos(map, FLOUR, 8, well.getFlag(), headquarter);
 
@@ -1898,7 +1915,7 @@ public class TestWell {
         // Verify that the var waits for the flag to get empty and produces nothing
         for (int i = 0; i < 300; i++) {
             assertEquals(well.getFlag().getStackedCargo().size(), 8);
-            assertNull(well.getWorker().getCargo());
+            assertNotEquals(wellWorker.getTarget(), well.getFlag().getPosition());
 
             map.stepTime();
         }
@@ -1914,7 +1931,7 @@ public class TestWell {
                 break;
             }
 
-            assertNull(well.getWorker().getCargo());
+            assertNotEquals(wellWorker.getTarget(), well.getFlag().getPosition());
             assertNull(courier.getCargo());
             assertEquals(well.getFlag().getStackedCargo().size(), 8);
 
@@ -1956,9 +1973,11 @@ public class TestWell {
         map.removeRoad(road0);
 
         // The var waits for the flag to get empty and produces nothing
+        var wellWorker = well.getWorker();
+
         for (int i = 0; i < 300; i++) {
             assertEquals(well.getFlag().getStackedCargo().size(), 8);
-            assertNull(well.getWorker().getCargo());
+            assertNotEquals(wellWorker.getTarget(), well.getFlag().getPosition());
 
             map.stepTime();
         }
@@ -1974,7 +1993,6 @@ public class TestWell {
                 break;
             }
 
-            assertNull(well.getWorker().getCargo());
             assertNull(courier.getCargo());
             assertEquals(well.getFlag().getStackedCargo().size(), 8);
 
@@ -1990,6 +2008,8 @@ public class TestWell {
         Utils.fastForwardUntilWorkerCarriesCargo(map, well.getWorker(), WATER);
 
         // Wait for the worker to put the cargo on the flag
+        Utils.waitForWorkerToSetTarget(map, wellWorker, well.getFlag().getPosition());
+
         assertEquals(well.getWorker().getTarget(), well.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, well.getWorker(), well.getFlag().getPosition());
@@ -1999,7 +2019,7 @@ public class TestWell {
         // Verify that the well doesn't produce anything because the flag is full
         for (int i = 0; i < 400; i++) {
             assertEquals(well.getFlag().getStackedCargo().size(), 8);
-            assertNull(well.getWorker().getCargo());
+            assertNotEquals(wellWorker.getTarget(), well.getFlag().getPosition());
 
             map.stepTime();
         }
@@ -2047,7 +2067,7 @@ public class TestWell {
             map.stepTime();
 
             assertEquals(well0.getFlag().getStackedCargo().size(), 8);
-            assertTrue(wellWorker0.isInsideBuilding());
+            assertNotEquals(wellWorker0.getTarget(), well0.getFlag().getPosition());
 
             if (road0.getCourier().getCargo() != null) {
                 assertNotEquals(road0.getCourier().getCargo().getMaterial(), WATER);

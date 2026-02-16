@@ -221,18 +221,18 @@ public class TestSawmill {
 
         assertTrue(sawmill.needsWorker());
 
-        // Verify that a sawmill worker leaves the headquarters
-        var sawmillWorker0 = Utils.waitForWorkerOutsideBuilding(Carpenter.class, player0);
+        // Verify that a carpenter leaves the headquarters
+        var carpenter0 = Utils.waitForWorkerOutsideBuilding(Carpenter.class, player0);
 
-        // Let the sawmill worker reach the sawmill
-        assertNotNull(sawmillWorker0);
-        assertEquals(sawmillWorker0.getTarget(), sawmill.getPosition());
+        // Let the carpenter reach the sawmill
+        assertNotNull(carpenter0);
+        assertEquals(carpenter0.getTarget(), sawmill.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, sawmillWorker0);
+        Utils.fastForwardUntilWorkersReachTarget(map, carpenter0);
 
-        assertTrue(sawmillWorker0.isInsideBuilding());
-        assertEquals(sawmillWorker0.getHome(), sawmill);
-        assertEquals(sawmill.getWorker(), sawmillWorker0);
+        assertTrue(carpenter0.isInsideBuilding());
+        assertEquals(carpenter0.getHome(), sawmill);
+        assertEquals(sawmill.getWorker(), carpenter0);
     }
 
     @Test
@@ -258,12 +258,12 @@ public class TestSawmill {
 
         assertTrue(sawmill.needsWorker());
 
-        // Verify that a sawmill worker leaves the headquarters
-        var sawmillWorker0 = Utils.waitForWorkerOutsideBuilding(Carpenter.class, player0);
+        // Verify that a carpenter leaves the headquarters
+        var carpenter0 = Utils.waitForWorkerOutsideBuilding(Carpenter.class, player0);
 
-        // Verify that the sawmill worker is not a soldier
-        assertNotNull(sawmillWorker0);
-        assertFalse(sawmillWorker0.isSoldier());
+        // Verify that the carpenter is not a soldier
+        assertNotNull(carpenter0);
+        assertFalse(carpenter0.isSoldier());
     }
 
     @Test
@@ -277,7 +277,7 @@ public class TestSawmill {
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Remove all sawmill workers from the headquarters and add a saw
+        // Remove all carpenters from the headquarters and add a saw
         Utils.adjustInventoryTo(headquarter, CARPENTER, 0);
         Utils.adjustInventoryTo(headquarter, Material.SAW, 1);
 
@@ -293,18 +293,18 @@ public class TestSawmill {
 
         assertTrue(sawmill.needsWorker());
 
-        // Verify that a sawmill worker leaves the headquarters
-        var sawmillWorker0 = Utils.waitForWorkerOutsideBuilding(Carpenter.class, player0);
+        // Verify that a carpenter leaves the headquarters
+        var carpenter0 = Utils.waitForWorkerOutsideBuilding(Carpenter.class, player0);
 
-        // Let the sawmill worker reach the sawmill
-        assertNotNull(sawmillWorker0);
-        assertEquals(sawmillWorker0.getTarget(), sawmill.getPosition());
+        // Let the carpenter reach the sawmill
+        assertNotNull(carpenter0);
+        assertEquals(carpenter0.getTarget(), sawmill.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, sawmillWorker0);
+        Utils.fastForwardUntilWorkersReachTarget(map, carpenter0);
 
-        assertTrue(sawmillWorker0.isInsideBuilding());
-        assertEquals(sawmillWorker0.getHome(), sawmill);
-        assertEquals(sawmill.getWorker(), sawmillWorker0);
+        assertTrue(carpenter0.isInsideBuilding());
+        assertEquals(carpenter0.getHome(), sawmill);
+        assertEquals(sawmill.getWorker(), carpenter0);
     }
 
     @Test
@@ -326,16 +326,16 @@ public class TestSawmill {
         Utils.constructHouse(sawmill);
 
         // Occupy the sawmill
-        var sawmillWorker0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
+        var carpenter0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
 
-        assertTrue(sawmillWorker0.isInsideBuilding());
-        assertEquals(sawmillWorker0.getHome(), sawmill);
-        assertEquals(sawmill.getWorker(), sawmillWorker0);
+        assertTrue(carpenter0.isInsideBuilding());
+        assertEquals(carpenter0.getHome(), sawmill);
+        assertEquals(sawmill.getWorker(), carpenter0);
 
         // Verify that the sawmill doesn't produce anything
         for (int i = 0; i < 500; i++) {
             assertTrue(sawmill.getFlag().getStackedCargo().isEmpty());
-            assertNull(sawmillWorker0.getCargo());
+            assertNull(carpenter0.getCargo());
 
             map.stepTime();
         }
@@ -387,11 +387,11 @@ public class TestSawmill {
         Utils.constructHouse(sawmill);
 
         // Occupy the sawmill
-        var sawmillWorker0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
+        var carpenter0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
 
-        assertTrue(sawmillWorker0.isInsideBuilding());
-        assertEquals(sawmillWorker0.getHome(), sawmill);
-        assertEquals(sawmill.getWorker(), sawmillWorker0);
+        assertTrue(carpenter0.isInsideBuilding());
+        assertEquals(carpenter0.getHome(), sawmill);
+        assertEquals(sawmill.getWorker(), carpenter0);
 
         // Deliver wood to the sawmill
         Utils.deliverCargo(sawmill, WOOD);
@@ -404,22 +404,22 @@ public class TestSawmill {
             map.stepTime();
 
             assertFalse(sawmill.isWorking());
-            assertFalse(sawmillWorker0.isWorking());
+            assertFalse(carpenter0.isWorking());
         }
 
         for (int i = 0; i < 50; i++) {
             map.stepTime();
 
             assertTrue(sawmill.isWorking());
-            assertTrue(sawmillWorker0.isWorking());
+            assertTrue(carpenter0.isWorking());
             assertTrue(sawmill.getFlag().getStackedCargo().isEmpty());
-            assertNull(sawmillWorker0.getCargo());
+            assertNull(carpenter0.getCargo());
         }
 
         map.stepTime();
 
-        assertNotNull(sawmillWorker0.getCargo());
-        assertEquals(sawmillWorker0.getCargo().getMaterial(), PLANK);
+        assertNotNull(carpenter0.getCargo());
+        assertEquals(carpenter0.getCargo().getMaterial(), PLANK);
         assertTrue(sawmill.getFlag().getStackedCargo().isEmpty());
         assertFalse(sawmill.isWorking());
     }
@@ -446,11 +446,11 @@ public class TestSawmill {
         Utils.constructHouse(sawmill);
 
         // Occupy the sawmill
-        var sawmillWorker0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
+        var carpenter0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
 
-        assertTrue(sawmillWorker0.isInsideBuilding());
-        assertEquals(sawmillWorker0.getHome(), sawmill);
-        assertEquals(sawmill.getWorker(), sawmillWorker0);
+        assertTrue(carpenter0.isInsideBuilding());
+        assertEquals(carpenter0.getHome(), sawmill);
+        assertEquals(sawmill.getWorker(), carpenter0);
 
         // Deliver wood to the sawmill
         Utils.deliverCargo(sawmill, WOOD);
@@ -461,27 +461,27 @@ public class TestSawmill {
             map.stepTime();
 
             assertTrue(sawmill.getFlag().getStackedCargo().isEmpty());
-            assertNull(sawmillWorker0.getCargo());
+            assertNull(carpenter0.getCargo());
         }
 
         map.stepTime();
 
-        assertNotNull(sawmillWorker0.getCargo());
-        assertEquals(sawmillWorker0.getCargo().getMaterial(), PLANK);
+        assertNotNull(carpenter0.getCargo());
+        assertEquals(carpenter0.getCargo().getMaterial(), PLANK);
         assertTrue(sawmill.getFlag().getStackedCargo().isEmpty());
 
-        // Verify that the sawmill worker leaves the cargo at the flag
-        assertEquals(sawmillWorker0.getTarget(), sawmill.getFlag().getPosition());
+        // Verify that the carpenter leaves the cargo at the flag
+        assertEquals(carpenter0.getTarget(), sawmill.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker0, sawmill.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, carpenter0, sawmill.getFlag().getPosition());
 
         assertFalse(sawmill.getFlag().getStackedCargo().isEmpty());
-        assertNull(sawmillWorker0.getCargo());
-        assertEquals(sawmillWorker0.getTarget(), sawmill.getPosition());
+        assertNull(carpenter0.getCargo());
+        assertEquals(carpenter0.getTarget(), sawmill.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, sawmillWorker0);
+        Utils.fastForwardUntilWorkersReachTarget(map, carpenter0);
 
-        assertTrue(sawmillWorker0.isInsideBuilding());
+        assertTrue(carpenter0.isInsideBuilding());
     }
 
     @Test
@@ -701,12 +701,12 @@ public class TestSawmill {
         Utils.constructHouse(sawmill);
 
         // Occupy the sawmill
-        var sawmillWorker0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
+        var carpenter0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
 
         // Deliver wood to the sawmill
         Utils.deliverCargo(sawmill, WOOD);
 
-        // Wait until the sawmill worker produces a plank
+        // Wait until the carpenter produces a plank
         assertEquals(sawmill.getAmount(WOOD), 1);
 
         Utils.fastForward(150, map);
@@ -734,24 +734,24 @@ public class TestSawmill {
         Utils.constructHouse(sawmill);
 
         // Occupy the sawmill
-        var sawmillWorker0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
+        var carpenter0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
 
-        // Fast forward so that the sawmill worker would produced planks if it had had any wood
+        // Fast forward so that the carpenter would produced planks if it had had any wood
         Utils.fastForward(150, map);
 
-        assertNull(sawmillWorker0.getCargo());
+        assertNull(carpenter0.getCargo());
 
         // Deliver wood to the sawmill
         Utils.deliverCargo(sawmill, WOOD);
 
-        // Verify that it takes 50 steps for the sawmill worker to produce the plank
+        // Verify that it takes 50 steps for the carpenter to produce the plank
         for (int i = 0; i < 50; i++) {
-            assertNull(sawmillWorker0.getCargo());
+            assertNull(carpenter0.getCargo());
 
             map.stepTime();
         }
 
-        assertNotNull(sawmillWorker0.getCargo());
+        assertNotNull(carpenter0.getCargo());
     }
 
     @Test
@@ -779,41 +779,41 @@ public class TestSawmill {
         Utils.deliverCargo(sawmill0, WOOD);
         Utils.deliverCargo(sawmill0, WOOD);
 
-        // Let the sawmill worker rest
+        // Let the carpenter rest
         Utils.fastForward(100, map);
 
-        // Wait for the sawmill worker to produce a new plank cargo
+        // Wait for the carpenter to produce a new plank cargo
         Utils.fastForward(50, map);
 
-        var sawmillWorker = sawmill0.getWorker();
+        var carpenter = sawmill0.getWorker();
 
-        assertNotNull(sawmillWorker.getCargo());
+        assertNotNull(carpenter.getCargo());
 
-        // Verify that the sawmill worker puts the plank cargo at the flag
-        assertEquals(sawmillWorker.getTarget(), sawmill0.getFlag().getPosition());
+        // Verify that the carpenter puts the plank cargo at the flag
+        assertEquals(carpenter.getTarget(), sawmill0.getFlag().getPosition());
         assertTrue(sawmill0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, sawmill0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, carpenter, sawmill0.getFlag().getPosition());
 
-        assertNull(sawmillWorker.getCargo());
+        assertNull(carpenter.getCargo());
         assertFalse(sawmill0.getFlag().getStackedCargo().isEmpty());
 
         // Wait for the worker to go back to the sawmill
-        assertEquals(sawmillWorker.getTarget(), sawmill0.getPosition());
+        assertEquals(carpenter.getTarget(), sawmill0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, sawmill0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, carpenter, sawmill0.getPosition());
 
         // Wait for the worker to rest and produce another cargo
         Utils.fastForward(150, map);
 
-        assertNotNull(sawmillWorker.getCargo());
+        assertNotNull(carpenter.getCargo());
 
         // Verify that the second cargo is put at the flag
-        assertEquals(sawmillWorker.getTarget(), sawmill0.getFlag().getPosition());
+        assertEquals(carpenter.getTarget(), sawmill0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, sawmill0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, carpenter, sawmill0.getFlag().getPosition());
 
-        assertNull(sawmillWorker.getCargo());
+        assertNull(carpenter.getCargo());
         assertEquals(sawmill0.getFlag().getStackedCargo().size(), 2);
     }
 
@@ -842,23 +842,23 @@ public class TestSawmill {
         // Occupy the sawmill
         Utils.occupyBuilding(new Carpenter(player0, map), sawmill0);
 
-        // Let the sawmill worker rest
+        // Let the carpenter rest
         Utils.fastForward(100, map);
 
-        // Wait for the sawmill worker to produce a new plank cargo
+        // Wait for the carpenter to produce a new plank cargo
         Utils.fastForward(50, map);
 
-        var sawmillWorker = sawmill0.getWorker();
+        var carpenter = sawmill0.getWorker();
 
-        assertNotNull(sawmillWorker.getCargo());
+        assertNotNull(carpenter.getCargo());
 
-        // Verify that the sawmill worker puts the plank cargo at the flag
-        assertEquals(sawmillWorker.getTarget(), sawmill0.getFlag().getPosition());
+        // Verify that the carpenter puts the plank cargo at the flag
+        assertEquals(carpenter.getTarget(), sawmill0.getFlag().getPosition());
         assertTrue(sawmill0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, sawmill0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, carpenter, sawmill0.getFlag().getPosition());
 
-        assertNull(sawmillWorker.getCargo());
+        assertNull(carpenter.getCargo());
         assertFalse(sawmill0.getFlag().getStackedCargo().isEmpty());
 
         // Wait to let the cargo remain at the flag without any connection to the storage
@@ -934,22 +934,22 @@ public class TestSawmill {
         Utils.occupyBuilding(new Carpenter(player0, map), sawmill0);
 
         // Destroy the sawmill
-        var sawmillWorker = sawmill0.getWorker();
+        var carpenter = sawmill0.getWorker();
 
-        assertTrue(sawmillWorker.isInsideBuilding());
-        assertEquals(sawmillWorker.getPosition(), sawmill0.getPosition());
+        assertTrue(carpenter.isInsideBuilding());
+        assertEquals(carpenter.getPosition(), sawmill0.getPosition());
 
         sawmill0.tearDown();
 
         // Verify that the worker leaves the building and goes back to the headquarters
-        assertFalse(sawmillWorker.isInsideBuilding());
-        assertEquals(sawmillWorker.getTarget(), headquarter0.getPosition());
+        assertFalse(carpenter.isInsideBuilding());
+        assertEquals(carpenter.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(CARPENTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, carpenter, headquarter0.getPosition());
 
-        // Verify that the sawmill worker is stored correctly in the headquarters
+        // Verify that the carpenter is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(CARPENTER), amount + 1);
     }
 
@@ -978,20 +978,20 @@ public class TestSawmill {
         Utils.occupyBuilding(new Carpenter(player0, map), sawmill0);
 
         // Destroy the sawmill
-        var sawmillWorker = sawmill0.getWorker();
+        var carpenter = sawmill0.getWorker();
 
-        assertTrue(sawmillWorker.isInsideBuilding());
-        assertEquals(sawmillWorker.getPosition(), sawmill0.getPosition());
+        assertTrue(carpenter.isInsideBuilding());
+        assertEquals(carpenter.getPosition(), sawmill0.getPosition());
 
         sawmill0.tearDown();
 
         // Verify that the worker leaves the building and goes back to the headquarters
-        assertFalse(sawmillWorker.isInsideBuilding());
-        assertEquals(sawmillWorker.getTarget(), headquarter0.getPosition());
+        assertFalse(carpenter.isInsideBuilding());
+        assertEquals(carpenter.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
         boolean firstStep = true;
-        for (var point : sawmillWorker.getPlannedPath()) {
+        for (var point : carpenter.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -1130,7 +1130,7 @@ public class TestSawmill {
         // Let the worker rest
         Utils.fastForward(100, map);
 
-        // Wait for the sawmill worker to produce cargo
+        // Wait for the carpenter to produce cargo
         Utils.fastForwardUntilWorkerProducesCargo(map, carpenter);
 
         assertEquals(carpenter.getCargo().getMaterial(), PLANK);
@@ -1186,7 +1186,7 @@ public class TestSawmill {
         // Let the worker rest
         Utils.fastForward(100, map);
 
-        // Wait for the sawmill worker to produce plank
+        // Wait for the carpenter to produce plank
         Utils.fastForwardUntilWorkerProducesCargo(map, carpenter);
 
         assertEquals(carpenter.getCargo().getMaterial(), PLANK);
@@ -1236,7 +1236,7 @@ public class TestSawmill {
         // Connect the sawmill with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill0.getFlag());
 
-        // Wait for sawmill worker to get assigned and leave the headquarters
+        // Wait for carpenter to get assigned and leave the headquarters
         var workers = Utils.waitForWorkersOutsideBuilding(Carpenter.class, 1, player0);
 
         assertNotNull(workers);
@@ -1320,7 +1320,7 @@ public class TestSawmill {
         // Connect the first flag with the second flag
         var road1 = map.placeAutoSelectedRoad(player0, flag0, sawmill0.getFlag());
 
-        // Wait for the sawmill worker to be on the second road on its way to the flag
+        // Wait for the carpenter to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Carpenter.class, 1, player0);
 
         Carpenter carpenter = null;
@@ -1338,18 +1338,18 @@ public class TestSawmill {
 
         map.stepTime();
 
-        // See that the sawmill worker has started walking
+        // See that the carpenter has started walking
         assertFalse(carpenter.isExactlyAtPoint());
 
         // Remove the next road
         map.removeRoad(road1);
 
-        // Verify that the sawmill worker continues walking to the flag
+        // Verify that the carpenter continues walking to the flag
         Utils.fastForwardUntilWorkerReachesPoint(map, carpenter, flag0.getPosition());
 
         assertEquals(carpenter.getPosition(), flag0.getPosition());
 
-        // Verify that the sawmill worker returns to the headquarters when it reaches the flag
+        // Verify that the carpenter returns to the headquarters when it reaches the flag
         assertEquals(carpenter.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, carpenter, headquarter0.getPosition());
@@ -1380,7 +1380,7 @@ public class TestSawmill {
         // Connect the first flag with the second flag
         var road1 = map.placeAutoSelectedRoad(player0, flag0, sawmill0.getFlag());
 
-        // Wait for the sawmill worker to be on the second road on its way to the flag
+        // Wait for the carpenter to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Carpenter.class, 1, player0);
 
         Carpenter carpenter = null;
@@ -1398,23 +1398,23 @@ public class TestSawmill {
 
         map.stepTime();
 
-        // See that the sawmill worker has started walking
+        // See that the carpenter has started walking
         assertFalse(carpenter.isExactlyAtPoint());
 
         // Remove the current road
         map.removeRoad(road0);
 
-        // Verify that the sawmill worker continues walking to the flag
+        // Verify that the carpenter continues walking to the flag
         Utils.fastForwardUntilWorkerReachesPoint(map, carpenter, flag0.getPosition());
 
         assertEquals(carpenter.getPosition(), flag0.getPosition());
 
-        // Verify that the sawmill worker continues to the final flag
+        // Verify that the carpenter continues to the final flag
         assertEquals(carpenter.getTarget(), sawmill0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, carpenter, sawmill0.getFlag().getPosition());
 
-        // Verify that the sawmill worker goes out to sawmill instead of going directly back
+        // Verify that the carpenter goes out to sawmill instead of going directly back
         assertNotEquals(carpenter.getTarget(), headquarter0.getPosition());
     }
 
@@ -1443,7 +1443,7 @@ public class TestSawmill {
         // Connect the first flag with the second flag
         var road1 = map.placeAutoSelectedRoad(player0, flag0, sawmill0.getFlag());
 
-        // Wait for the sawmill worker to be on the second road on its way to the flag
+        // Wait for the carpenter to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Carpenter.class, 1, player0);
 
         Carpenter carpenter = null;
@@ -1457,23 +1457,23 @@ public class TestSawmill {
         assertNotNull(carpenter);
         assertEquals(carpenter.getTarget(), sawmill0.getPosition());
 
-        // Wait for the sawmill worker to reach the first flag
+        // Wait for the carpenter to reach the first flag
         Utils.fastForwardUntilWorkerReachesPoint(map, carpenter, flag0.getPosition());
 
         map.stepTime();
 
-        // See that the sawmill worker has started walking
+        // See that the carpenter has started walking
         assertFalse(carpenter.isExactlyAtPoint());
 
         // Tear down the sawmill
         sawmill0.tearDown();
 
-        // Verify that the sawmill worker continues walking to the next flag
+        // Verify that the carpenter continues walking to the next flag
         Utils.fastForwardUntilWorkerReachesPoint(map, carpenter, sawmill0.getFlag().getPosition());
 
         assertEquals(carpenter.getPosition(), sawmill0.getFlag().getPosition());
 
-        // Verify that the sawmill worker goes back to storage
+        // Verify that the carpenter goes back to storage
         assertEquals(carpenter.getTarget(), headquarter0.getPosition());
     }
 
@@ -1491,12 +1491,12 @@ public class TestSawmill {
         // Place sawmill
         var point26 = new Point(17, 17);
         var sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill0.getFlag());
 
-        // Finish construction of the sawmill
-        Utils.constructHouse(sawmill0);
+        // Wait for the sawmill to get constructed and occupied
+        Utils.waitForBuildingToBeConstructed(sawmill0);
 
-        // Occupy the sawmill
-        Utils.occupyBuilding(new Carpenter(player0, map), sawmill0);
+        var carpenter = Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill0);
 
         // Place a second storage closer to the sawmill
         var point2 = new Point(13, 13);
@@ -1506,22 +1506,22 @@ public class TestSawmill {
         Utils.constructHouse(storehouse0);
 
         // Destroy the sawmill
-        var sawmillWorker = sawmill0.getWorker();
+        Utils.waitForWorkerToBeInside(carpenter, map);
 
-        assertTrue(sawmillWorker.isInsideBuilding());
-        assertEquals(sawmillWorker.getPosition(), sawmill0.getPosition());
+        assertTrue(carpenter.isInsideBuilding());
+        assertEquals(carpenter.getPosition(), sawmill0.getPosition());
 
         sawmill0.tearDown();
 
         // Verify that the worker leaves the building and goes back to the headquarters
-        assertFalse(sawmillWorker.isInsideBuilding());
-        assertEquals(sawmillWorker.getTarget(), storehouse0.getPosition());
+        assertFalse(carpenter.isInsideBuilding());
+        assertEquals(carpenter.getTarget(), storehouse0.getPosition());
 
         int amount = storehouse0.getAmount(CARPENTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, storehouse0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, carpenter, storehouse0.getPosition());
 
-        // Verify that the sawmill worker is stored correctly in the headquarters
+        // Verify that the carpenter is stored correctly in the headquarters
         assertEquals(storehouse0.getAmount(CARPENTER), amount + 1);
     }
 
@@ -1536,43 +1536,46 @@ public class TestSawmill {
         var point25 = new Point(9, 17);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        // Place sawmill
+        // Place sawmill and connect it to the headquarters
         var point26 = new Point(17, 17);
         var sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill0.getFlag());
 
-        // Finish construction of the sawmill
-        Utils.constructHouse(sawmill0);
+        // Wait for the sawmill to get constructed and occupied
+        Utils.waitForBuildingToBeConstructed(sawmill0);
 
-        // Occupy the sawmill
-        Utils.occupyBuilding(new Carpenter(player0, map), sawmill0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill0);
 
-        // Place a second storage closer to the sawmill
+        // Place a second storage closer to the sawmill and connect it to the headquarters
         var point2 = new Point(13, 13);
         var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var road1 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), storehouse0.getFlag());
 
-        // Finish construction of the storage
-        Utils.constructHouse(storehouse0);
+        // Wait for the second storage to get constructed
+        Utils.waitForBuildingToBeConstructed(storehouse0);
 
         // Destroy the storage
         storehouse0.tearDown();
 
-        // Destroy the sawmill
-        var sawmillWorker = sawmill0.getWorker();
+        // Destroy the sawmill with the carpenter inside
+        var carpenter = sawmill0.getWorker();
 
-        assertTrue(sawmillWorker.isInsideBuilding());
-        assertEquals(sawmillWorker.getPosition(), sawmill0.getPosition());
+        Utils.waitForWorkerToBeInside(carpenter, map);
+
+        assertTrue(carpenter.isInsideBuilding());
+        assertEquals(carpenter.getPosition(), sawmill0.getPosition());
 
         sawmill0.tearDown();
 
         // Verify that the worker leaves the building and goes back to the headquarters
-        assertFalse(sawmillWorker.isInsideBuilding());
-        assertEquals(sawmillWorker.getTarget(), headquarter0.getPosition());
+        assertFalse(carpenter.isInsideBuilding());
+        assertEquals(carpenter.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(CARPENTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, carpenter, headquarter0.getPosition());
 
-        // Verify that the sawmill worker is stored correctly in the headquarters
+        // Verify that the carpenter is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(CARPENTER), amount + 1);
     }
 
@@ -1590,12 +1593,12 @@ public class TestSawmill {
         // Place sawmill
         var point26 = new Point(17, 17);
         var sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill0.getFlag());
 
-        // Finish construction of the sawmill
-        Utils.constructHouse(sawmill0);
+        // Wait for the sawmill to get constructed and occupied
+        Utils.waitForBuildingToBeConstructed(sawmill0);
 
-        // Occupy the sawmill
-        Utils.occupyBuilding(new Carpenter(player0, map), sawmill0);
+        var carpenter = Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill0);
 
         // Place a second storage closer to the sawmill
         var point2 = new Point(13, 13);
@@ -1611,22 +1614,22 @@ public class TestSawmill {
         Utils.waitForBuildingToBurnDown(storehouse0);
 
         // Destroy the sawmill
-        var sawmillWorker = sawmill0.getWorker();
+        Utils.waitForWorkerToBeInside(carpenter, map);
 
-        assertTrue(sawmillWorker.isInsideBuilding());
-        assertEquals(sawmillWorker.getPosition(), sawmill0.getPosition());
+        assertTrue(carpenter.isInsideBuilding());
+        assertEquals(carpenter.getPosition(), sawmill0.getPosition());
 
         sawmill0.tearDown();
 
         // Verify that the worker leaves the building and goes back to the headquarters
-        assertFalse(sawmillWorker.isInsideBuilding());
-        assertEquals(sawmillWorker.getTarget(), headquarter0.getPosition());
+        assertFalse(carpenter.isInsideBuilding());
+        assertEquals(carpenter.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(CARPENTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, carpenter, headquarter0.getPosition());
 
-        // Verify that the sawmill worker is stored correctly in the headquarters
+        // Verify that the carpenter is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(CARPENTER), amount + 1);
     }
 
@@ -1656,22 +1659,22 @@ public class TestSawmill {
         var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Destroy the sawmill
-        var sawmillWorker = sawmill0.getWorker();
+        var carpenter = sawmill0.getWorker();
 
-        assertTrue(sawmillWorker.isInsideBuilding());
-        assertEquals(sawmillWorker.getPosition(), sawmill0.getPosition());
+        assertTrue(carpenter.isInsideBuilding());
+        assertEquals(carpenter.getPosition(), sawmill0.getPosition());
 
         sawmill0.tearDown();
 
         // Verify that the worker leaves the building and goes back to the headquarters
-        assertFalse(sawmillWorker.isInsideBuilding());
-        assertEquals(sawmillWorker.getTarget(), headquarter0.getPosition());
+        assertFalse(carpenter.isInsideBuilding());
+        assertEquals(carpenter.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(CARPENTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, carpenter, headquarter0.getPosition());
 
-        // Verify that the sawmill worker is stored correctly in the headquarters
+        // Verify that the carpenter is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(CARPENTER), amount + 1);
     }
 
@@ -1734,16 +1737,16 @@ public class TestSawmill {
         Utils.constructHouse(sawmill);
 
         // Populate the sawmill
-        var sawmillWorker0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
+        var carpenter0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
 
-        assertTrue(sawmillWorker0.isInsideBuilding());
-        assertEquals(sawmillWorker0.getHome(), sawmill);
-        assertEquals(sawmill.getWorker(), sawmillWorker0);
+        assertTrue(carpenter0.isInsideBuilding());
+        assertEquals(carpenter0.getHome(), sawmill);
+        assertEquals(sawmill.getWorker(), carpenter0);
 
         // Verify that the productivity is 0% when the sawmill doesn't produce anything
         for (int i = 0; i < 500; i++) {
             assertTrue(sawmill.getFlag().getStackedCargo().isEmpty());
-            assertNull(sawmillWorker0.getCargo());
+            assertNull(carpenter0.getCargo());
             assertEquals(sawmill.getProductivity(), 0);
 
             map.stepTime();
@@ -1769,11 +1772,11 @@ public class TestSawmill {
         Utils.constructHouse(sawmill);
 
         // Populate the sawmill
-        var sawmillWorker0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
+        var carpenter0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
 
-        assertTrue(sawmillWorker0.isInsideBuilding());
-        assertEquals(sawmillWorker0.getHome(), sawmill);
-        assertEquals(sawmill.getWorker(), sawmillWorker0);
+        assertTrue(carpenter0.isInsideBuilding());
+        assertEquals(carpenter0.getHome(), sawmill);
+        assertEquals(sawmill.getWorker(), carpenter0);
 
         // Connect the sawmill with the headquarters
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill.getFlag());
@@ -1820,11 +1823,11 @@ public class TestSawmill {
         Utils.constructHouse(sawmill);
 
         // Populate the sawmill
-        var sawmillWorker0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
+        var carpenter0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
 
-        assertTrue(sawmillWorker0.isInsideBuilding());
-        assertEquals(sawmillWorker0.getHome(), sawmill);
-        assertEquals(sawmill.getWorker(), sawmillWorker0);
+        assertTrue(carpenter0.isInsideBuilding());
+        assertEquals(carpenter0.getHome(), sawmill);
+        assertEquals(sawmill.getWorker(), carpenter0);
 
         // Connect the sawmill with the headquarters
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill.getFlag());
@@ -1893,7 +1896,7 @@ public class TestSawmill {
         Utils.constructHouse(sawmill0);
 
         // Populate the sawmill
-        var sawmillWorker0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill0);
+        var carpenter0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill0);
 
         // Verify that the sawmill can produce
         assertTrue(sawmill0.canProduce());
@@ -2157,11 +2160,11 @@ public class TestSawmill {
 
         Utils.waitForBuildingToBeConstructed(sawmill0);
 
-        var sawmillWorker0 = Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill0);
+        var carpenter0 = Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill0);
 
-        assertTrue(sawmillWorker0.isInsideBuilding());
-        assertEquals(sawmillWorker0.getHome(), sawmill0);
-        assertEquals(sawmill0.getWorker(), sawmillWorker0);
+        assertTrue(carpenter0.isInsideBuilding());
+        assertEquals(carpenter0.getHome(), sawmill0);
+        assertEquals(sawmill0.getWorker(), carpenter0);
 
         // Add a lot of material to the headquarters for the sawmill to consume
         Utils.adjustInventoryTo(headquarter0, WOOD, 40);
@@ -2172,13 +2175,13 @@ public class TestSawmill {
         // Verify that the sawmill puts eight planks on the flag and then stops
         Utils.waitForFlagToGetStackedCargo(map, sawmill0.getFlag(), 8);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker0, sawmill0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, carpenter0, sawmill0.getPosition());
 
         for (int i = 0; i < 300; i++) {
             map.stepTime();
 
             assertEquals(sawmill0.getFlag().getStackedCargo().size(), 8);
-            assertTrue(sawmillWorker0.isInsideBuilding());
+            assertNotEquals(carpenter0.getTarget(), sawmill0.getFlag().getPosition());
 
             if (road0.getCourier().getCargo() != null) {
                 assertNotEquals(road0.getCourier().getCargo().getMaterial(), PLANK);
@@ -2224,11 +2227,11 @@ public class TestSawmill {
         // Wait for the sawmill and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, sawmill0);
 
-        var sawmillWorker0 = sawmill0.getWorker();
+        var carpenter0 = sawmill0.getWorker();
 
-        assertTrue(sawmillWorker0.isInsideBuilding());
-        assertEquals(sawmillWorker0.getHome(), sawmill0);
-        assertEquals(sawmill0.getWorker(), sawmillWorker0);
+        assertTrue(carpenter0.isInsideBuilding());
+        assertEquals(carpenter0.getHome(), sawmill0);
+        assertEquals(sawmill0.getWorker(), carpenter0);
 
         // Verify that the worker goes to the storage when the sawmill is torn down
         headquarter0.blockDeliveryOfMaterial(CARPENTER);
@@ -2237,15 +2240,15 @@ public class TestSawmill {
 
         map.stepTime();
 
-        assertFalse(sawmillWorker0.isInsideBuilding());
+        assertFalse(carpenter0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker0, sawmill0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, carpenter0, sawmill0.getFlag().getPosition());
 
-        assertEquals(sawmillWorker0.getTarget(), storehouse.getPosition());
+        assertEquals(carpenter0.getTarget(), storehouse.getPosition());
 
-        Utils.verifyWorkerWalksToTargetOnRoads(map, sawmillWorker0, storehouse.getPosition());
+        Utils.verifyWorkerWalksToTargetOnRoads(map, carpenter0, storehouse.getPosition());
 
-        assertFalse(map.getWorkers().contains(sawmillWorker0));
+        assertFalse(map.getWorkers().contains(carpenter0));
     }
 
     @Test
@@ -2286,11 +2289,11 @@ public class TestSawmill {
         // Wait for the sawmill and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, sawmill0);
 
-        var sawmillWorker0 = sawmill0.getWorker();
+        var carpenter0 = sawmill0.getWorker();
 
-        assertTrue(sawmillWorker0.isInsideBuilding());
-        assertEquals(sawmillWorker0.getHome(), sawmill0);
-        assertEquals(sawmill0.getWorker(), sawmillWorker0);
+        assertTrue(carpenter0.isInsideBuilding());
+        assertEquals(carpenter0.getHome(), sawmill0);
+        assertEquals(sawmill0.getWorker(), carpenter0);
 
         // Verify that the worker goes to the storage off-road when the sawmill is torn down
         headquarter0.blockDeliveryOfMaterial(CARPENTER);
@@ -2301,15 +2304,15 @@ public class TestSawmill {
 
         map.stepTime();
 
-        assertFalse(sawmillWorker0.isInsideBuilding());
+        assertFalse(carpenter0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker0, sawmill0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, carpenter0, sawmill0.getFlag().getPosition());
 
-        assertEquals(sawmillWorker0.getTarget(), storehouse.getPosition());
+        assertEquals(carpenter0.getTarget(), storehouse.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker0, storehouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, carpenter0, storehouse.getPosition());
 
-        assertFalse(map.getWorkers().contains(sawmillWorker0));
+        assertFalse(map.getWorkers().contains(carpenter0));
     }
 
     @Test
@@ -2474,15 +2477,15 @@ public class TestSawmill {
         // Wait for the sawmill to get constructed
         Utils.waitForBuildingToBeConstructed(sawmill0);
 
-        // Wait for a sawmill worker to start walking to the sawmill
+        // Wait for a carpenter to start walking to the sawmill
         Carpenter carpenter = Utils.waitForWorkerOutsideBuilding(Carpenter.class, player0);
 
-        // Wait for the sawmill worker to go past the headquarters's flag
+        // Wait for the carpenter to go past the headquarters's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, carpenter, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
-        // Verify that the sawmill worker goes away and dies when the house has been torn down and storage is not possible
+        // Verify that the carpenter goes away and dies when the house has been torn down and storage is not possible
         assertEquals(carpenter.getTarget(), sawmill0.getPosition());
 
         headquarter0.blockDeliveryOfMaterial(CARPENTER);

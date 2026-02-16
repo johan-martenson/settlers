@@ -788,10 +788,7 @@ public class Building implements EndPoint {
     }
 
     void setPlayer(Player player) {
-        if (this.player != null) {
-            player.removeBuilding(this);
-        }
-
+        this.player.removeBuilding(this);
         this.player = player;
 
         flag.setPlayer(player);
@@ -1061,8 +1058,13 @@ public class Building implements EndPoint {
         }
 
         // Refuse to upgrade while being torn down
-        if (isBurningDown()) {
+        if (state == State.BURNING) {
             throw new InvalidUserActionException("Cannot upgrade while burning down.");
+        }
+
+        // Refuse to upgrade destroyed building
+        if (state == State.DESTROYED) {
+            throw new InvalidUserActionException("Cannot upgrade destroyed building.");
         }
 
         // Refuse to upgrade while already being upgraded

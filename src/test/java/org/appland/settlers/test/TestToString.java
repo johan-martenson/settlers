@@ -67,13 +67,9 @@ public class TestToString {
     @Test
     public void testStoneToString() throws Exception {
 
-        // Starting new game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place stone
         var point0 = new Point(3, 3);
@@ -86,13 +82,9 @@ public class TestToString {
     @Test
     public void testTreeToString() throws Exception {
 
-        // Starting new game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place stone
         var point0 = new Point(3, 5);
@@ -114,13 +106,9 @@ public class TestToString {
     @Test
     public void testEmptyFlagToString() throws Exception {
 
-        // Starting new game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -137,13 +125,9 @@ public class TestToString {
     @Test
     public void testGameEventMessages() throws Exception {
 
-        // Starting new game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -199,13 +183,9 @@ public class TestToString {
     @Test
     public void testPrivateSoldierToString() throws Exception {
 
-        // Starting new game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place barracks
         var point0 = new Point(10, 10);
@@ -247,13 +227,9 @@ public class TestToString {
     @Test
     public void testPrivateFirstClassSoldierToString() throws Exception {
 
-        // Starting new game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place barracks
         var point0 = new Point(10, 10);
@@ -277,31 +253,27 @@ public class TestToString {
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         // Wait for a soldier to start walking to the barracks
-        var military = Utils.waitForSoldierOutsideBuilding(player0);
+        var soldier = Utils.waitForSoldierOutsideBuilding(player0);
 
-        assertTrue(military.isExactlyAtPoint());
-        assertNotNull(military);
-        assertEquals(military.getRank(), Soldier.Rank.PRIVATE_FIRST_CLASS_RANK);
+        assertTrue(soldier.isExactlyAtPoint());
+        assertNotNull(soldier);
+        assertEquals(soldier.getRank(), Soldier.Rank.PRIVATE_FIRST_CLASS_RANK);
 
         // Verify that the toString() method is correct
-        assertEquals(military.toString(), "Private first class soldier (10, 10) (WALKING_TO_TARGET)");
+        assertEquals(soldier.toString(), "Private first class soldier (10, 10) (WALKING_TO_TARGET)");
 
         map.stepTime();
 
-        assertFalse(military.isExactlyAtPoint());
-        assertEquals(military.toString(), "Private first class soldier (10, 10) - (11, 9) (WALKING_TO_TARGET)");
+        assertFalse(soldier.isExactlyAtPoint());
+        assertEquals(soldier.toString(), "Private first class soldier (10, 10) - (11, 9) (WALKING_TO_TARGET)");
     }
 
     @Test
     public void testSergeantSoldierToString() throws Exception {
 
-        // Starting new game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place barracks
         var point0 = new Point(10, 10);
@@ -343,13 +315,9 @@ public class TestToString {
     @Test
     public void testOfficerSoldierToString() throws Exception {
 
-        // Starting new game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place barracks
         var point0 = new Point(10, 10);
@@ -391,13 +359,9 @@ public class TestToString {
     @Test
     public void testGeneralSoldierToString() throws Exception {
 
-        // Starting new game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place barracks
         var point0 = new Point(10, 10);
@@ -439,13 +403,9 @@ public class TestToString {
     @Test
     public void testRoadToString() throws Exception {
 
-        // Starting new game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point0 = new Point(10, 10);
@@ -481,13 +441,9 @@ public class TestToString {
     @Test
     public void testCargoToString() throws InvalidUserActionException {
 
-        // Starting new game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point0 = new Point(10, 10);
@@ -509,10 +465,7 @@ public class TestToString {
 
         // Create new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -550,9 +503,7 @@ public class TestToString {
 
         // Create new single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -575,22 +526,20 @@ public class TestToString {
 
         // Verify that the toString() method is correct
         assertTrue(baker.isExactlyAtPoint());
-        assertEquals(baker.toString(), "Baker (5, 5)");
+        assertEquals(baker.toString(), "Baker (5, 5) (WALKING_TO_TARGET)");
 
         map.stepTime();
 
         assertFalse(baker.isExactlyAtPoint());
-        assertEquals(baker.toString(), "Baker (5, 5) - (6, 4)");
+        assertEquals(baker.toString(), "Baker (5, 5) - (6, 4) (WALKING_TO_TARGET)");
     }
 
     @Test
     public void testButcherToString() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -624,11 +573,9 @@ public class TestToString {
     @Test
     public void testArmorerToString() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -664,9 +611,7 @@ public class TestToString {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -702,9 +647,7 @@ public class TestToString {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -738,11 +681,9 @@ public class TestToString {
     @Test
     public void testIronFounderToString() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -777,11 +718,9 @@ public class TestToString {
     @Test
     public void testCourierToString() throws Exception {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 30, 30);
+        var map = new GameMap(List.of(player0), 30, 30);
 
         // Place headquarter
         var point0 = new Point(19, 5);
@@ -811,11 +750,9 @@ public class TestToString {
     @Test
     public void testShipUnderConstructionToString() throws InvalidUserActionException {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place a lake
         for (int i = 7; i < 53; i += 2) {
@@ -907,11 +844,9 @@ public class TestToString {
     @Test
     public void testShipReadyToString() throws InvalidUserActionException {
 
-        // Create single player game
+        // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place a lake
         for (int i = 7; i < 53; i += 2) {

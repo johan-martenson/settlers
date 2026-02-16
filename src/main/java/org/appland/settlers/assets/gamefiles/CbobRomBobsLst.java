@@ -19,6 +19,7 @@ public class CbobRomBobsLst {
     public static final Animation LOWERING_FISHING_ROD_SOUTH_WEST = new Animation(124, 8);
     public static final Animation SOWING = new Animation(132, 8);
     public static final Animation HARVESTING = new Animation(140, 8);
+    public static final Animation FEEDING_PIGS = new Animation(148, 12);
 
     public static final Animation SAWING = new Animation(160, 6);
     public static final Animation SLAUGHTERING = new Animation(160, 6);

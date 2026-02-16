@@ -14,7 +14,6 @@ import org.appland.settlers.assets.utils.ImageUtils;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Set;
 
 import static org.appland.settlers.assets.Utils.getImageAt;
@@ -153,7 +152,7 @@ public class IconsExtractor {
             collector.addIcon(icon, ImageUtils.getBitmapFromResource(ioDat.get(icon.index)));
         }
 
-        try (InputStream in = IconsExtractor.class.getResourceAsStream("/pause.png")) {
+        try (var in = IconsExtractor.class.getResourceAsStream("/pause.png")) {
             if (in == null) {
                 throw new IOException("Resource not found: /pause.png");
             }
@@ -162,7 +161,7 @@ public class IconsExtractor {
             collector.addUiElement(UiIcon.PAUSE, ImageUtils.toBitmap(img));
         }
 
-        try (InputStream in = IconsExtractor.class.getResourceAsStream("/play.png")) {
+        try (var in = IconsExtractor.class.getResourceAsStream("/play.png")) {
             if (in == null) {
                 throw new IOException("Resource not found: /play.png");
             }
