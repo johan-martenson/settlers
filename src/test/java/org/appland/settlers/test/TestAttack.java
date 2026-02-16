@@ -5263,7 +5263,6 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
         var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place player 0's headquarters

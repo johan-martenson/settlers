@@ -219,7 +219,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -252,7 +251,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -293,7 +291,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -328,7 +325,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -368,7 +364,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -395,7 +390,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -487,7 +481,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -542,7 +535,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -609,7 +601,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -648,7 +639,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -724,7 +714,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -757,7 +746,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -825,7 +813,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -908,7 +895,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -957,7 +943,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1043,7 +1028,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1076,7 +1060,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1109,7 +1092,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1140,7 +1122,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1179,7 +1160,6 @@ public class TestMetalworks {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1252,7 +1232,6 @@ public class TestMetalworks {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1357,7 +1336,6 @@ public class TestMetalworks {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1400,7 +1378,6 @@ public class TestMetalworks {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1450,7 +1427,6 @@ public class TestMetalworks {
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -1515,7 +1491,6 @@ public class TestMetalworks {
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -1802,7 +1777,6 @@ public class TestMetalworks {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1863,7 +1837,6 @@ public class TestMetalworks {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1913,7 +1886,6 @@ public class TestMetalworks {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1966,7 +1938,6 @@ public class TestMetalworks {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2022,7 +1993,6 @@ public class TestMetalworks {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2069,7 +2039,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2111,7 +2080,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2147,7 +2115,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2210,7 +2177,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2268,7 +2234,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2296,7 +2261,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2323,7 +2287,6 @@ public class TestMetalworks {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2352,7 +2315,6 @@ public class TestMetalworks {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2385,7 +2347,6 @@ public class TestMetalworks {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2421,7 +2382,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -2489,7 +2449,6 @@ public class TestMetalworks {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter

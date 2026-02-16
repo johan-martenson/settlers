@@ -105,7 +105,6 @@ public class TestDecorations {
             // Create new game map
             var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
             var players = new ArrayList<Player>();            players.add(player0);
-
             var map = new GameMap(players, 100, 100);
 
             // Place headquarters
@@ -134,7 +133,6 @@ public class TestDecorations {
             // Create new game map
             var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
             var players = new ArrayList<Player>();            players.add(player0);
-
             var map = new GameMap(players, 100, 100);
 
             // Place headquarters
@@ -166,7 +164,6 @@ public class TestDecorations {
             // Create new game map
             var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
             var players = new ArrayList<Player>();            players.add(player0);
-
             var map = new GameMap(players, 100, 100);
 
             // Place headquarters
@@ -198,7 +195,6 @@ public class TestDecorations {
             // Create new game map
             var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
             var players = new ArrayList<Player>();            players.add(player0);
-
             var map = new GameMap(players, 100, 100);
 
             // Place headquarters
@@ -234,7 +230,6 @@ public class TestDecorations {
             // Create new game map
             var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
             var players = new ArrayList<Player>();            players.add(player0);
-
             var map = new GameMap(players, 100, 100);
 
             // Place decorations that should not have any impact on the game all over the map
@@ -391,7 +386,6 @@ public class TestDecorations {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 15, 15);
 
         // Place headquarter
@@ -435,7 +429,6 @@ public class TestDecorations {
             // Create single player game
             var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
             var players = new ArrayList<Player>();            players.add(player0);
-
             var map = new GameMap(players, 30, 30);
 
             // Place headquarter
@@ -492,4 +485,3 @@ public class TestDecorations {
         }
     }
 }
-

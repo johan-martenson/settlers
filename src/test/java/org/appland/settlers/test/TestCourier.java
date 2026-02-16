@@ -1197,7 +1197,6 @@ public class TestCourier {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 50, 50);
 
         // Place headquarters
@@ -1231,7 +1230,6 @@ public class TestCourier {
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
         players.add(player1);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -1297,7 +1295,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -1358,7 +1355,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -1414,7 +1410,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -1454,7 +1449,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -1508,7 +1502,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -1548,7 +1541,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -1599,7 +1591,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -1656,7 +1647,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -1697,7 +1687,6 @@ public class TestCourier {
             // Creating new game map with size 40x40
             var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
             var players = new ArrayList<Player>();            players.add(player0);
-
             var map = new GameMap(players, 100, 100);
 
             // Place headquarters
@@ -1755,7 +1744,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -1809,7 +1797,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -1864,7 +1851,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -1915,7 +1901,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -1972,7 +1957,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -2013,7 +1997,6 @@ public class TestCourier {
             // Creating new game map with size 40x40
             var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
             var players = new ArrayList<Player>();            players.add(player0);
-
             var map = new GameMap(players, 100, 100);
 
             // Place headquarters
@@ -2070,7 +2053,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -2124,7 +2106,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -2179,7 +2160,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -2230,7 +2210,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -2287,7 +2266,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -2329,7 +2307,6 @@ public class TestCourier {
             // Creating new game map with size 40x40
             var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
             var players = new ArrayList<Player>();            players.add(player0);
-
             var map = new GameMap(players, 100, 100);
 
             // Place headquarters
@@ -2386,7 +2363,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -2440,7 +2416,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -2495,7 +2470,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -2546,7 +2520,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -2603,7 +2576,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -2643,7 +2615,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -2699,7 +2670,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -2753,7 +2723,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -2808,7 +2777,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -2859,7 +2827,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -2916,7 +2883,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -2958,7 +2924,6 @@ public class TestCourier {
             // Creating new game map with size 40x40
             var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
             var players = new ArrayList<Player>();            players.add(player0);
-
             var map = new GameMap(players, 100, 100);
 
             // Place headquarters
@@ -3015,7 +2980,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -3064,7 +3028,6 @@ public class TestCourier {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters
@@ -3114,7 +3077,6 @@ public class TestCourier {
         // Creating new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarters

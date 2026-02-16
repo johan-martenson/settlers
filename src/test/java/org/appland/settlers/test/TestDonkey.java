@@ -1241,7 +1241,6 @@ public class TestDonkey {
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
         players.add(player1);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarter

@@ -1412,7 +1412,6 @@ public class TestGameMonitoringWhenDiscovering {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();
         players.add(player0);
-
         var map = new GameMap(players, 80, 40);
 
         // Place headquarter for player 0
@@ -1457,7 +1456,6 @@ public class TestGameMonitoringWhenDiscovering {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();
         players.add(player0);
-
         var map = new GameMap(players, 80, 40);
 
         // Place headquarter for player 0

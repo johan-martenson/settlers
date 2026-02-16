@@ -34,7 +34,6 @@ public class TestGameMap {
 
         // Create single player game
         var players = new ArrayList<Player>();        players.add(new Player("Some name", PlayerColor.YELLOW, Nation.ROMANS, PlayerType.HUMAN));
-
         var map = new GameMap(players, 100, 100);
 
         // Verify that the player list can be set
@@ -77,7 +76,6 @@ public class TestGameMap {
 
         // Create single player game
         var players = new ArrayList<Player>();        players.add(new Player("Some player", PlayerColor.YELLOW, Nation.ROMANS, PlayerType.HUMAN));
-
         var map = new GameMap(players, 100, 100);
 
         // Verify that the player list can be set

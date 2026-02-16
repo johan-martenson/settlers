@@ -202,7 +202,6 @@ public class TestMill {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -226,7 +225,6 @@ public class TestMill {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
@@ -257,7 +255,6 @@ public class TestMill {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -289,7 +286,6 @@ public class TestMill {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -318,7 +314,6 @@ public class TestMill {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -366,7 +361,6 @@ public class TestMill {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -408,7 +402,6 @@ public class TestMill {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -512,7 +505,6 @@ public class TestMill {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -576,7 +568,6 @@ public class TestMill {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -629,7 +620,6 @@ public class TestMill {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -691,7 +681,6 @@ public class TestMill {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -2060,7 +2049,6 @@ public class TestMill {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -2125,7 +2113,6 @@ public class TestMill {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter

@@ -105,7 +105,6 @@ public class TestPlacement {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 10, 10);
 
         // Place headquarter
@@ -934,7 +933,6 @@ public class TestPlacement {
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 40, 40);
 
         // Place a lake
@@ -966,7 +964,6 @@ public class TestPlacement {
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 10, 10);
 
         // Set a tile's vegetation to mountain
@@ -984,7 +981,6 @@ public class TestPlacement {
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-
         var map = new GameMap(players, 10, 10);
 
         // Place stone
@@ -1375,7 +1371,6 @@ public class TestPlacement {
 
         var players = new LinkedList<Player>();        players.add(player0);
         players.add(player1);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarter
@@ -1405,7 +1400,6 @@ public class TestPlacement {
 
         var players = new LinkedList<Player>();        players.add(player0);
         players.add(player1);
-
         var map = new GameMap(players, 100, 100);
 
         // Place headquarter
