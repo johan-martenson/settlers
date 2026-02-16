@@ -45,18 +45,17 @@ public class TestScout {
     public void testScoutCanBeCalledFromFlag() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 10);
+        var flag = map.placeFlag(player0, point1);
 
         // Connect headquarter and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -69,18 +68,17 @@ public class TestScout {
     public void testStorageDispatchesScoutWhenItHasBeenCalled() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 10);
+        var flag = map.placeFlag(player0, point1);
 
         // Connect headquarter and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -89,7 +87,7 @@ public class TestScout {
         Utils.fastForward(30, map);
 
         // Call scout from the flag
-        int amountWorkers = map.getWorkers().size();
+        var amountWorkers = map.getWorkers().size();
 
         flag.callScout();
 
@@ -105,18 +103,17 @@ public class TestScout {
     public void testScoutIsNotASoldier() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 10);
+        var flag = map.placeFlag(player0, point1);
 
         // Connect headquarter and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -125,12 +122,12 @@ public class TestScout {
         Utils.fastForward(30, map);
 
         // Call scout from the flag
-        int amountWorkers = map.getWorkers().size();
+        var amountWorkers = map.getWorkers().size();
 
         flag.callScout();
 
         // Wait for a scout to walk out
-        Scout scout0 = Utils.waitForWorkerOutsideBuilding(Scout.class, player0);
+        var scout0 = Utils.waitForWorkerOutsideBuilding(Scout.class, player0);
 
         // Verify that the scout is not a soldier
         assertFalse(scout0.isSoldier());
@@ -140,22 +137,21 @@ public class TestScout {
     public void testScoutGetsCreatedFromBow() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Remove all scouts from the headquarter and add a bow
         Utils.adjustInventoryTo(headquarter0, SCOUT, 0);
         Utils.adjustInventoryTo(headquarter0, Material.BOW, 1);
 
         // Place flag
-        Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 10);
+        var flag = map.placeFlag(player0, point1);
 
         // Connect headquarter and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -164,7 +160,7 @@ public class TestScout {
         Utils.fastForward(30, map);
 
         // Call scout from the flag
-        int amountWorkers = map.getWorkers().size();
+        var amountWorkers = map.getWorkers().size();
 
         flag.callScout();
 
@@ -180,18 +176,17 @@ public class TestScout {
     public void testScoutGetsToFlagThenLeavesToNearbySpot() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 10);
+        var flag = map.placeFlag(player0, point1);
 
         // Connect headquarter and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -207,7 +202,7 @@ public class TestScout {
 
         Worker scout = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
                 scout = worker;
             }
@@ -228,18 +223,17 @@ public class TestScout {
     public void testScoutWalksEastTowardAndThroughTheBorder() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(19, 9);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(19, 9);
+        var flag = map.placeFlag(player0, point1);
 
         // Connect headquarter and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -255,7 +249,7 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
                 scout = (Scout) worker;
             }
@@ -276,18 +270,17 @@ public class TestScout {
     public void testScoutWalksNorthTowardAndThroughTheBorder() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 17);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 17);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(5, 25);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(5, 25);
+        var flag = map.placeFlag(player0, point1);
 
         // Connect headquarter and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -303,7 +296,7 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
                 scout = (Scout) worker;
             }
@@ -332,18 +325,17 @@ public class TestScout {
     public void testScoutWalksThirtyStepsAndThenReturnsToFlag() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(10, 18);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 18);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(18, 18);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(18, 18);
+        var flag = map.placeFlag(player0, point1);
 
         // Connect headquarter and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -359,7 +351,7 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
                 scout = (Scout) worker;
             }
@@ -394,20 +386,19 @@ public class TestScout {
     public void testScoutDoesNotGoOutsideTheMap() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(9, 3);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(9, 3);
+        var flag = map.placeFlag(player0, point1);
 
         // Connect headquarter and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -423,7 +414,7 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
                 scout = (Scout) worker;
             }
@@ -451,18 +442,17 @@ public class TestScout {
     public void testScoutDiscoversNewGround() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(13, 13);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(13, 13);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(18, 18);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(18, 18);
+        var flag = map.placeFlag(player0, point1);
 
         // Connect headquarter and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -478,7 +468,7 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
                 scout = (Scout) worker;
             }
@@ -509,18 +499,17 @@ public class TestScout {
     public void testScoutDiscoversNewGroundForPlayer() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(10, 18);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 18);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(18, 18);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(18, 18);
+        var flag = map.placeFlag(player0, point1);
 
         // Connect headquarter and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -536,7 +525,7 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
                 scout = (Scout) worker;
             }
@@ -567,17 +556,16 @@ public class TestScout {
     public void testDepositingScoutIncreasesAmountOfScouts() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Storehouse headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Add a scout to the headquarter and verify that the amount goes up
-        int amount = headquarter0.getAmount(SCOUT);
+        var amount = headquarter0.getAmount(SCOUT);
 
         headquarter0.depositWorker(new Scout(player0, map));
 
@@ -588,18 +576,17 @@ public class TestScout {
     public void testSeveralScoutsCanBeCalled() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Storehouse headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 10);
+        var flag = map.placeFlag(player0, point1);
 
         // Add more scouts to the headquarter
         headquarter0.depositWorker(new Scout(player0, map));
@@ -611,7 +598,7 @@ public class TestScout {
         Utils.fastForward(30, map);
 
         // Call scout from the flag
-        int workers = map.getWorkers().size();
+        var workers = map.getWorkers().size();
 
         flag.callScout();
 
@@ -632,18 +619,17 @@ public class TestScout {
     public void testScoutGoesOutAgainIfNeeded() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(13, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(13, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(22, 8);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(22, 8);
+        var flag = map.placeFlag(player0, point1);
 
         // Connect headquarter and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -662,7 +648,7 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
                 scout = (Scout) worker;
             }
@@ -698,7 +684,7 @@ public class TestScout {
         scout = null;
 
         for (int i = 0; i < 100; i++) {
-            for (Worker worker : map.getWorkers()) {
+            for (var worker : map.getWorkers()) {
                 if (worker instanceof Scout && flag.getPosition().equals(worker.getTarget())) {
                     scout = (Scout)worker;
 
@@ -721,18 +707,17 @@ public class TestScout {
     public void testReturningScoutIncreasesAmountInStorage() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(14, 8);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(14, 8);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(22, 8);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(22, 8);
+        var flag = map.placeFlag(player0, point1);
 
         // Connect headquarter and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -751,7 +736,7 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
                 scout = (Scout) worker;
             }
@@ -791,20 +776,19 @@ public class TestScout {
     public void testAssignedScoutHasThePlayerSetCorrectly() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(13, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(13, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(22, 8);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(22, 8);
+        var flag = map.placeFlag(player0, point1);
 
         // Connect headquarter and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -819,11 +803,11 @@ public class TestScout {
         flag.callScout();
 
         // Wait for the scout to go to the flag
-        List<Scout> scouts = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0);
+        var scouts = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0);
 
         assertEquals(scouts.size(), 1);
 
-        Scout scout = scouts.getFirst();
+        var scout = scouts.getFirst();
 
         assertEquals(scout.getPlayer(), player0);
     }
@@ -832,20 +816,19 @@ public class TestScout {
     public void testNothingHappensWithScoutCalledFromFlagWithoutConnectionToStorage() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 10);
+        var flag = map.placeFlag(player0, point1);
 
         // Call scout from the flag
         flag.callScout();
@@ -853,7 +836,7 @@ public class TestScout {
         // Verify that no scout leaves the headquarter
         for (int i = 0; i < 100; i++) {
 
-            List<Scout> scouts = Utils.findWorkersOfTypeOutsideForPlayer(Scout.class, player0);
+            var scouts = Utils.findWorkersOfTypeOutsideForPlayer(Scout.class, player0);
 
             assertEquals(scouts.size(), 0);
 
@@ -867,28 +850,27 @@ public class TestScout {
     public void testScoutReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place second flag
-        Point point2 = new Point(14, 4);
-        Flag flag1 = map.placeFlag(player0, point2);
+        var point2 = new Point(14, 4);
+        var flag1 = map.placeFlag(player0, point2);
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         // Call scout from the second flag
         flag1.callScout();
@@ -898,7 +880,7 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
                 scout = (Scout) worker;
             }
@@ -934,28 +916,27 @@ public class TestScout {
     public void testScoutContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place second flag
-        Point point2 = new Point(14, 4);
-        Flag flag1 = map.placeFlag(player0, point2);
+        var point2 = new Point(14, 4);
+        var flag1 = map.placeFlag(player0, point2);
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         // Call scout from the second flag
         flag1.callScout();
@@ -965,7 +946,7 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
                 scout = (Scout) worker;
             }
@@ -1002,28 +983,27 @@ public class TestScout {
     public void testScoutContinuesEvenIfFlagIsRemovedWhenItIsClose() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place second flag
-        Point point2 = new Point(14, 4);
-        Flag flag1 = map.placeFlag(player0, point2);
+        var point2 = new Point(14, 4);
+        var flag1 = map.placeFlag(player0, point2);
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         // Call scout from the second flag
         flag1.callScout();
@@ -1033,7 +1013,7 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
                 scout = (Scout) worker;
             }
@@ -1068,28 +1048,27 @@ public class TestScout {
     public void testScoutCanWalkAroundBlockingStones() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(23, 5);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(23, 5);
+        var flag = map.placeFlag(player0, point1);
 
         // Connect headquarter and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         // Place stones that the scout needs to walk around
-        Point point2 = new Point(25, 5);
-        Point point3 = new Point(24, 4);
-        Point point4 = new Point(24, 6);
-        Point point5 = new Point(23, 7);
-        Point point6 = new Point(23, 3);
+        var point2 = new Point(25, 5);
+        var point3 = new Point(24, 4);
+        var point4 = new Point(24, 6);
+        var point5 = new Point(23, 7);
+        var point6 = new Point(23, 3);
 
         map.placeStone(point2, Stone.StoneType.STONE_1, 7);
         map.placeStone(point3, Stone.StoneType.STONE_1, 7);
@@ -1101,7 +1080,7 @@ public class TestScout {
         flag.callScout();
 
         // Wait for the scout to come out
-        Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).getFirst();
+        var scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).getFirst();
 
         // Ensure that the scout goes around the stones
         for (int i = 0; i < 1000; i++) {
@@ -1120,18 +1099,17 @@ public class TestScout {
     public void testScoutWalksOtherDirectionIfBlockedBySea() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(17, 23);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(17, 23);
+        var flag = map.placeFlag(player0, point1);
 
         // Connect headquarter and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -1145,7 +1123,7 @@ public class TestScout {
         flag.callScout();
 
         // Wait for the scout to come out
-        Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).getFirst();
+        var scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).getFirst();
 
         // Wait for the scout to reach the flag
         assertEquals(scout.getTarget(), flag.getPosition());
@@ -1171,18 +1149,17 @@ public class TestScout {
     public void testScoutContinuouslyDiscoversWithSameRadius() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 100, 100);
 
         // Place headquarter
-        Point point0 = new Point(9, 23);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 23);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(17, 23);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(17, 23);
+        var flag = map.placeFlag(player0, point1);
 
         // Connect headquarter and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -1191,7 +1168,7 @@ public class TestScout {
         flag.callScout();
 
         // Wait for the scout to come out
-        Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).getFirst();
+        var scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).getFirst();
 
         // Wait for the scout to reach the flag
         assertEquals(scout.getTarget(), flag.getPosition());
@@ -1247,27 +1224,26 @@ public class TestScout {
     public void testScoutReturnsOffroadIfRoadIsMissingWhScoutReachesFlag() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 100, 100);
 
         // Place headquarter
-        Point point0 = new Point(9, 23);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 23);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(17, 23);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(17, 23);
+        var flag = map.placeFlag(player0, point1);
 
         // Connect headquarter and flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         // Call scout from the flag
         flag.callScout();
 
         // Wait for the scout to come out
-        Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).getFirst();
+        var scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).getFirst();
 
         // Wait for the scout to reach the flag
         assertEquals(scout.getTarget(), flag.getPosition());

@@ -226,8 +226,7 @@ public class TestMonitoringWhenBuildingsDoWork {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -246,7 +245,7 @@ public class TestMonitoringWhenBuildingsDoWork {
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(armory0);
 
-        Worker armorer0 = armory0.getWorker();
+        var armorer0 = armory0.getWorker();
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), armory0);
@@ -321,8 +320,7 @@ public class TestMonitoringWhenBuildingsDoWork {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -402,8 +400,7 @@ public class TestMonitoringWhenBuildingsDoWork {
 
         // Create new single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -480,8 +477,7 @@ public class TestMonitoringWhenBuildingsDoWork {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -545,8 +541,7 @@ public class TestMonitoringWhenBuildingsDoWork {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -610,8 +605,7 @@ public class TestMonitoringWhenBuildingsDoWork {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -678,8 +672,7 @@ public class TestMonitoringWhenBuildingsDoWork {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -693,8 +686,8 @@ public class TestMonitoringWhenBuildingsDoWork {
         Utils.constructHouse(donkeyFarm);
 
         // Deliver resources to the donkey farm
-        Cargo waterCargo = new Cargo(Material.WATER, map);
-        Cargo wheatCargo = new Cargo(WHEAT, map);
+        var waterCargo = new Cargo(Material.WATER, map);
+        var wheatCargo = new Cargo(WHEAT, map);
 
         donkeyFarm.putCargo(waterCargo);
         donkeyFarm.putCargo(wheatCargo);
@@ -857,8 +850,7 @@ public class TestMonitoringWhenBuildingsDoWork {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -1032,8 +1024,7 @@ public class TestMonitoringWhenBuildingsDoWork {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters

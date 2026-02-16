@@ -83,7 +83,7 @@ public class Utils {
     public static void assertNoStepDirectlyUpwards(List<Point> route) {
         Point previous = null;
 
-        for (Point iterator : route) {
+        for (var iterator : route) {
             if (previous == null) {
                 previous = iterator;
                 continue;
@@ -212,7 +212,7 @@ public class Utils {
     }
 
     public static void verifyListContainsWorkerOfType(List<Worker> workers, Class<? extends Worker> workerClass) {
-        boolean found = false;
+        var found = false;
 
         for (var worker : workers) {
             if (worker.getClass().equals(workerClass)) {
@@ -282,19 +282,19 @@ public class Utils {
     }
 
     public static void createMinableMountainWithinRadius(Point point, int radius, GameMap map) {
-        for (Point p : map.getPointsWithinRadius(point, radius - 1)) {
+        for (var p : map.getPointsWithinRadius(point, radius - 1)) {
             surroundPointWithVegetation(p, MOUNTAIN_1, map);
         }
     }
 
     public static void putMineralWithinRadius(Material mineral, Point point1, int radius, GameMap map) {
-        for (Point p : map.getPointsWithinRadius(point1, radius - 1)) {
+        for (var p : map.getPointsWithinRadius(point1, radius - 1)) {
             map.surroundPointWithMineral(p, mineral, LARGE);
         }
     }
 
     public static Courier occupyRoad(Road road, GameMap map) {
-        Courier courier = new Courier(road.getPlayer(), map);
+        var courier = new Courier(road.getPlayer(), map);
 
         map.placeWorker(courier, road.getFlags()[0]);
         courier.assignToRoad(road);
@@ -354,7 +354,7 @@ public class Utils {
         var map = building.getMap();
 
         // Assign builder
-        Builder builder = new Builder(building.getPlayer(), building.getMap());
+        var builder = new Builder(building.getPlayer(), building.getMap());
         map.placeWorker(builder, building.getFlag());
 
         building.promiseBuilder(builder);
@@ -369,7 +369,7 @@ public class Utils {
         for (int i = 0; i < 20; i++) {
             if (building.needsMaterial(PLANK)) {
                 try {
-                    Cargo cargo = new Cargo(PLANK, map);
+                    var cargo = new Cargo(PLANK, map);
 
                     building.promiseDelivery(PLANK);
                     building.putCargo(cargo);
@@ -380,7 +380,7 @@ public class Utils {
 
             if (building.needsMaterial(STONE)) {
                 try {
-                    Cargo cargo = new Cargo(STONE, map);
+                    var cargo = new Cargo(STONE, map);
 
                     building.promiseDelivery(STONE);
                     building.putCargo(cargo);
@@ -404,8 +404,7 @@ public class Utils {
     public static Cargo fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Material... materials) throws InvalidUserActionException {
         assertTrue(materials.length > 0);
 
-        Set<Material> setOfMaterials = new HashSet<>(Arrays.asList(materials));
-
+        var setOfMaterials = new HashSet<Material>(Arrays.asList(materials));
         for (int j = 0; j < 20000; j++) {
             if (worker.getCargo() != null && setOfMaterials.contains(worker.getCargo().getMaterial())) {
                 break;
@@ -447,7 +446,7 @@ public class Utils {
     public static void waitForMilitaryBuildingToGetPopulated(Building building, int nr) throws InvalidUserActionException {
         var map = building.getMap();
 
-        boolean populated = false;
+        var populated = false;
 
         for (int i = 0; i < 1000; i++) {
             if (building.getNumberOfHostedSoldiers() == nr) {
@@ -488,9 +487,9 @@ public class Utils {
     }
 
     public static void verifyDeliveryOfMaterial(GameMap map, Road road) throws InvalidUserActionException {
-        Courier courier = road.getCourier();
+        var courier = road.getCourier();
 
-        boolean delivery = false;
+        var delivery = false;
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == COIN) {
@@ -506,7 +505,7 @@ public class Utils {
     }
 
     public static void verifyNoDeliveryOfMaterial(GameMap map, Road road) throws InvalidUserActionException {
-        Courier courier = road.getCourier();
+        var courier = road.getCourier();
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == COIN) {
@@ -557,8 +556,7 @@ public class Utils {
 
     public static List<Soldier> findSoldiersOutsideBuilding(Player player) {
         var map = player.getMap();
-        List<Soldier> result = new LinkedList<>();
-
+        var result = new LinkedList<Soldier>();
         for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
                 result.add((Soldier)worker);
@@ -602,8 +600,7 @@ public class Utils {
 
     public static <T extends Worker> List<T> findWorkersOfTypeOutsideForPlayer(Class<T> aClass, Player player) {
         var map = player.getMap();
-        List<T> workersFound = new LinkedList<>();
-
+        var workersFound = new LinkedList<T>();
         for (var worker : map.getWorkers()) {
             if (worker.getClass().equals(aClass) && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
                 workersFound.add(aClass.cast(worker));
@@ -615,8 +612,7 @@ public class Utils {
 
     public static <T extends Worker> List<T> waitForWorkersOutsideBuilding(Class<T> type, int nr, Player player) throws InvalidUserActionException {
         var map = player.getMap();
-        List<T> workers = new LinkedList<>();
-
+        var workers = new LinkedList<T>();
         for (int i = 0; i < 5000; i++) {
             workers.clear();
 
@@ -762,7 +758,7 @@ public class Utils {
         for (int i = 0; i < 5000; i++) {
 
             // Check if there is a wild animal close to the hut
-            for (WildAnimal wa : map.getWildAnimals()) {
+            for (var wa : map.getWildAnimals()) {
                 if (wa.getPosition().distance(point) < 20) {
                     animal = wa;
 
@@ -872,7 +868,7 @@ public class Utils {
     public static Crop waitForFarmerToPlantCrop(GameMap map, Farmer farmer0) throws InvalidUserActionException {
         waitForFarmerToStartPlanting(map, farmer0);
 
-        Point position = farmer0.getPosition();
+        var position = farmer0.getPosition();
 
         assertFalse(map.isCropAtPoint(position));
 
@@ -926,9 +922,9 @@ public class Utils {
     }
 
     static <T> int countNumberElementAppearsInList(List<T> transportPriorityList, T element) {
-        int sum = 0;
+        var sum = 0;
 
-        for (T type : transportPriorityList) {
+        for (var type : transportPriorityList) {
             if (element == null) {
                 if (type == null) {
                     sum++;
@@ -1005,7 +1001,7 @@ public class Utils {
     }
 
     public static void plantTreesOnPoints(List<Point> points, GameMap map) {
-        for (Point point : points) {
+        for (var point : points) {
             if (map.isTreeAtPoint(point)) {
                 continue;
             }
@@ -1017,7 +1013,7 @@ public class Utils {
     }
 
     public static void putStoneOnOnePoint(List<Point> points, GameMap map) {
-        for (Point point : points) {
+        for (var point : points) {
             if (map.isStoneAtPoint(point)) {
                 continue;
             }
@@ -1030,7 +1026,7 @@ public class Utils {
     }
 
     public static void putWildAnimalOnOnePoint(List<Point> points, GameMap map) {
-        for (Point point : points) {
+        for (var point : points) {
             try {
                 map.placeWildAnimal(point);
                 break;
@@ -1119,10 +1115,9 @@ public class Utils {
     }
 
     public static Set<Courier> waitForRoadsToGetAssignedCouriers(GameMap map, Road... roads) throws InvalidUserActionException {
-        Set<Courier> couriers = new HashSet<>();
-
+        var couriers = new HashSet<Courier>();
         for (int i = 0; i < 1000; i++) {
-            for (Road road : roads) {
+            for (var road : roads) {
                 if (road.getCourier() == null) {
                     continue;
                 }
@@ -1145,7 +1140,7 @@ public class Utils {
     public static void waitForNewMessage(Player player0) throws InvalidUserActionException {
         var map = player0.getMap();
 
-        int amountMessages = player0.getMessages().size();
+        var amountMessages = player0.getMessages().size();
 
         for (int i = 0; i < 1000; i++) {
             if (player0.getMessages().size() > amountMessages) {
@@ -1335,9 +1330,9 @@ public class Utils {
 
     public static void waitForStonesToDisappear(GameMap map, Stone... stones) throws InvalidUserActionException {
         for (int i = 0; i < 10000; i++) {
-            boolean allStonesGone = true;
+            var allStonesGone = true;
 
-            for (Stone stone : stones) {
+            for (var stone : stones) {
                 if (map.isStoneAtPoint(stone.getPosition())) {
                     allStonesGone = false;
 
@@ -1352,15 +1347,15 @@ public class Utils {
             map.stepTime();
         }
 
-        for (Stone stone : stones) {
+        for (var stone : stones) {
             assertFalse(map.isStoneAtPoint(stone.getPosition()));
         }
     }
 
     public static Point getPointAtMaxX(Collection<Point> points) {
-        Point pointAtMaxX = new Point(0, 0);
+        var pointAtMaxX = new Point(0, 0);
 
-        for (Point point : points) {
+        for (var point : points) {
             if (point.x > pointAtMaxX.x) {
                 pointAtMaxX = point;
             }
@@ -1370,9 +1365,9 @@ public class Utils {
     }
 
     public static Point getPointAtMaxY(Collection<Point> points) {
-        Point pointAtMaxY = new Point(0, 0);
+        var pointAtMaxY = new Point(0, 0);
 
-        for (Point point : points) {
+        for (var point : points) {
             if (point.y > pointAtMaxY.y) {
                 pointAtMaxY = point;
             }
@@ -1382,9 +1377,8 @@ public class Utils {
     }
 
     public static Collection<Point> getPointsForX(Collection<Point> fieldOfView, int x) {
-        List<Point> points = new ArrayList<>();
-
-        for (Point point : fieldOfView) {
+        var points = new ArrayList<Point>();
+        for (var point : fieldOfView) {
             if (point.x == x) {
                 points.add(point);
             }
@@ -1394,9 +1388,9 @@ public class Utils {
     }
 
     public static Point getPointAtMinX(Collection<Point> points) {
-        Point pointAtMinX = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        var pointAtMinX = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
-        for (Point point : points) {
+        for (var point : points) {
             if (point.x < pointAtMinX.x) {
                 pointAtMinX = point;
             }
@@ -1406,9 +1400,9 @@ public class Utils {
     }
 
     public static Point getPointAtMinY(Collection<Point> points) {
-        Point pointAtMinY = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        var pointAtMinY = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
-        for (Point point : points) {
+        for (var point : points) {
             if (point.y < pointAtMinY.y) {
                 pointAtMinY = point;
             }
@@ -1418,10 +1412,9 @@ public class Utils {
     }
 
     static Set<Point> getHexagonBorder(Point point0, int radius) {
-        Set<Point> hexagonBorder = new HashSet<>();
-
-        int upperY = point0.y;
-        int lowerY = point0.y;
+        var hexagonBorder = new HashSet<Point>();
+        var upperY = point0.y;
+        var lowerY = point0.y;
         for (int x = point0.x - (radius * 2); x < point0.x - radius; x++) {
             hexagonBorder.add(new Point(x, upperY));
             hexagonBorder.add(new Point(x, lowerY));
@@ -1448,17 +1441,17 @@ public class Utils {
     }
 
     public static void printMaxMinPoints(Collection<Point> points) {
-        int minX = Integer.MAX_VALUE;
-        int maxX = Integer.MIN_VALUE;
-        int minY = Integer.MAX_VALUE;
-        int maxY = Integer.MIN_VALUE;
+        var minX = Integer.MAX_VALUE;
+        var maxX = Integer.MIN_VALUE;
+        var minY = Integer.MAX_VALUE;
+        var maxY = Integer.MIN_VALUE;
 
-        Point pointAtMinX = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
-        Point pointAtMaxX = new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
-        Point pointAtMinY = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
-        Point pointAtMaxY = new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
+        var pointAtMinX = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        var pointAtMaxX = new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
+        var pointAtMinY = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        var pointAtMaxY = new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
 
-        for (Point point : points) {
+        for (var point : points) {
             if (point.x > maxX) {
                 maxX = point.x;
                 pointAtMaxX = point;
@@ -1487,7 +1480,7 @@ public class Utils {
     }
 
     public static void printAdjacentPointsForX(Collection<Point> borderPoints, int x) {
-        for (Point point : borderPoints) {
+        for (var point : borderPoints) {
             if (point.x == x || point.x == x - 1 || point.x == x + 1) {
                 System.out.print(point + " ");
             }
@@ -1498,7 +1491,7 @@ public class Utils {
 
     public static Barracks placeAndOccupyBarracks(Player player, Point point) throws InvalidUserActionException {
         var map = player.getMap();
-        Barracks barracks = map.placeBuilding(new Barracks(player), point);
+        var barracks = map.placeBuilding(new Barracks(player), point);
 
         // Finish construction of barracks
         constructHouse(barracks);
@@ -1510,11 +1503,11 @@ public class Utils {
     }
 
     public static void printMinYAdjacentToX(Collection<Point> landInPoints, int x) {
-        Point pointMinYLeft = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
-        Point pointMinY = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
-        Point pointMinYRight = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        var pointMinYLeft = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        var pointMinY = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        var pointMinYRight = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
-        for (Point point : landInPoints) {
+        for (var point : landInPoints) {
             if (point.x == x - 1 && pointMinYLeft.y > point.y) {
                 pointMinYLeft = point;
             }
@@ -1532,16 +1525,15 @@ public class Utils {
     }
 
     public static void waitForCouriersToBeIdle(GameMap map, Courier... couriers) throws InvalidUserActionException {
-        List<Courier> listOfCouriers = new ArrayList<>(Arrays.asList(couriers));
-
+        var listOfCouriers = new ArrayList<Courier>(Arrays.asList(couriers));
         waitForCouriersToBeIdle(map, listOfCouriers);
     }
 
     public static void waitForCouriersToBeIdle(GameMap map, Collection<Courier> couriers) throws InvalidUserActionException {
         for (int i = 0; i < 5000; i++) {
-            boolean allIdle = true;
+            var allIdle = true;
 
-            for (Courier courier : couriers) {
+            for (var courier : couriers) {
                 if (!courier.isIdle()) {
                     allIdle = false;
 
@@ -1556,13 +1548,13 @@ public class Utils {
             map.stepTime();
         }
 
-        for (Courier courier : couriers) {
+        for (var courier : couriers) {
             assertTrue(courier.isIdle());
         }
     }
 
     public static Cargo placeCargo(GameMap map, Material material, Flag flag, Building building) {
-        Cargo cargo = new Cargo(material, map);
+        var cargo = new Cargo(material, map);
 
         cargo.setPosition(flag.getPosition());
         cargo.setTarget(building);
@@ -1609,7 +1601,7 @@ public class Utils {
         var map = buildings[0].getMap();
 
         for (int i = 0; i < 50_000; i++) {
-            boolean allDone = true;
+            var allDone = true;
 
             for (var building : buildings) {
                 if (!building.isReady()) {
@@ -1760,7 +1752,7 @@ public class Utils {
         var map = buildings[0].getMap();
 
         for (int i = 0; i < 10000; i++) {
-            boolean allPopulated = true;
+            var allPopulated = true;
 
             for (var building : buildings) {
                 if (!building.isOccupied()) {
@@ -1786,11 +1778,10 @@ public class Utils {
         var map = buildings[0].getMap();
 
         // Place builders
-        List<Worker> builders = new ArrayList<>();
-        for (var building : buildings) {
+        var builders = new ArrayList<Worker>();        for (var building : buildings) {
             var player = building.getPlayer();
 
-            Builder builder = new Builder(player, map);
+            var builder = new Builder(player, map);
             map.placeWorker(builder, building.getFlag());
 
             building.promiseBuilder(builder);
@@ -1809,7 +1800,7 @@ public class Utils {
             for (int i = 0; i < 20; i++) {
                 if (building.needsMaterial(PLANK)) {
                     try {
-                        Cargo cargo = new Cargo(PLANK, map);
+                        var cargo = new Cargo(PLANK, map);
 
                         building.promiseDelivery(PLANK);
                         building.putCargo(cargo);
@@ -1820,7 +1811,7 @@ public class Utils {
 
                 if (building.needsMaterial(STONE)) {
                     try {
-                        Cargo cargo = new Cargo(STONE, map);
+                        var cargo = new Cargo(STONE, map);
 
                         building.promiseDelivery(STONE);
                         building.putCargo(cargo);
@@ -1855,7 +1846,7 @@ public class Utils {
     }
 
     public static void verifyWorkerWalksOnPath(GameMap map, Worker worker, Point... points) throws InvalidUserActionException {
-        for (Point point : points) {
+        for (var point : points) {
             assertTrue(worker.isExactlyAtPoint());
             assertEquals(point, worker.getPosition());
 
@@ -1878,7 +1869,7 @@ public class Utils {
     }
 
     public static void verifyWorkerDoesNotMove(GameMap map, Courier courier, int time) throws InvalidUserActionException {
-        Point point = courier.getPosition();
+        var point = courier.getPosition();
 
         for (int i = 0; i < time; i++) {
             assertTrue(courier.isExactlyAtPoint());
@@ -1892,7 +1883,7 @@ public class Utils {
     public static void fastForwardUntilWorkersCarryCargo(GameMap map, Material material, Worker... workers) throws InvalidUserActionException {
         for (int i = 0; i < 5000; i++) {
 
-            boolean allWorkersCarryCargo = true;
+            var allWorkersCarryCargo = true;
 
             for (var worker : workers) {
                 if (worker.getCargo() == null || worker.getCargo().getMaterial() != material) {
@@ -1916,8 +1907,7 @@ public class Utils {
     }
 
     public static void verifyWorkersDoNotMove(GameMap map, Worker... workers) throws InvalidUserActionException {
-        Map<Worker, Point> positions = new HashMap<>();
-
+        var positions = new HashMap<Worker, Point>();
         for (var worker : workers) {
             positions.put(worker, worker.getPosition());
         }
@@ -1934,9 +1924,9 @@ public class Utils {
     public static void waitForCouriersToGetBlocked(GameMap map, Courier... couriers) throws InvalidUserActionException {
         for (int i = 0; i < 20000; i++) {
 
-            boolean allCouriersBlocked = true;
+            var allCouriersBlocked = true;
 
-            for (Courier courier : couriers) {
+            for (var courier : couriers) {
                 if (courier.getCargo() != null && courier.getTarget() == null && !map.isFlagAtPoint(courier.getPosition())) {
                     continue;
                 }
@@ -1953,7 +1943,7 @@ public class Utils {
             map.stepTime();
         }
 
-        for (Courier courier : couriers) {
+        for (var courier : couriers) {
             assertNotNull(courier.getCargo());
             assertNull(courier.getTarget());
             assertFalse(map.isFlagAtPoint(courier.getPosition()));
@@ -1967,7 +1957,7 @@ public class Utils {
     }
 
     public static Cargo retrieveOneCargo(Flag flag) {
-        Cargo cargo = flag.getStackedCargo().getFirst();
+        var cargo = flag.getStackedCargo().getFirst();
 
         flag.retrieveCargo(cargo);
 
@@ -1976,7 +1966,7 @@ public class Utils {
 
     public static void fastForwardUntilWorkersCarryCargo(GameMap map, Worker... workers) throws InvalidUserActionException {
         for (int i = 0; i < 5000; i++) {
-            boolean allWorkersCarryCargo = true;
+            var allWorkersCarryCargo = true;
 
             for (var worker : workers) {
                 if (worker.getCargo() != null) {
@@ -2038,14 +2028,14 @@ public class Utils {
     }
 
     public static void printMaxMinAdjacentToX(Set<Point> discoveredLand, int x) {
-        Point pointMin0 = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
-        Point pointMin1 = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
-        Point pointMin2 = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
-        Point pointMax0 = new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
-        Point pointMax1 = new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
-        Point pointMax2 = new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
+        var pointMin0 = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        var pointMin1 = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        var pointMin2 = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        var pointMax0 = new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
+        var pointMax1 = new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
+        var pointMax2 = new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
 
-        for (Point point : discoveredLand) {
+        for (var point : discoveredLand) {
             if (pointMin0.y > point.y && point.x == x - 1) {
                 pointMin0 = point;
             }
@@ -2097,7 +2087,7 @@ public class Utils {
     }
 
     public static void verifyBuilderHammersInPlaceForDuration(GameMap map, Builder builder0, int time) throws InvalidUserActionException {
-        Point point = builder0.getPosition();
+        var point = builder0.getPosition();
 
         for (int i = 0; i < time; i++) {
             assertEquals(point, builder0.getPosition());
@@ -2109,7 +2099,7 @@ public class Utils {
 
     public static void assignBuilder(Building building) throws InvalidUserActionException {
         var map = building.getMap();
-        Builder builder = new Builder(building.getPlayer(), map);
+        var builder = new Builder(building.getPlayer(), map);
 
         map.placeWorker(builder, building.getFlag());
         builder.setTargetBuilding(building);
@@ -2165,17 +2155,15 @@ public class Utils {
     }
 
     public static void waitForNewShipToBeBuilt(GameMap map) throws InvalidUserActionException {
-        Set<Ship> shipsBefore = new HashSet<>(map.getShips());
-
+        var shipsBefore = new HashSet<Ship>(map.getShips());
         for (int i = 0; i < 10000; i++) {
-            Set<Ship> currentShips = new HashSet<>(map.getShips());
-
+            var currentShips = new HashSet<Ship>(map.getShips());
             currentShips.removeAll(shipsBefore);
 
-            boolean foundNewConstructedShip = false;
+            var foundNewConstructedShip = false;
 
             if (currentShips.size() > 0) {
-                for (Ship ship : currentShips) {
+                for (var ship : currentShips) {
                     if (ship.isReady()) {
                         foundNewConstructedShip = true;
 
@@ -2191,15 +2179,14 @@ public class Utils {
             map.stepTime();
         }
 
-        Set<Ship> currentShips = new HashSet<>(map.getShips());
-
+        var currentShips = new HashSet<Ship>(map.getShips());
         currentShips.removeAll(shipsBefore);
 
         assertNotEquals(currentShips.size(), 0);
 
-        boolean foundNewConstructedShip = false;
+        var foundNewConstructedShip = false;
 
-        for (Ship ship : currentShips) {
+        for (var ship : currentShips) {
             if (ship.isReady()) {
                 foundNewConstructedShip = true;
 
@@ -2211,17 +2198,15 @@ public class Utils {
     }
 
     public static Set<Ship> waitForNewShipToStartConstruction(GameMap map) throws InvalidUserActionException {
-        Set<Ship> shipsBefore = new HashSet<>(map.getShips());
-
+        var shipsBefore = new HashSet<Ship>(map.getShips());
         for (int i = 0; i < 10000; i++) {
-            Set<Ship> currentShips = new HashSet<>(map.getShips());
-
+            var currentShips = new HashSet<Ship>(map.getShips());
             currentShips.removeAll(shipsBefore);
 
-            boolean foundNewUnderConstructionShip = false;
+            var foundNewUnderConstructionShip = false;
 
             if (currentShips.size() > 0) {
-                for (Ship ship : currentShips) {
+                for (var ship : currentShips) {
                     if (ship.isUnderConstruction()) {
                         foundNewUnderConstructionShip = true;
 
@@ -2237,15 +2222,14 @@ public class Utils {
             map.stepTime();
         }
 
-        Set<Ship> currentShips = new HashSet<>(map.getShips());
-
+        var currentShips = new HashSet<Ship>(map.getShips());
         currentShips.removeAll(shipsBefore);
 
         assertNotEquals(currentShips.size(), 0);
 
-        boolean foundNewUnderConstructionShip = false;
+        var foundNewUnderConstructionShip = false;
 
-        for (Ship ship : currentShips) {
+        for (var ship : currentShips) {
             if (ship.isUnderConstruction()) {
                 foundNewUnderConstructionShip = true;
 
@@ -2348,8 +2332,7 @@ public class Utils {
     }
 
     public static Iterable<? extends Point> getAllPointsOnMap(GameMap map) {
-        List<Point> pointsOnMap = new ArrayList<>();
-
+        var pointsOnMap = new ArrayList<Point>();
         for (int x = 0; x < map.getWidth(); x++) {
             for (int y = 0; y < map.getHeight(); y++) {
                 if ((x + y) % 2 != 0) {
@@ -2436,10 +2419,10 @@ public class Utils {
     }
 
     public static int countMonitoredEventsForDecoration(Point point, GameViewMonitor monitor) {
-        int count = 0;
+        var count = 0;
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
-            for (Point decoratedPoint : gameChangesList.removedDecorations()) {
+        for (var gameChangesList : monitor.getEvents()) {
+            for (var decoratedPoint : gameChangesList.removedDecorations()) {
                 if (Objects.equals(point, decoratedPoint)) {
                     count = count + 1;
                 }
@@ -2450,12 +2433,12 @@ public class Utils {
     }
 
     public static int countMonitoredEventsForNewDecoration(Point point, GameViewMonitor monitor) {
-        int count = 0;
+        var count = 0;
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             for (Map.Entry<Point, DecorationType> entry : gameChangesList.newDecorations().entrySet()) {
-                Point decoratedPoint = entry.getKey();
-                DecorationType decorationType = entry.getValue();
+                var decoratedPoint = entry.getKey();
+                var decorationType = entry.getValue();
 
                 if (Objects.equals(point, decoratedPoint)) {
                     count = count + 1;
@@ -2775,8 +2758,7 @@ public class Utils {
     }
 
     public static void printPlayerLand(Player player, Collection<Point> points) {
-        Map<Point, String> places = new HashMap<>();
-
+        var places = new HashMap<Point, String>();
         var map = player.getMap();
 
         map.getBuildings().stream()
@@ -2794,7 +2776,7 @@ public class Utils {
             points.forEach(point -> places.put(point, "+"));
         }
 
-        for (Road road : map.getRoads()) {
+        for (var road : map.getRoads()) {
             if (!Objects.equals(road.getPlayer(), player)) {
                 continue;
             }
@@ -2804,7 +2786,7 @@ public class Utils {
             }
 
             Point previous = null;
-            for (Point point : road.getWayPoints()) {
+            for (var point : road.getWayPoints()) {
                 if (Objects.equals(point, road.getStart()) || Objects.equals(point, road.getEnd())) {
                     previous = point;
 
@@ -2827,10 +2809,10 @@ public class Utils {
             }
         }
 
-        int minX = 500;
-        int maxX = 0;
-        int minY = 500;
-        int maxY = 0;
+        var minX = 500;
+        var maxX = 0;
+        var minY = 500;
+        var maxY = 0;
 
         for (var point : places.keySet()) {
             minX = Math.min(minX, point.x);
@@ -3218,17 +3200,17 @@ public class Utils {
 
         @Override
         public void onViewChangesForPlayer(Player player, GameChangesList gameChangesList) {
-            GameChangesList copiedGameChangesList = Utils.copyGameChangesList(gameChangesList);
+            var copiedGameChangesList = Utils.copyGameChangesList(gameChangesList);
 
             gameChanges.add(copiedGameChangesList);
 
             // Update the monitoring of available construction
             var map = player.getMap();
-            Map<Point, Size> availableBuildingsOnMap = map.getAvailableHousePoints(player);
-            Collection<Point> availableFlagsOnMap = map.getAvailableFlagPoints(player);
-            List<Point> availableMinesOnMap = map.getAvailableMinePoints(player);
+            var availableBuildingsOnMap = map.getAvailableHousePoints(player);
+            var availableFlagsOnMap = map.getAvailableFlagPoints(player);
+            var availableMinesOnMap = map.getAvailableMinePoints(player);
 
-            for (Point point : gameChangesList.changedAvailableConstruction()) {
+            for (var point : gameChangesList.changedAvailableConstruction()) {
                 AvailableConstruction.PossibleBuildings possibleBuilding = NO_BUILDING_POSSIBLE;
                 AvailableConstruction.PossibleFlag possibleFlag = NO_FLAG_POSSIBLE;
 
@@ -3237,7 +3219,7 @@ public class Utils {
                 }
 
                 if (availableBuildingsOnMap.containsKey(point)) {
-                    Size size = availableBuildingsOnMap.get(point);
+                    var size = availableBuildingsOnMap.get(point);
 
                     if (size == LARGE) {
                         possibleBuilding = LARGE_POSSIBLE;
@@ -3287,7 +3269,7 @@ public class Utils {
                 return new ArrayList<>();
             }
 
-            int index = gameChanges.indexOf(gameChangesEvent);
+            var index = gameChanges.indexOf(gameChangesEvent);
 
             return gameChanges.subList(index + 1, gameChanges.size());
         }
@@ -3305,8 +3287,8 @@ public class Utils {
                 }
             }
 
-            for (Point flagPoint : availableFlagPoints) {
-                AvailableConstruction availableConstructionAtPoint = availableConstruction.get(flagPoint);
+            for (var flagPoint : availableFlagPoints) {
+                var availableConstructionAtPoint = availableConstruction.get(flagPoint);
 
                 if (availableConstructionAtPoint == null) {
                     availableConstruction.put(flagPoint, new AvailableConstruction(NO_BUILDING_POSSIBLE, FLAG_POSSIBLE, flagPoint));
@@ -3315,8 +3297,8 @@ public class Utils {
                 }
             }
 
-            for (Point minePoint : availableMinePoints) {
-                AvailableConstruction availableConstructionAtPoint = availableConstruction.get(minePoint);
+            for (var minePoint : availableMinePoints) {
+                var availableConstructionAtPoint = availableConstruction.get(minePoint);
 
                 if (availableConstructionAtPoint == null) {
                     availableConstruction.put(minePoint, new AvailableConstruction(MINE_POSSIBLE, NO_FLAG_POSSIBLE, minePoint));
@@ -3327,13 +3309,13 @@ public class Utils {
         }
 
         public void assertMonitoredAvailableConstructionMatchesWithMap(GameMap map, Player player0) {
-            Map<Point, Size> availableBuildingsOnMap = map.getAvailableHousePoints(player0);
-            Collection<Point> availableFlagsOnMap = map.getAvailableFlagPoints(player0);
-            List<Point> availableMinesOnMap = map.getAvailableMinePoints(player0);
+            var availableBuildingsOnMap = map.getAvailableHousePoints(player0);
+            var availableFlagsOnMap = map.getAvailableFlagPoints(player0);
+            var availableMinesOnMap = map.getAvailableMinePoints(player0);
 
             // Run monitored against real
             for (Map.Entry<Point, AvailableConstruction> entry : availableConstruction.entrySet()) {
-                Point point = entry.getKey();
+                var point = entry.getKey();
 
                 if (entry.getValue().getAvailableBuilding() == NO_BUILDING_POSSIBLE) {
                     assertFalse(availableBuildingsOnMap.containsKey(point));
@@ -3373,10 +3355,10 @@ public class Utils {
             }
 
             // Run real against monitored
-            for (Point point : player0.getDiscoveredLand()) {
-                Size availableHouse = map.isAvailableHousePoint(player0, point);
-                boolean availableMine = map.isAvailableMinePoint(player0, point);
-                boolean availableFlag = map.isAvailableFlagPoint(player0, point);
+            for (var point : player0.getDiscoveredLand()) {
+                var availableHouse = map.isAvailableHousePoint(player0, point);
+                var availableMine = map.isAvailableMinePoint(player0, point);
+                var availableFlag = map.isAvailableFlagPoint(player0, point);
 
                 if (availableHouse == LARGE) {
                     assertEquals(availableConstruction.get(point).getAvailableBuilding(), LARGE_POSSIBLE);
@@ -3495,10 +3477,9 @@ public class Utils {
     }
 
     static Set<Point> getAreaInsideHexagon(int radius, Point position) {
-        Set<Point> area = new HashSet<>();
-
-        int xStart = position.x - radius;
-        int xEnd = position.x + radius;
+        var area = new HashSet<Point>();
+        var xStart = position.x - radius;
+        var xEnd = position.x + radius;
 
         for (int y = position.y - radius; y < position.y; y++) {
             for (int x = xStart; x <= xEnd; x += 2) {
@@ -3531,13 +3512,13 @@ public class Utils {
                     continue;
                 }
 
-                Point point = new Point(x, y);
+                var point = new Point(x, y);
 
                 if (map.isBuildingAtPoint(point) || map.isFlagAtPoint(point) || map.isRoadAtPoint(point)) {
                     continue;
                 }
 
-                Crop crop = map.placeCrop(point, Crop.CropType.TYPE_1);
+                var crop = map.placeCrop(point, Crop.CropType.TYPE_1);
             }
         }
     }
@@ -3550,7 +3531,7 @@ public class Utils {
     }
 
     public static int countMonitoredWorkerActionForWorker(Worker worker, WorkerAction workerAction, GameViewMonitor monitor) {
-        int count = 0;
+        var count = 0;
 
         for (var gameChangesList : monitor.getEvents()) {
             for (var entry : gameChangesList.workersWithStartedActions().entrySet()) {
@@ -3565,9 +3546,9 @@ public class Utils {
 
     public static <T extends Building> T verifyPlayerPlacesOnlyBuilding(ComputerPlayer computerPlayer, Class<T> aClass) throws Exception {
         var player = computerPlayer.getControlledPlayer();
-        int amount = player.getBuildings().size();
+        var amount = player.getBuildings().size();
 
-        T building = waitForComputerPlayerToPlaceBuilding(computerPlayer, aClass);
+        var building = waitForComputerPlayerToPlaceBuilding(computerPlayer, aClass);
 
         assertEquals(player.getBuildings().size(), amount + 1);
 
@@ -3580,8 +3561,7 @@ public class Utils {
         var map = player.getMap();
         T found = null;
 
-        Set<Building> buildingsBefore = new HashSet<>(player.getBuildings());
-
+        var buildingsBefore = new HashSet<Building>(player.getBuildings());
         for (int i = 0; i < 10000; i++) {
             for (var building : player.getBuildings()) {
                 if (building.getClass().equals(aClass) && !buildingsBefore.contains(building)) {
@@ -3606,9 +3586,9 @@ public class Utils {
     }
 
     public static void verifyPlayersBuildingsContain(Player player0, Class<? extends Building> aClass) {
-        boolean found = false;
+        var found = false;
 
-        for (Building b : player0.getBuildings()) {
+        for (var b : player0.getBuildings()) {
             if (b.getClass().equals(aClass)) {
                 found = true;
                 break;
@@ -3667,10 +3647,10 @@ public class Utils {
     public static double distanceToKnownBorder(Barracks barracks, Player player) {
 
         // Check how close the barracks is to the enemy's border
-        double distance = Double.MAX_VALUE;
+        var distance = Double.MAX_VALUE;
 
-        for (Point p : player.getBorderPoints()) {
-            double tmpDistance = barracks.getPosition().distance(p);
+        for (var p : player.getBorderPoints()) {
+            var tmpDistance = barracks.getPosition().distance(p);
 
             if (barracks.getPlayer().getDiscoveredLand().contains(p) &&
                     tmpDistance < distance) {

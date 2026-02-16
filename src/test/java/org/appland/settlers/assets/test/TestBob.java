@@ -20,25 +20,25 @@ public class TestBob {
     private static final String TEST_BOB_FILE = "src/test/resources/CARRIER.BOB";
     @Test
     public void testLoadBob() throws IOException, UnknownResourceTypeException, InvalidFormatException {
-        Palette palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
+        var palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
 
-        List<GameResource> gameResourceList = LstDecoder.loadLstFile(TEST_BOB_FILE, palette);
+        var gameResourceList = LstDecoder.loadLstFile(TEST_BOB_FILE, palette);
 
         assertEquals(gameResourceList.size(), 1);
 
-        Bob bob = ((BobResource)gameResourceList.getFirst()).getBob();
+        var bob = ((BobResource)gameResourceList.getFirst()).getBob();
 
         assertEquals(bob.getNumberOverlayImages(), 602);
         assertEquals(bob.getNumberLinks(), 3264);
         assertEquals(bob.getAllBitmaps().size(), 698);
 
-        for (PlayerBitmap bitmap : bob.getAllBitmaps()) {
+        for (var bitmap : bob.getAllBitmaps()) {
             assertEquals(bitmap.getNx(), 16);
             assertEquals(bitmap.getWidth(), 32);
             assertTrue(bitmap.getHeight() > 0);
         }
 
-        PlayerBitmap playerBitmap = bob.getAllBitmaps().getFirst();
+        var playerBitmap = bob.getAllBitmaps().getFirst();
 
         assertEquals(playerBitmap.getNy(), 12);
         assertEquals(playerBitmap.getHeight(), 13);

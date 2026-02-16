@@ -30,21 +30,20 @@ public class TestGameMonitoringOfDecorations {
     @Test
     public void testEventMessageWhenPureDecorationsAreRemoved() throws InvalidUserActionException {
 
-        for (DecorationType decoration : TestDecorations.PURE_DECORATIONS) {
+        for (var decoration : TestDecorations.PURE_DECORATIONS) {
 
             // Create new game map
-            Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-            List<Player> players = new ArrayList<>();
-            players.add(player0);
+            var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+            var players = new ArrayList<Player>();            players.add(player0);
 
-            GameMap map = new GameMap(players, 100, 100);
+            var map = new GameMap(players, 100, 100);
 
             // Place headquarters
-            Point point0 = new Point(5, 27);
-            Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+            var point0 = new Point(5, 27);
+            var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
             // Place decoration that should not have any impact on the game
-            Point point1 = new Point(10, 26);
+            var point1 = new Point(10, 26);
             map.placeDecoration(point1, decoration);
 
             assertTrue(map.isDecoratedAtPoint(point1));
@@ -57,7 +56,7 @@ public class TestGameMonitoringOfDecorations {
             player0.monitorGameView(monitor);
 
             // Verify that a flag can be placed on the decoration
-            Flag flag = map.placeFlag(player0, point1);
+            var flag = map.placeFlag(player0, point1);
 
             map.stepTime();
 
@@ -66,7 +65,7 @@ public class TestGameMonitoringOfDecorations {
             assertFalse(map.getDecorations().containsKey(point1));
 
             // Verify that an event was sent when the decoration was removed
-            int decorationEventCount = Utils.countMonitoredEventsForDecoration(point1, monitor);
+            var decorationEventCount = Utils.countMonitoredEventsForDecoration(point1, monitor);
 
             assertEquals(decorationEventCount, 1);
         }
@@ -75,21 +74,20 @@ public class TestGameMonitoringOfDecorations {
     @Test
     public void testEventMessageWhenPureDecorationsAreRemovedIsOnlySentOnce() throws InvalidUserActionException {
 
-        for (DecorationType decoration : TestDecorations.PURE_DECORATIONS) {
+        for (var decoration : TestDecorations.PURE_DECORATIONS) {
 
             // Create new game map
-            Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-            List<Player> players = new ArrayList<>();
-            players.add(player0);
+            var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+            var players = new ArrayList<Player>();            players.add(player0);
 
-            GameMap map = new GameMap(players, 100, 100);
+            var map = new GameMap(players, 100, 100);
 
             // Place headquarters
-            Point point0 = new Point(5, 27);
-            Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+            var point0 = new Point(5, 27);
+            var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
             // Place decoration that should not have any impact on the game
-            Point point1 = new Point(10, 26);
+            var point1 = new Point(10, 26);
             map.placeDecoration(point1, decoration);
 
             assertTrue(map.isDecoratedAtPoint(point1));
@@ -102,7 +100,7 @@ public class TestGameMonitoringOfDecorations {
             player0.monitorGameView(monitor);
 
             // Verify that a flag can be placed on the decoration
-            Flag flag = map.placeFlag(player0, point1);
+            var flag = map.placeFlag(player0, point1);
 
             map.stepTime();
 
@@ -111,7 +109,7 @@ public class TestGameMonitoringOfDecorations {
             assertFalse(map.getDecorations().containsKey(point1));
 
             // Verify that an event was sent when the decoration was removed
-            int decorationEventCount = Utils.countMonitoredEventsForDecoration(point1, monitor);
+            var decorationEventCount = Utils.countMonitoredEventsForDecoration(point1, monitor);
 
             assertEquals(decorationEventCount, 1);
 

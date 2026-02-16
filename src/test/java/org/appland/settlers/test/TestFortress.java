@@ -41,28 +41,27 @@ public class TestFortress {
     public void testFortressNeedsFourPlanksAndSevenStonesForConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         // Deliver two planks and three stones
-        Cargo cargo = new Cargo(PLANK, map);
+        var cargo = new Cargo(PLANK, map);
 
         fortress0.putCargo(cargo);
         fortress0.putCargo(cargo);
         fortress0.putCargo(cargo);
         fortress0.putCargo(cargo);
 
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         fortress0.putCargo(stoneCargo);
         fortress0.putCargo(stoneCargo);
@@ -89,27 +88,26 @@ public class TestFortress {
     public void testFortressCannotBeConstructedWithOnePlankTooLittle() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         // Deliver one plank and three stones
-        Cargo cargo = new Cargo(PLANK, map);
+        var cargo = new Cargo(PLANK, map);
 
         fortress0.putCargo(cargo);
         fortress0.putCargo(cargo);
         fortress0.putCargo(cargo);
 
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         fortress0.putCargo(stoneCargo);
         fortress0.putCargo(stoneCargo);
@@ -139,28 +137,27 @@ public class TestFortress {
     public void testFortressCannotBeConstructedWithOneStoneTooLittle() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         // Deliver four planks and six stones
-        Cargo cargo = new Cargo(PLANK, map);
+        var cargo = new Cargo(PLANK, map);
 
         fortress0.putCargo(cargo);
         fortress0.putCargo(cargo);
         fortress0.putCargo(cargo);
         fortress0.putCargo(cargo);
 
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         fortress0.putCargo(stoneCargo);
         fortress0.putCargo(stoneCargo);
@@ -189,21 +186,20 @@ public class TestFortress {
     public void testFortressGetPopulatedWhenFinished() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         // Connect the fortress with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, fortress0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, fortress0.getFlag(), headquarter0.getFlag());
 
         // Wait for the fortress to finish construction
         Utils.fastForwardUntilBuildingIsConstructed(fortress0);
@@ -214,7 +210,7 @@ public class TestFortress {
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
         Soldier military = null;
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier) {
                 military = (Soldier)worker;
             }
@@ -234,26 +230,25 @@ public class TestFortress {
     public void testBorderIsNotExtendedWhenFortressIsFinished() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(5, 23);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(5, 23);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
         // Wait for the fortress to finish construction
-        Point point3 = new Point(6, 24);
+        var point3 = new Point(6, 24);
         assertTrue(player0.getBorderPoints().contains(point3));
 
         Utils.fastForwardUntilBuildingIsConstructed(fortress0);
@@ -265,23 +260,22 @@ public class TestFortress {
     public void testBorderIsExtendedWhenFortressIsPopulated() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point21 = new Point(5, 17);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 17);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(5, 23);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(5, 23);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
         // Wait for the fortress to finish construction
         Utils.fastForwardUntilBuildingIsConstructed(fortress0);
@@ -294,7 +288,7 @@ public class TestFortress {
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
         Soldier military = null;
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier) {
                 military = (Soldier)worker;
             }
@@ -303,8 +297,8 @@ public class TestFortress {
         assertNotNull(military);
 
         // Verify that the border is extended when the military reaches the fortress
-        Point point3 = new Point(4, 26);
-        Point point4 = new Point(6, 34);
+        var point3 = new Point(4, 26);
+        var point4 = new Point(6, 34);
 
         assertEquals(military.getTarget(), fortress0.getPosition());
         assertTrue(player0.getBorderPoints().contains(point3));
@@ -319,18 +313,17 @@ public class TestFortress {
     public void testFortressOnlyNeedsNineSoldiers() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         Utils.constructHouse(fortress0);
 
@@ -353,23 +346,22 @@ public class TestFortress {
     public void testFortressCannotHoldSoldiersBeforeFinished() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         // Verify that the fortress can't hold soldiers before it's finished
         assertFalse(fortress0.needsMilitaryManning());
 
-        Soldier military = new Soldier(player0, PRIVATE_RANK, map);
+        var military = new Soldier(player0, PRIVATE_RANK, map);
 
         map.placeWorker(military, fortress0);
 
@@ -384,18 +376,17 @@ public class TestFortress {
     public void testFortressCannotHoldMoreThanNineSoldiers() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         Utils.constructHouse(fortress0);
 
@@ -411,7 +402,7 @@ public class TestFortress {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         // Verify that the fortress does not need another military
-        Soldier military = new Soldier(player0, PRIVATE_RANK, map);
+        var military = new Soldier(player0, PRIVATE_RANK, map);
 
         map.placeWorker(military, fortress0);
 
@@ -426,18 +417,17 @@ public class TestFortress {
     public void testFortressNeedsCoin() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         Utils.constructHouse(fortress0);
 
@@ -448,18 +438,17 @@ public class TestFortress {
     public void testUnfinishedFortressNotNeedsCoin() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         assertFalse(fortress0.needsMaterial(COIN));
     }
@@ -468,25 +457,24 @@ public class TestFortress {
     public void testFortressCanHoldFourCoins() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         Utils.constructHouse(fortress0);
 
         assertTrue(fortress0.needsMaterial(COIN));
 
         // Deliver four coins to the fortress
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         fortress0.promiseDelivery(COIN);
         fortress0.promiseDelivery(COIN);
@@ -514,28 +502,27 @@ public class TestFortress {
     public void testPrivateIsPromotedWhenCoinIsAvailable() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         Utils.constructHouse(fortress0);
 
         // Deliver one coin to the fortress
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         fortress0.putCargo(cargo);
 
         // Occupy the fortress with one private
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         // Verify that the private is promoted at the right time
         for (int i = 0; i < 100; i++) {
@@ -550,29 +537,28 @@ public class TestFortress {
     public void testOnlyOnePrivateIsPromoted() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         Utils.constructHouse(fortress0);
 
         // Deliver one coin to the fortress
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         fortress0.putCargo(cargo);
 
         // Occupy the fortress with one private
-        Soldier military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
-        Soldier military2 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        var military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        var military2 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         // Wait for the promotion to happen
         Utils.fastForward(100, map);
@@ -585,23 +571,22 @@ public class TestFortress {
     public void testTimeSpentWithCoinButNoMilitaryDoesNotSpeedUpPromotion() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         Utils.constructHouse(fortress0);
 
         // Deliver one coin to the fortress
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         fortress0.putCargo(cargo);
 
@@ -609,7 +594,7 @@ public class TestFortress {
         Utils.fastForward(200, map);
 
         // Occupy the fortress with one private
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         // Verify that it still takes the same time for the private to get promoted
         Utils.fastForward(99, map);
@@ -625,28 +610,27 @@ public class TestFortress {
     public void testPromotionConsumesCoin() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         Utils.constructHouse(fortress0);
 
         // Deliver one coin to the fortress
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         fortress0.putCargo(cargo);
 
         // Occupy the fortress with one private
-        Soldier military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        var military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         // Verify that the promotion consumes the coin
         assertEquals(fortress0.getAmount(COIN), 1);
@@ -660,30 +644,29 @@ public class TestFortress {
     public void testOnePromotionOnlyConsumesOneCoin() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         Utils.constructHouse(fortress0);
 
         // Deliver one coin to the fortress
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         fortress0.putCargo(cargo);
         fortress0.putCargo(cargo);
 
         // Occupy the fortress with one private
-        Soldier military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
-        Soldier military2 = Utils.occupyMilitaryBuilding(SERGEANT_RANK, fortress0);
+        var military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        var military2 = Utils.occupyMilitaryBuilding(SERGEANT_RANK, fortress0);
 
         // Verify that the promotion consumes the coin
         assertEquals(fortress0.getAmount(COIN), 2);
@@ -697,29 +680,28 @@ public class TestFortress {
     public void testFortressWithNoPromotionPossibleDoesNotConsumeCoin() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         Utils.constructHouse(fortress0);
 
         // Deliver one coin to the fortress
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         fortress0.putCargo(cargo);
 
         // Occupy the fortress with one private
-        Soldier military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, fortress0);
-        Soldier military2 = Utils.occupyMilitaryBuilding(GENERAL_RANK, fortress0);
+        var military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, fortress0);
+        var military2 = Utils.occupyMilitaryBuilding(GENERAL_RANK, fortress0);
 
         // Verify that coin is not consumed
         assertEquals(fortress0.getAmount(COIN), 1);
@@ -733,18 +715,17 @@ public class TestFortress {
     public void testCanDisableCoinsToFortress() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         Utils.constructHouse(fortress0);
 
@@ -761,18 +742,17 @@ public class TestFortress {
     public void testOccupiedFortressCanBeEvacuated() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         // Connect headquarter and fortress
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
@@ -781,7 +761,7 @@ public class TestFortress {
         Utils.constructHouse(fortress0);
 
         // Occupy the fortress
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         // Evacuate the fortress and verify that the military leaves the fortress
         assertTrue(military.isInsideBuilding());
@@ -798,18 +778,17 @@ public class TestFortress {
     public void testEvacuatedMilitaryReturnsToStorage() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         // Connect headquarter and fortress
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
@@ -818,7 +797,7 @@ public class TestFortress {
         Utils.constructHouse(fortress0);
 
         // Occupy the fortress
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         // Evacuate the fortress
         assertTrue(military.isInsideBuilding());
@@ -831,7 +810,7 @@ public class TestFortress {
 
         // Verify that the evacuated military returns to the storage
         assertEquals(military.getTarget(), headquarter0.getPosition());
-        int amount = headquarter0.getAmount(PRIVATE);
+        var amount = headquarter0.getAmount(PRIVATE);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
 
@@ -843,24 +822,23 @@ public class TestFortress {
     public void testEvacuatedSoldierReturnsOffroadWhenNotConnected() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         // Finish construction of the fortress
         Utils.constructHouse(fortress0);
 
         // Occupy the fortress
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         // Evacuate the fortress
         assertTrue(military.isInsideBuilding());
@@ -873,7 +851,7 @@ public class TestFortress {
 
         // Verify that the evacuated military returns to the storage
         assertEquals(military.getTarget(), headquarter0.getPosition());
-        int amount = headquarter0.getAmount(PRIVATE);
+        var amount = headquarter0.getAmount(PRIVATE);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
 
@@ -885,18 +863,17 @@ public class TestFortress {
     public void testNoMilitaryIsDispatchedToEvacuatedFortress() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         // Connect headquarters and fortress
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
@@ -918,24 +895,23 @@ public class TestFortress {
     public void testEvacuationCanBeCanceled() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         // Finish construction of the fortress
         Utils.constructHouse(fortress0);
 
         // Occupy the fortress
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         // Evacuate the fortress
         assertTrue(military.isInsideBuilding());
@@ -948,7 +924,7 @@ public class TestFortress {
 
         // Wait for the evacuated military to return to the storage
         assertEquals(military.getTarget(), headquarter0.getPosition());
-        int amount = headquarter0.getAmount(PRIVATE);
+        var amount = headquarter0.getAmount(PRIVATE);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
 
@@ -967,18 +943,17 @@ public class TestFortress {
     public void testMilitaryGoesBackToStorageWhenFortressIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place fortress
-        Point point26 = new Point(8, 8);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point26);
+        var point26 = new Point(8, 8);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point26);
 
         // Finish construction of the fortress
         Utils.constructHouse(fortress0);
@@ -992,12 +967,12 @@ public class TestFortress {
         fortress0.tearDown();
 
         // Verify that the worker leaves the building and goes back to the headquarter
-        Soldier military = Utils.waitForSoldierOutsideBuilding(player0);
+        var military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(PRIVATE);
+        var amount = headquarter0.getAmount(PRIVATE);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, headquarter0.getPosition());
 
@@ -1009,18 +984,17 @@ public class TestFortress {
     public void testMilitaryGoesBackOnToStorageOnRoadsIfPossibleWhenFortressIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place fortress
-        Point point26 = new Point(8, 8);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point26);
+        var point26 = new Point(8, 8);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point26);
 
         // Connect the fortress with the headquarter
         map.placeAutoSelectedRoad(player0, fortress0.getFlag(), headquarter0.getFlag());
@@ -1037,14 +1011,14 @@ public class TestFortress {
         fortress0.tearDown();
 
         // Verify that the worker leaves the building and goes back to the headquarter
-        Soldier military = Utils.waitForSoldierOutsideBuilding(player0);
+        var military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
-        for (Point point : military.getPlannedPath()) {
+        var firstStep = true;
+        for (var point : military.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -1058,18 +1032,17 @@ public class TestFortress {
     public void testProductionCannotBeResumedInFortress() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place fortress
-        Point point26 = new Point(8, 8);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point26);
+        var point26 = new Point(8, 8);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point26);
 
         // Finish construction of the fortress
         Utils.constructHouse(fortress0);
@@ -1086,23 +1059,22 @@ public class TestFortress {
     public void testCannotStopProductionInFortress() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(5, 9);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(5, 9);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
         // Wait for the fortress to finish construction
         Utils.fastForwardUntilBuildingIsConstructed(fortress0);
@@ -1121,18 +1093,17 @@ public class TestFortress {
     public void testFortressCanProduce() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place fortress
-        Point point1 = new Point(7, 9);
-        Building fortress = map.placeBuilding(new Fortress(player0), point1);
+        var point1 = new Point(7, 9);
+        var fortress = map.placeBuilding(new Fortress(player0), point1);
 
         // Finish construction of the fortress
         Utils.constructHouse(fortress);
@@ -1148,18 +1119,17 @@ public class TestFortress {
     public void testFortressReportsCorrectOutput() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place fortress
-        Point point1 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point1);
+        var point1 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         // Construct the fortress
         Utils.constructHouse(fortress0);
@@ -1172,18 +1142,17 @@ public class TestFortress {
     public void testFortressReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place fortress
-        Point point1 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point1);
+        var point1 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         // Verify that the reported needed construction material is correct
         assertEquals(fortress0.getTypesOfMaterialNeeded().size(), 2);
@@ -1192,7 +1161,7 @@ public class TestFortress {
         assertEquals(fortress0.getCanHoldAmount(PLANK), 4);
         assertEquals(fortress0.getCanHoldAmount(STONE), 7);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
@@ -1205,18 +1174,17 @@ public class TestFortress {
     public void testFortressReportsCorrectMaterialsNeededForProduction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place fortress
-        Point point1 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point1);
+        var point1 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         // Construct the fortress
         Utils.constructHouse(fortress0);
@@ -1225,7 +1193,7 @@ public class TestFortress {
         assertEquals(fortress0.getTypesOfMaterialNeeded().size(), 1);
         assertEquals(fortress0.getCanHoldAmount(COIN), 4);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == COIN) {
                 continue;
             }
@@ -1238,18 +1206,17 @@ public class TestFortress {
     public void testHostedMilitaryListIsEmptyForFortressUnderConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         // Verify that the list of hosted soldiers is empty
         assertEquals(0, fortress0.getHostedSoldiers().size());
@@ -1259,18 +1226,17 @@ public class TestFortress {
     public void testHostedMilitaryListIsEmptyForEmptyFortress() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         // Construct fortress
         Utils.constructHouse(fortress0);
@@ -1283,18 +1249,17 @@ public class TestFortress {
     public void testAddingMilitaryUpsHostedMilitaryList() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         // Construct fortress
         Utils.constructHouse(fortress0);
@@ -1311,18 +1276,17 @@ public class TestFortress {
     public void testRankIsCorrectInHostedMilitaryList() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place fortress
-        Point point22 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        var point22 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         // Construct fortress
         Utils.constructHouse(fortress0);
@@ -1338,18 +1302,17 @@ public class TestFortress {
     public void testBorderForFortressIsCorrect() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 80, 80);
 
         // Place headquarter
-        Point point0 = new Point(30, 30);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(30, 30);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(25, 23);
-        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
+        var point1 = new Point(25, 23);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         // Construct and occupy the barracks
         Utils.constructHouse(fortress0);
@@ -1365,12 +1328,12 @@ public class TestFortress {
                 -8, -8  -------  +8, +8
 
          */
-        Set<Point> watchTowerHexagonBorder = Utils.getHexagonBorder(fortress0.getPosition(), 11);
-        Set<Point> headquarterHexagonBorder = Utils.getHexagonBorder(headquarter0.getPosition(), 9);
+        var watchTowerHexagonBorder = Utils.getHexagonBorder(fortress0.getPosition(), 11);
+        var headquarterHexagonBorder = Utils.getHexagonBorder(headquarter0.getPosition(), 9);
 
         // Verify that all points in the hexagon are part of the actual border
-        Set<Point> border = player0.getBorderPoints();
-        for (Point point : watchTowerHexagonBorder) {
+        var border = player0.getBorderPoints();
+        for (var point : watchTowerHexagonBorder) {
 
             // Ignore points that are within the player's land
             if (player0.getOwnedLand().contains(point)) {
@@ -1381,7 +1344,7 @@ public class TestFortress {
         }
 
         // Verify that all points in the actual border are part of the hexagon border
-        for (Point point : border) {
+        for (var point : border) {
 
             // Ignore points that are part of the hexagon around the headquarter
             if (headquarterHexagonBorder.contains(point)) {
@@ -1396,18 +1359,17 @@ public class TestFortress {
     public void testLandForFortressIsCorrect() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 80, 80);
 
         // Place headquarter
-        Point point0 = new Point(30, 30);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(30, 30);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(25, 23);
-        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
+        var point1 = new Point(25, 23);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         // Construct and occupy the barracks
         Utils.constructHouse(fortress0);
@@ -1423,11 +1385,11 @@ public class TestFortress {
                 -8, -8  -------  +8, +8
 
          */
-        Set<Point> area = Utils.getAreaInsideHexagon(10, fortress0.getPosition());
+        var area = Utils.getAreaInsideHexagon(10, fortress0.getPosition());
 
         // Verify that all points in the hexagon land are part of the actual land
-        Collection<Point> land = fortress0.getDefendedLand();
-        for (Point point : land) {
+        var land = fortress0.getDefendedLand();
+        for (var point : land) {
 
             // Ignore points that are part of the headquarters land
             if (headquarter0.getDefendedLand().contains(point)) {
@@ -1438,7 +1400,7 @@ public class TestFortress {
         }
 
         // Verify that all points in the actual land are part of the hexagon land
-        for (Point point : area) {
+        for (var point : area) {
             assertTrue(land.contains(point));
         }
     }
@@ -1447,18 +1409,17 @@ public class TestFortress {
     public void testDiscoveredLandForFortressIsCorrect() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 80, 80);
 
         // Place headquarter
-        Point point0 = new Point(30, 30);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(30, 30);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(25, 23);
-        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
+        var point1 = new Point(25, 23);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         // Construct and occupy the barracks
         Utils.constructHouse(fortress0);
@@ -1476,12 +1437,12 @@ public class TestFortress {
                 -8, -8  -------  +8, +8
 
          */
-        Set<Point> watchTowerHexagonDiscoveredArea = Utils.getAreaInsideHexagon(15, fortress0.getPosition());
-        Set<Point> headquarterDiscoveredLand = Utils.getAreaInsideHexagon(13, headquarter0.getPosition());
+        var watchTowerHexagonDiscoveredArea = Utils.getAreaInsideHexagon(15, fortress0.getPosition());
+        var headquarterDiscoveredLand = Utils.getAreaInsideHexagon(13, headquarter0.getPosition());
 
         // Verify that all points in the hexagon land are part of the actual land
-        Collection<Point> discoveredLand = player0.getDiscoveredLand();
-        for (Point point : discoveredLand) {
+        var discoveredLand = player0.getDiscoveredLand();
+        for (var point : discoveredLand) {
 
             // Ignore points within the discovered land for the headquarter
             if (headquarterDiscoveredLand.contains(point)) {
@@ -1492,7 +1453,7 @@ public class TestFortress {
         }
 
         // Verify that all points in the actual land are part of the hexagon land
-        for (Point point : watchTowerHexagonDiscoveredArea) {
+        for (var point : watchTowerHexagonDiscoveredArea) {
 
             // Filter points outside the map
             if (point.x < 0 || point.y < 0) {
@@ -1507,25 +1468,24 @@ public class TestFortress {
     public void testDiscoveredLandForPlayerCannotBeOutsideTheMap() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 80, 80);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 10);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(3, 3);
-        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
+        var point1 = new Point(3, 3);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         // Construct and occupy the barracks
         Utils.constructHouse(fortress0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         // Verify that the discovered land is only inside the map
-        for (Point point : player0.getDiscoveredLand()) {
+        for (var point : player0.getDiscoveredLand()) {
             assertTrue(point.x >= 0);
             assertTrue(point.y >= 0);
         }
@@ -1535,25 +1495,24 @@ public class TestFortress {
     public void testOwnedLandForPlayerCannotBeOutsideTheMap() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 80, 80);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 10);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(3, 3);
-        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
+        var point1 = new Point(3, 3);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         // Construct and occupy the barracks
         Utils.constructHouse(fortress0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         // Verify that the discovered land is only inside the map
-        for (Point point : player0.getOwnedLand()) {
+        for (var point : player0.getOwnedLand()) {
             assertTrue(point.x >= 0);
             assertTrue(point.y >= 0);
         }

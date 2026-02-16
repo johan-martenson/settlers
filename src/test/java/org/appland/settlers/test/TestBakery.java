@@ -1012,7 +1012,7 @@ public class TestBakery {
         // Verify that the courier delivers the cargo to the headquarters
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(BREAD);
+        var amount = headquarter0.getAmount(BREAD);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
@@ -1054,7 +1054,7 @@ public class TestBakery {
         assertFalse(baker.isInsideBuilding());
         assertEquals(baker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(BAKER);
+        var amount = headquarter0.getAmount(BAKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getPosition());
 
@@ -1099,7 +1099,7 @@ public class TestBakery {
         assertEquals(baker.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
+        var firstStep = true;
         for (var point : baker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
@@ -1537,7 +1537,7 @@ public class TestBakery {
         assertFalse(baker.isInsideBuilding());
         assertEquals(baker.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(BAKER);
+        var amount = storehouse0.getAmount(BAKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, baker, storehouse0.getPosition());
 
@@ -1588,7 +1588,7 @@ public class TestBakery {
         assertFalse(baker.isInsideBuilding());
         assertEquals(baker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(BAKER);
+        var amount = headquarter0.getAmount(BAKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getPosition());
 
@@ -1642,7 +1642,7 @@ public class TestBakery {
         assertFalse(baker.isInsideBuilding());
         assertEquals(baker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(BAKER);
+        var amount = headquarter0.getAmount(BAKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getPosition());
 
@@ -1687,7 +1687,7 @@ public class TestBakery {
         assertFalse(baker.isInsideBuilding());
         assertEquals(baker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(BAKER);
+        var amount = headquarter0.getAmount(BAKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getPosition());
 

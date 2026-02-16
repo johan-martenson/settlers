@@ -37,8 +37,7 @@ public class TestDonkeyFarm {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -90,8 +89,7 @@ public class TestDonkeyFarm {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -103,8 +101,8 @@ public class TestDonkeyFarm {
         var farm0 = map.placeBuilding(new DonkeyFarm(player0), point22);
 
         // Deliver three plank and three stone
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var plankCargo = new Cargo(PLANK, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         farm0.putCargo(plankCargo);
         farm0.putCargo(plankCargo);
@@ -131,8 +129,7 @@ public class TestDonkeyFarm {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -144,8 +141,8 @@ public class TestDonkeyFarm {
         var farm0 = map.placeBuilding(new DonkeyFarm(player0), point22);
 
         // Deliver two plank and three stone
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var plankCargo = new Cargo(PLANK, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         farm0.putCargo(plankCargo);
         farm0.putCargo(plankCargo);
@@ -171,8 +168,7 @@ public class TestDonkeyFarm {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -184,8 +180,8 @@ public class TestDonkeyFarm {
         var farm0 = map.placeBuilding(new DonkeyFarm(player0), point22);
 
         // Deliver three planks and two stones
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var plankCargo = new Cargo(PLANK, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         farm0.putCargo(plankCargo);
         farm0.putCargo(plankCargo);
@@ -211,8 +207,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -235,8 +230,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -258,8 +252,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -288,8 +281,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -318,8 +310,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -344,8 +335,8 @@ public class TestDonkeyFarm {
         assertTrue(donkeyBreeder.isInsideBuilding());
 
         // Deliver resources to the donkey farm
-        Cargo waterCargo = new Cargo(WATER, map);
-        Cargo wheatCargo = new Cargo(WHEAT, map);
+        var waterCargo = new Cargo(WATER, map);
+        var wheatCargo = new Cargo(WHEAT, map);
 
         donkeyFarm.putCargo(waterCargo);
         donkeyFarm.putCargo(wheatCargo);
@@ -370,8 +361,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -389,8 +379,8 @@ public class TestDonkeyFarm {
         Utils.constructHouse(donkeyFarm);
 
         // Deliver wheat and donkey to the farm
-        Cargo wheatCargo = new Cargo(WHEAT, map);
-        Cargo waterCargo = new Cargo(WATER, map);
+        var wheatCargo = new Cargo(WHEAT, map);
+        var waterCargo = new Cargo(WATER, map);
 
         donkeyFarm.putCargo(wheatCargo);
         donkeyFarm.putCargo(waterCargo);
@@ -444,8 +434,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -470,8 +459,8 @@ public class TestDonkeyFarm {
         assertTrue(donkeyBreeder.isInsideBuilding());
 
         // Deliver resources to the donkey farm
-        Cargo waterCargo = new Cargo(WATER, map);
-        Cargo wheatCargo = new Cargo(WHEAT, map);
+        var waterCargo = new Cargo(WATER, map);
+        var wheatCargo = new Cargo(WHEAT, map);
 
         donkeyFarm.putCargo(waterCargo);
         donkeyFarm.putCargo(wheatCargo);
@@ -521,8 +510,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -539,8 +527,8 @@ public class TestDonkeyFarm {
         Utils.constructHouse(donkeyFarm);
 
         // Deliver resources to the donkey farm
-        Cargo waterCargo = new Cargo(WATER, map);
-        Cargo wheatCargo = new Cargo(WHEAT, map);
+        var waterCargo = new Cargo(WATER, map);
+        var wheatCargo = new Cargo(WHEAT, map);
 
         donkeyFarm.putCargo(waterCargo);
         donkeyFarm.putCargo(wheatCargo);
@@ -592,7 +580,7 @@ public class TestDonkeyFarm {
         assertTrue(donkeyBreeder.isInsideBuilding());
 
         // Wait for the donkey breeder to prepare the donkey
-        int amount = map.getWorkers().size();
+        var amount = map.getWorkers().size();
 
         Utils.fastForward(20, map);
 
@@ -626,8 +614,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 20, 20);
 
@@ -694,8 +681,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -712,7 +698,7 @@ public class TestDonkeyFarm {
         Utils.constructHouse(donkeyFarm0);
 
         // Verify that the farm does not produce any donkeys
-        boolean newDonkeyFound = false;
+        var newDonkeyFound = false;
 
         for (int i = 0; i < 500; i++) {
             for (var worker : map.getWorkers()) {
@@ -738,8 +724,7 @@ public class TestDonkeyFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -757,8 +742,8 @@ public class TestDonkeyFarm {
         Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm0);
 
         // Deliver material to the donkey farm
-        Cargo wheatCargo = new Cargo(WHEAT, map);
-        Cargo waterCargo = new Cargo(WATER, map);
+        var wheatCargo = new Cargo(WHEAT, map);
+        var waterCargo = new Cargo(WATER, map);
 
         donkeyFarm0.putCargo(wheatCargo);
         donkeyFarm0.putCargo(wheatCargo);
@@ -770,7 +755,7 @@ public class TestDonkeyFarm {
         Utils.fastForward(100, map);
 
         // Wait for the donkey breeder to produce a new donkey
-        boolean newDonkeyFound = false;
+        var newDonkeyFound = false;
         for (int i = 0; i < 500; i++) {
             for (var worker : map.getWorkers()) {
                 if (worker instanceof Donkey && worker.getPosition().equals(donkeyFarm0.getPosition())) {
@@ -796,8 +781,7 @@ public class TestDonkeyFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -826,7 +810,7 @@ public class TestDonkeyFarm {
         assertFalse(worker.isInsideBuilding());
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(DONKEY_BREEDER);
+        var amount = headquarter0.getAmount(DONKEY_BREEDER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
 
@@ -839,8 +823,7 @@ public class TestDonkeyFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -873,7 +856,7 @@ public class TestDonkeyFarm {
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
+        var firstStep = true;
         for (var point : worker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
@@ -889,8 +872,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -928,8 +910,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -968,8 +949,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -983,8 +963,8 @@ public class TestDonkeyFarm {
         Utils.constructHouse(donkeyFarm);
 
         // Deliver resources to the donkey farm
-        Cargo waterCargo = new Cargo(WATER, map);
-        Cargo wheatCargo = new Cargo(WHEAT, map);
+        var waterCargo = new Cargo(WATER, map);
+        var wheatCargo = new Cargo(WHEAT, map);
 
         donkeyFarm.putCargo(waterCargo);
         donkeyFarm.putCargo(wheatCargo);
@@ -1038,8 +1018,7 @@ public class TestDonkeyFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1083,8 +1062,7 @@ public class TestDonkeyFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1111,8 +1089,7 @@ public class TestDonkeyFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1139,8 +1116,7 @@ public class TestDonkeyFarm {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -1165,8 +1141,8 @@ public class TestDonkeyFarm {
         assertTrue(donkeyBreeder.isInsideBuilding());
 
         // Deliver resources to the donkey farm
-        Cargo waterCargo = new Cargo(WATER, map);
-        Cargo wheatCargo = new Cargo(WHEAT, map);
+        var waterCargo = new Cargo(WATER, map);
+        var wheatCargo = new Cargo(WHEAT, map);
 
         donkeyFarm0.putCargo(waterCargo);
         donkeyFarm0.putCargo(wheatCargo);
@@ -1174,7 +1150,7 @@ public class TestDonkeyFarm {
         // Let the worker rest
         Utils.fastForward(100, map);
 
-        boolean newDonkeyFound = false;
+        var newDonkeyFound = false;
         for (int i = 0; i < 500; i++) {
             for (var worker : map.getWorkers()) {
                 if (worker instanceof Donkey && worker.getPosition().equals(donkeyFarm0.getPosition())) {
@@ -1228,8 +1204,7 @@ public class TestDonkeyFarm {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -1247,8 +1222,8 @@ public class TestDonkeyFarm {
         Utils.constructHouse(donkeyFarm0);
 
         // Deliver resources to the donkey farm
-        Cargo waterCargo = new Cargo(WATER, map);
-        Cargo wheatCargo = new Cargo(WHEAT, map);
+        var waterCargo = new Cargo(WATER, map);
+        var wheatCargo = new Cargo(WHEAT, map);
 
         donkeyFarm0.putCargo(waterCargo);
         donkeyFarm0.putCargo(waterCargo);
@@ -1267,7 +1242,7 @@ public class TestDonkeyFarm {
         Utils.fastForward(100, map);
 
         // Wait for the donkey breeder to produce donkey
-        boolean newDonkeyFound = false;
+        var newDonkeyFound = false;
         for (int i = 0; i < 500; i++) {
             for (var worker : map.getWorkers()) {
                 if (worker instanceof Donkey && worker.getPosition().equals(donkeyFarm0.getPosition())) {
@@ -1341,8 +1316,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -1359,8 +1333,8 @@ public class TestDonkeyFarm {
         Utils.constructHouse(donkeyFarm);
 
         // Deliver resources to the donkey farm
-        Cargo waterCargo = new Cargo(WATER, map);
-        Cargo wheatCargo = new Cargo(WHEAT, map);
+        var waterCargo = new Cargo(WATER, map);
+        var wheatCargo = new Cargo(WHEAT, map);
 
         donkeyFarm.putCargo(waterCargo);
         donkeyFarm.putCargo(wheatCargo);
@@ -1385,8 +1359,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -1403,8 +1376,8 @@ public class TestDonkeyFarm {
         Utils.constructHouse(donkeyFarm0);
 
         // Deliver resources to the donkey farm
-        Cargo waterCargo = new Cargo(WATER, map);
-        Cargo wheatCargo = new Cargo(WHEAT, map);
+        var waterCargo = new Cargo(WATER, map);
+        var wheatCargo = new Cargo(WHEAT, map);
 
         donkeyFarm0.putCargo(waterCargo);
         donkeyFarm0.putCargo(wheatCargo);
@@ -1463,8 +1436,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -1481,8 +1453,8 @@ public class TestDonkeyFarm {
         Utils.constructHouse(donkeyFarm0);
 
         // Deliver resources to the donkey farm
-        Cargo waterCargo = new Cargo(WATER, map);
-        Cargo wheatCargo = new Cargo(WHEAT, map);
+        var waterCargo = new Cargo(WATER, map);
+        var wheatCargo = new Cargo(WHEAT, map);
 
         donkeyFarm0.putCargo(waterCargo);
         donkeyFarm0.putCargo(wheatCargo);
@@ -1530,8 +1502,7 @@ public class TestDonkeyFarm {
 
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
         var map = new GameMap(players, 50, 50);
@@ -1551,13 +1522,13 @@ public class TestDonkeyFarm {
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), donkeyFarm0.getFlag());
 
         // Wait for donkey breeder to get assigned and leave the headquarter
-        List<DonkeyBreeder> workers = Utils.waitForWorkersOutsideBuilding(DonkeyBreeder.class, 1, player0);
+        var workers = Utils.waitForWorkersOutsideBuilding(DonkeyBreeder.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
 
         // Verify that the player is set correctly in the worker
-        DonkeyBreeder worker = workers.getFirst();
+        var worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1570,8 +1541,7 @@ public class TestDonkeyFarm {
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
         players.add(player2);
@@ -1609,7 +1579,7 @@ public class TestDonkeyFarm {
         Utils.constructHouse(donkeyFarm0);
 
         // Occupy the donkey farm
-        DonkeyBreeder worker = Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm0);
+        var worker = Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm0);
 
         // Verify that the worker goes back to its own storage when the fortress is torn down
         fortress0.tearDown();
@@ -1622,8 +1592,7 @@ public class TestDonkeyFarm {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1684,8 +1653,7 @@ public class TestDonkeyFarm {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1749,8 +1717,7 @@ public class TestDonkeyFarm {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1810,8 +1777,7 @@ public class TestDonkeyFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1847,7 +1813,7 @@ public class TestDonkeyFarm {
         assertFalse(donkeyBreeder.isInsideBuilding());
         assertEquals(donkeyBreeder.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(DONKEY_BREEDER);
+        var amount = storehouse0.getAmount(DONKEY_BREEDER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, storehouse0.getPosition());
 
@@ -1860,8 +1826,7 @@ public class TestDonkeyFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1900,7 +1865,7 @@ public class TestDonkeyFarm {
         assertFalse(donkeyBreeder.isInsideBuilding());
         assertEquals(donkeyBreeder.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(DONKEY_BREEDER);
+        var amount = headquarter0.getAmount(DONKEY_BREEDER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, headquarter0.getPosition());
 
@@ -1913,8 +1878,7 @@ public class TestDonkeyFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1956,7 +1920,7 @@ public class TestDonkeyFarm {
         assertFalse(donkeyBreeder.isInsideBuilding());
         assertEquals(donkeyBreeder.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(DONKEY_BREEDER);
+        var amount = headquarter0.getAmount(DONKEY_BREEDER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, headquarter0.getPosition());
 
@@ -1969,8 +1933,7 @@ public class TestDonkeyFarm {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2003,7 +1966,7 @@ public class TestDonkeyFarm {
         assertFalse(donkeyBreeder.isInsideBuilding());
         assertEquals(donkeyBreeder.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(DONKEY_BREEDER);
+        var amount = headquarter0.getAmount(DONKEY_BREEDER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, headquarter0.getPosition());
 
@@ -2016,8 +1979,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2058,8 +2020,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2095,8 +2056,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2157,8 +2117,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2210,8 +2169,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2238,8 +2196,7 @@ public class TestDonkeyFarm {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2265,8 +2222,7 @@ public class TestDonkeyFarm {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2290,8 +2246,7 @@ public class TestDonkeyFarm {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2323,8 +2278,7 @@ public class TestDonkeyFarm {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2359,8 +2313,7 @@ public class TestDonkeyFarm {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2408,8 +2361,7 @@ public class TestDonkeyFarm {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2473,8 +2425,7 @@ public class TestDonkeyFarm {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2540,8 +2491,7 @@ public class TestDonkeyFarm {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2578,8 +2528,7 @@ public class TestDonkeyFarm {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2623,8 +2572,7 @@ public class TestDonkeyFarm {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2683,8 +2631,7 @@ public class TestDonkeyFarm {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2705,7 +2652,7 @@ public class TestDonkeyFarm {
         Utils.waitForBuildingToBeConstructed(donkeyFarm0);
 
         // Wait for a donkey breeder to start walking to the donkey farm
-        DonkeyBreeder donkeyBreeder = Utils.waitForWorkerOutsideBuilding(DonkeyBreeder.class, player0);
+        var donkeyBreeder = Utils.waitForWorkerOutsideBuilding(DonkeyBreeder.class, player0);
 
         // Wait for the donkey breeder to go past the headquarter's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, headquarter0.getFlag().getPosition());

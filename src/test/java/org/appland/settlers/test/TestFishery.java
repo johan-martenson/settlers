@@ -582,7 +582,7 @@ public class TestFishery {
         assertTrue(fisherman.isTraveling());
 
         // Let the fisherman reach the spot and start fishing
-        int amountOfFish = map.getAmountFishAtPoint(point);
+        var amountOfFish = map.getAmountFishAtPoint(point);
 
         Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
 
@@ -1150,7 +1150,7 @@ public class TestFishery {
         assertTrue(fisherman.isTraveling());
 
         // Let the fisherman reach the spot and start fishing
-        int amountOfFish = map.getAmountFishAtPoint(point);
+        var amountOfFish = map.getAmountFishAtPoint(point);
 
         Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
 
@@ -1367,7 +1367,7 @@ public class TestFishery {
         // Verify that the courier delivers the cargo to the headquarters
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(FISH);
+        var amount = headquarter0.getAmount(FISH);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
@@ -1409,7 +1409,7 @@ public class TestFishery {
         assertFalse(fisherman.isInsideBuilding());
         assertEquals(fisherman.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(FISHERMAN);
+        var amount = headquarter0.getAmount(FISHERMAN);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, headquarter0.getPosition());
 
@@ -1454,7 +1454,7 @@ public class TestFishery {
         assertEquals(fisherman.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
+        var firstStep = true;
         for (var point : fisherman.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
@@ -1912,7 +1912,7 @@ public class TestFishery {
         assertFalse(fisherman.isInsideBuilding());
         assertEquals(fisherman.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(FISHERMAN);
+        var amount = storehouse0.getAmount(FISHERMAN);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, storehouse0.getPosition());
 
@@ -1963,7 +1963,7 @@ public class TestFishery {
         assertFalse(fisherman.isInsideBuilding());
         assertEquals(fisherman.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(FISHERMAN);
+        var amount = headquarter0.getAmount(FISHERMAN);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, headquarter0.getPosition());
 
@@ -2017,7 +2017,7 @@ public class TestFishery {
         assertFalse(fisherman.isInsideBuilding());
         assertEquals(fisherman.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(FISHERMAN);
+        var amount = headquarter0.getAmount(FISHERMAN);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, headquarter0.getPosition());
 
@@ -2062,7 +2062,7 @@ public class TestFishery {
         assertFalse(fisherman.isInsideBuilding());
         assertEquals(fisherman.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(FISHERMAN);
+        var amount = headquarter0.getAmount(FISHERMAN);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, headquarter0.getPosition());
 

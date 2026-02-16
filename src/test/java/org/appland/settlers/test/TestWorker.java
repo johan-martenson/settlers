@@ -44,21 +44,20 @@ public class TestWorker {
     public void testWorkerCannotEnterBuildingWhenItsNotAtRightPosition() throws Exception {
 
         // Create a single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place sawmill
-        Point point3 = new Point(7, 9);
-        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point3);
+        var point3 = new Point(7, 9);
+        var sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         // Occupy the sawmill
-        Carpenter worker = new Carpenter(player0, map);
+        var worker = new Carpenter(player0, map);
         map.placeWorker(worker, sawmill.getFlag());
 
         // Verify that the worker cannot enter the sawmill when standing at the flag
@@ -74,34 +73,33 @@ public class TestWorker {
     public void testWalking() throws Exception {
 
         // Create gamemap
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place well
-        Point point1 = new Point(13, 5);
-        Building well = map.placeBuilding(new Well(player0), point1);
+        var point1 = new Point(13, 5);
+        var well = map.placeBuilding(new Well(player0), point1);
 
         // Place flag
-        Point point4 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point4);
+        var point4 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point4);
 
         // Connect the headquarters with the flag
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Road road0 = map.placeRoad(player0, point2, point3, point4);
+        var point2 = new Point(6, 4);
+        var point3 = new Point(8, 4);
+        var road0 = map.placeRoad(player0, point2, point3, point4);
 
         // Connect the well with the flag
-        Point point5 = new Point(12, 4);
-        Road road1 = map.placeRoad(player0, point4, point5, well.getFlag().getPosition());
+        var point5 = new Point(12, 4);
+        var road1 = map.placeRoad(player0, point4, point5, well.getFlag().getPosition());
 
         // Place a courier at the headquarters
-        Courier courier = new Courier(player0, map);
+        var courier = new Courier(player0, map);
 
         map.placeWorker(courier, headquarter);
 
@@ -221,36 +219,35 @@ public class TestWorker {
     public void testWalkingHalfway() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 0's headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarters
-        Point point1 = new Point(31, 15);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(31, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Clear the soldiers from the inventories
         Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
         Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
 
         // Place barracks for player 0
-        Point point2 = new Point(17, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+        var point2 = new Point(17, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         // Place barracks for player 1
-        Point point3 = new Point(17, 15);
-        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+        var point3 = new Point(17, 15);
+        var barracks1 = map.placeBuilding(new Barracks(player1), point3);
 
         // Finish construction
         Utils.constructHouse(barracks0);
@@ -273,7 +270,7 @@ public class TestWorker {
         // Find the military that was chosen to attack
         map.stepTime();
 
-        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
+        var attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -290,9 +287,9 @@ public class TestWorker {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
         // Wait for the defender to go to the attacker
-        Soldier defender = Utils.findSoldierOutsideBuilding(player1);
+        var defender = Utils.findSoldierOutsideBuilding(player1);
 
-        Point fightingPoint = attacker.getPosition();
+        var fightingPoint = attacker.getPosition();
 
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
@@ -306,8 +303,8 @@ public class TestWorker {
         assertFalse(attacker.isFighting());
         assertFalse(defender.isFighting());
 
-        int attackersDistance = -1;
-        int defendersDistance = -1;
+        var attackersDistance = -1;
+        var defendersDistance = -1;
 
         for (int i = 0; i < 20; i++) {
 
@@ -326,8 +323,8 @@ public class TestWorker {
             assertFalse(attacker.isExactlyAtPoint());
             assertFalse(defender.isExactlyAtPoint());
 
-            int newAttackersDistance = attacker.getPercentageOfDistanceTraveled();
-            int newDefendersDistance = defender.getPercentageOfDistanceTraveled();
+            var newAttackersDistance = attacker.getPercentageOfDistanceTraveled();
+            var newDefendersDistance = defender.getPercentageOfDistanceTraveled();
 
             assertTrue(newAttackersDistance > attackersDistance || newDefendersDistance > defendersDistance);
 
@@ -375,7 +372,7 @@ public class TestWorker {
         // Verify that the winner walks back to the flag
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        int distance = attacker.getPercentageOfDistanceTraveled();
+        var distance = attacker.getPercentageOfDistanceTraveled();
 
         for (int i = 0; i < 10; i++) {
 
@@ -388,7 +385,7 @@ public class TestWorker {
             assertEquals(attacker.getNextPoint(), barracks1.getFlag().getPosition());
             assertEquals(attacker.getLastPoint(), barracks1.getFlag().getPosition().left());
 
-            int newDistance = attacker.getPercentageOfDistanceTraveled();
+            var newDistance = attacker.getPercentageOfDistanceTraveled();
 
             assertTrue(newDistance > distance);
 

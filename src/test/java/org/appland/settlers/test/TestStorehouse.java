@@ -69,22 +69,21 @@ public class TestStorehouse {
     public void testStorageOnlyNeedsFourPlanksAndThreeStonesForConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place storage
-        Point point22 = new Point(6, 12);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point22);
+        var point22 = new Point(6, 12);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point22);
 
         // Deliver four plank and three stone
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var plankCargo = new Cargo(PLANK, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         storehouse0.putCargo(plankCargo);
         storehouse0.putCargo(plankCargo);
@@ -111,22 +110,21 @@ public class TestStorehouse {
     public void testStorageCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place storage
-        Point point22 = new Point(6, 12);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point22);
+        var point22 = new Point(6, 12);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point22);
 
         // Deliver three planks and three stone
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var plankCargo = new Cargo(PLANK, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         storehouse0.putCargo(plankCargo);
         storehouse0.putCargo(plankCargo);
@@ -152,22 +150,21 @@ public class TestStorehouse {
     public void testStorageCannotBeConstructedWithTooFewStones() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place storage
-        Point point22 = new Point(6, 12);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point22);
+        var point22 = new Point(6, 12);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point22);
 
         // Deliver four planks and two stones
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var plankCargo = new Cargo(PLANK, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         storehouse0.putCargo(plankCargo);
         storehouse0.putCargo(plankCargo);
@@ -193,22 +190,21 @@ public class TestStorehouse {
     public void testStorageIsConstructedWithRequiredResources() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place storage
-        Point point22 = new Point(6, 12);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point22);
+        var point22 = new Point(6, 12);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point22);
 
         // Deliver four planks and two stones
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var plankCargo = new Cargo(PLANK, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         storehouse0.putCargo(plankCargo);
         storehouse0.putCargo(plankCargo);
@@ -238,18 +234,17 @@ public class TestStorehouse {
     public void testUnfinishedStorageNotNeedsWorker() throws Exception {
 
         // Create a single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storage
-        Point point3 = new Point(7, 9);
-        Storehouse storage = map.placeBuilding(new Storehouse(player0), point3);
+        var point3 = new Point(7, 9);
+        var storage = map.placeBuilding(new Storehouse(player0), point3);
 
         // Verify that an unfinished storage doesn't need a worker
         assertFalse(storage.needsWorker());
@@ -259,18 +254,17 @@ public class TestStorehouse {
     public void testStorageNeedsWorker() throws Exception {
 
         // Create a single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storage
-        Point point3 = new Point(7, 9);
-        Storehouse storage = map.placeBuilding(new Storehouse(player0), point3);
+        var point3 = new Point(7, 9);
+        var storage = map.placeBuilding(new Storehouse(player0), point3);
 
         // Finish construction of the storage
         Utils.constructHouse(storage);
@@ -285,21 +279,20 @@ public class TestStorehouse {
     public void testStorageWorkerGetsAssignedToFinishedStorage() throws Exception {
 
         // Create a single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storage
-        Point point3 = new Point(7, 9);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point3);
+        var point3 = new Point(7, 9);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point3);
 
         // Connect the storage with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse);
@@ -309,7 +302,7 @@ public class TestStorehouse {
 
         Worker storageWorker = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof StorehouseWorker) {
                 storageWorker = worker;
             }
@@ -329,21 +322,20 @@ public class TestStorehouse {
     public void testStorageWorkerIsNotASoldier() throws Exception {
 
         // Create a single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storage
-        Point point3 = new Point(7, 9);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point3);
+        var point3 = new Point(7, 9);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point3);
 
         // Connect the storage with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse);
@@ -353,7 +345,7 @@ public class TestStorehouse {
 
         Worker storageWorker = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof StorehouseWorker) {
                 storageWorker = worker;
             }
@@ -373,22 +365,21 @@ public class TestStorehouse {
     public void testStorageWorkerRests() throws Exception {
 
         // Create a single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storage
-        Point point3 = new Point(7, 9);
-        Storehouse storage = map.placeBuilding(new Storehouse(player0), point3);
+        var point3 = new Point(7, 9);
+        var storage = map.placeBuilding(new Storehouse(player0), point3);
 
         Utils.constructHouse(storage);
 
-        StorehouseWorker storehouseWorker0 = new StorehouseWorker(player0, map);
+        var storehouseWorker0 = new StorehouseWorker(player0, map);
 
         Utils.occupyBuilding(storehouseWorker0, storage);
 
@@ -403,32 +394,31 @@ public class TestStorehouse {
     public void testStorageWorkerRestsThenDeliversCargo() throws Exception {
 
         // Create a single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(11, 9);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
+        var point1 = new Point(11, 9);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
 
         // Place storage
-        Point point3 = new Point(7, 9);
-        Storehouse storage = map.placeBuilding(new Storehouse(player0), point3.upLeft());
+        var point3 = new Point(7, 9);
+        var storage = map.placeBuilding(new Storehouse(player0), point3.upLeft());
 
         // Connect the storage with the woodcutter
-        Point point2 = new Point(9, 9);
+        var point2 = new Point(9, 9);
         map.placeRoad(player0, point1, point2, point3);
 
         // Finish construction of the storage
         Utils.constructHouse(storage);
 
         // Occupy the storage worker
-        StorehouseWorker storehouseWorker0 = new StorehouseWorker(player0, map);
+        var storehouseWorker0 = new StorehouseWorker(player0, map);
         Utils.occupyBuilding(storehouseWorker0, storage);
 
         // The storage worker rests
@@ -457,30 +447,29 @@ public class TestStorehouse {
     public void testStorageWorkerGoesBackToStorageAfterDelivery() throws Exception {
 
         // Create a single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(11, 9);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
+        var point1 = new Point(11, 9);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
 
         // Place storage
-        Point point3 = new Point(7, 9);
-        Storehouse storage = map.placeBuilding(new Storehouse(player0), point3.upLeft());
+        var point3 = new Point(7, 9);
+        var storage = map.placeBuilding(new Storehouse(player0), point3.upLeft());
 
         // Connect the storage with woodcutter
-        Point point2 = new Point(9, 9);
+        var point2 = new Point(9, 9);
         map.placeRoad(player0, point1, point2, point3);
 
         Utils.constructHouse(storage);
 
-        StorehouseWorker storehouseWorker0 = new StorehouseWorker(player0, map);
+        var storehouseWorker0 = new StorehouseWorker(player0, map);
 
         Utils.occupyBuilding(storehouseWorker0, storage);
 
@@ -513,30 +502,29 @@ public class TestStorehouse {
     public void testStorageWorkerRestsInStorageAfterDelivery() throws Exception {
 
         // Create a single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(11, 9);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
+        var point1 = new Point(11, 9);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
 
         // Place storage
-        Point point3 = new Point(7, 9);
-        Storehouse storage = map.placeBuilding(new Storehouse(player0), point3.upLeft());
+        var point3 = new Point(7, 9);
+        var storage = map.placeBuilding(new Storehouse(player0), point3.upLeft());
 
         // Connect the storage with the woodcutter
-        Point point2 = new Point(9, 9);
+        var point2 = new Point(9, 9);
         map.placeRoad(player0, point1, point2, point3);
 
         Utils.constructHouse(storage);
 
-        StorehouseWorker storehouseWorker0 = new StorehouseWorker(player0, map);
+        var storehouseWorker0 = new StorehouseWorker(player0, map);
 
         Utils.occupyBuilding(storehouseWorker0, storage);
 
@@ -574,18 +562,17 @@ public class TestStorehouse {
     public void testStorageWorkerGoesBackToStorageWhenStorageIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place storage
-        Point point26 = new Point(8, 8);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
+        var point26 = new Point(8, 8);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -594,7 +581,7 @@ public class TestStorehouse {
         Utils.occupyBuilding(new StorehouseWorker(player0, map), storehouse0);
 
         // Destroy the storage
-        Worker storageWorker = storehouse0.getWorker();
+        var storageWorker = storehouse0.getWorker();
 
         assertTrue(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getPosition(), storehouse0.getPosition());
@@ -605,7 +592,7 @@ public class TestStorehouse {
         assertFalse(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(STOREHOUSE_WORKER);
+        var amount = headquarter0.getAmount(STOREHOUSE_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, headquarter0.getPosition());
 
@@ -617,18 +604,17 @@ public class TestStorehouse {
     public void testStorageWorkerDoesNotGoBackToUnfinishedStorageWhenStorageIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place storage
-        Point point26 = new Point(17, 17);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
+        var point26 = new Point(17, 17);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -637,14 +623,14 @@ public class TestStorehouse {
         Utils.occupyBuilding(new StorehouseWorker(player0, map), storehouse0);
 
         // Place second storage
-        Point point2 = new Point(15, 15);
-        Storehouse storage1 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(15, 15);
+        var storage1 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Connect the storage buildings
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), storage1.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), storage1.getFlag());
 
         // Destroy the storage
-        Worker storageWorker = storehouse0.getWorker();
+        var storageWorker = storehouse0.getWorker();
 
         assertTrue(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getPosition(), storehouse0.getPosition());
@@ -660,18 +646,17 @@ public class TestStorehouse {
     public void testStorageWorkerDoesNotGoBackToBurningStorageWhenStorageIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place storage
-        Point point26 = new Point(17, 17);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
+        var point26 = new Point(17, 17);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -680,11 +665,11 @@ public class TestStorehouse {
         Utils.occupyBuilding(new StorehouseWorker(player0, map), storehouse0);
 
         // Place second storage
-        Point point2 = new Point(15, 15);
-        Storehouse storage1 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(15, 15);
+        var storage1 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Connect the storage buildings
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), storage1.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), storage1.getFlag());
 
         // Finish construction of the second storage
         Utils.constructHouse(storage1);
@@ -693,7 +678,7 @@ public class TestStorehouse {
         storage1.tearDown();
 
         // Destroy the storage
-        Worker storageWorker = storehouse0.getWorker();
+        var storageWorker = storehouse0.getWorker();
 
         assertTrue(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getPosition(), storehouse0.getPosition());
@@ -709,18 +694,17 @@ public class TestStorehouse {
     public void testStorageWorkerDoesNotGoBackToDestroyedStorageWhenStorageIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place storage
-        Point point26 = new Point(17, 17);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
+        var point26 = new Point(17, 17);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -729,11 +713,11 @@ public class TestStorehouse {
         Utils.occupyBuilding(new StorehouseWorker(player0, map), storehouse0);
 
         // Place second storage
-        Point point2 = new Point(15, 15);
-        Storehouse storage1 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(15, 15);
+        var storage1 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Connect the storage buildings
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), storage1.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), storage1.getFlag());
 
         // Finish construction of the second storage
         Utils.constructHouse(storage1);
@@ -745,7 +729,7 @@ public class TestStorehouse {
         Utils.waitForBuildingToBurnDown(storage1);
 
         // Destroy the storage
-        Worker storageWorker = storehouse0.getWorker();
+        var storageWorker = storehouse0.getWorker();
 
         assertTrue(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getPosition(), storehouse0.getPosition());
@@ -761,18 +745,17 @@ public class TestStorehouse {
     public void testStorageWorkerDoesNotGoBackOffroadToUnfinishedStorageWhenStorageIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place storage
-        Point point26 = new Point(17, 17);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
+        var point26 = new Point(17, 17);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -781,11 +764,11 @@ public class TestStorehouse {
         Utils.occupyBuilding(new StorehouseWorker(player0, map), storehouse0);
 
         // Place second storage
-        Point point2 = new Point(15, 15);
-        Storehouse storage1 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(15, 15);
+        var storage1 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Destroy the storage
-        Worker storageWorker = storehouse0.getWorker();
+        var storageWorker = storehouse0.getWorker();
 
         assertTrue(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getPosition(), storehouse0.getPosition());
@@ -801,18 +784,17 @@ public class TestStorehouse {
     public void testStorageWorkerDoesNotGoBackOffroadToBurningStorageWhenStorageIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place storage
-        Point point26 = new Point(17, 17);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
+        var point26 = new Point(17, 17);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -821,8 +803,8 @@ public class TestStorehouse {
         Utils.occupyBuilding(new StorehouseWorker(player0, map), storehouse0);
 
         // Place second storage
-        Point point2 = new Point(15, 15);
-        Storehouse storage1 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(15, 15);
+        var storage1 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the second storage
         Utils.constructHouse(storage1);
@@ -831,7 +813,7 @@ public class TestStorehouse {
         storage1.tearDown();
 
         // Destroy the storage
-        Worker storageWorker = storehouse0.getWorker();
+        var storageWorker = storehouse0.getWorker();
 
         assertTrue(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getPosition(), storehouse0.getPosition());
@@ -847,18 +829,17 @@ public class TestStorehouse {
     public void testStorageWorkerDoesNotGoBackOffroadToDestroyedStorageWhenStorageIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place storage
-        Point point26 = new Point(17, 17);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
+        var point26 = new Point(17, 17);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -867,8 +848,8 @@ public class TestStorehouse {
         Utils.occupyBuilding(new StorehouseWorker(player0, map), storehouse0);
 
         // Place second storage
-        Point point2 = new Point(15, 15);
-        Storehouse storage1 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(15, 15);
+        var storage1 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the second storage
         Utils.constructHouse(storage1);
@@ -880,7 +861,7 @@ public class TestStorehouse {
         Utils.waitForBuildingToBurnDown(storage1);
 
         // Destroy the storage
-        Worker storageWorker = storehouse0.getWorker();
+        var storageWorker = storehouse0.getWorker();
 
         assertTrue(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getPosition(), storehouse0.getPosition());
@@ -896,18 +877,17 @@ public class TestStorehouse {
     public void testStorageWorkerGoesBackOnToStorageOnRoadsIfPossibleWhenStorageIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place storage
-        Point point26 = new Point(8, 8);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
+        var point26 = new Point(8, 8);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
 
         // Connect the storage with the headquarters
         map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), headquarter0.getFlag());
@@ -919,7 +899,7 @@ public class TestStorehouse {
         Utils.occupyBuilding(new StorehouseWorker(player0, map), storehouse0);
 
         // Destroy the storage
-        Worker storageWorker = storehouse0.getWorker();
+        var storageWorker = storehouse0.getWorker();
 
         assertTrue(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getPosition(), storehouse0.getPosition());
@@ -931,8 +911,8 @@ public class TestStorehouse {
         assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
-        for (Point p : storageWorker.getPlannedPath()) {
+        var firstStep = true;
+        for (var p : storageWorker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -946,18 +926,17 @@ public class TestStorehouse {
     public void testDestroyedStorageIsRemovedAfterSomeTime() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place storage
-        Point point26 = new Point(8, 8);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
+        var point26 = new Point(8, 8);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
 
         // Connect the storage with the headquarters
         map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), headquarter0.getFlag());
@@ -991,18 +970,17 @@ public class TestStorehouse {
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place storage
-        Point point26 = new Point(8, 8);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
+        var point26 = new Point(8, 8);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -1019,18 +997,17 @@ public class TestStorehouse {
     public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place storage
-        Point point26 = new Point(8, 8);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
+        var point26 = new Point(8, 8);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -1047,27 +1024,26 @@ public class TestStorehouse {
     public void testProductionInStorageCannotBeStopped() throws Exception {
 
         // Create game map
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storage
-        Point point1 = new Point(10, 6);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(10, 6);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
 
         // Connect the storage and the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), headquarter.getFlag());
 
         // Finish the storage
         Utils.constructHouse(storehouse0);
 
         // Assign a worker to the storage
-        StorehouseWorker storehouseWorker = new StorehouseWorker(player0, map);
+        var storehouseWorker = new StorehouseWorker(player0, map);
 
         Utils.occupyBuilding(storehouseWorker, storehouse0);
 
@@ -1083,27 +1059,26 @@ public class TestStorehouse {
     public void testProductionInStorageCannotBeResumed() throws Exception {
 
         // Create game map
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storage
-        Point point1 = new Point(10, 6);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(10, 6);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
 
         // Connect the storage and the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), headquarter.getFlag());
 
         // Finish the storage
         Utils.constructHouse(storehouse0);
 
         // Assign a worker to the storage
-        StorehouseWorker storehouseWorker = new StorehouseWorker(player0, map);
+        var storehouseWorker = new StorehouseWorker(player0, map);
 
         Utils.occupyBuilding(storehouseWorker, storehouse0);
 
@@ -1119,35 +1094,34 @@ public class TestStorehouse {
     public void testAssignedStorageWorkerHasCorrectlySetPlayer() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarters
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storage
-        Point point1 = new Point(20, 14);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(20, 14);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
 
         // Connect the storage with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), storehouse0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), storehouse0.getFlag());
 
         // Wait for storage worker to get assigned and leave the headquarters
-        List<StorehouseWorker> workers = Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0);
+        var workers = Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
 
         // Verify that the player is set correctly in the worker
-        StorehouseWorker worker = workers.getFirst();
+        var worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1156,34 +1130,33 @@ public class TestStorehouse {
     public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        Player player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
         players.add(player2);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 0's headquarters
-        Point point0 = new Point(7, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(7, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 2's headquarters
-        Point point10 = new Point(70, 70);
-        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
+        var point10 = new Point(70, 70);
+        var headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
         // Place player 1's headquarters
-        Point point1 = new Point(37, 5);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(37, 5);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Place fortress for player 0
-        Point point2 = new Point(21, 9);
-        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        var point2 = new Point(21, 9);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         // Finish construction of the fortress
         Utils.constructHouse(fortress0);
@@ -1192,14 +1165,14 @@ public class TestStorehouse {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         // Place storage close to the new border
-        Point point4 = new Point(28, 18);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point4);
+        var point4 = new Point(28, 18);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point4);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
 
         // Occupy the storage
-        StorehouseWorker worker = Utils.occupyBuilding(new StorehouseWorker(player0, map), storehouse0);
+        var worker = Utils.occupyBuilding(new StorehouseWorker(player0, map), storehouse0);
 
         // Verify that the worker goes back to its own storage when the fortress is torn down
         fortress0.tearDown();
@@ -1211,30 +1184,29 @@ public class TestStorehouse {
     public void testRoadCloseToOpponentGetsPopulatedFromCorrectPlayer() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        Player player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
         players.add(player2);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 0's headquarters
-        Point point0 = new Point(13, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(13, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarters
-        Point point1 = new Point(45, 17);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(45, 17);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Place player 2's headquarters
-        Point point10 = new Point(70, 70);
-        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
+        var point10 = new Point(70, 70);
+        var headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
         // Clear the inventories of soldiers
         Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
@@ -1242,8 +1214,8 @@ public class TestStorehouse {
         Utils.clearInventory(headquarter2, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
 
         // Place fortress for player 0
-        Point point2 = new Point(21, 5);
-        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        var point2 = new Point(21, 5);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         // Finish construction of the fortress
         Utils.constructHouse(fortress0);
@@ -1252,14 +1224,14 @@ public class TestStorehouse {
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress0);
 
         // Connect the fortress with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
         // Occupy the road
         Utils.occupyRoad(road0, map);
 
         // Place barracks close to the new border
-        Point point4 = new Point(34, 18);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player1), point4);
+        var point4 = new Point(34, 18);
+        var barracks0 = map.placeBuilding(new Barracks(player1), point4);
 
         // Finish construction of the barracks
         Utils.constructHouse(barracks0);
@@ -1268,7 +1240,7 @@ public class TestStorehouse {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
         // Connect the barracks with the headquarters
-        Road road1 = map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), barracks0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), barracks0.getFlag());
 
         // Occupy the road
         Utils.occupyRoad(road1, map);
@@ -1277,9 +1249,9 @@ public class TestStorehouse {
         player0.attack(barracks0, 2, AttackStrength.STRONG);
 
         // Wait for the attackers to come out
-        List<Soldier> attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
+        var attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
 
-        Soldier mainAttacker = Utils.getMainAttacker(barracks0, attackers);
+        var mainAttacker = Utils.getMainAttacker(barracks0, attackers);
 
         // Wait for the attacker to reach the flag of the barracks
         assertEquals(mainAttacker.getTarget(), barracks0.getFlag().getPosition());
@@ -1299,30 +1271,30 @@ public class TestStorehouse {
         assertTrue(barracks0.getNumberOfHostedSoldiers() > 0);
 
         // Connect the captured barracks with the headquarters
-        Road road4 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), fortress0.getFlag());
+        var road4 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), fortress0.getFlag());
 
         // Occupy the road
         Utils.occupyRoad(road4, map);
 
         // Place flag
-        Point point5 = new Point(32, 18);
-        Flag flag0 = map.placeFlag(player0, point5);
+        var point5 = new Point(32, 18);
+        var flag0 = map.placeFlag(player0, point5);
 
         // Place road
-        Road road3 = map.placeAutoSelectedRoad(player0, flag0, barracks0.getFlag());
+        var road3 = map.placeAutoSelectedRoad(player0, flag0, barracks0.getFlag());
 
         // Verify that player 1's headquartersis closer to the road
-        for (Point point : road3.getWayPoints()) {
+        for (var point : road3.getWayPoints()) {
 
             assertTrue(point.distance(headquarter1.getPosition()) < point.distance(headquarter0.getPosition()));
         }
 
         // Verify that the barracks gets populated from the right headquartersonly
-        int player0Couriers = Utils.findWorkersOfTypeOutsideForPlayer(Courier.class, player0).size();
-        int player1Couriers = Utils.findWorkersOfTypeOutsideForPlayer(Courier.class, player1).size();
+        var player0Couriers = Utils.findWorkersOfTypeOutsideForPlayer(Courier.class, player0).size();
+        var player1Couriers = Utils.findWorkersOfTypeOutsideForPlayer(Courier.class, player1).size();
 
         for (int i = 0; i < 1000; i++) {
-            Courier courier = road3.getCourier();
+            var courier = road3.getCourier();
 
             if (courier != null && road3.getWayPoints().contains(courier.getPosition())) {
                 break;
@@ -1341,38 +1313,37 @@ public class TestStorehouse {
     public void testStorageWorkerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place storage
-        Point point2 = new Point(14, 4);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2.upLeft());
+        var point2 = new Point(14, 4);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2.upLeft());
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
 
         // Connect headquartersand first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, storehouse0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, storehouse0.getFlag());
 
         // Wait for the storage worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0);
 
         StorehouseWorker storehouseWorker = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof StorehouseWorker && storehouse0.getPosition().equals(worker.getTarget())) {
                 storehouseWorker = (StorehouseWorker) worker;
             }
@@ -1406,38 +1377,37 @@ public class TestStorehouse {
     public void testStorageWorkerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place storage
-        Point point2 = new Point(14, 4);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2.upLeft());
+        var point2 = new Point(14, 4);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2.upLeft());
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
 
         // Connect headquartersand first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, storehouse0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, storehouse0.getFlag());
 
         // Wait for the storage worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0);
 
         StorehouseWorker storehouseWorker = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof StorehouseWorker && storehouse0.getPosition().equals(worker.getTarget())) {
                 storehouseWorker = (StorehouseWorker) worker;
             }
@@ -1474,38 +1444,37 @@ public class TestStorehouse {
     public void testStorageWorkerReturnsToStorageIfStorageIsDestroyed() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place storage
-        Point point2 = new Point(14, 4);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2.upLeft());
+        var point2 = new Point(14, 4);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2.upLeft());
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
 
         // Connect headquartersand first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, storehouse0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, storehouse0.getFlag());
 
         // Wait for the storage worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0);
 
         StorehouseWorker storehouseWorker = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof StorehouseWorker && storehouse0.getPosition().equals(worker.getTarget())) {
                 storehouseWorker = (StorehouseWorker) worker;
             }
@@ -1538,18 +1507,17 @@ public class TestStorehouse {
     public void testStorageWorkerGoesOffroadBackToClosestStorageWhenStorageIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place storage
-        Point point26 = new Point(17, 17);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
+        var point26 = new Point(17, 17);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -1558,14 +1526,14 @@ public class TestStorehouse {
         Utils.occupyBuilding(new StorehouseWorker(player0, map), storehouse0);
 
         // Place a second storage closer to the storage
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse1 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse1 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse1);
 
         // Destroy the storage
-        Worker storageWorker = storehouse0.getWorker();
+        var storageWorker = storehouse0.getWorker();
 
         assertTrue(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getPosition(), storehouse0.getPosition());
@@ -1576,7 +1544,7 @@ public class TestStorehouse {
         assertFalse(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getTarget(), storehouse1.getPosition());
 
-        int amount = storehouse1.getAmount(STOREHOUSE_WORKER);
+        var amount = storehouse1.getAmount(STOREHOUSE_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, storehouse1.getPosition());
 
@@ -1588,18 +1556,17 @@ public class TestStorehouse {
     public void testStorageWorkerReturnsOffroadAndAvoidsBurningStorageWhenStorageIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place storage
-        Point point26 = new Point(17, 17);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
+        var point26 = new Point(17, 17);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -1608,8 +1575,8 @@ public class TestStorehouse {
         Utils.occupyBuilding(new StorehouseWorker(player0, map), storehouse0);
 
         // Place a second storage closer to the storage
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse1 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse1 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse1);
@@ -1618,7 +1585,7 @@ public class TestStorehouse {
         storehouse1.tearDown();
 
         // Destroy the storage
-        Worker storageWorker = storehouse0.getWorker();
+        var storageWorker = storehouse0.getWorker();
 
         assertTrue(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getPosition(), storehouse0.getPosition());
@@ -1629,7 +1596,7 @@ public class TestStorehouse {
         assertFalse(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(STOREHOUSE_WORKER);
+        var amount = headquarter0.getAmount(STOREHOUSE_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, headquarter0.getPosition());
 
@@ -1641,18 +1608,17 @@ public class TestStorehouse {
     public void testStorageWorkerReturnsOffroadAndAvoidsDestroyedStorageWhenStorageIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place storage
-        Point point26 = new Point(17, 17);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
+        var point26 = new Point(17, 17);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -1661,8 +1627,8 @@ public class TestStorehouse {
         Utils.occupyBuilding(new StorehouseWorker(player0, map), storehouse0);
 
         // Place a second storage closer to the storage
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse1 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse1 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse1);
@@ -1674,7 +1640,7 @@ public class TestStorehouse {
         Utils.waitForBuildingToBurnDown(storehouse1);
 
         // Destroy the storage
-        Worker storageWorker = storehouse0.getWorker();
+        var storageWorker = storehouse0.getWorker();
 
         assertTrue(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getPosition(), storehouse0.getPosition());
@@ -1685,7 +1651,7 @@ public class TestStorehouse {
         assertFalse(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(STOREHOUSE_WORKER);
+        var amount = headquarter0.getAmount(STOREHOUSE_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, headquarter0.getPosition());
 
@@ -1697,18 +1663,17 @@ public class TestStorehouse {
     public void testStorageWorkerReturnsOffroadAndAvoidsUnfinishedStorageWhenStorageIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place storage
-        Point point26 = new Point(17, 17);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
+        var point26 = new Point(17, 17);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -1717,11 +1682,11 @@ public class TestStorehouse {
         Utils.occupyBuilding(new StorehouseWorker(player0, map), storehouse0);
 
         // Place a second storage closer to the storage
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse1 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse1 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Destroy the storage
-        Worker storageWorker = storehouse0.getWorker();
+        var storageWorker = storehouse0.getWorker();
 
         assertTrue(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getPosition(), storehouse0.getPosition());
@@ -1732,7 +1697,7 @@ public class TestStorehouse {
         assertFalse(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(STOREHOUSE_WORKER);
+        var amount = headquarter0.getAmount(STOREHOUSE_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, headquarter0.getPosition());
 
@@ -1744,27 +1709,26 @@ public class TestStorehouse {
     public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place storage
-        Point point26 = new Point(17, 17);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
+        var point26 = new Point(17, 17);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
 
         // Place road to connect the headquartersand the storage
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), storehouse0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), storehouse0.getFlag());
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
 
         // Wait for a worker to start walking to the building
-        Worker worker = Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0).getFirst();
+        var worker = Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, storehouse0.getFlag().getPosition());
@@ -1788,24 +1752,23 @@ public class TestStorehouse {
     public void testStorageCannotProduce() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storage
-        Point point1 = new Point(10, 10);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(10, 10);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
 
         // Populate the storage
-        Worker storageWorker0 = Utils.occupyBuilding(new StorehouseWorker(player0, map), storehouse0);
+        var storageWorker0 = Utils.occupyBuilding(new StorehouseWorker(player0, map), storehouse0);
 
         // Verify that the storage can produce
         assertFalse(storehouse0.canProduce());
@@ -1815,18 +1778,17 @@ public class TestStorehouse {
     public void testStorageReportsCorrectOutput() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storage
-        Point point1 = new Point(6, 12);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
 
         // Construct the storage
         Utils.constructHouse(storehouse0);
@@ -1839,18 +1801,17 @@ public class TestStorehouse {
     public void testStorageReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storage
-        Point point1 = new Point(6, 12);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
 
         // Verify that the reported needed construction material is correct
         assertEquals(storehouse0.getTypesOfMaterialNeeded().size(), 2);
@@ -1859,7 +1820,7 @@ public class TestStorehouse {
         assertEquals(storehouse0.getCanHoldAmount(PLANK), 4);
         assertEquals(storehouse0.getCanHoldAmount(STONE), 3);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
@@ -1872,18 +1833,17 @@ public class TestStorehouse {
     public void testStorageReportsCorrectMaterialsNeededForProduction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storage
-        Point point1 = new Point(6, 12);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
 
         // Construct the storage
         Utils.constructHouse(storehouse0);
@@ -1891,7 +1851,7 @@ public class TestStorehouse {
         // Verify that the reported needed construction material is correct
         assertEquals(storehouse0.getTypesOfMaterialNeeded().size(), 0);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             assertEquals(storehouse0.getCanHoldAmount(material), 0);
         }
     }
@@ -1900,26 +1860,25 @@ public class TestStorehouse {
     public void testStorehouseWaitsWhenFlagIsFull() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Make sure there is enough construction material in the headquarters
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
         // Place storehouse
-        Point point1 = new Point(16, 6);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(16, 6);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Connect the storehouse with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         // Wait for the storehouse to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(storehouse);
@@ -1939,11 +1898,11 @@ public class TestStorehouse {
         map.removeRoad(road0);
 
         // Place fortress
-        Point point2 = new Point(12, 10);
-        Fortress fortress = map.placeBuilding(new Fortress(player0), point2);
+        var point2 = new Point(12, 10);
+        var fortress = map.placeBuilding(new Fortress(player0), point2);
 
         // Connect the fortress with the storehouse
-        Road road1 = map.placeAutoSelectedRoad(player0, fortress.getFlag(), storehouse.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, fortress.getFlag(), storehouse.getFlag());
 
         // Verify that the storehouse waits for the flag to get empty and produces nothing
         for (int i = 0; i < 300; i++) {
@@ -1954,7 +1913,7 @@ public class TestStorehouse {
         }
 
         // Remove one of the cargos
-        Cargo cargo = storehouse.getFlag().getStackedCargo().getFirst();
+        var cargo = storehouse.getFlag().getStackedCargo().getFirst();
         storehouse.getFlag().retrieveCargo(cargo);
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 7);
@@ -1967,26 +1926,25 @@ public class TestStorehouse {
     public void testStorehouseDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Make sure there is enough construction material in the headquarters
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
         // Place storehouse
-        Point point1 = new Point(16, 6);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(16, 6);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Connect the storehouse with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         // Make sure there is enough construction material in the headquarters
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
@@ -2010,11 +1968,11 @@ public class TestStorehouse {
         map.removeRoad(road0);
 
         // Place fortress
-        Point point2 = new Point(12, 10);
-        Fortress fortress = map.placeBuilding(new Fortress(player0), point2);
+        var point2 = new Point(12, 10);
+        var fortress = map.placeBuilding(new Fortress(player0), point2);
 
         // Connect the fortress with the storehouse
-        Road road1 = map.placeAutoSelectedRoad(player0, fortress.getFlag(), storehouse.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, fortress.getFlag(), storehouse.getFlag());
 
         // The storehouse waits for the flag to get empty and produces nothing
         for (int i = 0; i < 300; i++) {
@@ -2025,7 +1983,7 @@ public class TestStorehouse {
         }
 
         // Remove a cargo from the flag
-        Cargo cargo = storehouse.getFlag().getStackedCargo().getFirst();
+        var cargo = storehouse.getFlag().getStackedCargo().getFirst();
         storehouse.getFlag().retrieveCargo(cargo);
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 7);
@@ -2033,7 +1991,7 @@ public class TestStorehouse {
         // Wait for the worker to put the cargo on the flag
         assertTrue(fortress.needsMaterial(PLANK));
 
-        Cargo newCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storehouse.getWorker());
+        var newCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storehouse.getWorker());
 
         assertEquals(storehouse.getWorker().getTarget(), storehouse.getFlag().getPosition());
 
@@ -2059,22 +2017,21 @@ public class TestStorehouse {
     public void testPushedOutCargoGoesToOtherStorehouse() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
-        Point point1 = new Point(16, 6);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(16, 6);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Connect the storehouse with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         // Make sure there is enough construction material in the headquarters
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
@@ -2109,22 +2066,21 @@ public class TestStorehouse {
     public void testPushedOutWorkerGoesToOtherStorehouseWhenOwnStoreIsBlocked() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
-        Point point1 = new Point(16, 6);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(16, 6);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Connect the storehouse with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         // Make sure there is enough construction material in the headquarters
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
@@ -2143,7 +2099,7 @@ public class TestStorehouse {
         // Verify that all the scout goes to the storehouse
         assertEquals(storehouse.getAmount(SCOUT), 0);
 
-        Worker scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).getFirst();
+        var scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).getFirst();
 
         assertEquals(scout.getPosition(), headquarter.getPosition());
         assertNull(headquarter.getWorker().getCargo());
@@ -2169,22 +2125,21 @@ public class TestStorehouse {
     public void testPushedOutMaterialFollowsPriorityOrder() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
-        Point point1 = new Point(16, 6);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(16, 6);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Connect the storehouse with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         // Make sure there is enough construction material in the headquarters
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
@@ -2222,36 +2177,35 @@ public class TestStorehouse {
     public void testDeliveriesGoToOtherStorehouseWhenDeliveryIsBlocked() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
-        Point point1 = new Point(16, 6);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(16, 6);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Place well
-        Point point2 = new Point(9, 7);
-        Well well = map.placeBuilding(new Well(player0), point2);
+        var point2 = new Point(9, 7);
+        var well = map.placeBuilding(new Well(player0), point2);
 
         // Make sure there is enough construction material in the headquarters
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
         // Connect the storehouse with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         // Wait for the storehouse to get constructed
         Utils.waitForBuildingToBeConstructed(storehouse);
 
         // Connect the well with the headquarters
-        Road road1 = map.placeAutoSelectedRoad(player0, well.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, well.getFlag(), headquarter.getFlag());
 
         // Wait for the well to get constructed
         Utils.waitForBuildingToBeConstructed(well);
@@ -2271,7 +2225,7 @@ public class TestStorehouse {
         for (int i = 0; i < 10; i++) {
 
             // Wait for the well worker to produce a water cargo
-            Cargo cargo = Utils.fastForwardUntilWorkerCarriesCargo(map, well.getWorker(), WATER);
+            var cargo = Utils.fastForwardUntilWorkerCarriesCargo(map, well.getWorker(), WATER);
 
             // Wait for the courier for the road between the well and the headquartersto pick up the water cargo
             Utils.fastForwardUntilWorkerCarriesCargo(map, road1.getCourier(), cargo);
@@ -2300,15 +2254,14 @@ public class TestStorehouse {
     public void testPushedOutMaterialStopsWhenFlagFillsUp() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Make sure there is enough construction material in the headquarters
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
@@ -2338,32 +2291,31 @@ public class TestStorehouse {
     public void testStorehouseWorkerReturnsCargoIfItIsStillOnTheFlagAndItsTargetBecomesUnreachable() throws InvalidUserActionException {
 
         // Creating new game map
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place headquarters
-        Point point0 = new Point(5, 7);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 7);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(10, 6);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 6);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place flag
-        Point point2 = new Point(14, 8);
-        Flag flag1 = map.placeFlag(player0, point2);
+        var point2 = new Point(14, 8);
+        var flag1 = map.placeFlag(player0, point2);
 
         // Place road between the headquarters and the flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Place road between the flag and the woodcutter
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         // Wait for the first road to get assigned a courier
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition().left());
 
@@ -2373,7 +2325,7 @@ public class TestStorehouse {
         Utils.adjustInventoryTo(headquarter0, PLANK, 20);
 
         // Place woodcutter
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2.upLeft());
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point2.upLeft());
 
         // Wait for the courier to start walking to the headquarters' flag to pick up a cargo for the woodcutter
         Utils.waitForWorkerToSetTarget(map, courier, headquarter0.getFlag().getPosition());
@@ -2387,7 +2339,7 @@ public class TestStorehouse {
         map.removeRoad(road1);
 
         // Verify that the storehouse worker brings the cargo back to the storehouse
-        StorehouseWorker storehouseWorker = (StorehouseWorker) headquarter0.getWorker();
+        var storehouseWorker = (StorehouseWorker) headquarter0.getWorker();
 
         Utils.waitForWorkerToSetTarget(map, storehouseWorker, headquarter0.getFlag().getPosition());
 

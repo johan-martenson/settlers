@@ -49,24 +49,23 @@ public class TestCoalMine {
     public void testCoalMineCanHoldTwoFishTwoBreadsTwoMeats() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mountain
-        Point point1 = new Point(6, 12);
+        var point1 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         // Place coal mine
         var coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         // Connect the coal mine with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
 
         // Make sure the headquarters has enough resources
         Utils.adjustInventoryTo(headquarter0, PLANK, 20);
@@ -109,24 +108,23 @@ public class TestCoalMine {
     public void testCoalMineOnlyNeedsFourPlanksForConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Put a small mountain on the map
-        Point point22 = new Point(6, 12);
+        var point22 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point22, map);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point22);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point22);
 
         // Deliver four planks
-        Cargo plankCargo = new Cargo(PLANK, map);
+        var plankCargo = new Cargo(PLANK, map);
 
         coalMine0.putCargo(plankCargo);
         coalMine0.putCargo(plankCargo);
@@ -150,24 +148,23 @@ public class TestCoalMine {
     public void testCoalMineCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Put a small mountain on the map
-        Point point22 = new Point(6, 12);
+        var point22 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point22, map);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point22);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point22);
 
         // Deliver two plank and three stone
-        Cargo plankCargo = new Cargo(PLANK, map);
+        var plankCargo = new Cargo(PLANK, map);
 
         coalMine0.putCargo(plankCargo);
         coalMine0.putCargo(plankCargo);
@@ -190,24 +187,23 @@ public class TestCoalMine {
     public void testConstructCoalMine() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(8, 14);
+        var point0 = new Point(8, 14);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         // Place a headquarter
-        Point point1 = new Point(7, 7);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(7, 7);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a coalmine
-        Building mine = map.placeBuilding(new CoalMine(player0), point0);
+        var mine = map.placeBuilding(new CoalMine(player0), point0);
 
         // Connect the mine with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, mine.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mine.getFlag(), headquarter.getFlag());
 
         // Wait for the mine to get constructed
         Utils.waitForBuildingToBeConstructed(mine);
@@ -219,21 +215,20 @@ public class TestCoalMine {
     public void testCoalmineIsNotMilitary() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(8, 14);
+        var point0 = new Point(8, 14);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         // Place a headquarter
-        Point point1 = new Point(7, 7);
+        var point1 = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a coal mine
-        Building mine = map.placeBuilding(new CoalMine(player0), point0);
+        var mine = map.placeBuilding(new CoalMine(player0), point0);
 
         // Verify that the mine is not a military building
         assertFalse(mine.isMilitaryBuilding());
@@ -247,21 +242,20 @@ public class TestCoalMine {
     public void testCoalmineUnderConstructionNotNeedsMiner() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(8, 14);
+        var point0 = new Point(8, 14);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         // Place a headquarter
-        Point point1 = new Point(7, 7);
+        var point1 = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a gold mine
-        Building mine = map.placeBuilding(new CoalMine(player0), point0);
+        var mine = map.placeBuilding(new CoalMine(player0), point0);
 
         // Verify that the unfinished mine does not need a worker
         assertFalse(mine.needsWorker());
@@ -271,21 +265,20 @@ public class TestCoalMine {
     public void testFinishedCoalmineNeedsMiner() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(8, 14);
+        var point0 = new Point(8, 14);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         // Place a headquarter
-        Point point1 = new Point(7, 7);
+        var point1 = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a gold mine
-        Building mine = map.placeBuilding(new CoalMine(player0), point0);
+        var mine = map.placeBuilding(new CoalMine(player0), point0);
 
         constructHouse(mine);
 
@@ -297,24 +290,23 @@ public class TestCoalMine {
     public void testMinerIsAssignedToFinishedCoalmine() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place a headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(10, 8);
+        var point1 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         // Place a gold mine
-        Building mine = map.placeBuilding(new CoalMine(player0), point1);
+        var mine = map.placeBuilding(new CoalMine(player0), point1);
 
         // Place a road between the headquarter and the goldmine
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
 
         // Wait for the mine to get constructed
         Utils.waitForBuildingToBeConstructed(mine);
@@ -338,24 +330,23 @@ public class TestCoalMine {
     public void testMinerIsNotASoldier() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place a headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(10, 8);
+        var point1 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         // Place a gold mine
-        Building mine = map.placeBuilding(new CoalMine(player0), point1);
+        var mine = map.placeBuilding(new CoalMine(player0), point1);
 
         // Place a road between the headquarter and the goldmine
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
 
         // Construct the mine
         constructHouse(mine);
@@ -363,7 +354,7 @@ public class TestCoalMine {
         assertTrue(mine.isReady());
 
         // Wait for a miner to walk out
-        Miner miner0 = Utils.waitForWorkerOutsideBuilding(Miner.class, player0);
+        var miner0 = Utils.waitForWorkerOutsideBuilding(Miner.class, player0);
 
         assertNotNull(miner0);
         assertFalse(miner0.isSoldier());
@@ -373,28 +364,27 @@ public class TestCoalMine {
     public void testMinerIsCreatedFromPickAxe() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place a headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Remove all miners from the headquarter and add one pick axe
         Utils.adjustInventoryTo(headquarter, MINER, 0);
         Utils.adjustInventoryTo(headquarter, PICK_AXE, 1);
 
         // Put a small mountain on the map
-        Point point1 = new Point(10, 8);
+        var point1 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         // Place a gold mine
-        Building mine = map.placeBuilding(new CoalMine(player0), point1);
+        var mine = map.placeBuilding(new CoalMine(player0), point1);
 
         // Place a road between the headquarter and the goldmine
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
 
         // Construct the mine
         constructHouse(mine);
@@ -418,21 +408,20 @@ public class TestCoalMine {
     public void testCanPlaceMineOnPointSurroundedByMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place a headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(10, 8);
+        var point1 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         // Place a gold mine
-        Building mine = map.placeBuilding(new CoalMine(player0), point1);
+        var mine = map.placeBuilding(new CoalMine(player0), point1);
 
         assertEquals(map.getBuildings().size(), 2);
     }
@@ -441,27 +430,26 @@ public class TestCoalMine {
     public void testArrivedMinerRests() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
+        var point1 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a gold mine
-        Building mine = map.placeBuilding(new CoalMine(player0), point0);
+        var mine = map.placeBuilding(new CoalMine(player0), point0);
 
         // Construct the gold mine
         constructHouse(mine);
 
         // Manually place miner
-        Miner miner = new Miner(player0, map);
+        var miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
@@ -484,32 +472,31 @@ public class TestCoalMine {
     public void testMinerMinesCoal() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
+        var point1 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a gold mine
-        Building mine = map.placeBuilding(new CoalMine(player0), point0);
+        var mine = map.placeBuilding(new CoalMine(player0), point0);
 
         // Construct the gold mine
         constructHouse(mine);
 
         // Deliver food to the miner
-        Cargo food = new Cargo(BREAD, map);
+        var food = new Cargo(BREAD, map);
         mine.putCargo(food);
 
         // Manually place miner
-        Miner miner = new Miner(player0, map);
+        var miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
@@ -519,7 +506,7 @@ public class TestCoalMine {
         Utils.fastForward(100, map);
 
         // Verify that the miner mines for gold
-        int amountCoal = map.getAmountOfMineralAtPoint(COAL, point0);
+        var amountCoal = map.getAmountOfMineralAtPoint(COAL, point0);
 
         for (int i = 0; i < 50; i++) {
             assertTrue(miner.isMining());
@@ -538,22 +525,21 @@ public class TestCoalMine {
     public void testCoalmineGoesToFlagWithCargoAndBack() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(15, 15);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a gold mine
-        Building mine = map.placeBuilding(new CoalMine(player0), point0);
+        var mine = map.placeBuilding(new CoalMine(player0), point0);
 
         // Place a road from headquarter to mine
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
@@ -562,11 +548,11 @@ public class TestCoalMine {
         constructHouse(mine);
 
         // Deliver food to the miner
-        Cargo food = new Cargo(BREAD, map);
+        var food = new Cargo(BREAD, map);
         mine.putCargo(food);
 
         // Manually place miner
-        Miner miner = new Miner(player0, map);
+        var miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
@@ -600,36 +586,35 @@ public class TestCoalMine {
     public void testCoalCargoIsDeliveredToMintWhichIsCloserThanHeadquarters() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point3 = new Point(6, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(6, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Remove all coal from the headquarters
         Utils.adjustInventoryTo(headquarter, COAL, 0);
 
         // Place mint
-        Point point4 = new Point(10, 4);
-        Mint mint = map.placeBuilding(new Mint(player0), point4);
+        var point4 = new Point(10, 4);
+        var mint = map.placeBuilding(new Mint(player0), point4);
 
         // Connect the mint to the headquarters
-        Road road2 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
 
         // Place mountain
-        Point point1 = new Point(14, 4);
+        var point1 = new Point(14, 4);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         // Place the coal mine
-        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine = map.placeBuilding(new CoalMine(player0), point1);
 
         // Connect the coal mine with the mint
-        Road road0 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), mint.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), mint.getFlag());
 
         // Wait for the coal mine and the mint to get constructed and occupied
         Utils.waitForBuildingsToBeConstructed(coalMine, mint);
@@ -656,39 +641,38 @@ public class TestCoalMine {
     public void testCoalIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point3 = new Point(6, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(6, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Adjust the inventory
         Utils.clearInventory(headquarter, GOLD, STONE, MEAT, BREAD, FISH, PLANK, COAL);
 
         // Place storehouse
-        Point point4 = new Point(10, 4);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+        var point4 = new Point(10, 4);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point4);
 
         // Connect the storehouse to the headquarters
-        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         // Add stones to the storehouse doesn't need any more stones
         Utils.deliverMaxCargos(storehouse, STONE);
 
         // Place mountain
-        Point point1 = new Point(14, 4);
+        var point1 = new Point(14, 4);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         // Place the coal mine
-        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine = map.placeBuilding(new CoalMine(player0), point1);
 
         // Connect the coal mine with the storehouse
-        Road road0 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), storehouse.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), storehouse.getFlag());
 
         // Deliver the needed material to construct the coal mine
         Utils.deliverCargos(coalMine, PLANK, 4);
@@ -725,25 +709,24 @@ public class TestCoalMine {
     public void testGoldIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point3 = new Point(6, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(6, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Adjust the inventory
         Utils.clearInventory(headquarter, BREAD, FISH, MEAT, GOLD, COAL, GOLD);
 
         // Place mint
-        Point point4 = new Point(10, 4);
-        Mint mint = map.placeBuilding(new Mint(player0), point4);
+        var point4 = new Point(10, 4);
+        var mint = map.placeBuilding(new Mint(player0), point4);
 
         // Connect the mint to the headquarters
-        Road road2 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
 
         // Wait for the mint to get constructed
         Utils.waitForBuildingToBeConstructed(mint);
@@ -758,15 +741,15 @@ public class TestCoalMine {
         assertEquals(mint.getCanHoldAmount(COAL) - mint.getAmount(COAL), 1);
 
         // Place mountain
-        Point point1 = new Point(14, 4);
+        var point1 = new Point(14, 4);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         // Place the coal mine
-        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine = map.placeBuilding(new CoalMine(player0), point1);
 
         // Connect the coal mine with the mint
-        Road road0 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), mint.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), mint.getFlag());
 
         // Deliver the needed material to construct the coal mine
         Utils.deliverCargos(coalMine, PLANK, 4);
@@ -805,17 +788,16 @@ public class TestCoalMine {
     public void testCanNotPlaceMineOnGrass() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(7, 7);
+        var point0 = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that it's not possible to place a mine on the grass
-        Point point1 = new Point(2, 2);
+        var point1 = new Point(2, 2);
         try {
             map.placeBuilding(new CoalMine(player0), point1);
             fail();
@@ -828,13 +810,12 @@ public class TestCoalMine {
     public void testCoalmineRunsOutOfCoal() throws Exception {
 
         // Create game map with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, SMALL, map);
 
@@ -846,11 +827,11 @@ public class TestCoalMine {
         }
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(15, 15);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a coal mine
-        Building mine = map.placeBuilding(new CoalMine(player0), point0);
+        var mine = map.placeBuilding(new CoalMine(player0), point0);
 
         // Place a road from headquarter to mine
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
@@ -864,7 +845,7 @@ public class TestCoalMine {
         Utils.deliverCargo(mine, MEAT);
 
         // Manually place miner
-        Miner miner = new Miner(player0, map);
+        var miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
@@ -907,21 +888,20 @@ public class TestCoalMine {
     public void testCoalmineWithoutCoalProducesNothing() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(15, 15);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a coal mine
-        Building mine = map.placeBuilding(new CoalMine(player0), point0);
+        var mine = map.placeBuilding(new CoalMine(player0), point0);
 
         // Place a road from headquarter to mine
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
@@ -930,11 +910,11 @@ public class TestCoalMine {
         constructHouse(mine);
 
         // Deliver food to the miner
-        Cargo food = new Cargo(BREAD, map);
+        var food = new Cargo(BREAD, map);
         mine.putCargo(food);
 
         // Manually place miner
-        Miner miner = new Miner(player0, map);
+        var miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
@@ -958,28 +938,27 @@ public class TestCoalMine {
     public void testCoalmineWithoutFoodProducesNothing() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(15, 15);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a coal mine
-        Building mine = map.placeBuilding(new CoalMine(player0), point0);
+        var mine = map.placeBuilding(new CoalMine(player0), point0);
 
         // Construct the coal mine
         constructHouse(mine);
 
         // Manually place miner
-        Miner miner = new Miner(player0, map);
+        var miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
@@ -1002,32 +981,31 @@ public class TestCoalMine {
     public void testMiningConsumesFood() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
+        var point1 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a coal mine
-        Building mine = map.placeBuilding(new CoalMine(player0), point0);
+        var mine = map.placeBuilding(new CoalMine(player0), point0);
 
         // Construct the coal mine
         constructHouse(mine);
 
         // Deliver food to the miner
-        Cargo food = new Cargo(BREAD, map);
+        var food = new Cargo(BREAD, map);
         mine.putCargo(food);
 
         // Manually place miner
-        Miner miner = new Miner(player0, map);
+        var miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
@@ -1049,22 +1027,21 @@ public class TestCoalMine {
     public void testCoalmineCanConsumeAllTypesOfFood() throws Exception {
 
         // Start new game with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
+        var point1 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a coal mine
-        Building mine = map.placeBuilding(new CoalMine(player0), point0);
+        var mine = map.placeBuilding(new CoalMine(player0), point0);
 
         // Construct the coal mine
         constructHouse(mine);
@@ -1079,7 +1056,7 @@ public class TestCoalMine {
         mine.putCargo(new Cargo(BREAD, map));
 
         // Manually place miner
-        Miner miner = new Miner(player0, map);
+        var miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
@@ -1108,22 +1085,21 @@ public class TestCoalMine {
     public void testCoalMineWithoutConnectedStorageKeepsProducing() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
 
         // Finish construction of the coal mine
         constructHouse(coalMine0);
@@ -1132,7 +1108,7 @@ public class TestCoalMine {
         Utils.occupyBuilding(new Miner(player0, map), coalMine0);
 
         // Deliver material to the coal mine
-        Cargo fishCargo = new Cargo(FISH, map);
+        var fishCargo = new Cargo(FISH, map);
 
         coalMine0.putCargo(fishCargo);
         coalMine0.putCargo(fishCargo);
@@ -1143,7 +1119,7 @@ public class TestCoalMine {
         // Wait for the miner to produce a new coal cargo
         Utils.fastForward(50, map);
 
-        Worker miner = coalMine0.getWorker();
+        var miner = coalMine0.getWorker();
 
         assertNotNull(miner.getCargo());
 
@@ -1179,28 +1155,27 @@ public class TestCoalMine {
     public void testCargoProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
 
         // Finish construction of the coal mine
         constructHouse(coalMine0);
 
         // Deliver material to the coal mine
-        Cargo fishCargo = new Cargo(FISH, map);
+        var fishCargo = new Cargo(FISH, map);
 
         coalMine0.putCargo(fishCargo);
         coalMine0.putCargo(fishCargo);
@@ -1214,7 +1189,7 @@ public class TestCoalMine {
         // Wait for the miner to produce a new coal cargo
         Utils.fastForward(50, map);
 
-        Worker miner = coalMine0.getWorker();
+        var miner = coalMine0.getWorker();
 
         assertNotNull(miner.getCargo());
 
@@ -1228,7 +1203,7 @@ public class TestCoalMine {
         assertFalse(coalMine0.getFlag().getStackedCargo().isEmpty());
 
         // Wait to let the cargo remain at the flag without any connection to the storage
-        Cargo cargo = coalMine0.getFlag().getStackedCargo().getFirst();
+        var cargo = coalMine0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -1240,10 +1215,10 @@ public class TestCoalMine {
         Utils.adjustInventoryTo(headquarter0, FISH, 0);
 
         // Connect the coal mine with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), coalMine0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), coalMine0.getFlag());
 
         // Assign a courier to the road
-        Courier courier = new Courier(player0, map);
+        var courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
 
@@ -1268,7 +1243,7 @@ public class TestCoalMine {
         // Verify that the courier delivers the cargo to the headquarter
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(COAL);
+        var amount = headquarter0.getAmount(COAL);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
@@ -1281,22 +1256,21 @@ public class TestCoalMine {
     public void testMinerGoesBackToStorageWhenCoalMineIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
 
         // Finish construction of the coal mine
         constructHouse(coalMine0);
@@ -1305,7 +1279,7 @@ public class TestCoalMine {
         Utils.occupyBuilding(new Miner(player0, map), coalMine0);
 
         // Destroy the coal mine
-        Worker miner = coalMine0.getWorker();
+        var miner = coalMine0.getWorker();
 
         assertTrue(miner.isInsideBuilding());
         assertEquals(miner.getPosition(), coalMine0.getPosition());
@@ -1316,7 +1290,7 @@ public class TestCoalMine {
         assertFalse(miner.isInsideBuilding());
         assertEquals(miner.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(MINER);
+        var amount = headquarter0.getAmount(MINER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
 
@@ -1328,22 +1302,21 @@ public class TestCoalMine {
     public void testMinerGoesBackOnToStorageOnRoadsIfPossibleWhenCoalMineIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
 
         // Connect the coal mine with the headquarter
         map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
@@ -1355,7 +1328,7 @@ public class TestCoalMine {
         Utils.occupyBuilding(new Miner(player0, map), coalMine0);
 
         // Destroy the coal mine
-        Worker miner = coalMine0.getWorker();
+        var miner = coalMine0.getWorker();
 
         assertTrue(miner.isInsideBuilding());
         assertEquals(miner.getPosition(), coalMine0.getPosition());
@@ -1367,8 +1340,8 @@ public class TestCoalMine {
         assertEquals(miner.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
-        for (Point point : miner.getPlannedPath()) {
+        var firstStep = true;
+        for (var point : miner.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -1382,38 +1355,37 @@ public class TestCoalMine {
     public void testProductionInCoalMineCanBeStopped() throws Exception {
 
         // Create game map
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point1 = new Point(10, 6);
+        var point1 = new Point(10, 6);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         // Connect the coal mine and the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter.getFlag());
 
         // Finish the coal mine
         constructHouse(coalMine0);
 
         // Assign a worker to the coal mine
-        Miner miner = new Miner(player0, map);
+        var miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, coalMine0);
 
         assertTrue(miner.isInsideBuilding());
 
         // Deliver material to the coal mine
-        Cargo fishCargo = new Cargo(FISH, map);
+        var fishCargo = new Cargo(FISH, map);
 
         coalMine0.putCargo(fishCargo);
         coalMine0.putCargo(fishCargo);
@@ -1447,37 +1419,36 @@ public class TestCoalMine {
     public void testProductionInCoalMineCanBeResumed() throws Exception {
 
         // Create game map
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point1 = new Point(10, 6);
+        var point1 = new Point(10, 6);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         // Connect the coal mine and the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter.getFlag());
 
         // Finish the coal mine
         constructHouse(coalMine0);
 
         // Deliver material to the coal mine
-        Cargo fishCargo = new Cargo(FISH, map);
+        var fishCargo = new Cargo(FISH, map);
 
         coalMine0.putCargo(fishCargo);
         coalMine0.putCargo(fishCargo);
 
         // Assign a worker to the coal mine
-        Miner miner = new Miner(player0, map);
+        var miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, coalMine0);
 
@@ -1519,39 +1490,38 @@ public class TestCoalMine {
     public void testAssignedMinerHasCorrectlySetPlayer() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Put a small mountain on the map
-        Point point0 = new Point(8, 10);
+        var point0 = new Point(8, 10);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         // Place headquarter
-        Point point1 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
 
         // Finish construction of the coal mine
         constructHouse(coalMine0);
 
         // Connect the coal mine with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), coalMine0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), coalMine0.getFlag());
 
         // Wait for miner to get assigned and leave the headquarter
-        List<Miner> workers = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
+        var workers = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
 
         // Verify that the player is set correctly in the worker
-        Miner worker = workers.getFirst();
+        var worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1560,39 +1530,38 @@ public class TestCoalMine {
     public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        Player player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
         players.add(player2);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Put a small mountain on the map
-        Point point4 = new Point(28, 18);
+        var point4 = new Point(28, 18);
         Utils.surroundPointWithMinableMountain(point4, map);
         Utils.putCoalAtSurroundingTiles(point4, LARGE, map);
 
         // Place player 2's headquarter
-        Point point10 = new Point(70, 70);
-        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
+        var point10 = new Point(70, 70);
+        var headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
         // Place player 0's headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarter
-        Point point3 = new Point(45, 5);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point3);
+        var point3 = new Point(45, 5);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point3);
 
         // Place fortress for player 0
-        Point point2 = new Point(21, 9);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        var point2 = new Point(21, 9);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         // Finish construction of the fortress
         constructHouse(fortress0);
@@ -1601,13 +1570,13 @@ public class TestCoalMine {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         // Place coal mine close to the new border
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point4);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point4);
 
         // Finish construction of the coal mine
         constructHouse(coalMine0);
 
         // Occupy the coal mine
-        Miner worker = Utils.occupyBuilding(new Miner(player0, map), coalMine0);
+        var worker = Utils.occupyBuilding(new Miner(player0, map), coalMine0);
 
         // Verify that the worker goes back to its own storage when the fortress is torn down
         fortress0.tearDown();
@@ -1619,39 +1588,38 @@ public class TestCoalMine {
     public void testMinerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Put a small mountain on the map
-        Point point2 = new Point(14, 4);
+        var point2 = new Point(14, 4);
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putCoalAtSurroundingTiles(point2, LARGE, map);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, coalMine0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, coalMine0.getFlag());
 
         // Wait for the miner to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
 
         Miner miner = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Miner) {
                 miner = (Miner) worker;
             }
@@ -1685,39 +1653,38 @@ public class TestCoalMine {
     public void testMinerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Put a small mountain on the map
-        Point point2 = new Point(14, 4);
+        var point2 = new Point(14, 4);
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putCoalAtSurroundingTiles(point2, LARGE, map);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, coalMine0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, coalMine0.getFlag());
 
         // Wait for the miner to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
 
         Miner miner = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Miner) {
                 miner = (Miner) worker;
             }
@@ -1754,39 +1721,38 @@ public class TestCoalMine {
     public void testMinerReturnsToStorageIfCoalMineIsDestroyed() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Put a small mountain on the map
-        Point point2 = new Point(14, 4);
+        var point2 = new Point(14, 4);
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putCoalAtSurroundingTiles(point2, LARGE, map);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, coalMine0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, coalMine0.getFlag());
 
         // Wait for the miner to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
 
         Miner miner = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Miner) {
                 miner = (Miner) worker;
             }
@@ -1819,22 +1785,21 @@ public class TestCoalMine {
     public void testMinerGoesOffroadBackToClosestStorageWhenCoalMineIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Put a small mountain on the map
-        Point point3 = new Point(17, 17);
+        var point3 = new Point(17, 17);
         Utils.surroundPointWithMinableMountain(point3, map);
         Utils.putCoalAtSurroundingTiles(point3, LARGE, map);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point3);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point3);
 
         // Finish construction of the coal mine
         constructHouse(coalMine0);
@@ -1843,14 +1808,14 @@ public class TestCoalMine {
         Utils.occupyBuilding(new Miner(player0, map), coalMine0);
 
         // Place a second storage closer to the coal mine
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         constructHouse(storehouse0);
 
         // Destroy the coal mine
-        Worker miner = coalMine0.getWorker();
+        var miner = coalMine0.getWorker();
 
         assertTrue(miner.isInsideBuilding());
         assertEquals(miner.getPosition(), coalMine0.getPosition());
@@ -1861,7 +1826,7 @@ public class TestCoalMine {
         assertFalse(miner.isInsideBuilding());
         assertEquals(miner.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(MINER);
+        var amount = storehouse0.getAmount(MINER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, storehouse0.getPosition());
 
@@ -1873,22 +1838,21 @@ public class TestCoalMine {
     public void testMinerReturnsOffroadAndAvoidsBurningStorageWhenCoalMineIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Put a small mountain on the map
-        Point point3 = new Point(17, 17);
+        var point3 = new Point(17, 17);
         Utils.surroundPointWithMinableMountain(point3, map);
         Utils.putCoalAtSurroundingTiles(point3, LARGE, map);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point3);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point3);
 
         // Finish construction of the coal mine
         constructHouse(coalMine0);
@@ -1897,8 +1861,8 @@ public class TestCoalMine {
         Utils.occupyBuilding(new Miner(player0, map), coalMine0);
 
         // Place a second storage closer to the coal mine
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         constructHouse(storehouse0);
@@ -1907,7 +1871,7 @@ public class TestCoalMine {
         storehouse0.tearDown();
 
         // Destroy the coal mine
-        Worker miner = coalMine0.getWorker();
+        var miner = coalMine0.getWorker();
 
         assertTrue(miner.isInsideBuilding());
         assertEquals(miner.getPosition(), coalMine0.getPosition());
@@ -1918,7 +1882,7 @@ public class TestCoalMine {
         assertFalse(miner.isInsideBuilding());
         assertEquals(miner.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(MINER);
+        var amount = headquarter0.getAmount(MINER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
 
@@ -1930,22 +1894,21 @@ public class TestCoalMine {
     public void testMinerReturnsOffroadAndAvoidsDestroyedStorageWhenCoalMineIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Put a small mountain on the map
-        Point point1 = new Point(17, 17);
+        var point1 = new Point(17, 17);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         // Finish construction of the coal mine
         constructHouse(coalMine0);
@@ -1954,8 +1917,8 @@ public class TestCoalMine {
         Utils.occupyBuilding(new Miner(player0, map), coalMine0);
 
         // Place a second storage closer to the coal mine
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         constructHouse(storehouse0);
@@ -1967,7 +1930,7 @@ public class TestCoalMine {
         Utils.waitForBuildingToBurnDown(storehouse0);
 
         // Destroy the coal mine
-        Worker miner = coalMine0.getWorker();
+        var miner = coalMine0.getWorker();
 
         assertTrue(miner.isInsideBuilding());
         assertEquals(miner.getPosition(), coalMine0.getPosition());
@@ -1978,7 +1941,7 @@ public class TestCoalMine {
         assertFalse(miner.isInsideBuilding());
         assertEquals(miner.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(MINER);
+        var amount = headquarter0.getAmount(MINER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
 
@@ -1990,22 +1953,21 @@ public class TestCoalMine {
     public void testMinerReturnsOffroadAndAvoidsUnfinishedStorageWhenCoalMineIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Put a small mountain on the map
-        Point point1 = new Point(17, 17);
+        var point1 = new Point(17, 17);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         // Finish construction of the coal mine
         constructHouse(coalMine0);
@@ -2014,11 +1976,11 @@ public class TestCoalMine {
         Utils.occupyBuilding(new Miner(player0, map), coalMine0);
 
         // Place a second storage closer to the coal mine
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Destroy the coal mine
-        Worker miner = coalMine0.getWorker();
+        var miner = coalMine0.getWorker();
 
         assertTrue(miner.isInsideBuilding());
         assertEquals(miner.getPosition(), coalMine0.getPosition());
@@ -2029,7 +1991,7 @@ public class TestCoalMine {
         assertFalse(miner.isInsideBuilding());
         assertEquals(miner.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(MINER);
+        var amount = headquarter0.getAmount(MINER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
 
@@ -2041,31 +2003,30 @@ public class TestCoalMine {
     public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Put a small mountain on the map
-        Point point1 = new Point(17, 17);
+        var point1 = new Point(17, 17);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         // Place road to connect the headquarter and the coal mine
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), coalMine0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), coalMine0.getFlag());
 
         // Finish construction of the coal mine
         constructHouse(coalMine0);
 
         // Wait for a worker to start walking to the building
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0).getFirst();
+        var worker = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, coalMine0.getFlag().getPosition());
@@ -2087,28 +2048,27 @@ public class TestCoalMine {
     public void testCoalMineWithoutResourcesHasZeroProductivity() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(7, 9);
+        var point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         // Place coal mine
-        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine = map.placeBuilding(new CoalMine(player0), point1);
 
         // Finish construction of the coal mine
         constructHouse(coalMine);
 
         // Populate the coal mine
-        Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), coalMine);
+        var miner0 = Utils.occupyBuilding(new Miner(player0, map), coalMine);
 
         assertTrue(miner0.isInsideBuilding());
         assertEquals(miner0.getHome(), coalMine);
@@ -2128,28 +2088,27 @@ public class TestCoalMine {
     public void testCoalMineWithAbundantResourcesHasFullProductivity() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(7, 9);
+        var point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         // Place coal mine
-        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine = map.placeBuilding(new CoalMine(player0), point1);
 
         // Finish construction of the coal mine
         constructHouse(coalMine);
 
         // Populate the coal mine
-        Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), coalMine);
+        var miner0 = Utils.occupyBuilding(new Miner(player0, map), coalMine);
 
         assertTrue(miner0.isInsideBuilding());
         assertEquals(miner0.getHome(), coalMine);
@@ -2187,28 +2146,27 @@ public class TestCoalMine {
     public void testCoalMineLosesProductivityWhenResourcesRunOut() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(7, 9);
+        var point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         // Place coal mine
-        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine = map.placeBuilding(new CoalMine(player0), point1);
 
         // Finish construction of the coal mine
         constructHouse(coalMine);
 
         // Populate the coal mine
-        Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), coalMine);
+        var miner0 = Utils.occupyBuilding(new Miner(player0, map), coalMine);
 
         assertTrue(miner0.isInsideBuilding());
         assertEquals(miner0.getHome(), coalMine);
@@ -2245,22 +2203,21 @@ public class TestCoalMine {
     public void testUnoccupiedCoalMineHasNoProductivity() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(7, 9);
+        var point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         // Place coal mine
-        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine = map.placeBuilding(new CoalMine(player0), point1);
 
         // Finish construction of the coal mine
         constructHouse(coalMine);
@@ -2277,27 +2234,26 @@ public class TestCoalMine {
     public void testCoalMineCanProduce() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a small mountain on the map
-        Point point1 = new Point(7, 9);
+        var point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         // Place coal mine
-        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine = map.placeBuilding(new CoalMine(player0), point1);
 
         // Finish construction of the coal mine
         constructHouse(coalMine);
 
         // Populate the coal mine
-        Worker miner = Utils.occupyBuilding(new Miner(player0, map), coalMine);
+        var miner = Utils.occupyBuilding(new Miner(player0, map), coalMine);
 
         // Verify that the coal mine can produce
         assertTrue(coalMine.canProduce());
@@ -2307,21 +2263,20 @@ public class TestCoalMine {
     public void testCoalMineReportsCorrectOutput() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a small mountain
-        Point point1 = new Point(6, 12);
+        var point1 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         // Construct the coal mine
         constructHouse(coalMine0);
@@ -2335,28 +2290,27 @@ public class TestCoalMine {
     public void testCoalMineReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a small mountain
-        Point point1 = new Point(6, 12);
+        var point1 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         // Verify that the reported needed construction material is correct
         assertEquals(coalMine0.getTypesOfMaterialNeeded().size(), 1);
         assertTrue(coalMine0.getTypesOfMaterialNeeded().contains(PLANK));
         assertEquals(coalMine0.getCanHoldAmount(PLANK), 4);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == PLANK) {
                 continue;
             }
@@ -2369,21 +2323,20 @@ public class TestCoalMine {
     public void testCoalMineReportsCorrectMaterialsNeededForProduction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a small mountain
-        Point point1 = new Point(6, 12);
+        var point1 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         // Construct the coal mine
         constructHouse(coalMine0);
@@ -2397,7 +2350,7 @@ public class TestCoalMine {
         assertEquals(coalMine0.getCanHoldAmount(MEAT), 2);
         assertEquals(coalMine0.getCanHoldAmount(FISH), 2);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == BREAD || material == MEAT || material == FISH) {
                 continue;
             }
@@ -2410,26 +2363,25 @@ public class TestCoalMine {
     public void testCoalMineWaitsWhenFlagIsFull() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a small mountain
-        Point point1 = new Point(16, 6);
+        var point1 = new Point(16, 6);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         // Place coal mine
-        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine = map.placeBuilding(new CoalMine(player0), point1);
 
         // Connect the coal mine with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), headquarter.getFlag());
 
         // Wait for the coal mine to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(coalMine);
@@ -2456,10 +2408,10 @@ public class TestCoalMine {
         }
 
         // Reconnect the coal mine with the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2483,26 +2435,25 @@ public class TestCoalMine {
     public void testCoalMineDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a small mountain
-        Point point1 = new Point(16, 6);
+        var point1 = new Point(16, 6);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         // Place coal mine
-        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine = map.placeBuilding(new CoalMine(player0), point1);
 
         // Connect the coal mine with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), headquarter.getFlag());
 
         // Wait for the coal mine to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(coalMine);
@@ -2529,10 +2480,10 @@ public class TestCoalMine {
         }
 
         // Reconnect the coal mine with the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2574,25 +2525,24 @@ public class TestCoalMine {
     public void testWhenCoalDeliveryAreBlockedCoalMineFillsUpFlagAndThenStops() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(7, 9);
+        var point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         // Place Coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         // Place road to connect the coal mine with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
 
         // Wait for the coal mine to get constructed and occupied
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2600,7 +2550,7 @@ public class TestCoalMine {
 
         Utils.waitForBuildingToBeConstructed(coalMine0);
 
-        Worker miner0 = Utils.waitForNonMilitaryBuildingToGetPopulated(coalMine0);
+        var miner0 = Utils.waitForNonMilitaryBuildingToGetPopulated(coalMine0);
 
         assertTrue(miner0.isInsideBuilding());
         assertEquals(miner0.getHome(), coalMine0);
@@ -2634,32 +2584,31 @@ public class TestCoalMine {
     public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndCoalMineIsTornDown() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
-        Point point1 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(5, 5);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Put a small mountain on the map
-        Point point2 = new Point(18, 6);
+        var point2 = new Point(18, 6);
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putCoalAtSurroundingTiles(point2, LARGE, map);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
 
         // Place road to connect the storehouse with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
         // Place road to connect the headquarter with the coal mine
-        Road road1 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
 
         // Add a lot of planks and stones to the headquarter
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2675,7 +2624,7 @@ public class TestCoalMine {
         // Wait for the coal mine and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, coalMine0);
 
-        Worker miner0 = coalMine0.getWorker();
+        var miner0 = coalMine0.getWorker();
 
         assertTrue(miner0.isInsideBuilding());
         assertEquals(miner0.getHome(), coalMine0);
@@ -2703,32 +2652,31 @@ public class TestCoalMine {
     public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndCoalMineIsTornDown() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
-        Point point1 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(5, 5);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Put a small mountain on the map
-        Point point2 = new Point(18, 6);
+        var point2 = new Point(18, 6);
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putCoalAtSurroundingTiles(point2, LARGE, map);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
 
         // Place road to connect the storehouse with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
         // Place road to connect the headquarter with the coal mine
-        Road road1 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
 
         // Add a lot of planks and stones to the headquarter
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2744,7 +2692,7 @@ public class TestCoalMine {
         // Wait for the coal mine and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, coalMine0);
 
-        Worker miner0 = coalMine0.getWorker();
+        var miner0 = coalMine0.getWorker();
 
         assertTrue(miner0.isInsideBuilding());
         assertEquals(miner0.getHome(), coalMine0);
@@ -2774,14 +2722,13 @@ public class TestCoalMine {
     public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, MINER, 1);
@@ -2791,7 +2738,7 @@ public class TestCoalMine {
         headquarter0.pushOutAll(MINER);
 
         for (int i = 0; i < 10; i++) {
-            Worker worker = Utils.waitForWorkerOutsideBuilding(Miner.class, player0);
+            var worker = Utils.waitForWorkerOutsideBuilding(Miner.class, player0);
 
             assertEquals(headquarter0.getAmount(MINER), 0);
             assertEquals(worker.getPosition(), headquarter0.getPosition());
@@ -2812,14 +2759,13 @@ public class TestCoalMine {
     public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, MINER, 1);
@@ -2827,7 +2773,7 @@ public class TestCoalMine {
         headquarter0.blockDeliveryOfMaterial(MINER);
         headquarter0.pushOutAll(MINER);
 
-        Worker worker = Utils.waitForWorkerOutsideBuilding(Miner.class, player0);
+        var worker = Utils.waitForWorkerOutsideBuilding(Miner.class, player0);
 
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
@@ -2857,25 +2803,24 @@ public class TestCoalMine {
     public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(7, 9);
+        var point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         // Place road to connect the coal mine with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
@@ -2889,7 +2834,7 @@ public class TestCoalMine {
         */
         headquarter0.blockDeliveryOfMaterial(MINER);
 
-        Worker worker = coalMine0.getWorker();
+        var worker = coalMine0.getWorker();
 
         coalMine0.tearDown();
 
@@ -2921,25 +2866,24 @@ public class TestCoalMine {
     public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(7, 9);
+        var point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         // Place coal mine
-        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         // Place road to connect the coal mine with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
@@ -2948,7 +2892,7 @@ public class TestCoalMine {
         Utils.waitForBuildingToBeConstructed(coalMine0);
 
         // Wait for a miner to start walking to the coal mine
-        Miner miner = Utils.waitForWorkerOutsideBuilding(Miner.class, player0);
+        var miner = Utils.waitForWorkerOutsideBuilding(Miner.class, player0);
 
         // Wait for the miner to go past the headquarter's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getFlag().getPosition());
@@ -2972,7 +2916,7 @@ public class TestCoalMine {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, miner.getTarget());
 
-        Point point = miner.getPosition();
+        var point = miner.getPosition();
         for (int i = 0; i < 100; i++) {
             assertTrue(miner.isDead());
             assertEquals(miner.getPosition(), point);

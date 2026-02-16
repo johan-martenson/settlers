@@ -32,18 +32,17 @@ public class TestGameLogic {
     public void testInitiateNewDeliveries() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players,30, 30);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players,30, 30);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(5, 11);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(5, 11);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Place road to connect the woodcutter and the headquarter
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), woodcutter0.getFlag());
@@ -63,8 +62,8 @@ public class TestGameLogic {
         Utils.fastForward(20, map);
 
         // Place an unfinished sawmill on the map and verify that it needs deliveries
-        Point point2 = new Point(10, 10);
-        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point2);
+        var point2 = new Point(10, 10);
+        var sawmill0 = map.placeBuilding(new Sawmill(player0), point2);
 
         // Connect the sawmill with the headquarter
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), sawmill0.getFlag());
@@ -83,34 +82,33 @@ public class TestGameLogic {
     public void testAssignWorkToIdleCouriers() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 30, 30);
+        var map = new GameMap(players, 30, 30);
 
         // Place headquarter
-        Point point0 = new Point(15, 5);
+        var point0 = new Point(15, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(10, 10);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 10);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place sawmill
-        Point point2 = new Point(5, 5);
-        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point2);
+        var point2 = new Point(5, 5);
+        var sawmill0 = map.placeBuilding(new Sawmill(player0), point2);
 
         // Place road to connect the flag with the sawmill's flag
-        Road road0 = map.placeAutoSelectedRoad(player0, flag0, sawmill0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, flag0, sawmill0.getFlag());
 
         // Occupy the road
-        Courier courier = Utils.occupyRoad(road0, map);
+        var courier = Utils.occupyRoad(road0, map);
 
         // Fast forward so the courier can reach its road and be assigned
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
 
-        Cargo cargo = new Cargo(PLANK, map);
+        var cargo = new Cargo(PLANK, map);
 
         cargo.setPosition(flag0.getPosition());
         cargo.setTarget(sawmill0);
@@ -139,34 +137,33 @@ public class TestGameLogic {
     public void testDeliverForWorkersAtTarget() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 30, 30);
+        var map = new GameMap(players, 30, 30);
 
         // Place headquarter
-        Point point0 = new Point(17, 5);
+        var point0 = new Point(17, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(5, 5);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(5, 5);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place woodcutter
-        Point point2 = new Point(11, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
+        var point2 = new Point(11, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
 
         // Place road to connect the flag with the woodcutter's flag
-        Road road0 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
 
         // Occupy the road
-        Courier courier = Utils.occupyRoad(road0, map);
+        var courier = Utils.occupyRoad(road0, map);
 
         // Fast forward to let the courier reach its road and get assigned
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
 
-        Cargo cargo0 = new Cargo(PLANK, map);
+        var cargo0 = new Cargo(PLANK, map);
 
         flag0.putCargo(cargo0);
         cargo0.setTarget(woodcutter0);
@@ -197,22 +194,21 @@ public class TestGameLogic {
     public void testAssignNewWorkerToUnoccupiedPlaces() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players,30, 30);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players,30, 30);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place the barracks' flag
-        Point point1 = new Point(6, 10);
-        Flag flag0 = map.placeFlag(player0, point1.downRight());
+        var point1 = new Point(6, 10);
+        var flag0 = map.placeFlag(player0, point1.downRight());
 
         // Place the forester hut's flag
-        Point point2 = new Point(10, 10);
-        Flag flag1 = map.placeFlag(player0, point2.downRight());
+        var point2 = new Point(10, 10);
+        var flag1 = map.placeFlag(player0, point2.downRight());
 
         // Assign new workers to unoccupied places. Since there are no places that require workers this should not do anything
         assertEquals(map.getWorkers().size(), 1);
@@ -223,8 +219,8 @@ public class TestGameLogic {
         assertEquals(map.getWorkers().size(), 1);
 
         // Construct a road without any courier assigned
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         assertEquals(map.getWorkers().size(), 1);
 
@@ -245,8 +241,8 @@ public class TestGameLogic {
         assertTrue(map.getWorkers().get(1) instanceof Courier);
         assertTrue(map.getWorkers().get(2) instanceof Courier);
 
-        Courier courier0 = (Courier)map.getWorkers().get(1);
-        Courier courier1 = (Courier)map.getWorkers().get(2);
+        var courier0 = (Courier)map.getWorkers().get(1);
+        var courier1 = (Courier)map.getWorkers().get(2);
 
         // Fast forward to let the couriers reach their roads
         Utils.fastForwardUntilWorkersReachTarget(map, courier0, courier1);
@@ -264,13 +260,13 @@ public class TestGameLogic {
         assertEquals(map.getWorkers().size(), 3);
 
         // Construct the barracks
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         assertTrue(barracks0.isPlanned());
         assertTrue(barracks0.isMilitaryBuilding());
         assertTrue(headquarter0.getAmount(PRIVATE) >= 10);
 
-        int currentNumberOfMilitary = headquarter0.getAmount(PRIVATE);
+        var currentNumberOfMilitary = headquarter0.getAmount(PRIVATE);
 
         Utils.constructHouse(barracks0);
 
@@ -282,7 +278,7 @@ public class TestGameLogic {
 
         Soldier military = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker.isSoldier()) {
                 military = (Soldier) worker;
 
@@ -304,7 +300,7 @@ public class TestGameLogic {
         assertFalse(military.isTraveling());
 
         // Make traveling workers that have arrived enter their building or road
-        List<Soldier> soldiersOutside = Utils.findSoldiersOutsideBuilding(player0);
+        var soldiersOutside = Utils.findSoldiersOutsideBuilding(player0);
 
         assertEquals(soldiersOutside.size(), 1);
 
@@ -323,7 +319,7 @@ public class TestGameLogic {
         assertEquals(map.getWorkers().size(), 6);
 
         // Finish construction of the forester hut which requires a forester worker to function
-        ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point2);
+        var foresterHut0 = map.placeBuilding(new ForesterHut(player0), point2);
         Utils.constructHouse(foresterHut0);
 
         assertTrue(foresterHut0.needsWorker());
@@ -341,7 +337,7 @@ public class TestGameLogic {
         assertFalse(foresterHut0.needsWorker());
 
         Forester forester = null;
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Forester) {
                 forester = (Forester)worker;
             }

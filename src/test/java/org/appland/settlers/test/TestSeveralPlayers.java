@@ -34,11 +34,10 @@ public class TestSeveralPlayers {
     public void testChooseNoPlayers() {
 
         // Create empty player list
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         // Create game map choosing no players
         try {
-            GameMap map = new GameMap(players, 20, 20);
+            var map = new GameMap(players, 20, 20);
 
             fail();
         } catch (Exception e) {}
@@ -48,11 +47,10 @@ public class TestSeveralPlayers {
     public void testChooseOnePlayer() throws Exception {
 
         // Create player list with one player
-        List<Player> players = new LinkedList<>();
-        players.add(new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN));
+        var players = new LinkedList<Player>();        players.add(new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN));
 
         // Create game map choosing one players
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Verify that there is one player in the game map
         assertEquals(map.getPlayers().size(), 1);
@@ -65,12 +63,11 @@ public class TestSeveralPlayers {
     public void testChooseTwoPlayer() throws Exception {
 
         // Create player list with two players
-        List<Player> players = new LinkedList<>();
-        players.add(new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN));
+        var players = new LinkedList<Player>();        players.add(new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN));
         players.add(new Player("Player 1", GREEN, Nation.ROMANS, PlayerType.HUMAN));
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Verify that there is one player in the game map
         assertEquals(map.getPlayers().size(), 2);
@@ -84,25 +81,24 @@ public class TestSeveralPlayers {
     public void testCannotPlacePlayersHeadquartersTogether() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-        players.add(player0);
+        var players = new LinkedList<Player>();        players.add(player0);
         players.add(player1);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter for first player
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the other player can't place a building close to the first player's headquarter
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
 
         try {
-            Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+            var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
             fail();
         } catch (Exception e) {}
@@ -112,23 +108,22 @@ public class TestSeveralPlayers {
     public void testPlacedHouseHasCorrectPlayerForSeveralPlayers() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-        players.add(player0);
+        var players = new LinkedList<Player>();        players.add(player0);
         players.add(player1);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter for first player
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place headquarter for second player
-        Point point1 = new Point(40, 40);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(40, 40);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Verify that the player is set correctly in both headquarters
         assertEquals(headquarter0.getPlayer(), player0);
@@ -139,51 +134,49 @@ public class TestSeveralPlayers {
     public void testSeveralPlayersCanPlaceAdditionalBuildingsAfterHeadquarter() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 0's headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarter far away from player 0
-        Point point1 = new Point(90, 84);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(90, 84);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Place woodcutter for player 0
-        Point point2 = new Point(10, 6);
-        Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
+        var point2 = new Point(10, 6);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
 
         // Place woodcutter for player 1
-        Point point3 = new Point(90, 80);
-        Building woodcutter1 = map.placeBuilding(new Woodcutter(player1), point3);
+        var point3 = new Point(90, 80);
+        var woodcutter1 = map.placeBuilding(new Woodcutter(player1), point3);
     }
 
     @Test
     public void testRetrievePlayersFromGameMap() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Verify that the correct players can be retrieved from the game map
-        List<Player> retrievedPlayers = map.getPlayers();
+        var retrievedPlayers = map.getPlayers();
 
         assertEquals(retrievedPlayers.size(), 2);
         assertTrue(retrievedPlayers.contains(player0));

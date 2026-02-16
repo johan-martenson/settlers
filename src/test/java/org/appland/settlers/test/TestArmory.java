@@ -795,7 +795,7 @@ public class TestArmory {
         assertFalse(armory0.getFlag().getStackedCargo().isEmpty());
 
         // Wait to let the cargo remain at the flag without any connection to the storage
-        Cargo cargo = armory0.getFlag().getStackedCargo().getFirst();
+        var cargo = armory0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -836,7 +836,7 @@ public class TestArmory {
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
         var material = cargo.getMaterial();
-        int amount = headquarter0.getAmount(material);
+        var amount = headquarter0.getAmount(material);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
@@ -878,7 +878,7 @@ public class TestArmory {
         assertFalse(armorer0.isInsideBuilding());
         assertEquals(armorer0.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(ARMORER);
+        var amount = headquarter0.getAmount(ARMORER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getPosition());
 
@@ -923,7 +923,7 @@ public class TestArmory {
         assertEquals(armorer0.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
+        var firstStep = true;
         for (var point : armorer0.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
@@ -1073,7 +1073,7 @@ public class TestArmory {
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory0.getFlag());
 
         // Wait for armorer to get assigned and leave the headquarters
-        List<Armorer> workers = Utils.waitForWorkersOutsideBuilding(Armorer.class, 1, player0);
+        var workers = Utils.waitForWorkersOutsideBuilding(Armorer.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
@@ -1432,7 +1432,7 @@ public class TestArmory {
         assertFalse(armorer0.isInsideBuilding());
         assertEquals(armorer0.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(ARMORER);
+        var amount = storehouse0.getAmount(ARMORER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, storehouse0.getPosition());
 
@@ -1483,7 +1483,7 @@ public class TestArmory {
         assertFalse(armorer0.isInsideBuilding());
         assertEquals(armorer0.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(ARMORER);
+        var amount = headquarter0.getAmount(ARMORER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getPosition());
 
@@ -1537,7 +1537,7 @@ public class TestArmory {
         assertFalse(armorer0.isInsideBuilding());
         assertEquals(armorer0.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(ARMORER);
+        var amount = headquarter0.getAmount(ARMORER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getPosition());
 
@@ -1584,7 +1584,7 @@ public class TestArmory {
         assertFalse(armorer0.isInsideBuilding());
         assertEquals(armorer0.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(ARMORER);
+        var amount = headquarter0.getAmount(ARMORER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getPosition());
 

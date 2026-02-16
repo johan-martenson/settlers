@@ -67,8 +67,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -83,7 +82,7 @@ public class TestMonitoringProductivity {
         Utils.constructHouse(armory);
 
         // Populate the armory
-        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory);
+        var armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory);
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), armory);
@@ -128,8 +127,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -183,7 +181,7 @@ public class TestMonitoringProductivity {
         assertEquals(gameChangesList.changedBuildings().iterator().next(), armory);
 
         // Verify that the changed house is only reported once
-        int productivity = armory.getProductivity();
+        var productivity = armory.getProductivity();
 
         for (int i = 0; i < 30; i++) {
             if (productivity != armory.getProductivity()) {
@@ -203,8 +201,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -261,8 +258,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -326,8 +322,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -386,8 +381,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -440,7 +434,7 @@ public class TestMonitoringProductivity {
         assertEquals(gameChangesList.changedBuildings().iterator().next(), brewery);
 
         // Verify that the changed house is only reported once
-        int productivity = brewery.getProductivity();
+        var productivity = brewery.getProductivity();
 
         for (int i = 0; i < 30; i++) {
             if (productivity != brewery.getProductivity()) {
@@ -460,8 +454,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -519,8 +512,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -573,7 +565,7 @@ public class TestMonitoringProductivity {
         assertEquals(gameChangesList.changedBuildings().iterator().next(), coalMine);
 
         // Verify that the changed house is only reported once
-        int productivity = coalMine.getProductivity();
+        var productivity = coalMine.getProductivity();
 
         for (int i = 0; i < 30; i++) {
             if (productivity != coalMine.getProductivity()) {
@@ -593,8 +585,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -652,8 +643,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -706,7 +696,7 @@ public class TestMonitoringProductivity {
         assertEquals(gameChangesList.changedBuildings().iterator().next(), donkeyFarm);
 
         // Verify that the changed house is only reported once
-        int productivity = donkeyFarm.getProductivity();
+        var productivity = donkeyFarm.getProductivity();
 
         for (int i = 0; i < 30; i++) {
             if (productivity != donkeyFarm.getProductivity()) {
@@ -726,8 +716,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -777,8 +766,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -823,7 +811,7 @@ public class TestMonitoringProductivity {
         assertEquals(gameChangesList.changedBuildings().iterator().next(), farm);
 
         // Verify that the changed house is only reported once
-        int productivity = farm.getProductivity();
+        var productivity = farm.getProductivity();
 
         for (int i = 0; i < 30; i++) {
             if (productivity != farm.getProductivity()) {
@@ -843,8 +831,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -898,8 +885,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -948,7 +934,7 @@ public class TestMonitoringProductivity {
         assertEquals(gameChangesList.changedBuildings().iterator().next(), fishery);
 
         // Verify that the changed house is only reported once
-        int productivity = fishery.getProductivity();
+        var productivity = fishery.getProductivity();
 
         for (int i = 0; i < 30; i++) {
             if (productivity != fishery.getProductivity()) {
@@ -968,8 +954,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1027,8 +1012,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1081,7 +1065,7 @@ public class TestMonitoringProductivity {
         assertEquals(gameChangesList.changedBuildings().iterator().next(), goldMine);
 
         // Verify that the changed house is only reported once
-        int productivity = goldMine.getProductivity();
+        var productivity = goldMine.getProductivity();
 
         for (int i = 0; i < 30; i++) {
             if (productivity != goldMine.getProductivity()) {
@@ -1101,8 +1085,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1160,8 +1143,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1214,7 +1196,7 @@ public class TestMonitoringProductivity {
         assertEquals(gameChangesList.changedBuildings().iterator().next(), graniteMine);
 
         // Verify that the changed house is only reported once
-        int productivity = graniteMine.getProductivity();
+        var productivity = graniteMine.getProductivity();
 
         for (int i = 0; i < 30; i++) {
             if (productivity != graniteMine.getProductivity()) {
@@ -1234,8 +1216,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1250,7 +1231,7 @@ public class TestMonitoringProductivity {
         constructHouse(hunterHut0);
 
         // Populate the hunter hut
-        Worker hunter = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
+        var hunter = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
 
         assertTrue(hunter.isInsideBuilding());
         assertEquals(hunter.getHome(), hunterHut0);
@@ -1299,8 +1280,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1315,7 +1295,7 @@ public class TestMonitoringProductivity {
         constructHouse(hunterHut0);
 
         // Populate the hunter hut
-        Worker hunter = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
+        var hunter = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
 
         assertTrue(hunter.isInsideBuilding());
         assertEquals(hunter.getHome(), hunterHut0);
@@ -1358,7 +1338,7 @@ public class TestMonitoringProductivity {
         assertEquals(gameChangesList.changedBuildings().iterator().next(), hunterHut0);
 
         // Verify that the changed house is only reported once
-        int productivity = hunterHut0.getProductivity();
+        var productivity = hunterHut0.getProductivity();
 
         for (int i = 0; i < 30; i++) {
             if (productivity != hunterHut0.getProductivity()) {
@@ -1378,8 +1358,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1398,7 +1377,7 @@ public class TestMonitoringProductivity {
         constructHouse(ironMine);
 
         // Populate the iron mine
-        Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), ironMine);
+        var miner0 = Utils.occupyBuilding(new Miner(player0, map), ironMine);
 
         assertTrue(miner0.isInsideBuilding());
         assertEquals(miner0.getHome(), ironMine);
@@ -1438,8 +1417,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1458,7 +1436,7 @@ public class TestMonitoringProductivity {
         constructHouse(ironMine);
 
         // Populate the iron mine
-        Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), ironMine);
+        var miner0 = Utils.occupyBuilding(new Miner(player0, map), ironMine);
 
         assertTrue(miner0.isInsideBuilding());
         assertEquals(miner0.getHome(), ironMine);
@@ -1493,7 +1471,7 @@ public class TestMonitoringProductivity {
         assertEquals(gameChangesList.changedBuildings().iterator().next(), ironMine);
 
         // Verify that the changed house is only reported once
-        int productivity = ironMine.getProductivity();
+        var productivity = ironMine.getProductivity();
 
         for (int i = 0; i < 30; i++) {
             if (productivity != ironMine.getProductivity()) {
@@ -1513,8 +1491,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1529,7 +1506,7 @@ public class TestMonitoringProductivity {
         Utils.constructHouse(ironSmelter);
 
         // Populate the iron smelter
-        Worker ironFounder0 = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter);
+        var ironFounder0 = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter);
 
         assertTrue(ironFounder0.isInsideBuilding());
         assertEquals(ironFounder0.getHome(), ironSmelter);
@@ -1575,8 +1552,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1591,7 +1567,7 @@ public class TestMonitoringProductivity {
         Utils.constructHouse(ironSmelter);
 
         // Populate the iron smelter
-        Worker ironFounder0 = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter);
+        var ironFounder0 = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter);
 
         assertTrue(ironFounder0.isInsideBuilding());
         assertEquals(ironFounder0.getHome(), ironSmelter);
@@ -1636,8 +1612,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -1653,7 +1628,7 @@ public class TestMonitoringProductivity {
         Utils.constructHouse(metalworks);
 
         // Populate the metalworks
-        Worker armorer0 = Utils.occupyBuilding(new Metalworker(player0, map), metalworks);
+        var armorer0 = Utils.occupyBuilding(new Metalworker(player0, map), metalworks);
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), metalworks);
@@ -1697,8 +1672,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -1714,7 +1688,7 @@ public class TestMonitoringProductivity {
         Utils.constructHouse(metalworks);
 
         // Populate the metalworks
-        Worker armorer0 = Utils.occupyBuilding(new Metalworker(player0, map), metalworks);
+        var armorer0 = Utils.occupyBuilding(new Metalworker(player0, map), metalworks);
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), metalworks);
@@ -1753,7 +1727,7 @@ public class TestMonitoringProductivity {
         assertEquals(gameChangesList.changedBuildings().iterator().next(), metalworks);
 
         // Verify that the changed house is only reported once
-        int productivity = metalworks.getProductivity();
+        var productivity = metalworks.getProductivity();
 
         for (int i = 0; i < 2; i++) {
             if (productivity != metalworks.getProductivity()) {
@@ -1773,8 +1747,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1789,7 +1762,7 @@ public class TestMonitoringProductivity {
         Utils.constructHouse(mill);
 
         // Populate the mill
-        Worker miller0 = Utils.occupyBuilding(new Miller(player0, map), mill);
+        var miller0 = Utils.occupyBuilding(new Miller(player0, map), mill);
 
         assertTrue(miller0.isInsideBuilding());
         assertEquals(miller0.getHome(), mill);
@@ -1829,8 +1802,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1845,7 +1817,7 @@ public class TestMonitoringProductivity {
         Utils.constructHouse(mill);
 
         // Populate the mill
-        Worker miller0 = Utils.occupyBuilding(new Miller(player0, map), mill);
+        var miller0 = Utils.occupyBuilding(new Miller(player0, map), mill);
 
         assertTrue(miller0.isInsideBuilding());
         assertEquals(miller0.getHome(), mill);
@@ -1885,8 +1857,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1901,7 +1872,7 @@ public class TestMonitoringProductivity {
         Utils.constructHouse(mint);
 
         // Populate the mint
-        Worker minter0 = Utils.occupyBuilding(new Minter(player0, map), mint);
+        var minter0 = Utils.occupyBuilding(new Minter(player0, map), mint);
 
         assertTrue(minter0.isInsideBuilding());
         assertEquals(minter0.getHome(), mint);
@@ -1945,8 +1916,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1961,7 +1931,7 @@ public class TestMonitoringProductivity {
         Utils.constructHouse(mint);
 
         // Populate the mint
-        Worker minter0 = Utils.occupyBuilding(new Minter(player0, map), mint);
+        var minter0 = Utils.occupyBuilding(new Minter(player0, map), mint);
 
         assertTrue(minter0.isInsideBuilding());
         assertEquals(minter0.getHome(), mint);
@@ -2005,8 +1975,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2021,7 +1990,7 @@ public class TestMonitoringProductivity {
         Utils.constructHouse(pigFarm);
 
         // Populate the pig farm
-        Worker pigBreeder0 = Utils.occupyBuilding(new PigBreeder(player0, map), pigFarm);
+        var pigBreeder0 = Utils.occupyBuilding(new PigBreeder(player0, map), pigFarm);
 
         assertTrue(pigBreeder0.isInsideBuilding());
         assertEquals(pigBreeder0.getHome(), pigFarm);
@@ -2065,8 +2034,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2081,7 +2049,7 @@ public class TestMonitoringProductivity {
         Utils.constructHouse(pigFarm);
 
         // Populate the pig farm
-        Worker pigBreeder0 = Utils.occupyBuilding(new PigBreeder(player0, map), pigFarm);
+        var pigBreeder0 = Utils.occupyBuilding(new PigBreeder(player0, map), pigFarm);
 
         assertTrue(pigBreeder0.isInsideBuilding());
         assertEquals(pigBreeder0.getHome(), pigFarm);
@@ -2125,8 +2093,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2141,7 +2108,7 @@ public class TestMonitoringProductivity {
         constructHouse(quarry0);
 
         // Populate the quarry
-        Worker stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
+        var stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         assertTrue(stonemason.isInsideBuilding());
         assertEquals(stonemason.getHome(), quarry0);
@@ -2185,8 +2152,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2201,7 +2167,7 @@ public class TestMonitoringProductivity {
         constructHouse(quarry0);
 
         // Populate the quarry
-        Worker stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
+        var stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         assertTrue(stonemason.isInsideBuilding());
         assertEquals(stonemason.getHome(), quarry0);
@@ -2245,8 +2211,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2261,7 +2226,7 @@ public class TestMonitoringProductivity {
         Utils.constructHouse(sawmill);
 
         // Populate the sawmill
-        Worker sawmillWorker0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
+        var sawmillWorker0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
 
         assertTrue(sawmillWorker0.isInsideBuilding());
         assertEquals(sawmillWorker0.getHome(), sawmill);
@@ -2301,8 +2266,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2317,7 +2281,7 @@ public class TestMonitoringProductivity {
         Utils.constructHouse(sawmill);
 
         // Populate the sawmill
-        Worker sawmillWorker0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
+        var sawmillWorker0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
 
         assertTrue(sawmillWorker0.isInsideBuilding());
         assertEquals(sawmillWorker0.getHome(), sawmill);
@@ -2352,7 +2316,7 @@ public class TestMonitoringProductivity {
         assertEquals(gameChangesList.changedBuildings().iterator().next(), sawmill);
 
         // Verify that the changed house is only reported once
-        int productivity = sawmill.getProductivity();
+        var productivity = sawmill.getProductivity();
 
         for (int i = 0; i < 30; i++) {
             if (productivity != sawmill.getProductivity()) {
@@ -2372,8 +2336,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2388,7 +2351,7 @@ public class TestMonitoringProductivity {
         Utils.constructHouse(slaughterHouse);
 
         // Populate the butcher
-        Worker butcher0 = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse);
+        var butcher0 = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse);
 
         assertTrue(butcher0.isInsideBuilding());
         assertEquals(butcher0.getHome(), slaughterHouse);
@@ -2428,8 +2391,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2444,7 +2406,7 @@ public class TestMonitoringProductivity {
         Utils.constructHouse(slaughterHouse);
 
         // Populate the butcher
-        Worker butcher0 = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse);
+        var butcher0 = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse);
 
         assertTrue(butcher0.isInsideBuilding());
         assertEquals(butcher0.getHome(), slaughterHouse);
@@ -2484,8 +2446,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2500,7 +2461,7 @@ public class TestMonitoringProductivity {
         Utils.constructHouse(well);
 
         // Populate the well
-        Worker wellWorker0 = Utils.occupyBuilding(new WellWorker(player0, map), well);
+        var wellWorker0 = Utils.occupyBuilding(new WellWorker(player0, map), well);
 
         assertTrue(wellWorker0.isInsideBuilding());
         assertEquals(wellWorker0.getHome(), well);
@@ -2536,8 +2497,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2552,7 +2512,7 @@ public class TestMonitoringProductivity {
         Utils.constructHouse(well);
 
         // Populate the well
-        Worker wellWorker0 = Utils.occupyBuilding(new WellWorker(player0, map), well);
+        var wellWorker0 = Utils.occupyBuilding(new WellWorker(player0, map), well);
 
         assertTrue(wellWorker0.isInsideBuilding());
         assertEquals(wellWorker0.getHome(), well);
@@ -2588,8 +2548,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2614,7 +2573,7 @@ public class TestMonitoringProductivity {
         player0.monitorGameView(monitor);
 
         // Populate the woodcutter hut
-        Worker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         assertTrue(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getHome(), woodcutter0);
@@ -2646,8 +2605,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2672,7 +2630,7 @@ public class TestMonitoringProductivity {
         player0.monitorGameView(monitor);
 
         // Populate the woodcutter hut
-        Worker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         assertTrue(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getHome(), woodcutter0);
@@ -2697,7 +2655,7 @@ public class TestMonitoringProductivity {
         assertTrue(gameChangesList.changedBuildings().contains(woodcutter0));
 
         // Verify that the changed house is only reported once
-        int productivity = woodcutter0.getProductivity();
+        var productivity = woodcutter0.getProductivity();
 
         for (int i = 0; i < 30; i++) {
             if (productivity != woodcutter0.getProductivity()) {

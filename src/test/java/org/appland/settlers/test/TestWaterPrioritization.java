@@ -34,29 +34,28 @@ public class TestWaterPrioritization {
     public void testOnlyBakeryGetsWater() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place donkey farm
-        Point point1 = new Point(6, 10);
-        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
+        var point1 = new Point(6, 10);
+        var donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
 
         // Place bakery
-        Point point2 = new Point(10, 14);
-        Building bakery0 = map.placeBuilding(new Bakery(player0), point2);
+        var point2 = new Point(10, 14);
+        var bakery0 = map.placeBuilding(new Bakery(player0), point2);
 
         // Place pig farm
-        Point point3 = new Point(10, 6);
-        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point3);
+        var point3 = new Point(10, 6);
+        var pigFarm0 = map.placeBuilding(new PigFarm(player0), point3);
 
         // Place brewery
-        Point point4 = new Point(6, 16);
+        var point4 = new Point(6, 16);
         var brewery = map.placeBuilding(new Brewery(player0), point4);
 
         // Finish construction of the wheat consumers
@@ -90,8 +89,7 @@ public class TestWaterPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that only the bakery gets any water
-        Map<Building, Integer> waterAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var waterAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -119,18 +117,18 @@ public class TestWaterPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, WATER);
 
             // Keep track of where the wheat cargos end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!waterAllocation.containsKey(targetBuilding)) {
                 waterAllocation.put(targetBuilding, 0);
             }
 
-            int amount = waterAllocation.get(targetBuilding);
+            var amount = waterAllocation.get(targetBuilding);
             waterAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the wheat to reach the consumer
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -140,9 +138,9 @@ public class TestWaterPrioritization {
             Utils.waitUntilAmountIs(target, WATER, 0);
 
             // Exit after four delivered wheat cargos
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : waterAllocation.values()) {
+            for (var amountInBuilding : waterAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -159,29 +157,28 @@ public class TestWaterPrioritization {
     public void testOnlyDonkeyFarmGetsWheat() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place donkey farm
-        Point point1 = new Point(6, 10);
-        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
+        var point1 = new Point(6, 10);
+        var donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
 
         // Place bakery
-        Point point2 = new Point(10, 14);
-        Building bakery0 = map.placeBuilding(new Bakery(player0), point2);
+        var point2 = new Point(10, 14);
+        var bakery0 = map.placeBuilding(new Bakery(player0), point2);
 
         // Place pig farm
-        Point point3 = new Point(10, 6);
-        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point3);
+        var point3 = new Point(10, 6);
+        var pigFarm0 = map.placeBuilding(new PigFarm(player0), point3);
 
         // Place brewery
-        Point point4 = new Point(6, 16);
+        var point4 = new Point(6, 16);
         var brewery = map.placeBuilding(new Brewery(player0), point4);
 
         // Finish construction of the wheat consumers
@@ -215,8 +212,7 @@ public class TestWaterPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that only the bakery gets any wheat
-        Map<Building, Integer> wheatAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var wheatAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -240,18 +236,18 @@ public class TestWaterPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, WATER);
 
             // Keep track of where the wheat cargos end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!wheatAllocation.containsKey(targetBuilding)) {
                 wheatAllocation.put(targetBuilding, 0);
             }
 
-            int amount = wheatAllocation.get(targetBuilding);
+            var amount = wheatAllocation.get(targetBuilding);
             wheatAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the wheat to reach the consumer
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -261,9 +257,9 @@ public class TestWaterPrioritization {
             Utils.waitUntilAmountIs(target, WATER, 0);
 
             // Exit after four delivered wheat cargos
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : wheatAllocation.values()) {
+            for (var amountInBuilding : wheatAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -280,29 +276,28 @@ public class TestWaterPrioritization {
     public void testOnlyPigFarmGetsWheat() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place donkey farm
-        Point point1 = new Point(6, 10);
-        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
+        var point1 = new Point(6, 10);
+        var donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
 
         // Place bakery
-        Point point2 = new Point(10, 14);
-        Building bakery0 = map.placeBuilding(new Bakery(player0), point2);
+        var point2 = new Point(10, 14);
+        var bakery0 = map.placeBuilding(new Bakery(player0), point2);
 
         // Place pig farm
-        Point point3 = new Point(10, 6);
-        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point3);
+        var point3 = new Point(10, 6);
+        var pigFarm0 = map.placeBuilding(new PigFarm(player0), point3);
 
         // Place brewery
-        Point point4 = new Point(6, 16);
+        var point4 = new Point(6, 16);
         var brewery = map.placeBuilding(new Brewery(player0), point4);
 
         // Finish construction of the wheat consumers
@@ -336,8 +331,7 @@ public class TestWaterPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that only the bakery gets any wheat
-        Map<Building, Integer> wheatAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var wheatAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -361,18 +355,18 @@ public class TestWaterPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, WATER);
 
             // Keep track of where the wheat cargos end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!wheatAllocation.containsKey(targetBuilding)) {
                 wheatAllocation.put(targetBuilding, 0);
             }
 
-            int amount = wheatAllocation.get(targetBuilding);
+            var amount = wheatAllocation.get(targetBuilding);
             wheatAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the wheat to reach the consumer
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -382,9 +376,9 @@ public class TestWaterPrioritization {
             Utils.waitUntilAmountIs(target, WATER, 0);
 
             // Exit after four delivered wheat cargos
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : wheatAllocation.values()) {
+            for (var amountInBuilding : wheatAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -401,29 +395,28 @@ public class TestWaterPrioritization {
     public void testOnlyBreweryGetsWheat() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place donkey farm
-        Point point1 = new Point(6, 10);
-        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
+        var point1 = new Point(6, 10);
+        var donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
 
         // Place bakery
-        Point point2 = new Point(10, 14);
-        Building bakery0 = map.placeBuilding(new Bakery(player0), point2);
+        var point2 = new Point(10, 14);
+        var bakery0 = map.placeBuilding(new Bakery(player0), point2);
 
         // Place pig farm
-        Point point3 = new Point(10, 6);
-        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point3);
+        var point3 = new Point(10, 6);
+        var pigFarm0 = map.placeBuilding(new PigFarm(player0), point3);
 
         // Place brewery
-        Point point4 = new Point(6, 16);
+        var point4 = new Point(6, 16);
         var brewery = map.placeBuilding(new Brewery(player0), point4);
 
         // Finish construction of the wheat consumers
@@ -457,8 +450,7 @@ public class TestWaterPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that only the bakery gets any wheat
-        Map<Building, Integer> wheatAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var wheatAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -482,18 +474,18 @@ public class TestWaterPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, WATER);
 
             // Keep track of where the wheat cargos end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!wheatAllocation.containsKey(targetBuilding)) {
                 wheatAllocation.put(targetBuilding, 0);
             }
 
-            int amount = wheatAllocation.get(targetBuilding);
+            var amount = wheatAllocation.get(targetBuilding);
             wheatAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the wheat to reach the consumer
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -503,9 +495,9 @@ public class TestWaterPrioritization {
             Utils.waitUntilAmountIs(target, WATER, 0);
 
             // Exit after four delivered wheat cargos
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : wheatAllocation.values()) {
+            for (var amountInBuilding : wheatAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -522,25 +514,24 @@ public class TestWaterPrioritization {
     public void testOtherConsumersGetWheatWithBakeryMissing() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place donkey farm
-        Point point1 = new Point(6, 10);
-        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
+        var point1 = new Point(6, 10);
+        var donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
 
         // Place pig farm
-        Point point2 = new Point(10, 14);
-        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point2);
+        var point2 = new Point(10, 14);
+        var pigFarm0 = map.placeBuilding(new PigFarm(player0), point2);
 
         // Place brewery
-        Point point3 = new Point(6, 16);
+        var point3 = new Point(6, 16);
         var brewery = map.placeBuilding(new Brewery(player0), point3);
 
         // Finish construction of the wheat consumers
@@ -571,8 +562,7 @@ public class TestWaterPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that the pig farm and the donkey farm get half of the delivered wheat each
-        Map<Building, Integer> wheatAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var wheatAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -596,18 +586,18 @@ public class TestWaterPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, WATER);
 
             // Keep track of where the wheat cargos end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!wheatAllocation.containsKey(targetBuilding)) {
                 wheatAllocation.put(targetBuilding, 0);
             }
 
-            int amount = wheatAllocation.get(targetBuilding);
+            var amount = wheatAllocation.get(targetBuilding);
             wheatAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the wheat to reach the consumer
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -617,9 +607,9 @@ public class TestWaterPrioritization {
             Utils.waitUntilAmountIs(target, WATER, 0);
 
             // Exit after four delivered wheat cargos
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : wheatAllocation.values()) {
+            for (var amountInBuilding : wheatAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -638,25 +628,24 @@ public class TestWaterPrioritization {
     public void testOtherConsumersGetWheatWithBakeryNotReady() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place donkey farm
-        Point point1 = new Point(6, 10);
+        var point1 = new Point(6, 10);
         var donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
 
         // Place bakery
-        Point point2 = new Point(10, 10);
+        var point2 = new Point(10, 10);
         var bakery0 = map.placeBuilding(new Bakery(player0), point2);
 
         // Place pig farm
-        Point point3 = new Point(20, 10);
+        var point3 = new Point(20, 10);
         var pigFarm0 = map.placeBuilding(new PigFarm(player0), point3);
 
         // Finish construction of the wheat consumers
@@ -689,8 +678,7 @@ public class TestWaterPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that the other consumers get wheat when the bakery is not yet constructed
-        Map<Building, Integer> waterAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var waterAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -710,25 +698,25 @@ public class TestWaterPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, WATER);
 
             // Keep track of where the wheat cargos end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!waterAllocation.containsKey(targetBuilding)) {
                 waterAllocation.put(targetBuilding, 0);
             }
 
-            int amount = waterAllocation.get(targetBuilding);
+            var amount = waterAllocation.get(targetBuilding);
             waterAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the water to reach the consumer
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
             // Exit after six delivered wheat cargos
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : waterAllocation.values()) {
+            for (var amountInBuilding : waterAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -747,26 +735,25 @@ public class TestWaterPrioritization {
     public void testOtherConsumersGetWaterWithFullyStockedBakery() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place donkey farm
-        Point point1 = new Point(6, 10);
-        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
+        var point1 = new Point(6, 10);
+        var donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
 
         // Place bakery
-        Point point2 = new Point(10, 14);
-        Building bakery0 = map.placeBuilding(new Bakery(player0), point2);
+        var point2 = new Point(10, 14);
+        var bakery0 = map.placeBuilding(new Bakery(player0), point2);
 
         // Place pig farm
-        Point point3 = new Point(10, 6);
-        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point3);
+        var point3 = new Point(10, 6);
+        var pigFarm0 = map.placeBuilding(new PigFarm(player0), point3);
 
         // Finish construction of the water consumers
         Utils.constructHouse(donkeyFarm0);
@@ -807,8 +794,7 @@ public class TestWaterPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that the other consumers get wheat when the bakery is already fully stocked and does not consume its resources
-        Map<Building, Integer> waterAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var waterAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -828,25 +814,25 @@ public class TestWaterPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, WATER);
 
             // Keep track of where the wheat cargos end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!waterAllocation.containsKey(targetBuilding)) {
                 waterAllocation.put(targetBuilding, 0);
             }
 
-            int amount = waterAllocation.get(targetBuilding);
+            var amount = waterAllocation.get(targetBuilding);
             waterAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the water to reach the building
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
             // Exit after four delivered wheat cargos
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : waterAllocation.values()) {
+            for (var amountInBuilding : waterAllocation.values()) {
                 sum += amountInBuilding;
             }
 

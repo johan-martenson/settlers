@@ -537,7 +537,7 @@ public class TestCatapult {
         Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         // Verify that the catapult has a hit rate higher than seventy percent
-        int hits = 0;
+        var hits = 0;
 
         for (int i = 0; i < 100; i++) {
 
@@ -556,7 +556,7 @@ public class TestCatapult {
 
             var projectile = Utils.waitForCatapultToThrowProjectile(catapult);
 
-            int hostedBefore = barracks0.getNumberOfHostedSoldiers();
+            var hostedBefore = barracks0.getNumberOfHostedSoldiers();
 
             // Wait for the projectile to reach its target
             Utils.waitForProjectileToReachTarget(projectile, map);
@@ -636,37 +636,36 @@ public class TestCatapult {
     public void testCatapultWaitsBeforeThrowingAfterReceivingStone() throws Exception {
 
         // Create new game map
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
         players.add(player1);
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place headquarter
-        Point point1 = new Point(45, 5);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(45, 5);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Place barracks
-        Point point2 = new Point(33, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player1), point2);
+        var point2 = new Point(33, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player1), point2);
 
         // Finish construction of the woodcutter
         Utils.constructHouse(barracks0);
 
         // Place catapult
-        Point point3 = new Point(21, 5);
-        Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
+        var point3 = new Point(21, 5);
+        var catapult = map.placeBuilding(new Catapult(player0), point3);
 
         // Finish construction of the catapult
         Utils.constructHouse(catapult);
 
         // Occupy the catapult
-        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);
+        var catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);
 
         assertTrue(catapultWorker0.isInsideBuilding());
         assertEquals(catapultWorker0.getHome(), catapult);
@@ -697,37 +696,36 @@ public class TestCatapult {
     public void testCatapultFiresAtRightPointInTime() throws Exception {
 
         // Create new game map
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
         players.add(player1);
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place headquarter
-        Point point1 = new Point(45, 5);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(45, 5);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Place barracks
-        Point point2 = new Point(29, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player1), point2);
+        var point2 = new Point(29, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player1), point2);
 
         // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
         // Place catapult
-        Point point3 = new Point(21, 5);
-        Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
+        var point3 = new Point(21, 5);
+        var catapult = map.placeBuilding(new Catapult(player0), point3);
 
         // Finish construction of the catapult
         Utils.constructHouse(catapult);
 
         // Occupy the catapult
-        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);
+        var catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);
 
         assertTrue(catapultWorker0.isInsideBuilding());
         assertEquals(catapultWorker0.getHome(), catapult);
@@ -759,18 +757,17 @@ public class TestCatapult {
     public void testCatapultWorkerGoesBackToStorageWhenCatapultIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place catapult
-        Point point26 = new Point(8, 8);
-        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
+        var point26 = new Point(8, 8);
+        var catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         // Finish construction of the catapult
         Utils.constructHouse(catapult0);
@@ -779,7 +776,7 @@ public class TestCatapult {
         Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0);
 
         // Destroy the catapult
-        Worker catapultWorker = catapult0.getWorker();
+        var catapultWorker = catapult0.getWorker();
 
         assertTrue(catapultWorker.isInsideBuilding());
         assertEquals(catapultWorker.getPosition(), catapult0.getPosition());
@@ -800,18 +797,17 @@ public class TestCatapult {
     public void testCatapultWorkerGoesBackOnToStorageOnRoadsIfPossibleWhenCatapultIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place catapult
-        Point point26 = new Point(8, 8);
-        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
+        var point26 = new Point(8, 8);
+        var catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         // Connect the catapult with the headquarter
         map.placeAutoSelectedRoad(player0, catapult0.getFlag(), headquarter0.getFlag());
@@ -823,7 +819,7 @@ public class TestCatapult {
         Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0);
 
         // Destroy the catapult
-        Worker catapultWorker = catapult0.getWorker();
+        var catapultWorker = catapult0.getWorker();
 
         assertTrue(catapultWorker.isInsideBuilding());
         assertEquals(catapultWorker.getPosition(), catapult0.getPosition());
@@ -835,8 +831,8 @@ public class TestCatapult {
         assertEquals(catapultWorker.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
-        for (Point point : catapultWorker.getPlannedPath()) {
+        var firstStep = true;
+        for (var point : catapultWorker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -850,18 +846,17 @@ public class TestCatapult {
     public void testDestroyedCatapultIsRemovedAfterSomeTime() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place catapult
-        Point point26 = new Point(8, 8);
-        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
+        var point26 = new Point(8, 8);
+        var catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         // Connect the catapult with the headquarter
         map.placeAutoSelectedRoad(player0, catapult0.getFlag(), headquarter0.getFlag());
@@ -895,18 +890,17 @@ public class TestCatapult {
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place catapult
-        Point point26 = new Point(8, 8);
-        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
+        var point26 = new Point(8, 8);
+        var catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         // Finish construction of the catapult
         Utils.constructHouse(catapult0);
@@ -923,18 +917,17 @@ public class TestCatapult {
     public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place catapult
-        Point point26 = new Point(8, 8);
-        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
+        var point26 = new Point(8, 8);
+        var catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         // Finish construction of the catapult
         Utils.constructHouse(catapult0);
@@ -956,35 +949,34 @@ public class TestCatapult {
     public void testAssignedCatapultWorkerHasCorrectlySetPlayer() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place catapult
-        Point point1 = new Point(20, 14);
-        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point1);
+        var point1 = new Point(20, 14);
+        var catapult0 = map.placeBuilding(new Catapult(player0), point1);
 
         // Finish construction of the catapult
         Utils.constructHouse(catapult0);
 
         // Connect the catapult with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), catapult0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), catapult0.getFlag());
 
         // Wait for catapult worker to get assigned and leave the headquarter
-        List<CatapultWorker> workers = Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0);
+        var workers = Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
 
         // Verify that the player is set correctly in the worker
-        CatapultWorker worker = workers.getFirst();
+        var worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -993,34 +985,33 @@ public class TestCatapult {
     public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        Player player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
         players.add(player2);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 2's headquarter
-        Point point10 = new Point(70, 70);
-        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
+        var point10 = new Point(70, 70);
+        var headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
         // Place player 0's headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarter
-        Point point1 = new Point(45, 5);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(45, 5);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Place fortress for player 0
-        Point point2 = new Point(21, 9);
-        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        var point2 = new Point(21, 9);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         // Finish construction of the fortress
         Utils.constructHouse(fortress0);
@@ -1029,14 +1020,14 @@ public class TestCatapult {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         // Place catapult close to the new border
-        Point point4 = new Point(28, 18);
-        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point4);
+        var point4 = new Point(28, 18);
+        var catapult0 = map.placeBuilding(new Catapult(player0), point4);
 
         // Finish construction of the catapult
         Utils.constructHouse(catapult0);
 
         // Occupy the catapult
-        CatapultWorker worker = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0);
+        var worker = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0);
 
         // Verify that the worker goes back to its own storage when the fortress is torn down
         fortress0.tearDown();
@@ -1048,35 +1039,34 @@ public class TestCatapult {
     public void testCatapultWorkerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place catapult
-        Point point2 = new Point(14, 4);
-        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point2.upLeft());
+        var point2 = new Point(14, 4);
+        var catapult0 = map.placeBuilding(new Catapult(player0), point2.upLeft());
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, catapult0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, catapult0.getFlag());
 
         // Wait for the catapult worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0);
 
         CatapultWorker catapultWorker = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof CatapultWorker) {
                 catapultWorker = (CatapultWorker) worker;
             }
@@ -1110,35 +1100,34 @@ public class TestCatapult {
     public void testCatapultWorkerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place catapult
-        Point point2 = new Point(14, 4);
-        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point2.upLeft());
+        var point2 = new Point(14, 4);
+        var catapult0 = map.placeBuilding(new Catapult(player0), point2.upLeft());
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, catapult0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, catapult0.getFlag());
 
         // Wait for the catapult worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0);
 
         CatapultWorker catapultWorker = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof CatapultWorker) {
                 catapultWorker = (CatapultWorker) worker;
             }
@@ -1175,28 +1164,27 @@ public class TestCatapult {
     public void testCatapultWorkerReturnsToStorageIfCatapultIsDestroyed() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place catapult
-        Point point2 = new Point(14, 4);
-        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point2.upLeft());
+        var point2 = new Point(14, 4);
+        var catapult0 = map.placeBuilding(new Catapult(player0), point2.upLeft());
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, catapult0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, catapult0.getFlag());
 
         // Wait for the catapult to get constructed
         Utils.waitForBuildingToBeConstructed(catapult0);
@@ -1206,7 +1194,7 @@ public class TestCatapult {
 
         CatapultWorker catapultWorker = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof CatapultWorker) {
                 catapultWorker = (CatapultWorker) worker;
             }
@@ -1239,18 +1227,17 @@ public class TestCatapult {
     public void testCatapultWorkerGoesOffroadBackToClosestStorageWhenCatapultIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place catapult
-        Point point26 = new Point(17, 17);
-        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
+        var point26 = new Point(17, 17);
+        var catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         // Finish construction of the catapult
         Utils.constructHouse(catapult0);
@@ -1259,14 +1246,14 @@ public class TestCatapult {
         Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0);
 
         // Place a second storage closer to the catapult
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
 
         // Destroy the catapult
-        Worker catapultWorker = catapult0.getWorker();
+        var catapultWorker = catapult0.getWorker();
 
         assertTrue(catapultWorker.isInsideBuilding());
         assertEquals(catapultWorker.getPosition(), catapult0.getPosition());
@@ -1277,7 +1264,7 @@ public class TestCatapult {
         assertFalse(catapultWorker.isInsideBuilding());
         assertEquals(catapultWorker.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(CATAPULT_WORKER);
+        var amount = storehouse0.getAmount(CATAPULT_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, catapultWorker, storehouse0.getPosition());
     }
@@ -1286,18 +1273,17 @@ public class TestCatapult {
     public void testCatapultWorkerReturnsOffroadAndAvoidsBurningStorageWhenCatapultIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place catapult
-        Point point26 = new Point(17, 17);
-        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
+        var point26 = new Point(17, 17);
+        var catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         // Finish construction of the catapult
         Utils.constructHouse(catapult0);
@@ -1306,8 +1292,8 @@ public class TestCatapult {
         Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0);
 
         // Place a second storage closer to the catapult
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -1316,7 +1302,7 @@ public class TestCatapult {
         storehouse0.tearDown();
 
         // Destroy the catapult
-        Worker catapultWorker = catapult0.getWorker();
+        var catapultWorker = catapult0.getWorker();
 
         assertTrue(catapultWorker.isInsideBuilding());
         assertEquals(catapultWorker.getPosition(), catapult0.getPosition());
@@ -1327,7 +1313,7 @@ public class TestCatapult {
         assertFalse(catapultWorker.isInsideBuilding());
         assertEquals(catapultWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(CATAPULT_WORKER);
+        var amount = headquarter0.getAmount(CATAPULT_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, catapultWorker, headquarter0.getPosition());
     }
@@ -1336,18 +1322,17 @@ public class TestCatapult {
     public void testCatapultWorkerReturnsOffroadAndAvoidsDestroyedStorageWhenCatapultIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place catapult
-        Point point26 = new Point(17, 17);
-        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
+        var point26 = new Point(17, 17);
+        var catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         // Finish construction of the catapult
         Utils.constructHouse(catapult0);
@@ -1356,8 +1341,8 @@ public class TestCatapult {
         Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0);
 
         // Place a second storage closer to the catapult
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -1369,7 +1354,7 @@ public class TestCatapult {
         Utils.waitForBuildingToBurnDown(storehouse0);
 
         // Destroy the catapult
-        Worker catapultWorker = catapult0.getWorker();
+        var catapultWorker = catapult0.getWorker();
 
         assertTrue(catapultWorker.isInsideBuilding());
         assertEquals(catapultWorker.getPosition(), catapult0.getPosition());
@@ -1380,7 +1365,7 @@ public class TestCatapult {
         assertFalse(catapultWorker.isInsideBuilding());
         assertEquals(catapultWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(CATAPULT_WORKER);
+        var amount = headquarter0.getAmount(CATAPULT_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, catapultWorker, headquarter0.getPosition());
     }
@@ -1389,18 +1374,17 @@ public class TestCatapult {
     public void testCatapultWorkerReturnsOffroadAndAvoidsUnfinishedStorageWhenCatapultIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place catapult
-        Point point26 = new Point(17, 17);
-        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
+        var point26 = new Point(17, 17);
+        var catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         // Finish construction of the catapult
         Utils.constructHouse(catapult0);
@@ -1409,11 +1393,11 @@ public class TestCatapult {
         Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0);
 
         // Place a second storage closer to the catapult
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Destroy the catapult
-        Worker catapultWorker = catapult0.getWorker();
+        var catapultWorker = catapult0.getWorker();
 
         assertTrue(catapultWorker.isInsideBuilding());
         assertEquals(catapultWorker.getPosition(), catapult0.getPosition());
@@ -1424,7 +1408,7 @@ public class TestCatapult {
         assertFalse(catapultWorker.isInsideBuilding());
         assertEquals(catapultWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(CATAPULT_WORKER);
+        var amount = headquarter0.getAmount(CATAPULT_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, catapultWorker, headquarter0.getPosition());
     }
@@ -1433,27 +1417,26 @@ public class TestCatapult {
     public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place catapult
-        Point point26 = new Point(17, 17);
-        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
+        var point26 = new Point(17, 17);
+        var catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         // Place road to connect the headquarter and the catapult
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), catapult0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), catapult0.getFlag());
 
         // Finish construction of the catapult
         Utils.constructHouse(catapult0);
 
         // Wait for a worker to start walking to the building
-        Worker worker = Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0).getFirst();
+        var worker = Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, catapult0.getFlag().getPosition());
@@ -1475,18 +1458,17 @@ public class TestCatapult {
     public void testCatapultReportsCorrectOutput() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place catapult
-        Point point1 = new Point(6, 12);
-        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point1);
+        var point1 = new Point(6, 12);
+        var catapult0 = map.placeBuilding(new Catapult(player0), point1);
 
         // Construct the catapult
         Utils.constructHouse(catapult0);
@@ -1499,18 +1481,17 @@ public class TestCatapult {
     public void testCatapultReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place catapult
-        Point point1 = new Point(6, 12);
-        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point1);
+        var point1 = new Point(6, 12);
+        var catapult0 = map.placeBuilding(new Catapult(player0), point1);
 
         // Verify that the reported needed construction material is correct
         assertEquals(catapult0.getTypesOfMaterialNeeded().size(), 2);
@@ -1519,7 +1500,7 @@ public class TestCatapult {
         assertEquals(catapult0.getCanHoldAmount(PLANK), 4);
         assertEquals(catapult0.getCanHoldAmount(STONE), 2);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
@@ -1532,18 +1513,17 @@ public class TestCatapult {
     public void testCatapultReportsCorrectMaterialsNeededForProduction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place catapult
-        Point point1 = new Point(6, 12);
-        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point1);
+        var point1 = new Point(6, 12);
+        var catapult0 = map.placeBuilding(new Catapult(player0), point1);
 
         // Construct the catapult
         Utils.constructHouse(catapult0);
@@ -1553,7 +1533,7 @@ public class TestCatapult {
         assertTrue(catapult0.getTypesOfMaterialNeeded().contains(STONE));
         assertEquals(catapult0.getCanHoldAmount(STONE), 4);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == STONE) {
                 continue;
             }

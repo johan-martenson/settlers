@@ -1756,7 +1756,7 @@ public class TestRoads {
         var workersAfter = new LinkedList<>(map.getWorkers());
         workersAfter.removeAll(workersBefore);
 
-        Worker worker = workersAfter.getFirst();
+        var worker = workersAfter.getFirst();
 
         Utils.fastForwardUntilWorkersReachTarget(map, worker);
 

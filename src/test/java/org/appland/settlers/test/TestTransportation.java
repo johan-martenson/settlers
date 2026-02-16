@@ -49,8 +49,8 @@ public class TestTransportation {
 
     @Test
     public void testCreateCargo() {
-        for (Material military : Material.values()) {
-            Cargo cargo = new Cargo(military, null);
+        for (var military : Material.values()) {
+            var cargo = new Cargo(military, null);
 
             assertNotNull(cargo);
 
@@ -62,32 +62,31 @@ public class TestTransportation {
     public void testCreateRoad() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 30, 30);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 30, 30);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(6, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(6, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place flag
-        Point point2 = new Point(11, 5);
-        Flag flag1 = map.placeFlag(player0, point2);
+        var point2 = new Point(11, 5);
+        var flag1 = map.placeFlag(player0, point2);
 
         // Place road
         map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         // Verify that the roads are created
-        List<Road> roads = map.getRoads();
+        var roads = map.getRoads();
 
         assertEquals(roads.size(), 2);
 
-        Road road = map.getRoad(point1, point2);
+        var road = map.getRoad(point1, point2);
 
         assertEquals(road.getStart().x, 6);
         assertEquals(road.getStart().y, 4);
@@ -100,21 +99,20 @@ public class TestTransportation {
     public void testCreateRoadToBuilding() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storage
-        Point point1 = new Point(4, 6);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(4, 6);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Place flag
-        Point point3 = new Point(8, 6);
+        var point3 = new Point(8, 6);
 
         // Verify that it's not possible to place a road to a building
         try {
@@ -128,23 +126,22 @@ public class TestTransportation {
     public void testCreateRoadWithoutEndBuilding() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(4, 4);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(4, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Verify that it' not possible to place a road without flags at both sides
-        Point point2 = new Point(8, 6);
+        var point2 = new Point(8, 6);
 
         try {
             map.placeAutoSelectedRoad(player0, new Flag(point2), woodcutter.getFlag());
@@ -157,18 +154,17 @@ public class TestTransportation {
     public void testCreateRoadBetweenFlagsThatAreNotPlacedOnTheMap() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
+        var point0 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place road
-        Point point1 = new Point(1, 1);
-        Point point2 = new Point(3, 5);
+        var point1 = new Point(1, 1);
+        var point2 = new Point(3, 5);
 
         try {
             map.placeAutoSelectedRoad(player0, new Flag(point1), new Flag(point2));
@@ -181,34 +177,33 @@ public class TestTransportation {
     public void testCreateTwoChainedRoads() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 11);
+        var point0 = new Point(5, 11);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(4, 4);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(4, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Place middle flag
-        Point middleFlag = new Point(7, 7);
+        var middleFlag = new Point(7, 7);
         map.placeFlag(player0, middleFlag);
 
         // Place road from woodcutter to the middle flag
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag().getPosition(), middleFlag);
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag().getPosition(), middleFlag);
 
         // Place end flag
-        Point endFlag = new Point(10, 10);
+        var endFlag = new Point(10, 10);
         map.placeFlag(player0, endFlag);
 
         // Place road from middle flag to end flag
-        Road road1 = map.placeAutoSelectedRoad(player0, middleFlag, endFlag);
+        var road1 = map.placeAutoSelectedRoad(player0, middleFlag, endFlag);
 
         assertTrue(map.getRoads().contains(road0));
         assertTrue(map.getRoads().contains(road1));
@@ -218,18 +213,17 @@ public class TestTransportation {
     public void testCreateRoadWithSameEndAndStart() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(3, 3);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(3, 3);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
         try {
@@ -242,14 +236,13 @@ public class TestTransportation {
     public void testFindRouteWithSameStartAndEnd() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 10, 10);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 10, 10);
 
         // Verify that there is no road with the same start and end points
         try {
-            List<Point> path = map.findWayWithExistingRoads(new Point(1, 1), new Point(1, 1));
+            var path = map.findWayWithExistingRoads(new Point(1, 1), new Point(1, 1));
 
             assertNull(path);
         } catch (InvalidGameLogicException e) {}
@@ -259,10 +252,9 @@ public class TestTransportation {
     public void testWorkerWalk() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         /*
          * F--F1--F2--F3--F4
@@ -274,24 +266,24 @@ public class TestTransportation {
          *    |
          *    |---F7---F8
          */
-        Point point0 = new Point(12, 16);
-        Point start = new Point(4, 18);
-        Point point1 = new Point(8, 18);
-        Point point2 = new Point(12, 18);
-        Point point3 = new Point(16, 18);
-        Point point4 = new Point(20, 18);
-        Point point5 = new Point(10, 12);
-        Point point6 = new Point(14, 12);
-        Point point7 = new Point(10, 10);
-        Point point8 = new Point(14, 10);
-        Point point9 = new Point(16, 14);
+        var point0 = new Point(12, 16);
+        var start = new Point(4, 18);
+        var point1 = new Point(8, 18);
+        var point2 = new Point(12, 18);
+        var point3 = new Point(16, 18);
+        var point4 = new Point(20, 18);
+        var point5 = new Point(10, 12);
+        var point6 = new Point(14, 12);
+        var point7 = new Point(10, 10);
+        var point8 = new Point(14, 10);
+        var point9 = new Point(16, 14);
 
         // Place headquarter
-        Point point10 = new Point(13, 13);
+        var point10 = new Point(13, 13);
         map.placeBuilding(new Headquarter(player0), point10);
 
         // Place start flag
-        Flag startFlag = map.placeFlag(player0, start);
+        var startFlag = map.placeFlag(player0, start);
 
         // Place flags
         map.placeFlag(player0, point1);
@@ -306,7 +298,7 @@ public class TestTransportation {
         map.placeRoad(player0, point3, point3.right(), point4);
 
         // Place forester hut
-        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point0);
+        var foresterHut = map.placeBuilding(new ForesterHut(player0), point0);
 
         // Place flag
         map.placeFlag(player0, point9);
@@ -341,12 +333,12 @@ public class TestTransportation {
         // Finish construction of the forester hut
         Utils.constructHouse(foresterHut);
 
-        Flag target = foresterHut.getFlag();
+        var target = foresterHut.getFlag();
 
         assertEquals(target.getPosition(), foresterHut.getFlag().getPosition());
 
         // Place a forester on the map and assign it to the forester hut
-        Forester forester = new Forester(player0, map);
+        var forester = new Forester(player0, map);
 
         assertNotNull(forester);
 
@@ -377,33 +369,32 @@ public class TestTransportation {
     public void testWorkerUnreachableTarget() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(14, 4);
+        var point0 = new Point(14, 4);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point4 = new Point(4, 2);
-        Flag end = map.placeFlag(player0, point4);
+        var point4 = new Point(4, 2);
+        var end = map.placeFlag(player0, point4);
 
         // Place second flag
-        Point point2 = new Point(8, 2);
+        var point2 = new Point(8, 2);
         map.placeFlag(player0, point2);
 
         // Place third flag
-        Point point1 = new Point(12, 2);
-        Flag flag = map.placeFlag(player0, point1);
+        var point1 = new Point(12, 2);
+        var flag = map.placeFlag(player0, point1);
 
         // Place road
-        Point point3 = new Point(6, 2);
-        Road targetRoad = map.placeRoad(player0, point2, point3, point4);
+        var point3 = new Point(6, 2);
+        var targetRoad = map.placeRoad(player0, point2, point3, point4);
 
         // Place a courier on the separate flag
-        Courier worker = new Courier(player0, map);
+        var worker = new Courier(player0, map);
 
         map.placeWorker(worker, flag);
 
@@ -419,33 +410,32 @@ public class TestTransportation {
     public void testProduceThenDeliverToStorage() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place quarry
-        Point point1 = new Point(4, 4);
-        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        var point1 = new Point(4, 4);
+        var quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         // Place storage
-        Point point2 = new Point(8, 4);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(8, 4);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point2);
 
-        Flag target = storehouse.getFlag();
-        Flag start = quarry0.getFlag();
+        var target = storehouse.getFlag();
+        var start = quarry0.getFlag();
 
         // Connect the storage and the quarry
         map.placeAutoSelectedRoad(player0, start, target);
 
-        Courier worker = new Courier(player0, map);
-        Stonemason mason = new Stonemason(player0, map);
+        var worker = new Courier(player0, map);
+        var mason = new Stonemason(player0, map);
 
         // Place a stone
         map.placeStone(quarry0.getFlag().getPosition().up().up(), Stone.StoneType.STONE_1, 7);
@@ -486,7 +476,7 @@ public class TestTransportation {
 
         assertFalse(quarry0.getFlag().getStackedCargo().isEmpty());
 
-        Cargo cargo = quarry0.getFlag().getStackedCargo().getFirst();
+        var cargo = quarry0.getFlag().getStackedCargo().getFirst();
 
         assertEquals(cargo.getPosition(), quarry0.getFlag().getPosition());
         assertEquals(cargo.getTarget(), storehouse);
@@ -497,32 +487,31 @@ public class TestTransportation {
     public void testDeliverWithHandover() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(10, 6);
-        Storehouse storehouse = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 6);
+        var storehouse = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
         Point point1 = new Point(10, 10); // headquarter to middle 6 steps
-        Flag middleFlag = map.placeFlag(player0, point1);
+        var middleFlag = map.placeFlag(player0, point1);
 
         // Place flag
         Point point2 = new Point(10, 14); // end to middle 4 steps
-        Flag endFlag = map.placeFlag(player0, point2);
+        var endFlag = map.placeFlag(player0, point2);
 
         // Place road
-        Road hqToMiddleRoad = map.placeAutoSelectedRoad(player0, storehouse.getFlag().getPosition(), point1);
+        var hqToMiddleRoad = map.placeAutoSelectedRoad(player0, storehouse.getFlag().getPosition(), point1);
 
         // Place road
-        Road middleToEndRoad = map.placeRoad(player0, point1, point1.upRight(), point1.upRight().upLeft(), point2.downLeft(), point2);
+        var middleToEndRoad = map.placeRoad(player0, point1, point1.upRight(), point1.upRight().upLeft(), point2.downLeft(), point2);
 
         // Assign couriers to the roads
-        Courier mdlToEndCr = new Courier(player0, map);
-        Courier hqToMdlCr = new Courier(player0, map);
+        var mdlToEndCr = new Courier(player0, map);
+        var hqToMdlCr = new Courier(player0, map);
         map.placeWorker(hqToMdlCr, middleFlag);
         map.placeWorker(mdlToEndCr, endFlag);
 
@@ -542,7 +531,7 @@ public class TestTransportation {
         assertFalse(mdlToEndCr.isTraveling());
         assertNull(mdlToEndCr.getCargo());
 
-        Cargo cargo = new Cargo(WOOD, map);
+        var cargo = new Cargo(WOOD, map);
         endFlag.putCargo(cargo);
         cargo.setTarget(storehouse);
 
@@ -591,21 +580,20 @@ public class TestTransportation {
     public void testCourierIsAssignedToNewRoad() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 30, 30);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 30, 30);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var storehouse = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(11, 5);
+        var point1 = new Point(11, 5);
         map.placeFlag(player0, point1);
 
         // Place road
-        Road hqToMiddleRoad = map.placeAutoSelectedRoad(player0, storehouse.getFlag().getPosition(), point1);
+        var hqToMiddleRoad = map.placeAutoSelectedRoad(player0, storehouse.getFlag().getPosition(), point1);
 
         assertTrue(hqToMiddleRoad.needsCourier());
         assertNull(hqToMiddleRoad.getCourier());
@@ -618,7 +606,7 @@ public class TestTransportation {
 
         // Courier needs to walk to road before it's assigned
         Courier courier = null;
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Courier) {
                 courier = (Courier)worker;
             }
@@ -634,28 +622,27 @@ public class TestTransportation {
     public void testEmptyRoadNeedsCourier() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(3, 3);
+        var point1 = new Point(3, 3);
         map.placeFlag(player0, point1);
 
         // Place flag
-        Point point2 = new Point(7, 3);
+        var point2 = new Point(7, 3);
         map.placeFlag(player0, point2);
 
         // Place road
-        Point point3 = new Point(5, 3);
-        Road road = map.placeRoad(player0, point1, point3, point2);
+        var point3 = new Point(5, 3);
+        var road = map.placeRoad(player0, point1, point3, point2);
 
         assertTrue(road.needsCourier());
     }
@@ -664,39 +651,38 @@ public class TestTransportation {
     public void testMilitaryTransportation() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(7, 7);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(7, 7);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(12, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        var point1 = new Point(12, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         // Place road
-        Road road = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), barracks0.getFlag());
+        var road = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), barracks0.getFlag());
 
         // Occupy the road
-        Courier courier = Utils.occupyRoad(road, map);
+        var courier = Utils.occupyRoad(road, map);
 
         // Construct barracks
         Utils.constructHouse(barracks0);
 
         // Add a private to the headquarter
-        Soldier military = new Soldier(player0, PRIVATE_RANK, map);
+        var military = new Soldier(player0, PRIVATE_RANK, map);
         headquarter.depositWorker(military);
 
         // Check that the barracks needs a military
         assertTrue(barracks0.isMilitaryBuilding());
 
-        int hostedMilitary = barracks0.getNumberOfHostedSoldiers();
-        int maxHostedMilitary = barracks0.getMaxHostedSoldiers();
+        var hostedMilitary = barracks0.getNumberOfHostedSoldiers();
+        var maxHostedMilitary = barracks0.getMaxHostedSoldiers();
 
         assertEquals(hostedMilitary, 0);
         assertEquals(maxHostedMilitary, 2);
@@ -725,29 +711,28 @@ public class TestTransportation {
     public void testCourierPicksUpCargoWhenItAppearsAndWorkerIsNotOnFlag() throws Exception {
 
         // Create new game map with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place sawmill at the other end of the road
-        Point point1 = new Point(7, 7);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point1.upLeft());
+        var point1 = new Point(7, 7);
+        var sawmill = map.placeBuilding(new Sawmill(player0), point1.upLeft());
 
         // Place start flag
-        Point point2 = new Point(5, 5);
-        Flag flag0 = map.placeFlag(player0, point2);
+        var point2 = new Point(5, 5);
+        var flag0 = map.placeFlag(player0, point2);
 
         // Place middle flag
-        Point point3 = new Point(6, 6);
-        Road road0 = map.placeRoad(player0, point2, point3, point1);
+        var point3 = new Point(6, 6);
+        var road0 = map.placeRoad(player0, point2, point3, point1);
 
         // Assign a courier to the road
-        Courier courier = new Courier(player0, map);
+        var courier = new Courier(player0, map);
 
         map.placeWorker(courier, sawmill.getFlag());
         courier.assignToRoad(road0);
@@ -756,7 +741,7 @@ public class TestTransportation {
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
 
         // Place cargo to be delivered to the sawmill at the start flag
-        Cargo cargo = new Cargo(WOOD, map);
+        var cargo = new Cargo(WOOD, map);
         cargo.setPosition(point2);
         cargo.setTarget(sawmill);
 
@@ -784,36 +769,35 @@ public class TestTransportation {
     public void testCargoTargetRemainsWhenItIsPutDownAtFlag() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create the game map
-        GameMap map = new GameMap(players, 20, 20);
-        Point point1 = new Point(6, 6);
-        Point point4 = new Point(11, 7);
+        var map = new GameMap(players, 20, 20);
+        var point1 = new Point(6, 6);
+        var point4 = new Point(11, 7);
 
         // Place the headquarter
-        Point point5 = new Point(11, 11);
+        var point5 = new Point(11, 11);
         map.placeBuilding(new Headquarter(player0), point5);
 
         // Place a sawmill
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point4.upLeft());
+        var sawmill = map.placeBuilding(new Sawmill(player0), point4.upLeft());
 
         // Place flags
-        Point point0 = new Point(5, 5);
-        Point point2 = new Point(7, 7);
-        Flag flag0 = map.placeFlag(player0, point0);
-        Flag flag1 = map.placeFlag(player0, point2);
+        var point0 = new Point(5, 5);
+        var point2 = new Point(7, 7);
+        var flag0 = map.placeFlag(player0, point0);
+        var flag1 = map.placeFlag(player0, point2);
 
         // Place road from the first flag to the second flag
-        Road road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         // Place road from the second flag to the sawmill's flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag1, sawmill.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag1, sawmill.getFlag());
 
-        Courier courier = new Courier(player0, map);
-        Courier secondCourier = new Courier(player0, map);
+        var courier = new Courier(player0, map);
+        var secondCourier = new Courier(player0, map);
 
         map.placeWorker(courier, flag0);
         courier.assignToRoad(road0);
@@ -824,7 +808,7 @@ public class TestTransportation {
         // Let the couriers reach their roads and get assigned
         Utils.fastForwardUntilWorkersReachTarget(map, courier, secondCourier);
 
-        Cargo cargo = new Cargo(WOOD, map);
+        var cargo = new Cargo(WOOD, map);
         cargo.setPosition(point0);
         cargo.setTarget(sawmill);
 
@@ -869,35 +853,34 @@ public class TestTransportation {
     public void testCargoDeliveryPromiseIsCleared() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(11, 11);
+        var point0 = new Point(11, 11);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place sawmill
-        Point point1 = new Point(11, 7);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point1.upLeft());
+        var point1 = new Point(11, 7);
+        var sawmill = map.placeBuilding(new Sawmill(player0), point1.upLeft());
 
         // Place flags
-        Point point2 = new Point(5, 5);
-        Flag flag0 = map.placeFlag(player0, point2);
-        Point point3 = new Point(7, 7);
-        Flag flag1 = map.placeFlag(player0, point3);
+        var point2 = new Point(5, 5);
+        var flag0 = map.placeFlag(player0, point2);
+        var point3 = new Point(7, 7);
+        var flag1 = map.placeFlag(player0, point3);
 
         // Place roads
-        Point point4 = new Point(6, 6);
-        Road road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
-        Road road1 = map.placeAutoSelectedRoad(player0, flag1, sawmill.getFlag());
+        var point4 = new Point(6, 6);
+        var road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var road1 = map.placeAutoSelectedRoad(player0, flag1, sawmill.getFlag());
 
         // Populate the roads
-        Courier courier = new Courier(player0, map);
-        Courier secondCourier = new Courier(player0, map);
+        var courier = new Courier(player0, map);
+        var secondCourier = new Courier(player0, map);
 
         map.placeWorker(courier, flag1);
         courier.assignToRoad(road0);
@@ -909,7 +892,7 @@ public class TestTransportation {
         Utils.fastForwardUntilWorkersReachTarget(map, courier, secondCourier);
 
         // Place a cargo on the first flag
-        Cargo cargo = new Cargo(WOOD, map);
+        var cargo = new Cargo(WOOD, map);
         cargo.setPosition(point2);
         cargo.setTarget(sawmill);
 
@@ -941,32 +924,31 @@ public class TestTransportation {
     public void testCargoIsReturnedToStorageIfItCannotBeDelivered() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(20, 10);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(20, 10);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place sawmill
-        Point point1 = new Point(23, 15);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point1.upLeft());
+        var point1 = new Point(23, 15);
+        var sawmill = map.placeBuilding(new Sawmill(player0), point1.upLeft());
 
         // Place flags
-        Point point2 = new Point(19, 5);
-        Flag flag0 = map.placeFlag(player0, point2);
+        var point2 = new Point(19, 5);
+        var flag0 = map.placeFlag(player0, point2);
 
         // Place roads
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, sawmill.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, sawmill.getFlag());
 
         // Populate the roads
-        Courier courier = new Courier(player0, map);
-        Courier courier2 = new Courier(player0, map);
+        var courier = new Courier(player0, map);
+        var courier2 = new Courier(player0, map);
 
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
@@ -982,7 +964,7 @@ public class TestTransportation {
         Utils.fastForwardUntilWorkersReachTarget(map, courier, courier2);
 
         // Place a cargo on the headquarter's flag
-        Cargo cargo = new Cargo(PLANK, map);
+        var cargo = new Cargo(PLANK, map);
         headquarter0.getFlag().putCargo(cargo);
 
         // Target the cargo to the sawmill
@@ -1020,20 +1002,19 @@ public class TestTransportation {
     public void testCargoIsReturnedToStorageIfItCannotBeDeliveredWhenTargetBuildingIsBurning() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(14, 16);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(14, 16);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place catapult
-        Point point1 = new Point(23, 15);
-        Building catapult = map.placeBuilding(new Catapult(player0), point1.upLeft());
+        var point1 = new Point(23, 15);
+        var catapult = map.placeBuilding(new Catapult(player0), point1.upLeft());
 
         // Finish construction of the catapult
         Utils.constructHouse(catapult);
@@ -1042,10 +1023,10 @@ public class TestTransportation {
         Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);
 
         // Place road to connect the catapult with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), catapult.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), catapult.getFlag());
 
         // Populate the road
-        Courier courier = new Courier(player0, map);
+        var courier = new Courier(player0, map);
 
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
@@ -1058,7 +1039,7 @@ public class TestTransportation {
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
 
         // Place a cargo on the headquarter's flag
-        Cargo cargo = new Cargo(STONE, map);
+        var cargo = new Cargo(STONE, map);
         headquarter0.getFlag().putCargo(cargo);
 
         // Target the cargo to the catapult
@@ -1098,33 +1079,32 @@ public class TestTransportation {
     public void testCargoIsDeliveredViaNewRouteIfRoadIsRemoved() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(14, 16);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(14, 16);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place sawmill
-        Point point1 = new Point(23, 15);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point1.upLeft());
+        var point1 = new Point(23, 15);
+        var sawmill = map.placeBuilding(new Sawmill(player0), point1.upLeft());
 
         // Place flags
-        Point point2 = new Point(19, 15);
-        Point point3 = new Point(10, 10);
+        var point2 = new Point(19, 15);
+        var point3 = new Point(10, 10);
 
-        Flag flag0 = map.placeFlag(player0, point2);
-        Flag flag1 = map.placeFlag(player0, point3);
+        var flag0 = map.placeFlag(player0, point2);
+        var flag1 = map.placeFlag(player0, point3);
 
         // Place roads
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, sawmill.getFlag());
-        Road road2 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag1);
-        Road road3 = map.placeAutoSelectedRoad(player0, flag1, sawmill.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, sawmill.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag1);
+        var road3 = map.placeAutoSelectedRoad(player0, flag1, sawmill.getFlag());
 
         // Wait for the roads to get populated
         Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1, road2, road3);
@@ -1135,14 +1115,14 @@ public class TestTransportation {
         Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         // Give the couriers time to get to the middle of their roads
-        Courier courier = road0.getCourier();
-        Courier courier3 = road2.getCourier();
-        Courier courier4 = road3.getCourier();
+        var courier = road0.getCourier();
+        var courier3 = road2.getCourier();
+        var courier4 = road3.getCourier();
 
         Utils.waitForCouriersToBeIdle(map, courier, courier3, courier4);
 
         // Place a cargo on the headquarter's flag for the sawmill
-        Cargo cargo = Utils.placeCargo(map, WOOD, headquarter0.getFlag(), sawmill);
+        var cargo = Utils.placeCargo(map, WOOD, headquarter0.getFlag(), sawmill);
 
         // Wait for the first courier to pick up the cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
@@ -1191,36 +1171,35 @@ public class TestTransportation {
     public void testCargoTakesBetterRouteIfNewRoadIsAdded() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(14, 16);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(14, 16);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place sawmill
-        Point point1 = new Point(20, 18);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point1);
+        var point1 = new Point(20, 18);
+        var sawmill = map.placeBuilding(new Sawmill(player0), point1);
 
         // Place flags
-        Point point2 = new Point(19, 15);
-        Flag flag0 = map.placeFlag(player0, point2);
-        Point point3 = new Point(23, 15);
-        Flag flag1 = map.placeFlag(player0, point3);
+        var point2 = new Point(19, 15);
+        var flag0 = map.placeFlag(player0, point2);
+        var point3 = new Point(23, 15);
+        var flag1 = map.placeFlag(player0, point3);
 
         // Place roads
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
-        Road road2 = map.placeAutoSelectedRoad(player0, flag1, sawmill.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var road2 = map.placeAutoSelectedRoad(player0, flag1, sawmill.getFlag());
 
         // Populate the roads
-        Courier courier = new Courier(player0, map);
-        Courier courier2 = new Courier(player0, map);
-        Courier courier3 = new Courier(player0, map);
+        var courier = new Courier(player0, map);
+        var courier2 = new Courier(player0, map);
+        var courier3 = new Courier(player0, map);
 
         map.placeWorker(courier, flag0);
         courier.assignToRoad(road0);
@@ -1236,7 +1215,7 @@ public class TestTransportation {
         Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         // Place a cargo on the headquarter's flag
-        Cargo cargo = new Cargo(PLANK, map);
+        var cargo = new Cargo(PLANK, map);
         headquarter0.getFlag().putCargo(cargo);
         cargo.setTarget(sawmill);
         sawmill.promiseDelivery(PLANK);
@@ -1245,10 +1224,10 @@ public class TestTransportation {
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
 
         // Add a shortcut from the second flag to the sawmill
-        Road road3 = map.placeAutoSelectedRoad(player0, flag0, sawmill.getFlag());
+        var road3 = map.placeAutoSelectedRoad(player0, flag0, sawmill.getFlag());
 
         // Populate the shortcut
-        Courier courier4 = new Courier(player0, map);
+        var courier4 = new Courier(player0, map);
 
         map.placeWorker(courier4, flag0);
         courier4.assignToRoad(road3);
@@ -1272,26 +1251,25 @@ public class TestTransportation {
     public void testFindDirectWayBetweenTwoFlagsWithNoStepsInBetween() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(14, 16);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(14, 16);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(19, 15);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(19, 15);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Verify that there is a road between the two flags
-        List<Point> path = map.findWayWithExistingRoadsInFlagsAndBuildings(headquarter0.getFlag(), flag0);
+        var path = map.findWayWithExistingRoadsInFlagsAndBuildings(headquarter0.getFlag(), flag0);
         assertNotNull(path);
         assertEquals(path.size(), 2);
         assertEquals(path.get(0), headquarter0.getFlag().getPosition());
@@ -1302,23 +1280,22 @@ public class TestTransportation {
     public void testFindNoWayBetweenTwoFlagsWithNoStepsInBetween() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(14, 16);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(14, 16);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(19, 15);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(19, 15);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Verify that there is a road between the two flags
-        List<Point> path = map.findWayWithExistingRoadsInFlagsAndBuildings(headquarter0.getFlag(), flag0);
+        var path = map.findWayWithExistingRoadsInFlagsAndBuildings(headquarter0.getFlag(), flag0);
         assertNull(path);
     }
 
@@ -1326,37 +1303,36 @@ public class TestTransportation {
     public void testFindShortestWayBetweenTwoFlagsWithNoStepsInBetween() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(14, 16);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(14, 16);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(19, 15);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(19, 15);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place second flag
-        Point point2 = new Point(23, 15);
-        Flag flag1 = map.placeFlag(player0, point2);
+        var point2 = new Point(23, 15);
+        var flag1 = map.placeFlag(player0, point2);
 
         // Place roads
-        Point point3 = new Point(22, 14);
-        Point point4 = new Point(20, 14);
-        Point point5 = new Point(19, 13);
-        Point point6 = new Point(17, 13);
-        Point point7 = new Point(16, 14);
-        Road road0 = map.placeRoad(player0, point2, point3, point4, point5, point6, point7, headquarter0.getFlag().getPosition());
-        Road road1 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
-        Road road2 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var point3 = new Point(22, 14);
+        var point4 = new Point(20, 14);
+        var point5 = new Point(19, 13);
+        var point6 = new Point(17, 13);
+        var point7 = new Point(16, 14);
+        var road0 = map.placeRoad(player0, point2, point3, point4, point5, point6, point7, headquarter0.getFlag().getPosition());
+        var road1 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road2 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         // Verify that the short road is chosen
-        List<Point> path = map.findWayWithExistingRoadsInFlagsAndBuildings(headquarter0.getFlag(), flag1);
+        var path = map.findWayWithExistingRoadsInFlagsAndBuildings(headquarter0.getFlag(), flag1);
 
         assertNotNull(path);
         assertEquals(path.size(), 3);
@@ -1369,24 +1345,23 @@ public class TestTransportation {
     public void testUtilBuildingsAreConnected() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(14, 16);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(14, 16);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(19, 15);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(19, 15);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Place second woodcutter
-        Point point2 = new Point(23, 15);
-        Woodcutter woodcutter1 = map.placeBuilding(new Woodcutter(player0), point2);
+        var point2 = new Point(23, 15);
+        var woodcutter1 = map.placeBuilding(new Woodcutter(player0), point2);
 
         // Place road to connect the woodcutters
         map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), woodcutter1.getFlag());
@@ -1399,24 +1374,23 @@ public class TestTransportation {
     public void testUtilBuildingsAreNotConnected() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(14, 16);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(14, 16);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(19, 15);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(19, 15);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Place second woodcutter
-        Point point2 = new Point(23, 15);
-        Woodcutter woodcutter1 = map.placeBuilding(new Woodcutter(player0), point2);
+        var point2 = new Point(23, 15);
+        var woodcutter1 = map.placeBuilding(new Woodcutter(player0), point2);
 
         // Verify that the woodcutters are not connected according to the util function
         assertFalse(map.areFlagsOrBuildingsConnectedViaRoads(woodcutter0, woodcutter1));
@@ -1426,24 +1400,23 @@ public class TestTransportation {
     public void testUtilFlagsAreNotConnected() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(14, 16);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(14, 16);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(19, 15);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(19, 15);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place second flag
-        Point point2 = new Point(23, 15);
-        Flag flag1 = map.placeFlag(player0, point2);
+        var point2 = new Point(23, 15);
+        var flag1 = map.placeFlag(player0, point2);
 
         // Verify that the flags are not connected according to the util function
         assertFalse(map.areFlagsOrBuildingsConnectedViaRoads(flag0, flag1));
@@ -1453,24 +1426,23 @@ public class TestTransportation {
     public void testUtilFlagsAreConnected() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(14, 16);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(14, 16);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(19, 15);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(19, 15);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place second flag
-        Point point2 = new Point(23, 15);
-        Flag flag1 = map.placeFlag(player0, point2);
+        var point2 = new Point(23, 15);
+        var flag1 = map.placeFlag(player0, point2);
 
         // Place road to connect the flags
         map.placeAutoSelectedRoad(player0, flag0, flag1);
@@ -1484,37 +1456,36 @@ public class TestTransportation {
     public void testCargoReroutingEvenIfRemovedRoadIsNotNextRoad() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create the game map
-        GameMap map = new GameMap(players, 40, 40);
-        Point point0 = new Point(17, 5);
-        Point point1 = new Point(15, 7);
-        Point point2 = new Point(13, 9);
-        Point point3 = new Point(11, 11);
+        var map = new GameMap(players, 40, 40);
+        var point0 = new Point(17, 5);
+        var point1 = new Point(15, 7);
+        var point2 = new Point(13, 9);
+        var point3 = new Point(11, 11);
 
         // Place the headquarter
-        Point point4 = new Point(15, 11);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player0), point4);
+        var point4 = new Point(15, 11);
+        var headquarter1 = map.placeBuilding(new Headquarter(player0), point4);
 
         // Place a sawmill
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point3.upLeft());
+        var sawmill = map.placeBuilding(new Sawmill(player0), point3.upLeft());
 
         // Finish construction of the sawmill
         Utils.constructHouse(sawmill);
 
         // Place flags
-        Flag flag0 = map.placeFlag(player0, point0);
-        Flag flag1 = map.placeFlag(player0, point1);
-        Flag flag2 = map.placeFlag(player0, point2);
+        var flag0 = map.placeFlag(player0, point0);
+        var flag1 = map.placeFlag(player0, point1);
+        var flag2 = map.placeFlag(player0, point2);
 
         // Place roads: flag0 - flag1, flag1 - flag2, flag2 - sawmill flag
-        Road road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
-        Road road1 = map.placeAutoSelectedRoad(player0, flag1, flag2);
-        Road road2 = map.placeAutoSelectedRoad(player0, flag2, sawmill.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var road1 = map.placeAutoSelectedRoad(player0, flag1, flag2);
+        var road2 = map.placeAutoSelectedRoad(player0, flag2, sawmill.getFlag());
 
         // Remove all the wood from the headquarter to avoid interference
         Utils.adjustInventoryTo(headquarter1, WOOD, 0);
@@ -1523,10 +1494,10 @@ public class TestTransportation {
         map.placeAutoSelectedRoad(player0, flag0, headquarter1.getFlag());
 
         // Wait for the roads to get assigned couriers
-        Set<Courier> couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1, road2);
+        var couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1, road2);
 
         // Put a cargo at the first flag and target it to the sawmill
-        Cargo cargo = new Cargo(WOOD, map);
+        var cargo = new Cargo(WOOD, map);
         cargo.setPosition(point0);
         cargo.setTarget(sawmill);
 
@@ -1556,7 +1527,7 @@ public class TestTransportation {
         map.stepTime();
 
         // Build a second way that is longer
-        Road road3 = map.placeAutoSelectedRoad(player0, flag0, sawmill.getFlag());
+        var road3 = map.placeAutoSelectedRoad(player0, flag0, sawmill.getFlag());
 
         // Occupy the new longer road
         Utils.occupyRoad(road3, map);

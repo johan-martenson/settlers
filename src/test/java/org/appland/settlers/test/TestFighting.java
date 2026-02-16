@@ -50,36 +50,35 @@ public class TestFighting {
     public void testFightStartsAndOneSoldierHitsWhileTheOtherGetsHitOrAvoids() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 0's headquarters
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarters
-        Point point1 = new Point(37, 15);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(37, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Clear soldiers from the headquarters
         Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
         Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
 
         // Place barracks for player 0
-        Point point2 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+        var point2 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         // Place barracks for player 1
-        Point point3 = new Point(23, 15);
-        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+        var point3 = new Point(23, 15);
+        var barracks1 = map.placeBuilding(new Barracks(player1), point3);
 
         // Finish construction
         Utils.constructHouse(barracks0);
@@ -102,7 +101,7 @@ public class TestFighting {
         // Find the military that was chosen to attack
         map.stepTime();
 
-        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
+        var attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -118,7 +117,7 @@ public class TestFighting {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
         // Wait for the defender to go to the attacker
-        Soldier defender = Utils.findSoldierOutsideBuilding(player1);
+        var defender = Utils.findSoldierOutsideBuilding(player1);
 
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
@@ -132,8 +131,8 @@ public class TestFighting {
         assertFalse(attacker.isFighting());
         assertFalse(defender.isFighting());
 
-        int attackersDistance = -1;
-        int defendersDistance = -1;
+        var attackersDistance = -1;
+        var defendersDistance = -1;
 
         for (int i = 0; i < 20; i++) {
 
@@ -143,8 +142,8 @@ public class TestFighting {
                 continue;
             }
 
-            int newAttackersDistance = attacker.getPercentageOfDistanceTraveled();
-            int newDefendersDistance = defender.getPercentageOfDistanceTraveled();
+            var newAttackersDistance = attacker.getPercentageOfDistanceTraveled();
+            var newDefendersDistance = defender.getPercentageOfDistanceTraveled();
 
             if (attackersDistance < 50) {
                 assertTrue(newAttackersDistance > attackersDistance);
@@ -197,7 +196,7 @@ public class TestFighting {
         assertFalse(attacker.isAttacking() && defender.isAttacking());
 
         // Wait for one of the soldiers to be dying
-        Soldier dyingSoldier = Utils.waitForSoldierToBeDying(map, attacker, defender);
+        var dyingSoldier = Utils.waitForSoldierToBeDying(map, attacker, defender);
 
         // Wait for the dying soldier to die
         Utils.waitForWorkerToDie(map, dyingSoldier);
@@ -239,44 +238,43 @@ public class TestFighting {
     public void testBothAttackerAndDefenderCanMakeFirstHitInFight() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 0's headquarters
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarters
-        Point point1 = new Point(37, 15);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(37, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Remove all soldiers from the headquarters
         Utils.clearInventory(headquarter0, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER, Material.GENERAL);
         Utils.clearInventory(headquarter1, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER, Material.GENERAL);
 
         // Place barracks for player 0
-        Point point2 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+        var point2 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         // Place barracks for player 1
-        Point point3 = new Point(23, 15);
-        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+        var point3 = new Point(23, 15);
+        var barracks1 = map.placeBuilding(new Barracks(player1), point3);
 
         // Finish construction
         Utils.constructHouse(barracks0);
         Utils.constructHouse(barracks1);
 
         // Verify that both the attacker and the defender can make the first hit
-        boolean attackerHasMadeFirstHit = false;
-        boolean defenderHasMadeFirstHit = false;
+        var attackerHasMadeFirstHit = false;
+        var defenderHasMadeFirstHit = false;
 
         // Make sure both barracks have soldiers
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0);
@@ -303,7 +301,7 @@ public class TestFighting {
             }
 
             // Find the soldier that was chosen to attack
-            Soldier attacker = Utils.waitForSoldierNotDyingOutsideBuilding(player0);
+            var attacker = Utils.waitForSoldierNotDyingOutsideBuilding(player0);
 
             // Wait for the military to reach the attacked building
             if (attacker.isTraveling() && attacker.getTarget().equals(barracks1.getFlag().getPosition())) {
@@ -315,7 +313,7 @@ public class TestFighting {
             assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
 
             // Wait for the defender to go to the attacker
-            Soldier defender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
+            var defender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
 
             assertFalse(defender.isDead());
             assertNotNull(defender);
@@ -404,24 +402,23 @@ public class TestFighting {
     public void testGeneralHealth() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 0's headquarters
-        Point point0 = new Point(9, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarters
-        Point point1 = new Point(37, 15);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(37, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Remove all soldiers from the headquarters and place one general in player 0's headquarters
         Utils.clearInventory(headquarter0, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER);
@@ -434,7 +431,7 @@ public class TestFighting {
         Utils.setNoReservedSoldiers(headquarter1);
 
         // Place barracks for player 1
-        Point point3 = new Point(23, 15);
+        var point3 = new Point(23, 15);
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
         // Finish construction
@@ -451,7 +448,7 @@ public class TestFighting {
         // Get the attacking general
         map.stepTime();
 
-        Soldier attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
+        var attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
 
         // Verify that the general dies after seven hits
         for (int i = 0; i < 200; i++) {
@@ -482,24 +479,23 @@ public class TestFighting {
     public void testOfficerHealth() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 0's headquarters
-        Point point0 = new Point(9, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarters
-        Point point1 = new Point(37, 15);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(37, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Remove all soldiers from the headquarters and place one general in player 0's headquarters
         Utils.clearInventory(headquarter0, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER);
@@ -512,7 +508,7 @@ public class TestFighting {
         Utils.setNoReservedSoldiers(headquarter1);
 
         // Place barracks for player 1
-        Point point3 = new Point(23, 15);
+        var point3 = new Point(23, 15);
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
         // Finish construction
@@ -529,7 +525,7 @@ public class TestFighting {
         // Get the attacking general
         map.stepTime();
 
-        Soldier attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
+        var attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
 
         // Verify that the general dies after seven hits
         for (int i = 0; i < 200; i++) {
@@ -560,24 +556,23 @@ public class TestFighting {
     public void testSergeantHealth() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 0's headquarters
-        Point point0 = new Point(9, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarters
-        Point point1 = new Point(37, 15);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(37, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Remove all soldiers from the headquarters and place one general in player 0's headquarters
         Utils.clearInventory(headquarter0, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER);
@@ -590,7 +585,7 @@ public class TestFighting {
         Utils.setNoReservedSoldiers(headquarter1);
 
         // Place barracks for player 1
-        Point point3 = new Point(23, 15);
+        var point3 = new Point(23, 15);
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
         // Finish construction
@@ -607,7 +602,7 @@ public class TestFighting {
         // Get the attacking general
         map.stepTime();
 
-        Soldier attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
+        var attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
 
         // Verify that the general dies after seven hits
         for (int i = 0; i < 200; i++) {
@@ -638,24 +633,23 @@ public class TestFighting {
     public void testPrivateFirstRankHealth() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 0's headquarters
-        Point point0 = new Point(9, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarters
-        Point point1 = new Point(37, 15);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(37, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Remove all soldiers from the headquarters and place one general in player 0's headquarters
         Utils.clearInventory(headquarter0, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER);
@@ -668,7 +662,7 @@ public class TestFighting {
         Utils.setNoReservedSoldiers(headquarter1);
 
         // Place barracks for player 1
-        Point point3 = new Point(23, 15);
+        var point3 = new Point(23, 15);
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
         // Finish construction
@@ -685,7 +679,7 @@ public class TestFighting {
         // Get the attacking general
         map.stepTime();
 
-        Soldier attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
+        var attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
 
         // Verify that the general dies after seven hits
         for (int i = 0; i < 200; i++) {
@@ -716,24 +710,23 @@ public class TestFighting {
     public void testPrivateHealth() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 0's headquarters
-        Point point0 = new Point(9, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarters
-        Point point1 = new Point(37, 15);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(37, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Remove all soldiers from the headquarters and place one general in player 0's headquarters
         Utils.clearInventory(headquarter0, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER);
@@ -746,7 +739,7 @@ public class TestFighting {
         Utils.setNoReservedSoldiers(headquarter1);
 
         // Place barracks for player 1
-        Point point3 = new Point(23, 15);
+        var point3 = new Point(23, 15);
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
         // Finish construction
@@ -763,7 +756,7 @@ public class TestFighting {
         // Get the attacking general
         map.stepTime();
 
-        Soldier attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
+        var attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
 
         // Verify that the general dies after seven hits
         for (int i = 0; i < 200; i++) {
@@ -794,24 +787,23 @@ public class TestFighting {
     public void testGeneralHitProbability() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 0's headquarters
-        Point point0 = new Point(9, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarters
-        Point point1 = new Point(37, 15);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(37, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Set no reserved soldiers in the headquarters
         Utils.setNoReservedSoldiers(headquarter0);
@@ -824,7 +816,7 @@ public class TestFighting {
         Utils.adjustInventoryTo(headquarter0, GENERAL, 2);
 
         // Place barracks for player 1
-        Point point3 = new Point(23, 15);
+        var point3 = new Point(23, 15);
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
         // Finish construction
@@ -834,8 +826,8 @@ public class TestFighting {
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress);
 
         // Collect statistics on attempts to hit and successful hits
-        int attempts = 0;
-        int hits = 0;
+        var attempts = 0;
+        var hits = 0;
 
         for (int i = 0; i < 200; i++) {
 
@@ -849,10 +841,10 @@ public class TestFighting {
             // Get the attacking general
             map.stepTime();
 
-            Soldier attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
+            var attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
 
             // Find the defending soldier
-            Soldier defender = Utils.waitForSoldierOutsideBuilding(player1);
+            var defender = Utils.waitForSoldierOutsideBuilding(player1);
 
             assertNotNull(defender);
 
@@ -922,24 +914,23 @@ public class TestFighting {
     public void testOfficerHitProbability() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 0's headquarters
-        Point point0 = new Point(9, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarters
-        Point point1 = new Point(37, 15);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(37, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Set no reserved soldiers in the headquarters
         Utils.setNoReservedSoldiers(headquarter0);
@@ -952,7 +943,7 @@ public class TestFighting {
         Utils.adjustInventoryTo(headquarter0, OFFICER, 2);
 
         // Place barracks for player 1
-        Point point3 = new Point(23, 15);
+        var point3 = new Point(23, 15);
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
         // Finish construction
@@ -962,8 +953,8 @@ public class TestFighting {
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress);
 
         // Collect statistics on attempts to hit and successful hits
-        int attempts = 0;
-        int hits = 0;
+        var attempts = 0;
+        var hits = 0;
 
         for (int i = 0; i < 20; i++) {
 
@@ -977,10 +968,10 @@ public class TestFighting {
             // Get the attacking general
             map.stepTime();
 
-            Soldier attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
+            var attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
 
             // Find the defending soldier
-            Soldier defender = Utils.waitForSoldierOutsideBuilding(player1);
+            var defender = Utils.waitForSoldierOutsideBuilding(player1);
 
             assertNotNull(defender);
 
@@ -1047,24 +1038,23 @@ public class TestFighting {
     public void testSergeantHitProbability() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 0's headquarters
-        Point point0 = new Point(9, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarters
-        Point point1 = new Point(37, 15);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(37, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Set no reserved soldiers in the headquarters
         Utils.setNoReservedSoldiers(headquarter0);
@@ -1077,7 +1067,7 @@ public class TestFighting {
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 2);
 
         // Place barracks for player 1
-        Point point3 = new Point(23, 15);
+        var point3 = new Point(23, 15);
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
         // Finish construction
@@ -1087,8 +1077,8 @@ public class TestFighting {
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress);
 
         // Collect statistics on attempts to hit and successful hits
-        int attempts = 0;
-        int hits = 0;
+        var attempts = 0;
+        var hits = 0;
 
         for (int i = 0; i < 20; i++) {
 
@@ -1102,10 +1092,10 @@ public class TestFighting {
             // Get the attacking general
             map.stepTime();
 
-            Soldier attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
+            var attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
 
             // Find the defending soldier
-            Soldier defender = Utils.waitForSoldierOutsideBuilding(player1);
+            var defender = Utils.waitForSoldierOutsideBuilding(player1);
 
             assertNotNull(defender);
 
@@ -1170,24 +1160,23 @@ public class TestFighting {
     public void testPrivateFirstClassHitProbability() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 0's headquarters
-        Point point0 = new Point(9, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarters
-        Point point1 = new Point(37, 15);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(37, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Set no reserved soldiers in the headquarters
         Utils.setNoReservedSoldiers(headquarter0);
@@ -1200,7 +1189,7 @@ public class TestFighting {
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 2);
 
         // Place barracks for player 1
-        Point point3 = new Point(23, 15);
+        var point3 = new Point(23, 15);
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
         // Finish construction
@@ -1210,8 +1199,8 @@ public class TestFighting {
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress);
 
         // Collect statistics on attempts to hit and successful hits
-        int attempts = 0;
-        int hits = 0;
+        var attempts = 0;
+        var hits = 0;
 
         for (int i = 0; i < 200; i++) {
 
@@ -1225,10 +1214,10 @@ public class TestFighting {
             // Get the attacking general
             map.stepTime();
 
-            Soldier attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
+            var attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
 
             // Find the defending soldier
-            Soldier defender = Utils.waitForSoldierOutsideBuilding(player1);
+            var defender = Utils.waitForSoldierOutsideBuilding(player1);
 
             assertNotNull(defender);
 
@@ -1293,24 +1282,23 @@ public class TestFighting {
     public void testPrivateHitProbability() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 0's headquarters
-        Point point0 = new Point(9, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarters
-        Point point1 = new Point(37, 15);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(37, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Set no reserved soldiers in the headquarters
         Utils.setNoReservedSoldiers(headquarter0);
@@ -1323,7 +1311,7 @@ public class TestFighting {
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 2);
 
         // Place barracks for player 1
-        Point point3 = new Point(23, 15);
+        var point3 = new Point(23, 15);
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
         // Finish construction
@@ -1333,8 +1321,8 @@ public class TestFighting {
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress);
 
         // Collect statistics on attempts to hit and successful hits
-        int attempts = 0;
-        int hits = 0;
+        var attempts = 0;
+        var hits = 0;
 
         for (int i = 0; i < 20; i++) {
 
@@ -1348,10 +1336,10 @@ public class TestFighting {
             // Get the attacking general
             map.stepTime();
 
-            Soldier attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
+            var attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
 
             // Find the defending soldier
-            Soldier defender = Utils.waitForSoldierOutsideBuilding(player1);
+            var defender = Utils.waitForSoldierOutsideBuilding(player1);
 
             assertNotNull(defender);
 

@@ -100,21 +100,20 @@ public class TestDecorations {
     @Test
     public void testAvailableConstructionOnPureDecorations() throws InvalidUserActionException {
 
-        for (DecorationType decoration : PURE_DECORATIONS) {
+        for (var decoration : PURE_DECORATIONS) {
 
             // Create new game map
-            Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-            List<Player> players = new ArrayList<>();
-            players.add(player0);
+            var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+            var players = new ArrayList<Player>();            players.add(player0);
 
-            GameMap map = new GameMap(players, 100, 100);
+            var map = new GameMap(players, 100, 100);
 
             // Place headquarters
-            Point point0 = new Point(5, 27);
-            Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+            var point0 = new Point(5, 27);
+            var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
             // Place decoration that should not have any impact on the game
-            Point point1 = new Point(10, 26);
+            var point1 = new Point(10, 26);
             map.placeDecoration(point1, decoration);
 
             assertTrue(map.isDecoratedAtPoint(point1));
@@ -130,21 +129,20 @@ public class TestDecorations {
 
     @Test
     public void testPlaceFlagOnPureDecorations() throws InvalidUserActionException {
-        for (DecorationType decoration : PURE_DECORATIONS) {
+        for (var decoration : PURE_DECORATIONS) {
 
             // Create new game map
-            Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-            List<Player> players = new ArrayList<>();
-            players.add(player0);
+            var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+            var players = new ArrayList<Player>();            players.add(player0);
 
-            GameMap map = new GameMap(players, 100, 100);
+            var map = new GameMap(players, 100, 100);
 
             // Place headquarters
-            Point point0 = new Point(5, 27);
-            Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+            var point0 = new Point(5, 27);
+            var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
             // Place decoration that should not have any impact on the game
-            Point point1 = new Point(10, 26);
+            var point1 = new Point(10, 26);
             map.placeDecoration(point1, decoration);
 
             assertTrue(map.isDecoratedAtPoint(point1));
@@ -153,7 +151,7 @@ public class TestDecorations {
             assertEquals(map.getDecorations().get(point1), decoration);
 
             // Verify that a flag can be placed on the decoration
-            Flag flag = map.placeFlag(player0, point1);
+            var flag = map.placeFlag(player0, point1);
 
             assertTrue(map.isFlagAtPoint(point1));
             assertFalse(map.isDecoratedAtPoint(point1));
@@ -163,21 +161,20 @@ public class TestDecorations {
 
     @Test
     public void testPlaceBuildingOnPureDecorations() throws InvalidUserActionException {
-        for (DecorationType decoration : PURE_DECORATIONS) {
+        for (var decoration : PURE_DECORATIONS) {
 
             // Create new game map
-            Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-            List<Player> players = new ArrayList<>();
-            players.add(player0);
+            var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+            var players = new ArrayList<Player>();            players.add(player0);
 
-            GameMap map = new GameMap(players, 100, 100);
+            var map = new GameMap(players, 100, 100);
 
             // Place headquarters
-            Point point0 = new Point(5, 27);
-            Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+            var point0 = new Point(5, 27);
+            var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
             // Place decoration that should not have any impact on the game
-            Point point1 = new Point(10, 26);
+            var point1 = new Point(10, 26);
             map.placeDecoration(point1, decoration);
 
             assertTrue(map.isDecoratedAtPoint(point1));
@@ -186,7 +183,7 @@ public class TestDecorations {
             assertEquals(map.getDecorations().get(point1), decoration);
 
             // Verify that a building can be placed on the decoration
-            Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+            var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
             assertTrue(map.isBuildingAtPoint(point1));
             assertFalse(map.isDecoratedAtPoint(point1));
@@ -196,21 +193,20 @@ public class TestDecorations {
 
     @Test
     public void testPlaceRoadOnPureDecorations() throws InvalidUserActionException {
-        for (DecorationType decoration : PURE_DECORATIONS) {
+        for (var decoration : PURE_DECORATIONS) {
 
             // Create new game map
-            Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-            List<Player> players = new ArrayList<>();
-            players.add(player0);
+            var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+            var players = new ArrayList<Player>();            players.add(player0);
 
-            GameMap map = new GameMap(players, 100, 100);
+            var map = new GameMap(players, 100, 100);
 
             // Place headquarters
-            Point point0 = new Point(5, 27);
-            Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+            var point0 = new Point(5, 27);
+            var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
             // Place decoration that should not have any impact on the game
-            Point point1 = new Point(7, 27);
+            var point1 = new Point(7, 27);
             map.placeDecoration(point1, decoration);
 
             assertTrue(map.isDecoratedAtPoint(point1));
@@ -219,11 +215,11 @@ public class TestDecorations {
             assertEquals(map.getDecorations().get(point1), decoration);
 
             // Place flag
-            Point point2 = new Point(9, 27);
-            Flag flag = map.placeFlag(player0, point2);
+            var point2 = new Point(9, 27);
+            var flag = map.placeFlag(player0, point2);
 
             // Verify that a road can be placed on the decoration
-            Road road = map.placeRoad(player0, headquarter0.getFlag().getPosition(), point1, flag.getPosition());
+            var road = map.placeRoad(player0, headquarter0.getFlag().getPosition(), point1, flag.getPosition());
 
             assertTrue(map.isRoadAtPoint(point1));
             assertFalse(map.isDecoratedAtPoint(point1));
@@ -233,14 +229,13 @@ public class TestDecorations {
 
     @Test
     public void testForesterPlantsTreeOnPureDecorations() throws InvalidUserActionException {
-        for (DecorationType decoration : PURE_DECORATIONS) {
+        for (var decoration : PURE_DECORATIONS) {
 
             // Create new game map
-            Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-            List<Player> players = new ArrayList<>();
-            players.add(player0);
+            var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+            var players = new ArrayList<Player>();            players.add(player0);
 
-            GameMap map = new GameMap(players, 100, 100);
+            var map = new GameMap(players, 100, 100);
 
             // Place decorations that should not have any impact on the game all over the map
             for (int x = 0; x < 100; x++) {
@@ -250,7 +245,7 @@ public class TestDecorations {
                         continue;
                     }
 
-                    Point point = new Point(x, y);
+                    var point = new Point(x, y);
                     map.placeDecoration(point, decoration);
 
                     assertTrue(map.isDecoratedAtPoint(point));
@@ -261,20 +256,20 @@ public class TestDecorations {
             }
 
             // Place headquarters
-            Point point0 = new Point(5, 27);
-            Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+            var point0 = new Point(5, 27);
+            var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
             // Place forester hut
-            Point point2 = new Point(9, 27);
-            ForesterHut foresterHut = map.placeBuilding(new ForesterHut(player0), point2);
+            var point2 = new Point(9, 27);
+            var foresterHut = map.placeBuilding(new ForesterHut(player0), point2);
 
             // Connect the forester hut with the headquarter
-            Road road = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter0.getFlag());
+            var road = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter0.getFlag());
 
             // Wait for the forester hut to get constructed and populated
             Utils.waitForBuildingToBeConstructed(foresterHut);
 
-            Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut);
+            var forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut);
 
             // Wait for the forester to go out to plant
             assertTrue(forester.isInsideBuilding());
@@ -287,7 +282,7 @@ public class TestDecorations {
             Utils.fastForwardUntilWorkerReachesPoint(map, forester, forester.getTarget());
 
             // Verify that the forester places a tree on a decoration (and that the decoration then is removed)
-            Point point3 = forester.getPosition();
+            var point3 = forester.getPosition();
 
             assertFalse(map.isTreeAtPoint(point3));
             assertTrue(map.isDecoratedAtPoint(point3));
@@ -303,36 +298,35 @@ public class TestDecorations {
     public void testSkeletonAppearsWhenSoldierDies() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 0's headquarters
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarters
-        Point point1 = new Point(37, 15);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(37, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Clear soldiers from the inventories
         Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
         Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
 
         // Place barracks for player 0
-        Point point2 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+        var point2 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         // Place barracks for player 1
-        Point point3 = new Point(23, 15);
-        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+        var point3 = new Point(23, 15);
+        var barracks1 = map.placeBuilding(new Barracks(player1), point3);
 
         // Finish construction
         Utils.constructHouses(barracks0, barracks1);
@@ -353,7 +347,7 @@ public class TestDecorations {
         // Find the military that was chosen to attack
         map.stepTime();
 
-        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
+        var attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -368,7 +362,7 @@ public class TestDecorations {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
         // Get the defender
-        Soldier defender = Utils.findSoldierOutsideBuilding(player1);
+        var defender = Utils.findSoldierOutsideBuilding(player1);
 
         assertNotNull(defender);
 
@@ -395,19 +389,18 @@ public class TestDecorations {
     public void testStoneDecorationIsPlacedWhenStoneRunsOut() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 15, 15);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place stone
-        Point point1 = new Point(5, 5);
-        Stone stone0 = map.placeStone(point1, STONE_1, 7);
+        var point1 = new Point(5, 5);
+        var stone0 = map.placeStone(point1, STONE_1, 7);
 
         // Remove all but one pats of the stone
         for (int i = 0; i < 6; i++) {
@@ -440,18 +433,17 @@ public class TestDecorations {
         for (var decoration : CANNOT_BUILD_ON_DECORATIONS) {
 
             // Create single player game
-            Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-            List<Player> players = new ArrayList<>();
-            players.add(player0);
+            var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+            var players = new ArrayList<Player>();            players.add(player0);
 
-            GameMap map = new GameMap(players, 30, 30);
+            var map = new GameMap(players, 30, 30);
 
             // Place headquarter
-            Point point0 = new Point(10, 10);
+            var point0 = new Point(10, 10);
             map.placeBuilding(new Headquarter(player0), point0);
 
             // Place decoration
-            Point point1 = new Point(5, 5);
+            var point1 = new Point(5, 5);
 
             map.placeDecoration(point1, decoration);
 

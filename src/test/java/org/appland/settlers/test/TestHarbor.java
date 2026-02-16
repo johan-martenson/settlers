@@ -670,7 +670,7 @@ public class TestHarbor {
         assertFalse(harborWorker.isInsideBuilding());
         assertEquals(harborWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(STOREHOUSE_WORKER);
+        var amount = headquarter0.getAmount(STOREHOUSE_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, headquarter0.getPosition());
 
@@ -1042,7 +1042,7 @@ public class TestHarbor {
         assertEquals(harborWorker.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
+        var firstStep = true;
         for (var p : harborWorker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
@@ -1446,8 +1446,8 @@ public class TestHarbor {
         }
 
         // Verify that the barracks gets populated from the right headquarters only
-        int player0Couriers = Utils.findWorkersOfTypeOutsideForPlayer(Courier.class, player0).size();
-        int player1Couriers = Utils.findWorkersOfTypeOutsideForPlayer(Courier.class, player1).size();
+        var player0Couriers = Utils.findWorkersOfTypeOutsideForPlayer(Courier.class, player0).size();
+        var player1Couriers = Utils.findWorkersOfTypeOutsideForPlayer(Courier.class, player1).size();
 
         for (int i = 0; i < 1000; i++) {
             var courier = road3.getCourier();
@@ -1725,7 +1725,7 @@ public class TestHarbor {
         assertFalse(harborWorker.isInsideBuilding());
         assertEquals(harborWorker.getTarget(), storehouse.getPosition());
 
-        int amount = storehouse.getAmount(STOREHOUSE_WORKER);
+        var amount = storehouse.getAmount(STOREHOUSE_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, storehouse.getPosition());
 
@@ -1783,7 +1783,7 @@ public class TestHarbor {
         assertFalse(harborWorker.isInsideBuilding());
         assertEquals(harborWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(STOREHOUSE_WORKER);
+        var amount = headquarter0.getAmount(STOREHOUSE_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, headquarter0.getPosition());
 
@@ -1844,7 +1844,7 @@ public class TestHarbor {
         assertFalse(harborWorker.isInsideBuilding());
         assertEquals(harborWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(STOREHOUSE_WORKER);
+        var amount = headquarter0.getAmount(STOREHOUSE_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, headquarter0.getPosition());
 
@@ -1896,7 +1896,7 @@ public class TestHarbor {
         assertFalse(harborWorker.isInsideBuilding());
         assertEquals(harborWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(STOREHOUSE_WORKER);
+        var amount = headquarter0.getAmount(STOREHOUSE_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, headquarter0.getPosition());
 
@@ -1933,7 +1933,7 @@ public class TestHarbor {
         Utils.constructHouse(harbor0);
 
         // Wait for a worker to start walking to the building
-        Worker worker = Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0).getFirst();
+        var worker = Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, harbor0.getFlag().getPosition());

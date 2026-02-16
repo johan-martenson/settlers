@@ -343,24 +343,23 @@ public class TestMerchandise {
     public void testMerchandiseStatisticsWhenWoodIsProduced() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place and grow the tree
-        Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point2 = new Point(12, 4);
+        var tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         // Place the woodcutter, connect it to the headquarters, and wait for it to get constructed and occupied
-        Point point1 = new Point(10, 4);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         var road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
@@ -387,18 +386,17 @@ public class TestMerchandise {
     public void testMerchandiseStatisticsWhenPlankIsProduced() throws InvalidUserActionException {
 
         // Create a single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place sawmill, connect it to the headquarters, and wait for it to get constructed and occupied
-        Point point3 = new Point(7, 9);
-        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point3);
+        var point3 = new Point(7, 9);
+        var sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         var road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
         Utils.waitForBuildingToBeConstructed(sawmill);
@@ -426,18 +424,17 @@ public class TestMerchandise {
     public void testMerchandiseStatisticsWhenStoneIsProduced() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place quarry, connect it to the headquarters, and wait for it to get constructed and occupied
-        Point point1 = new Point(10, 4);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        var point1 = new Point(10, 4);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
         var road0 = map.placeAutoSelectedRoad(player0,quarry.getFlag(), headquarter.getFlag());
 
@@ -446,8 +443,8 @@ public class TestMerchandise {
         var stonemason = (Stonemason) Utils.waitForNonMilitaryBuildingToGetPopulated(quarry);
 
         // Place stone
-        Point point2 = new Point(11, 5);
-        Stone stone = map.placeStone(point2, STONE_1, 7);
+        var point2 = new Point(11, 5);
+        var stone = map.placeStone(point2, STONE_1, 7);
 
         // Wait for the stonemason to start cutting the stone
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
@@ -468,31 +465,30 @@ public class TestMerchandise {
     public void testMerchandiseStatisticsWhenFishIsProduced() throws InvalidUserActionException {
 
         // Create a single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place fish on one tile
-        Point point2 = new Point(5, 5);
+        var point2 = new Point(5, 5);
         map.setVegetationBelow(point2, WATER);
 
         // Place headquarters
-        Point point3 = new Point(15, 9);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(15, 9);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Place fishery
-        Point point4 = new Point(7, 5);
-        Building fishery = map.placeBuilding(new Fishery(player0), point4);
+        var point4 = new Point(7, 5);
+        var fishery = map.placeBuilding(new Fishery(player0), point4);
 
         // Connect the fishery with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
         // Wait for the fishery to get constructed
         Utils.waitForBuildingToBeConstructed(fishery);
 
         // Wait for the fishery to get occupied
-        Fisherman fisherman = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
+        var fisherman = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
 
         assertTrue(fisherman.isInsideBuilding());
 
@@ -517,20 +513,19 @@ public class TestMerchandise {
     public void testMerchandiseStatisticsWhenMeatIsProducedByButcher() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place slaughterhouse, connect it to the headquarters, and wait for it to get constructed and occupied
-        Point point3 = new Point(7, 9);
-        SlaughterHouse slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
+        var point3 = new Point(7, 9);
+        var slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, slaughterHouse.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, slaughterHouse.getFlag(), headquarter.getFlag());
 
         Utils.waitForBuildingToBeConstructed(slaughterHouse);
 
@@ -560,18 +555,17 @@ public class TestMerchandise {
     public void testMerchandiseStatisticsWhenMeatIsProducedByHunter() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(15, 9);
+        var point0 = new Point(15, 9);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place hunter hut, connect with the headquarters, and wait for it to get constructed and occupied
-        Point point1 = new Point(10, 4);
-        Building hunterHut = map.placeBuilding(new HunterHut(player0), point1);
+        var point1 = new Point(10, 4);
+        var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
         var road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
 
@@ -647,20 +641,19 @@ public class TestMerchandise {
     public void testMerchandiseStatisticsWhenWaterIsProduced() throws InvalidUserActionException {
 
         // Create gamemap
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place well, connect to the headquarters, and wait for it to get constructed and occupied
-        Point point1 = new Point(8, 6);
-        Well well = map.placeBuilding(new Well(player0), point1);
+        var point1 = new Point(8, 6);
+        var well = map.placeBuilding(new Well(player0), point1);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, well.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, well.getFlag(), headquarter.getFlag());
 
         Utils.waitForBuildingToBeConstructed(well);
 
@@ -688,25 +681,24 @@ public class TestMerchandise {
     public void testMerchandiseStatisticsWhenBeerIsProduced() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place brewery, connect with the headquarters, and wait for the brewery to get constructed and occupied
-        Point point3 = new Point(7, 9);
-        Brewery brewery = map.placeBuilding(new Brewery(player0), point3);
+        var point3 = new Point(7, 9);
+        var brewery = map.placeBuilding(new Brewery(player0), point3);
 
         var road0 = map.placeAutoSelectedRoad(player0, brewery.getFlag(), headquarter.getFlag());
 
         Utils.waitForBuildingToBeConstructed(brewery);
 
-        Worker brewer0 = Utils.waitForNonMilitaryBuildingToGetPopulated(brewery);
+        var brewer0 = Utils.waitForNonMilitaryBuildingToGetPopulated(brewery);
 
         assertTrue(brewer0.isInsideBuilding());
         assertEquals(brewer0.getHome(), brewery);
@@ -734,28 +726,27 @@ public class TestMerchandise {
     public void testMerchandiseStatisticsWhenCoalIsProduced() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
+        var point1 = new Point(15, 15);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a gold mine, connect it to the headquarters, and wait for it to get constructed and occupied
-        Building mine = map.placeBuilding(new CoalMine(player0), point0);
+        var mine = map.placeBuilding(new CoalMine(player0), point0);
 
         var road0 = map.placeAutoSelectedRoad(player0, mine.getFlag(), headquarter.getFlag());
 
         Utils.waitForBuildingToBeConstructed(mine);
 
-        Worker miner = Utils.waitForNonMilitaryBuildingToGetPopulated(mine);
+        var miner = Utils.waitForNonMilitaryBuildingToGetPopulated(mine);
 
         assertTrue(miner.isInsideBuilding());
 
@@ -777,28 +768,27 @@ public class TestMerchandise {
     public void testMerchandiseStatisticsWhenIronIsProduced() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
+        var point1 = new Point(15, 15);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place an iron mine, connect it to the headquarters, and wait for it to get constructed and occupied
-        Building mine = map.placeBuilding(new IronMine(player0), point0);
+        var mine = map.placeBuilding(new IronMine(player0), point0);
 
         var road0 = map.placeAutoSelectedRoad(player0, mine.getFlag(), headquarter.getFlag());
 
         Utils.waitForBuildingToBeConstructed(mine);
 
-        Worker miner = Utils.waitForNonMilitaryBuildingToGetPopulated(mine);
+        var miner = Utils.waitForNonMilitaryBuildingToGetPopulated(mine);
 
         assertTrue(miner.isInsideBuilding());
 
@@ -820,28 +810,27 @@ public class TestMerchandise {
     public void testMerchandiseStatisticsWhenGoldIsProduced() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
+        var point1 = new Point(15, 15);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place an iron mine, connect it to the headquarters, and wait for it to get constructed and occupied
-        Building mine = map.placeBuilding(new GoldMine(player0), point0);
+        var mine = map.placeBuilding(new GoldMine(player0), point0);
 
         var road0 = map.placeAutoSelectedRoad(player0, mine.getFlag(), headquarter.getFlag());
 
         Utils.waitForBuildingToBeConstructed(mine);
 
-        Worker miner = Utils.waitForNonMilitaryBuildingToGetPopulated(mine);
+        var miner = Utils.waitForNonMilitaryBuildingToGetPopulated(mine);
 
         assertTrue(miner.isInsideBuilding());
 
@@ -863,18 +852,17 @@ public class TestMerchandise {
     public void testMerchandiseStatisticsUpdatedWhenIronBarIsProduced() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place iron smelter, connect it to the headquarters, and wait for it to get constructed and occupied
-        Point point3 = new Point(7, 9);
-        Building ironSmelter = map.placeBuilding(new IronSmelter(player0), point3);
+        var point3 = new Point(7, 9);
+        var ironSmelter = map.placeBuilding(new IronSmelter(player0), point3);
 
         var road0 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), headquarter.getFlag());
 
@@ -906,21 +894,20 @@ public class TestMerchandise {
     public void testMerchaniseStaticsWhenCoinIsProduced() throws InvalidUserActionException {
 
         // Create a single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mint
-        Point point3 = new Point(7, 9);
-        Mint mint = map.placeBuilding(new Mint(player0), point3);
+        var point3 = new Point(7, 9);
+        var mint = map.placeBuilding(new Mint(player0), point3);
 
         // Connect the mint with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
 
         // Wait for the mint to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(mint);
@@ -954,19 +941,18 @@ public class TestMerchandise {
         for (var tool : TOOLS) {
 
             // Create single player game
-            Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-            List<Player> players = new ArrayList<>();
-            players.add(player0);
+            var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+            var players = new ArrayList<Player>();            players.add(player0);
 
-            GameMap map = new GameMap(players, 40, 40);
+            var map = new GameMap(players, 40, 40);
 
             // Place headquarter
-            Point point0 = new Point(5, 5);
-            Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+            var point0 = new Point(5, 5);
+            var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
             // Place metalworks, connect it to the headquarters, and wait for it to get constructed and occupied
-            Point point3 = new Point(7, 9);
-            Building metalworks = map.placeBuilding(new Metalworks(player0), point3);
+            var point3 = new Point(7, 9);
+            var metalworks = map.placeBuilding(new Metalworks(player0), point3);
 
             var road0 = map.placeAutoSelectedRoad(player0, metalworks.getFlag(), headquarter.getFlag());
 
@@ -1008,21 +994,20 @@ public class TestMerchandise {
     public void testMerchandiseStatisticsUpdatedWhenWeaponIsProduced() throws InvalidUserActionException {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place armory
-        Point point1 = new Point(7, 9);
-        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
+        var point1 = new Point(7, 9);
+        var armory0 = map.placeBuilding(new Armory(player0), point1);
 
         // Place road to connect the armory with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         // Wait for the armory to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(armory0);
@@ -1060,22 +1045,21 @@ public class TestMerchandise {
     public void testMerchandiseStatisticsUpdatedWhenBoatIsProduced() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(14, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(14, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect the shipyard with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -1107,24 +1091,23 @@ public class TestMerchandise {
     public void testListeningToMerchandiseStatisticsWhenWoodIsProduced() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarters
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place and grow the tree
-        Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point2 = new Point(12, 4);
+        var tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         // Place the woodcutter, connect it to the headquarters, and wait for it to get constructed and occupied
-        Point point1 = new Point(10, 4);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         var road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
@@ -1158,18 +1141,17 @@ public class TestMerchandise {
     public void testListeningToMerchandiseStatisticsWhenPlankIsProduced() throws InvalidUserActionException {
 
         // Create a single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place sawmill, connect it to the headquarters, and wait for it to get constructed and occupied
-        Point point3 = new Point(7, 9);
-        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point3);
+        var point3 = new Point(7, 9);
+        var sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         var road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
         Utils.waitForBuildingToBeConstructed(sawmill);
@@ -1204,18 +1186,17 @@ public class TestMerchandise {
     public void testListeningToMerchandiseStatisticsWhenStoneIsProduced() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place quarry, connect it to the headquarters, and wait for it to get constructed and occupied
-        Point point1 = new Point(10, 4);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        var point1 = new Point(10, 4);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
         var road0 = map.placeAutoSelectedRoad(player0,quarry.getFlag(), headquarter.getFlag());
 
@@ -1224,8 +1205,8 @@ public class TestMerchandise {
         var stonemason = (Stonemason) Utils.waitForNonMilitaryBuildingToGetPopulated(quarry);
 
         // Place stone
-        Point point2 = new Point(11, 5);
-        Stone stone = map.placeStone(point2, STONE_1, 7);
+        var point2 = new Point(11, 5);
+        var stone = map.placeStone(point2, STONE_1, 7);
 
         // Wait for the stonemason to start cutting the stone
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
@@ -1253,31 +1234,30 @@ public class TestMerchandise {
     public void testListeningToMerchandiseStatisticsWhenFishIsProduced() throws InvalidUserActionException {
 
         // Create a single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place fish on one tile
-        Point point2 = new Point(5, 5);
+        var point2 = new Point(5, 5);
         map.setVegetationBelow(point2, WATER);
 
         // Place headquarters
-        Point point3 = new Point(15, 9);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(15, 9);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Place fishery
-        Point point4 = new Point(7, 5);
-        Building fishery = map.placeBuilding(new Fishery(player0), point4);
+        var point4 = new Point(7, 5);
+        var fishery = map.placeBuilding(new Fishery(player0), point4);
 
         // Connect the fishery with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
         // Wait for the fishery to get constructed
         Utils.waitForBuildingToBeConstructed(fishery);
 
         // Wait for the fishery to get occupied
-        Fisherman fisherman = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
+        var fisherman = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
 
         assertTrue(fisherman.isInsideBuilding());
 
@@ -1367,20 +1347,19 @@ public class TestMerchandise {
     public void testListeningToMerchandiseStatisticsWhenMeatIsProducedByButcher() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place slaughterhouse, connect it to the headquarters, and wait for it to get constructed and occupied
-        Point point3 = new Point(7, 9);
-        SlaughterHouse slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
+        var point3 = new Point(7, 9);
+        var slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, slaughterHouse.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, slaughterHouse.getFlag(), headquarter.getFlag());
 
         Utils.waitForBuildingToBeConstructed(slaughterHouse);
 
@@ -1417,18 +1396,17 @@ public class TestMerchandise {
     public void testListeningToMerchandiseStatisticsWhenMeatIsProducedByHunter() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(15, 9);
+        var point0 = new Point(15, 9);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place hunter hut, connect with the headquarters, and wait for it to get constructed and occupied
-        Point point1 = new Point(10, 4);
-        Building hunterHut = map.placeBuilding(new HunterHut(player0), point1);
+        var point1 = new Point(10, 4);
+        var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
         var road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
 
@@ -1466,20 +1444,19 @@ public class TestMerchandise {
     public void testListeningToMerchandiseStatisticsWhenWaterIsProduced() throws InvalidUserActionException {
 
         // Create gamemap
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place well, connect to the headquarters, and wait for it to get constructed and occupied
-        Point point1 = new Point(8, 6);
-        Well well = map.placeBuilding(new Well(player0), point1);
+        var point1 = new Point(8, 6);
+        var well = map.placeBuilding(new Well(player0), point1);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, well.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, well.getFlag(), headquarter.getFlag());
 
         Utils.waitForBuildingToBeConstructed(well);
 
@@ -1514,25 +1491,24 @@ public class TestMerchandise {
     public void testListeningToMerchandiseStatisticsWhenBeerIsProduced() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place brewery, connect with the headquarters, and wait for the brewery to get constructed and occupied
-        Point point3 = new Point(7, 9);
-        Brewery brewery = map.placeBuilding(new Brewery(player0), point3);
+        var point3 = new Point(7, 9);
+        var brewery = map.placeBuilding(new Brewery(player0), point3);
 
         var road0 = map.placeAutoSelectedRoad(player0, brewery.getFlag(), headquarter.getFlag());
 
         Utils.waitForBuildingToBeConstructed(brewery);
 
-        Worker brewer0 = Utils.waitForNonMilitaryBuildingToGetPopulated(brewery);
+        var brewer0 = Utils.waitForNonMilitaryBuildingToGetPopulated(brewery);
 
         assertTrue(brewer0.isInsideBuilding());
         assertEquals(brewer0.getHome(), brewery);
@@ -1567,28 +1543,27 @@ public class TestMerchandise {
     public void testListeningToMerchandiseStatisticsWhenCoalIsProduced() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
+        var point1 = new Point(15, 15);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a gold mine, connect it to the headquarters, and wait for it to get constructed and occupied
-        Building mine = map.placeBuilding(new CoalMine(player0), point0);
+        var mine = map.placeBuilding(new CoalMine(player0), point0);
 
         var road0 = map.placeAutoSelectedRoad(player0, mine.getFlag(), headquarter.getFlag());
 
         Utils.waitForBuildingToBeConstructed(mine);
 
-        Worker miner = Utils.waitForNonMilitaryBuildingToGetPopulated(mine);
+        var miner = Utils.waitForNonMilitaryBuildingToGetPopulated(mine);
 
         assertTrue(miner.isInsideBuilding());
 
@@ -1617,28 +1592,27 @@ public class TestMerchandise {
     public void testListeningToMerchandiseStatisticsWhenIronIsProduced() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
+        var point1 = new Point(15, 15);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place an iron mine, connect it to the headquarters, and wait for it to get constructed and occupied
-        Building mine = map.placeBuilding(new IronMine(player0), point0);
+        var mine = map.placeBuilding(new IronMine(player0), point0);
 
         var road0 = map.placeAutoSelectedRoad(player0, mine.getFlag(), headquarter.getFlag());
 
         Utils.waitForBuildingToBeConstructed(mine);
 
-        Worker miner = Utils.waitForNonMilitaryBuildingToGetPopulated(mine);
+        var miner = Utils.waitForNonMilitaryBuildingToGetPopulated(mine);
 
         assertTrue(miner.isInsideBuilding());
 
@@ -1667,28 +1641,27 @@ public class TestMerchandise {
     public void testListeningToMerchandiseStatisticsWhenGoldIsProduced() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
+        var point1 = new Point(15, 15);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place an iron mine, connect it to the headquarters, and wait for it to get constructed and occupied
-        Building mine = map.placeBuilding(new GoldMine(player0), point0);
+        var mine = map.placeBuilding(new GoldMine(player0), point0);
 
         var road0 = map.placeAutoSelectedRoad(player0, mine.getFlag(), headquarter.getFlag());
 
         Utils.waitForBuildingToBeConstructed(mine);
 
-        Worker miner = Utils.waitForNonMilitaryBuildingToGetPopulated(mine);
+        var miner = Utils.waitForNonMilitaryBuildingToGetPopulated(mine);
 
         assertTrue(miner.isInsideBuilding());
 
@@ -1717,18 +1690,17 @@ public class TestMerchandise {
     public void testListeningToMerchandiseStatisticsUpdatedWhenIronBarIsProduced() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place iron smelter, connect it to the headquarters, and wait for it to get constructed and occupied
-        Point point3 = new Point(7, 9);
-        Building ironSmelter = map.placeBuilding(new IronSmelter(player0), point3);
+        var point3 = new Point(7, 9);
+        var ironSmelter = map.placeBuilding(new IronSmelter(player0), point3);
 
         var road0 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), headquarter.getFlag());
 
@@ -1767,21 +1739,20 @@ public class TestMerchandise {
     public void testListeningToMerchandiseStaticsWhenCoinIsProduced() throws InvalidUserActionException {
 
         // Create a single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mint
-        Point point3 = new Point(7, 9);
-        Mint mint = map.placeBuilding(new Mint(player0), point3);
+        var point3 = new Point(7, 9);
+        var mint = map.placeBuilding(new Mint(player0), point3);
 
         // Connect the mint with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
 
         // Wait for the mint to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(mint);
@@ -1822,19 +1793,18 @@ public class TestMerchandise {
         for (var tool : TOOLS) {
 
             // Create single player game
-            Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-            List<Player> players = new ArrayList<>();
-            players.add(player0);
+            var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+            var players = new ArrayList<Player>();            players.add(player0);
 
-            GameMap map = new GameMap(players, 40, 40);
+            var map = new GameMap(players, 40, 40);
 
             // Place headquarter
-            Point point0 = new Point(5, 5);
-            Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+            var point0 = new Point(5, 5);
+            var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
             // Place metalworks, connect it to the headquarters, and wait for it to get constructed and occupied
-            Point point3 = new Point(7, 9);
-            Building metalworks = map.placeBuilding(new Metalworks(player0), point3);
+            var point3 = new Point(7, 9);
+            var metalworks = map.placeBuilding(new Metalworks(player0), point3);
 
             var road0 = map.placeAutoSelectedRoad(player0, metalworks.getFlag(), headquarter.getFlag());
 
@@ -1883,21 +1853,20 @@ public class TestMerchandise {
     public void testListeningToMerchandiseStatisticsUpdatedWhenWeaponIsProduced() throws InvalidUserActionException {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place armory
-        Point point1 = new Point(7, 9);
-        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
+        var point1 = new Point(7, 9);
+        var armory0 = map.placeBuilding(new Armory(player0), point1);
 
         // Place road to connect the armory with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         // Wait for the armory to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(armory0);
@@ -1941,22 +1910,21 @@ public class TestMerchandise {
     public void testListeningToMerchandiseStatisticsUpdatedWhenBoatIsProduced() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(14, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(14, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect the shipyard with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(shipyard);

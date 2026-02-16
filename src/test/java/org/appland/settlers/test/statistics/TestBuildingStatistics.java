@@ -62,16 +62,15 @@ public class TestBuildingStatistics {
     public void testAdditionalTimeDoesNotImpactBuildingStatistics() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
         players.add(player1);
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         var point1 = new Point(40, 40);
         var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
@@ -108,18 +107,17 @@ public class TestBuildingStatistics {
     public void testBurningDownHouseImpactsBuildingStatistics() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
         players.add(player1);
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        StatisticsManager statisticsManager5 = map.getStatisticsManager();
+        var statisticsManager5 = map.getStatisticsManager();
         assertEquals(statisticsManager5.getPlayerStatistics(player0).totalAmountBuildings().getMeasurements().size(), 1);
 
         var point1 = new Point(40, 40);
@@ -131,17 +129,17 @@ public class TestBuildingStatistics {
 
         var road = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
 
-        StatisticsManager statisticsManager4 = map.getStatisticsManager();
+        var statisticsManager4 = map.getStatisticsManager();
         assertEquals(statisticsManager4.getPlayerStatistics(player0).totalAmountBuildings().getMeasurements().size(), 1);
-        StatisticsManager statisticsManager3 = map.getStatisticsManager();
+        var statisticsManager3 = map.getStatisticsManager();
         assertEquals(statisticsManager3.getPlayerStatistics(player0).totalAmountBuildings().getMeasurements().getLast().value(), 1);
 
 
         Utils.waitForBuildingToBeConstructed(woodcutter);
 
-        StatisticsManager statisticsManager2 = map.getStatisticsManager();
+        var statisticsManager2 = map.getStatisticsManager();
         assertEquals(statisticsManager2.getPlayerStatistics(player0).totalAmountBuildings().getMeasurements().size(), 2);
-        StatisticsManager statisticsManager1 = map.getStatisticsManager();
+        var statisticsManager1 = map.getStatisticsManager();
         assertEquals(statisticsManager1.getPlayerStatistics(player0).totalAmountBuildings().getMeasurements().getLast().value(), 2);
 
         // Verify that burning down the house impacts the building statistics
@@ -199,16 +197,15 @@ public class TestBuildingStatistics {
     public void testPlaceMultipleBuildingsOfSameType() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
         players.add(player1);
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         var point1 = new Point(40, 40);
         var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
@@ -252,14 +249,13 @@ public class TestBuildingStatistics {
     public void testMonitorEventWhenNewBuildingIsConstructed() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 100, 100);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter and connect it to the headquarters
         var point2 = new Point(15, 5);
@@ -294,14 +290,13 @@ public class TestBuildingStatistics {
     public void testStatisticsEventWhenBuildingIsTornDown() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 100, 100);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter, connect it to the headquarters, and wait for it to get constructed
         var point2 = new Point(15, 5);
@@ -337,14 +332,13 @@ public class TestBuildingStatistics {
     public void testEmptyMeasurementAtStartOfDataSeriesForNormalBuilding() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 100, 100);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that there is no measurement for woodcutters yet
         var statisticsManager = map.getStatisticsManager();

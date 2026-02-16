@@ -40,21 +40,20 @@ public class TestMill {
     public void testMillCanHoldSixWheatBarsAndSixWater() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(6, 12);
+        var point1 = new Point(6, 12);
         var mill0 = map.placeBuilding(new Mill(player0), point1);
 
         // Connect the mill with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
 
         // Make sure the headquarters has enough resources
         Utils.adjustInventoryTo(headquarter0, PLANK, 20);
@@ -89,22 +88,21 @@ public class TestMill {
     public void testMillOnlyNeedsTwoPlanksAndTwoStonesForConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place mill
-        Point point22 = new Point(6, 12);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point22);
+        var point22 = new Point(6, 12);
+        var mill0 = map.placeBuilding(new Mill(player0), point22);
 
         // Deliver two plank and two stone
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var plankCargo = new Cargo(PLANK, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         mill0.putCargo(plankCargo);
         mill0.putCargo(plankCargo);
@@ -128,22 +126,21 @@ public class TestMill {
     public void testMillCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place mill
-        Point point22 = new Point(6, 12);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point22);
+        var point22 = new Point(6, 12);
+        var mill0 = map.placeBuilding(new Mill(player0), point22);
 
         // Deliver one plank and two stone
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var plankCargo = new Cargo(PLANK, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         mill0.putCargo(plankCargo);
         mill0.putCargo(stoneCargo);
@@ -166,22 +163,21 @@ public class TestMill {
     public void testMillCannotBeConstructedWithTooFewStones() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place mill
-        Point point22 = new Point(6, 12);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point22);
+        var point22 = new Point(6, 12);
+        var mill0 = map.placeBuilding(new Mill(player0), point22);
 
         // Deliver two planks and one stone
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var plankCargo = new Cargo(PLANK, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         mill0.putCargo(plankCargo);
         mill0.putCargo(plankCargo);
@@ -204,19 +200,18 @@ public class TestMill {
     public void testFinishedMillNeedsWorker() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(8, 6);
-        Mill mill = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(8, 6);
+        var mill = map.placeBuilding(new Mill(player0), point1);
 
         // Construct the mill
         Utils.constructHouse(mill);
@@ -260,28 +255,27 @@ public class TestMill {
     public void testMillerIsNotASoldier() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(12, 8);
-        Mill mill = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(12, 8);
+        var mill = map.placeBuilding(new Mill(player0), point1);
 
         // Connect the mill with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
 
         // Finish the mill
         Utils.constructHouse(mill);
 
         // Wait for a miller to walk out
-        Miller miller0 = Utils.waitForWorkerOutsideBuilding(Miller.class, player0);
+        var miller0 = Utils.waitForWorkerOutsideBuilding(Miller.class, player0);
 
         assertNotNull(miller0);
 
@@ -293,22 +287,21 @@ public class TestMill {
     public void testUnoccupiedMillProducesNothing() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(12, 8);
-        Mill mill = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(12, 8);
+        var mill = map.placeBuilding(new Mill(player0), point1);
 
         // Connect the mill with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
 
         // Finish the mill
         Utils.constructHouse(mill);
@@ -323,25 +316,24 @@ public class TestMill {
     public void testMillerEntersTheMill() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(12, 8);
-        Mill mill = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(12, 8);
+        var mill = map.placeBuilding(new Mill(player0), point1);
 
         // Connect the mill with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
 
         // Place a courier
-        Courier courier = new Courier(player0, map);
+        var courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter.getFlag());
         courier.assignToRoad(road0);
 
@@ -354,7 +346,7 @@ public class TestMill {
         // Get the miller
         Miller miller = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Miller) {
                 miller = (Miller) worker;
             }
@@ -372,25 +364,24 @@ public class TestMill {
     public void testMillWorkerRests() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(12, 8);
-        Mill mill = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(12, 8);
+        var mill = map.placeBuilding(new Mill(player0), point1);
 
         // Connect the mill with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
 
         // Place a courier
-        Courier courier = new Courier(player0, map);
+        var courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter.getFlag());
         courier.assignToRoad(road0);
 
@@ -398,7 +389,7 @@ public class TestMill {
         Utils.constructHouse(mill);
 
         // Put the miller in the mill
-        Miller miller = new Miller(player0, map);
+        var miller = new Miller(player0, map);
 
         Utils.occupyBuilding(miller, mill);
 
@@ -415,25 +406,24 @@ public class TestMill {
     public void testMillWithoutWheatProducesNothing() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(12, 8);
-        Mill mill = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(12, 8);
+        var mill = map.placeBuilding(new Mill(player0), point1);
 
         // Connect the mill with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
 
         // Place a courier
-        Courier courier = new Courier(player0, map);
+        var courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter.getFlag());
         courier.assignToRoad(road0);
 
@@ -441,7 +431,7 @@ public class TestMill {
         Utils.constructHouse(mill);
 
         // Put the miller in the mill
-        Miller miller = new Miller(player0, map);
+        var miller = new Miller(player0, map);
 
         Utils.occupyBuilding(miller, mill);
 
@@ -520,25 +510,24 @@ public class TestMill {
     public void testMillWorkerPlacesFlourCargoAtTheFlag() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(12, 8);
-        Mill mill = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(12, 8);
+        var mill = map.placeBuilding(new Mill(player0), point1);
 
         // Connect the mill with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
 
         // Place a courier on the road
-        Courier courier = new Courier(player0, map);
+        var courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter.getFlag());
         courier.assignToRoad(road0);
 
@@ -546,12 +535,12 @@ public class TestMill {
         Utils.constructHouse(mill);
 
         // Deliver wheat to the mill
-        Cargo cargo = new Cargo(WHEAT, map);
+        var cargo = new Cargo(WHEAT, map);
 
         mill.putCargo(cargo);
 
         // Put the worker in the mill
-        Miller miller = new Miller(player0, map);
+        var miller = new Miller(player0, map);
 
         Utils.occupyBuilding(miller, mill);
 
@@ -585,32 +574,31 @@ public class TestMill {
     public void testFlourCargoIsDeliveredToGuardHouseUnderConstructionWhichIsCloserThanHeadquarters() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point3 = new Point(6, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(6, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Remove all flour from the headquarters
         Utils.adjustInventoryTo(headquarter, FLOUR, 0);
 
         // Place bakery
-        Point point4 = new Point(10, 4);
-        Bakery bakery = map.placeBuilding(new Bakery(player0), point4);
+        var point4 = new Point(10, 4);
+        var bakery = map.placeBuilding(new Bakery(player0), point4);
 
         // Connect the bakery to the headquarters
-        Road road2 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         // Place the mill
-        Point point1 = new Point(14, 4);
-        Mill mill = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(14, 4);
+        var mill = map.placeBuilding(new Mill(player0), point1);
 
         // Connect the mill with the bakery
-        Road road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), bakery.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), bakery.getFlag());
 
         // Wait for the mill to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(mill);
@@ -639,32 +627,31 @@ public class TestMill {
     public void testFlourIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point3 = new Point(6, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(6, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Adjust the inventory so that there are no stones, planks, or wood
         Utils.clearInventory(headquarter, PLANK, STONE, FLOUR, WHEAT);
 
         // Place storehouse
-        Point point4 = new Point(10, 4);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+        var point4 = new Point(10, 4);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point4);
 
         // Connect the storehouse to the headquarters
-        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         // Place the mill
-        Point point1 = new Point(14, 4);
-        Mill mill = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(14, 4);
+        var mill = map.placeBuilding(new Mill(player0), point1);
 
         // Connect the mill with the storehouse
-        Road road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), storehouse.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), storehouse.getFlag());
 
         // Deliver the needed material to construct the mill
         Utils.deliverCargos(mill, PLANK, 2);
@@ -702,35 +689,34 @@ public class TestMill {
     public void testFlourIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point3 = new Point(6, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(6, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Adjust the inventory so that there are no planks, stones, flour, or wheat
         Utils.clearInventory(headquarter, PLANK, STONE, FLOUR, WHEAT);
 
         // Place bakery
-        Point point4 = new Point(10, 4);
-        Bakery bakery = map.placeBuilding(new Bakery(player0), point4);
+        var point4 = new Point(10, 4);
+        var bakery = map.placeBuilding(new Bakery(player0), point4);
 
         // Construct the bakery
         Utils.constructHouse(bakery);
 
         // Connect the bakery to the headquarters
-        Road road2 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         // Place the mill
-        Point point1 = new Point(14, 4);
-        Mill mill = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(14, 4);
+        var mill = map.placeBuilding(new Mill(player0), point1);
 
         // Connect the mill with the bakery
-        Road road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), bakery.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), bakery.getFlag());
 
         // Deliver the needed material to construct the mill
         Utils.deliverCargos(mill, PLANK, 2);
@@ -776,18 +762,17 @@ public class TestMill {
     public void testMillWithoutConnectedStorageKeepsProducing() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place mill
-        Point point26 = new Point(8, 8);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point26);
+        var point26 = new Point(8, 8);
+        var mill0 = map.placeBuilding(new Mill(player0), point26);
 
         // Finish construction of the mill
         Utils.constructHouse(mill0);
@@ -796,7 +781,7 @@ public class TestMill {
         Utils.occupyBuilding(new Miller(player0, map), mill0);
 
         // Deliver material to the mill
-        Cargo wheatCargo = new Cargo(WHEAT, map);
+        var wheatCargo = new Cargo(WHEAT, map);
 
         mill0.putCargo(wheatCargo);
         mill0.putCargo(wheatCargo);
@@ -807,7 +792,7 @@ public class TestMill {
         // Wait for the miller to produce a new flour cargo
         Utils.fastForward(50, map);
 
-        Worker worker = mill0.getWorker();
+        var worker = mill0.getWorker();
 
         assertNotNull(worker.getCargo());
 
@@ -843,24 +828,23 @@ public class TestMill {
     public void testCargoProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place mill
-        Point point26 = new Point(8, 8);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point26);
+        var point26 = new Point(8, 8);
+        var mill0 = map.placeBuilding(new Mill(player0), point26);
 
         // Finish construction of the mill
         Utils.constructHouse(mill0);
 
         // Deliver material to the mill
-        Cargo wheatCargo = new Cargo(WHEAT, map);
+        var wheatCargo = new Cargo(WHEAT, map);
 
         mill0.putCargo(wheatCargo);
         mill0.putCargo(wheatCargo);
@@ -874,7 +858,7 @@ public class TestMill {
         // Wait for the miller to produce a new flour cargo
         Utils.fastForward(50, map);
 
-        Worker worker = mill0.getWorker();
+        var worker = mill0.getWorker();
 
         assertNotNull(worker.getCargo());
 
@@ -888,17 +872,17 @@ public class TestMill {
         assertFalse(mill0.getFlag().getStackedCargo().isEmpty());
 
         // Wait to let the cargo remain at the flag without any connection to the storage
-        Cargo cargo = mill0.getFlag().getStackedCargo().getFirst();
+        var cargo = mill0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
         assertEquals(cargo.getPosition(), mill0.getFlag().getPosition());
 
         // Connect the mill with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mill0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mill0.getFlag());
 
         // Assign a courier to the road
-        Courier courier = new Courier(player0, map);
+        var courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
 
@@ -923,7 +907,7 @@ public class TestMill {
         // Verify that the courier delivers the cargo to the headquarter
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(FLOUR);
+        var amount = headquarter0.getAmount(FLOUR);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
@@ -936,18 +920,17 @@ public class TestMill {
     public void testMillNeedsHelper() throws InvalidUserActionException {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place mill
-        Point point26 = new Point(8, 8);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point26);
+        var point26 = new Point(8, 8);
+        var mill0 = map.placeBuilding(new Mill(player0), point26);
 
         // Verify that the mill needs a helper
         assertEquals(mill0.getWorkerType(), Material.HELPER);
@@ -957,18 +940,17 @@ public class TestMill {
     public void testMillerGoesBackToStorageWhenMillIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place mill
-        Point point26 = new Point(8, 8);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point26);
+        var point26 = new Point(8, 8);
+        var mill0 = map.placeBuilding(new Mill(player0), point26);
 
         // Finish construction of the mill
         Utils.constructHouse(mill0);
@@ -977,7 +959,7 @@ public class TestMill {
         Utils.occupyBuilding(new Miller(player0, map), mill0);
 
         // Destroy the mill
-        Worker worker = mill0.getWorker();
+        var worker = mill0.getWorker();
 
         assertTrue(worker.isInsideBuilding());
         assertEquals(worker.getPosition(), mill0.getPosition());
@@ -988,7 +970,7 @@ public class TestMill {
         assertFalse(worker.isInsideBuilding());
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(MILLER);
+        var amount = headquarter0.getAmount(MILLER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
 
@@ -1000,18 +982,17 @@ public class TestMill {
     public void testMillerGoesBackOnToStorageOnRoadsIfPossibleWhenMillIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place mill
-        Point point26 = new Point(8, 8);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point26);
+        var point26 = new Point(8, 8);
+        var mill0 = map.placeBuilding(new Mill(player0), point26);
 
         // Connect the mill with the headquarter
         map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
@@ -1023,7 +1004,7 @@ public class TestMill {
         Utils.occupyBuilding(new Miller(player0, map), mill0);
 
         // Destroy the mill
-        Worker worker = mill0.getWorker();
+        var worker = mill0.getWorker();
 
         assertTrue(worker.isInsideBuilding());
         assertEquals(worker.getPosition(), mill0.getPosition());
@@ -1035,8 +1016,8 @@ public class TestMill {
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
-        for (Point point : worker.getPlannedPath()) {
+        var firstStep = true;
+        for (var point : worker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -1050,18 +1031,17 @@ public class TestMill {
     public void testDestroyedMillIsRemovedAfterSomeTime() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place mill
-        Point point26 = new Point(8, 8);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point26);
+        var point26 = new Point(8, 8);
+        var mill0 = map.placeBuilding(new Mill(player0), point26);
 
         // Connect the mill with the headquarter
         map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
@@ -1095,18 +1075,17 @@ public class TestMill {
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place mill
-        Point point26 = new Point(8, 8);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point26);
+        var point26 = new Point(8, 8);
+        var mill0 = map.placeBuilding(new Mill(player0), point26);
 
         // Finish construction of the mill
         Utils.constructHouse(mill0);
@@ -1123,18 +1102,17 @@ public class TestMill {
     public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place mill
-        Point point26 = new Point(8, 8);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point26);
+        var point26 = new Point(8, 8);
+        var mill0 = map.placeBuilding(new Mill(player0), point26);
 
         // Finish construction of the mill
         Utils.constructHouse(mill0);
@@ -1151,33 +1129,32 @@ public class TestMill {
     public void testProductionInMillCanBeStopped() throws Exception {
 
         // Create game map
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(12, 8);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(12, 8);
+        var mill0 = map.placeBuilding(new Mill(player0), point1);
 
         // Connect the mill and the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter.getFlag());
 
         // Finish the mill
         Utils.constructHouse(mill0);
 
         // Deliver material to the mill
-        Cargo wheatCargo = new Cargo(WHEAT, map);
+        var wheatCargo = new Cargo(WHEAT, map);
 
         mill0.putCargo(wheatCargo);
         mill0.putCargo(wheatCargo);
 
         // Assign a worker to the mill
-        Miller worker = new Miller(player0, map);
+        var worker = new Miller(player0, map);
 
         Utils.occupyBuilding(worker, mill0);
 
@@ -1212,34 +1189,33 @@ public class TestMill {
     public void testProductionInMillCanBeResumed() throws Exception {
 
         // Create game map
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(12, 8);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(12, 8);
+        var mill0 = map.placeBuilding(new Mill(player0), point1);
 
         // Connect the mill and the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter.getFlag());
 
         // Finish the mill
         Utils.constructHouse(mill0);
 
         // Assign a worker to the mill
-        Miller worker = new Miller(player0, map);
+        var worker = new Miller(player0, map);
 
         Utils.occupyBuilding(worker, mill0);
 
         assertTrue(worker.isInsideBuilding());
 
         // Deliver material to the mill
-        Cargo wheatCargo = new Cargo(WHEAT, map);
+        var wheatCargo = new Cargo(WHEAT, map);
 
         mill0.putCargo(wheatCargo);
         mill0.putCargo(wheatCargo);
@@ -1280,35 +1256,34 @@ public class TestMill {
     public void testAssignedMillerHasCorrectlySetPlayer() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(20, 14);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(20, 14);
+        var mill0 = map.placeBuilding(new Mill(player0), point1);
 
         // Finish construction of the mill
         Utils.constructHouse(mill0);
 
         // Connect the mill with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mill0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mill0.getFlag());
 
         // Wait for miller to get assigned and leave the headquarter
-        List<Miller> workers = Utils.waitForWorkersOutsideBuilding(Miller.class, 1, player0);
+        var workers = Utils.waitForWorkersOutsideBuilding(Miller.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
 
         // Verify that the player is set correctly in the worker
-        Miller worker = workers.getFirst();
+        var worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1317,34 +1292,33 @@ public class TestMill {
     public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        Player player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
         players.add(player2);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 2's headquarter
-        Point point10 = new Point(70, 70);
-        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
+        var point10 = new Point(70, 70);
+        var headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
         // Place player 0's headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarter
-        Point point1 = new Point(45, 5);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(45, 5);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Place fortress for player 0
-        Point point2 = new Point(21, 9);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        var point2 = new Point(21, 9);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         // Finish construction of the fortress
         Utils.constructHouse(fortress0);
@@ -1353,14 +1327,14 @@ public class TestMill {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         // Place mill close to the new border
-        Point point4 = new Point(28, 18);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point4);
+        var point4 = new Point(28, 18);
+        var mill0 = map.placeBuilding(new Mill(player0), point4);
 
         // Finish construction of the mill
         Utils.constructHouse(mill0);
 
         // Occupy the mill
-        Miller worker = Utils.occupyBuilding(new Miller(player0, map), mill0);
+        var worker = Utils.occupyBuilding(new Miller(player0, map), mill0);
 
         // Verify that the worker goes back to its own storage when the fortress is torn down
         fortress0.tearDown();
@@ -1372,35 +1346,34 @@ public class TestMill {
     public void testMillerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place mill
-        Point point2 = new Point(14, 4);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point2.upLeft());
+        var point2 = new Point(14, 4);
+        var mill0 = map.placeBuilding(new Mill(player0), point2.upLeft());
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, mill0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, mill0.getFlag());
 
         // Wait for the miller to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Miller.class, 1, player0);
 
         Miller miller = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Miller) {
                 miller = (Miller) worker;
             }
@@ -1434,35 +1407,34 @@ public class TestMill {
     public void testMillerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place mill
-        Point point2 = new Point(14, 4);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point2.upLeft());
+        var point2 = new Point(14, 4);
+        var mill0 = map.placeBuilding(new Mill(player0), point2.upLeft());
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, mill0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, mill0.getFlag());
 
         // Wait for the miller to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Miller.class, 1, player0);
 
         Miller miller = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Miller) {
                 miller = (Miller) worker;
             }
@@ -1499,35 +1471,34 @@ public class TestMill {
     public void testMillerReturnsToStorageIfMillIsDestroyed() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place mill
-        Point point2 = new Point(14, 4);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point2.upLeft());
+        var point2 = new Point(14, 4);
+        var mill0 = map.placeBuilding(new Mill(player0), point2.upLeft());
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, mill0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, mill0.getFlag());
 
         // Wait for the miller to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Miller.class, 1, player0);
 
         Miller miller = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Miller) {
                 miller = (Miller) worker;
             }
@@ -1560,18 +1531,17 @@ public class TestMill {
     public void testMillerGoesOffroadBackToClosestStorageWhenMillIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place mill
-        Point point26 = new Point(17, 17);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point26);
+        var point26 = new Point(17, 17);
+        var mill0 = map.placeBuilding(new Mill(player0), point26);
 
         // Finish construction of the mill
         Utils.constructHouse(mill0);
@@ -1580,14 +1550,14 @@ public class TestMill {
         Utils.occupyBuilding(new Miller(player0, map), mill0);
 
         // Place a second storage closer to the mill
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
 
         // Destroy the mill
-        Worker miller = mill0.getWorker();
+        var miller = mill0.getWorker();
 
         assertTrue(miller.isInsideBuilding());
         assertEquals(miller.getPosition(), mill0.getPosition());
@@ -1598,7 +1568,7 @@ public class TestMill {
         assertFalse(miller.isInsideBuilding());
         assertEquals(miller.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(MILLER);
+        var amount = storehouse0.getAmount(MILLER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miller, storehouse0.getPosition());
 
@@ -1610,18 +1580,17 @@ public class TestMill {
     public void testMillerReturnsOffroadAndAvoidsBurningStorageWhenMillIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place mill
-        Point point26 = new Point(17, 17);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point26);
+        var point26 = new Point(17, 17);
+        var mill0 = map.placeBuilding(new Mill(player0), point26);
 
         // Finish construction of the mill
         Utils.constructHouse(mill0);
@@ -1630,8 +1599,8 @@ public class TestMill {
         Utils.occupyBuilding(new Miller(player0, map), mill0);
 
         // Place a second storage closer to the mill
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -1640,7 +1609,7 @@ public class TestMill {
         storehouse0.tearDown();
 
         // Destroy the mill
-        Worker miller = mill0.getWorker();
+        var miller = mill0.getWorker();
 
         assertTrue(miller.isInsideBuilding());
         assertEquals(miller.getPosition(), mill0.getPosition());
@@ -1651,7 +1620,7 @@ public class TestMill {
         assertFalse(miller.isInsideBuilding());
         assertEquals(miller.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(MILLER);
+        var amount = headquarter0.getAmount(MILLER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miller, headquarter0.getPosition());
 
@@ -1663,18 +1632,17 @@ public class TestMill {
     public void testMillerReturnsOffroadAndAvoidsDestroyedStorageWhenMillIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place mill
-        Point point26 = new Point(17, 17);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point26);
+        var point26 = new Point(17, 17);
+        var mill0 = map.placeBuilding(new Mill(player0), point26);
 
         // Finish construction of the mill
         Utils.constructHouse(mill0);
@@ -1683,8 +1651,8 @@ public class TestMill {
         Utils.occupyBuilding(new Miller(player0, map), mill0);
 
         // Place a second storage closer to the mill
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -1696,7 +1664,7 @@ public class TestMill {
         Utils.waitForBuildingToBurnDown(storehouse0);
 
         // Destroy the mill
-        Worker miller = mill0.getWorker();
+        var miller = mill0.getWorker();
 
         assertTrue(miller.isInsideBuilding());
         assertEquals(miller.getPosition(), mill0.getPosition());
@@ -1707,7 +1675,7 @@ public class TestMill {
         assertFalse(miller.isInsideBuilding());
         assertEquals(miller.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(MILLER);
+        var amount = headquarter0.getAmount(MILLER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miller, headquarter0.getPosition());
 
@@ -1719,18 +1687,17 @@ public class TestMill {
     public void testMillerReturnsOffroadAndAvoidsUnfinishedStorageWhenMillIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place mill
-        Point point26 = new Point(17, 17);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point26);
+        var point26 = new Point(17, 17);
+        var mill0 = map.placeBuilding(new Mill(player0), point26);
 
         // Finish construction of the mill
         Utils.constructHouse(mill0);
@@ -1739,11 +1706,11 @@ public class TestMill {
         Utils.occupyBuilding(new Miller(player0, map), mill0);
 
         // Place a second storage closer to the mill
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Destroy the mill
-        Worker miller = mill0.getWorker();
+        var miller = mill0.getWorker();
 
         assertTrue(miller.isInsideBuilding());
         assertEquals(miller.getPosition(), mill0.getPosition());
@@ -1754,7 +1721,7 @@ public class TestMill {
         assertFalse(miller.isInsideBuilding());
         assertEquals(miller.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(MILLER);
+        var amount = headquarter0.getAmount(MILLER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miller, headquarter0.getPosition());
 
@@ -1766,27 +1733,26 @@ public class TestMill {
     public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place mill
-        Point point26 = new Point(17, 17);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point26);
+        var point26 = new Point(17, 17);
+        var mill0 = map.placeBuilding(new Mill(player0), point26);
 
         // Place road to connect the headquarter and the mill
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mill0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mill0.getFlag());
 
         // Finish construction of the mill
         Utils.constructHouse(mill0);
 
         // Wait for a worker to start walking to the building
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Miller.class, 1, player0).getFirst();
+        var worker = Utils.waitForWorkersOutsideBuilding(Miller.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, mill0.getFlag().getPosition());
@@ -1808,24 +1774,23 @@ public class TestMill {
     public void testMillWithoutResourcesHasZeroProductivity() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(7, 9);
-        Mill mill = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(7, 9);
+        var mill = map.placeBuilding(new Mill(player0), point1);
 
         // Finish construction of the mill
         Utils.constructHouse(mill);
 
         // Populate the mill
-        Worker miller0 = Utils.occupyBuilding(new Miller(player0, map), mill);
+        var miller0 = Utils.occupyBuilding(new Miller(player0, map), mill);
 
         assertTrue(miller0.isInsideBuilding());
         assertEquals(miller0.getHome(), mill);
@@ -1844,24 +1809,23 @@ public class TestMill {
     public void testMillWithAbundantResourcesHasFullProductivity() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(7, 9);
-        Mill mill = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(7, 9);
+        var mill = map.placeBuilding(new Mill(player0), point1);
 
         // Finish construction of the mill
         Utils.constructHouse(mill);
 
         // Populate the mill
-        Worker miller0 = Utils.occupyBuilding(new Miller(player0, map), mill);
+        var miller0 = Utils.occupyBuilding(new Miller(player0, map), mill);
 
         assertTrue(miller0.isInsideBuilding());
         assertEquals(miller0.getHome(), mill);
@@ -1899,24 +1863,23 @@ public class TestMill {
     public void testMillLosesProductivityWhenResourcesRunOut() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(7, 9);
-        Mill mill = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(7, 9);
+        var mill = map.placeBuilding(new Mill(player0), point1);
 
         // Finish construction of the mill
         Utils.constructHouse(mill);
 
         // Populate the mill
-        Worker miller0 = Utils.occupyBuilding(new Miller(player0, map), mill);
+        var miller0 = Utils.occupyBuilding(new Miller(player0, map), mill);
 
         assertTrue(miller0.isInsideBuilding());
         assertEquals(miller0.getHome(), mill);
@@ -1949,18 +1912,17 @@ public class TestMill {
     public void testUnoccupiedMillHasNoProductivity() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(7, 9);
-        Mill mill = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(7, 9);
+        var mill = map.placeBuilding(new Mill(player0), point1);
 
         // Finish construction of the mill
         Utils.constructHouse(mill);
@@ -1981,24 +1943,23 @@ public class TestMill {
     public void testMillCanProduce() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(10, 10);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(10, 10);
+        var mill0 = map.placeBuilding(new Mill(player0), point1);
 
         // Finish construction of the mill
         Utils.constructHouse(mill0);
 
         // Populate the mill
-        Worker miller0 = Utils.occupyBuilding(new Miller(player0, map), mill0);
+        var miller0 = Utils.occupyBuilding(new Miller(player0, map), mill0);
 
         // Verify that the mill can produce
         assertTrue(mill0.canProduce());
@@ -2008,18 +1969,17 @@ public class TestMill {
     public void testMillReportsCorrectOutput() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(6, 12);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(6, 12);
+        var mill0 = map.placeBuilding(new Mill(player0), point1);
 
         // Construct the mill
         Utils.constructHouse(mill0);
@@ -2033,18 +1993,17 @@ public class TestMill {
     public void testMillReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(6, 12);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(6, 12);
+        var mill0 = map.placeBuilding(new Mill(player0), point1);
 
         // Verify that the reported needed construction material is correct
         assertEquals(mill0.getTypesOfMaterialNeeded().size(), 2);
@@ -2053,7 +2012,7 @@ public class TestMill {
         assertEquals(mill0.getCanHoldAmount(PLANK), 2);
         assertEquals(mill0.getCanHoldAmount(STONE), 2);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
@@ -2066,18 +2025,17 @@ public class TestMill {
     public void testMillReportsCorrectMaterialsNeededForProduction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(6, 12);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(6, 12);
+        var mill0 = map.placeBuilding(new Mill(player0), point1);
 
         // Construct the mill
         Utils.constructHouse(mill0);
@@ -2087,7 +2045,7 @@ public class TestMill {
         assertTrue(mill0.getTypesOfMaterialNeeded().contains(WHEAT));
         assertEquals(mill0.getCanHoldAmount(WHEAT), 6);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == WHEAT) {
                 continue;
             }
@@ -2100,22 +2058,21 @@ public class TestMill {
     public void testMillWaitsWhenFlagIsFull() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(16, 6);
-        Mill mill = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(16, 6);
+        var mill = map.placeBuilding(new Mill(player0), point1);
 
         // Connect the mill with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
 
         // Wait for the mill to get constructed and assigned a miller
         Utils.waitForBuildingToBeConstructed(mill);
@@ -2139,10 +2096,10 @@ public class TestMill {
         }
 
         // Reconnect the mill with the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2166,22 +2123,21 @@ public class TestMill {
     public void testMillDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(16, 6);
-        Mill mill = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(16, 6);
+        var mill = map.placeBuilding(new Mill(player0), point1);
 
         // Connect the mill with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
 
         // Wait for the mill to get constructed and assigned a miller
         Utils.waitForBuildingToBeConstructed(mill);
@@ -2206,10 +2162,10 @@ public class TestMill {
         }
 
         // Reconnect the mill with the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2251,21 +2207,20 @@ public class TestMill {
     public void testWhenFlourDeliveryAreBlockedMillFillsUpFlagAndThenStops() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place Mill
-        Point point1 = new Point(7, 9);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(7, 9);
+        var mill0 = map.placeBuilding(new Mill(player0), point1);
 
         // Place road to connect the mill with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
 
         // Wait for the mill to get constructed and occupied
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2273,7 +2228,7 @@ public class TestMill {
 
         Utils.waitForBuildingToBeConstructed(mill0);
 
-        Worker miller0 = Utils.waitForNonMilitaryBuildingToGetPopulated(mill0);
+        var miller0 = Utils.waitForNonMilitaryBuildingToGetPopulated(mill0);
 
         assertTrue(miller0.isInsideBuilding());
         assertEquals(miller0.getHome(), mill0);
@@ -2306,28 +2261,27 @@ public class TestMill {
     public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndMillIsTornDown() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
-        Point point1 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(5, 5);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Place mill
-        Point point2 = new Point(18, 6);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point2);
+        var point2 = new Point(18, 6);
+        var mill0 = map.placeBuilding(new Mill(player0), point2);
 
         // Place road to connect the storehouse with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
         // Place road to connect the headquarter with the mill
-        Road road1 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
 
         // Add a lot of planks and stones to the headquarter
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2342,7 +2296,7 @@ public class TestMill {
         // Wait for the mill and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, mill0);
 
-        Worker miller0 = mill0.getWorker();
+        var miller0 = mill0.getWorker();
 
         assertTrue(miller0.isInsideBuilding());
         assertEquals(miller0.getHome(), mill0);
@@ -2370,28 +2324,27 @@ public class TestMill {
     public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndMillIsTornDown() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
-        Point point1 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(5, 5);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Place mill
-        Point point2 = new Point(18, 6);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point2);
+        var point2 = new Point(18, 6);
+        var mill0 = map.placeBuilding(new Mill(player0), point2);
 
         // Place road to connect the storehouse with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
         // Place road to connect the headquarter with the mill
-        Road road1 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
 
         // Add a lot of planks and stones to the headquarter
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2406,7 +2359,7 @@ public class TestMill {
         // Wait for the mill and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, mill0);
 
-        Worker miller0 = mill0.getWorker();
+        var miller0 = mill0.getWorker();
 
         assertTrue(miller0.isInsideBuilding());
         assertEquals(miller0.getHome(), mill0);
@@ -2436,14 +2389,13 @@ public class TestMill {
     public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, MILLER, 1);
@@ -2453,7 +2405,7 @@ public class TestMill {
         headquarter0.pushOutAll(MILLER);
 
         for (int i = 0; i < 10; i++) {
-            Worker worker = Utils.waitForWorkerOutsideBuilding(Miller.class, player0);
+            var worker = Utils.waitForWorkerOutsideBuilding(Miller.class, player0);
 
             assertEquals(headquarter0.getAmount(MILLER), 0);
             assertEquals(worker.getPosition(), headquarter0.getPosition());
@@ -2474,14 +2426,13 @@ public class TestMill {
     public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, MILLER, 1);
@@ -2489,7 +2440,7 @@ public class TestMill {
         headquarter0.blockDeliveryOfMaterial(MILLER);
         headquarter0.pushOutAll(MILLER);
 
-        Worker worker = Utils.waitForWorkerOutsideBuilding(Miller.class, player0);
+        var worker = Utils.waitForWorkerOutsideBuilding(Miller.class, player0);
 
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
@@ -2519,21 +2470,20 @@ public class TestMill {
     public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(7, 9);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(7, 9);
+        var mill0 = map.placeBuilding(new Mill(player0), point1);
 
         // Place road to connect the mill with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
@@ -2548,7 +2498,7 @@ public class TestMill {
        
         headquarter0.blockDeliveryOfMaterial(MILLER);
 
-        Worker worker = mill0.getWorker();
+        var worker = mill0.getWorker();
 
         mill0.tearDown();
 
@@ -2580,21 +2530,20 @@ public class TestMill {
     public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(7, 9);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(7, 9);
+        var mill0 = map.placeBuilding(new Mill(player0), point1);
 
         // Place road to connect the mill with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
@@ -2603,7 +2552,7 @@ public class TestMill {
         Utils.waitForBuildingToBeConstructed(mill0);
 
         // Wait for a miller to start walking to the mill
-        Miller miller = Utils.waitForWorkerOutsideBuilding(Miller.class, player0);
+        var miller = Utils.waitForWorkerOutsideBuilding(Miller.class, player0);
 
         // Wait for the miller to go past the headquarter's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, miller, headquarter0.getFlag().getPosition());
@@ -2627,7 +2576,7 @@ public class TestMill {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miller, miller.getTarget());
 
-        Point point = miller.getPosition();
+        var point = miller.getPosition();
         for (int i = 0; i < 100; i++) {
             assertTrue(miller.isDead());
             assertEquals(miller.getPosition(), point);
@@ -2643,21 +2592,20 @@ public class TestMill {
     public void testWorkerCanDeliverAfterHavingWaited() throws InvalidUserActionException {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(7, 9);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(7, 9);
+        var mill0 = map.placeBuilding(new Mill(player0), point1);
 
         // Place road to connect the mill with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
 
         // Wait for the mill to get constructed and populated
         Utils.waitForBuildingToBeConstructed(mill0);

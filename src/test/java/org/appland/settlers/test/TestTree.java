@@ -78,14 +78,13 @@ public class TestTree {
     public void testDefaultTreeType() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place tree
-        Point point0 = new Point(10, 10);
-        Tree tree0 = map.placeTree(point0, TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point0 = new Point(10, 10);
+        var tree0 = map.placeTree(point0, TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         // Verify that the tree has the default tree type
         assertEquals(tree0.getTreeType(), TreeType.PINE);
@@ -95,14 +94,13 @@ public class TestTree {
     public void testTreeTypeCanBeSet() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place tree
-        Point point0 = new Point(10, 10);
-        Tree tree0 = map.placeTree(point0, TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point0 = new Point(10, 10);
+        var tree0 = map.placeTree(point0, TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         // Verify that the tree type can be set
         tree0.setTreeType(TreeType.BIRCH);
@@ -114,10 +112,9 @@ public class TestTree {
     public void testNoDeadTreesByDefault() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Verify that there are no dead trees without being explicitly placed
         assertEquals(map.getDeadTrees().size(), 0);
@@ -127,15 +124,14 @@ public class TestTree {
     public void testPlaceDeadTree() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Verify that a dead tree can be placed
         assertEquals(map.getDeadTrees().size(), 0);
 
-        Point point0 = new Point(20, 20);
+        var point0 = new Point(20, 20);
 
         assertFalse(map.isDeadTree(point0));
 
@@ -150,18 +146,17 @@ public class TestTree {
     public void testCannotPlaceDeadTreeOnHouse() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place well
-        Point point1 = new Point(6, 12);
-        Building well0 = map.placeBuilding(new Well(player0), point1);
+        var point1 = new Point(6, 12);
+        var well0 = map.placeBuilding(new Well(player0), point1);
 
         // Verify that it's not possible to place a dead tree on a house
         assertEquals(map.getDeadTrees().size(), 0);
@@ -179,18 +174,17 @@ public class TestTree {
     public void testCannotPlaceDeadTreeOnStone() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place stone
-        Point point1 = new Point(6, 12);
-        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
+        var point1 = new Point(6, 12);
+        var stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
         // Verify that it's not possible to place a dead tree on a stone
         assertEquals(map.getDeadTrees().size(), 0);
@@ -208,21 +202,20 @@ public class TestTree {
     public void testCannotPlaceDeadTreeOnRoad() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Verify that it's not possible to place a dead tree on a road
         assertEquals(map.getDeadTrees().size(), 0);
@@ -240,18 +233,17 @@ public class TestTree {
     public void testCannotPlaceDeadTreeOnTree() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place tree
-        Point point1 = new Point(6, 12);
-        Tree tree0 = map.placeTree(point1, TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        var point1 = new Point(6, 12);
+        var tree0 = map.placeTree(point1, TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         // Verify that it's not possible to place a dead tree on a tree
         assertEquals(map.getDeadTrees().size(), 0);
@@ -269,18 +261,17 @@ public class TestTree {
     public void testCannotPlaceDeadTreeOnFlag() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(6, 12);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(6, 12);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Verify that it's not possible to place a dead tree on a flag
         assertEquals(map.getDeadTrees().size(), 0);
@@ -298,17 +289,16 @@ public class TestTree {
     public void testOnlyFlagIsAvailableOnDeadTree() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place dead tree
-        Point point1 = new Point(10, 6);
+        var point1 = new Point(10, 6);
         map.placeDeadTree(point1);
 
         // Verify that it's only possible to place a flag on the dead tree
@@ -320,21 +310,20 @@ public class TestTree {
     public void testCanPlaceFlagOnDeadTree() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place dead tree
-        Point point1 = new Point(6, 12);
+        var point1 = new Point(6, 12);
         map.placeDeadTree(point1);
 
         // Verify that it's possible to place a flag on a dead tree
-        Flag flag0 = map.placeFlag(player0, point1);
+        var flag0 = map.placeFlag(player0, point1);
 
         assertEquals(map.getDeadTrees().size(), 0);
         assertFalse(map.isDeadTree(point1));
@@ -345,17 +334,16 @@ public class TestTree {
     public void testCanPlaceLargeBuildingAfterPlacedAndRemovedFlagOnDeadTree() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place dead tree
-        Point point1 = new Point(6, 12);
+        var point1 = new Point(6, 12);
 
         assertFalse(map.isDeadTree(point1));
 
@@ -364,7 +352,7 @@ public class TestTree {
         assertTrue(map.isDeadTree(point1));
 
         // Place flag on the dead tree
-        Flag flag0 = map.placeFlag(player0, point1);
+        var flag0 = map.placeFlag(player0, point1);
 
         assertFalse(map.isDeadTree(point1));
 
@@ -379,17 +367,16 @@ public class TestTree {
     public void testCanPlaceDeadTreeOnMountain() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mountain
-        Point point1 = new Point(12, 6);
+        var point1 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_1, map);
 
         // Verify that a dead tree can be placed on a mountain
@@ -402,17 +389,16 @@ public class TestTree {
     public void testCanPlaceDeadTreeOnSavannah() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place savannah
-        Point point1 = new Point(12, 6);
+        var point1 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point1, SAVANNAH, map);
 
         // Verify that a dead tree can be placed on a savannah
@@ -425,17 +411,16 @@ public class TestTree {
     public void testCanPlaceDeadTreeOnLava() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place lava
-        Point point1 = new Point(12, 6);
+        var point1 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point1, LAVA_1, map);
 
         // Verify that a dead tree can be placed on lava
@@ -448,17 +433,16 @@ public class TestTree {
     public void testCanPlaceDeadTreeOnSteppe() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place steppe
-        Point point1 = new Point(12, 6);
+        var point1 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point1, STEPPE, map);
 
         // Verify that a dead tree can be placed on steppe
@@ -471,17 +455,16 @@ public class TestTree {
     public void testCanPlaceDeadTreeOnSwamp() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place swamp
-        Point point1 = new Point(12, 6);
+        var point1 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point1, SWAMP, map);
 
         // Verify that a dead tree can be placed on swamp
@@ -494,17 +477,16 @@ public class TestTree {
     public void testCanPlaceDeadTreeOnDesert() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place desert
-        Point point1 = new Point(12, 6);
+        var point1 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point1, DESERT_1, map);
 
         // Verify that a dead tree can be placed on desert
@@ -517,17 +499,16 @@ public class TestTree {
     public void testCanPlaceDeadTreeOnCombinedVegetation() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place savannah and mountain on the map
-        Point point1 = new Point(12, 6);
+        var point1 = new Point(12, 6);
         map.setVegetationBelow(point1, SAVANNAH);
         map.setVegetationDownRight(point1, MOUNTAIN_1);
         map.setVegetationDownLeft(point1, DESERT_1);
@@ -542,17 +523,16 @@ public class TestTree {
     public void testCannotPlaceDeadTreeOnSnow() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place snow
-        Point point1 = new Point(12, 6);
+        var point1 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point1, SNOW, map);
 
         // Verify that a dead tree can be placed on snow
@@ -569,17 +549,16 @@ public class TestTree {
     public void testCannotPlaceDeadTreeOnShallowWater() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place shallow water
-        Point point1 = new Point(12, 6);
+        var point1 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point1, BUILDABLE_WATER, map);
 
         // Verify that a dead tree can be placed on shallow water
@@ -596,17 +575,16 @@ public class TestTree {
     public void testCannotPlaceDeadTreeOnWater() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place water
-        Point point1 = new Point(12, 6);
+        var point1 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point1, WATER, map);
 
         // Verify that a dead tree can be placed on water
@@ -623,17 +601,16 @@ public class TestTree {
     public void testCannotPlaceDeadTreeOnDeepWater() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place deep water
-        Point point1 = new Point(12, 6);
+        var point1 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point1, WATER_2, map);
 
         // Verify that a dead tree can be placed on deep water

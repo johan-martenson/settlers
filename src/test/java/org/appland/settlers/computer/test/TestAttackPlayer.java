@@ -35,19 +35,18 @@ public class TestAttackPlayer {
     public void testAttackerDoesNotBuild() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new AttackPlayer(player0, map);
+        var computerPlayer = new AttackPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 10);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the player does not place any buildings
         for (int i = 0; i < 1000; i++) {
@@ -65,33 +64,32 @@ public class TestAttackPlayer {
     public void testAttackerWithBuildingInReachAttacks() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
         players.add(player1);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new AttackPlayer(player0, map);
+        var computerPlayer = new AttackPlayer(player0, map);
 
         // Place headquarter for player 0
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 10);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place headquarter for player 1
-        Point point1 = new Point(44, 10);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(44, 10);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Place and occupy barracks for player 0
-        Point point2 = new Point(24, 10);
-        Barracks barracks0 = Utils.placeAndOccupyBarracks(player0, point2);
+        var point2 = new Point(24, 10);
+        var barracks0 = Utils.placeAndOccupyBarracks(player0, point2);
 
         // Place and occupy barracks for player 1
-        Point point3 = new Point(34, 10);
-        Barracks barracks1 = Utils.placeAndOccupyBarracks(player1, point3);
+        var point3 = new Point(34, 10);
+        var barracks1 = Utils.placeAndOccupyBarracks(player1, point3);
 
         // Add an extra soldier to the attacking player's barracks
         Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, barracks0);
@@ -103,7 +101,7 @@ public class TestAttackPlayer {
 
             computerPlayer.turn();
 
-            List<Soldier> militariesOutside = Utils.findWorkersOfTypeOutsideForPlayer(Soldier.class, player0);
+            var militariesOutside = Utils.findWorkersOfTypeOutsideForPlayer(Soldier.class, player0);
 
             if (militariesOutside.size() == 1) {
                 break;
@@ -112,11 +110,11 @@ public class TestAttackPlayer {
             map.stepTime();
         }
 
-        List<Soldier> militaries = Utils.findWorkersOfTypeOutsideForPlayer(Soldier.class, player0);
+        var militaries = Utils.findWorkersOfTypeOutsideForPlayer(Soldier.class, player0);
 
         assertEquals(militaries.size(), 1);
 
-        Soldier attacker = militaries.getFirst();
+        var attacker = militaries.getFirst();
 
         assertTrue(attacker.getTarget().distance(barracks1.getPosition()) < 3);
     }

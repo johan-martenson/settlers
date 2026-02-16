@@ -569,7 +569,7 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.waitForBuildingToBeConstructed(fishery);
 
         // Wait for the fishery to get occupied
-        Fisherman fisherman = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
+        var fisherman = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
 
         assertTrue(fisherman.isInsideBuilding());
 
@@ -1499,7 +1499,7 @@ public class TestGameMonitoringOfWorkerActions {
         player2.monitorGameView(monitor2);
 
         // Keep attacking until a soldier stands aside during a fight
-        boolean jumpBackFound = false;
+        var jumpBackFound = false;
 
         for (int i = 0; i < 20; i++) {
 
@@ -1692,7 +1692,7 @@ public class TestGameMonitoringOfWorkerActions {
         player2.monitorGameView(monitor2);
 
         // Keep attacking until a soldier stands aside during a fight
-        boolean standAsideFound = false;
+        var standAsideFound = false;
 
         for (int i = 0; i < 20; i++) {
 
@@ -1805,7 +1805,7 @@ public class TestGameMonitoringOfWorkerActions {
                 Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks1);
 
                 // Wait for another soldier to come out and beat the attacker
-                Soldier otherDefender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
+                var otherDefender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
 
                 // Wait for the fight to start
                 Utils.waitForFightToStart(map, attacker, otherDefender);

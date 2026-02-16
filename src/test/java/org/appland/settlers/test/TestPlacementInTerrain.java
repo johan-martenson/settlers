@@ -43,10 +43,9 @@ public class TestPlacementInTerrain {
     public void testPathCloseToLake() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         /* Place lake with this form:
 
@@ -55,11 +54,11 @@ public class TestPlacementInTerrain {
              W  W  W
 
         */
-        Point pointX = new Point(4, 4);
-        Point point1 = new Point(6, 4);
-        Point point2 = new Point(7, 3);
-        Point point3 = new Point(9, 3);
-        Point point4 = new Point(11, 3);
+        var pointX = new Point(4, 4);
+        var point1 = new Point(6, 4);
+        var point2 = new Point(7, 3);
+        var point3 = new Point(9, 3);
+        var point4 = new Point(11, 3);
 
         Utils.surroundPointWithVegetation(pointX, WATER, map);
         Utils.surroundPointWithVegetation(point1, WATER, map);
@@ -68,7 +67,7 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point4, WATER, map);
 
         // Place headquarter
-        Point point0 = new Point(16, 6);
+        var point0 = new Point(16, 6);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place fisheries like this:
@@ -81,20 +80,20 @@ public class TestPlacementInTerrain {
 
         */
 
-        Point point5 = new Point(4, 6);
-        Point point6 = new Point(9, 5);
+        var point5 = new Point(4, 6);
+        var point6 = new Point(9, 5);
 
         assertTrue(map.isAvailableFlagPoint(player0, point5.downRight()));
         assertTrue(map.isAvailableFlagPoint(player0, point6.downRight()));
         assertNotNull(map.isAvailableHousePoint(player0, point5));
         assertNotNull(map.isAvailableHousePoint(player0, point6));
 
-        Fishery fishery0 = map.placeBuilding(new Fishery(player0), point5);
-        Fishery fishery1 = map.placeBuilding(new Fishery(player0), point6);
+        var fishery0 = map.placeBuilding(new Fishery(player0), point5);
+        var fishery1 = map.placeBuilding(new Fishery(player0), point6);
 
         // Verify that it's possible to build a road between the flags that follows the edge of the lake
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(8, 4);
+        var point7 = new Point(7, 5);
+        var point8 = new Point(8, 4);
 
         assertEquals(map.getVegetationDownLeft(fishery0.getFlag().getPosition()), WATER);
         assertEquals(map.getVegetationBelow(fishery0.getFlag().getPosition()), WATER);
@@ -123,7 +122,7 @@ public class TestPlacementInTerrain {
         );
 
         // Then place the road
-        Road road0 = map.placeRoad(player0, fishery0.getFlag().getPosition(), point7, point8, fishery1.getFlag().getPosition());
+        var road0 = map.placeRoad(player0, fishery0.getFlag().getPosition(), point7, point8, fishery1.getFlag().getPosition());
 
         assertTrue(map.arePointsConnectedByRoads(point5, point6));
     }
@@ -133,18 +132,17 @@ public class TestPlacementInTerrain {
     public void testAvailableFlagInDesert() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small desert on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, DESERT_1, map);
 
         // Verify that there is an available flag point in the desert
@@ -155,22 +153,21 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagInDesert() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small desert on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, DESERT_1, map);
 
         // Verify that it is possible to place a flag in the desert
-        Flag flag = map.placeFlag(player0, point1);
+        var flag = map.placeFlag(player0, point1);
 
         assertTrue(map.isFlagAtPoint(point1));
         assertEquals(flag, map.getFlagAtPoint(point1));
@@ -180,18 +177,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseInDesert() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small desert on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, DESERT_1, map);
 
         // Verify that there is no available house point in the desert
@@ -202,18 +198,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseInDesert() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small desert on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, DESERT_1, map);
 
         // Verify that it's not possible to place a house in the desert
@@ -228,18 +223,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineInDesert() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small desert on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, DESERT_1, map);
 
         // Verify that there is no available house point in the desert
@@ -250,18 +244,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineInDesert() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small desert on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, DESERT_1, map);
 
         // Verify that it's not possible to place a house in the desert
@@ -276,28 +269,27 @@ public class TestPlacementInTerrain {
     public void testCanBuildRoadAcrossDesert() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small desert on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, DESERT_1, map);
 
         // Place flags
-        Point point2 = new Point(8, 10);
-        Point point3 = new Point(12, 10);
-        Flag flag0 = map.placeFlag(player0, point2);
-        Flag flag1 = map.placeFlag(player0, point3);
+        var point2 = new Point(8, 10);
+        var point3 = new Point(12, 10);
+        var flag0 = map.placeFlag(player0, point2);
+        var flag1 = map.placeFlag(player0, point3);
 
         // Verify that it's possible to Build a road across the desert
-        Road road0 = map.placeRoad(player0, point2, point1, point3);
+        var road0 = map.placeRoad(player0, point2, point1, point3);
 
         assertTrue(map.getRoads().contains(road0));
     }
@@ -306,24 +298,23 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnBorderOfDesert() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small desert on the map
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(12, 10);
+        var point1 = new Point(10, 10);
+        var point2 = new Point(12, 10);
         Utils.surroundPointWithVegetation(point1, DESERT_1, map);
         Utils.surroundPointWithVegetation(point2, DESERT_1, map);
 
         // Verify that there is no available house point on the border of the desert
-        Point point3 = new Point(11, 11);
+        var point3 = new Point(11, 11);
         assertNull(map.isAvailableHousePoint(player0, point3));
     }
 
@@ -331,24 +322,23 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnBorderOfDesert() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small desert on the map
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(12, 10);
+        var point1 = new Point(10, 10);
+        var point2 = new Point(12, 10);
         Utils.surroundPointWithVegetation(point1, DESERT_1, map);
         Utils.surroundPointWithVegetation(point2, DESERT_1, map);
 
         // Verify that it's not possible to place a house on the border of the desert
-        Point point3 = new Point(11, 11);
+        var point3 = new Point(11, 11);
         try {
             map.placeBuilding(new Woodcutter(player0), point3);
 
@@ -360,27 +350,26 @@ public class TestPlacementInTerrain {
     public void testWorkerCanWalkOffroadAcrossDesert() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a woodcutter hut on the map
-        Point point1 = new Point(15, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(15, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Surround the woodcutter hut with a desert
-        Point point2 = new Point(15, 7);
-        Point point3 = new Point(18, 6);
-        Point point4 = new Point(18, 4);
-        Point point5 = new Point(15, 3);
-        Point point6 = new Point(12, 4);
-        Point point7 = new Point(12, 6);
+        var point2 = new Point(15, 7);
+        var point3 = new Point(18, 6);
+        var point4 = new Point(18, 4);
+        var point5 = new Point(15, 3);
+        var point6 = new Point(12, 4);
+        var point7 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point2, DESERT_1, map);
         Utils.surroundPointWithVegetation(point3, DESERT_1, map);
         Utils.surroundPointWithVegetation(point4, DESERT_1, map);
@@ -392,7 +381,7 @@ public class TestPlacementInTerrain {
         Utils.constructHouse(woodcutter0);
 
         // Occupy the woodcutter hut
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
@@ -407,36 +396,35 @@ public class TestPlacementInTerrain {
     public void testWorkerCanGoIntoDesert() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a desert on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, DESERT_1, map);
 
         // Place hunter hut
-        Point point1 = new Point(8, 6);
-        Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
+        var point1 = new Point(8, 6);
+        var hunter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         // Finish construction of the hunter hut
         Utils.constructHouse(hunter0);
 
         // Occupy the hunter hut
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
+        var hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
         // Place wild animal
-        WildAnimal animal0 = map.placeWildAnimal(point2);
+        var animal0 = map.placeWildAnimal(point2);
 
         // Verify that the worker can reach the animal
         assertTrue(animal0.isExactlyAtPoint());
 
-        boolean meet = false;
+        var meet = false;
         for (int i = 0; i < 1000; i++) {
             hunter0.getWorker().stepTime();
 
@@ -454,28 +442,27 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBorderOfDesertAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a desert on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, DESERT_1, map);
 
         // Place snow next to the desert
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's possible to place a flag on the border of desert and snow
-        Point point5 = new Point(5, 7);
-        Flag flag = map.placeFlag(player0, point5);
+        var point5 = new Point(5, 7);
+        var flag = map.placeFlag(player0, point5);
 
         assertTrue(map.isFlagAtPoint(point5));
         assertEquals(flag, map.getFlagAtPoint(point5));
@@ -485,27 +472,26 @@ public class TestPlacementInTerrain {
     public void testFlagPointAvailableOnBorderOfDesertAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a desert on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, DESERT_1, map);
 
         // Place snow next to the desert
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's possible to place a flag on the border of desert and snow
-        Point point5 = new Point(5, 7);
+        var point5 = new Point(5, 7);
         assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
 
@@ -513,16 +499,15 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHeadquarterOnDesert() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place a desert on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, DESERT_1, map);
 
-        for (Point point : point2.getAdjacentPoints()) {
+        for (var point : point2.getAdjacentPoints()) {
             Utils.surroundPointWithVegetation(point, DESERT_1, map);
         }
 
@@ -543,18 +528,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableFlagOnSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of snow on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SNOW, map);
 
         // Verify that there is no available flag point in the snow
@@ -565,18 +549,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceFlagOnSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of snow on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SNOW, map);
 
         // Verify that it is not possible to place a flag on the snow
@@ -591,18 +574,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of snow on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SNOW, map);
 
         // Verify that there is no available house point on the snow
@@ -613,18 +595,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of snow on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SNOW, map);
 
         // Verify that it's not possible to place a house on the snow
@@ -639,18 +620,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of snow on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SNOW, map);
 
         // Verify that there is no available house point on the snow
@@ -661,18 +641,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of snow on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SNOW, map);
 
         // Verify that it's not possible to place a house on the snow
@@ -687,29 +666,28 @@ public class TestPlacementInTerrain {
     public void testCannotBuildRoadAcrossSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of snow on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SNOW, map);
 
         // Place flags
-        Point point2 = new Point(8, 10);
-        Point point3 = new Point(12, 10);
-        Flag flag0 = map.placeFlag(player0, point2);
-        Flag flag1 = map.placeFlag(player0, point3);
+        var point2 = new Point(8, 10);
+        var point3 = new Point(12, 10);
+        var flag0 = map.placeFlag(player0, point2);
+        var flag1 = map.placeFlag(player0, point3);
 
         // Verify that it's not possible to Build a road across the snow
         try {
-            Road road0 = map.placeRoad(player0, point2, point1, point3);
+            var road0 = map.placeRoad(player0, point2, point1, point3);
 
             fail();
         } catch (Exception e) {}
@@ -719,24 +697,23 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnBorderOfSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of snow on the map
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(12, 10);
+        var point1 = new Point(10, 10);
+        var point2 = new Point(12, 10);
         Utils.surroundPointWithVegetation(point1, SNOW, map);
         Utils.surroundPointWithVegetation(point2, SNOW, map);
 
         // Verify that there is no available house point on the border of the snow
-        Point point3 = new Point(11, 11);
+        var point3 = new Point(11, 11);
         assertNull(map.isAvailableHousePoint(player0, point3));
     }
 
@@ -744,24 +721,23 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnBorderOfSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of snow on the map
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(12, 10);
+        var point1 = new Point(10, 10);
+        var point2 = new Point(12, 10);
         Utils.surroundPointWithVegetation(point1, SNOW, map);
         Utils.surroundPointWithVegetation(point2, SNOW, map);
 
         // Verify that it's not possible to place a house on the border of the snow
-        Point point3 = new Point(11, 11);
+        var point3 = new Point(11, 11);
         try {
             map.placeBuilding(new Woodcutter(player0), point3);
 
@@ -773,27 +749,26 @@ public class TestPlacementInTerrain {
     public void testWorkerCannotWalkOffroadAcrossSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a woodcutter hut on the map
-        Point point1 = new Point(15, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(15, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Surround the woodcutter hut with water
-        Point point2 = new Point(15, 7);
-        Point point3 = new Point(18, 6);
-        Point point4 = new Point(18, 4);
-        Point point5 = new Point(15, 3);
-        Point point6 = new Point(12, 4);
-        Point point7 = new Point(12, 6);
+        var point2 = new Point(15, 7);
+        var point3 = new Point(18, 6);
+        var point4 = new Point(18, 4);
+        var point5 = new Point(15, 3);
+        var point6 = new Point(12, 4);
+        var point7 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point2, SNOW, map);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
@@ -805,7 +780,7 @@ public class TestPlacementInTerrain {
         Utils.constructHouse(woodcutter0);
 
         // Occupy the woodcutter hut
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
@@ -826,31 +801,30 @@ public class TestPlacementInTerrain {
     public void testWorkerCannotGoIntoSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a patch of snow on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, SNOW, map);
 
         // Place a wild animal
-        WildAnimal animal0 = map.placeWildAnimal(point2);
+        var animal0 = map.placeWildAnimal(point2);
 
         // Place hunter hut
-        Point point1 = new Point(8, 6);
-        Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
+        var point1 = new Point(8, 6);
+        var hunter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         // Finish construction of the hunter hut
         Utils.constructHouse(hunter0);
 
         // Occupy the hunter hut
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
+        var hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
         // Verify that the worker can't reach the animal
         for (int i = 0; i < 1000; i++) {
@@ -864,27 +838,26 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceFlagOnBorderOfSnowAndWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a lake on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, WATER, map);
 
         // Place snow next to the lake
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's not possible to place a flag on the border of water and snow
-        Point point5 = new Point(5, 7);
+        var point5 = new Point(5, 7);
 
         try {
             map.placeFlag(player0, point5);
@@ -897,27 +870,26 @@ public class TestPlacementInTerrain {
     public void testNoFlagPointAvailableOnBorderOfSnowAndWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a lake on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, WATER, map);
 
         // Place snow next to the lake
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's not possible to place a flag on the border of water and snow
-        Point point5 = new Point(5, 7);
+        var point5 = new Point(5, 7);
         assertFalse(map.isAvailableFlagPoint(player0, point5));
     }
 
@@ -925,16 +897,15 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHeadquarterOnSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place snow on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, SNOW, map);
 
-        for (Point point : point2.getAdjacentPoints()) {
+        for (var point : point2.getAdjacentPoints()) {
             Utils.surroundPointWithVegetation(point, SNOW, map);
         }
 
@@ -954,18 +925,17 @@ public class TestPlacementInTerrain {
     public void testAvailableFlagOnMeadow1() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of grass on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MEADOW_1, map);
 
         // Verify that there is an available flag point on the grass
@@ -976,22 +946,21 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnMeadow1() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of grass on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MEADOW_1, map);
 
         // Verify that it is  possible to place a flag on the grass
-        Flag flag = map.placeFlag(player0, point1);
+        var flag = map.placeFlag(player0, point1);
 
         assertTrue(map.isFlagAtPoint(point1));
         assertEquals(flag, map.getFlagAtPoint(point1));
@@ -1001,18 +970,17 @@ public class TestPlacementInTerrain {
     public void testAvailableHouseOnMeadow1() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of grass on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MEADOW_1, map);
 
         // Verify that there is an available house point on the grass
@@ -1023,22 +991,21 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHouseOnMeadow1() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of grass on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MEADOW_1, map);
 
         // Verify that it's possible to place a house on the grass
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         assertNotNull(woodcutter);
         assertTrue(map.isBuildingAtPoint(point1));
@@ -1049,18 +1016,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnMeadow1() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of grass on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MEADOW_1, map);
 
         // Verify that there is no available house point on the grass
@@ -1071,18 +1037,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnMeadow1() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of grass on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MEADOW_1, map);
 
         // Verify that it's not possible to place a house on the grass
@@ -1097,28 +1062,27 @@ public class TestPlacementInTerrain {
     public void testCanBuildRoadAcrossMeadow1() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of grass on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MEADOW_1, map);
 
         // Place flags
-        Point point2 = new Point(8, 10);
-        Point point3 = new Point(12, 10);
-        Flag flag0 = map.placeFlag(player0, point2);
-        Flag flag1 = map.placeFlag(player0, point3);
+        var point2 = new Point(8, 10);
+        var point3 = new Point(12, 10);
+        var flag0 = map.placeFlag(player0, point2);
+        var flag1 = map.placeFlag(player0, point3);
 
         // Verify that it's possible to build a road across the grass
-        Road road0 = map.placeRoad(player0, point2, point1, point3);
+        var road0 = map.placeRoad(player0, point2, point1, point3);
 
         assertTrue(map.getRoads().contains(road0));
     }
@@ -1127,27 +1091,26 @@ public class TestPlacementInTerrain {
     public void testWorkerCanWalkOffroadAcrossMeadow1() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a woodcutter hut on the map
-        Point point1 = new Point(15, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(15, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Surround the woodcutter hut with grass
-        Point point2 = new Point(15, 7);
-        Point point3 = new Point(18, 6);
-        Point point4 = new Point(18, 4);
-        Point point5 = new Point(15, 3);
-        Point point6 = new Point(12, 4);
-        Point point7 = new Point(12, 6);
+        var point2 = new Point(15, 7);
+        var point3 = new Point(18, 6);
+        var point4 = new Point(18, 4);
+        var point5 = new Point(15, 3);
+        var point6 = new Point(12, 4);
+        var point7 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point2, MEADOW_1, map);
         Utils.surroundPointWithVegetation(point3, MEADOW_1, map);
         Utils.surroundPointWithVegetation(point4, MEADOW_1, map);
@@ -1159,7 +1122,7 @@ public class TestPlacementInTerrain {
         Utils.constructHouse(woodcutter0);
 
         // Occupy the woodcutter hut
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
@@ -1174,36 +1137,35 @@ public class TestPlacementInTerrain {
     public void testWorkerCanGoIntoMeadow1() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a patch of grass on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, MEADOW_1, map);
 
         // Place hunter hut
-        Point point1 = new Point(8, 6);
-        Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
+        var point1 = new Point(8, 6);
+        var hunter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         // Finish construction of the hunter hut
         Utils.constructHouse(hunter0);
 
         // Occupy the hunter hut
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
+        var hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
         // Place wild animal
-        WildAnimal animal0 = map.placeWildAnimal(point2);
+        var animal0 = map.placeWildAnimal(point2);
 
         // Verify that the worker can reach the animal
         assertTrue(animal0.isExactlyAtPoint());
 
-        boolean meet = false;
+        var meet = false;
         for (int i = 0; i < 1000; i++) {
             hunter0.getWorker().stepTime();
 
@@ -1221,28 +1183,27 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBorderOfMeadow1AndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a patch of grass on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, MEADOW_1, map);
 
         // Place snow next to the grass
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's possible to place a flag on the border of grass and snow
-        Point point5 = new Point(5, 7);
-        Flag flag = map.placeFlag(player0, point5);
+        var point5 = new Point(5, 7);
+        var flag = map.placeFlag(player0, point5);
 
         assertTrue(map.isFlagAtPoint(point5));
         assertEquals(flag, map.getFlagAtPoint(point5));
@@ -1252,27 +1213,26 @@ public class TestPlacementInTerrain {
     public void testFlagPointAvailableOnBorderOfMeadow1AndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a patch of grass on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, MEADOW_1, map);
 
         // Place snow next to the grass
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's possible to place a flag on the border of grass and snow
-        Point point5 = new Point(5, 7);
+        var point5 = new Point(5, 7);
         assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
 
@@ -1283,18 +1243,17 @@ public class TestPlacementInTerrain {
     public void testAvailableFlagOnSavannah() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of savannah on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SAVANNAH, map);
 
         // Verify that there is an available flag point on the savannah
@@ -1305,22 +1264,21 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnSavannah() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of savannah on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SAVANNAH, map);
 
         // Verify that it is  possible to place a flag on the savannah
-        Flag flag = map.placeFlag(player0, point1);
+        var flag = map.placeFlag(player0, point1);
 
         assertTrue(map.getFlags().contains(flag));
         assertTrue(map.isFlagAtPoint(point1));
@@ -1331,18 +1289,17 @@ public class TestPlacementInTerrain {
     public void testAvailableHouseOnSavannah() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of savannah on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SAVANNAH, map);
 
         // Verify that there is an available house point on the savannah
@@ -1353,22 +1310,21 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHouseOnSavannah() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of savannah on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SAVANNAH, map);
 
         // Verify that it's possible to place a house on the savannah
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         assertTrue(map.getBuildings().contains(woodcutter));
         assertTrue(map.isBuildingAtPoint(point1));
@@ -1379,18 +1335,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnSavannah() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of savannah on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SAVANNAH, map);
 
         // Verify that there is no available house point on the savannah
@@ -1401,18 +1356,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnSavannah() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of savannah on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SAVANNAH, map);
 
         // Verify that it's not possible to place a house on the savannah
@@ -1427,28 +1381,27 @@ public class TestPlacementInTerrain {
     public void testCanBuildRoadAcrossSavannah() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of savannah on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SAVANNAH, map);
 
         // Place flags
-        Point point2 = new Point(8, 10);
-        Point point3 = new Point(12, 10);
-        Flag flag0 = map.placeFlag(player0, point2);
-        Flag flag1 = map.placeFlag(player0, point3);
+        var point2 = new Point(8, 10);
+        var point3 = new Point(12, 10);
+        var flag0 = map.placeFlag(player0, point2);
+        var flag1 = map.placeFlag(player0, point3);
 
         // Verify that it's possible to build a road across the savannah
-        Road road0 = map.placeRoad(player0, point2, point1, point3);
+        var road0 = map.placeRoad(player0, point2, point1, point3);
 
         assertTrue(map.getRoads().contains(road0));
     }
@@ -1457,27 +1410,26 @@ public class TestPlacementInTerrain {
     public void testWorkerCanWalkOffroadAcrossSavannah() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a woodcutter hut on the map
-        Point point1 = new Point(15, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(15, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Surround the woodcutter hut with savannah
-        Point point2 = new Point(15, 7);
-        Point point3 = new Point(18, 6);
-        Point point4 = new Point(18, 4);
-        Point point5 = new Point(15, 3);
-        Point point6 = new Point(12, 4);
-        Point point7 = new Point(12, 6);
+        var point2 = new Point(15, 7);
+        var point3 = new Point(18, 6);
+        var point4 = new Point(18, 4);
+        var point5 = new Point(15, 3);
+        var point6 = new Point(12, 4);
+        var point7 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point2, SAVANNAH, map);
         Utils.surroundPointWithVegetation(point3, SAVANNAH, map);
         Utils.surroundPointWithVegetation(point4, SAVANNAH, map);
@@ -1489,7 +1441,7 @@ public class TestPlacementInTerrain {
         Utils.constructHouse(woodcutter0);
 
         // Occupy the woodcutter hut
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
@@ -1504,34 +1456,33 @@ public class TestPlacementInTerrain {
     public void testWorkerCanGoIntoSavannah() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a savannah on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, SAVANNAH, map);
 
         // Place hunter hut
-        Point point1 = new Point(8, 6);
-        Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
+        var point1 = new Point(8, 6);
+        var hunter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         // Finish construction of the hunter hut
         Utils.constructHouse(hunter0);
 
         // Occupy the hunter hut
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
+        var hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
         // Place wild animal
-        WildAnimal animal0 = map.placeWildAnimal(point2);
+        var animal0 = map.placeWildAnimal(point2);
 
         // Verify that the worker can reach the animal
-        boolean meet = false;
+        var meet = false;
         for (int i = 0; i < 1000; i++) {
             hunter0.getWorker().stepTime();
 
@@ -1549,28 +1500,27 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBorderOfSavannahAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a savannah on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, SAVANNAH, map);
 
         // Place snow next to the savannah
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's possible to place a flag on the border of savannah and snow
-        Point point5 = new Point(5, 7);
-        Flag flag = map.placeFlag(player0, point5);
+        var point5 = new Point(5, 7);
+        var flag = map.placeFlag(player0, point5);
 
         assertTrue(map.getFlags().contains(flag));
         assertTrue(map.isFlagAtPoint(point5));
@@ -1581,27 +1531,26 @@ public class TestPlacementInTerrain {
     public void testFlagPointAvailableOnBorderOfSavannahAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a savannah on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, SAVANNAH, map);
 
         // Place snow next to the savannah
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's possible to place a flag on the border of savannah and snow
-        Point point5 = new Point(5, 7);
+        var point5 = new Point(5, 7);
         assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
 
@@ -1609,21 +1558,20 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHeadquarterOnSavannah() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place savannah on the map
-        Point point2 = new Point(8, 8);
+        var point2 = new Point(8, 8);
         Utils.surroundPointWithVegetation(point2, SAVANNAH, map);
 
-        for (Point point : point2.getAdjacentPoints()) {
+        for (var point : point2.getAdjacentPoints()) {
             Utils.surroundPointWithVegetation(point, SAVANNAH, map);
         }
 
         // Verify that a headquarter can be placed on the savannah
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         assertTrue(map.getBuildings().contains(headquarter));
         assertTrue(map.isBuildingAtPoint(point2));
@@ -1637,18 +1585,17 @@ public class TestPlacementInTerrain {
     public void testAvailableFlagOnBuildableWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of buildable water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, BUILDABLE_WATER, map);
 
         // Verify that there is an available flag point on the buildable water
@@ -1659,22 +1606,21 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBuildableWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of buildable water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, BUILDABLE_WATER, map);
 
         // Verify that it is  possible to place a flag on the buildable water
-        Flag flag = map.placeFlag(player0, point1);
+        var flag = map.placeFlag(player0, point1);
 
         assertTrue(map.getFlags().contains(flag));
         assertTrue(map.isFlagAtPoint(point1));
@@ -1685,18 +1631,17 @@ public class TestPlacementInTerrain {
     public void testAvailableHouseOnBuildableWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of buildable water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, BUILDABLE_WATER, map);
 
         // Verify that there is an available house point next to the buildable water
@@ -1707,22 +1652,21 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHouseOnBuildableWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of buildable water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, BUILDABLE_WATER, map);
 
         // Verify that it's possible to place a house on the buildable water
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         assertTrue(map.getBuildings().contains(woodcutter));
         assertTrue(map.isBuildingAtPoint(point1));
@@ -1733,18 +1677,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnBuildableWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of buildable water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, WATER_2, map);
 
         // Verify that there is no available house point on the buildable water
@@ -1755,18 +1698,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnBuildableWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of buildable water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, WATER_2, map);
 
         // Verify that it's not possible to place a house on the buildable water
@@ -1781,28 +1723,27 @@ public class TestPlacementInTerrain {
     public void testCanBuildRoadAcrossBuildableWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of buildable water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, BUILDABLE_WATER, map);
 
         // Place flags
-        Point point2 = new Point(8, 10);
-        Point point3 = new Point(12, 10);
-        Flag flag0 = map.placeFlag(player0, point2);
-        Flag flag1 = map.placeFlag(player0, point3);
+        var point2 = new Point(8, 10);
+        var point3 = new Point(12, 10);
+        var flag0 = map.placeFlag(player0, point2);
+        var flag1 = map.placeFlag(player0, point3);
 
         // Verify that it's possible to build a road across the buildable water
-        Road road0 = map.placeRoad(player0, point2, point1, point3);
+        var road0 = map.placeRoad(player0, point2, point1, point3);
 
         assertTrue(map.getRoads().contains(road0));
     }
@@ -1811,27 +1752,26 @@ public class TestPlacementInTerrain {
     public void testWorkerCanWalkOffroadAcrossBuildableWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a woodcutter hut on the map
-        Point point1 = new Point(15, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(15, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Surround the woodcutter hut with buildable water
-        Point point2 = new Point(15, 7);
-        Point point3 = new Point(18, 6);
-        Point point4 = new Point(18, 4);
-        Point point5 = new Point(15, 3);
-        Point point6 = new Point(12, 4);
-        Point point7 = new Point(12, 6);
+        var point2 = new Point(15, 7);
+        var point3 = new Point(18, 6);
+        var point4 = new Point(18, 4);
+        var point5 = new Point(15, 3);
+        var point6 = new Point(12, 4);
+        var point7 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point2, BUILDABLE_WATER, map);
         Utils.surroundPointWithVegetation(point3, BUILDABLE_WATER, map);
         Utils.surroundPointWithVegetation(point4, BUILDABLE_WATER, map);
@@ -1843,7 +1783,7 @@ public class TestPlacementInTerrain {
         Utils.constructHouse(woodcutter0);
 
         // Occupy the woodcutter hut
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
@@ -1858,36 +1798,35 @@ public class TestPlacementInTerrain {
     public void testWorkerCanGoIntoBuildableWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a lake of buildable water on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, BUILDABLE_WATER, map);
 
         // Place hunter hut
-        Point point1 = new Point(8, 6);
-        Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
+        var point1 = new Point(8, 6);
+        var hunter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         // Finish construction of the hunter hut
         Utils.constructHouse(hunter0);
 
         // Occupy the hunter hut
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
+        var hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
         // Place wild animal
-        WildAnimal animal0 = map.placeWildAnimal(point2);
+        var animal0 = map.placeWildAnimal(point2);
 
         // Verify that the worker can reach the animal
         assertTrue(animal0.isExactlyAtPoint());
 
-        boolean meet = false;
+        var meet = false;
         for (int i = 0; i < 1000; i++) {
             hunter0.getWorker().stepTime();
 
@@ -1905,28 +1844,27 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBorderOfBuildableWaterAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a lake of buildable water on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, BUILDABLE_WATER, map);
 
         // Place snow next to the lake
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's possible to place a flag on the border of buildable water and snow
-        Point point5 = new Point(5, 7);
-        Flag flag = map.placeFlag(player0, point5);
+        var point5 = new Point(5, 7);
+        var flag = map.placeFlag(player0, point5);
 
         assertTrue(map.getFlags().contains(flag));
         assertTrue(map.isFlagAtPoint(point5));
@@ -1937,27 +1875,26 @@ public class TestPlacementInTerrain {
     public void testFlagPointAvailableOnBorderOfBuildableWaterAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a lake of buildable water on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, BUILDABLE_WATER, map);
 
         // Place snow next to the lake
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's possible to place a flag on the border of buildable water and snow
-        Point point5 = new Point(5, 7);
+        var point5 = new Point(5, 7);
         assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
 
@@ -1965,21 +1902,20 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHeadquarterOnBuildableWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place buildable water on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, BUILDABLE_WATER, map);
 
-        for (Point point : point2.getAdjacentPoints()) {
+        for (var point : point2.getAdjacentPoints()) {
             Utils.surroundPointWithVegetation(point, BUILDABLE_WATER, map);
         }
 
         // Verify that a headquarter can be placed on the buildable water
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         assertTrue(map.getBuildings().contains(headquarter));
         assertTrue(map.isBuildingAtPoint(point2));
@@ -1993,18 +1929,17 @@ public class TestPlacementInTerrain {
     public void testAvailableFlagOnSteppe() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of steppe on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, STEPPE, map);
 
         // Verify that there is an available flag point on the steppe
@@ -2015,22 +1950,21 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnSteppe() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of steppe on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, STEPPE, map);
 
         // Verify that it is  possible to place a flag on the steppe
-        Flag flag = map.placeFlag(player0, point1);
+        var flag = map.placeFlag(player0, point1);
 
         assertTrue(map.getFlags().contains(flag));
         assertTrue(map.isFlagAtPoint(point1));
@@ -2041,18 +1975,17 @@ public class TestPlacementInTerrain {
     public void testAvailableHouseOnSteppe() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of steppe on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, STEPPE, map);
 
         // Verify that there is an available house point on the steppe
@@ -2063,22 +1996,21 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHouseOnSteppe() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of steppe on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, STEPPE, map);
 
         // Verify that it's possible to place a house on the steppe
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         assertTrue(map.getBuildings().contains(woodcutter));
         assertTrue(map.isBuildingAtPoint(point1));
@@ -2089,18 +2021,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnSteppe() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of steppe on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, STEPPE, map);
 
         // Verify that there is no available house point on the steppe
@@ -2111,18 +2042,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnSteppe() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of steppe on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, STEPPE, map);
 
         // Verify that it's not possible to place a house on the steppe
@@ -2137,28 +2067,27 @@ public class TestPlacementInTerrain {
     public void testCanBuildRoadAcrossSteppe() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of steppe on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, STEPPE, map);
 
         // Place flags
-        Point point2 = new Point(8, 10);
-        Point point3 = new Point(12, 10);
-        Flag flag0 = map.placeFlag(player0, point2);
-        Flag flag1 = map.placeFlag(player0, point3);
+        var point2 = new Point(8, 10);
+        var point3 = new Point(12, 10);
+        var flag0 = map.placeFlag(player0, point2);
+        var flag1 = map.placeFlag(player0, point3);
 
         // Verify that it's possible to build a road across the steppe
-        Road road0 = map.placeRoad(player0, point2, point1, point3);
+        var road0 = map.placeRoad(player0, point2, point1, point3);
 
         assertTrue(map.getRoads().contains(road0));
     }
@@ -2167,27 +2096,26 @@ public class TestPlacementInTerrain {
     public void testWorkerCanWalkOffroadAcrossSteppe() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a woodcutter hut on the map
-        Point point1 = new Point(15, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(15, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Surround the woodcutter hut with steppe
-        Point point2 = new Point(15, 7);
-        Point point3 = new Point(18, 6);
-        Point point4 = new Point(18, 4);
-        Point point5 = new Point(15, 3);
-        Point point6 = new Point(12, 4);
-        Point point7 = new Point(12, 6);
+        var point2 = new Point(15, 7);
+        var point3 = new Point(18, 6);
+        var point4 = new Point(18, 4);
+        var point5 = new Point(15, 3);
+        var point6 = new Point(12, 4);
+        var point7 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point2, STEPPE, map);
         Utils.surroundPointWithVegetation(point3, STEPPE, map);
         Utils.surroundPointWithVegetation(point4, STEPPE, map);
@@ -2199,7 +2127,7 @@ public class TestPlacementInTerrain {
         Utils.constructHouse(woodcutter0);
 
         // Occupy the woodcutter hut
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
@@ -2214,34 +2142,33 @@ public class TestPlacementInTerrain {
     public void testWorkerCanGoIntoSteppe() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a steppe on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, STEPPE, map);
 
         // Place hunter hut
-        Point point1 = new Point(8, 6);
-        Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
+        var point1 = new Point(8, 6);
+        var hunter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         // Finish construction of the hunter hut
         Utils.constructHouse(hunter0);
 
         // Occupy the hunter hut
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
+        var hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
         // Place wild animal
-        WildAnimal animal0 = map.placeWildAnimal(point2);
+        var animal0 = map.placeWildAnimal(point2);
 
         // Verify that the worker can reach the animal
-        boolean meet = false;
+        var meet = false;
         for (int i = 0; i < 1000; i++) {
             hunter0.getWorker().stepTime();
 
@@ -2259,28 +2186,27 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBorderOfSteppeAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a steppe on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, STEPPE, map);
 
         // Place snow next to the steppe
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's possible to place a flag on the border of steppe and snow
-        Point point5 = new Point(5, 7);
-        Flag flag = map.placeFlag(player0, point5);
+        var point5 = new Point(5, 7);
+        var flag = map.placeFlag(player0, point5);
 
         assertTrue(map.getFlags().contains(flag));
         assertTrue(map.isFlagAtPoint(point5));
@@ -2291,27 +2217,26 @@ public class TestPlacementInTerrain {
     public void testFlagPointAvailableOnBorderOfSteppeAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a steppe on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, STEPPE, map);
 
         // Place snow next to the steppe
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's possible to place a flag on the border of steppe and snow
-        Point point5 = new Point(5, 7);
+        var point5 = new Point(5, 7);
         assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
 
@@ -2319,21 +2244,20 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHeadquarterOnSteppe() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place steppe on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, STEPPE, map);
 
-        for (Point point : point2.getAdjacentPoints()) {
+        for (var point : point2.getAdjacentPoints()) {
             Utils.surroundPointWithVegetation(point, STEPPE, map);
         }
 
         // Verify that a headquarters can be placed on the steppe
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         assertTrue(map.getBuildings().contains(headquarter));
         assertTrue(map.isBuildingAtPoint(point2));
@@ -2347,18 +2271,17 @@ public class TestPlacementInTerrain {
     public void testAvailableFlagOnMountainMeadow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of mountain meadow on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_MEADOW, map);
 
         // Verify that there is an available flag point on the mountain meadow
@@ -2369,22 +2292,21 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnMountainMeadow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of mountain meadow on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_MEADOW, map);
 
         // Verify that it is  possible to place a flag on the mountain meadow
-        Flag flag = map.placeFlag(player0, point1);
+        var flag = map.placeFlag(player0, point1);
 
         assertTrue(map.getFlags().contains(flag));
         assertTrue(map.isFlagAtPoint(point1));
@@ -2395,18 +2317,17 @@ public class TestPlacementInTerrain {
     public void testAvailableHouseOnMountainMeadow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of mountain meadow on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_MEADOW, map);
 
         // Verify that there is an available house point on the mountain meadow
@@ -2417,22 +2338,21 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHouseOnMountainMeadow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of mountain meadow on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_MEADOW, map);
 
         // Verify that it's possible to place a house on the mountain meadow
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         assertTrue(map.getBuildings().contains(woodcutter));
         assertTrue(map.isBuildingAtPoint(point1));
@@ -2443,18 +2363,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnMountainMeadow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of mountain meadow on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_MEADOW, map);
 
         // Verify that there is no available house point on the mountain meadow
@@ -2465,18 +2384,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnMountainMeadow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of mountain meadow on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_MEADOW, map);
 
         // Verify that it's not possible to place a house on the mountain meadow
@@ -2491,28 +2409,27 @@ public class TestPlacementInTerrain {
     public void testCanBuildRoadAcrossMountainMeadow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of mountain meadow on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_MEADOW, map);
 
         // Place flags
-        Point point2 = new Point(8, 10);
-        Point point3 = new Point(12, 10);
-        Flag flag0 = map.placeFlag(player0, point2);
-        Flag flag1 = map.placeFlag(player0, point3);
+        var point2 = new Point(8, 10);
+        var point3 = new Point(12, 10);
+        var flag0 = map.placeFlag(player0, point2);
+        var flag1 = map.placeFlag(player0, point3);
 
         // Verify that it's possible to build a road across the mountain meadow
-        Road road0 = map.placeRoad(player0, point2, point1, point3);
+        var road0 = map.placeRoad(player0, point2, point1, point3);
 
         assertTrue(map.getRoads().contains(road0));
     }
@@ -2521,27 +2438,26 @@ public class TestPlacementInTerrain {
     public void testWorkerCanWalkOffroadAcrossMountainMeadow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a woodcutter hut on the map
-        Point point1 = new Point(15, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(15, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Surround the woodcutter hut with mountain meadow
-        Point point2 = new Point(15, 7);
-        Point point3 = new Point(18, 6);
-        Point point4 = new Point(18, 4);
-        Point point5 = new Point(15, 3);
-        Point point6 = new Point(12, 4);
-        Point point7 = new Point(12, 6);
+        var point2 = new Point(15, 7);
+        var point3 = new Point(18, 6);
+        var point4 = new Point(18, 4);
+        var point5 = new Point(15, 3);
+        var point6 = new Point(12, 4);
+        var point7 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point2, MOUNTAIN_MEADOW, map);
         Utils.surroundPointWithVegetation(point3, MOUNTAIN_MEADOW, map);
         Utils.surroundPointWithVegetation(point4, MOUNTAIN_MEADOW, map);
@@ -2553,7 +2469,7 @@ public class TestPlacementInTerrain {
         Utils.constructHouse(woodcutter0);
 
         // Occupy the woodcutter hut
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
@@ -2568,36 +2484,35 @@ public class TestPlacementInTerrain {
     public void testWorkerCanGoIntoMountainMeadow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a mountain meadow on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, MOUNTAIN_MEADOW, map);
 
         // Place hunter hut
-        Point point1 = new Point(8, 6);
-        Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
+        var point1 = new Point(8, 6);
+        var hunter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         // Finish construction of the hunter hut
         Utils.constructHouse(hunter0);
 
         // Occupy the hunter hut
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
+        var hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
         // Place wild animal
-        WildAnimal animal0 = map.placeWildAnimal(point2);
+        var animal0 = map.placeWildAnimal(point2);
 
         // Verify that the worker can reach the animal
         assertTrue(animal0.isExactlyAtPoint());
 
-        boolean meet = false;
+        var meet = false;
         for (int i = 0; i < 1000; i++) {
             hunter0.getWorker().stepTime();
 
@@ -2615,28 +2530,27 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBorderOfMountainMeadowAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a mountain meadow on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, MOUNTAIN_MEADOW, map);
 
         // Place snow next to the mountain meadow
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's possible to place a flag on the border of mountain meadow and snow
-        Point point5 = new Point(5, 7);
-        Flag flag = map.placeFlag(player0, point5);
+        var point5 = new Point(5, 7);
+        var flag = map.placeFlag(player0, point5);
 
         assertTrue(map.getFlags().contains(flag));
         assertTrue(map.isFlagAtPoint(point5));
@@ -2647,27 +2561,26 @@ public class TestPlacementInTerrain {
     public void testFlagPointAvailableOnBorderOfMountainMeadowAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a mountain meadow on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, MOUNTAIN_MEADOW, map);
 
         // Place snow next to the mountain meadow
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's possible to place a flag on the border of mountain meadow and snow
-        Point point5 = new Point(5, 7);
+        var point5 = new Point(5, 7);
         assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
 
@@ -2675,21 +2588,20 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHeadquarterOnMountainMeadow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place mountain meadow on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, MOUNTAIN_MEADOW, map);
 
-        for (Point point : point2.getAdjacentPoints()) {
+        for (var point : point2.getAdjacentPoints()) {
             Utils.surroundPointWithVegetation(point, MOUNTAIN_MEADOW, map);
         }
 
         // Verify that a headquarter can be placed on the mountain meadow
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         assertTrue(map.getBuildings().contains(headquarter));
         assertTrue(map.isBuildingAtPoint(point2));
@@ -2702,18 +2614,17 @@ public class TestPlacementInTerrain {
     public void testAvailableFlagOnBuildableMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of buildable mountain on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, BUILDABLE_MOUNTAIN, map);
 
         // Verify that there is an available flag point on the buildable mountain
@@ -2724,22 +2635,21 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBuildableMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of buildable mountain on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, BUILDABLE_MOUNTAIN, map);
 
         // Verify that it is  possible to place a flag on the buildable mountain
-        Flag flag = map.placeFlag(player0, point1);
+        var flag = map.placeFlag(player0, point1);
 
         assertTrue(map.getFlags().contains(flag));
         assertTrue(map.isFlagAtPoint(point1));
@@ -2750,18 +2660,17 @@ public class TestPlacementInTerrain {
     public void testAvailableHouseOnBuildableMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of buildable mountain on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, BUILDABLE_MOUNTAIN, map);
 
         // Verify that there is an available house point on the buildable mountain
@@ -2772,22 +2681,21 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHouseOnBuildableMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of buildable mountain on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, BUILDABLE_MOUNTAIN, map);
 
         // Verify that it's possible to place a house on the buildable mountain
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         assertTrue(map.getBuildings().contains(woodcutter));
         assertTrue(map.isBuildingAtPoint(point1));
@@ -2798,18 +2706,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnBuildableMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of buildable mountain on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, BUILDABLE_MOUNTAIN, map);
 
         // Verify that there is no available house point on the buildable mountain
@@ -2820,18 +2727,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnBuildableMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of buildable mountain on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, BUILDABLE_MOUNTAIN, map);
 
         // Verify that it's not possible to place a house on the buildable mountain
@@ -2846,28 +2752,27 @@ public class TestPlacementInTerrain {
     public void testCanBuildRoadAcrossBuildableMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of buildable mountain on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, BUILDABLE_MOUNTAIN, map);
 
         // Place flags
-        Point point2 = new Point(8, 10);
-        Point point3 = new Point(12, 10);
-        Flag flag0 = map.placeFlag(player0, point2);
-        Flag flag1 = map.placeFlag(player0, point3);
+        var point2 = new Point(8, 10);
+        var point3 = new Point(12, 10);
+        var flag0 = map.placeFlag(player0, point2);
+        var flag1 = map.placeFlag(player0, point3);
 
         // Verify that it's possible to build a road across the buildable mountain
-        Road road0 = map.placeRoad(player0, point2, point1, point3);
+        var road0 = map.placeRoad(player0, point2, point1, point3);
 
         assertTrue(map.getRoads().contains(road0));
     }
@@ -2876,27 +2781,26 @@ public class TestPlacementInTerrain {
     public void testWorkerCanWalkOffroadAcrossBuildableMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a woodcutter hut on the map
-        Point point1 = new Point(15, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(15, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Surround the woodcutter hut with buildable mountain
-        Point point2 = new Point(15, 7);
-        Point point3 = new Point(18, 6);
-        Point point4 = new Point(18, 4);
-        Point point5 = new Point(15, 3);
-        Point point6 = new Point(12, 4);
-        Point point7 = new Point(12, 6);
+        var point2 = new Point(15, 7);
+        var point3 = new Point(18, 6);
+        var point4 = new Point(18, 4);
+        var point5 = new Point(15, 3);
+        var point6 = new Point(12, 4);
+        var point7 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point2, BUILDABLE_MOUNTAIN, map);
         Utils.surroundPointWithVegetation(point3, BUILDABLE_MOUNTAIN, map);
         Utils.surroundPointWithVegetation(point4, BUILDABLE_MOUNTAIN, map);
@@ -2908,7 +2812,7 @@ public class TestPlacementInTerrain {
         Utils.constructHouse(woodcutter0);
 
         // Occupy the woodcutter hut
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
@@ -2923,34 +2827,33 @@ public class TestPlacementInTerrain {
     public void testWorkerCanGoIntoBuildableMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a buildable mountain on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, BUILDABLE_MOUNTAIN, map);
 
         // Place hunter hut
-        Point point1 = new Point(8, 6);
-        Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
+        var point1 = new Point(8, 6);
+        var hunter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         // Finish construction of the hunter hut
         Utils.constructHouse(hunter0);
 
         // Occupy the hunter hut
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
+        var hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
         // Place wild animal
-        WildAnimal animal0 = map.placeWildAnimal(point2);
+        var animal0 = map.placeWildAnimal(point2);
 
         // Verify that the worker can reach the animal
-        boolean meet = false;
+        var meet = false;
         for (int i = 0; i < 1000; i++) {
             hunter0.getWorker().stepTime();
 
@@ -2968,28 +2871,27 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBorderOfBuildableMountainAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a buildable mountain on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, BUILDABLE_MOUNTAIN, map);
 
         // Place snow next to the buildable mountain
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's possible to place a flag on the border of buildable mountain and snow
-        Point point5 = new Point(5, 7);
-        Flag flag = map.placeFlag(player0, point5);
+        var point5 = new Point(5, 7);
+        var flag = map.placeFlag(player0, point5);
 
         assertTrue(map.getFlags().contains(flag));
         assertTrue(map.isFlagAtPoint(point5));
@@ -3000,27 +2902,26 @@ public class TestPlacementInTerrain {
     public void testFlagPointAvailableOnBorderOfBuildableMountainAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a buildable mountain on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, BUILDABLE_MOUNTAIN, map);
 
         // Place snow next to the buildable mountain
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's possible to place a flag on the border of buildable mountain and snow
-        Point point5 = new Point(5, 7);
+        var point5 = new Point(5, 7);
         assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
 
@@ -3028,21 +2929,20 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHeadquarterOnBuildableMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place buildable mountain on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, BUILDABLE_MOUNTAIN, map);
 
-        for (Point point : point2.getAdjacentPoints()) {
+        for (var point : point2.getAdjacentPoints()) {
             Utils.surroundPointWithVegetation(point, BUILDABLE_MOUNTAIN, map);
         }
 
         // Verify that a headquarter can be placed on the buildable mountain
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         assertTrue(map.getBuildings().contains(headquarter));
         assertTrue(map.isBuildingAtPoint(point2));
@@ -3053,20 +2953,19 @@ public class TestPlacementInTerrain {
     public void testAvailableLargeHouseOnBuildableMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(13, 13);
+        var point1 = new Point(13, 13);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a buildable mountain on the map
-        Point point2 = new Point(6, 6);
+        var point2 = new Point(6, 6);
         Utils.surroundPointWithVegetation(point2, BUILDABLE_MOUNTAIN, map);
 
-        for (Point point : point2.getAdjacentPoints()) {
+        for (var point : point2.getAdjacentPoints()) {
             Utils.surroundPointWithVegetation(point, BUILDABLE_MOUNTAIN, map);
         }
 
@@ -3084,18 +2983,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableFlagOnLava() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of lava on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, LAVA_1, map);
 
         // Verify that there is no available flag point in the lava
@@ -3106,18 +3004,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceFlagOnLava() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of lava on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, LAVA_1, map);
 
         // Verify that it is not possible to place a flag on the lava
@@ -3132,18 +3029,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnLava() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of lava on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, LAVA_1, map);
 
         // Verify that there is no available house point on the lava
@@ -3154,18 +3050,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnLava() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of lava on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, LAVA_1, map);
 
         // Verify that it's not possible to place a house on the lava
@@ -3180,18 +3075,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnLava() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of lava on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, LAVA_1, map);
 
         // Verify that there is no available house point on the lava
@@ -3202,18 +3096,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnLava() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of lava on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, LAVA_1, map);
 
         // Verify that it's not possible to place a house on the lava
@@ -3228,29 +3121,28 @@ public class TestPlacementInTerrain {
     public void testCannotBuildRoadAcrossLava() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of lava on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, LAVA_1, map);
 
         // Place flags
-        Point point2 = new Point(8, 10);
-        Point point3 = new Point(12, 10);
-        Flag flag0 = map.placeFlag(player0, point2);
-        Flag flag1 = map.placeFlag(player0, point3);
+        var point2 = new Point(8, 10);
+        var point3 = new Point(12, 10);
+        var flag0 = map.placeFlag(player0, point2);
+        var flag1 = map.placeFlag(player0, point3);
 
         // Verify that it's not possible to Build a road across the lava
         try {
-            Road road0 = map.placeRoad(player0, point2, point1, point3);
+            var road0 = map.placeRoad(player0, point2, point1, point3);
 
             fail();
         } catch (Exception e) {}
@@ -3260,24 +3152,23 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnBorderOfLava() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of lava on the map
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(12, 10);
+        var point1 = new Point(10, 10);
+        var point2 = new Point(12, 10);
         Utils.surroundPointWithVegetation(point1, LAVA_1, map);
         Utils.surroundPointWithVegetation(point2, LAVA_1, map);
 
         // Verify that there is no available house point on the border of the lava
-        Point point3 = new Point(11, 11);
+        var point3 = new Point(11, 11);
         assertNull(map.isAvailableHousePoint(player0, point3));
     }
 
@@ -3285,24 +3176,23 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnBorderOfLava() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of lava on the map
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(12, 10);
+        var point1 = new Point(10, 10);
+        var point2 = new Point(12, 10);
         Utils.surroundPointWithVegetation(point1, LAVA_1, map);
         Utils.surroundPointWithVegetation(point2, LAVA_1, map);
 
         // Verify that it's not possible to place a house on the border of the lava
-        Point point3 = new Point(11, 11);
+        var point3 = new Point(11, 11);
         try {
             map.placeBuilding(new Woodcutter(player0), point3);
 
@@ -3314,27 +3204,26 @@ public class TestPlacementInTerrain {
     public void testWorkerCannotWalkOffroadAcrossLava() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a woodcutter hut on the map
-        Point point1 = new Point(15, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(15, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Surround the woodcutter hut with water
-        Point point2 = new Point(15, 7);
-        Point point3 = new Point(18, 6);
-        Point point4 = new Point(18, 4);
-        Point point5 = new Point(15, 3);
-        Point point6 = new Point(12, 4);
-        Point point7 = new Point(12, 6);
+        var point2 = new Point(15, 7);
+        var point3 = new Point(18, 6);
+        var point4 = new Point(18, 4);
+        var point5 = new Point(15, 3);
+        var point6 = new Point(12, 4);
+        var point7 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point2, LAVA_1, map);
         Utils.surroundPointWithVegetation(point3, LAVA_1, map);
         Utils.surroundPointWithVegetation(point4, LAVA_1, map);
@@ -3346,7 +3235,7 @@ public class TestPlacementInTerrain {
         Utils.constructHouse(woodcutter0);
 
         // Occupy the woodcutter hut
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
@@ -3367,27 +3256,26 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceFlagOnBorderOfLavaAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place lava on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, LAVA_1, map);
 
         // Place snow next to the swamp
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's not possible to place a flag on the border of lava and snow
-        Point point5 = new Point(5, 7);
+        var point5 = new Point(5, 7);
 
         try {
             map.placeFlag(player0, point5);
@@ -3400,27 +3288,26 @@ public class TestPlacementInTerrain {
     public void testNoFlagPointAvailableOnBorderOfLavaAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a swamp on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, LAVA_1, map);
 
         // Place snow next to the swamp
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's not possible to place a flag on the border of lava and snow
-        Point point5 = new Point(5, 7);
+        var point5 = new Point(5, 7);
         assertFalse(map.isAvailableFlagPoint(player0, point5));
     }
 
@@ -3428,16 +3315,15 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHeadquarterOnLava() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place lava on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, LAVA_1, map);
 
-        for (Point point : point2.getAdjacentPoints()) {
+        for (var point : point2.getAdjacentPoints()) {
             Utils.surroundPointWithVegetation(point, LAVA_1, map);
         }
 
@@ -3454,20 +3340,19 @@ public class TestPlacementInTerrain {
     public void testNoAvailableLargeHouseOnLava() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(13, 13);
+        var point1 = new Point(13, 13);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place lava on the map
-        Point point2 = new Point(6, 6);
+        var point2 = new Point(6, 6);
         Utils.surroundPointWithVegetation(point2, LAVA_1, map);
 
-        for (Point point : point2.getAdjacentPoints()) {
+        for (var point : point2.getAdjacentPoints()) {
             Utils.surroundPointWithVegetation(point, LAVA_1, map);
         }
 
@@ -3485,18 +3370,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableFlagOnDeepWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of deep water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, WATER_2, map);
 
         // Verify that there is no available flag point in the deep water
@@ -3507,18 +3391,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceFlagOnDeepWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of deep water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, WATER_2, map);
 
         // Verify that it is not possible to place a flag on the deep water
@@ -3533,18 +3416,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnDeepWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of deep water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, WATER_2, map);
 
         // Verify that there is no available house point on the deep water
@@ -3555,18 +3437,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnDeepWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of deep water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, WATER_2, map);
 
         // Verify that it's not possible to place a house on the deep water
@@ -3581,18 +3462,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnDeepWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of deep water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, BUILDABLE_WATER, map);
 
         // Verify that there is no available house point on the deep water
@@ -3603,18 +3483,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnDeepWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of deep water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, BUILDABLE_WATER, map);
 
         // Verify that it's not possible to place a house on the deep water
@@ -3629,29 +3508,28 @@ public class TestPlacementInTerrain {
     public void testCannotBuildRoadAcrossDeepWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of deep water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, WATER_2, map);
 
         // Place flags
-        Point point2 = new Point(8, 10);
-        Point point3 = new Point(12, 10);
-        Flag flag0 = map.placeFlag(player0, point2);
-        Flag flag1 = map.placeFlag(player0, point3);
+        var point2 = new Point(8, 10);
+        var point3 = new Point(12, 10);
+        var flag0 = map.placeFlag(player0, point2);
+        var flag1 = map.placeFlag(player0, point3);
 
         // Verify that it's not possible to Build a road across the deep water
         try {
-            Road road0 = map.placeRoad(player0, point2, point1, point3);
+            var road0 = map.placeRoad(player0, point2, point1, point3);
 
             fail();
         } catch (Exception e) {}
@@ -3661,24 +3539,23 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnBorderOfDeepWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of deep water on the map
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(12, 10);
+        var point1 = new Point(10, 10);
+        var point2 = new Point(12, 10);
         Utils.surroundPointWithVegetation(point1, WATER_2, map);
         Utils.surroundPointWithVegetation(point2, WATER_2, map);
 
         // Verify that there is no available house point on the border of the deep water
-        Point point3 = new Point(11, 11);
+        var point3 = new Point(11, 11);
         assertNull(map.isAvailableHousePoint(player0, point3));
     }
 
@@ -3686,24 +3563,23 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnBorderOfDeepWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of deep water on the map
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(12, 10);
+        var point1 = new Point(10, 10);
+        var point2 = new Point(12, 10);
         Utils.surroundPointWithVegetation(point1, WATER_2, map);
         Utils.surroundPointWithVegetation(point2, WATER_2, map);
 
         // Verify that it's not possible to place a house on the border of the deep water
-        Point point3 = new Point(11, 11);
+        var point3 = new Point(11, 11);
         try {
             map.placeBuilding(new Woodcutter(player0), point3);
 
@@ -3715,27 +3591,26 @@ public class TestPlacementInTerrain {
     public void testWorkerCannotWalkOffroadAcrossDeepWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a woodcutter hut on the map
-        Point point1 = new Point(15, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(15, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Surround the woodcutter hut with water
-        Point point2 = new Point(15, 7);
-        Point point3 = new Point(18, 6);
-        Point point4 = new Point(18, 4);
-        Point point5 = new Point(15, 3);
-        Point point6 = new Point(12, 4);
-        Point point7 = new Point(12, 6);
+        var point2 = new Point(15, 7);
+        var point3 = new Point(18, 6);
+        var point4 = new Point(18, 4);
+        var point5 = new Point(15, 3);
+        var point6 = new Point(12, 4);
+        var point7 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point2, WATER_2, map);
         Utils.surroundPointWithVegetation(point3, WATER_2, map);
         Utils.surroundPointWithVegetation(point4, WATER_2, map);
@@ -3747,7 +3622,7 @@ public class TestPlacementInTerrain {
         Utils.constructHouse(woodcutter0);
 
         // Occupy the woodcutter hut
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
@@ -3769,27 +3644,26 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceFlagOnBorderOfDeepWaterAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a lake with deep water on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, WATER_2, map);
 
         // Place snow next to the lake
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's not possible to place a flag on the border of deep water and snow
-        Point point5 = new Point(5, 7);
+        var point5 = new Point(5, 7);
 
         try {
             map.placeFlag(player0, point5);
@@ -3802,27 +3676,26 @@ public class TestPlacementInTerrain {
     public void testNoFlagPointAvailableOnBorderOfDeepWaterAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a lake with deep water on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, WATER_2, map);
 
         // Place snow next to the lake
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's not possible to place a flag on the border of deep water and snow
-        Point point5 = new Point(5, 7);
+        var point5 = new Point(5, 7);
         assertFalse(map.isAvailableFlagPoint(player0, point5));
     }
 
@@ -3830,16 +3703,15 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHeadquarterOnDeepWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place deep water on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, WATER_2, map);
 
-        for (Point point : point2.getAdjacentPoints()) {
+        for (var point : point2.getAdjacentPoints()) {
             Utils.surroundPointWithVegetation(point2, WATER_2, map);
         }
 
@@ -3856,20 +3728,19 @@ public class TestPlacementInTerrain {
     public void testNoAvailableLargeHouseOnDeepWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(13, 13);
+        var point1 = new Point(13, 13);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place deep water on the map
-        Point point2 = new Point(6, 6);
+        var point2 = new Point(6, 6);
         Utils.surroundPointWithVegetation(point2, WATER_2, map);
 
-        for (Point point : point2.getAdjacentPoints()) {
+        for (var point : point2.getAdjacentPoints()) {
             Utils.surroundPointWithVegetation(point, WATER_2, map);
         }
 
@@ -3887,18 +3758,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableFlagOnWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of Water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, WATER, map);
 
         // Verify that there is no available flag point in the water
@@ -3909,18 +3779,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceFlagOnWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, WATER, map);
 
         // Verify that it is not possible to place a flag on the water
@@ -3935,18 +3804,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, WATER, map);
 
         // Verify that there is no available house point on the water
@@ -3957,18 +3825,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, WATER, map);
 
         // Verify that it's not possible to place a house on the water
@@ -3983,18 +3850,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, WATER, map);
 
         // Verify that there is no available house point on the water
@@ -4005,18 +3871,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, WATER, map);
 
         // Verify that it's not possible to place a house on the water
@@ -4031,29 +3896,28 @@ public class TestPlacementInTerrain {
     public void testCannotBuildRoadAcrossWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of water on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, WATER, map);
 
         // Place flags
-        Point point2 = new Point(8, 10);
-        Point point3 = new Point(12, 10);
-        Flag flag0 = map.placeFlag(player0, point2);
-        Flag flag1 = map.placeFlag(player0, point3);
+        var point2 = new Point(8, 10);
+        var point3 = new Point(12, 10);
+        var flag0 = map.placeFlag(player0, point2);
+        var flag1 = map.placeFlag(player0, point3);
 
         // Verify that it's not possible to Build a road across the water
         try {
-            Road road0 = map.placeRoad(player0, point2, point1, point3);
+            var road0 = map.placeRoad(player0, point2, point1, point3);
 
             fail();
         } catch (Exception e) {}
@@ -4063,24 +3927,23 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnBorderOfWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of water on the map
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(12, 10);
+        var point1 = new Point(10, 10);
+        var point2 = new Point(12, 10);
         Utils.surroundPointWithVegetation(point1, WATER, map);
         Utils.surroundPointWithVegetation(point2, WATER, map);
 
         // Verify that there is no available house point on the border of the water
-        Point point3 = new Point(11, 11);
+        var point3 = new Point(11, 11);
         assertNull(map.isAvailableHousePoint(player0, point3));
     }
 
@@ -4088,24 +3951,23 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnBorderOfWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of water on the map
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(12, 10);
+        var point1 = new Point(10, 10);
+        var point2 = new Point(12, 10);
         Utils.surroundPointWithVegetation(point1, WATER, map);
         Utils.surroundPointWithVegetation(point2, WATER, map);
 
         // Verify that it's not possible to place a house on the border of the water
-        Point point3 = new Point(11, 11);
+        var point3 = new Point(11, 11);
         try {
             map.placeBuilding(new Woodcutter(player0), point3);
 
@@ -4117,27 +3979,26 @@ public class TestPlacementInTerrain {
     public void testWorkerCannotWalkOffroadAcrossWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a woodcutter hut on the map
-        Point point1 = new Point(15, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(15, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Surround the woodcutter hut with water
-        Point point2 = new Point(15, 7);
-        Point point3 = new Point(18, 6);
-        Point point4 = new Point(18, 4);
-        Point point5 = new Point(15, 3);
-        Point point6 = new Point(12, 4);
-        Point point7 = new Point(12, 6);
+        var point2 = new Point(15, 7);
+        var point3 = new Point(18, 6);
+        var point4 = new Point(18, 4);
+        var point5 = new Point(15, 3);
+        var point6 = new Point(12, 4);
+        var point7 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point2, WATER, map);
         Utils.surroundPointWithVegetation(point3, WATER, map);
         Utils.surroundPointWithVegetation(point4, WATER, map);
@@ -4149,7 +4010,7 @@ public class TestPlacementInTerrain {
         Utils.constructHouse(woodcutter0);
 
         // Occupy the woodcutter hut
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
@@ -4171,27 +4032,26 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceFlagOnBorderOfWaterAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a lake on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, WATER, map);
 
         // Place snow next to the lake
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's not possible to place a flag on the border of water and snow
-        Point point5 = new Point(5, 7);
+        var point5 = new Point(5, 7);
 
         try {
             map.placeFlag(player0, point5);
@@ -4204,27 +4064,26 @@ public class TestPlacementInTerrain {
     public void testNoFlagPointAvailableOnBorderOfWaterAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a lake on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, WATER, map);
 
         // Place snow next to the lake
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's not possible to place a flag on the border of water and snow
-        Point point5 = new Point(5, 7);
+        var point5 = new Point(5, 7);
         assertFalse(map.isAvailableFlagPoint(player0, point5));
     }
 
@@ -4232,16 +4091,15 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHeadquarterOnWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place water on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, WATER, map);
 
-        for (Point point : point2.getAdjacentPoints()) {
+        for (var point : point2.getAdjacentPoints()) {
             Utils.surroundPointWithVegetation(point, WATER, map);
         }
 
@@ -4258,20 +4116,19 @@ public class TestPlacementInTerrain {
     public void testNoAvailableLargeHouseOnWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(13, 13);
+        var point1 = new Point(13, 13);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place water on the map
-        Point point2 = new Point(6, 6);
+        var point2 = new Point(6, 6);
         Utils.surroundPointWithVegetation(point2, WATER, map);
 
-        for (Point point : point2.getAdjacentPoints()) {
+        for (var point : point2.getAdjacentPoints()) {
             Utils.surroundPointWithVegetation(point, WATER, map);
         }
 
@@ -4289,18 +4146,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableFlagOnSwamp() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of swamp on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SWAMP, map);
 
         // Verify that there is no available flag point in the swamp
@@ -4311,18 +4167,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceFlagOnSwamp() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of swamp on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SWAMP, map);
 
         // Verify that it is not possible to place a flag on the swamp
@@ -4337,18 +4192,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnSwamp() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of swamp on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SWAMP, map);
 
         // Verify that there is no available house point on the swamp
@@ -4359,18 +4213,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnSwamp() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of swamp on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SWAMP, map);
 
         // Verify that it's not possible to place a house on the swamp
@@ -4385,18 +4238,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnSwamp() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of swamp on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SWAMP, map);
 
         // Verify that there is no available house point on the swamp
@@ -4407,18 +4259,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnSwamp() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of swamp on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SWAMP, map);
 
         // Verify that it's not possible to place a house on the swamp
@@ -4433,29 +4284,28 @@ public class TestPlacementInTerrain {
     public void testCannotBuildRoadAcrossSwamp() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of swamp on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SWAMP, map);
 
         // Place flags
-        Point point2 = new Point(8, 10);
-        Point point3 = new Point(12, 10);
-        Flag flag0 = map.placeFlag(player0, point2);
-        Flag flag1 = map.placeFlag(player0, point3);
+        var point2 = new Point(8, 10);
+        var point3 = new Point(12, 10);
+        var flag0 = map.placeFlag(player0, point2);
+        var flag1 = map.placeFlag(player0, point3);
 
         // Verify that it's not possible to Build a road across the swamp
         try {
-            Road road0 = map.placeRoad(player0, point2, point1, point3);
+            var road0 = map.placeRoad(player0, point2, point1, point3);
 
             fail();
         } catch (Exception e) {}
@@ -4465,24 +4315,23 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnBorderOfSwamp() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of swamp on the map
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(12, 10);
+        var point1 = new Point(10, 10);
+        var point2 = new Point(12, 10);
         Utils.surroundPointWithVegetation(point1, SWAMP, map);
         Utils.surroundPointWithVegetation(point2, SWAMP, map);
 
         // Verify that there is no available house point on the border of the swamp
-        Point point3 = new Point(11, 11);
+        var point3 = new Point(11, 11);
         assertNull(map.isAvailableHousePoint(player0, point3));
     }
 
@@ -4490,24 +4339,23 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnBorderOfSwamp() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small patch of swamp on the map
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(12, 10);
+        var point1 = new Point(10, 10);
+        var point2 = new Point(12, 10);
         Utils.surroundPointWithVegetation(point1, SWAMP, map);
         Utils.surroundPointWithVegetation(point2, SWAMP, map);
 
         // Verify that it's not possible to place a house on the border of the swamp
-        Point point3 = new Point(11, 11);
+        var point3 = new Point(11, 11);
         try {
             map.placeBuilding(new Woodcutter(player0), point3);
 
@@ -4519,27 +4367,26 @@ public class TestPlacementInTerrain {
     public void testWorkerCannotWalkOffroadAcrossSwamp() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a woodcutter hut on the map
-        Point point1 = new Point(15, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(15, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Surround the woodcutter hut with water
-        Point point2 = new Point(15, 7);
-        Point point3 = new Point(18, 6);
-        Point point4 = new Point(18, 4);
-        Point point5 = new Point(15, 3);
-        Point point6 = new Point(12, 4);
-        Point point7 = new Point(12, 6);
+        var point2 = new Point(15, 7);
+        var point3 = new Point(18, 6);
+        var point4 = new Point(18, 4);
+        var point5 = new Point(15, 3);
+        var point6 = new Point(12, 4);
+        var point7 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point2, SWAMP, map);
         Utils.surroundPointWithVegetation(point3, SWAMP, map);
         Utils.surroundPointWithVegetation(point4, SWAMP, map);
@@ -4551,7 +4398,7 @@ public class TestPlacementInTerrain {
         Utils.constructHouse(woodcutter0);
 
         // Occupy the woodcutter hut
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
@@ -4572,31 +4419,30 @@ public class TestPlacementInTerrain {
     public void testWorkerCannotGoIntoSwamp() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a swamp on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, SWAMP, map);
 
         // Place tree
-        WildAnimal animal0 = map.placeWildAnimal(point2);
+        var animal0 = map.placeWildAnimal(point2);
 
         // Place woodcutter
-        Point point1 = new Point(8, 6);
-        Building woodcutter0 = map.placeBuilding(new HunterHut(player0), point1);
+        var point1 = new Point(8, 6);
+        var woodcutter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         // Finish construction of the woodcutter
         Utils.constructHouse(woodcutter0);
 
         // Occupy the woodcutter
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), woodcutter0);
+        var hunter = Utils.occupyBuilding(new Hunter(player0, map), woodcutter0);
 
         // Verify that the worker can't reach the tree
         for (int i = 0; i < 1000; i++) {
@@ -4610,27 +4456,26 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceFlagOnBorderOfSwampAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a swamp on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, SWAMP, map);
 
         // Place snow next to the swamp
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's not possible to place a flag on the border of swamp and snow
-        Point point5 = new Point(5, 7);
+        var point5 = new Point(5, 7);
 
         try {
             map.placeFlag(player0, point5);
@@ -4643,27 +4488,26 @@ public class TestPlacementInTerrain {
     public void testNoFlagPointAvailableOnBorderOfSwampAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a swamp on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, SWAMP, map);
 
         // Place snow next to the swamp
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's not possible to place a flag on the border of swamp and snow
-        Point point5 = new Point(5, 7);
+        var point5 = new Point(5, 7);
         assertFalse(map.isAvailableFlagPoint(player0, point5));
     }
 
@@ -4671,16 +4515,15 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHeadquarterOnSwamp() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place swamp on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, SWAMP, map);
 
-        for (Point point : point2.getAdjacentPoints()) {
+        for (var point : point2.getAdjacentPoints()) {
             Utils.surroundPointWithVegetation(point, SWAMP, map);
         }
 
@@ -4698,20 +4541,19 @@ public class TestPlacementInTerrain {
     public void testNoAvailableLargeHouseOnSwamp() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(13, 13);
+        var point1 = new Point(13, 13);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place swamp on the map
-        Point point2 = new Point(6, 6);
+        var point2 = new Point(6, 6);
         Utils.surroundPointWithVegetation(point2, SWAMP, map);
 
-        for (Point point : point2.getAdjacentPoints()) {
+        for (var point : point2.getAdjacentPoints()) {
             Utils.surroundPointWithVegetation(point, SWAMP, map);
         }
 
@@ -4728,18 +4570,17 @@ public class TestPlacementInTerrain {
     public void testAvailableFlagInMagenta() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small magenta on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MAGENTA, map);
 
         // Verify that there is an available flag point in the magenta
@@ -4750,22 +4591,21 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagInMagenta() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small magenta on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MAGENTA, map);
 
         // Verify that it is possible to place a flag in the magenta
-        Flag flag = map.placeFlag(player0, point1);
+        var flag = map.placeFlag(player0, point1);
 
         assertTrue(map.getFlags().contains(flag));
         assertTrue(map.isFlagAtPoint(point1));
@@ -4776,18 +4616,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseInMagenta() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small magenta on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MAGENTA, map);
 
         // Verify that there is no available house point in the magenta
@@ -4798,18 +4637,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseInMagenta() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small magenta on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MAGENTA, map);
 
         // Verify that it's not possible to place a house in the magenta
@@ -4824,18 +4662,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineInMagenta() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small magenta on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MAGENTA, map);
 
         // Verify that there is no available house point in the magenta
@@ -4846,18 +4683,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineInMagenta() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small magenta on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MAGENTA, map);
 
         // Verify that it's not possible to place a house in the magenta
@@ -4872,28 +4708,27 @@ public class TestPlacementInTerrain {
     public void testCanBuildRoadAcrossMagenta() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small magenta on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MAGENTA, map);
 
         // Place flags
-        Point point2 = new Point(8, 10);
-        Point point3 = new Point(12, 10);
-        Flag flag0 = map.placeFlag(player0, point2);
-        Flag flag1 = map.placeFlag(player0, point3);
+        var point2 = new Point(8, 10);
+        var point3 = new Point(12, 10);
+        var flag0 = map.placeFlag(player0, point2);
+        var flag1 = map.placeFlag(player0, point3);
 
         // Verify that it's possible to Build a road across the magenta
-        Road road0 = map.placeRoad(player0, point2, point1, point3);
+        var road0 = map.placeRoad(player0, point2, point1, point3);
 
         assertTrue(map.getRoads().contains(road0));
     }
@@ -4902,24 +4737,23 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnBorderOfMagenta() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small magenta on the map
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(12, 10);
+        var point1 = new Point(10, 10);
+        var point2 = new Point(12, 10);
         Utils.surroundPointWithVegetation(point1, MAGENTA, map);
         Utils.surroundPointWithVegetation(point2, MAGENTA, map);
 
         // Verify that there is no available house point on the border of the magenta
-        Point point3 = new Point(11, 11);
+        var point3 = new Point(11, 11);
         assertNull(map.isAvailableHousePoint(player0, point3));
     }
 
@@ -4927,24 +4761,23 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnBorderOfMagenta() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small magenta on the map
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(12, 10);
+        var point1 = new Point(10, 10);
+        var point2 = new Point(12, 10);
         Utils.surroundPointWithVegetation(point1, MAGENTA, map);
         Utils.surroundPointWithVegetation(point2, MAGENTA, map);
 
         // Verify that it's not possible to place a house on the border of the magenta
-        Point point3 = new Point(11, 11);
+        var point3 = new Point(11, 11);
         try {
             map.placeBuilding(new Woodcutter(player0), point3);
 
@@ -4956,27 +4789,26 @@ public class TestPlacementInTerrain {
     public void testWorkerCanWalkOffroadAcrossMagenta() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a woodcutter hut on the map
-        Point point1 = new Point(15, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(15, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Surround the woodcutter hut with magenta
-        Point point2 = new Point(15, 7);
-        Point point3 = new Point(18, 6);
-        Point point4 = new Point(18, 4);
-        Point point5 = new Point(15, 3);
-        Point point6 = new Point(12, 4);
-        Point point7 = new Point(12, 6);
+        var point2 = new Point(15, 7);
+        var point3 = new Point(18, 6);
+        var point4 = new Point(18, 4);
+        var point5 = new Point(15, 3);
+        var point6 = new Point(12, 4);
+        var point7 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point2, MAGENTA, map);
         Utils.surroundPointWithVegetation(point3, MAGENTA, map);
         Utils.surroundPointWithVegetation(point4, MAGENTA, map);
@@ -4988,7 +4820,7 @@ public class TestPlacementInTerrain {
         Utils.constructHouse(woodcutter0);
 
         // Occupy the woodcutter hut
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
@@ -5003,36 +4835,35 @@ public class TestPlacementInTerrain {
     public void testWorkerCanGoIntoMagenta() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place magenta on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, MAGENTA, map);
 
         // Place hunter hut
-        Point point1 = new Point(8, 6);
-        Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
+        var point1 = new Point(8, 6);
+        var hunter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         // Finish construction of the hunter hut
         Utils.constructHouse(hunter0);
 
         // Occupy the hunter hut
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
+        var hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
         // Place wild animal
-        WildAnimal animal0 = map.placeWildAnimal(point2);
+        var animal0 = map.placeWildAnimal(point2);
 
         // Verify that the worker can reach the animal
         assertTrue(animal0.isExactlyAtPoint());
 
-        boolean meet = false;
+        var meet = false;
         for (int i = 0; i < 1000; i++) {
             hunter0.getWorker().stepTime();
 
@@ -5050,28 +4881,27 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBorderOfMagentaAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place magenta on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, MAGENTA, map);
 
         // Place snow next to the magenta
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's possible to place a flag on the border of magenta and snow
-        Point point5 = new Point(5, 7);
-        Flag flag = map.placeFlag(player0, point5);
+        var point5 = new Point(5, 7);
+        var flag = map.placeFlag(player0, point5);
 
         assertTrue(map.getFlags().contains(flag));
         assertTrue(map.isFlagAtPoint(point5));
@@ -5082,27 +4912,26 @@ public class TestPlacementInTerrain {
     public void testFlagPointAvailableOnBorderOfMagentaAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place magenta on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, MAGENTA, map);
 
         // Place snow next to the magenta
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's possible to place a flag on the border of magenta and snow
-        Point point5 = new Point(5, 7);
+        var point5 = new Point(5, 7);
         assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
 
@@ -5110,16 +4939,15 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHeadquarterOnMagenta() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place magenta on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, MAGENTA, map);
 
-        for (Point point : point2.getAdjacentPoints()) {
+        for (var point : point2.getAdjacentPoints()) {
             Utils.surroundPointWithVegetation(point, MAGENTA, map);
         }
 
@@ -5136,20 +4964,19 @@ public class TestPlacementInTerrain {
     public void testNoAvailableLargeHouseOnMagenta() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(13, 13);
+        var point1 = new Point(13, 13);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place magenta on the map
-        Point point2 = new Point(6, 6);
+        var point2 = new Point(6, 6);
         Utils.surroundPointWithVegetation(point2, MAGENTA, map);
 
-        for (Point point : point2.getAdjacentPoints()) {
+        for (var point : point2.getAdjacentPoints()) {
             Utils.surroundPointWithVegetation(point, MAGENTA, map);
         }
 
@@ -5166,18 +4993,17 @@ public class TestPlacementInTerrain {
     public void testAvailableFlagInMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_1, map);
 
         // Verify that there is an available flag point in the mountain
@@ -5188,22 +5014,21 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagInMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_1, map);
 
         // Verify that it is possible to place a flag in the mountain
-        Flag flag = map.placeFlag(player0, point1);
+        var flag = map.placeFlag(player0, point1);
 
         assertTrue(map.getFlags().contains(flag));
         assertTrue(map.isFlagAtPoint(point1));
@@ -5214,18 +5039,17 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseInMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_1, map);
 
         // Verify that there is no available house point in the mountain
@@ -5236,18 +5060,17 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseInMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_1, map);
 
         // Verify that it's not possible to place a house in the mountain
@@ -5262,18 +5085,17 @@ public class TestPlacementInTerrain {
     public void testAvailableMineInMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_1, map);
 
         // Verify that there is no available house point in the mountain
@@ -5284,22 +5106,21 @@ public class TestPlacementInTerrain {
     public void testCanPlaceMineInMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_1, map);
 
         // Verify that it's possible to place a house in the mountain
-        GoldMine goldMine = map.placeBuilding(new GoldMine(player0), point1);
+        var goldMine = map.placeBuilding(new GoldMine(player0), point1);
 
         assertTrue(map.getBuildings().contains(goldMine));
         assertTrue(map.isBuildingAtPoint(point1));
@@ -5310,28 +5131,27 @@ public class TestPlacementInTerrain {
     public void testCanBuildRoadAcrossMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_1, map);
 
         // Place flags
-        Point point2 = new Point(8, 10);
-        Point point3 = new Point(12, 10);
-        Flag flag0 = map.placeFlag(player0, point2);
-        Flag flag1 = map.placeFlag(player0, point3);
+        var point2 = new Point(8, 10);
+        var point3 = new Point(12, 10);
+        var flag0 = map.placeFlag(player0, point2);
+        var flag1 = map.placeFlag(player0, point3);
 
         // Verify that it's possible to Build a road across the mountain
-        Road road0 = map.placeRoad(player0, point2, point1, point3);
+        var road0 = map.placeRoad(player0, point2, point1, point3);
 
         assertTrue(map.getRoads().contains(road0));
     }
@@ -5340,24 +5160,23 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnBorderOfMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(12, 10);
+        var point1 = new Point(10, 10);
+        var point2 = new Point(12, 10);
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_1, map);
         Utils.surroundPointWithVegetation(point2, MOUNTAIN_1, map);
 
         // Verify that there is no available house point on the border of the mountain
-        Point point3 = new Point(11, 11);
+        var point3 = new Point(11, 11);
         assertNull(map.isAvailableHousePoint(player0, point3));
     }
 
@@ -5365,24 +5184,23 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnBorderOfMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
+        var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(12, 10);
+        var point1 = new Point(10, 10);
+        var point2 = new Point(12, 10);
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_1, map);
         Utils.surroundPointWithVegetation(point2, MOUNTAIN_1, map);
 
         // Verify that it's not possible to place a house on the border of the mountain
-        Point point3 = new Point(11, 11);
+        var point3 = new Point(11, 11);
         try {
             map.placeBuilding(new Woodcutter(player0), point3);
 
@@ -5394,27 +5212,26 @@ public class TestPlacementInTerrain {
     public void testWorkerCanWalkOffroadAcrossMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a woodcutter hut on the map
-        Point point1 = new Point(15, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(15, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Surround the woodcutter hut with mountains
-        Point point2 = new Point(15, 7);
-        Point point3 = new Point(18, 6);
-        Point point4 = new Point(18, 4);
-        Point point5 = new Point(15, 3);
-        Point point6 = new Point(12, 4);
-        Point point7 = new Point(12, 6);
+        var point2 = new Point(15, 7);
+        var point3 = new Point(18, 6);
+        var point4 = new Point(18, 4);
+        var point5 = new Point(15, 3);
+        var point6 = new Point(12, 4);
+        var point7 = new Point(12, 6);
         Utils.surroundPointWithVegetation(point2, MOUNTAIN_1, map);
         Utils.surroundPointWithVegetation(point3, MOUNTAIN_1, map);
         Utils.surroundPointWithVegetation(point4, MOUNTAIN_1, map);
@@ -5426,7 +5243,7 @@ public class TestPlacementInTerrain {
         Utils.constructHouse(woodcutter0);
 
         // Occupy the woodcutter hut
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
@@ -5441,36 +5258,35 @@ public class TestPlacementInTerrain {
     public void testWorkerCanGoIntoMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a mountain on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, MOUNTAIN_1, map);
 
         // Place hunter hut
-        Point point1 = new Point(8, 6);
-        Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
+        var point1 = new Point(8, 6);
+        var hunter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         // Finish construction of the hunter hut
         Utils.constructHouse(hunter0);
 
         // Occupy the hunter hut
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
+        var hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
         // Place wild animal
-        WildAnimal animal0 = map.placeWildAnimal(point2);
+        var animal0 = map.placeWildAnimal(point2);
 
         // Verify that the worker can reach the animal
         assertTrue(animal0.isExactlyAtPoint());
 
-        boolean meet = false;
+        var meet = false;
         for (int i = 0; i < 1000; i++) {
             hunter0.getWorker().stepTime();
 
@@ -5488,28 +5304,27 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBorderOfMountainAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a mountain on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, MOUNTAIN_1, map);
 
         // Place snow next to the mountain
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's possible to place a flag on the border of mountain and snow
-        Point point5 = new Point(5, 7);
-        Flag flag = map.placeFlag(player0, point5);
+        var point5 = new Point(5, 7);
+        var flag = map.placeFlag(player0, point5);
 
         assertTrue(map.getFlags().contains(flag));
         assertTrue(map.isFlagAtPoint(point5));
@@ -5520,27 +5335,26 @@ public class TestPlacementInTerrain {
     public void testFlagPointAvailableOnBorderOfMountainAndSnow() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a mountain on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, MOUNTAIN_1, map);
 
         // Place snow next to the mountain
-        Point point3 = new Point(4, 8);
-        Point point4 = new Point(7, 7);
+        var point3 = new Point(4, 8);
+        var point4 = new Point(7, 7);
         Utils.surroundPointWithVegetation(point3, SNOW, map);
         Utils.surroundPointWithVegetation(point4, SNOW, map);
 
         // Verify that it's possible to place a flag on the border of mountain and snow
-        Point point5 = new Point(5, 7);
+        var point5 = new Point(5, 7);
         assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
 
@@ -5548,16 +5362,15 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHeadquarterOnMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place mountain on the map
-        Point point2 = new Point(4, 6);
+        var point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, MOUNTAIN_1, map);
 
-        for (Point point : point2.getAdjacentPoints()) {
+        for (var point : point2.getAdjacentPoints()) {
             Utils.surroundPointWithVegetation(point, MOUNTAIN_1, map);
         }
 
@@ -5574,20 +5387,19 @@ public class TestPlacementInTerrain {
     public void testNoAvailableLargeHouseOnMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(13, 13);
+        var point1 = new Point(13, 13);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place mountain on the map
-        Point point2 = new Point(6, 6);
+        var point2 = new Point(6, 6);
         Utils.surroundPointWithVegetation(point2, MOUNTAIN_1, map);
 
-        for (Point point : point2.getAdjacentPoints()) {
+        for (var point : point2.getAdjacentPoints()) {
             Utils.surroundPointWithVegetation(point, MOUNTAIN_1, map);
         }
 

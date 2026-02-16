@@ -42,18 +42,17 @@ public class TestBuilder {
     public void testJustPlacedWoodcutterIsPlanned() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(6, 12);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(6, 12);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Verify that the status of the woodcutter is planned
         assertTrue(woodcutter0.isPlanned());
@@ -68,28 +67,27 @@ public class TestBuilder {
     public void testBuilderIsAssignedToPlannedBuilding() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(6, 12);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(6, 12);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         assertTrue(woodcutter0.isPlanned());
 
         // Connect the woodcutter with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         // Verify that a builder is assigned to the planned building
         assertTrue(headquarter0.getAmount(Material.BUILDER) > 0);
 
-        Builder builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+        var builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
         assertNotNull(builder0);
         assertEquals(builder0.getTarget(), woodcutter0.getPosition());
@@ -99,30 +97,29 @@ public class TestBuilder {
     public void testBreakingPromisedBuilder() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(6, 12);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(6, 12);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         assertTrue(woodcutter0.isPlanned());
 
         // Connect the woodcutter with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         // Wait for a builder to be assigned to the planned building
         Utils.adjustInventoryTo(headquarter0, BUILDER, 2);
 
         assertEquals(headquarter0.getAmount(Material.BUILDER), 2);
 
-        Builder builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+        var builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
         assertNotNull(builder0);
         assertEquals(builder0.getTarget(), woodcutter0.getPosition());
@@ -136,15 +133,15 @@ public class TestBuilder {
         assertEquals(builder0.getTarget(), headquarter0.getPosition());
 
         // Verify that the second build starts going out when the road is put back
-        Road road1 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
-        List<Builder> builders = Utils.waitForWorkersOutsideBuilding(Builder.class, 2, player0);
+        var builders = Utils.waitForWorkersOutsideBuilding(Builder.class, 2, player0);
 
         assertEquals(builders.size(), 2);
 
         builders.remove(builder0);
 
-        Builder builder1 = builders.getFirst();
+        var builder1 = builders.getFirst();
 
         assertEquals(builder1.getTarget(), woodcutter0.getPosition());
 
@@ -157,14 +154,13 @@ public class TestBuilder {
     public void testBuilderIsCreated() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust contents of the headquarter
         Utils.adjustInventoryTo(headquarter0, BUILDER, 0);
@@ -174,16 +170,16 @@ public class TestBuilder {
         assertEquals(headquarter0.getAmount(HAMMER), 1);
 
         // Place woodcutter
-        Point point1 = new Point(6, 12);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(6, 12);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         assertTrue(woodcutter0.isPlanned());
 
         // Connect the woodcutter with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         // Verify that a builder is assigned to the planned building
-        Builder builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+        var builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
         assertNotNull(builder0);
         assertEquals(builder0.getTarget(), woodcutter0.getPosition());
@@ -194,18 +190,17 @@ public class TestBuilder {
     public void testPlannedBuildingGetsNeededMaterialDelivered() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(6, 12);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(6, 12);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         assertTrue(woodcutter0.isPlanned());
 
@@ -215,7 +210,7 @@ public class TestBuilder {
         Utils.adjustInventoryTo(headquarter0, Material.STONE, 10);
 
         // Connect the woodcutter with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         // Verify that the planned building gets resources delivered
         assertEquals(woodcutter0.getAmount(Material.PLANK), 0);
@@ -230,18 +225,17 @@ public class TestBuilder {
     public void testPlannedBuildingIsNotConstructedWithoutBuilder() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(6, 12);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(6, 12);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         assertTrue(woodcutter0.isPlanned());
 
@@ -251,7 +245,7 @@ public class TestBuilder {
         Utils.adjustInventoryTo(headquarter0, Material.STONE, 10);
 
         // Connect the woodcutter with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         // Wait for the planned building to get resources delivered
         assertEquals(woodcutter0.getAmount(Material.PLANK), 0);
@@ -272,18 +266,17 @@ public class TestBuilder {
     public void testPlannedBuildingIsConstructedByBuilder() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(6, 12);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(6, 12);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         assertTrue(woodcutter0.isPlanned());
 
@@ -293,7 +286,7 @@ public class TestBuilder {
         Utils.adjustInventoryTo(headquarter0, Material.STONE, 10);
 
         // Connect the woodcutter with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         // Wait for the planned building to get resources delivered
         assertEquals(woodcutter0.getAmount(Material.PLANK), 0);
@@ -308,7 +301,7 @@ public class TestBuilder {
         // Wait for a builder to get assigned and to reach the building
         Utils.adjustInventoryTo(headquarter0, Material.BUILDER, 1);
 
-        Worker builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+        var builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
         assertEquals(builder0.getTarget(), woodcutter0.getPosition());
 
@@ -326,18 +319,17 @@ public class TestBuilder {
     public void testBuilderWalksAroundSmallBuildingDuringConstruction() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(6, 12);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(6, 12);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         assertTrue(woodcutter0.isPlanned());
 
@@ -347,7 +339,7 @@ public class TestBuilder {
         Utils.adjustInventoryTo(headquarter0, Material.STONE, 10);
 
         // Connect the woodcutter with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         // Wait for the planned building to get resources delivered
         assertEquals(woodcutter0.getAmount(Material.PLANK), 0);
@@ -362,7 +354,7 @@ public class TestBuilder {
         // Wait for a builder to leave the headquarter
         Utils.adjustInventoryTo(headquarter0, Material.BUILDER, 1);
 
-        Builder builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+        var builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
         // Verify that the builder is not building while walking to the woodcutter
         assertEquals(builder0.getTarget(), woodcutter0.getPosition());
@@ -412,18 +404,17 @@ public class TestBuilder {
     public void testBuilderWalksBackWhenConstructionIsDone() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(6, 12);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(6, 12);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         assertTrue(woodcutter0.isPlanned());
 
@@ -433,7 +424,7 @@ public class TestBuilder {
         Utils.adjustInventoryTo(headquarter0, Material.STONE, 10);
 
         // Connect the woodcutter with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         // Wait for the planned building to get resources delivered
         assertEquals(woodcutter0.getAmount(Material.PLANK), 0);
@@ -448,7 +439,7 @@ public class TestBuilder {
         // Wait for a builder to leave the headquarter
         Utils.adjustInventoryTo(headquarter0, Material.BUILDER, 1);
 
-        Builder builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+        var builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
         // Verify that the builder is not building while walking to the woodcutter
         assertEquals(builder0.getTarget(), woodcutter0.getPosition());
@@ -495,18 +486,17 @@ public class TestBuilder {
     public void testBuilderIsDepositedInTheHeadquarterWhenHesBack() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(6, 12);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(6, 12);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         assertTrue(woodcutter0.isPlanned());
 
@@ -516,7 +506,7 @@ public class TestBuilder {
         Utils.adjustInventoryTo(headquarter0, Material.STONE, 10);
 
         // Connect the woodcutter with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         // Wait for the planned building to get resources delivered
         assertEquals(woodcutter0.getAmount(Material.PLANK), 0);
@@ -531,7 +521,7 @@ public class TestBuilder {
         // Wait for a builder to leave the headquarter
         Utils.adjustInventoryTo(headquarter0, Material.BUILDER, 1);
 
-        Builder builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+        var builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
         // Verify that the builder is not building while walking to the woodcutter
         assertEquals(builder0.getTarget(), woodcutter0.getPosition());
@@ -571,7 +561,7 @@ public class TestBuilder {
         assertEquals(builder0.getPosition(), woodcutter0.getFlag().getPosition());
         assertEquals(builder0.getTarget(), headquarter0.getPosition());
 
-        int amountBuilders = headquarter0.getAmount(Material.BUILDER);
+        var amountBuilders = headquarter0.getAmount(Material.BUILDER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, builder0, headquarter0.getPosition());
 
@@ -587,18 +577,18 @@ public class TestBuilder {
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
-        Point point1 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(5, 5);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Place road to connect the storehouse with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
         // Wait for the builder of the storehouse
-        Builder builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+        var builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
         // Wait for the storehouse to get constructed
         Utils.waitForBuildingToBeConstructed(storehouse);
@@ -609,18 +599,18 @@ public class TestBuilder {
         assertFalse(map.getWorkers().contains(builder0));
 
         // Place well
-        Point point2 = new Point(18, 6);
-        Well well0 = map.placeBuilding(new Well(player0), point2);
+        var point2 = new Point(18, 6);
+        var well0 = map.placeBuilding(new Well(player0), point2);
 
         // Place road to connect the headquarters with the well
-        Road road1 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
 
         // Add a lot of planks and stones to the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
         // Wait for a builder to reach the well
-        Builder builder1 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+        var builder1 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
         assertNotNull(builder1);
         assertEquals(builder1.getTargetBuilding(), well0);
@@ -650,24 +640,23 @@ public class TestBuilder {
     public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndWellIsTornDown() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
-        Point point1 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(5, 5);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Place road to connect the storehouse with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
         // Wait for the builder of the storehouse
-        Builder builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+        var builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
         // Wait for the storehouse to get constructed
         Utils.waitForBuildingToBeConstructed(storehouse);
@@ -678,18 +667,18 @@ public class TestBuilder {
         assertFalse(map.getWorkers().contains(builder0));
 
         // Place well
-        Point point2 = new Point(18, 6);
-        Well well0 = map.placeBuilding(new Well(player0), point2);
+        var point2 = new Point(18, 6);
+        var well0 = map.placeBuilding(new Well(player0), point2);
 
         // Place road to connect the headquarter with the well
-        Road road1 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
 
         // Add a lot of planks and stones to the headquarter
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
         // Wait for a builder to reach the well
-        Builder builder1 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+        var builder1 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
         assertNotNull(builder1);
         assertEquals(builder1.getTargetBuilding(), well0);
@@ -721,14 +710,13 @@ public class TestBuilder {
     public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, BUILDER, 1);
@@ -738,7 +726,7 @@ public class TestBuilder {
         headquarter0.pushOutAll(BUILDER);
 
         for (int i = 0; i < 10; i++) {
-            Worker worker = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+            var worker = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
             assertEquals(headquarter0.getAmount(BUILDER), 0);
             assertEquals(worker.getPosition(), headquarter0.getPosition());
@@ -759,14 +747,13 @@ public class TestBuilder {
     public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, BUILDER, 1);
@@ -774,7 +761,7 @@ public class TestBuilder {
         headquarter0.blockDeliveryOfMaterial(BUILDER);
         headquarter0.pushOutAll(BUILDER);
 
-        Worker worker = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+        var worker = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
@@ -804,27 +791,26 @@ public class TestBuilder {
     public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place well
-        Point point1 = new Point(7, 9);
-        Well well0 = map.placeBuilding(new Well(player0), point1);
+        var point1 = new Point(7, 9);
+        var well0 = map.placeBuilding(new Well(player0), point1);
 
         // Place road to connect the well with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
         // Wait for the builder to reach the well and start construction
-        Builder builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+        var builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
         assertFalse(well0.isUnderConstruction());
 
@@ -860,27 +846,26 @@ public class TestBuilder {
     public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place well
-        Point point1 = new Point(7, 9);
-        Well well0 = map.placeBuilding(new Well(player0), point1);
+        var point1 = new Point(7, 9);
+        var well0 = map.placeBuilding(new Well(player0), point1);
 
         // Place road to connect the well with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
         // Wait for the builder to start walking towards the well
-        Builder builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+        var builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
         assertTrue(well0.isPlanned());
         assertFalse(well0.isUnderConstruction());
@@ -912,7 +897,7 @@ public class TestBuilder {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, builder0, builder0.getTarget());
 
-        Point point = builder0.getPosition();
+        var point = builder0.getPosition();
 
         for (int i = 0; i < 100; i++) {
             assertTrue(builder0.isDead());

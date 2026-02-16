@@ -47,27 +47,26 @@ public class TestWatchTower {
     public void testWatchTowerNeedsThreePlanksAndFiveStonesForConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         // Deliver two planks and five stones
-        Cargo cargo = new Cargo(PLANK, map);
+        var cargo = new Cargo(PLANK, map);
 
         watchTower0.putCargo(cargo);
         watchTower0.putCargo(cargo);
         watchTower0.putCargo(cargo);
 
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         watchTower0.putCargo(stoneCargo);
         watchTower0.putCargo(stoneCargo);
@@ -92,26 +91,25 @@ public class TestWatchTower {
     public void testWatchTowerCannotBeConstructedWithOnePlankTooLittle() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         // Deliver one plank and three stones
-        Cargo cargo = new Cargo(PLANK, map);
+        var cargo = new Cargo(PLANK, map);
 
         watchTower0.putCargo(cargo);
         watchTower0.putCargo(cargo);
 
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         watchTower0.putCargo(stoneCargo);
         watchTower0.putCargo(stoneCargo);
@@ -139,27 +137,26 @@ public class TestWatchTower {
     public void testWatchTowerCannotBeConstructedWithOneStoneTooLittle() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         // Deliver one plank and three stones
-        Cargo cargo = new Cargo(PLANK, map);
+        var cargo = new Cargo(PLANK, map);
 
         watchTower0.putCargo(cargo);
         watchTower0.putCargo(cargo);
         watchTower0.putCargo(cargo);
 
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         watchTower0.putCargo(stoneCargo);
         watchTower0.putCargo(stoneCargo);
@@ -186,21 +183,20 @@ public class TestWatchTower {
     public void testWatchTowerGetPopulatedWhenFinished() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         // Connect the watch tower with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
 
         // Wait for the watch tower to finish construction
         Utils.fastForwardUntilBuildingIsConstructed(watchTower0);
@@ -211,7 +207,7 @@ public class TestWatchTower {
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
         Soldier military = null;
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier) {
                 military = (Soldier)worker;
             }
@@ -231,26 +227,25 @@ public class TestWatchTower {
     public void testBorderIsNotExtendedWhenWatchTowerIsFinished() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(5, 13);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(5, 13);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
 
         // Verify that the border doesn't change when the watch tower finishes construction
-        Point point3 = new Point(6, 14);
+        var point3 = new Point(6, 14);
         assertTrue(player0.getBorderPoints().contains(point3));
 
         Utils.fastForwardUntilBuildingIsConstructed(watchTower0);
@@ -262,21 +257,20 @@ public class TestWatchTower {
     public void testBorderIsExtendedWhenWatchTowerIsPopulated() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(5, 13);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(5, 13);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
 
         // Wait for the watch tower to finish construction
         Utils.fastForwardUntilBuildingIsConstructed(watchTower0);
@@ -289,7 +283,7 @@ public class TestWatchTower {
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
         Soldier military = null;
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier) {
                 military = (Soldier)worker;
             }
@@ -299,12 +293,12 @@ public class TestWatchTower {
 
         // Verify that the border is extended when the military reaches the watch tower
         assertEquals(military.getTarget(), watchTower0.getPosition());
-        Point point3 = new Point(6, 14);
+        var point3 = new Point(6, 14);
         assertTrue(player0.getBorderPoints().contains(point3));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, watchTower0.getPosition());
 
-        Point point4 = new Point(7, 23);
+        var point4 = new Point(7, 23);
 
         assertFalse(player0.getBorderPoints().contains(point3));
         assertTrue(player0.getBorderPoints().contains(point4));
@@ -314,18 +308,17 @@ public class TestWatchTower {
     public void testWatchTowerOnlyNeedsSixSoldiers() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
@@ -345,23 +338,22 @@ public class TestWatchTower {
     public void testWatchTowerCannotHoldSoldiersBeforeFinished() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         // Verify that the watch tower can't hold soldiers before it's finished
         assertFalse(watchTower0.needsMilitaryManning());
 
-        Soldier military = new Soldier(player0, PRIVATE_RANK, map);
+        var military = new Soldier(player0, PRIVATE_RANK, map);
 
         map.placeWorker(military, watchTower0);
 
@@ -376,18 +368,17 @@ public class TestWatchTower {
     public void testWatchTowerCannotHoldMoreThanSixSoldiers() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
@@ -400,7 +391,7 @@ public class TestWatchTower {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         // Verify that the watch tower does not need another military
-        Soldier military = new Soldier(player0, PRIVATE_RANK, map);
+        var military = new Soldier(player0, PRIVATE_RANK, map);
 
         map.placeWorker(military, watchTower0);
 
@@ -415,18 +406,17 @@ public class TestWatchTower {
     public void testWatchTowerNeedsCoin() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
@@ -437,18 +427,17 @@ public class TestWatchTower {
     public void testUnfinishedWatchTowerNotNeedsCoin() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         assertFalse(watchTower0.needsMaterial(COIN));
     }
@@ -457,25 +446,24 @@ public class TestWatchTower {
     public void testWatchTowerCanHoldThreeCoins() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
         assertTrue(watchTower0.needsMaterial(COIN));
 
         // Deliver one coin to the watch tower
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         watchTower0.promiseDelivery(COIN);
         watchTower0.promiseDelivery(COIN);
@@ -501,28 +489,27 @@ public class TestWatchTower {
     public void testPrivateIsPromotedWhenCoinIsAvailable() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
         // Deliver one coin to the watch tower
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         watchTower0.putCargo(cargo);
 
         // Occupy the watch tower with one private
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         // Verify that the private is promoted at the right time
         for (int i = 0; i < 100; i++) {
@@ -537,29 +524,28 @@ public class TestWatchTower {
     public void testOnlyOnePrivateIsPromoted() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
         // Deliver one coin to the watch tower
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         watchTower0.putCargo(cargo);
 
         // Occupy the watch tower with one private
-        Soldier military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
-        Soldier military2 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        var military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        var military2 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         // Wait for the promotion to happen
         Utils.fastForward(100, map);
@@ -572,23 +558,22 @@ public class TestWatchTower {
     public void testTimeSpentWithCoinButNoMilitaryDoesNotSpeedUpPromotion() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
         // Deliver one coin to the watch tower
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         watchTower0.putCargo(cargo);
 
@@ -596,7 +581,7 @@ public class TestWatchTower {
         Utils.fastForward(200, map);
 
         // Occupy the watch tower with one private
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         // Verify that it still takes the same time for the private to get promoted
         Utils.fastForward(99, map);
@@ -612,28 +597,27 @@ public class TestWatchTower {
     public void testPromotionConsumesCoin() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
         // Deliver one coin to the watch tower
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         watchTower0.putCargo(cargo);
 
         // Occupy the watch tower with one private
-        Soldier military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        var military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         // Verify that the promotion consumes the coin
         assertEquals(watchTower0.getAmount(COIN), 1);
@@ -647,30 +631,29 @@ public class TestWatchTower {
     public void testOnePromotionOnlyConsumesOneCoin() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
         // Deliver one coin to the watch tower
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         watchTower0.putCargo(cargo);
         watchTower0.putCargo(cargo);
 
         // Occupy the watch tower with one private
-        Soldier military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
-        Soldier military2 = Utils.occupyMilitaryBuilding(SERGEANT_RANK, watchTower0);
+        var military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        var military2 = Utils.occupyMilitaryBuilding(SERGEANT_RANK, watchTower0);
 
         // Verify that the promotion consumes the coin
         assertEquals(watchTower0.getAmount(COIN), 2);
@@ -684,29 +667,28 @@ public class TestWatchTower {
     public void testWatchTowerWithNoPromotionPossibleDoesNotConsumeCoin() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
         // Deliver one coin to the watch tower
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         watchTower0.putCargo(cargo);
 
         // Occupy the watch tower with one private
-        Soldier military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, watchTower0);
-        Soldier military2 = Utils.occupyMilitaryBuilding(GENERAL_RANK, watchTower0);
+        var military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, watchTower0);
+        var military2 = Utils.occupyMilitaryBuilding(GENERAL_RANK, watchTower0);
 
         // Verify that coin is not consumed
         assertEquals(watchTower0.getAmount(COIN), 1);
@@ -720,18 +702,17 @@ public class TestWatchTower {
     public void testCanDisableCoinsToWatchTower() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
@@ -748,18 +729,17 @@ public class TestWatchTower {
     public void testOccupiedWatchTowerCanBeEvacuated() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         // Connect headquarter and watch tower
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
@@ -768,7 +748,7 @@ public class TestWatchTower {
         Utils.constructHouse(watchTower0);
 
         // Occupy the watch tower
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         // Evacuate the watch tower and verify that the military leaves the watch tower
         assertTrue(military.isInsideBuilding());
@@ -785,18 +765,17 @@ public class TestWatchTower {
     public void testEvacuatedMilitaryReturnsToStorage() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         // Connect headquarter and watch tower
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
@@ -805,7 +784,7 @@ public class TestWatchTower {
         Utils.constructHouse(watchTower0);
 
         // Occupy the watch tower
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         // Evacuate the watch tower
         assertTrue(military.isInsideBuilding());
@@ -818,7 +797,7 @@ public class TestWatchTower {
 
         // Verify that the evacuated military returns to the storage
         assertEquals(military.getTarget(), headquarter0.getPosition());
-        int amount = headquarter0.getAmount(PRIVATE);
+        var amount = headquarter0.getAmount(PRIVATE);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
 
@@ -830,24 +809,23 @@ public class TestWatchTower {
     public void testEvacuatedSoldierReturnsOffroadWhenNotConnected() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
 
         // Occupy the watch tower
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         // Evacuate the watch tower
         assertTrue(military.isInsideBuilding());
@@ -860,7 +838,7 @@ public class TestWatchTower {
 
         // Verify that the evacuated military returns to the storage
         assertEquals(military.getTarget(), headquarter0.getPosition());
-        int amount = headquarter0.getAmount(PRIVATE);
+        var amount = headquarter0.getAmount(PRIVATE);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
 
@@ -872,18 +850,17 @@ public class TestWatchTower {
     public void testNoMilitaryIsDispatchedToEvacuatedWatchTower() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         // Connect headquarters and watch tower
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
@@ -905,24 +882,23 @@ public class TestWatchTower {
     public void testEvacuationCanBeCanceled() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
 
         // Occupy the watch tower
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         // Evacuate the watch tower
         assertTrue(military.isInsideBuilding());
@@ -935,7 +911,7 @@ public class TestWatchTower {
 
         // Wait for the evacuated military to return to the storage
         assertEquals(military.getTarget(), headquarter0.getPosition());
-        int amount = headquarter0.getAmount(PRIVATE);
+        var amount = headquarter0.getAmount(PRIVATE);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
 
@@ -954,18 +930,17 @@ public class TestWatchTower {
     public void testMilitaryGoesBackToStorageWhenWatchTowerIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place watch tower
-        Point point26 = new Point(8, 8);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point26);
+        var point26 = new Point(8, 8);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point26);
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
@@ -979,12 +954,12 @@ public class TestWatchTower {
         watchTower0.tearDown();
 
         // Verify that the worker leaves the building and goes back to the headquarter
-        Soldier military = Utils.waitForSoldierOutsideBuilding(player0);
+        var military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(PRIVATE);
+        var amount = headquarter0.getAmount(PRIVATE);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, headquarter0.getPosition());
 
@@ -996,18 +971,17 @@ public class TestWatchTower {
     public void testProductionCannotBeResumedInWatchTower() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place watch tower
-        Point point26 = new Point(8, 8);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point26);
+        var point26 = new Point(8, 8);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point26);
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
@@ -1024,18 +998,17 @@ public class TestWatchTower {
     public void testMilitaryGoesBackOnToStorageOnRoadsIfPossibleWhenWatchTowerIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place watch tower
-        Point point26 = new Point(8, 8);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point26);
+        var point26 = new Point(8, 8);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point26);
 
         // Connect the watch tower with the headquarter
         map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
@@ -1052,14 +1025,14 @@ public class TestWatchTower {
         watchTower0.tearDown();
 
         // Verify that the worker leaves the building and goes back to the headquarter
-        Soldier military = Utils.waitForSoldierOutsideBuilding(player0);
+        var military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
-        for (Point point : military.getPlannedPath()) {
+        var firstStep = true;
+        for (var point : military.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -1073,23 +1046,22 @@ public class TestWatchTower {
     public void testCannotStopProductionInBarracks() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(5, 13);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(5, 13);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
 
         // Wait for the watch tower to finish construction
         Utils.fastForwardUntilBuildingIsConstructed(watchTower0);
@@ -1108,18 +1080,17 @@ public class TestWatchTower {
     public void testWatchTowerCannotProduce() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place watch tower
-        Point point1 = new Point(10, 10);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(10, 10);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
@@ -1135,18 +1106,17 @@ public class TestWatchTower {
     public void testWatchTowerReportsCorrectOutput() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place watch tower
-        Point point1 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Construct the watch tower
         Utils.constructHouse(watchTower0);
@@ -1159,18 +1129,17 @@ public class TestWatchTower {
     public void testWatchTowerReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place watch tower
-        Point point1 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Verify that the reported needed construction material is correct
         assertEquals(watchTower0.getTypesOfMaterialNeeded().size(), 2);
@@ -1179,7 +1148,7 @@ public class TestWatchTower {
         assertEquals(watchTower0.getCanHoldAmount(PLANK), 3);
         assertEquals(watchTower0.getCanHoldAmount(STONE), 5);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
@@ -1192,18 +1161,17 @@ public class TestWatchTower {
     public void testWatchTowerReportsCorrectMaterialsNeededForProduction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place watch tower
-        Point point1 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Construct the watch tower
         Utils.constructHouse(watchTower0);
@@ -1212,7 +1180,7 @@ public class TestWatchTower {
         assertEquals(watchTower0.getTypesOfMaterialNeeded().size(), 1);
         assertEquals(watchTower0.getCanHoldAmount(COIN), 3);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == COIN) {
                 continue;
             }
@@ -1225,18 +1193,17 @@ public class TestWatchTower {
     public void testHostedMilitaryListIsEmptyForWatchTowerUnderConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         // Verify that the list of hosted soldiers is empty
         assertEquals(0, watchTower0.getHostedSoldiers().size());
@@ -1246,18 +1213,17 @@ public class TestWatchTower {
     public void testHostedMilitaryListIsEmptyForEmptyWatchTower() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         // Construct watch tower
         Utils.constructHouse(watchTower0);
@@ -1270,18 +1236,17 @@ public class TestWatchTower {
     public void testAddingMilitaryUpsHostedMilitaryList() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         // Construct watch tower
         Utils.constructHouse(watchTower0);
@@ -1298,18 +1263,17 @@ public class TestWatchTower {
     public void testRankIsCorrectInHostedMilitaryList() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place watch tower
-        Point point22 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        var point22 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         // Construct watch tower
         Utils.constructHouse(watchTower0);
@@ -1325,18 +1289,17 @@ public class TestWatchTower {
     public void testBorderForWatchTowerIsCorrect() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 80, 80);
 
         // Place headquarter
-        Point point0 = new Point(30, 30);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(30, 30);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(25, 23);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(25, 23);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Construct and occupy the barracks
         Utils.constructHouse(watchTower0);
@@ -1352,12 +1315,12 @@ public class TestWatchTower {
                 -8, -8  -------  +8, +8
 
          */
-        Set<Point> watchTowerHexagonBorder = Utils.getHexagonBorder(watchTower0.getPosition(), 10);
-        Set<Point> headquarterHexagonBorder = Utils.getHexagonBorder(headquarter0.getPosition(), 9);
+        var watchTowerHexagonBorder = Utils.getHexagonBorder(watchTower0.getPosition(), 10);
+        var headquarterHexagonBorder = Utils.getHexagonBorder(headquarter0.getPosition(), 9);
 
         // Verify that all points in the hexagon are part of the actual border
-        Set<Point> border = player0.getBorderPoints();
-        for (Point point : watchTowerHexagonBorder) {
+        var border = player0.getBorderPoints();
+        for (var point : watchTowerHexagonBorder) {
 
             // Ignore points that are within the player's land
             if (player0.getOwnedLand().contains(point)) {
@@ -1368,7 +1331,7 @@ public class TestWatchTower {
         }
 
         // Verify that all points in the actual border are part of the hexagon border
-        for (Point point : border) {
+        for (var point : border) {
 
             // Ignore points that are part of the hexagon around the headquarter
             if (headquarterHexagonBorder.contains(point)) {
@@ -1383,18 +1346,17 @@ public class TestWatchTower {
     public void testLandForWatchTowerIsCorrect() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 80, 80);
 
         // Place headquarter
-        Point point0 = new Point(30, 30);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(30, 30);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(25, 23);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(25, 23);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Construct and occupy the barracks
         Utils.constructHouse(watchTower0);
@@ -1410,11 +1372,11 @@ public class TestWatchTower {
                 -8, -8  -------  +8, +8
 
          */
-        Set<Point> area = Utils.getAreaInsideHexagon(9, watchTower0.getPosition());
+        var area = Utils.getAreaInsideHexagon(9, watchTower0.getPosition());
 
         // Verify that all points in the hexagon land are part of the actual land
-        Collection<Point> land = watchTower0.getDefendedLand();
-        for (Point point : land) {
+        var land = watchTower0.getDefendedLand();
+        for (var point : land) {
 
             // Ignore points that are part of the headquarters land
             if (headquarter0.getDefendedLand().contains(point)) {
@@ -1425,7 +1387,7 @@ public class TestWatchTower {
         }
 
         // Verify that all points in the actual land are part of the hexagon land
-        for (Point point : area) {
+        for (var point : area) {
             assertTrue(land.contains(point));
         }
     }
@@ -1434,18 +1396,17 @@ public class TestWatchTower {
     public void testDiscoveredLandForWatchTowerIsCorrect() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 80, 80);
 
         // Place headquarter
-        Point point0 = new Point(30, 30);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(30, 30);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(25, 23);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(25, 23);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Construct and occupy the barracks
         Utils.constructHouse(watchTower0);
@@ -1463,12 +1424,12 @@ public class TestWatchTower {
                 -8, -8  -------  +8, +8
 
          */
-        Set<Point> watchTowerHexagonDiscoveredArea = Utils.getAreaInsideHexagon(14, watchTower0.getPosition());
-        Set<Point> headquarterDiscoveredLand = Utils.getAreaInsideHexagon(13, headquarter0.getPosition());
+        var watchTowerHexagonDiscoveredArea = Utils.getAreaInsideHexagon(14, watchTower0.getPosition());
+        var headquarterDiscoveredLand = Utils.getAreaInsideHexagon(13, headquarter0.getPosition());
 
         // Verify that all points in the hexagon land are part of the actual land
-        Collection<Point> discoveredLand = player0.getDiscoveredLand();
-        for (Point point : discoveredLand) {
+        var discoveredLand = player0.getDiscoveredLand();
+        for (var point : discoveredLand) {
 
             // Ignore points within the discovered land for the headquarter
             if (headquarterDiscoveredLand.contains(point)) {
@@ -1479,7 +1440,7 @@ public class TestWatchTower {
         }
 
         // Verify that all points in the actual land are part of the hexagon land
-        for (Point point : watchTowerHexagonDiscoveredArea) {
+        for (var point : watchTowerHexagonDiscoveredArea) {
 
             // Filter points outside the map
             if (point.x < 0 || point.y < 0) {
@@ -1494,25 +1455,24 @@ public class TestWatchTower {
     public void testDiscoveredLandForPlayerCannotBeOutsideTheMap() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 80, 80);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 10);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(3, 3);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(3, 3);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Construct and occupy the barracks
         Utils.constructHouse(watchTower0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         // Verify that the discovered land is only inside the map
-        for (Point point : player0.getDiscoveredLand()) {
+        for (var point : player0.getDiscoveredLand()) {
             assertTrue(point.x >= 0);
             assertTrue(point.y >= 0);
         }
@@ -1522,25 +1482,24 @@ public class TestWatchTower {
     public void testOwnedLandForPlayerCannotBeOutsideTheMap() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 80, 80);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 10);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(3, 3);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(3, 3);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Construct and occupy the barracks
         Utils.constructHouse(watchTower0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         // Verify that the discovered land is only inside the map
-        for (Point point : player0.getOwnedLand()) {
+        for (var point : player0.getOwnedLand()) {
             assertTrue(point.x >= 0);
             assertTrue(point.y >= 0);
         }
@@ -1550,23 +1509,22 @@ public class TestWatchTower {
     public void testWatchTowerCanBeUpgraded() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(21, 5);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(21, 5);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Connect the barracks with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
 
         // Finish construction of the barracks
         Utils.constructHouse(watchTower0);
@@ -1592,7 +1550,7 @@ public class TestWatchTower {
             map.stepTime();
         }
 
-        Building upgradedBuilding = map.getBuildingAtPoint(watchTower0.getPosition());
+        var upgradedBuilding = map.getBuildingAtPoint(watchTower0.getPosition());
 
         assertFalse(map.getBuildings().contains(watchTower0));
         assertTrue(map.getBuildings().contains(upgradedBuilding));
@@ -1607,23 +1565,22 @@ public class TestWatchTower {
     public void testUnfinishedWatchTowerCannotBeUpgraded() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place watch tower
-        Point point1 = new Point(13, 5);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(13, 5);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Connect the watch tower with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
 
         // Upgrade the watch tower
         try {
@@ -1637,23 +1594,22 @@ public class TestWatchTower {
     public void testBurningWatchTowerCannotBeUpgraded() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place watch tower
-        Point point1 = new Point(13, 5);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(13, 5);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Connect the watch tower with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
@@ -1673,20 +1629,19 @@ public class TestWatchTower {
     public void testCannotUpgradeWatchTowerWithoutMaterial() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place watch tower
-        Point point1 = new Point(21, 5);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(21, 5);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
@@ -1723,23 +1678,22 @@ public class TestWatchTower {
     public void testCannotUpgradeWatchTowerBeingUpgraded() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place watch tower
-        Point point1 = new Point(13, 5);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(13, 5);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Connect the watch tower with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
@@ -1762,27 +1716,26 @@ public class TestWatchTower {
     public void testUpgradingCausesMaterialToGetDelivered() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Make sure there is material for upgrading
         Utils.adjustInventoryTo(headquarter0, PLANK, 10);
         Utils.adjustInventoryTo(headquarter0, STONE, 10);
 
         // Place watch tower
-        Point point1 = new Point(21, 5);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(21, 5);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Connect the watch tower with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
@@ -1796,7 +1749,7 @@ public class TestWatchTower {
         // Place the courier on the road
         assertNotNull(road0.getCourier());
 
-        Courier courier0 = road0.getCourier();
+        var courier0 = road0.getCourier();
 
         // Verify that the watch tower doesn't need stone before the upgrade
         assertFalse(watchTower0.needsMaterial(STONE));
@@ -1825,20 +1778,19 @@ public class TestWatchTower {
     public void testOccupiedWatchTowerIsOccupiedAfterUpgrade() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place watch tower
-        Point point1 = new Point(21, 5);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(21, 5);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
@@ -1852,7 +1804,7 @@ public class TestWatchTower {
         watchTower0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         watchTower0.promiseDelivery(STONE);
         watchTower0.promiseDelivery(STONE);
@@ -1871,7 +1823,7 @@ public class TestWatchTower {
         }
 
         // Verify that the upgraded building is also occupied
-        Building fortress0 = map.getBuildingAtPoint(watchTower0.getPosition());
+        var fortress0 = map.getBuildingAtPoint(watchTower0.getPosition());
 
         assertTrue(fortress0.isOccupied());
         assertEquals(fortress0.getNumberOfHostedSoldiers(), 1);
@@ -1881,20 +1833,19 @@ public class TestWatchTower {
     public void testCoinRemainsAfterUpgrade() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place watch tower
-        Point point1 = new Point(21, 5);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(21, 5);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
@@ -1903,7 +1854,7 @@ public class TestWatchTower {
         watchTower0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         watchTower0.promiseDelivery(STONE);
         watchTower0.promiseDelivery(STONE);
@@ -1914,7 +1865,7 @@ public class TestWatchTower {
         watchTower0.putCargo(stoneCargo);
 
         // Put a coin in the building
-        Cargo coinCargo = new Cargo(COIN, map);
+        var coinCargo = new Cargo(COIN, map);
 
         watchTower0.promiseDelivery(COIN);
 
@@ -1931,7 +1882,7 @@ public class TestWatchTower {
         }
 
         // Verify that the coin is still in the building
-        Building fortress0 = map.getBuildingAtPoint(watchTower0.getPosition());
+        var fortress0 = map.getBuildingAtPoint(watchTower0.getPosition());
 
         assertEquals(fortress0.getAmount(COIN), 1);
     }
@@ -1940,20 +1891,19 @@ public class TestWatchTower {
     public void testBuildingDuringUpgradeCanBeDestroyed() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place watch tower
-        Point point1 = new Point(21, 5);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(21, 5);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
@@ -1967,7 +1917,7 @@ public class TestWatchTower {
         watchTower0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         watchTower0.promiseDelivery(STONE);
         watchTower0.promiseDelivery(STONE);
@@ -1995,24 +1945,23 @@ public class TestWatchTower {
     public void testPlayerIsCorrectAfterUpgrade() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        Player player2 = new Player("Player 2", PlayerColor.GRAY, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player2);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.GRAY, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player2);
         players.add(player0);
         players.add(player1);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place watch tower
-        Point point1 = new Point(21, 5);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(21, 5);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
@@ -2026,7 +1975,7 @@ public class TestWatchTower {
         watchTower0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         watchTower0.promiseDelivery(STONE);
         watchTower0.promiseDelivery(STONE);
@@ -2037,7 +1986,7 @@ public class TestWatchTower {
         watchTower0.putCargo(stoneCargo);
 
         // Put a coin in the building
-        Cargo coinCargo = new Cargo(COIN, map);
+        var coinCargo = new Cargo(COIN, map);
 
         watchTower0.promiseDelivery(COIN);
 
@@ -2053,7 +2002,7 @@ public class TestWatchTower {
         }
 
         // Verify that the player is set correctly in the upgraded building
-        Building fortress0 = map.getBuildingAtPoint(watchTower0.getPosition());
+        var fortress0 = map.getBuildingAtPoint(watchTower0.getPosition());
 
         assertEquals(fortress0.getPlayer(), player0);
     }
@@ -2062,20 +2011,19 @@ public class TestWatchTower {
     public void testCanHostRightNumberOfSoldiersAfterUpgraded() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place watch tower
-        Point point1 = new Point(21, 5);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(21, 5);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
@@ -2089,7 +2037,7 @@ public class TestWatchTower {
         watchTower0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         watchTower0.promiseDelivery(STONE);
         watchTower0.promiseDelivery(STONE);
@@ -2108,7 +2056,7 @@ public class TestWatchTower {
         }
 
         // Verify that two more soldiers can be hosted in the building
-        Building fortress0 = map.getBuildingAtPoint(watchTower0.getPosition());
+        var fortress0 = map.getBuildingAtPoint(watchTower0.getPosition());
 
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
@@ -2118,20 +2066,19 @@ public class TestWatchTower {
     public void testBorderIsExpandedAfterUpgrade() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(7, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place watch tower
-        Point point1 = new Point(21, 5);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(21, 5);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
@@ -2149,8 +2096,8 @@ public class TestWatchTower {
         Utils.deliverCargos(watchTower0, STONE, 2);
 
         // Verify the border before the upgrade
-        Point point2 = new Point(36, 10);
-        Point point3 = new Point(36, 12);
+        var point2 = new Point(36, 10);
+        var point3 = new Point(36, 12);
 
         assertTrue(player0.getBorderPoints().contains(point2));
         assertFalse(player0.getBorderPoints().contains(point3));
@@ -2174,20 +2121,19 @@ public class TestWatchTower {
     public void testFlagIsCorrectAfterUpgrade() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place watch tower
-        Point point1 = new Point(21, 5);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(21, 5);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
@@ -2201,7 +2147,7 @@ public class TestWatchTower {
         watchTower0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         watchTower0.promiseDelivery(STONE);
         watchTower0.promiseDelivery(STONE);
@@ -2220,7 +2166,7 @@ public class TestWatchTower {
         }
 
         // Verify that the flag is correct after the upgrade
-        Building buildingAfterUpgrade = map.getBuildingAtPoint(point1);
+        var buildingAfterUpgrade = map.getBuildingAtPoint(point1);
 
         assertNotNull(buildingAfterUpgrade);
         assertNotNull(buildingAfterUpgrade.getFlag());
@@ -2231,20 +2177,19 @@ public class TestWatchTower {
     public void testOccupiedBuildingRemainsOccupiedDuringUpgrade() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place watch tower
-        Point point1 = new Point(21, 5);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(21, 5);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
@@ -2261,7 +2206,7 @@ public class TestWatchTower {
         assertTrue(watchTower0.isOccupied());
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         watchTower0.promiseDelivery(STONE);
         watchTower0.promiseDelivery(STONE);
@@ -2285,18 +2230,17 @@ public class TestWatchTower {
     public void testEvacuatedBuildingKeepsSendingHomeMilitary() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place watch tower
-        Point point1 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
@@ -2311,7 +2255,7 @@ public class TestWatchTower {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
 
         // Occupy the watch tower
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         // Verify that the military comes out immediately
 
@@ -2325,20 +2269,19 @@ public class TestWatchTower {
     public void testCanUpgradeAfterDisablingPromotions() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place watch tower
-        Point point1 = new Point(21, 5);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(21, 5);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
@@ -2373,7 +2316,7 @@ public class TestWatchTower {
         // Verify that the watch tower is upgraded
         assertNotEquals(map.getBuildingAtPoint(watchTower0.getPosition()), watchTower0);
 
-        Building buildingAfterUpgrade = map.getBuildingAtPoint(point1);
+        var buildingAfterUpgrade = map.getBuildingAtPoint(point1);
 
         assertFalse(buildingAfterUpgrade.isUpgrading());
         assertNotNull(buildingAfterUpgrade);
@@ -2384,20 +2327,19 @@ public class TestWatchTower {
     public void testUpgradeDoesNotDestroyNearbyHouses() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         // Finish construction of the barracks
         Utils.constructHouse(barracks0);
@@ -2406,8 +2348,8 @@ public class TestWatchTower {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
         // Place a watch tower
-        Point point2 = new Point(26, 6);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point2);
+        var point2 = new Point(26, 6);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point2);
 
         // Construct the watch tower
         Utils.constructHouse(watchTower0);
@@ -2416,11 +2358,11 @@ public class TestWatchTower {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, watchTower0);
 
         // Place regular building
-        Point point3 = new Point(30, 6);
-        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point3);
+        var point3 = new Point(30, 6);
+        var foresterHut0 = map.placeBuilding(new ForesterHut(player0), point3);
 
         // Connect the buildings with a road
-        Road road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), foresterHut0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), foresterHut0.getFlag());
 
         // Evacuate the watch tower and wait for the watch tower to become empty
         watchTower0.evacuate();
@@ -2440,7 +2382,7 @@ public class TestWatchTower {
         watchTower0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         watchTower0.promiseDelivery(STONE);
         watchTower0.promiseDelivery(STONE);
@@ -2469,20 +2411,19 @@ public class TestWatchTower {
     public void testUnoccupiedBuildingRemainsUnoccupiedDuringAndAfterUpgrade() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(7, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place watch tower
-        Point point1 = new Point(21, 5);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(21, 5);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
@@ -2496,7 +2437,7 @@ public class TestWatchTower {
         assertFalse(watchTower0.isOccupied());
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         watchTower0.promiseDelivery(STONE);
         watchTower0.promiseDelivery(STONE);
@@ -2507,8 +2448,8 @@ public class TestWatchTower {
         watchTower0.putCargo(stoneCargo);
 
         // Verify that the watch tower is unoccupied during and after the upgrade
-        Point point2 = new Point(25, 5);
-        Point point3 = new Point(27, 5);
+        var point2 = new Point(25, 5);
+        var point3 = new Point(27, 5);
 
         for (int i = 0; i < 100; i++) {
 
@@ -2530,23 +2471,22 @@ public class TestWatchTower {
     public void testUpgradeOfBuildingWithMilitaryDoesNotCauseOverAllocation() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place watch tower
-        Point point1 = new Point(21, 5);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(21, 5);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         // Connect the watch tower with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
 
         // Finish construction of the watch tower
         Utils.constructHouse(watchTower0);
@@ -2569,7 +2509,7 @@ public class TestWatchTower {
         // Wait for the upgrade to happen
         assertEquals(watchTower0.getNumberOfHostedSoldiers(), 6);
 
-        Building fortress0 = Utils.waitForBuildingToGetUpgraded(watchTower0);
+        var fortress0 = Utils.waitForBuildingToGetUpgraded(watchTower0);
 
         assertEquals(fortress0.getNumberOfHostedSoldiers(), 6);
         assertEquals(map.getBuildingAtPoint(watchTower0.getPosition()), fortress0);
@@ -2596,26 +2536,25 @@ public class TestWatchTower {
     public void testUpgradedWatchTowerGetsPopulatedFully() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Add privates to the headquarter
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 20);
 
         // Place watch tower
-        Point point1 = new Point(6, 12);
-        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(6, 12);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         Utils.constructHouse(watchTower0);
 
         // Connect the watch tower to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
 
         // Wait for the watch tower to get occupied
         for (int i = 0; i < 1000; i++) {
@@ -2633,7 +2572,7 @@ public class TestWatchTower {
         watchTower0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         watchTower0.promiseDelivery(STONE);
         watchTower0.promiseDelivery(STONE);
@@ -2644,7 +2583,7 @@ public class TestWatchTower {
         watchTower0.putCargo(stoneCargo);
 
         // Wait for the upgrade to happen
-        Building fortress0 = Utils.waitForBuildingToGetUpgraded(watchTower0);
+        var fortress0 = Utils.waitForBuildingToGetUpgraded(watchTower0);
 
         assertEquals(map.getBuildingAtPoint(watchTower0.getPosition()), fortress0);
         assertEquals(fortress0.getMaxHostedSoldiers(), 9);

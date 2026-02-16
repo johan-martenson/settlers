@@ -26,14 +26,13 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     public void testDefaultPopulationOfMilitaryBuildings() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify the default strength of population of new military buildings
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingCloseToBorder(), 10);
@@ -45,14 +44,13 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     public void testMinimumPopulationOfMilitaryBuildingsCloseToBorder() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Set the population of military buildings close to the border
         player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(0);
@@ -82,14 +80,13 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     public void testMaximumPopulationOfMilitaryBuildingsCloseToBorder() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Set the population of military buildings close to the border
         player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(10);
@@ -117,14 +114,13 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     public void testMediumPopulationOfMilitaryBuildingsCloseToBorder() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Set the population of military buildings close to the border
         player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(5);
@@ -152,14 +148,13 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     public void testChangeMinimumToMediumPopulationOfMilitaryBuildingsCloseToBorder() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Set the population of military buildings close to the border
         player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(0);
@@ -198,14 +193,13 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     public void testChangeMaximumToMediumPopulationOfMilitaryBuildingsCloseToBorder() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Set the population of military buildings close to the border
         player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(10);
@@ -244,14 +238,13 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     public void testPreferredSoldierStaysWhenChangeMaximumToMediumPopulationOfMilitaryBuildingsCloseToBorder() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Change soldier inventory
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 1);
@@ -316,14 +309,13 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     public void testSettingPopulationCloseToBorderDoesNotAffectOtherMilitaryBuildings () throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 100, 100);
 
         // Place headquarters
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Change soldier inventory
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 50);
@@ -404,14 +396,13 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     public void testMinimumPopulationOfMilitaryBuildingsAwayFromBorder() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Change soldier inventory
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 50);
@@ -463,14 +454,13 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     public void testMaximumPopulationOfMilitaryBuildingsAwayFromBorder() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Change soldier inventory
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 50);
@@ -522,14 +512,13 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     public void testMediumPopulationOfMilitaryBuildingsAwayFromBorder() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 100, 100);
 
         // Place headquarters
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Change soldier inventory
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 50);
@@ -591,14 +580,13 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     public void testChangeMinimumToMediumPopulationOfMilitaryBuildingsAwayFromBorder() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 100, 100);
 
         // Place headquarters
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Change soldier inventory
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 50);
@@ -668,14 +656,13 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     public void testChangeMaximumToMediumPopulationOfMilitaryBuildingsAwayFromBorder() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 100, 100);
 
         // Place headquarters
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Change soldier inventory
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 50);
@@ -745,14 +732,13 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     public void testMinimumPopulationOfMilitaryBuildingsFarAwayFromBorder() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 100, 100);
 
         // Place headquarters
-        Point point0 = new Point(39, 35);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(39, 35);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Fill in lots of resources in the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 500);
@@ -857,14 +843,13 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     public void testMaximumPopulationOfMilitaryBuildingsFarAwayFromBorder() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 100, 100);
 
         // Place headquarters
-        Point point0 = new Point(39, 35);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(39, 35);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Fill in lots of resources in the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 500);
@@ -969,14 +954,13 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     public void testMediumPopulationOfMilitaryBuildingsFarAwayFromBorder() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 100, 100);
 
         // Place headquarters
-        Point point0 = new Point(39, 35);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(39, 35);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Fill in lots of resources in the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 500);
@@ -1081,14 +1065,13 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     public void testChangeMinimumToMediumPopulationOfMilitaryBuildingsFarAwayFromBorder() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 100, 100);
 
         // Place headquarters
-        Point point0 = new Point(39, 35);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(39, 35);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Fill in lots of resources in the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 500);
@@ -1212,14 +1195,13 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     public void testChangeMaximumToMediumPopulationOfMilitaryBuildingsFarAwayFromBorder() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 100, 100);
 
         // Place headquarters
-        Point point0 = new Point(39, 35);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(39, 35);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Fill in lots of resources in the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 500);

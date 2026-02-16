@@ -39,18 +39,17 @@ public class TestInventory {
     public void initTests() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
+        var point0 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Finish construction of the storehouse
@@ -194,7 +193,7 @@ public class TestInventory {
     public void testRetrieveCourierFromEmptyInventory() {
         // This should always work
 
-        Courier courier = storehouse.retrieveCourier();
+        var courier = storehouse.retrieveCourier();
 
         assertNotNull(courier);
     }
@@ -217,7 +216,7 @@ public class TestInventory {
         storehouse.depositWorker(new Soldier(null, PRIVATE_RANK, null));
         assertTrue(storehouse.isInStock(PRIVATE));
 
-        Soldier military = storehouse.retrieveSoldierToPopulateBuilding();
+        var military = storehouse.retrieveSoldierToPopulateBuilding();
         assertNotNull(military);
 
         storehouse.depositWorker(new Soldier(null, SERGEANT_RANK, null));

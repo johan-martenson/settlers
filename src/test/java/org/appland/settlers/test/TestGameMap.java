@@ -33,8 +33,7 @@ public class TestGameMap {
     public void testSetPlayers() throws Exception {
 
         // Create single player game
-        List<Player> players = new ArrayList<>();
-        players.add(new Player("Some name", PlayerColor.YELLOW, Nation.ROMANS, PlayerType.HUMAN));
+        var players = new ArrayList<Player>();        players.add(new Player("Some name", PlayerColor.YELLOW, Nation.ROMANS, PlayerType.HUMAN));
 
         var map = new GameMap(players, 100, 100);
 
@@ -42,8 +41,7 @@ public class TestGameMap {
         var player0 = new Player("Player 0", GREEN, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> newPlayers = new ArrayList<>();
-
+        var newPlayers = new ArrayList<Player>();
         newPlayers.add(player0);
         newPlayers.add(player1);
 
@@ -78,8 +76,7 @@ public class TestGameMap {
     public void testMapIsCorrectAfterSetPlayers() throws Exception {
 
         // Create single player game
-        List<Player> players = new ArrayList<>();
-        players.add(new Player("Some player", PlayerColor.YELLOW, Nation.ROMANS, PlayerType.HUMAN));
+        var players = new ArrayList<Player>();        players.add(new Player("Some player", PlayerColor.YELLOW, Nation.ROMANS, PlayerType.HUMAN));
 
         var map = new GameMap(players, 100, 100);
 
@@ -239,7 +236,7 @@ public class TestGameMap {
 
         // Verify that it's possible to create a minimal game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        GameMap gameMap = new GameMap(List.of(player0), 5, 5);
+        var gameMap = new GameMap(List.of(player0), 5, 5);
 
         assertNotNull(gameMap);
         assertEquals(gameMap.getWidth(), 5);

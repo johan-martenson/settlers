@@ -31,10 +31,10 @@ public class TestPlayer {
     public void testPlayerIsSetWhenBuildingIsCreated() {
 
         // Create player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         // Create building with the player set
-        Woodcutter woodcutter0 = new Woodcutter(player0);
+        var woodcutter0 = new Woodcutter(player0);
 
         // Verify that the player is set in the building
         assertNotNull(woodcutter0.getPlayer());
@@ -45,7 +45,7 @@ public class TestPlayer {
     public void testNameIsSetInPlayer() {
 
         // Create player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         // Verify that the name is set
         assertEquals(player0.getName(), "Player 0");
@@ -55,7 +55,7 @@ public class TestPlayer {
     public void testCreatePlayer() {
 
         // Create player 'player one'
-        Player player = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         assertEquals(player.getName(), "Player one");
         assertEquals(player.getColor(), BLUE);
@@ -65,10 +65,10 @@ public class TestPlayer {
     public void testCreateHouseWithPlayer() {
 
         // Create player 'player one'
-        Player player = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         // Create house belonging to player one
-        Woodcutter woodcutter0 = new Woodcutter(player);
+        var woodcutter0 = new Woodcutter(player);
 
         assertEquals(woodcutter0.getPlayer(), player);
     }
@@ -77,10 +77,10 @@ public class TestPlayer {
     public void testPlayerIsAlsoSetInBuildingsFlag() {
 
         // Create player 'player one'
-        Player player = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         // Create house belonging to player one
-        Woodcutter woodcutter0 = new Woodcutter(player);
+        var woodcutter0 = new Woodcutter(player);
 
         // Verify that the building's flag has the player set correctly
         assertEquals(woodcutter0.getFlag().getPlayer(), player);
@@ -90,22 +90,21 @@ public class TestPlayer {
     public void testPlayerCanOnlyCreateOneHeadquarter() throws Exception {
 
         // Create player 'player one'
-        Player player = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         // Create game map with one player
-        List<Player> players = new ArrayList<>();
-        players.add(player);
-        GameMap map = new GameMap(players, 50, 50);
+        var players = new ArrayList<Player>();        players.add(player);
+        var map = new GameMap(players, 50, 50);
 
         // Place first headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player), point0);
 
         // Create second headquarter belonging to player one
-        Headquarter headquarter1 = new Headquarter(player);
+        var headquarter1 = new Headquarter(player);
 
         // Verify that it's not possible to place a second headquarter
-        Point point1 = new Point(15, 15);
+        var point1 = new Point(15, 15);
 
         try {
             map.placeBuilding(headquarter1, point1);
@@ -118,23 +117,22 @@ public class TestPlayer {
     public void testPlayerIsAlsoSetInRoad() throws Exception {
 
         // Create player 'player one'
-        Player player0 = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         // Create game map with one player
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 50, 50);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 50, 50);
 
         // Place first headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(9, 5);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(9, 5);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         assertEquals(road0.getPlayer(), player0);
     }
@@ -143,23 +141,22 @@ public class TestPlayer {
     public void testPlayerIsSetInDriveWay() throws Exception {
 
         // Create player 'player one'
-        Player player0 = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         // Create game map with one player
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 50, 50);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 50, 50);
 
         // Place first headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(11, 5);
-        Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(11, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Verify that the woodcutter's driveway has the player set correctly
-        Road road0 = map.getRoad(woodcutter0.getPosition(), woodcutter0.getFlag().getPosition());
+        var road0 = map.getRoad(woodcutter0.getPosition(), woodcutter0.getFlag().getPosition());
 
         assertEquals(road0.getPlayer(), player0);
     }
@@ -168,23 +165,22 @@ public class TestPlayer {
     public void testCannotPlaceBuildingWithInvalidPlayer() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that it's not possible to place a building with an invalid player
-        Player invalidPlayer = new Player("", BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Point point1 = new Point(8, 6);
+        var invalidPlayer = new Player("", BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var point1 = new Point(8, 6);
 
         try {
-            Building woodcutter = map.placeBuilding(new Woodcutter(invalidPlayer), point1);
+            var woodcutter = map.placeBuilding(new Woodcutter(invalidPlayer), point1);
 
             fail();
         } catch (Exception e) {}
@@ -194,29 +190,28 @@ public class TestPlayer {
     public void testCannotPlaceRoadWithInvalidPlayer() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(8, 6);
-        Point point3 = new Point(12, 6);
-        Flag flag0 = map.placeFlag(player0, point1);
-        Flag flag1 = map.placeFlag(player0, point3);
+        var point1 = new Point(8, 6);
+        var point3 = new Point(12, 6);
+        var flag0 = map.placeFlag(player0, point1);
+        var flag1 = map.placeFlag(player0, point3);
 
         // Verify that it's not possible to place a road with an invalid player
-        Player invalidPlayer = new Player("", BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Point point2 = new Point(10, 6);
+        var invalidPlayer = new Player("", BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var point2 = new Point(10, 6);
 
         try {
-            Road road0 = map.placeRoad(invalidPlayer, point1, point2, point3);
+            var road0 = map.placeRoad(invalidPlayer, point1, point2, point3);
 
             fail();
         } catch (Exception e) {}
@@ -226,23 +221,22 @@ public class TestPlayer {
     public void testCannotPlaceFlagWithInvalidPlayer() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that it's not possible to place a flag with an invalid player
-        Player invalidPlayer = new Player("", BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Point point1 = new Point(8, 6);
+        var invalidPlayer = new Player("", BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var point1 = new Point(8, 6);
 
         try {
-            Flag flag0 = map.placeFlag(invalidPlayer, point1);
+            var flag0 = map.placeFlag(invalidPlayer, point1);
 
             fail();
         } catch (Exception e) {}
@@ -252,7 +246,7 @@ public class TestPlayer {
     public void testColorIsCorrectInPlayer() {
 
         // Create player
-        Player player0 = new Player("Player 0", RED, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", RED, Nation.ROMANS, PlayerType.HUMAN);
 
         // Verify that the color is set correctly
         assertEquals(player0.getColor(), RED);
@@ -262,7 +256,7 @@ public class TestPlayer {
     public void testChangeColorInPlayer() {
 
         // Create player
-        Player player0 = new Player("Player 0", RED, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", RED, Nation.ROMANS, PlayerType.HUMAN);
 
         // Change the color
         player0.setColor(BLUE);
@@ -275,7 +269,7 @@ public class TestPlayer {
     public void testChangeNameInPlayer() {
 
         // Create player
-        Player player0 = new Player("Player 0", RED, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", RED, Nation.ROMANS, PlayerType.HUMAN);
 
         // Change the name
         player0.setName("Another player");
@@ -288,15 +282,14 @@ public class TestPlayer {
     public void testCannotHaveTwoPlayersWithSameColor() {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
         players.add(player1);
 
         // Verify that it's not possible to have two players with the same color
         try {
-            GameMap map = new GameMap(players, 20, 20);
+            var map = new GameMap(players, 20, 20);
 
             fail();
         } catch (Exception e) {}
@@ -306,17 +299,16 @@ public class TestPlayer {
     public void testPlayerDefaultNationIsRoman() throws InvalidUserActionException {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         assertEquals(player0.getNation(), Nation.ROMANS);
 
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         assertEquals(player0.getNation(), Nation.ROMANS);
 
         // Verify that it's not possible to have two players with the same color
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         assertEquals(player0.getNation(), Nation.ROMANS);
     }
@@ -325,18 +317,17 @@ public class TestPlayer {
     public void testSetNationForPlayer() throws InvalidUserActionException {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         assertEquals(player0.getNation(), Nation.ROMANS);
 
         player0.setNation(Nation.VIKINGS);
 
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         assertEquals(player0.getNation(), Nation.VIKINGS);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         assertEquals(player0.getNation(), Nation.VIKINGS);
     }

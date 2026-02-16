@@ -801,7 +801,7 @@ public class TestBrewery {
         // Verify that the courier delivers the cargo to the headquarters
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(BEER);
+        var amount = headquarter0.getAmount(BEER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
@@ -843,7 +843,7 @@ public class TestBrewery {
         assertFalse(worker.isInsideBuilding());
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(BREWER);
+        var amount = headquarter0.getAmount(BREWER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
 
@@ -888,7 +888,7 @@ public class TestBrewery {
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
+        var firstStep = true;
         for (var point : worker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
@@ -1322,7 +1322,7 @@ public class TestBrewery {
         assertFalse(brewer.isInsideBuilding());
         assertEquals(brewer.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(BREWER);
+        var amount = storehouse0.getAmount(BREWER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, brewer, storehouse0.getPosition());
 
@@ -1373,7 +1373,7 @@ public class TestBrewery {
         assertFalse(brewer.isInsideBuilding());
         assertEquals(brewer.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(BREWER);
+        var amount = headquarter0.getAmount(BREWER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, brewer, headquarter0.getPosition());
 
@@ -1427,7 +1427,7 @@ public class TestBrewery {
         assertFalse(brewer.isInsideBuilding());
         assertEquals(brewer.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(BREWER);
+        var amount = headquarter0.getAmount(BREWER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, brewer, headquarter0.getPosition());
 
@@ -1472,7 +1472,7 @@ public class TestBrewery {
         assertFalse(brewer.isInsideBuilding());
         assertEquals(brewer.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(BREWER);
+        var amount = headquarter0.getAmount(BREWER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, brewer, headquarter0.getPosition());
 

@@ -630,7 +630,7 @@ public class TestAttack {
 
         barracks1.evacuate();
 
-        Soldier military = Utils.waitForSoldierOutsideBuilding(player1);
+        var military = Utils.waitForSoldierOutsideBuilding(player1);
 
         assertEquals(military.getTarget(), headquarter1.getPosition());
 
@@ -1537,7 +1537,7 @@ public class TestAttack {
 
         map.stepTime();
 
-        Soldier nextDefender = Utils.waitForSoldierOutsideBuilding(player1);
+        var nextDefender = Utils.waitForSoldierOutsideBuilding(player1);
 
         assertNotNull(nextDefender);
         assertNotEquals(attacker, nextDefender);
@@ -1635,7 +1635,7 @@ public class TestAttack {
         }
 
         // Verify that the sixth defender beats the general
-        Soldier nextDefender = Utils.waitForSoldierOutsideBuilding(player1);
+        var nextDefender = Utils.waitForSoldierOutsideBuilding(player1);
 
         assertNotNull(nextDefender);
         assertNotEquals(attacker, nextDefender);
@@ -1743,7 +1743,7 @@ public class TestAttack {
         }
 
         // Verify that the fourth defender beats the general
-        Soldier nextDefender = Utils.waitForSoldierOutsideBuilding(player1);
+        var nextDefender = Utils.waitForSoldierOutsideBuilding(player1);
 
         assertNotNull(nextDefender);
         assertNotEquals(attacker, nextDefender);
@@ -1851,7 +1851,7 @@ public class TestAttack {
         }
 
         // Verify that the fourth defender beats the general
-        Soldier nextDefender = Utils.waitForSoldierOutsideBuilding(player1);
+        var nextDefender = Utils.waitForSoldierOutsideBuilding(player1);
 
         assertNotNull(nextDefender);
         assertNotEquals(attacker, nextDefender);
@@ -1959,7 +1959,7 @@ public class TestAttack {
         }
 
         // Verify that the fourth defender beats the general
-        Soldier nextDefender = Utils.waitForSoldierOutsideBuilding(player1);
+        var nextDefender = Utils.waitForSoldierOutsideBuilding(player1);
 
         assertNotNull(nextDefender);
         assertNotEquals(attacker, nextDefender);
@@ -2095,7 +2095,7 @@ public class TestAttack {
         assertTrue(attacker1.getTarget().equals(barracks1.getFlag().getPosition())
                 || attacker2.getTarget().equals(barracks1.getFlag().getPosition()));
 
-        Point flagPoint = barracks1.getFlag().getPosition();
+        var flagPoint = barracks1.getFlag().getPosition();
 
         assertTrue(flagPoint.isAdjacent(attacker1.getTarget()) || flagPoint.equals(attacker1.getTarget()));
         assertTrue(flagPoint.isAdjacent(attacker2.getTarget()) || flagPoint.equals(attacker2.getTarget()));
@@ -2157,7 +2157,7 @@ public class TestAttack {
         // Get the first attacker
         Soldier firstAttacker = null;
 
-        for (Soldier military : attackers) {
+        for (var military : attackers) {
             if (military.getTarget().equals(barracks1.getFlag().getPosition())) {
                 firstAttacker = military;
 
@@ -2187,7 +2187,7 @@ public class TestAttack {
             Utils.fastForwardUntilWorkerReachesPoint(map, waitingAttacker, waitingAttacker.getTarget());
         }
 
-        Point waitingPosition = waitingAttacker.getPosition();
+        var waitingPosition = waitingAttacker.getPosition();
 
         assertFalse(waitingAttacker.isTraveling());
 
@@ -2258,7 +2258,7 @@ public class TestAttack {
 
         // Place guard house for player 0
         var point2 = new Point(21, 5);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point2);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point2);
 
         // Finish construction
         Utils.constructHouse(watchTower0);
@@ -2317,8 +2317,8 @@ public class TestAttack {
         map.stepTime();
 
         // Verify that one attacker goes back to the watch tower and the others go to the headquarters
-        int attackersToWatchTower = 0;
-        int attackersToHeadquarter = 0;
+        var attackersToWatchTower = 0;
+        var attackersToHeadquarter = 0;
 
         for (var attacker : attackers) {
 
@@ -2351,7 +2351,7 @@ public class TestAttack {
 
         // Place guard house for player 0
         var point2 = new Point(21, 5);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point2);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point2);
 
         // Place barracks for player 1
         var point3 = new Point(23, 15);
@@ -2434,7 +2434,7 @@ public class TestAttack {
                 break;
             }
 
-            for (Worker military : attackers) {
+            for (var military : attackers) {
                 assertNotEquals(military.getPosition(), barracks1.getPosition());
             }
 
@@ -2448,8 +2448,8 @@ public class TestAttack {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
 
         // Verify that the second military enters the captured barracks and the third military returns to the watch tower
-        Soldier remainingAttacker1 = attackers.get(0);
-        Soldier remainingAttacker2 = attackers.get(1);
+        var remainingAttacker1 = attackers.get(0);
+        var remainingAttacker2 = attackers.get(1);
 
         map.stepTime();
 
@@ -2492,7 +2492,7 @@ public class TestAttack {
 
         // Place guard house for player 0
         var point2 = new Point(21, 5);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point2);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point2);
 
         // Place barracks for player 1
         var point3 = new Point(23, 15);
@@ -2571,7 +2571,7 @@ public class TestAttack {
                 break;
             }
 
-            for (Worker military : attackers) {
+            for (var military : attackers) {
                 assertNotEquals(military.getPosition(), barracks1.getPosition());
             }
 
@@ -2585,8 +2585,8 @@ public class TestAttack {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
 
         // Verify that the second military enters the captured barracks and the third military returns to the storage since the watch tower is full
-        Soldier remainingAttacker1 = attackers.get(0);
-        Soldier remainingAttacker2 = attackers.get(1);
+        var remainingAttacker1 = attackers.get(0);
+        var remainingAttacker2 = attackers.get(1);
 
         map.stepTime();
 
@@ -2629,7 +2629,7 @@ public class TestAttack {
 
         // Place watch tower for player 0
         var point2 = new Point(21, 5);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point2);
+        var watchTower0 = map.placeBuilding(new WatchTower(player0), point2);
 
         // Place barracks for player 1
         var point3 = new Point(23, 15);
@@ -2782,7 +2782,7 @@ public class TestAttack {
         Utils.waitForSoldierToWinFight(attacker, map);
 
         // Send a reinforcement to the attacked building
-        Soldier reinforcement = new Soldier(player1, PRIVATE_RANK, map);
+        var reinforcement = new Soldier(player1, PRIVATE_RANK, map);
 
         map.placeWorker(reinforcement, flag0);
 
@@ -2906,7 +2906,7 @@ public class TestAttack {
         Utils.waitForFightToStart(map, attacker, defender);
 
         // Send a reinforcement to the attacked building
-        Soldier reinforcement = new Soldier(player1, PRIVATE_RANK, map);
+        var reinforcement = new Soldier(player1, PRIVATE_RANK, map);
 
         map.placeWorker(reinforcement, flag0);
 
@@ -3016,7 +3016,7 @@ public class TestAttack {
         assertNotNull(defender);
 
         // Send a reinforcement to the attacked building
-        Soldier reinforcement = new Soldier(player1, PRIVATE_RANK, map);
+        var reinforcement = new Soldier(player1, PRIVATE_RANK, map);
 
         map.placeWorker(reinforcement, barracks1.getFlag());
 
@@ -3137,8 +3137,7 @@ public class TestAttack {
         assertFalse(defender.isDead());
 
         // Verify that the other attackers wait and don't start fighting
-        Map<Soldier, Point> positions = new HashMap<>();
-
+        var positions = new HashMap<Soldier, Point>();
         for (int i = 0; i < 1000; i++) {
             if (defender.isDying()) {
                 break;
@@ -3464,7 +3463,7 @@ public class TestAttack {
         // Place barracks close to the new border
         var point4 = new Point(34, 18);
         assertTrue(player1.getOwnedLand().contains(point4));
-        Barracks barracks0 = map.placeBuilding(new Barracks(player1), point4);
+        var barracks0 = map.placeBuilding(new Barracks(player1), point4);
 
         // Finish construction of the barracks
         Utils.constructHouse(barracks0);
@@ -3710,7 +3709,7 @@ public class TestAttack {
 
         // Wait for the attackers to get to the headquarters and start to walk home
         for (int i = 0; i < 200; i++) {
-            boolean allWalkingBack = true;
+            var allWalkingBack = true;
 
             for (var attacker : attackers) {
                 if (!attacker.getTarget().equals(headquarter0.getPosition()) &&
@@ -4123,7 +4122,7 @@ public class TestAttack {
 
         // Place fortress for player 0
         var point3 = new Point(17, 13);
-        Fortress fortress1 = map.placeBuilding(new Fortress(player0), point3);
+        var fortress1 = map.placeBuilding(new Fortress(player0), point3);
 
         // Place barracks for player 1
         var point4 = new Point(27, 9);

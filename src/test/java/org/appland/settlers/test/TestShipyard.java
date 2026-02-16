@@ -65,18 +65,17 @@ public class TestShipyard {
     public void testShipyardOnlyNeedsThreePlanksAndThreeStonesForConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(6, 12);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(6, 12);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Deliver two planks and three stones
         Utils.deliverCargos(shipyard0, PLANK, 3);
@@ -99,18 +98,17 @@ public class TestShipyard {
     public void testShipyardCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(6, 12);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(6, 12);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Deliver one plank and three stone
         Utils.deliverCargos(shipyard0, PLANK, 2);
@@ -133,18 +131,17 @@ public class TestShipyard {
     public void testShipyardCannotBeConstructedWithTooFewStones() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(6, 12);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(6, 12);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Deliver three planks and two stones
         Utils.deliverCargos(shipyard0, PLANK, 3);
@@ -167,18 +164,17 @@ public class TestShipyard {
     public void testUnfinishedShipyardNeedsNoShipwright() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(15, 15);
+        var point1 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(10, 10);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 10);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         assertTrue(shipyard.isPlanned());
         assertFalse(shipyard.needsWorker());
@@ -188,19 +184,18 @@ public class TestShipyard {
     public void testFinishedShipyardNeedsShipwright() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(15, 15);
+        var point1 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(10, 10);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 10);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Construct the shipyard
         Utils.constructHouse(shipyard);
@@ -214,27 +209,26 @@ public class TestShipyard {
     public void testShipwrightIsAssignedToFinishedShipyard() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Finish the shipyard
         Utils.constructHouse(shipyard);
 
         // Verify that a shipwright starts walking to the shipyard
-        Shipwright shipwright = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
+        var shipwright = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
 
         assertNotNull(shipwright);
         assertEquals(shipwright.getTarget(), shipyard.getPosition());
@@ -244,27 +238,26 @@ public class TestShipyard {
     public void testShipwrightIsNotASoldier() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Finish the shipyard
         Utils.constructHouse(shipyard);
 
         // Wait for a shipwright to walk out
-        Shipwright shipwright0 = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
+        var shipwright0 = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
 
         assertNotNull(shipwright0);
         assertFalse(shipwright0.isSoldier());
@@ -274,32 +267,31 @@ public class TestShipyard {
     public void testShipwrightIsCreatedFromHammer() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Remove all shipwrights from the headquarter and add one scythe
         Utils.adjustInventoryTo(headquarter, Material.SHIPWRIGHT, 0);
         Utils.adjustInventoryTo(headquarter, Material.HAMMER, 1);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Finish the shipyard
         Utils.constructHouse(shipyard);
 
         // Verify that a shipwright starts walking to the shipyard
-        Shipwright shipwright = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
+        var shipwright = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
 
         assertNotNull(shipwright);
         assertEquals(headquarter.getAmount(HAMMER), 0);
@@ -309,22 +301,21 @@ public class TestShipyard {
     public void testShipyardMakesBoatsByDefault() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(15, 15);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(15, 15);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(10, 10);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 10);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect the shipyard with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -337,7 +328,7 @@ public class TestShipyard {
 
         Utils.deliverCargos(shipyard, PLANK, 2);
 
-        Shipwright shipwright = (Shipwright) shipyard.getWorker();
+        var shipwright = (Shipwright) shipyard.getWorker();
 
         Utils.fastForwardUntilWorkerCarriesCargo(map, shipwright);
 
@@ -349,25 +340,24 @@ public class TestShipyard {
     public void testShipwrightRestsInShipyardThenLeavesIfShipsAreConstructed() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place lake
-        Point point2 = new Point(15, 9);
+        var point2 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -378,7 +368,7 @@ public class TestShipyard {
         assertTrue(shipyard.isProducingShips());
 
         // Wait for a shipwright to occupy the shipyard
-        Worker shipwright = Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -403,25 +393,24 @@ public class TestShipyard {
     public void testShipwrightGoesOutViaFlagWhenShipsAreProduced() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place lake
-        Point point2 = new Point(15, 9);
+        var point2 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed
         assertTrue(headquarter.getAmount(SHIPWRIGHT) > 0);
@@ -434,7 +423,7 @@ public class TestShipyard {
         assertTrue(shipyard.isProducingShips());
 
         // Wait for a shipwright to occupy the shipyard
-        Worker shipwright = Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -462,25 +451,24 @@ public class TestShipyard {
     public void testShipwrightStartsBuildingAShipWhenThereIsAFreeSpot() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place lake
-        Point point2 = new Point(15, 9);
+        var point2 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect the shipyard with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -491,7 +479,7 @@ public class TestShipyard {
         assertTrue(shipyard.isProducingShips());
 
         // Wait for a shipwright to occupy the shipyard
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -508,7 +496,7 @@ public class TestShipyard {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -527,7 +515,7 @@ public class TestShipyard {
 
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -542,25 +530,24 @@ public class TestShipyard {
     public void testShipwrightBuildsAShipPointOnWaterEdge() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place lake
-        Point point2 = new Point(15, 9);
+        var point2 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect the shipyard with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -571,7 +558,7 @@ public class TestShipyard {
         assertTrue(shipyard.isProducingShips());
 
         // Wait for a shipwright to occupy the shipyard
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -588,7 +575,7 @@ public class TestShipyard {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
         assertTrue(GameUtils.isSomeButNotAll(map.getSurroundingTiles(point), Vegetation.WATER));
@@ -598,25 +585,24 @@ public class TestShipyard {
     public void testShipwrightReturnsViaFlagAfterStartingToBuildShip() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place lake
-        Point point2 = new Point(15, 9);
+        var point2 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -627,7 +613,7 @@ public class TestShipyard {
         assertTrue(shipyard.isProducingShips());
 
         // Wait for a shipwright to occupy the shipyard
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -644,7 +630,7 @@ public class TestShipyard {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -661,7 +647,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
 
@@ -683,25 +669,24 @@ public class TestShipyard {
     public void testShipwrightWithEnoughResourcesBuildsShip() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place lake
-        Point point2 = new Point(15, 9);
+        var point2 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -712,7 +697,7 @@ public class TestShipyard {
         assertTrue(shipyard.isProducingShips());
 
         // Wait for a shipwright to occupy the shipyard
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -736,7 +721,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         for (int i = 0; i < 100; i++) {
             if (ship.isReady()) {
@@ -760,25 +745,24 @@ public class TestShipyard {
     public void testShipwrightOnlyBuildsShipWhenThereAreEnoughResources() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place lake
-        Point point2 = new Point(15, 9);
+        var point2 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -792,7 +776,7 @@ public class TestShipyard {
         assertTrue(shipyard.isProducingShips());
 
         // Wait for a shipwright to occupy the shipyard
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -824,7 +808,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         for (int i = 0; i < 100; i++) {
             if (ship.isReady()) {
@@ -853,25 +837,24 @@ public class TestShipyard {
     public void testFinishedShipStaysInWaterCloseToShipyard() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place lake
-        Point point2 = new Point(15, 9);
+        var point2 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -882,7 +865,7 @@ public class TestShipyard {
         assertTrue(shipyard.isProducingShips());
 
         // Wait for a shipwright to occupy the shipyard
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -906,12 +889,12 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertTrue(ship.isUnderConstruction());
         assertFalse(ship.isReady());
 
-        Point point3 = shipwright.getPosition();
+        var point3 = shipwright.getPosition();
 
         for (int i = 0; i < 100; i++) {
             if (ship.isReady()) {
@@ -930,7 +913,7 @@ public class TestShipyard {
         assertTrue(ship.isReady());
 
         // Verify that the ship sails a short distance and then lies waiting
-        Point point4 = ship.getTarget();
+        var point4 = ship.getTarget();
 
         assertNotNull(point4);
         assertNotEquals(point4, point3);
@@ -946,25 +929,24 @@ public class TestShipyard {
     public void testShipIsBuiltCloseToWaterRightOfShipyard() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place lake
-        Point point2 = new Point(17, 9);
+        var point2 = new Point(17, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -975,7 +957,7 @@ public class TestShipyard {
         assertTrue(shipyard.isProducingShips());
 
         // Wait for a shipwright to occupy the shipyard
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -999,7 +981,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         // Verify that the ship is built close to the water
         assertTrue(Math.abs(ship.getPosition().x - point2.x) < 5);
@@ -1010,25 +992,24 @@ public class TestShipyard {
     public void testCannotBuildShipCloseToWater2() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place lake
-        Point point2 = new Point(17, 9);
+        var point2 = new Point(17, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER_2, map);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -1039,7 +1020,7 @@ public class TestShipyard {
         assertTrue(shipyard.isProducingShips());
 
         // Wait for a shipwright to occupy the shipyard
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1057,25 +1038,24 @@ public class TestShipyard {
     public void testCannotBuildShipCloseToBuildableWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place lake
-        Point point2 = new Point(17, 9);
+        var point2 = new Point(17, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.BUILDABLE_WATER, map);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -1086,7 +1066,7 @@ public class TestShipyard {
         assertTrue(shipyard.isProducingShips());
 
         // Wait for a shipwright to occupy the shipyard
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1103,25 +1083,24 @@ public class TestShipyard {
     public void testShipIsBuiltCloseToWaterLeftOfShipyard() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place lake
-        Point point2 = new Point(4, 10);
+        var point2 = new Point(4, 10);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -1132,7 +1111,7 @@ public class TestShipyard {
         assertTrue(shipyard.isProducingShips());
 
         // Wait for a shipwright to occupy the shipyard
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1156,7 +1135,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         // Verify that the ship is built close to the water
         assertTrue(Math.abs(ship.getPosition().x - point2.x) < 5);
@@ -1167,25 +1146,24 @@ public class TestShipyard {
     public void testShipIsBuiltCloseToWaterAboveShipyard() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place lake
-        Point point2 = new Point(10, 14);
+        var point2 = new Point(10, 14);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -1196,7 +1174,7 @@ public class TestShipyard {
         assertTrue(shipyard.isProducingShips());
 
         // Wait for a shipwright to occupy the shipyard
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1220,7 +1198,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         // Verify that the ship is built close to the water
         assertTrue(Math.abs(ship.getPosition().x - point2.x) < 5);
@@ -1231,25 +1209,24 @@ public class TestShipyard {
     public void testShipIsBuiltCloseToWaterBelowShipyard() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 9);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 9);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place lake
-        Point point2 = new Point(9, 3);
+        var point2 = new Point(9, 3);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         // Place shipyard
-        Point point0 = new Point(9, 11);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(9, 11);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -1260,7 +1237,7 @@ public class TestShipyard {
         assertTrue(shipyard.isProducingShips());
 
         // Wait for a shipwright to occupy the shipyard
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1284,7 +1261,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         // Verify that the ship is built close to the water
         assertTrue(Math.abs(ship.getPosition().x - point2.x) < 5);
@@ -1295,18 +1272,17 @@ public class TestShipyard {
     public void testShipyardWithoutPlanksProducesNothing() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Adjust resources to there is only resources for constructing the shipyard
         Utils.adjustInventoryTo(headquarter, PLANK, 30);
@@ -1319,7 +1295,7 @@ public class TestShipyard {
         // Construct and occupy the shipyard
         Utils.constructHouse(shipyard);
 
-        Shipwright shipwright = Utils.occupyBuilding(new Shipwright(player0, map), shipyard);
+        var shipwright = Utils.occupyBuilding(new Shipwright(player0, map), shipyard);
 
         // Verify that the shipyard does not produce anything because it has no resources
         for (int i = 0; i < 200; i++) {
@@ -1334,26 +1310,25 @@ public class TestShipyard {
     public void testShipwrightGoesBackToStorageWhenShipyardIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(8, 8);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(8, 8);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard0);
 
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1367,7 +1342,7 @@ public class TestShipyard {
         assertFalse(shipwright.isInsideBuilding());
         assertEquals(shipwright.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(SHIPWRIGHT);
+        var amount = headquarter0.getAmount(SHIPWRIGHT);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, headquarter0.getPosition());
 
@@ -1379,18 +1354,17 @@ public class TestShipyard {
     public void testShipwrightGoesBackOnToStorageOnRoadsIfPossibleWhenShipyardIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(8, 8);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(8, 8);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect the shipyard with the headquarter
         map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
@@ -1398,7 +1372,7 @@ public class TestShipyard {
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard0);
 
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1413,8 +1387,8 @@ public class TestShipyard {
         assertEquals(shipwright.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
-        for (Point point : shipwright.getPlannedPath()) {
+        var firstStep = true;
+        for (var point : shipwright.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -1428,26 +1402,25 @@ public class TestShipyard {
     public void testProductionInShipyardCanBeStopped() throws Exception {
 
         // Create game map
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(12, 8);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(12, 8);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect the shipyard and the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard0);
 
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1492,26 +1465,25 @@ public class TestShipyard {
     public void testProductionInShipyardCanBeResumed() throws Exception {
 
         // Create game map
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(12, 8);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(12, 8);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect the shipyard and the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard0);
 
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1569,35 +1541,34 @@ public class TestShipyard {
     public void testAssignedShipwrightHasCorrectlySetPlayer() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point1 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(20, 14);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(20, 14);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect the shipyard with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), shipyard0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), shipyard0.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard0);
 
         // Wait for shipwright to get assigned and leave the headquarter
-        List<Shipwright> workers = Utils.waitForWorkersOutsideBuilding(Shipwright.class, 1, player0);
+        var workers = Utils.waitForWorkersOutsideBuilding(Shipwright.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
 
         // Verify that the player is set correctly in the worker
-        Shipwright worker = workers.getFirst();
+        var worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1606,34 +1577,33 @@ public class TestShipyard {
     public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        Player player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
         players.add(player2);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 2's headquarter
-        Point point1 = new Point(70, 70);
-        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point1);
+        var point1 = new Point(70, 70);
+        var headquarter2 = map.placeBuilding(new Headquarter(player2), point1);
 
         // Place player 0's headquarter
-        Point point2 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place player 1's headquarter
-        Point point3 = new Point(45, 5);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point3);
+        var point3 = new Point(45, 5);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point3);
 
         // Place fortress for player 0
-        Point point4 = new Point(21, 9);
-        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point4);
+        var point4 = new Point(21, 9);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point4);
 
         // Finish construction of the fortress
         Utils.constructHouse(fortress0);
@@ -1642,16 +1612,16 @@ public class TestShipyard {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         // Place shipyard close to the new border
-        Point point0 = new Point(28, 18);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(28, 18);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect the shipyard with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard0);
 
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1665,25 +1635,24 @@ public class TestShipyard {
     public void testCannotPlaceBuildingOnShipBeingBuilt() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place lake
-        Point point2 = new Point(15, 9);
+        var point2 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -1692,7 +1661,7 @@ public class TestShipyard {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1709,7 +1678,7 @@ public class TestShipyard {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -1726,7 +1695,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
 
@@ -1745,25 +1714,24 @@ public class TestShipyard {
     public void testNoAvailableBuildingSpaceOnShipBeingBuilt() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place lake
-        Point point2 = new Point(15, 9);
+        var point2 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -1772,7 +1740,7 @@ public class TestShipyard {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1789,7 +1757,7 @@ public class TestShipyard {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -1806,7 +1774,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
 
@@ -1818,25 +1786,24 @@ public class TestShipyard {
     public void testCannotPlaceFlagOnShipBeingBuilt() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place lake
-        Point point0 = new Point(15, 9);
+        var point0 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point2 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point2);
+        var point2 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point2);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -1845,7 +1812,7 @@ public class TestShipyard {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1862,7 +1829,7 @@ public class TestShipyard {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -1879,13 +1846,13 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
 
         // Verify that it's not possible to place a flag on a ship being built
         try {
-            Flag flag0 = map.placeFlag(player0, ship.getPosition());
+            var flag0 = map.placeFlag(player0, ship.getPosition());
 
             fail();
         } catch (Exception e) {}
@@ -1898,25 +1865,24 @@ public class TestShipyard {
     public void testNoAvailableFlagOnShipBeingBuilt() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place lake
-        Point point0 = new Point(15, 9);
+        var point0 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point2 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point2);
+        var point2 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point2);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -1925,7 +1891,7 @@ public class TestShipyard {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1942,7 +1908,7 @@ public class TestShipyard {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -1959,7 +1925,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
 
@@ -1972,25 +1938,24 @@ public class TestShipyard {
     public void testAvailableFlagSpaceOnSpaceWhereShipWasBeingBuiltWhenConstructionIsDone() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place lake
-        Point point1 = new Point(15, 9);
+        var point1 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point1, Vegetation.WATER, map);
 
         // Place shipyard
-        Point point2 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point2);
+        var point2 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point2);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -1999,7 +1964,7 @@ public class TestShipyard {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -2016,7 +1981,7 @@ public class TestShipyard {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
         assertTrue(map.isAvailableFlagPoint(player0, point));
@@ -2034,7 +1999,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertEquals(ship.getPosition(), point);
@@ -2055,33 +2020,32 @@ public class TestShipyard {
     public void testShipwrightReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place first flag
-        Point point2 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point2);
+        var point2 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point2);
 
         // Place shipyard
-        Point point0 = new Point(13, 5);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(13, 5);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, shipyard0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, shipyard0.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard0);
 
-        Shipwright shipwright = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
+        var shipwright = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
 
         assertNotNull(shipwright);
         assertEquals(shipwright.getTarget(), shipyard0.getPosition());
@@ -2111,34 +2075,33 @@ public class TestShipyard {
     public void testShipwrightContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place first flag
-        Point point2 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point2);
+        var point2 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point2);
 
         // Place shipyard
-        Point point0 = new Point(13, 5);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(13, 5);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, shipyard0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, shipyard0.getFlag());
 
         // Wait for the shipyard to get constructed
         Utils.waitForBuildingToBeConstructed(shipyard0);
 
         // Wait for a shipwright to start walking towards the shipyard
-        Shipwright shipwright = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
+        var shipwright = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, headquarter0.getFlag().getPosition());
 
@@ -2168,34 +2131,33 @@ public class TestShipyard {
     public void testShipwrightReturnsToStorageIfShipyardIsDestroyed() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place first flag
-        Point point2 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point2);
+        var point2 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point2);
 
         // Place shipyard
-        Point point0 = new Point(13, 5);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(13, 5);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, shipyard0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, shipyard0.getFlag());
 
         // Wait for the shipyard to get constructed
         Utils.waitForBuildingToBeConstructed(shipyard0);
 
         // Wait for a shipwright start to walk to the shipyard
-        Shipwright shipwright = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
+        var shipwright = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
 
         assertNotNull(shipwright);
         assertEquals(shipwright.getTarget(), shipyard0.getPosition());
@@ -2224,26 +2186,25 @@ public class TestShipyard {
     public void testShipwrightGoesOffroadBackToClosestStorageWhenShipyardIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(17, 17);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(17, 17);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect the shipyard with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard0);
 
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -2253,8 +2214,8 @@ public class TestShipyard {
         Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipyard0.getPosition());
 
         // Place a second storage closer to the shipyard
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -2271,7 +2232,7 @@ public class TestShipyard {
         assertFalse(shipwright.isInsideBuilding());
         assertEquals(shipwright.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(SHIPWRIGHT);
+        var amount = storehouse0.getAmount(SHIPWRIGHT);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, storehouse0.getPosition());
 
@@ -2283,26 +2244,25 @@ public class TestShipyard {
     public void testShipwrightReturnsOffroadAndAvoidsBurningStorageWhenShipyardIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(17, 17);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(17, 17);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect the shipyard with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard0);
 
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -2312,8 +2272,8 @@ public class TestShipyard {
         Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipyard0.getPosition());
 
         // Place a second storage closer to the shipyard
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -2333,7 +2293,7 @@ public class TestShipyard {
         assertFalse(shipwright.isInsideBuilding());
         assertEquals(shipwright.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(SHIPWRIGHT);
+        var amount = headquarter0.getAmount(SHIPWRIGHT);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, headquarter0.getPosition());
 
@@ -2345,26 +2305,25 @@ public class TestShipyard {
     public void testShipwrightReturnsOffroadAndAvoidsDestroyedStorageWhenShipyardIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(17, 17);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(17, 17);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard0);
 
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -2374,8 +2333,8 @@ public class TestShipyard {
         Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipyard0.getPosition());
 
         // Place a second storage closer to the shipyard
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -2399,7 +2358,7 @@ public class TestShipyard {
         assertFalse(shipwright.isInsideBuilding());
         assertEquals(shipwright.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(SHIPWRIGHT);
+        var amount = headquarter0.getAmount(SHIPWRIGHT);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, headquarter0.getPosition());
 
@@ -2411,26 +2370,25 @@ public class TestShipyard {
     public void testShipwrightReturnsOffroadAndAvoidsUnfinishedStorageWhenShipyardIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(17, 17);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(17, 17);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard0);
 
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -2440,8 +2398,8 @@ public class TestShipyard {
         Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipyard0.getPosition());
 
         // Place a second storage closer to the shipyard
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Destroy the shipyard
         assertTrue(shipwright.isInsideBuilding());
@@ -2453,7 +2411,7 @@ public class TestShipyard {
         assertFalse(shipwright.isInsideBuilding());
         assertEquals(shipwright.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(SHIPWRIGHT);
+        var amount = headquarter0.getAmount(SHIPWRIGHT);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, headquarter0.getPosition());
 
@@ -2465,27 +2423,26 @@ public class TestShipyard {
     public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(17, 17);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(17, 17);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road to connect the headquarter and the shipyard
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), shipyard0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), shipyard0.getFlag());
 
         // Wait for the shipyard to get constructed
         Utils.waitForBuildingToBeConstructed(shipyard0);
 
         // Wait for a shipwright to start walking to the shipyard
-        Shipwright shipwright = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
+        var shipwright = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
 
         assertFalse(shipwright.isInsideBuilding());
 
@@ -2509,23 +2466,22 @@ public class TestShipyard {
     public void testShipyardWithoutResourcesHasZeroProductivity() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(10, 10);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 10);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Construct and occupy the shipyard
         Utils.constructHouse(shipyard0);
 
-        Shipwright shipwright = Utils.occupyBuilding(new Shipwright(player0, map), shipyard0);
+        var shipwright = Utils.occupyBuilding(new Shipwright(player0, map), shipyard0);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -2542,18 +2498,17 @@ public class TestShipyard {
     public void testShipyardWithAbundantResourcesHasFullProductivity() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(10, 10);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 10);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect the shipyard with the headquarter
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), shipyard0.getFlag());
@@ -2561,7 +2516,7 @@ public class TestShipyard {
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard0);
 
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -2589,18 +2544,17 @@ public class TestShipyard {
     public void testShipyardLosesProductivityWhenResourcesRunOut() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(10, 10);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 10);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect the shipyard with the headquarter
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), shipyard0.getFlag());
@@ -2608,7 +2562,7 @@ public class TestShipyard {
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard0);
 
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -2651,18 +2605,17 @@ public class TestShipyard {
     public void testUnoccupiedShipyardHasNoProductivity() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(10, 10);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 10);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Finish construction of the shipyard
         Utils.constructHouse(shipyard);
@@ -2682,26 +2635,25 @@ public class TestShipyard {
     public void testShipyardCanProduce() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(7, 9);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(7, 9);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect the shipyard with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard0);
 
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -2718,18 +2670,17 @@ public class TestShipyard {
     public void testShipyardReportsCorrectOutput() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(6, 12);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(6, 12);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Construct the shipyard
         Utils.constructHouse(shipyard0);
@@ -2743,22 +2694,21 @@ public class TestShipyard {
     public void testShipyardWaitsWhenFlagIsFull() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(14, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(14, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect the shipyard with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -2785,10 +2735,10 @@ public class TestShipyard {
         assertTrue(map.isFlagAtPoint(shipyard.getFlag().getPosition()));
         assertTrue(map.isFlagAtPoint(headquarter.getFlag().getPosition()));
 
-        Road road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2815,33 +2765,32 @@ public class TestShipyard {
     public void testBoatIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point3 = new Point(6, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(6, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Remove all planks and stones from the headquarters to prevent the storehouse from being finished
         Utils.adjustInventoryTo(headquarter, PLANK, 0);
         Utils.adjustInventoryTo(headquarter, STONE, 0);
 
         // Place store house
-        Point point4 = new Point(10, 4);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+        var point4 = new Point(10, 4);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point4);
 
         // Connect the store house to the headquarters
-        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         // Place the shipyard
-        Point point1 = new Point(14, 4);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point1);
+        var point1 = new Point(14, 4);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point1);
 
         // Connect the shipyard with the store house
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), storehouse.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), storehouse.getFlag());
 
         // Deliver the needed material to construct the shipyard
         Utils.deliverCargos(shipyard, PLANK, 3);
@@ -2880,22 +2829,21 @@ public class TestShipyard {
     public void testShipyardDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(14, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(14, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect the shipyard with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -2922,10 +2870,10 @@ public class TestShipyard {
         }
 
         // Reconnect the shipyard with the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2970,21 +2918,20 @@ public class TestShipyard {
     public void testWhenBoatDeliveryAreBlockedShipyardFillsUpFlagAndThenStops() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place Shipyard
-        Point point0 = new Point(7, 9);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(7, 9);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road to connect the shipyard with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2992,7 +2939,7 @@ public class TestShipyard {
 
         Utils.waitForBuildingToBeConstructed(shipyard0);
 
-        Worker shipwright0 = Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
+        var shipwright0 = Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard0);
 
         assertTrue(shipwright0.isInsideBuilding());
         assertEquals(shipwright0.getHome(), shipyard0);
@@ -3021,28 +2968,27 @@ public class TestShipyard {
     public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndShipyardIsTornDown() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place storehouse
-        Point point2 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(5, 5);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point2);
 
         // Place shipyard
-        Point point0 = new Point(18, 4);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(18, 4);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road to connect the storehouse with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
         // Place road to connect the headquarter with the shipyard
-        Road road1 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
 
         // Add a lot of planks and stones to the headquarter
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -3054,7 +3000,7 @@ public class TestShipyard {
         // Wait for the shipyard and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, shipyard0);
 
-        Worker shipwright0 = shipyard0.getWorker();
+        var shipwright0 = shipyard0.getWorker();
 
         assertTrue(shipwright0.isInsideBuilding());
         assertEquals(shipwright0.getHome(), shipyard0);
@@ -3082,28 +3028,27 @@ public class TestShipyard {
     public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndShipyardIsTornDown() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place storehouse
-        Point point2 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(5, 5);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point2);
 
         // Place shipyard
-        Point point0 = new Point(18, 6);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(18, 6);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road to connect the storehouse with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
         // Place road to connect the headquarter with the shipyard
-        Road road1 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
 
         // Add a lot of planks and stones to the headquarter
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -3115,7 +3060,7 @@ public class TestShipyard {
         // Wait for the shipyard and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, shipyard0);
 
-        Worker shipwright0 = shipyard0.getWorker();
+        var shipwright0 = shipyard0.getWorker();
 
         assertTrue(shipwright0.isInsideBuilding());
         assertEquals(shipwright0.getHome(), shipyard0);
@@ -3150,14 +3095,13 @@ public class TestShipyard {
     public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, SHIPWRIGHT, 1);
@@ -3167,7 +3111,7 @@ public class TestShipyard {
         headquarter0.pushOutAll(SHIPWRIGHT);
 
         for (int i = 0; i < 10; i++) {
-            Worker worker = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
+            var worker = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
 
             assertEquals(headquarter0.getAmount(SHIPWRIGHT), 0);
             assertEquals(worker.getPosition(), headquarter0.getPosition());
@@ -3188,14 +3132,13 @@ public class TestShipyard {
     public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, SHIPWRIGHT, 1);
@@ -3203,7 +3146,7 @@ public class TestShipyard {
         headquarter0.blockDeliveryOfMaterial(SHIPWRIGHT);
         headquarter0.pushOutAll(SHIPWRIGHT);
 
-        Worker worker = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
+        var worker = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
 
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
@@ -3233,21 +3176,20 @@ public class TestShipyard {
     public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(7, 9);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(7, 9);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road to connect the shipyard with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
@@ -3261,7 +3203,7 @@ public class TestShipyard {
         */
         headquarter0.blockDeliveryOfMaterial(SHIPWRIGHT);
 
-        Worker worker = shipyard0.getWorker();
+        var worker = shipyard0.getWorker();
 
         shipyard0.tearDown();
 
@@ -3293,21 +3235,20 @@ public class TestShipyard {
     public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point1 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(7, 9);
-        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(7, 9);
+        var shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road to connect the shipyard with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
@@ -3316,7 +3257,7 @@ public class TestShipyard {
         Utils.waitForBuildingToBeConstructed(shipyard0);
 
         // Wait for a shipwright to start walking to the shipyard
-        Shipwright shipwright = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
+        var shipwright = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
 
         // Wait for the shipwright to go past the headquarter's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, headquarter0.getFlag().getPosition());
@@ -3340,7 +3281,7 @@ public class TestShipyard {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
 
-        Point point = shipwright.getPosition();
+        var point = shipwright.getPosition();
         for (int i = 0; i < 100; i++) {
             assertTrue(shipwright.isDead());
             assertEquals(shipwright.getPosition(), point);

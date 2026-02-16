@@ -34,21 +34,20 @@ public class TestLimitedSpaceOnFlag {
     public void testFlagCanContainRightAmountOfItems() throws Exception {
 
         // Start new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place well
-        Point point1 = new Point(6, 12);
-        Building well0 = map.placeBuilding(new Well(player0), point1);
+        var point1 = new Point(6, 12);
+        var well0 = map.placeBuilding(new Well(player0), point1);
 
         // Connect the well with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
 
         // Wait for the well to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(well0);
@@ -73,31 +72,30 @@ public class TestLimitedSpaceOnFlag {
     public void testCourierWaitsToDeliverWhenFlagIsFull() throws Exception {
 
         // Start new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag far away from the headquarter
-        Point point1 = new Point(21, 5);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(21, 5);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place flag closer to the headquarter
-        Point point2 = new Point(17, 5);
-        Flag flag1 = map.placeFlag(player0, point2);
+        var point2 = new Point(17, 5);
+        var flag1 = map.placeFlag(player0, point2);
 
         // Place a short road to make a courier wait on
-        Road road0 = map.placeRoad(player0, flag0.getPosition(), flag0.getPosition().left(), flag1.getPosition());
+        var road0 = map.placeRoad(player0, flag0.getPosition(), flag0.getPosition().left(), flag1.getPosition());
 
         // Place a long road to the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, flag1, headquarter0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag1, headquarter0.getFlag());
 
         // Wait for both roads to get their couriers assigned and standing idle
-        Collection<Courier> couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1);
+        var couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1);
 
         Utils.waitForCouriersToBeIdle(map, couriers);
 
@@ -143,31 +141,30 @@ public class TestLimitedSpaceOnFlag {
     public void testCourierResumesDeliveryAfterWaiting() throws Exception {
 
         // Start new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag far away from the headquarter
-        Point point1 = new Point(21, 5);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(21, 5);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place flag closer to the headquarter
-        Point point2 = new Point(17, 5);
-        Flag flag1 = map.placeFlag(player0, point2);
+        var point2 = new Point(17, 5);
+        var flag1 = map.placeFlag(player0, point2);
 
         // Place a short road to make a courier wait on
-        Road road0 = map.placeRoad(player0, flag0.getPosition(), flag0.getPosition().left(), flag1.getPosition());
+        var road0 = map.placeRoad(player0, flag0.getPosition(), flag0.getPosition().left(), flag1.getPosition());
 
         // Place a long road to the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, flag1, headquarter0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag1, headquarter0.getFlag());
 
         // Wait for both roads to get their couriers assigned and standing idle
-        Collection<Courier> couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1);
+        var couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1);
 
         Utils.waitForCouriersToBeIdle(map, couriers);
 
@@ -228,38 +225,37 @@ public class TestLimitedSpaceOnFlag {
     public void testOnlyOneCourierDeliversWhenThereIsOnlySpaceForOneButTwoWantsToDeliver() throws Exception {
 
         // Start new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag far away from the headquarter
-        Point point1 = new Point(21, 5);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(21, 5);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place flag closer to the headquarter
-        Point point2 = new Point(17, 5);
-        Flag flag1 = map.placeFlag(player0, point2);
+        var point2 = new Point(17, 5);
+        var flag1 = map.placeFlag(player0, point2);
 
         // Place flag
-        Point point3 = new Point(15, 7);
-        Flag flag2 = map.placeFlag(player0, point3);
+        var point3 = new Point(15, 7);
+        var flag2 = map.placeFlag(player0, point3);
 
         // Place a short road to make
-        Road road0 = map.placeRoad(player0, flag0.getPosition(), flag0.getPosition().left(), flag1.getPosition());
+        var road0 = map.placeRoad(player0, flag0.getPosition(), flag0.getPosition().left(), flag1.getPosition());
 
         // Place a second short road
-        Road road1 = map.placeRoad(player0, flag2.getPosition(), flag2.getPosition().downRight(), flag1.getPosition());
+        var road1 = map.placeRoad(player0, flag2.getPosition(), flag2.getPosition().downRight(), flag1.getPosition());
 
         // Place a long road to the headquarter
-        Road road2 = map.placeAutoSelectedRoad(player0, flag1, headquarter0.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, flag1, headquarter0.getFlag());
 
         // Wait for both roads to get their couriers assigned and standing idle
-        Collection<Courier> couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1, road2);
+        var couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1, road2);
 
         Utils.waitForCouriersToBeIdle(map, couriers);
 
@@ -273,7 +269,7 @@ public class TestLimitedSpaceOnFlag {
         map.stepTime();
 
         // Wait for the couriers of the short roads to pick up their cargo
-        Courier courierAtLongRoad = road2.getCourier();
+        var courierAtLongRoad = road2.getCourier();
 
         assertEquals(courierAtLongRoad.getTarget(), flag1.getPosition());
         assertNull(courierAtLongRoad.getCargo());
@@ -338,38 +334,37 @@ public class TestLimitedSpaceOnFlag {
     public void testOnlyOneCourierResumesDeliveryWhenThereIsSpaceAfterTwoHaveWaitedToDeliver() throws Exception {
 
         // Start new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag far away from the headquarter
-        Point point1 = new Point(21, 5);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(21, 5);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place flag closer to the headquarter
-        Point point2 = new Point(17, 5);
-        Flag flag1 = map.placeFlag(player0, point2);
+        var point2 = new Point(17, 5);
+        var flag1 = map.placeFlag(player0, point2);
 
         // Place flag
-        Point point3 = new Point(15, 7);
-        Flag flag2 = map.placeFlag(player0, point3);
+        var point3 = new Point(15, 7);
+        var flag2 = map.placeFlag(player0, point3);
 
         // Place a short road to make
-        Road road0 = map.placeRoad(player0, flag0.getPosition(), flag0.getPosition().left(), flag1.getPosition());
+        var road0 = map.placeRoad(player0, flag0.getPosition(), flag0.getPosition().left(), flag1.getPosition());
 
         // Place a second short road
-        Road road1 = map.placeRoad(player0, flag2.getPosition(), flag2.getPosition().downRight(), flag1.getPosition());
+        var road1 = map.placeRoad(player0, flag2.getPosition(), flag2.getPosition().downRight(), flag1.getPosition());
 
         // Place a long road to the headquarter
-        Road road2 = map.placeAutoSelectedRoad(player0, flag1, headquarter0.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, flag1, headquarter0.getFlag());
 
         // Wait for both roads to get their couriers assigned and standing idle
-        Collection<Courier> couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1, road2);
+        var couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1, road2);
 
         Utils.waitForCouriersToBeIdle(map, couriers);
 
@@ -383,7 +378,7 @@ public class TestLimitedSpaceOnFlag {
         map.stepTime();
 
         // Wait for the couriers of the short roads to pick up their cargo
-        Courier courierAtLongRoad = road2.getCourier();
+        var courierAtLongRoad = road2.getCourier();
 
         assertEquals(courierAtLongRoad.getTarget(), flag1.getPosition());
         assertNull(courierAtLongRoad.getCargo());
@@ -469,38 +464,37 @@ public class TestLimitedSpaceOnFlag {
     public void testSeveralDeliveriesHappenInSequenceAfterTwoHaveWaitedToDeliver() throws Exception {
 
         // Start new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag far away from the headquarter
-        Point point1 = new Point(21, 5);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(21, 5);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place flag closer to the headquarter
-        Point point2 = new Point(17, 5);
-        Flag flag1 = map.placeFlag(player0, point2);
+        var point2 = new Point(17, 5);
+        var flag1 = map.placeFlag(player0, point2);
 
         // Place flag
-        Point point3 = new Point(15, 7);
-        Flag flag2 = map.placeFlag(player0, point3);
+        var point3 = new Point(15, 7);
+        var flag2 = map.placeFlag(player0, point3);
 
         // Place a short road to make
-        Road road0 = map.placeRoad(player0, flag0.getPosition(), flag0.getPosition().left(), flag1.getPosition());
+        var road0 = map.placeRoad(player0, flag0.getPosition(), flag0.getPosition().left(), flag1.getPosition());
 
         // Place a second short road
-        Road road1 = map.placeRoad(player0, flag2.getPosition(), flag2.getPosition().downRight(), flag1.getPosition());
+        var road1 = map.placeRoad(player0, flag2.getPosition(), flag2.getPosition().downRight(), flag1.getPosition());
 
         // Place a long road to the headquarter
-        Road road2 = map.placeAutoSelectedRoad(player0, flag1, headquarter0.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, flag1, headquarter0.getFlag());
 
         // Wait for both roads to get their couriers assigned and standing idle
-        Collection<Courier> couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1, road2);
+        var couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1, road2);
 
         Utils.waitForCouriersToBeIdle(map, couriers);
 
@@ -514,7 +508,7 @@ public class TestLimitedSpaceOnFlag {
         map.stepTime();
 
         // Wait for the couriers of the short roads to pick up their cargo
-        Courier courierAtLongRoad = road2.getCourier();
+        var courierAtLongRoad = road2.getCourier();
 
         assertEquals(courierAtLongRoad.getTarget(), flag1.getPosition());
         assertNull(courierAtLongRoad.getCargo());
@@ -617,22 +611,21 @@ public class TestLimitedSpaceOnFlag {
     public void testContinuousDeliveryToHouse() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mill
-        Point point1 = new Point(12, 8);
-        Building mill = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(12, 8);
+        var mill = map.placeBuilding(new Mill(player0), point1);
 
         // Connect the mill with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
 
         // Wait for the mill to get constructed and assigned a miller
         Utils.waitForBuildingToBeConstructed(mill);
@@ -661,32 +654,31 @@ public class TestLimitedSpaceOnFlag {
     public void testPlaceNewRoadToContinueDeliveriesWhenRoadIsFull() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place mill
-        Point point2 = new Point(13, 5);
-        Building mill = map.placeBuilding(new Mill(player0), point2);
+        var point2 = new Point(13, 5);
+        var mill = map.placeBuilding(new Mill(player0), point2);
 
         // Connect the headquarter with the flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
 
         // Connect the flag with the mill
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, mill.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, mill.getFlag());
 
         // Wait for the first road to get assigned a courier
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
         // Wait for the courier to carry cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
@@ -711,10 +703,10 @@ public class TestLimitedSpaceOnFlag {
         Utils.waitForFlagToHaveCargoWaiting(map, headquarter.getFlag());
 
         // Place a second road to it possible to deliver cargos to the mill
-        Road road3 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mill.getFlag());
+        var road3 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mill.getFlag());
 
         // Wait for a courier to get assigned to the new road
-        Courier courier1 = Utils.waitForRoadToGetAssignedCourier(map, road3);
+        var courier1 = Utils.waitForRoadToGetAssignedCourier(map, road3);
 
         // Verify that the new courier picks up the cargo waiting and delivers it to the mill
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier1);
@@ -730,23 +722,22 @@ public class TestLimitedSpaceOnFlag {
     public void testFlagWithDirectBuildingAndBidirectionalTrafficCannotExceedLimit() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 7);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 7);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(17, 7);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(17, 7);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place fortress
-        Point point2 = new Point(19, 9);
-        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        var point2 = new Point(19, 9);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         // Construct the fortress
         Utils.constructHouse(fortress0);
@@ -755,52 +746,52 @@ public class TestLimitedSpaceOnFlag {
         Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, fortress0);
 
         // Place sawmill connected directly to the flag
-        Mill mill = map.placeBuilding(new Mill(player0), flag0.getPosition().upLeft());
+        var mill = map.placeBuilding(new Mill(player0), flag0.getPosition().upLeft());
 
         // Place woodcutter
-        Point point3 = new Point(22, 12);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point3);
+        var point3 = new Point(22, 12);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point3);
 
         // Place forester
-        Point point4 = new Point(26, 12);
-        ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point4);
+        var point4 = new Point(26, 12);
+        var foresterHut0 = map.placeBuilding(new ForesterHut(player0), point4);
 
         // Connect the woodcutter with the forester
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), foresterHut0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), foresterHut0.getFlag());
 
         // Place woodcutter
-        Point point5 = new Point(22, 8);
-        Woodcutter woodcutter1 = map.placeBuilding(new Woodcutter(player0), point5);
+        var point5 = new Point(22, 8);
+        var woodcutter1 = map.placeBuilding(new Woodcutter(player0), point5);
 
         // Place forester
-        Point point6 = new Point(26, 8);
-        ForesterHut foresterHut1 = map.placeBuilding(new ForesterHut(player0), point6);
+        var point6 = new Point(26, 8);
+        var foresterHut1 = map.placeBuilding(new ForesterHut(player0), point6);
 
         // Connect the woodcutter with the forester
-        Road road1 = map.placeAutoSelectedRoad(player0, woodcutter1.getFlag(), foresterHut1.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, woodcutter1.getFlag(), foresterHut1.getFlag());
 
         // Place woodcutter
-        Point point7 = new Point(22, 4);
-        Woodcutter woodcutter2 = map.placeBuilding(new Woodcutter(player0), point7);
+        var point7 = new Point(22, 4);
+        var woodcutter2 = map.placeBuilding(new Woodcutter(player0), point7);
 
         // Place forester
-        Point point8 = new Point(26, 4);
-        ForesterHut foresterHut2 = map.placeBuilding(new ForesterHut(player0), point8);
+        var point8 = new Point(26, 4);
+        var foresterHut2 = map.placeBuilding(new ForesterHut(player0), point8);
 
         // Connect the woodcutter with the forester
-        Road road2 = map.placeAutoSelectedRoad(player0, woodcutter2.getFlag(), foresterHut2.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, woodcutter2.getFlag(), foresterHut2.getFlag());
 
         // Connect the first woodcutter with the flag
-        Road road3 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), flag0);
+        var road3 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), flag0);
 
         // Connect the second woodcutter with the flag
-        Road road4 = map.placeAutoSelectedRoad(player0, woodcutter1.getFlag(), flag0);
+        var road4 = map.placeAutoSelectedRoad(player0, woodcutter1.getFlag(), flag0);
 
         // Connect the third woodcutter with the flag
-        Road road5 = map.placeAutoSelectedRoad(player0, woodcutter2.getFlag(), flag0);
+        var road5 = map.placeAutoSelectedRoad(player0, woodcutter2.getFlag(), flag0);
 
         // Connect the flag with the headquarter
-        Road road6 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
+        var road6 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
 
         // Wait for the buildings to get constructed
         Utils.waitForBuildingsToBeConstructed(mill, woodcutter0, foresterHut0, woodcutter1, foresterHut1, woodcutter2, foresterHut2);

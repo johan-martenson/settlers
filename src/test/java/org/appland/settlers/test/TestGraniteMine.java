@@ -49,24 +49,23 @@ public class TestGraniteMine {
     public void testGraniteMineCanHoldTwoFishTwoBreadsTwoMeats() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mountain
-        Point point1 = new Point(6, 12);
+        var point1 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         // Place granite mine
         var graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Connect the granite mine with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), headquarter0.getFlag());
 
         // Make sure the headquarters has enough resources
         Utils.adjustInventoryTo(headquarter0, PLANK, 20);
@@ -109,24 +108,23 @@ public class TestGraniteMine {
     public void testGraniteMineOnlyNeedsFourPlanksForConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Put a small mountain on the map
-        Point point22 = new Point(6, 12);
+        var point22 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point22, map);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point22);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point22);
 
         // Deliver four planks
-        Cargo cargo = new Cargo(PLANK, map);
+        var cargo = new Cargo(PLANK, map);
 
         graniteMine0.putCargo(cargo);
         graniteMine0.putCargo(cargo);
@@ -150,24 +148,23 @@ public class TestGraniteMine {
     public void testGraniteMineCannotBeConstructedWithThreePlanks() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Put a small mountain on the map
-        Point point22 = new Point(6, 12);
+        var point22 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point22, map);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point22);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point22);
 
         // Deliver three planks
-        Cargo cargo = new Cargo(PLANK, map);
+        var cargo = new Cargo(PLANK, map);
 
         graniteMine0.putCargo(cargo);
         graniteMine0.putCargo(cargo);
@@ -190,21 +187,20 @@ public class TestGraniteMine {
     public void testConstructGraniteMine() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(12, 8);
+        var point0 = new Point(12, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         // Place a headquarter
-        Point point1 = new Point(7, 7);
+        var point1 = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a granite mine
-        Building mine = map.placeBuilding(new GraniteMine(player0), point0);
+        var mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         assertTrue(mine.isPlanned());
 
@@ -217,23 +213,22 @@ public class TestGraniteMine {
     public void testGraniteMineIsNotMilitary() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(12, 8);
+        var point0 = new Point(12, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         // Place a headquarter
-        Point point1 = new Point(7, 7);
+        var point1 = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a granite mine
-        Building mine = map.placeBuilding(new GraniteMine(player0), point0);
+        var mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         // Verify that the mine is not a military building
         assertFalse(mine.isMilitaryBuilding());
@@ -247,23 +242,22 @@ public class TestGraniteMine {
     public void testGraniteMineUnderConstructionNotNeedsMiner() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(12, 8);
+        var point0 = new Point(12, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         // Place a headquarter
-        Point point1 = new Point(7, 7);
+        var point1 = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a granite mine
-        Building mine = map.placeBuilding(new GraniteMine(player0), point0);
+        var mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         // Verify that the unfinished mine does not need a worker
         assertFalse(mine.needsWorker());
@@ -273,23 +267,22 @@ public class TestGraniteMine {
     public void testFinishedGraniteMineNeedsMiner() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(12, 8);
+        var point0 = new Point(12, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         // Place a headquarter
-        Point point1 = new Point(7, 7);
+        var point1 = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a granite mine
-        Building mine = map.placeBuilding(new GraniteMine(player0), point0);
+        var mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         constructHouse(mine);
 
@@ -301,24 +294,23 @@ public class TestGraniteMine {
     public void testMinerIsAssignedToFinishedGraniteMine() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place a headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(10, 8);
+        var point1 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         // Place a granite mine
-        Building mine = map.placeBuilding(new GraniteMine(player0), point1);
+        var mine = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Place a road between the headquarter and the granite mine
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
 
         // Construct the mine
         constructHouse(mine);
@@ -342,21 +334,20 @@ public class TestGraniteMine {
     public void testCanPlaceMineOnPointSurroundedByMountain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place a headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(10, 8);
+        var point1 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         // Place a granite mine
-        Building mine = map.placeBuilding(new GraniteMine(player0), point1);
+        var mine = map.placeBuilding(new GraniteMine(player0), point1);
 
         assertEquals(map.getBuildings().size(), 2);
     }
@@ -365,27 +356,26 @@ public class TestGraniteMine {
     public void testArrivedMinerRests() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
+        var point1 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a granite mine
-        Building mine = map.placeBuilding(new GraniteMine(player0), point0);
+        var mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         // Construct the granite mine
         constructHouse(mine);
 
         // Manually place miner
-        Miner miner = new Miner(player0, map);
+        var miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
@@ -408,32 +398,31 @@ public class TestGraniteMine {
     public void testMinerMinesGranite() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGraniteAtSurroundingTiles(point0, LARGE, map);
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
+        var point1 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a granite mine
-        Building mine = map.placeBuilding(new GraniteMine(player0), point0);
+        var mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         // Construct the granite mine
         constructHouse(mine);
 
         // Deliver food to the miner
-        Cargo food = new Cargo(BREAD, map);
+        var food = new Cargo(BREAD, map);
         mine.putCargo(food);
 
         // Manually place miner
-        Miner miner = new Miner(player0, map);
+        var miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
@@ -443,7 +432,7 @@ public class TestGraniteMine {
         Utils.fastForward(100, map);
 
         // Verify that the miner mines for granite
-        int amountGranite = map.getAmountOfMineralAtPoint(STONE, point0);
+        var amountGranite = map.getAmountOfMineralAtPoint(STONE, point0);
 
         for (int i = 0; i < 50; i++) {
             assertTrue(miner.isMining());
@@ -462,22 +451,21 @@ public class TestGraniteMine {
     public void testGraniteMineGoesToFlagWithCargoAndBack() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGraniteAtSurroundingTiles(point0, LARGE, map);
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(15, 15);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a granite mine
-        Building mine = map.placeBuilding(new GraniteMine(player0), point0);
+        var mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         // Place a road from headquarter to mine
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
@@ -486,11 +474,11 @@ public class TestGraniteMine {
         constructHouse(mine);
 
         // Deliver food to the miner
-        Cargo food = new Cargo(BREAD, map);
+        var food = new Cargo(BREAD, map);
         mine.putCargo(food);
 
         // Manually place miner
-        Miner miner = new Miner(player0, map);
+        var miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
@@ -524,36 +512,35 @@ public class TestGraniteMine {
     public void testStoneCargoIsDeliveredToMintWhichIsCloserThanHeadquarters() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point3 = new Point(6, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(6, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Remove all stone from the headquarters
         Utils.adjustInventoryTo(headquarter, STONE, 0);
 
         // Place mint
-        Point point4 = new Point(10, 4);
-        Mint mint = map.placeBuilding(new Mint(player0), point4);
+        var point4 = new Point(10, 4);
+        var mint = map.placeBuilding(new Mint(player0), point4);
 
         // Connect the mint to the headquarters
-        Road road2 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
 
         // Place mountain
-        Point point1 = new Point(14, 4);
+        var point1 = new Point(14, 4);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         // Place the granite mine
-        GraniteMine graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
+        var graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Connect the granite mine with the mint
-        Road road0 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), mint.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), mint.getFlag());
 
         // Wait for the granite mine to get constructed and occupied
         Utils.waitForBuildingsToBeConstructed(graniteMine);
@@ -581,39 +568,38 @@ public class TestGraniteMine {
     public void testStoneIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point3 = new Point(6, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(6, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Adjust the inventory
         Utils.clearInventory(headquarter, STONE, MEAT, BREAD, FISH, PLANK);
 
         // Place storehouse
-        Point point4 = new Point(10, 4);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+        var point4 = new Point(10, 4);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point4);
 
         // Connect the storehouse to the headquarters
-        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         // Add stones to the storehouse doesn't need any more stones
         Utils.deliverMaxCargos(storehouse, STONE);
 
         // Place mountain
-        Point point1 = new Point(14, 4);
+        var point1 = new Point(14, 4);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         // Place the granite mine
-        GraniteMine graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
+        var graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Connect the granite mine with the storehouse
-        Road road0 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), storehouse.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), storehouse.getFlag());
 
         // Deliver the needed material to construct the granite mine
         Utils.deliverCargos(graniteMine, PLANK, 4);
@@ -650,39 +636,38 @@ public class TestGraniteMine {
     public void testStoneIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point3 = new Point(6, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(6, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Adjust the inventory
         Utils.clearInventory(headquarter, PLANK, STONE, BREAD, FISH, MEAT);
 
         // Place storehouse
-        Point point4 = new Point(10, 4);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+        var point4 = new Point(10, 4);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point4);
 
         // Deliver stones to the storehouse so it only needs one more stone
         Utils.deliverCargos(storehouse, STONE, 2);
 
         // Connect the storehouse to the headquarters
-        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         // Place mountain
-        Point point1 = new Point(14, 4);
+        var point1 = new Point(14, 4);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         // Place the granite mine
-        GraniteMine graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
+        var graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Connect the granite mine with the storehouse
-        Road road0 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), storehouse.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), storehouse.getFlag());
 
         // Deliver the needed material to construct the granite mine
         Utils.deliverCargos(graniteMine, PLANK, 4);
@@ -721,16 +706,15 @@ public class TestGraniteMine {
     public void testCanNotPlaceMineOnGrass() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 12, 12);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 12, 12);
 
         // Place headquarter
-        Point point0 = new Point(7, 7);
+        var point0 = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        Point point1 = new Point(2, 2);
+        var point1 = new Point(2, 2);
         try {
             map.placeBuilding(new GraniteMine(player0), point1);
             fail();
@@ -743,13 +727,12 @@ public class TestGraniteMine {
     public void testGraniteMineRunsOutOfGranite() throws Exception {
 
         // Create new game map with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGraniteAtSurroundingTiles(point0, SMALL, map);
 
@@ -761,11 +744,11 @@ public class TestGraniteMine {
         }
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(15, 15);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a granite mine
-        Building mine = map.placeBuilding(new GraniteMine(player0), point0);
+        var mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         // Place a road from headquarter to mine
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
@@ -779,7 +762,7 @@ public class TestGraniteMine {
         Utils.deliverCargo(mine, MEAT);
 
         // Manually place miner
-        Miner miner = new Miner(player0, map);
+        var miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
@@ -822,21 +805,20 @@ public class TestGraniteMine {
     public void testGraniteMineWithoutGraniteProducesNothing() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(15, 15);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a granite mine
-        Building mine = map.placeBuilding(new GraniteMine(player0), point0);
+        var mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         // Place a road from headquarter to mine
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
@@ -845,11 +827,11 @@ public class TestGraniteMine {
         constructHouse(mine);
 
         // Deliver food to the miner
-        Cargo food = new Cargo(BREAD, map);
+        var food = new Cargo(BREAD, map);
         mine.putCargo(food);
 
         // Manually place miner
-        Miner miner = new Miner(player0, map);
+        var miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
@@ -873,28 +855,27 @@ public class TestGraniteMine {
     public void testGraniteMineWithoutFoodProducesNothing() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGraniteAtSurroundingTiles(point0, LARGE, map);
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(15, 15);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a granite mine
-        Building mine = map.placeBuilding(new GraniteMine(player0), point0);
+        var mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         // Construct the granite mine
         constructHouse(mine);
 
         // Manually place miner
-        Miner miner = new Miner(player0, map);
+        var miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
@@ -917,32 +898,31 @@ public class TestGraniteMine {
     public void testMiningConsumesFood() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGraniteAtSurroundingTiles(point0, LARGE, map);
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
+        var point1 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a granite mine
-        Building mine = map.placeBuilding(new GraniteMine(player0), point0);
+        var mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         // Construct the granite mine
         constructHouse(mine);
 
         // Deliver food to the miner
-        Cargo food = new Cargo(BREAD, map);
+        var food = new Cargo(BREAD, map);
         mine.putCargo(food);
 
         // Manually place miner
-        Miner miner = new Miner(player0, map);
+        var miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
@@ -964,22 +944,21 @@ public class TestGraniteMine {
     public void testGraniteMineCanConsumeAllTypesOfFood() throws Exception {
 
         // Start new game with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGraniteAtSurroundingTiles(point0, LARGE, map);
 
         // Place a headquarter
-        Point point1 = new Point(15, 15);
+        var point1 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point1);
 
         // Place a granite mine
-        Building mine = map.placeBuilding(new GraniteMine(player0), point0);
+        var mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         // Construct the granite mine
         constructHouse(mine);
@@ -994,7 +973,7 @@ public class TestGraniteMine {
         mine.putCargo(new Cargo(BREAD, map));
 
         // Manually place miner
-        Miner miner = new Miner(player0, map);
+        var miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
@@ -1022,22 +1001,21 @@ public class TestGraniteMine {
     public void testGraniteMineWithoutConnectedStorageKeepsProducing() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGraniteAtSurroundingTiles(point0, LARGE, map);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
 
         // Finish construction of the granite mine
         constructHouse(graniteMine0);
@@ -1046,7 +1024,7 @@ public class TestGraniteMine {
         Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         // Deliver material to the granite mine
-        Cargo fishCargo = new Cargo(FISH, map);
+        var fishCargo = new Cargo(FISH, map);
 
         graniteMine0.putCargo(fishCargo);
         graniteMine0.putCargo(fishCargo);
@@ -1057,7 +1035,7 @@ public class TestGraniteMine {
         // Wait for the miner to produce a new stone cargo
         Utils.fastForward(50, map);
 
-        Worker miner = graniteMine0.getWorker();
+        var miner = graniteMine0.getWorker();
 
         assertNotNull(miner.getCargo());
 
@@ -1093,28 +1071,27 @@ public class TestGraniteMine {
     public void testCargoProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGraniteAtSurroundingTiles(point0, LARGE, map);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
 
         // Finish construction of the granite mine
         constructHouse(graniteMine0);
 
         // Deliver material to the granite mine
-        Cargo fishCargo = new Cargo(FISH, map);
+        var fishCargo = new Cargo(FISH, map);
 
         graniteMine0.putCargo(fishCargo);
         graniteMine0.putCargo(fishCargo);
@@ -1128,7 +1105,7 @@ public class TestGraniteMine {
         // Wait for the miner to produce a new stone cargo
         Utils.fastForward(50, map);
 
-        Worker miner = graniteMine0.getWorker();
+        var miner = graniteMine0.getWorker();
 
         assertNotNull(miner.getCargo());
 
@@ -1142,7 +1119,7 @@ public class TestGraniteMine {
         assertFalse(graniteMine0.getFlag().getStackedCargo().isEmpty());
 
         // Wait to let the cargo remain at the flag without any connection to the storage
-        Cargo cargo = graniteMine0.getFlag().getStackedCargo().getFirst();
+        var cargo = graniteMine0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -1154,10 +1131,10 @@ public class TestGraniteMine {
         Utils.adjustInventoryTo(headquarter0, FISH, 0);
 
         // Connect the granite mine with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), graniteMine0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), graniteMine0.getFlag());
 
         // Assign a courier to the road
-        Courier courier = new Courier(player0, map);
+        var courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
 
@@ -1182,7 +1159,7 @@ public class TestGraniteMine {
         // Verify that the courier delivers the cargo to the headquarter
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(STONE);
+        var amount = headquarter0.getAmount(STONE);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
@@ -1195,22 +1172,21 @@ public class TestGraniteMine {
     public void testMinerGoesBackToStorageWhenGraniteMineIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGraniteAtSurroundingTiles(point0, LARGE, map);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
 
         // Finish construction of the granite mine
         constructHouse(graniteMine0);
@@ -1219,7 +1195,7 @@ public class TestGraniteMine {
         Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         // Destroy the granite mine
-        Worker miner = graniteMine0.getWorker();
+        var miner = graniteMine0.getWorker();
 
         assertTrue(miner.isInsideBuilding());
         assertEquals(miner.getPosition(), graniteMine0.getPosition());
@@ -1230,7 +1206,7 @@ public class TestGraniteMine {
         assertFalse(miner.isInsideBuilding());
         assertEquals(miner.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(MINER);
+        var amount = headquarter0.getAmount(MINER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
 
@@ -1242,22 +1218,21 @@ public class TestGraniteMine {
     public void testMinerGoesBackOnToStorageOnRoadsIfPossibleWhenGraniteMineIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 8);
+        var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGraniteAtSurroundingTiles(point0, LARGE, map);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
 
         // Connect the granite mine with the headquarter
         map.placeAutoSelectedRoad(player0, graniteMine0.getFlag(), headquarter0.getFlag());
@@ -1269,7 +1244,7 @@ public class TestGraniteMine {
         Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         // Destroy the granite mine
-        Worker miner = graniteMine0.getWorker();
+        var miner = graniteMine0.getWorker();
 
         assertTrue(miner.isInsideBuilding());
         assertEquals(miner.getPosition(), graniteMine0.getPosition());
@@ -1281,8 +1256,8 @@ public class TestGraniteMine {
         assertEquals(miner.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
-        for (Point point : miner.getPlannedPath()) {
+        var firstStep = true;
+        for (var point : miner.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -1296,35 +1271,34 @@ public class TestGraniteMine {
     public void testProductionInGraniteMineCanBeStopped() throws Exception {
 
         // Create game map
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point1 = new Point(10, 6);
+        var point1 = new Point(10, 6);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Connect the granite mine and the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, graniteMine0.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, graniteMine0.getFlag(), headquarter.getFlag());
 
         // Finish the granite mine
         constructHouse(graniteMine0);
 
         // Deliver food to the miner
-        Cargo food = new Cargo(BREAD, map);
+        var food = new Cargo(BREAD, map);
         graniteMine0.putCargo(food);
 
         // Assign a worker to the granite mine
-        Miner miner = new Miner(player0, map);
+        var miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, graniteMine0);
 
@@ -1359,37 +1333,36 @@ public class TestGraniteMine {
     public void testProductionInGraniteMineCanBeResumed() throws Exception {
 
         // Create game map
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Put a small mountain on the map
-        Point point1 = new Point(10, 6);
+        var point1 = new Point(10, 6);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Connect the granite mine and the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, graniteMine0.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, graniteMine0.getFlag(), headquarter.getFlag());
 
         // Finish the granite mine
         constructHouse(graniteMine0);
 
         // Deliver food to the miner
-        Cargo food = new Cargo(BREAD, map);
+        var food = new Cargo(BREAD, map);
 
         graniteMine0.putCargo(food);
         graniteMine0.putCargo(food);
 
         // Assign a worker to the granite mine
-        Miner miner = new Miner(player0, map);
+        var miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, graniteMine0);
 
@@ -1431,39 +1404,38 @@ public class TestGraniteMine {
     public void testAssignedMinerHasCorrectlySetPlayer() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Put a small mountain on the map
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGraniteAtSurroundingTiles(point0, LARGE, map);
 
         // Place headquarter
-        Point point1 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
 
         // Finish construction of the granite mine
         constructHouse(graniteMine0);
 
         // Connect the granite mine with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), graniteMine0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), graniteMine0.getFlag());
 
         // Wait for miner to get assigned and leave the headquarter
-        List<Miner> workers = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
+        var workers = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
 
         // Verify that the player is set correctly in the worker
-        Miner worker = workers.getFirst();
+        var worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1472,39 +1444,38 @@ public class TestGraniteMine {
     public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        Player player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
         players.add(player2);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Put a small mountain on the map
-        Point point4 = new Point(28, 12);
+        var point4 = new Point(28, 12);
         Utils.surroundPointWithMinableMountain(point4, map);
         Utils.putGraniteAtSurroundingTiles(point4, LARGE, map);
 
         // Place player 2's headquarter
-        Point point10 = new Point(70, 70);
-        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
+        var point10 = new Point(70, 70);
+        var headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
         // Place player 0's headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarter
-        Point point3 = new Point(45, 5);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point3);
+        var point3 = new Point(45, 5);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point3);
 
         // Place fortress for player 0
-        Point point2 = new Point(21, 5);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        var point2 = new Point(21, 5);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         // Finish construction of the fortress
         constructHouse(fortress0);
@@ -1513,13 +1484,13 @@ public class TestGraniteMine {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         // Place granite mine close to the new border
-        GraniteMine graniteMine0 = map.placeBuilding(new GraniteMine(player0), point4);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point4);
 
         // Finish construction of the granite mine
         constructHouse(graniteMine0);
 
         // Occupy the granite mine
-        Miner worker = Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
+        var worker = Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         // Verify that the worker goes back to its own storage when the fortress is torn down
         fortress0.tearDown();
@@ -1531,39 +1502,38 @@ public class TestGraniteMine {
     public void testMinerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Put a small mountain on the map
-        Point point2 = new Point(13, 5);
+        var point2 = new Point(13, 5);
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGraniteAtSurroundingTiles(point2, LARGE, map);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point2);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point2);
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, graniteMine0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, graniteMine0.getFlag());
 
         // Wait for the miner to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
 
         Miner miner = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Miner) {
                 miner = (Miner) worker;
             }
@@ -1597,39 +1567,38 @@ public class TestGraniteMine {
     public void testMinerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Put a small mountain on the map
-        Point point2 = new Point(13, 5);
+        var point2 = new Point(13, 5);
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGraniteAtSurroundingTiles(point2, LARGE, map);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point2);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point2);
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, graniteMine0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, graniteMine0.getFlag());
 
         // Wait for the miner to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
 
         Miner miner = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Miner) {
                 miner = (Miner) worker;
             }
@@ -1666,39 +1635,38 @@ public class TestGraniteMine {
     public void testMinerReturnsToStorageIfGraniteMineIsDestroyed() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Put a small mountain on the map
-        Point point2 = new Point(13, 5);
+        var point2 = new Point(13, 5);
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGraniteAtSurroundingTiles(point2, LARGE, map);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point2);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point2);
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, graniteMine0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, graniteMine0.getFlag());
 
         // Wait for the miner to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
 
         Miner miner = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Miner) {
                 miner = (Miner) worker;
             }
@@ -1731,22 +1699,21 @@ public class TestGraniteMine {
     public void testMinerGoesOffroadBackToClosestStorageWhenGraniteMineIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Put a small mountain on the map
-        Point point1 = new Point(17, 17);
+        var point1 = new Point(17, 17);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Finish construction of the granite mine
         constructHouse(graniteMine0);
@@ -1755,14 +1722,14 @@ public class TestGraniteMine {
         Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         // Place a second storage closer to the granite mine
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         constructHouse(storehouse0);
 
         // Destroy the granite mine
-        Worker miner = graniteMine0.getWorker();
+        var miner = graniteMine0.getWorker();
 
         assertTrue(miner.isInsideBuilding());
         assertEquals(miner.getPosition(), graniteMine0.getPosition());
@@ -1773,7 +1740,7 @@ public class TestGraniteMine {
         assertFalse(miner.isInsideBuilding());
         assertEquals(miner.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(MINER);
+        var amount = storehouse0.getAmount(MINER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, storehouse0.getPosition());
 
@@ -1785,22 +1752,21 @@ public class TestGraniteMine {
     public void testMinerReturnsOffroadAndAvoidsBurningStorageWhenGraniteMineIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Put a small mountain on the map
-        Point point1 = new Point(17, 17);
+        var point1 = new Point(17, 17);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Finish construction of the granite mine
         constructHouse(graniteMine0);
@@ -1809,8 +1775,8 @@ public class TestGraniteMine {
         Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         // Place a second storage closer to the granite mine
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         constructHouse(storehouse0);
@@ -1819,7 +1785,7 @@ public class TestGraniteMine {
         storehouse0.tearDown();
 
         // Destroy the granite mine
-        Worker miner = graniteMine0.getWorker();
+        var miner = graniteMine0.getWorker();
 
         assertTrue(miner.isInsideBuilding());
         assertEquals(miner.getPosition(), graniteMine0.getPosition());
@@ -1830,7 +1796,7 @@ public class TestGraniteMine {
         assertFalse(miner.isInsideBuilding());
         assertEquals(miner.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(MINER);
+        var amount = headquarter0.getAmount(MINER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
 
@@ -1842,22 +1808,21 @@ public class TestGraniteMine {
     public void testMinerReturnsOffroadAndAvoidsDestroyedStorageWhenGraniteMineIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Put a small mountain on the map
-        Point point1 = new Point(17, 17);
+        var point1 = new Point(17, 17);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Finish construction of the granite mine
         constructHouse(graniteMine0);
@@ -1866,8 +1831,8 @@ public class TestGraniteMine {
         Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         // Place a second storage closer to the granite mine
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         constructHouse(storehouse0);
@@ -1879,7 +1844,7 @@ public class TestGraniteMine {
         Utils.waitForBuildingToBurnDown(storehouse0);
 
         // Destroy the granite mine
-        Worker miner = graniteMine0.getWorker();
+        var miner = graniteMine0.getWorker();
 
         assertTrue(miner.isInsideBuilding());
         assertEquals(miner.getPosition(), graniteMine0.getPosition());
@@ -1890,7 +1855,7 @@ public class TestGraniteMine {
         assertFalse(miner.isInsideBuilding());
         assertEquals(miner.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(MINER);
+        var amount = headquarter0.getAmount(MINER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
 
@@ -1902,22 +1867,21 @@ public class TestGraniteMine {
     public void testMinerReturnsOffroadAndAvoidsUnfinishedStorageWhenGraniteMineIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Put a small mountain on the map
-        Point point1 = new Point(17, 17);
+        var point1 = new Point(17, 17);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Finish construction of the granite mine
         constructHouse(graniteMine0);
@@ -1926,11 +1890,11 @@ public class TestGraniteMine {
         Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         // Place a second storage closer to the granite mine
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Destroy the granite mine
-        Worker miner = graniteMine0.getWorker();
+        var miner = graniteMine0.getWorker();
 
         assertTrue(miner.isInsideBuilding());
         assertEquals(miner.getPosition(), graniteMine0.getPosition());
@@ -1941,7 +1905,7 @@ public class TestGraniteMine {
         assertFalse(miner.isInsideBuilding());
         assertEquals(miner.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(MINER);
+        var amount = headquarter0.getAmount(MINER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
 
@@ -1953,31 +1917,30 @@ public class TestGraniteMine {
     public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Put a small mountain on the map
-        Point point1 = new Point(17, 17);
+        var point1 = new Point(17, 17);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Place road to connect the headquarter and the granite mine
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), graniteMine0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), graniteMine0.getFlag());
 
         // Finish construction of the granite mine
         constructHouse(graniteMine0);
 
         // Wait for a worker to start walking to the building
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0).getFirst();
+        var worker = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, graniteMine0.getFlag().getPosition());
@@ -1999,28 +1962,27 @@ public class TestGraniteMine {
     public void testGraniteMineWithoutResourcesHasZeroProductivity() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(7, 9);
+        var point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         // Place granite mine
-        Building graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
+        var graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Finish construction of the granite mine
         constructHouse(graniteMine);
 
         // Populate the granite mine
-        Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), graniteMine);
+        var miner0 = Utils.occupyBuilding(new Miner(player0, map), graniteMine);
 
         assertTrue(miner0.isInsideBuilding());
         assertEquals(miner0.getHome(), graniteMine);
@@ -2039,28 +2001,27 @@ public class TestGraniteMine {
     public void testGraniteMineWithAbundantResourcesHasFullProductivity() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(7, 9);
+        var point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         // Place granite mine
-        Building graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
+        var graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Finish construction of the granite mine
         constructHouse(graniteMine);
 
         // Populate the granite mine
-        Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), graniteMine);
+        var miner0 = Utils.occupyBuilding(new Miner(player0, map), graniteMine);
 
         assertTrue(miner0.isInsideBuilding());
         assertEquals(miner0.getHome(), graniteMine);
@@ -2098,28 +2059,27 @@ public class TestGraniteMine {
     public void testGraniteMineLosesProductivityWhenResourcesRunOut() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(7, 9);
+        var point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         // Place granite mine
-        Building graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
+        var graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Finish construction of the granite mine
         constructHouse(graniteMine);
 
         // Populate the granite mine
-        Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), graniteMine);
+        var miner0 = Utils.occupyBuilding(new Miner(player0, map), graniteMine);
 
         assertTrue(miner0.isInsideBuilding());
         assertEquals(miner0.getHome(), graniteMine);
@@ -2152,22 +2112,21 @@ public class TestGraniteMine {
     public void testUnoccupiedGraniteMineHasNoProductivity() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(7, 9);
+        var point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         // Place granite mine
-        Building graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
+        var graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Finish construction of the granite mine
         constructHouse(graniteMine);
@@ -2184,27 +2143,26 @@ public class TestGraniteMine {
     public void testGraniteMineCanProduce() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a small mountain on the map
-        Point point1 = new Point(7, 9);
+        var point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         // Place granite mine
-        Building graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
+        var graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Finish construction of the stone mine
         constructHouse(graniteMine);
 
         // Populate the granite mine
-        Worker miner = Utils.occupyBuilding(new Miner(player0, map), graniteMine);
+        var miner = Utils.occupyBuilding(new Miner(player0, map), graniteMine);
 
         // Verify that the granite mine can produce
         assertTrue(graniteMine.canProduce());
@@ -2214,21 +2172,20 @@ public class TestGraniteMine {
     public void testGraniteMineReportsCorrectOutput() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a small mountain
-        Point point1 = new Point(6, 12);
+        var point1 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Construct the granite mine
         constructHouse(graniteMine0);
@@ -2242,28 +2199,27 @@ public class TestGraniteMine {
     public void testGraniteMineReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a small mountain
-        Point point1 = new Point(6, 12);
+        var point1 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Verify that the reported needed construction material is correct
         assertEquals(graniteMine0.getTypesOfMaterialNeeded().size(), 1);
         assertTrue(graniteMine0.getTypesOfMaterialNeeded().contains(PLANK));
         assertEquals(graniteMine0.getCanHoldAmount(PLANK), 4);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == PLANK) {
                 continue;
             }
@@ -2276,21 +2232,20 @@ public class TestGraniteMine {
     public void testGraniteMineReportsCorrectMaterialsNeededForProduction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a small mountain
-        Point point1 = new Point(6, 12);
+        var point1 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Construct the granite mine
         constructHouse(graniteMine0);
@@ -2304,7 +2259,7 @@ public class TestGraniteMine {
         assertEquals(graniteMine0.getCanHoldAmount(MEAT), 2);
         assertEquals(graniteMine0.getCanHoldAmount(FISH), 2);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == BREAD || material == MEAT || material == FISH) {
                 continue;
             }
@@ -2317,26 +2272,25 @@ public class TestGraniteMine {
     public void testGraniteMineWaitsWhenFlagIsFull() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a small mountain
-        Point point1 = new Point(16, 6);
+        var point1 = new Point(16, 6);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         // Place granite mine
-        Building graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
+        var graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Connect the granite mine with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), headquarter.getFlag());
 
         // Wait for the granite mine to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(graniteMine);
@@ -2363,10 +2317,10 @@ public class TestGraniteMine {
         }
 
         // Reconnect the granite mine with the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2390,26 +2344,25 @@ public class TestGraniteMine {
     public void testGraniteMineDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a small mountain
-        Point point1 = new Point(16, 6);
+        var point1 = new Point(16, 6);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         // Place granite mine
-        GraniteMine graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
+        var graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Connect the granite mine with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), headquarter.getFlag());
 
         // Wait for the granite mine to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(graniteMine);
@@ -2436,10 +2389,10 @@ public class TestGraniteMine {
         }
 
         // Reconnect the granite mine with the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2481,25 +2434,24 @@ public class TestGraniteMine {
     public void testWhenStoneDeliveryAreBlockedGraniteMineFillsUpFlagAndThenStops() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(7, 9);
+        var point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         // Place Stone mine
-        GraniteMine stoneMine0 = map.placeBuilding(new GraniteMine(player0), point1);
+        var stoneMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Place road to connect the stone mine with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, stoneMine0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, stoneMine0.getFlag(), headquarter0.getFlag());
 
         // Wait for the stone mine to get constructed and occupied
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2507,7 +2459,7 @@ public class TestGraniteMine {
 
         Utils.waitForBuildingToBeConstructed(stoneMine0);
 
-        Worker miner0 = Utils.waitForNonMilitaryBuildingToGetPopulated(stoneMine0);
+        var miner0 = Utils.waitForNonMilitaryBuildingToGetPopulated(stoneMine0);
 
         assertTrue(miner0.isInsideBuilding());
         assertEquals(miner0.getHome(), stoneMine0);
@@ -2541,32 +2493,31 @@ public class TestGraniteMine {
     public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndGraniteMineIsTornDown() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
-        Point point1 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(5, 5);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Put a small mountain on the map
-        Point point2 = new Point(18, 6);
+        var point2 = new Point(18, 6);
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGraniteAtSurroundingTiles(point2, LARGE, map);
 
         // Place stone mine
-        GraniteMine stoneMine0 = map.placeBuilding(new GraniteMine(player0), point2);
+        var stoneMine0 = map.placeBuilding(new GraniteMine(player0), point2);
 
         // Place road to connect the storehouse with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
         // Place road to connect the headquarter with the stone mine
-        Road road1 = map.placeAutoSelectedRoad(player0, stoneMine0.getFlag(), headquarter0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, stoneMine0.getFlag(), headquarter0.getFlag());
 
         // Add a lot of planks and stones to the headquarter
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2582,7 +2533,7 @@ public class TestGraniteMine {
         // Wait for the stone mine and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, stoneMine0);
 
-        Worker miner0 = stoneMine0.getWorker();
+        var miner0 = stoneMine0.getWorker();
 
         assertTrue(miner0.isInsideBuilding());
         assertEquals(miner0.getHome(), stoneMine0);
@@ -2610,32 +2561,31 @@ public class TestGraniteMine {
     public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndGraniteMineIsTornDown() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
-        Point point1 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(5, 5);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Put a small mountain on the map
-        Point point2 = new Point(18, 6);
+        var point2 = new Point(18, 6);
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGraniteAtSurroundingTiles(point2, LARGE, map);
 
         // Place stone mine
-        GraniteMine stoneMine0 = map.placeBuilding(new GraniteMine(player0), point2);
+        var stoneMine0 = map.placeBuilding(new GraniteMine(player0), point2);
 
         // Place road to connect the storehouse with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
         // Place road to connect the headquarter with the stone mine
-        Road road1 = map.placeAutoSelectedRoad(player0, stoneMine0.getFlag(), headquarter0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, stoneMine0.getFlag(), headquarter0.getFlag());
 
         // Add a lot of planks and stones to the headquarter
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2651,7 +2601,7 @@ public class TestGraniteMine {
         // Wait for the stone mine and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, stoneMine0);
 
-        Worker miner0 = stoneMine0.getWorker();
+        var miner0 = stoneMine0.getWorker();
 
         assertTrue(miner0.isInsideBuilding());
         assertEquals(miner0.getHome(), stoneMine0);
@@ -2681,14 +2631,13 @@ public class TestGraniteMine {
     public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, MINER, 1);
@@ -2698,7 +2647,7 @@ public class TestGraniteMine {
         headquarter0.pushOutAll(MINER);
 
         for (int i = 0; i < 10; i++) {
-            Worker worker = Utils.waitForWorkerOutsideBuilding(Miner.class, player0);
+            var worker = Utils.waitForWorkerOutsideBuilding(Miner.class, player0);
 
             assertEquals(headquarter0.getAmount(MINER), 0);
             assertEquals(worker.getPosition(), headquarter0.getPosition());
@@ -2719,14 +2668,13 @@ public class TestGraniteMine {
     public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, MINER, 1);
@@ -2734,7 +2682,7 @@ public class TestGraniteMine {
         headquarter0.blockDeliveryOfMaterial(MINER);
         headquarter0.pushOutAll(MINER);
 
-        Worker worker = Utils.waitForWorkerOutsideBuilding(Miner.class, player0);
+        var worker = Utils.waitForWorkerOutsideBuilding(Miner.class, player0);
 
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
@@ -2764,25 +2712,24 @@ public class TestGraniteMine {
     public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(7, 9);
+        var point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         // Place stone mine
-        GraniteMine stoneMine0 = map.placeBuilding(new GraniteMine(player0), point1);
+        var stoneMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Place road to connect the stone mine with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, stoneMine0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, stoneMine0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
@@ -2796,7 +2743,7 @@ public class TestGraniteMine {
         */
         headquarter0.blockDeliveryOfMaterial(MINER);
 
-        Worker worker = stoneMine0.getWorker();
+        var worker = stoneMine0.getWorker();
 
         stoneMine0.tearDown();
 
@@ -2828,25 +2775,24 @@ public class TestGraniteMine {
     public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Put a small mountain on the map
-        Point point1 = new Point(7, 9);
+        var point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         // Place stone mine
-        GraniteMine stoneMine0 = map.placeBuilding(new GraniteMine(player0), point1);
+        var stoneMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         // Place road to connect the stone mine with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, stoneMine0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, stoneMine0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
@@ -2855,7 +2801,7 @@ public class TestGraniteMine {
         Utils.waitForBuildingToBeConstructed(stoneMine0);
 
         // Wait for a miner to start walking to the stone mine
-        Miner miner = Utils.waitForWorkerOutsideBuilding(Miner.class, player0);
+        var miner = Utils.waitForWorkerOutsideBuilding(Miner.class, player0);
 
         // Wait for the miner to go past the headquarter's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getFlag().getPosition());
@@ -2879,7 +2825,7 @@ public class TestGraniteMine {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, miner.getTarget());
 
-        Point point = miner.getPosition();
+        var point = miner.getPosition();
         for (int i = 0; i < 100; i++) {
             assertTrue(miner.isDead());
             assertEquals(miner.getPosition(), point);

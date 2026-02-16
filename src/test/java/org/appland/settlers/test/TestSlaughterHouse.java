@@ -884,7 +884,7 @@ public class TestSlaughterHouse {
         // Verify that the courier delivers the cargo to the headquarters
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(MEAT);
+        var amount = headquarter0.getAmount(MEAT);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
@@ -926,7 +926,7 @@ public class TestSlaughterHouse {
         assertFalse(worker.isInsideBuilding());
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(BUTCHER);
+        var amount = headquarter0.getAmount(BUTCHER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
 
@@ -971,7 +971,7 @@ public class TestSlaughterHouse {
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
+        var firstStep = true;
         for (var point : worker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
@@ -1510,7 +1510,7 @@ public class TestSlaughterHouse {
         assertFalse(butcher.isInsideBuilding());
         assertEquals(butcher.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(BUTCHER);
+        var amount = storehouse0.getAmount(BUTCHER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, butcher, storehouse0.getPosition());
 
@@ -1561,7 +1561,7 @@ public class TestSlaughterHouse {
         assertFalse(butcher.isInsideBuilding());
         assertEquals(butcher.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(BUTCHER);
+        var amount = headquarter0.getAmount(BUTCHER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, butcher, headquarter0.getPosition());
 
@@ -1615,7 +1615,7 @@ public class TestSlaughterHouse {
         assertFalse(butcher.isInsideBuilding());
         assertEquals(butcher.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(BUTCHER);
+        var amount = headquarter0.getAmount(BUTCHER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, butcher, headquarter0.getPosition());
 
@@ -1660,7 +1660,7 @@ public class TestSlaughterHouse {
         assertFalse(butcher.isInsideBuilding());
         assertEquals(butcher.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(BUTCHER);
+        var amount = headquarter0.getAmount(BUTCHER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, butcher, headquarter0.getPosition());
 

@@ -794,7 +794,7 @@ public class TestBarracks {
 
         // Verify that the evacuated military returns to the storage
         assertEquals(military.getTarget(), headquarter0.getPosition());
-        int amount = headquarter0.getAmount(PRIVATE);
+        var amount = headquarter0.getAmount(PRIVATE);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
 
@@ -834,7 +834,7 @@ public class TestBarracks {
 
         // Verify that the evacuated military returns to the storage
         assertEquals(military.getTarget(), headquarter0.getPosition());
-        int amount = headquarter0.getAmount(PRIVATE);
+        var amount = headquarter0.getAmount(PRIVATE);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
 
@@ -912,7 +912,7 @@ public class TestBarracks {
 
         // Wait for the evacuated military to return to the storage
         assertEquals(military.getTarget(), headquarter0.getPosition());
-        int amount = headquarter0.getAmount(PRIVATE);
+        var amount = headquarter0.getAmount(PRIVATE);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
 
@@ -959,7 +959,7 @@ public class TestBarracks {
         // Verify that the worker leaves the building and goes back to the headquarters
         var military = Utils.waitForSoldierOutsideBuilding(player0);
 
-        int amount = headquarter0.getAmount(PRIVATE);
+        var amount = headquarter0.getAmount(PRIVATE);
 
         assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
@@ -1006,7 +1006,7 @@ public class TestBarracks {
         assertEquals(military.getTarget(), headquarter0.getPosition());
 
         // Verify that the military plans to use the roads
-        boolean firstStep = true;
+        var firstStep = true;
         for (var point : military.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
@@ -1469,7 +1469,7 @@ public class TestBarracks {
         barracks0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
@@ -1515,7 +1515,7 @@ public class TestBarracks {
         barracks0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
@@ -1526,7 +1526,7 @@ public class TestBarracks {
         Utils.deliverCargo(barracks0, STONE);
 
         // Put a coin in the building
-        Cargo coinCargo = new Cargo(COIN, map);
+        var coinCargo = new Cargo(COIN, map);
 
         barracks0.promiseDelivery(COIN);
 
@@ -1574,7 +1574,7 @@ public class TestBarracks {
         barracks0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
@@ -1626,7 +1626,7 @@ public class TestBarracks {
         barracks0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
@@ -1637,7 +1637,7 @@ public class TestBarracks {
         Utils.deliverCargo(barracks0, STONE);
 
         // Put a coin in the building
-        Cargo coinCargo = new Cargo(COIN, map);
+        var coinCargo = new Cargo(COIN, map);
 
         barracks0.promiseDelivery(COIN);
 
@@ -1685,7 +1685,7 @@ public class TestBarracks {
         barracks0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
@@ -1736,7 +1736,7 @@ public class TestBarracks {
         barracks0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
@@ -1794,7 +1794,7 @@ public class TestBarracks {
         barracks0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
@@ -1849,7 +1849,7 @@ public class TestBarracks {
         assertTrue(barracks0.isOccupied());
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
@@ -1937,7 +1937,7 @@ public class TestBarracks {
         barracks0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
@@ -1980,7 +1980,7 @@ public class TestBarracks {
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
         // Keep track of the original amount of soldiers
-        int originalAmount = Utils.getAmountMilitary(headquarter0);
+        var originalAmount = Utils.getAmountMilitary(headquarter0);
 
         // Finish construction of the barracks
         Utils.constructHouse(barracks0);
@@ -2221,7 +2221,7 @@ public class TestBarracks {
         assertFalse(barracks0.isOccupied());
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
@@ -2282,7 +2282,7 @@ public class TestBarracks {
         barracks0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
@@ -2359,7 +2359,7 @@ public class TestBarracks {
         Utils.constructHouse(barracks0);
 
         // Deliver one coin to the barracks
-        Cargo coinCargo = new Cargo(COIN, map);
+        var coinCargo = new Cargo(COIN, map);
 
         Utils.deliverCargo(barracks0, COIN);
 
@@ -2412,7 +2412,7 @@ public class TestBarracks {
         barracks0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         barracks0.promiseDelivery(STONE);
         barracks0.promiseDelivery(STONE);
@@ -2702,7 +2702,7 @@ public class TestBarracks {
         */
         
 
-        int radius = 8;
+        var radius = 8;
         var barracksHexagonBorder = Utils.getHexagonBorder(barracks0.getPosition(), radius);
         var headquarterHexagonBorder = Utils.getHexagonBorder(headquarter0.getPosition(), 9);
 

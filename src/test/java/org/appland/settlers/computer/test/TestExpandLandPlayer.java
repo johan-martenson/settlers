@@ -45,34 +45,32 @@ public class TestExpandLandPlayer {
     public void testCreateExpandLandPlayer() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 10, 10);
+        var map = new GameMap(players, 10, 10);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ExpandLandPlayer(player0, map);
+        var computerPlayer = new ExpandLandPlayer(player0, map);
     }
 
     @Test
     public void testPlayerPlacesFirstBarracks() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ExpandLandPlayer(player0, map);
+        var computerPlayer = new ExpandLandPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 10);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Give the player extra building materials and militaries
         Utils.adjustInventoryTo(headquarter, PLANK, 40);
@@ -91,19 +89,18 @@ public class TestExpandLandPlayer {
     public void testPlayerPlacesFirstBarracksCloseToBorder() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ExpandLandPlayer(player0, map);
+        var computerPlayer = new ExpandLandPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 10);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Give the player extra building materials and militaries
         Utils.adjustInventoryTo(headquarter, PLANK, 40);
@@ -111,10 +108,10 @@ public class TestExpandLandPlayer {
         Utils.adjustInventoryTo(headquarter, PRIVATE, 40);
 
         // Wait for the player to with place a barracks
-        Barracks barracks = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
+        var barracks = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
 
         // Verify that the barracks is close to the border
-        double distance = getDistanceToOwnBorder(barracks.getPosition(), player0);
+        var distance = getDistanceToOwnBorder(barracks.getPosition(), player0);
 
         assertTrue(distance < 3);
     }
@@ -123,19 +120,18 @@ public class TestExpandLandPlayer {
     public void testPlayerPlacesDoesNotPlaceUnnecessaryBarracksCloseToEdgeOfMap() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ExpandLandPlayer(player0, map);
+        var computerPlayer = new ExpandLandPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 10);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Give the player extra building materials and militaries
         Utils.adjustInventoryTo(headquarter, PLANK, 40);
@@ -146,16 +142,16 @@ public class TestExpandLandPlayer {
 
         for (int i = 0; i < 15; i++) {
             // Wait for the player to with place a barracks
-            Barracks barracks = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
+            var barracks = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
 
             // Verify that it's not close to the edge and un-necessary
-            Point p = barracks.getPosition();
+            var p = barracks.getPosition();
 
-            boolean foundBorderPointNotAtEdge = false;
+            var foundBorderPointNotAtEdge = false;
 
             /* Check that the barracks is close to at least one border point
                that is not close to the edge */
-            for (Point bp : player0.getBorderPoints()) {
+            for (var bp : player0.getBorderPoints()) {
                 if (p.distance(bp) < 20) {
                     if (bp.x > 3 && bp.x < map.getWidth() - 3 && bp.y > 3 && bp.y < map.getHeight() - 3) {
                         foundBorderPointNotAtEdge = true;
@@ -173,19 +169,18 @@ public class TestExpandLandPlayer {
     public void testPlayerPlacesPlacesSecondBarracks() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ExpandLandPlayer(player0, map);
+        var computerPlayer = new ExpandLandPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 10);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Give the player extra building materials and militaries
         Utils.adjustInventoryTo(headquarter, PLANK, 40);
@@ -193,7 +188,7 @@ public class TestExpandLandPlayer {
         Utils.adjustInventoryTo(headquarter, PRIVATE, 40);
 
         // Wait for the player to with place a barracks
-        Barracks barracks = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
+        var barracks = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
 
         // Verify that the player places a second barracks
         Utils.verifyPlayerPlacesOnlyBuilding(computerPlayer, Barracks.class);
@@ -203,19 +198,18 @@ public class TestExpandLandPlayer {
     public void testPlayerPlacesPlacesSecondBarracksAtCorrectDistanceFromFirstBarracks() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ExpandLandPlayer(player0, map);
+        var computerPlayer = new ExpandLandPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 10);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Give the player extra building materials and militaries
         Utils.adjustInventoryTo(headquarter, PLANK, 40);
@@ -223,14 +217,14 @@ public class TestExpandLandPlayer {
         Utils.adjustInventoryTo(headquarter, PRIVATE, 40);
 
         // Wait for the player to with place a barracks
-        Barracks barracks0 = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
+        var barracks0 = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
 
         // Wait for the player to place the second barracks
-        Barracks barracks1 = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
+        var barracks1 = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
 
         /* Verify that the player placed the second barracks at the right distance
            from the first barracks (at least 7 away) */
-        double distance = barracks0.getPosition().distance(barracks1.getPosition());
+        var distance = barracks0.getPosition().distance(barracks1.getPosition());
 
         assertTrue(distance > 7);
     }
@@ -239,19 +233,18 @@ public class TestExpandLandPlayer {
     public void testPlayerKeepsPlacingBarracksWhenEdgeIsReached() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ExpandLandPlayer(player0, map);
+        var computerPlayer = new ExpandLandPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Give the player extra building materials and militaries
         Utils.adjustInventoryTo(headquarter, PLANK, 400);
@@ -262,10 +255,10 @@ public class TestExpandLandPlayer {
         for (int i = 0; i < 20; i++) {
 
             // Wait for the player to with place a barracks
-            Barracks barracks0 = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
+            var barracks0 = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
 
             // Check if the barracks is close enough to the edge of the map
-            Point point = barracks0.getPosition();
+            var point = barracks0.getPosition();
 
             if (point.x < 4 || point.x > map.getWidth() - 4 || point.y < 4 || point.y > map.getHeight() - 4) {
                 break;
@@ -280,19 +273,18 @@ public class TestExpandLandPlayer {
     public void testPlayerEvacuatesBarracksWhenItIsFarFromBorder() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ExpandLandPlayer(player0, map);
+        var computerPlayer = new ExpandLandPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Give the player extra building materials and militaries
         Utils.adjustInventoryTo(headquarter, PLANK, 40);
@@ -300,7 +292,7 @@ public class TestExpandLandPlayer {
         Utils.adjustInventoryTo(headquarter, PRIVATE, 40);
 
         // Wait for the player to place the first barracks
-        Barracks barracks0 = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
+        var barracks0 = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
 
         /* Wait for the border to get extended so that the first barracks is far
            from the border */
@@ -309,9 +301,9 @@ public class TestExpandLandPlayer {
             computerPlayer.turn();
 
             // Check if the barracks is still close to the border
-            boolean borderClose = false;
+            var borderClose = false;
 
-            for (Point point : player0.getBorderPoints()) {
+            for (var point : player0.getBorderPoints()) {
 
                 // Filter points too close to the edges of the map
                 if (point.x < 3 || point.x > map.getWidth() - 3 ||
@@ -343,19 +335,18 @@ public class TestExpandLandPlayer {
     public void testPlayerPlacesDoesNotPlaceBarracksTooCloseToEdgeOfMap() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ExpandLandPlayer(player0, map);
+        var computerPlayer = new ExpandLandPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Give the player extra building materials and militaries
         Utils.adjustInventoryTo(headquarter, PLANK, 40);
@@ -367,10 +358,10 @@ public class TestExpandLandPlayer {
         for (int i = 0; i < 15; i++) {
 
             // Wait for the player to with place a barracks
-            Barracks barracks = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
+            var barracks = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
 
             // Verify that it's not too close to the edge
-            Point p = barracks.getPosition();
+            var p = barracks.getPosition();
 
             assertTrue(p.x > 2);
             assertTrue(p.x < map.getWidth() - 2);
@@ -383,19 +374,18 @@ public class TestExpandLandPlayer {
     public void testPlayerBuildsNewBarracksIfCurrentBarracksIsDestroyed() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Create the computer player
-        ExpandLandPlayer computerPlayer = new ExpandLandPlayer(player0, map);
+        var computerPlayer = new ExpandLandPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 10);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Give the player extra building materials and militaries
         Utils.adjustInventoryTo(headquarter, PLANK, 40);
@@ -404,16 +394,16 @@ public class TestExpandLandPlayer {
         Utils.adjustInventoryTo(headquarter, BUILDER, 40);
 
         // Wait for the player to with place a barracks
-        Barracks barracks0 = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
+        var barracks0 = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
 
         // Wait for the player to place a second barracks
-        Barracks barracks1 = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
+        var barracks1 = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
 
         // Destroy the second barracks
         barracks1.tearDown();
 
         // Verify that the player builds a new barracks
-        Barracks barracks2 = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
+        var barracks2 = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
 
         assertEquals(map.getBuildingAtPoint(barracks2.getPosition()), barracks2);
         assertNotEquals(barracks2.getPosition(), barracks1.getPosition());
@@ -423,19 +413,18 @@ public class TestExpandLandPlayer {
     public void testPlayerRestoresRoadIfNeeded() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ExpandLandPlayer(player0, map);
+        var computerPlayer = new ExpandLandPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 10);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Give the player extra building materials and militaries
         Utils.adjustInventoryTo(headquarter, PLANK, 40);
@@ -443,13 +432,12 @@ public class TestExpandLandPlayer {
         Utils.adjustInventoryTo(headquarter, PRIVATE, 40);
 
         // Wait for the player to with place a barracks
-        Barracks barracks0 = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
+        var barracks0 = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
 
         assertFalse(barracks0.isReady());
 
         // Remove a road
-        Collection<Road> roads = new ArrayList<>(map.getRoadsFromFlag(barracks0.getFlag()));
-
+        var roads = new ArrayList<Road>(map.getRoadsFromFlag(barracks0.getFlag()));
         roads.remove(map.getRoad(barracks0.getPosition(), barracks0.getFlag().getPosition()));
 
         var roadToRemove = roads.iterator().next();
@@ -469,32 +457,31 @@ public class TestExpandLandPlayer {
     public void testPlayerDoesNotRestoreRoadToCapturedBarracks() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
         players.add(player1);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ExpandLandPlayer(player0, map);
+        var computerPlayer = new ExpandLandPlayer(player0, map);
 
         // Place player 0's headquarters
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 10);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarters
-        Point point1 = new Point(40, 10);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(40, 10);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Clear soldiers from the inventories
         Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
         Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
 
         // Place player 1's barracks
-        Point point2 = new Point(30, 10);
+        var point2 = new Point(30, 10);
         var watchTower = map.placeBuilding(new WatchTower(player1), point2);
 
         // Finish player 1's barracks
@@ -561,7 +548,7 @@ public class TestExpandLandPlayer {
 
         assertTrue(optionalMainAttacker.isPresent());
 
-        Soldier mainAttacker = optionalMainAttacker.get();
+        var mainAttacker = optionalMainAttacker.get();
 
         assertNotNull(mainAttacker);
         assertEquals(mainAttacker.getTarget(), barracksToAttack.getFlag().getPosition());
@@ -585,19 +572,18 @@ public class TestExpandLandPlayer {
     public void testPlayerStopsPromotionsInBarracksNotCloseToAnEnemy() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ExpandLandPlayer(player0, map);
+        var computerPlayer = new ExpandLandPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 10);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Give the player extra building materials and militaries
         Utils.adjustInventoryTo(headquarter, PLANK, 40);
@@ -605,7 +591,7 @@ public class TestExpandLandPlayer {
         Utils.adjustInventoryTo(headquarter, PRIVATE, 40);
 
         // Wait for the player to place barracks
-        Barracks barracks0 = Utils.verifyPlayerPlacesOnlyBuilding(computerPlayer, Barracks.class);
+        var barracks0 = Utils.verifyPlayerPlacesOnlyBuilding(computerPlayer, Barracks.class);
 
         assertEquals(player0.getBuildings().size(), 2);
 
@@ -624,25 +610,24 @@ public class TestExpandLandPlayer {
     public void testPlayerEnablesPromotionsForBarracksCloseToEnemy() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", org.appland.settlers.model.PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", org.appland.settlers.model.PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
         players.add(player1);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 30);
+        var map = new GameMap(players, 100, 30);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ExpandLandPlayer(player0, map);
+        var computerPlayer = new ExpandLandPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place the enemy's headquarter
-        Point point1 = new Point(50, 10);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(50, 10);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Give the player extra building materials and militaries
         Utils.adjustInventoryTo(headquarter, PLANK, 500);
@@ -657,7 +642,7 @@ public class TestExpandLandPlayer {
         for (int i = 0; i < 100; i++) {
 
             // Wait for the player to with place a barracks
-            Barracks barracks = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
+            var barracks = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
 
             // Wait for the barracks to be occupied
             Utils.waitForBuildingToGetOccupied(computerPlayer, barracks);
@@ -690,25 +675,24 @@ public class TestExpandLandPlayer {
     public void testPlayerUpgradesBarracksCloseToEnemy() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", org.appland.settlers.model.PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", org.appland.settlers.model.PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
         players.add(player1);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ExpandLandPlayer(player0, map);
+        var computerPlayer = new ExpandLandPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place the enemy's headquarters
-        Point point1 = new Point(40, 10);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(40, 10);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Give the player extra building materials and militaries
         Utils.adjustInventoryTo(headquarter, PLANK, 500);
@@ -721,7 +705,7 @@ public class TestExpandLandPlayer {
         for (int i = 0; i < 100; i++) {
 
             // Wait for the player to with place a barracks
-            Barracks barracks = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
+            var barracks = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Barracks.class);
 
             Utils.waitForBuildingToGetConstructedWithComputerPlayer(computerPlayer, barracks);
 

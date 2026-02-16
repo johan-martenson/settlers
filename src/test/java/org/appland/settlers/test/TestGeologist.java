@@ -75,7 +75,7 @@ public class TestGeologist {
         Utils.fastForward(30, map);
 
         // Call geologist from the flag
-        int amountWorkers = map.getWorkers().size();
+        var amountWorkers = map.getWorkers().size();
 
         flag.callGeologist();
 
@@ -109,7 +109,7 @@ public class TestGeologist {
         Utils.fastForward(30, map);
 
         // Call geologist from the flag
-        int amountWorkers = map.getWorkers().size();
+        var amountWorkers = map.getWorkers().size();
 
         flag.callGeologist();
 
@@ -844,7 +844,7 @@ public class TestGeologist {
         assertEquals(geologist.getTarget(), headquarter0.getPosition());
 
         // Wait for the geologist to reach the headquarters and verify that it's correctly stored
-        int amount = headquarter0.getAmount(GEOLOGIST);
+        var amount = headquarter0.getAmount(GEOLOGIST);
 
         Utils.fastForwardUntilWorkersReachTarget(map, geologist);
 
@@ -1166,7 +1166,7 @@ public class TestGeologist {
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Add a geologist to the headquarters and verify that the amount goes up
-        int amount = headquarter0.getAmount(GEOLOGIST);
+        var amount = headquarter0.getAmount(GEOLOGIST);
 
         headquarter0.depositWorker(new Geologist(player0, map));
 
@@ -1198,7 +1198,7 @@ public class TestGeologist {
         Utils.fastForward(30, map);
 
         // Call geologist from the flag
-        int workers = map.getWorkers().size();
+        var workers = map.getWorkers().size();
 
         flag.callGeologist();
 
@@ -1500,7 +1500,7 @@ public class TestGeologist {
         // Wait for the geologist to reach the headquarters and verify that it's correctly stored
         assertEquals(geologist.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(GEOLOGIST);
+        var amount = headquarter0.getAmount(GEOLOGIST);
 
         Utils.fastForwardUntilWorkersReachTarget(map, geologist);
 
@@ -1574,7 +1574,7 @@ public class TestGeologist {
         // Wait for the geologist to reach the headquarters and verify that it's correctly stored
         assertEquals(geologist.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(GEOLOGIST);
+        var amount = headquarter0.getAmount(GEOLOGIST);
 
         Utils.fastForwardUntilWorkersReachTarget(map, geologist);
 

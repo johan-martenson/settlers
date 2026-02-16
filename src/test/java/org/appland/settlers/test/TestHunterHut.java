@@ -954,7 +954,7 @@ public class TestHunterHut {
         assertFalse(hunter.isInsideBuilding());
         assertEquals(hunter.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(HUNTER);
+        var amount = headquarter0.getAmount(HUNTER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, hunter, headquarter0.getPosition());
 
@@ -999,7 +999,7 @@ public class TestHunterHut {
         assertEquals(hunter.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
+        var firstStep = true;
         for (var point : hunter.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
@@ -1441,7 +1441,7 @@ public class TestHunterHut {
         assertFalse(hunter.isInsideBuilding());
         assertEquals(hunter.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(HUNTER);
+        var amount = storehouse0.getAmount(HUNTER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, hunter, storehouse0.getPosition());
 
@@ -1492,7 +1492,7 @@ public class TestHunterHut {
         assertFalse(hunter.isInsideBuilding());
         assertEquals(hunter.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(HUNTER);
+        var amount = headquarter0.getAmount(HUNTER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, hunter, headquarter0.getPosition());
 
@@ -1546,7 +1546,7 @@ public class TestHunterHut {
         assertFalse(hunter.isInsideBuilding());
         assertEquals(hunter.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(HUNTER);
+        var amount = headquarter0.getAmount(HUNTER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, hunter, headquarter0.getPosition());
 
@@ -1591,7 +1591,7 @@ public class TestHunterHut {
         assertFalse(hunter.isInsideBuilding());
         assertEquals(hunter.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(HUNTER);
+        var amount = headquarter0.getAmount(HUNTER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, hunter, headquarter0.getPosition());
 

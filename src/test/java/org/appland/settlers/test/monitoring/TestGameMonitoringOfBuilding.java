@@ -46,31 +46,30 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitoringEventWhenBeerIsAddedToHeadquarter() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Wait for the road to get assigned a courier
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
         // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // No house updated event is sent when the headquarters receives cargo
-        Cargo beerCargo0 = Utils.placeCargo(map, BEER, flag0, headquarter0);
+        var beerCargo0 = Utils.placeCargo(map, BEER, flag0, headquarter0);
 
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, beerCargo0);
 
@@ -83,7 +82,7 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertTrue(gameChangesList.changedBuildings().isEmpty());
         }
 
@@ -91,7 +90,7 @@ public class TestGameMonitoringOfBuilding {
         player0.addDetailedMonitoring(headquarter0);
 
         // Verify that a house updated event is sent when the headquarters receives cargo
-        Cargo beerCargo1 = Utils.placeCargo(map, BEER, flag0, headquarter0);
+        var beerCargo1 = Utils.placeCargo(map, BEER, flag0, headquarter0);
 
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, beerCargo1);
 
@@ -115,7 +114,7 @@ public class TestGameMonitoringOfBuilding {
         player0.removeDetailedMonitoring(headquarter0);
 
         // Verify that no house updated event is sent when the headquarters receives cargo
-        Cargo beerCargo2 = Utils.placeCargo(map, BEER, flag0, headquarter0);
+        var beerCargo2 = Utils.placeCargo(map, BEER, flag0, headquarter0);
 
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, beerCargo2);
 
@@ -139,28 +138,27 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitoringEventWhenPlankIsRemovedFromHeadquarter() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Place farm
-        Point point2 = new Point(9, 5);
-        Farm farm0 = map.placeBuilding(new Farm(player0), point2);
+        var point2 = new Point(9, 5);
+        var farm0 = map.placeBuilding(new Farm(player0), point2);
 
         // Wait for the road to get assigned a courier
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
         // Adjust resources in the headquarters
         Utils.adjustInventoryTo(headquarter0, STONE, 0);
@@ -194,28 +192,27 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitoringEventWhenPlankIsAddedToBuildingUnderConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Place woodcutter
-        Point point2 = new Point(9, 5);
-        Farm farm0 = map.placeBuilding(new Farm(player0), point2);
+        var point2 = new Point(9, 5);
+        var farm0 = map.placeBuilding(new Farm(player0), point2);
 
         // Wait for the road to get assigned a courier
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
         // Adjust resources in the headquarters
         Utils.adjustInventoryTo(headquarter0, STONE, 0);
@@ -227,7 +224,7 @@ public class TestGameMonitoringOfBuilding {
         // No house updated event is sent when the first plank leaves the headquarters
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANK);
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertFalse(gameChangesList.changedBuildings().contains(farm0));
         }
 
@@ -263,28 +260,27 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitoringEventWhenConstructionProgresses() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point2 = new Point(9, 5);
-        Farm farm0 = map.placeBuilding(new Farm(player0), point2);
+        var point2 = new Point(9, 5);
+        var farm0 = map.placeBuilding(new Farm(player0), point2);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm0.getFlag());
 
         // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that events are sent when enough progress has been made (but not otherwise)
-        int trackedProgress = 0;
+        var trackedProgress = 0;
 
         for (int i = 0; i < 5000; i++) {
             if (farm0.getConstructionProgress() == 100) {
@@ -309,14 +305,13 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitoringEventWhenReservedLimitIsRaisedAndSoldierInInventoryBecomesHosted() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Set the reserved soldiers for the headquarters
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 0);
@@ -340,7 +335,7 @@ public class TestGameMonitoringOfBuilding {
         assertEquals(headquarter0.getActualReservedSoldiers().get(Soldier.Rank.PRIVATE_RANK), (Integer) 1);
         assertEquals(headquarter0.getAmount(PRIVATE), 9);
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertFalse(gameChangesList.changedBuildings().contains(headquarter0));
         }
 
@@ -348,7 +343,7 @@ public class TestGameMonitoringOfBuilding {
         player0.addDetailedMonitoring(headquarter0);
 
         // Verify that a house updated event is sent when the reserve limit is raised the second time
-        GameChangesList lastGameChangesList = monitor.getLastEvent();
+        var lastGameChangesList = monitor.getLastEvent();
 
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 3);
 
@@ -359,8 +354,8 @@ public class TestGameMonitoringOfBuilding {
 
         map.stepTime();
 
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
+        var found = 0;
+        for (var gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
             if (!gameChangesList.changedBuildings().isEmpty()) {
                 found++;
 
@@ -384,7 +379,7 @@ public class TestGameMonitoringOfBuilding {
         assertEquals(headquarter0.getActualReservedSoldiers().get(Soldier.Rank.PRIVATE_RANK), (Integer) 5);
         assertEquals(headquarter0.getAmount(PRIVATE), 5);
 
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
+        for (var gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
             assertTrue(gameChangesList.changedBuildings().isEmpty());
         }
     }
@@ -393,14 +388,13 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitoringEventWhenReservedLimitIsLoweredAndHostedSoldierMovesToInventory() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust resources in the headquarters
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 10);
@@ -424,7 +418,7 @@ public class TestGameMonitoringOfBuilding {
         assertEquals(headquarter0.getActualReservedSoldiers().get(Soldier.Rank.PRIVATE_RANK), (Integer) 5);
         assertEquals(headquarter0.getAmount(PRIVATE), 5);
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertFalse(gameChangesList.changedBuildings().contains(headquarter0));
         }
 
@@ -432,7 +426,7 @@ public class TestGameMonitoringOfBuilding {
         player0.addDetailedMonitoring(headquarter0);
 
         // Verify that a house updated event is sent when the reserve limit is raised the second time
-        GameChangesList lastGameChangesList = monitor.getLastEvent();
+        var lastGameChangesList = monitor.getLastEvent();
 
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 3);
 
@@ -443,8 +437,8 @@ public class TestGameMonitoringOfBuilding {
 
         map.stepTime();
 
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
+        var found = 0;
+        for (var gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
             if (!gameChangesList.changedBuildings().isEmpty()) {
                 found++;
 
@@ -468,7 +462,7 @@ public class TestGameMonitoringOfBuilding {
         assertEquals(headquarter0.getActualReservedSoldiers().get(Soldier.Rank.PRIVATE_RANK), (Integer) 1);
         assertEquals(headquarter0.getAmount(PRIVATE), 9);
 
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
+        for (var gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
             assertTrue(gameChangesList.changedBuildings().isEmpty());
         }
     }
@@ -477,27 +471,26 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenEvacuatingMilitaryBuilding() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house, connect it to the headquarters, and construct it
-        Point point1 = new Point(9, 5);
-        WatchTower watchTower = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(9, 5);
+        var watchTower = map.placeBuilding(new WatchTower(player0), point1);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, watchTower.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, watchTower.getFlag(), headquarter0.getFlag());
 
         Utils.constructHouse(watchTower);
 
         // Let one soldier enter the building to make it occupied
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 1);
 
-        Soldier military0 = Utils.waitForWorkerOutsideBuilding(Soldier.class, player0);
+        var military0 = Utils.waitForWorkerOutsideBuilding(Soldier.class, player0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military0, watchTower.getPosition());
 
@@ -509,14 +502,14 @@ public class TestGameMonitoringOfBuilding {
         player0.addDetailedMonitoring(watchTower);
 
         // Verify that there is an event when the house is evacuated
-        GameChangesList lastGameChangesList = monitor.getLastEvent();
+        var lastGameChangesList = monitor.getLastEvent();
 
         watchTower.evacuate();
 
         map.stepTime();
 
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
+        var found = 0;
+        for (var gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
             if (!gameChangesList.changedBuildings().isEmpty()) {
                 found++;
 
@@ -532,20 +525,19 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenStoppingEvacuationOfMilitaryBuilding() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house, connect it to the headquarters, and construct it
-        Point point1 = new Point(9, 5);
-        WatchTower watchTower = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(9, 5);
+        var watchTower = map.placeBuilding(new WatchTower(player0), point1);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, watchTower.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, watchTower.getFlag(), headquarter0.getFlag());
 
         Utils.constructHouse(watchTower);
 
@@ -560,14 +552,14 @@ public class TestGameMonitoringOfBuilding {
         player0.addDetailedMonitoring(watchTower);
 
         // Verify that there is an event when the evacuated is canceled
-        GameChangesList lastGameChangesList = monitor.getLastEvent();
+        var lastGameChangesList = monitor.getLastEvent();
 
         watchTower.cancelEvacuation();
 
         map.stepTime();
 
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
+        var found = 0;
+        for (var gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
             if (!gameChangesList.changedBuildings().isEmpty()) {
                 found++;
 
@@ -583,20 +575,19 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenPromotionsEnabledInMilitaryBuilding() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house, connect it to the headquarters, and construct it
-        Point point1 = new Point(9, 5);
-        WatchTower watchTower = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(9, 5);
+        var watchTower = map.placeBuilding(new WatchTower(player0), point1);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, watchTower.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, watchTower.getFlag(), headquarter0.getFlag());
 
         Utils.constructHouse(watchTower);
 
@@ -611,14 +602,14 @@ public class TestGameMonitoringOfBuilding {
         player0.addDetailedMonitoring(watchTower);
 
         // Verify that there is an event when promotions are enabled
-        GameChangesList lastGameChangesList = monitor.getLastEvent();
+        var lastGameChangesList = monitor.getLastEvent();
 
         watchTower.enablePromotions();
 
         map.stepTime();
 
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
+        var found = 0;
+        for (var gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
             if (!gameChangesList.changedBuildings().isEmpty()) {
                 found++;
 
@@ -634,20 +625,19 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenPromotionsDisabledInMilitaryBuilding() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house, connect it to the headquarters, and construct it
-        Point point1 = new Point(9, 5);
-        WatchTower watchTower = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(9, 5);
+        var watchTower = map.placeBuilding(new WatchTower(player0), point1);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, watchTower.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, watchTower.getFlag(), headquarter0.getFlag());
 
         Utils.constructHouse(watchTower);
 
@@ -659,14 +649,14 @@ public class TestGameMonitoringOfBuilding {
         player0.addDetailedMonitoring(watchTower);
 
         // Verify that there is an event when promotions are disabled
-        GameChangesList lastGameChangesList = monitor.getLastEvent();
+        var lastGameChangesList = monitor.getLastEvent();
 
         watchTower.disablePromotions();
 
         map.stepTime();
 
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
+        var found = 0;
+        for (var gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
             if (!gameChangesList.changedBuildings().isEmpty()) {
                 found++;
 
@@ -682,20 +672,19 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenProductionIsEnabled() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place sawmill, connect it to the headquarters, and construct it
-        Point point1 = new Point(9, 5);
-        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point1);
+        var point1 = new Point(9, 5);
+        var sawmill = map.placeBuilding(new Sawmill(player0), point1);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter0.getFlag());
 
         Utils.constructHouse(sawmill);
 
@@ -712,7 +701,7 @@ public class TestGameMonitoringOfBuilding {
         // Verify that no event comes when the production is enabled
         sawmill.resumeProduction();
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertFalse(gameChangesList.changedBuildings().contains(sawmill));
         }
 
@@ -723,14 +712,14 @@ public class TestGameMonitoringOfBuilding {
         player0.addDetailedMonitoring(sawmill);
 
         // Verify that an event comes when the production is enabled
-        GameChangesList lastGameChanges = monitor.getLastEvent();
+        var lastGameChanges = monitor.getLastEvent();
 
         sawmill.resumeProduction();
 
         map.stepTime();
 
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChanges)) {
+        var found = 0;
+        for (var gameChangesList : monitor.getEventsAfterEvent(lastGameChanges)) {
             if (gameChangesList.changedBuildings().contains(sawmill)) {
                 found++;
             }
@@ -749,7 +738,7 @@ public class TestGameMonitoringOfBuilding {
 
         sawmill.resumeProduction();
 
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChanges)) {
+        for (var gameChangesList : monitor.getEventsAfterEvent(lastGameChanges)) {
             assertFalse(gameChangesList.changedBuildings().contains(sawmill));
         }
     }
@@ -758,20 +747,19 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenProductionIsDisabled() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place sawmill, connect it to the headquarters, and construct it
-        Point point1 = new Point(9, 5);
-        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point1);
+        var point1 = new Point(9, 5);
+        var sawmill = map.placeBuilding(new Sawmill(player0), point1);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter0.getFlag());
 
         Utils.constructHouse(sawmill);
 
@@ -785,7 +773,7 @@ public class TestGameMonitoringOfBuilding {
         // Verify that no event comes when the production is disabled
         sawmill.stopProduction();
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertFalse(gameChangesList.changedBuildings().contains(sawmill));
         }
 
@@ -796,14 +784,14 @@ public class TestGameMonitoringOfBuilding {
         player0.addDetailedMonitoring(sawmill);
 
         // Verify that an event comes when the production is disabled
-        GameChangesList lastGameChanges = monitor.getLastEvent();
+        var lastGameChanges = monitor.getLastEvent();
 
         sawmill.stopProduction();
 
         map.stepTime();
 
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChanges)) {
+        var found = 0;
+        for (var gameChangesList : monitor.getEventsAfterEvent(lastGameChanges)) {
             if (gameChangesList.changedBuildings().contains(sawmill)) {
                 found++;
             }
@@ -822,7 +810,7 @@ public class TestGameMonitoringOfBuilding {
 
         sawmill.resumeProduction();
 
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChanges)) {
+        for (var gameChangesList : monitor.getEventsAfterEvent(lastGameChanges)) {
             assertFalse(gameChangesList.changedBuildings().contains(sawmill));
         }
     }
@@ -831,24 +819,23 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenProductionBuildingReceivesMaterial() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Remove all wood and sawmill workers from the headquarters
         Utils.adjustInventoryTo(headquarter0, WOOD, 0);
         Utils.adjustInventoryTo(headquarter0, CARPENTER, 0);
 
         // Place sawmill, connect it to the headquarters, and construct it
-        Point point1 = new Point(9, 5);
-        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
+        var point1 = new Point(9, 5);
+        var sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), headquarter0.getFlag());
 
         Utils.constructHouse(sawmill0);
 
@@ -917,7 +904,7 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.waitForBuildingToGetAmountOfMaterial(sawmill0, WOOD, 3);
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertFalse(gameChangesList.changedBuildings().contains(sawmill0));
         }
     }
@@ -926,14 +913,13 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenProductionBuildingConsumesMaterial() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Remove all wood from the headquarters
         Utils.adjustInventoryTo(headquarter0, WOOD, 0);
@@ -941,10 +927,10 @@ public class TestGameMonitoringOfBuilding {
         assertEquals(headquarter0.getAmount(WOOD), 0);
 
         // Place sawmill, connect it to the headquarters, and construct it
-        Point point1 = new Point(9, 5);
-        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
+        var point1 = new Point(9, 5);
+        var sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), headquarter0.getFlag());
 
         Utils.constructHouse(sawmill0);
 
@@ -1010,14 +996,13 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenSoldierEntersBuilding() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Remove all soldiers from the headquarters
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 0);
@@ -1027,17 +1012,17 @@ public class TestGameMonitoringOfBuilding {
         Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
 
         // Place guard house, connect it to the headquarters, and construct it
-        Point point1 = new Point(9, 5);
-        WatchTower watchTower = map.placeBuilding(new WatchTower(player0), point1);
+        var point1 = new Point(9, 5);
+        var watchTower = map.placeBuilding(new WatchTower(player0), point1);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, watchTower.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, watchTower.getFlag(), headquarter0.getFlag());
 
         Utils.constructHouse(watchTower);
 
         // Let one soldier enter the building to make it occupied
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 1);
 
-        Soldier military0 = Utils.waitForWorkerOutsideBuilding(Soldier.class, player0);
+        var military0 = Utils.waitForWorkerOutsideBuilding(Soldier.class, player0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military0, watchTower.getPosition());
 
@@ -1051,7 +1036,7 @@ public class TestGameMonitoringOfBuilding {
         // Verify that there is an event when the third soldier enters the house
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 1);
 
-        Soldier soldier = Utils.waitForWorkerOutsideBuilding(Soldier.class, player0);
+        var soldier = Utils.waitForWorkerOutsideBuilding(Soldier.class, player0);
 
         for (int i = 0; i < 2000; i++) {
             if (soldier.getPosition().equals(watchTower.getPosition())) {
@@ -1073,14 +1058,13 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenSoldierLeavesBuilding() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // TODO: set up attack to make soldiers leave a military building
     }
@@ -1089,20 +1073,19 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenProductivityChangedInBuilding() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place quarry, connect it to the headquarters, and construct it
-        Point point1 = new Point(9, 5);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        var point1 = new Point(9, 5);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter0.getFlag());
 
         Utils.constructHouse(quarry);
 
@@ -1110,7 +1093,7 @@ public class TestGameMonitoringOfBuilding {
         Utils.waitForNonMilitaryBuildingToGetPopulated(quarry);
 
         // Place stones close to the quarry
-        Point point2 = new Point(10, 6);
+        var point2 = new Point(10, 6);
         map.placeStone(point2, Stone.StoneType.STONE_1, 10);
 
         // Set up monitoring subscription for the player
@@ -1123,7 +1106,7 @@ public class TestGameMonitoringOfBuilding {
         // Verify that an event is sent when the productivity of the quarry changes
         monitor.clearEvents();
 
-        int originalProductivity = quarry.getProductivity();
+        var originalProductivity = quarry.getProductivity();
 
         for (int i = 0; i < 10000; i++) {
             if (quarry.getProductivity() != originalProductivity) {
@@ -1137,8 +1120,8 @@ public class TestGameMonitoringOfBuilding {
 
         assertNotEquals(originalProductivity, quarry.getProductivity());
 
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        var found = 0;
+        for (var gameChangesList : monitor.getEvents()) {
             if (gameChangesList.changedBuildings().contains(quarry)) {
                 found++;
             }
@@ -1151,20 +1134,19 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenUpgradingMilitaryBuilding() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house, connect it to the headquarters, and construct it
-        Point point1 = new Point(9, 5);
-        Barracks barracks = map.placeBuilding(new Barracks(player0), point1);
+        var point1 = new Point(9, 5);
+        var barracks = map.placeBuilding(new Barracks(player0), point1);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, barracks.getFlag(), headquarter0.getFlag());
 
         Utils.constructHouse(barracks);
 
@@ -1188,7 +1170,7 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.waitForUpgradeToFinish(barracks);
 
-        Building guardHouse = map.getBuildingAtPoint(point1);
+        var guardHouse = map.getBuildingAtPoint(point1);
 
         assertEquals(guardHouse.getClass(), GuardHouse.class);
 
@@ -1202,8 +1184,8 @@ public class TestGameMonitoringOfBuilding {
 
         map.stepTime();
 
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        var found = 0;
+        for (var gameChangesList : monitor.getEvents()) {
             if (gameChangesList.changedBuildings().contains(guardHouse)) {
                 found++;
             }
@@ -1216,16 +1198,16 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.waitForUpgradeToFinish(guardHouse);
 
-        Building watchTower = map.getBuildingAtPoint(point1);
+        var watchTower = map.getBuildingAtPoint(point1);
 
         found = 0;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
 
             assertTrue(gameChangesList.newBuildings().isEmpty());
             assertTrue(gameChangesList.removedBuildings().isEmpty());
 
             if (!gameChangesList.upgradedBuildings().isEmpty()) {
-                Optional<GameChangesList.NewAndOldBuilding> newAndOldBuildingOptional = gameChangesList.upgradedBuildings().stream().findFirst();
+                var newAndOldBuildingOptional = gameChangesList.upgradedBuildings().stream().findFirst();
 
                 assertTrue(gameChangesList.changedBuildings().isEmpty());
                 assertTrue(newAndOldBuildingOptional.isPresent());
@@ -1250,16 +1232,16 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.waitForUpgradeToFinish(watchTower);
 
-        Building fortress = map.getBuildingAtPoint(point1);
+        var fortress = map.getBuildingAtPoint(point1);
 
 
         found = 0;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertTrue(gameChangesList.newBuildings().isEmpty());
             assertTrue(gameChangesList.removedBuildings().isEmpty());
 
             if (!gameChangesList.upgradedBuildings().isEmpty()) {
-                Optional<GameChangesList.NewAndOldBuilding> newAndOldBuildingOptional = gameChangesList.upgradedBuildings().stream().findFirst();
+                var newAndOldBuildingOptional = gameChangesList.upgradedBuildings().stream().findFirst();
 
                 assertTrue(newAndOldBuildingOptional.isPresent());
                 assertEquals(newAndOldBuildingOptional.get().oldBuilding, watchTower);
@@ -1280,14 +1262,13 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenChangingAmountReservedInHeadquarters() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Remove all soldiers from the headquarters
         Utils.removeAllSoldiersFromStorage(headquarter0);
@@ -1306,8 +1287,8 @@ public class TestGameMonitoringOfBuilding {
 
         map.stepTime();
 
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        var found = 0;
+        for (var gameChangesList : monitor.getEvents()) {
             if (gameChangesList.changedBuildings().contains(headquarter0)) {
                 found++;
             }
@@ -1325,7 +1306,7 @@ public class TestGameMonitoringOfBuilding {
 
         map.stepTime();
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertFalse(gameChangesList.changedBuildings().contains(headquarter0));
         }
     }
@@ -1337,30 +1318,29 @@ public class TestGameMonitoringOfBuilding {
     public void testAttackCapabilityIncreasesWhenSoldierEntersBuilding() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         players.add(player1);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter for the first player
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place headquarters for the second player
-        Point point1 = new Point(29, 5);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(29, 5);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Remove all soldiers from player 0's headquarters
         Utils.removeAllSoldiersFromStorage(headquarter0);
 
         // Place barracks for player 0, connect it to the headquarters, and wait until it's constructed
-        Point point2 = new Point(15, 5);
-        WatchTower watchTower = map.placeBuilding(new WatchTower(player0), point2);
+        var point2 = new Point(15, 5);
+        var watchTower = map.placeBuilding(new WatchTower(player0), point2);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, watchTower.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, watchTower.getFlag(), headquarter0.getFlag());
 
         Utils.waitForBuildingToBeConstructed(watchTower);
 
@@ -1381,8 +1361,8 @@ public class TestGameMonitoringOfBuilding {
 
         assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 1);
 
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        var found = 0;
+        for (var gameChangesList : monitor.getEvents()) {
             if (gameChangesList.changedBuildings().contains(headquarter1)) {
                 found++;
             }
@@ -1404,7 +1384,7 @@ public class TestGameMonitoringOfBuilding {
 
         assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 2);
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertFalse(gameChangesList.changedBuildings().contains(headquarter1));
         }
     }
@@ -1413,30 +1393,29 @@ public class TestGameMonitoringOfBuilding {
     public void testAttackCapabilityDecreasesWhenSoldierLeavesBuilding() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         players.add(player1);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter for the first player
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place headquarters for the second player
-        Point point1 = new Point(29, 5);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(29, 5);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Remove all soldiers from player 0's headquarters
         Utils.removeAllSoldiersFromStorage(headquarter0);
 
         // Place barracks for player 0, connect it to the headquarters, and wait until it's constructed
-        Point point2 = new Point(15, 5);
-        WatchTower watchTower = map.placeBuilding(new WatchTower(player0), point2);
+        var point2 = new Point(15, 5);
+        var watchTower = map.placeBuilding(new WatchTower(player0), point2);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, watchTower.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, watchTower.getFlag(), headquarter0.getFlag());
 
         Utils.waitForBuildingToBeConstructed(watchTower);
 
@@ -1465,8 +1444,8 @@ public class TestGameMonitoringOfBuilding {
 
         map.stepTime();
 
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        var found = 0;
+        for (var gameChangesList : monitor.getEvents()) {
             if (gameChangesList.changedBuildings().contains(headquarter1)) {
                 found++;
             }
@@ -1484,30 +1463,29 @@ public class TestGameMonitoringOfBuilding {
     public void testAttackCapabilityDecreasesWhenMilitaryBuildingIsTornDown() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         players.add(player1);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter for the first player
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place headquarters for the second player
-        Point point1 = new Point(29, 5);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(29, 5);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Remove all soldiers from player 0's headquarters
         Utils.removeAllSoldiersFromStorage(headquarter0);
 
         // Place barracks for player 0, connect it to the headquarters, and wait until it's constructed
-        Point point2 = new Point(15, 5);
-        WatchTower watchTower = map.placeBuilding(new WatchTower(player0), point2);
+        var point2 = new Point(15, 5);
+        var watchTower = map.placeBuilding(new WatchTower(player0), point2);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, watchTower.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, watchTower.getFlag(), headquarter0.getFlag());
 
         Utils.waitForBuildingToBeConstructed(watchTower);
 
@@ -1536,8 +1514,8 @@ public class TestGameMonitoringOfBuilding {
 
         map.stepTime();
 
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        var found = 0;
+        for (var gameChangesList : monitor.getEvents()) {
             if (gameChangesList.changedBuildings().contains(headquarter1)) {
                 found++;
             }
@@ -1553,15 +1531,14 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitoringEventWhenDoorOpensAndCloses() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter for the first player
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a woodcutter hut and connect it to the headquarters
         var point1 = new Point(9, 7);
@@ -1705,15 +1682,14 @@ public class TestGameMonitoringOfBuilding {
     public void testEventWhenHeadquartersReceivesCargo() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter for the first player
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Remove all planks from the headquarters
         Utils.clearInventory(headquarter0, PLANK);
@@ -1765,15 +1741,14 @@ public class TestGameMonitoringOfBuilding {
     public void testEventWhenHeadquartersReceivesWorker() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter for the first player
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Remove all stonemasons from the headquarters
         Utils.clearInventory(headquarter0, STONEMASON);
@@ -1822,15 +1797,14 @@ public class TestGameMonitoringOfBuilding {
     public void testEventWhenSoldierLeavesHeadquarters() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter for the first player
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Remove all soldiers from the headquarters
         Utils.removeAllSoldiersFromStorage(headquarter0);
@@ -1884,15 +1858,14 @@ public class TestGameMonitoringOfBuilding {
     public void testEventWhenWorkerLeavesHeadquarters() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter for the first player
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Control the amount of builders in the headquarters
         Utils.adjustInventoryTo(headquarter0, BUILDER, 2);

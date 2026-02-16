@@ -30,21 +30,20 @@ public class TestIronBarPrioritization {
     public void testOnlyArmoryGetsIronBar() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place metalworks
-        Point point1 = new Point(6, 10);
+        var point1 = new Point(6, 10);
         var metalworks0 = map.placeBuilding(new Metalworks(player0), point1);
 
         // Place armory
-        Point point2 = new Point(10, 14);
+        var point2 = new Point(10, 14);
         var armory0 = map.placeBuilding(new Armory(player0), point2);
 
         // Finish construction of the wheat consumers
@@ -70,8 +69,7 @@ public class TestIronBarPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that only the armory gets any iron bar
-        Map<Building, Integer> ironBAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var ironBAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -91,18 +89,18 @@ public class TestIronBarPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, IRON_BAR);
 
             // Keep track of where the wheat cargos end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!ironBAllocation.containsKey(targetBuilding)) {
                 ironBAllocation.put(targetBuilding, 0);
             }
 
-            int amount = ironBAllocation.get(targetBuilding);
+            var amount = ironBAllocation.get(targetBuilding);
             ironBAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the wheat to reach the consumer
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -112,9 +110,9 @@ public class TestIronBarPrioritization {
             Utils.waitUntilAmountIs(target, IRON_BAR, 0);
 
             // Exit after four delivered wheat cargos
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : ironBAllocation.values()) {
+            for (var amountInBuilding : ironBAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -131,22 +129,21 @@ public class TestIronBarPrioritization {
     public void testOnlyMetalworksGetsIronBars() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place metalworks
-        Point point1 = new Point(6, 10);
-        Building metalworks0 = map.placeBuilding(new Metalworks(player0), point1);
+        var point1 = new Point(6, 10);
+        var metalworks0 = map.placeBuilding(new Metalworks(player0), point1);
 
         // Place armory
-        Point point2 = new Point(10, 14);
-        Building armory0 = map.placeBuilding(new Armory(player0), point2);
+        var point2 = new Point(10, 14);
+        var armory0 = map.placeBuilding(new Armory(player0), point2);
 
         // Finish construction of the wheat consumers
         Utils.constructHouse(metalworks0);
@@ -171,8 +168,7 @@ public class TestIronBarPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that only the armory gets any wheat
-        Map<Building, Integer> ironBarAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var ironBarAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -192,18 +188,18 @@ public class TestIronBarPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, IRON_BAR);
 
             // Keep track of where the iron bar cargos end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!ironBarAllocation.containsKey(targetBuilding)) {
                 ironBarAllocation.put(targetBuilding, 0);
             }
 
-            int amount = ironBarAllocation.get(targetBuilding);
+            var amount = ironBarAllocation.get(targetBuilding);
             ironBarAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the wheat to reach the consumer
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -213,9 +209,9 @@ public class TestIronBarPrioritization {
             Utils.waitUntilAmountIs(target, IRON_BAR, 0);
 
             // Exit after four delivered wheat cargos
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : ironBarAllocation.values()) {
+            for (var amountInBuilding : ironBarAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -232,22 +228,21 @@ public class TestIronBarPrioritization {
     public void testMetalworksGetsDoubleAmountIronBars() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place metalworks
-        Point point1 = new Point(6, 10);
-        Building metalworks0 = map.placeBuilding(new Metalworks(player0), point1);
+        var point1 = new Point(6, 10);
+        var metalworks0 = map.placeBuilding(new Metalworks(player0), point1);
 
         // Place armory
-        Point point2 = new Point(10, 14);
-        Building armory0 = map.placeBuilding(new Armory(player0), point2);
+        var point2 = new Point(10, 14);
+        var armory0 = map.placeBuilding(new Armory(player0), point2);
 
         // Finish construction of the wheat consumers
         Utils.constructHouse(metalworks0);
@@ -272,8 +267,7 @@ public class TestIronBarPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that only the armory gets any wheat
-        Map<Building, Integer> ironBarAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var ironBarAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -293,18 +287,18 @@ public class TestIronBarPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, IRON_BAR);
 
             // Keep track of where the iron bar cargos end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!ironBarAllocation.containsKey(targetBuilding)) {
                 ironBarAllocation.put(targetBuilding, 0);
             }
 
-            int amount = ironBarAllocation.get(targetBuilding);
+            var amount = ironBarAllocation.get(targetBuilding);
             ironBarAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the wheat to reach the consumer
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -314,9 +308,9 @@ public class TestIronBarPrioritization {
             Utils.waitUntilAmountIs(target, IRON_BAR, 0);
 
             // Exit after four delivered wheat cargos
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : ironBarAllocation.values()) {
+            for (var amountInBuilding : ironBarAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -334,22 +328,21 @@ public class TestIronBarPrioritization {
     public void testArmoryGetsDoubleAmountIronBars() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place metalworks
-        Point point1 = new Point(6, 10);
-        Building metalworks0 = map.placeBuilding(new Metalworks(player0), point1);
+        var point1 = new Point(6, 10);
+        var metalworks0 = map.placeBuilding(new Metalworks(player0), point1);
 
         // Place armory
-        Point point2 = new Point(10, 14);
-        Building armory0 = map.placeBuilding(new Armory(player0), point2);
+        var point2 = new Point(10, 14);
+        var armory0 = map.placeBuilding(new Armory(player0), point2);
 
         // Finish construction of the wheat consumers
         Utils.constructHouse(metalworks0);
@@ -374,8 +367,7 @@ public class TestIronBarPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that only the armory gets any wheat
-        Map<Building, Integer> ironBarAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var ironBarAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -395,18 +387,18 @@ public class TestIronBarPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, IRON_BAR);
 
             // Keep track of where the iron bar cargos end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!ironBarAllocation.containsKey(targetBuilding)) {
                 ironBarAllocation.put(targetBuilding, 0);
             }
 
-            int amount = ironBarAllocation.get(targetBuilding);
+            var amount = ironBarAllocation.get(targetBuilding);
             ironBarAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the wheat to reach the consumer
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -416,9 +408,9 @@ public class TestIronBarPrioritization {
             Utils.waitUntilAmountIs(target, IRON_BAR, 0);
 
             // Exit after four delivered wheat cargos
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : ironBarAllocation.values()) {
+            for (var amountInBuilding : ironBarAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -436,22 +428,21 @@ public class TestIronBarPrioritization {
     public void testMetalworksGetsIronBarWithFullyStockedArmory() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place metalworks
-        Point point1 = new Point(6, 10);
-        Building metalworks0 = map.placeBuilding(new Metalworks(player0), point1);
+        var point1 = new Point(6, 10);
+        var metalworks0 = map.placeBuilding(new Metalworks(player0), point1);
 
         // Place armory
-        Point point2 = new Point(10, 14);
-        Building armory0 = map.placeBuilding(new Armory(player0), point2);
+        var point2 = new Point(10, 14);
+        var armory0 = map.placeBuilding(new Armory(player0), point2);
 
         // Finish construction of the iron bar consumers
         Utils.constructHouse(metalworks0);
@@ -488,8 +479,7 @@ public class TestIronBarPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that the other consumers get wheat when the armory is already fully stocked and does not consume its resources
-        Map<Building, Integer> ironBAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var ironBAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -505,25 +495,25 @@ public class TestIronBarPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, IRON_BAR);
 
             // Keep track of where the wheat cargos end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!ironBAllocation.containsKey(targetBuilding)) {
                 ironBAllocation.put(targetBuilding, 0);
             }
 
-            int amount = ironBAllocation.get(targetBuilding);
+            var amount = ironBAllocation.get(targetBuilding);
             ironBAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the iron bar to reach the building
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
             // Exit after four delivered wheat cargos
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : ironBAllocation.values()) {
+            for (var amountInBuilding : ironBAllocation.values()) {
                 sum += amountInBuilding;
             }
 

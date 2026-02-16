@@ -26,34 +26,33 @@ public class TestMultipleStorehouses {
     public void testHouseGetsDeliveryFromRemoteHeadquarterWhenLocalStorehouseLacksMaterial() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(15, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
-        Point point1 = new Point(22, 6);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(22, 6);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Place well to the left of the headquarter
-        Point point2 = new Point(7, 5);
-        Well well0 = map.placeBuilding(new Well(player0), point2);
+        var point2 = new Point(7, 5);
+        var well0 = map.placeBuilding(new Well(player0), point2);
 
         // Place second well to the right of the storehouse
-        Point point3 = new Point(30, 6);
-        Well well1 = map.placeBuilding(new Well(player0), point3);
+        var point3 = new Point(30, 6);
+        var well1 = map.placeBuilding(new Well(player0), point3);
 
         // Make sure there is enough construction material in the headquarter
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
         // Connect the storehouse with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         // Wait for the storehouse to get constructed and populated
         Utils.waitForBuildingToBeConstructed(storehouse);
@@ -64,10 +63,10 @@ public class TestMultipleStorehouses {
         Utils.adjustInventoryTo(storehouse, STONE, 0);
 
         // Connect the storehouse with the right-most well
-        Road road1 = map.placeAutoSelectedRoad(player0, well1.getFlag(), storehouse.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, well1.getFlag(), storehouse.getFlag());
 
         // Connect the left-most well with the headquarter
-        Road road2 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter.getFlag());
 
         // Assign builders
         Utils.assignBuilder(well0);
@@ -87,34 +86,33 @@ public class TestMultipleStorehouses {
     public void testHouseGetsAssignedWorkerFromRemoteHeadquarterWhenLocalStorehouseLacksWorker() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(15, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
-        Point point1 = new Point(22, 6);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(22, 6);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Place well to the left of the headquarter
-        Point point2 = new Point(7, 5);
-        Well well0 = map.placeBuilding(new Well(player0), point2);
+        var point2 = new Point(7, 5);
+        var well0 = map.placeBuilding(new Well(player0), point2);
 
         // Place second well to the right of the storehouse
-        Point point3 = new Point(30, 6);
-        Well well1 = map.placeBuilding(new Well(player0), point3);
+        var point3 = new Point(30, 6);
+        var well1 = map.placeBuilding(new Well(player0), point3);
 
         // Make sure there is enough construction material in the headquarter
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
         // Connect the storehouse with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         // Wait for the storehouse to get constructed and populated
         Utils.waitForBuildingToBeConstructed(storehouse);
@@ -125,10 +123,10 @@ public class TestMultipleStorehouses {
         Utils.adjustInventoryTo(storehouse, STONE, 0);
 
         // Connect the storehouse with the right-most well
-        Road road1 = map.placeAutoSelectedRoad(player0, well1.getFlag(), storehouse.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, well1.getFlag(), storehouse.getFlag());
 
         // Connect the left-most well with the headquarter
-        Road road2 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter.getFlag());
 
         // Wait for both wells to get constructed
         Utils.adjustInventoryTo(headquarter, WELL_WORKER, 5);
@@ -147,34 +145,33 @@ public class TestMultipleStorehouses {
     public void testMilitaryHouseGetsAssignedSoldierFromRemoteHeadquarterWhenLocalStorehouseLacksSoldier() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(15, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
-        Point point1 = new Point(22, 6);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(22, 6);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Place barracks to the left of the headquarter
-        Point point2 = new Point(7, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+        var point2 = new Point(7, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         // Place second barracks to the right of the storehouse
-        Point point3 = new Point(30, 6);
-        Barracks barracks1 = map.placeBuilding(new Barracks(player0), point3);
+        var point3 = new Point(30, 6);
+        var barracks1 = map.placeBuilding(new Barracks(player0), point3);
 
         // Make sure there is enough construction material in the headquarter
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
         // Connect the storehouse with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         // Wait for the storehouse to get constructed and populated
         Utils.waitForBuildingToBeConstructed(storehouse);
@@ -185,10 +182,10 @@ public class TestMultipleStorehouses {
         Utils.adjustInventoryTo(storehouse, STONE, 0);
 
         // Connect the storehouse with the right-most barracks
-        Road road1 = map.placeAutoSelectedRoad(player0, barracks1.getFlag(), storehouse.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, barracks1.getFlag(), storehouse.getFlag());
 
         // Connect the left-most barracks with the headquarter
-        Road road2 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
 
         // Wait for both barracks to get constructed
         Utils.adjustInventoryTo(headquarter, PRIVATE, 5);

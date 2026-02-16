@@ -55,8 +55,8 @@ public class TestHeadquarter {
         var map = new GameMap(List.of(player0), 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the initial inventory is correct
         assertEquals(headquarter0.getAmount(WOOD), 24);
@@ -104,8 +104,8 @@ public class TestHeadquarter {
         var map = new GameMap(List.of(player0), 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Set the inventory to low
         headquarter0.setInitialResources(ResourceLevel.LOW);
@@ -180,8 +180,8 @@ public class TestHeadquarter {
         var map = new GameMap(List.of(player0), 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Set the inventory to low
         headquarter0.setInitialResources(ResourceLevel.MEDIUM);
@@ -256,8 +256,8 @@ public class TestHeadquarter {
         var map = new GameMap(List.of(player0), 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Set the inventory to low
         headquarter0.setInitialResources(ResourceLevel.HIGH);
@@ -328,14 +328,13 @@ public class TestHeadquarter {
     public void testHeadquarterIsReadyDirectly() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the headquarters is ready immediately
         assertTrue(headquarter0.isReady());
@@ -345,14 +344,13 @@ public class TestHeadquarter {
     public void testHeadquarterNeedsNoWorker() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the headquarters doesn't need a worker
         assertFalse(headquarter0.needsWorker());
@@ -362,14 +360,13 @@ public class TestHeadquarter {
     public void testHeadquarterGetsWorkerAutomatically() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the headquarters has a worker
         assertFalse(headquarter0.needsWorker());
@@ -380,18 +377,17 @@ public class TestHeadquarter {
     public void testHeadquartersStorageWorkerDeliversCargo() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(11, 9);
-        Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
+        var point1 = new Point(11, 9);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
 
         // Connect the woodcutter to the headquarters
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
@@ -405,7 +401,7 @@ public class TestHeadquarter {
         // Verify that the storage worker delivers stone or planks to the woodcutter
         assertTrue(headquarter0.getWorker() instanceof StorehouseWorker);
 
-        StorehouseWorker storehouseWorker0 = (StorehouseWorker) headquarter0.getWorker();
+        var storehouseWorker0 = (StorehouseWorker) headquarter0.getWorker();
 
         assertTrue(storehouseWorker0.isInsideBuilding());
 
@@ -426,14 +422,13 @@ public class TestHeadquarter {
     public void testHeadquarterCannotBeTornDown() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that trying to tear it down causes an exception
         try {
@@ -447,14 +442,13 @@ public class TestHeadquarter {
     public void testHeadquarterCannotBeTornDownByRemovingFlag() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that trying to tear it down by removing the flag causes an invalid user action exception
         try {
@@ -468,14 +462,13 @@ public class TestHeadquarter {
     public void testHeadquarterCannotProduce() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the headquarters can't produce
         assertFalse(headquarter0.canProduce());
@@ -485,19 +478,18 @@ public class TestHeadquarter {
     public void testCannotPlaceTwoHeadquarters() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that it's not possible to place a second headquarters
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         try {
-            Headquarter headquarter1 = map.placeBuilding(new Headquarter(player0), point1);
+            var headquarter1 = map.placeBuilding(new Headquarter(player0), point1);
             fail();
         } catch (Exception e) {
         }
@@ -507,14 +499,13 @@ public class TestHeadquarter {
     public void testHeadquarterReportsCorrectOutput() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the reported output is correct
         assertEquals(headquarter0.getProducedMaterial().length, 0);
@@ -524,19 +515,18 @@ public class TestHeadquarter {
     public void testHeadquarterReportsCorrectMaterialsNeededForProduction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the reported needed production material is correct
         assertEquals(headquarter0.getTypesOfMaterialNeeded().size(), 0);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             assertEquals(headquarter0.getCanHoldAmount(material), 0);
         }
     }
@@ -545,14 +535,13 @@ public class TestHeadquarter {
     public void testBorderForHeadquarterIsCorrect() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 80, 80);
 
         // Place headquarters
-        Point point0 = new Point(30, 30);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(30, 30);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that the border around the headquarters is hexagon shaped and the middle of each line is 9 steps away from the center of the headquarter
         Border:
@@ -565,10 +554,9 @@ public class TestHeadquarter {
 
          */
 
-        Set<Point> hexagonBorder = new HashSet<>();
-
-        int upperY = point0.y;
-        int lowerY = point0.y;
+        var hexagonBorder = new HashSet<Point>();
+        var upperY = point0.y;
+        var lowerY = point0.y;
         for (int x = point0.x - 18; x < point0.x - 9; x++) {
             hexagonBorder.add(new Point(x, upperY));
             hexagonBorder.add(new Point(x, lowerY));
@@ -593,13 +581,13 @@ public class TestHeadquarter {
         }
 
         // Verify that all points in the hexagon are part of the actual border
-        Set<Point> border = player0.getBorderPoints();
-        for (Point point : hexagonBorder) {
+        var border = player0.getBorderPoints();
+        for (var point : hexagonBorder) {
             assertTrue(border.contains(point));
         }
 
         // Verify that all points in the actual border are part of the hexagon border
-        for (Point point : border) {
+        for (var point : border) {
             assertTrue(hexagonBorder.contains(point));
         }
     }
@@ -608,14 +596,13 @@ public class TestHeadquarter {
     public void testLandForHeadquarterIsCorrect() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 80, 80);
 
         // Place headquarters
-        Point point0 = new Point(30, 30);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(30, 30);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that the land of the headquarters is hexagon shaped and the middle of each line is 9 steps away from the center of the headquarter
         Land
@@ -627,17 +614,17 @@ public class TestHeadquarter {
                 -8, -8  -------  +8, +8
 
          */
-        Point position = headquarter0.getPosition();
-        Set<Point> area = Utils.getAreaInsideHexagon(8, position);
+        var position = headquarter0.getPosition();
+        var area = Utils.getAreaInsideHexagon(8, position);
 
         // Verify that all points in the hexagon land are part of the actual land
-        Collection<Point> land = headquarter0.getDefendedLand();
-        for (Point point : land) {
+        var land = headquarter0.getDefendedLand();
+        for (var point : land) {
             assertTrue(area.contains(point));
         }
 
         // Verify that all points in the actual land are part of the hexagon land
-        for (Point point : area) {
+        for (var point : area) {
             assertTrue(land.contains(point));
         }
     }
@@ -646,14 +633,13 @@ public class TestHeadquarter {
     public void testDiscoveredLandForHeadquarterIsCorrect() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 80, 80);
 
         // Place headquarters
-        Point point0 = new Point(30, 30);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(30, 30);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that the discovered land of the headquarters is hexagon shaped and the middle of each line is 9 steps away from the center of the headquarter
         Land
@@ -666,17 +652,17 @@ public class TestHeadquarter {
 
          */
         int radius = 13; // Border is at 9, then 4 more points out is discovered
-        Point position = headquarter0.getPosition();
-        Set<Point> area = Utils.getAreaInsideHexagon(radius, position);
+        var position = headquarter0.getPosition();
+        var area = Utils.getAreaInsideHexagon(radius, position);
 
         // Verify that all points in the hexagon land are part of the actual land
-        Collection<Point> discoveredLand = player0.getDiscoveredLand();
-        for (Point point : discoveredLand) {
+        var discoveredLand = player0.getDiscoveredLand();
+        for (var point : discoveredLand) {
             assertTrue(area.contains(point));
         }
 
         // Verify that all points in the actual land are part of the hexagon land
-        for (Point point : area) {
+        for (var point : area) {
             assertTrue(discoveredLand.contains(point));
         }
     }
@@ -685,17 +671,16 @@ public class TestHeadquarter {
     public void testDiscoveredLandForPlayerCannotBeOutsideTheMap() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 80, 80);
 
         // Place headquarters
-        Point point0 = new Point(4, 4);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(4, 4);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the discovered land is only inside the map
-        for (Point point : player0.getDiscoveredLand()) {
+        for (var point : player0.getDiscoveredLand()) {
             assertTrue(point.x >= 0);
             assertTrue(point.y >= 0);
         }
@@ -705,17 +690,16 @@ public class TestHeadquarter {
     public void testOwnedLandForPlayerCannotBeOutsideTheMap() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 80, 80);
 
         // Place headquarters
-        Point point0 = new Point(4, 4);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(4, 4);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the discovered land is only inside the map
-        for (Point point : player0.getOwnedLand()) {
+        for (var point : player0.getOwnedLand()) {
             assertTrue(point.x >= 0);
             assertTrue(point.y >= 0);
         }
@@ -725,14 +709,13 @@ public class TestHeadquarter {
     public void testCreatedSoldierPlacedInInventoryWhenReservedAmountIsZero() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Set reserved privates to zero
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 0);
@@ -746,17 +729,17 @@ public class TestHeadquarter {
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 0);
 
         // Place flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Wait for the road to get an assigned courier
         Utils.waitForRoadToGetAssignedCourier(map, road0);
 
         // Place a cask of beer to be delivered to the headquarters
-        Cargo beerCargo = Utils.placeCargo(map, BEER, flag0, headquarter0);
+        var beerCargo = Utils.placeCargo(map, BEER, flag0, headquarter0);
 
         // Wait for the courier to pick up the beer and carry it to the headquarters
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier(), beerCargo);
@@ -772,14 +755,13 @@ public class TestHeadquarter {
     public void testCreatedSoldierHostedWhenReservedAmountIsHigher() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust resources in the headquarters
         Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
@@ -800,17 +782,17 @@ public class TestHeadquarter {
         assertEquals(headquarter0.getActualReservedSoldiers().get(Soldier.Rank.PRIVATE_RANK), (Integer) 0);
 
         // Place flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Wait for the road to get an assigned courier
         Utils.waitForRoadToGetAssignedCourier(map, road0);
 
         // Place a cask of beer to be delivered to the headquarters
-        Cargo beerCargo = Utils.placeCargo(map, BEER, flag0, headquarter0);
+        var beerCargo = Utils.placeCargo(map, BEER, flag0, headquarter0);
 
         // Wait for the courier to pick up the beer and carry it to the headquarters
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier(), beerCargo);
@@ -830,14 +812,13 @@ public class TestHeadquarter {
     public void testArrivingPrivateIsHostedWhenReservedAmountIsHigher() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust resources in the headquarters
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 0);
@@ -859,20 +840,20 @@ public class TestHeadquarter {
         assertEquals(headquarter0.getActualReservedSoldiers().get(Soldier.Rank.PRIVATE_RANK), (Integer) 0);
 
         // Place flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Place and construct barracks
-        Point point2 = new Point(9, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+        var point2 = new Point(9, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         Utils.constructHouse(barracks0);
 
         // Place private in the barracks, burn it down, so it walks to the headquarters
-        Soldier soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, barracks0);
+        var soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, barracks0);
 
         barracks0.tearDown();
 
@@ -890,14 +871,13 @@ public class TestHeadquarter {
     public void testArrivingPrivateFirstRankIsHostedWhenReservedAmountIsHigher() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust resources in the headquarters
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
@@ -918,20 +898,20 @@ public class TestHeadquarter {
         //assertEquals(headquarter0.getHostedSoldiers().stream().filter(soldier -> soldier.getRank() == Soldier.Rank.PRIVATE_FIRST_CLASS_RANK).count(), 0);
 
         // Place flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Place and construct barracks
-        Point point2 = new Point(9, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+        var point2 = new Point(9, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         Utils.constructHouse(barracks0);
 
         // Place private in the barracks, burn it down, so it walks to the headquarters
-        Soldier soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, barracks0);
+        var soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, barracks0);
 
         barracks0.tearDown();
 
@@ -948,14 +928,13 @@ public class TestHeadquarter {
     public void testArrivingSergeantIsHostedWhenReservedAmountIsHigher() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust resources in the headquarters
         headquarter0.setReservedSoldiers(Soldier.Rank.SERGEANT_RANK, 0);
@@ -974,20 +953,20 @@ public class TestHeadquarter {
         assertEquals(headquarter0.getAmount(SERGEANT), 0);
 
         // Place flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Place and construct barracks
-        Point point2 = new Point(9, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+        var point2 = new Point(9, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         Utils.constructHouse(barracks0);
 
         // Place private in the barracks, burn it down, so it walks to the headquarters
-        Soldier soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.SERGEANT_RANK, barracks0);
+        var soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.SERGEANT_RANK, barracks0);
 
         barracks0.tearDown();
 
@@ -1003,14 +982,13 @@ public class TestHeadquarter {
     public void testArrivingOfficerIsHostedWhenReservedAmountIsHigher() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust resources in the headquarters
         headquarter0.setReservedSoldiers(Soldier.Rank.OFFICER_RANK, 0);
@@ -1029,20 +1007,20 @@ public class TestHeadquarter {
         assertEquals(headquarter0.getAmount(OFFICER), 0);
 
         // Place flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Place and construct barracks
-        Point point2 = new Point(9, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+        var point2 = new Point(9, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         Utils.constructHouse(barracks0);
 
         // Place private in the barracks, burn it down, so it walks to the headquarters
-        Soldier soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.OFFICER_RANK, barracks0);
+        var soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.OFFICER_RANK, barracks0);
 
         barracks0.tearDown();
 
@@ -1058,14 +1036,13 @@ public class TestHeadquarter {
     public void testArrivingGeneralIsHostedWhenReservedAmountIsHigher() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust resources in the headquarters
         headquarter0.setReservedSoldiers(Soldier.Rank.GENERAL_RANK, 0);
@@ -1084,20 +1061,20 @@ public class TestHeadquarter {
         assertEquals(headquarter0.getActualReservedSoldiers().get(Soldier.Rank.GENERAL_RANK), (Integer) 0);
 
         // Place flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Place and construct barracks
-        Point point2 = new Point(9, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+        var point2 = new Point(9, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         Utils.constructHouse(barracks0);
 
         // Place private in the barracks, burn it down, so it walks to the headquarters
-        Soldier soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.GENERAL_RANK, barracks0);
+        var soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.GENERAL_RANK, barracks0);
 
         barracks0.tearDown();
 
@@ -1115,14 +1092,13 @@ public class TestHeadquarter {
     public void testArrivingPrivateIsPutInInventoryWhenReservedAmountIsFull() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust resources in the headquarters
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 0);
@@ -1140,20 +1116,20 @@ public class TestHeadquarter {
         assertEquals(headquarter0.getActualReservedSoldiers().get(Soldier.Rank.PRIVATE_RANK), (Integer) 0);
 
         // Place flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Place and construct barracks
-        Point point2 = new Point(9, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+        var point2 = new Point(9, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         Utils.constructHouse(barracks0);
 
         // Place private in the barracks, burn it down, so it walks to the headquarters
-        Soldier soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, barracks0);
+        var soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, barracks0);
 
         barracks0.tearDown();
 
@@ -1169,14 +1145,13 @@ public class TestHeadquarter {
     public void testArrivingPrivateFirstClassIsPutInInventoryWhenReservedAmountIsFull() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust resources in the headquarters
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
@@ -1194,20 +1169,20 @@ public class TestHeadquarter {
         assertEquals(headquarter0.getActualReservedSoldiers().get(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK), (Integer) 0);
 
         // Place flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Place and construct barracks
-        Point point2 = new Point(9, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+        var point2 = new Point(9, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         Utils.constructHouse(barracks0);
 
         // Place private in the barracks, burn it down, so it walks to the headquarters
-        Soldier soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, barracks0);
+        var soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, barracks0);
 
         barracks0.tearDown();
 
@@ -1223,14 +1198,13 @@ public class TestHeadquarter {
     public void testArrivingSergeantIsPutInInventoryWhenReservedAmountIsFull() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust resources in the headquarters
         headquarter0.setReservedSoldiers(Soldier.Rank.SERGEANT_RANK, 0);
@@ -1248,20 +1222,20 @@ public class TestHeadquarter {
         assertEquals(headquarter0.getActualReservedSoldiers().get(Soldier.Rank.SERGEANT_RANK), (Integer) 0);
 
         // Place flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Place and construct barracks
-        Point point2 = new Point(9, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+        var point2 = new Point(9, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         Utils.constructHouse(barracks0);
 
         // Place private in the barracks, burn it down, so it walks to the headquarters
-        Soldier soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.SERGEANT_RANK, barracks0);
+        var soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.SERGEANT_RANK, barracks0);
 
         barracks0.tearDown();
 
@@ -1277,14 +1251,13 @@ public class TestHeadquarter {
     public void testArrivingOfficerIsPutInInventoryWhenReservedAmountIsFull() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust resources in the headquarters
         headquarter0.setReservedSoldiers(Soldier.Rank.OFFICER_RANK, 0);
@@ -1302,20 +1275,20 @@ public class TestHeadquarter {
         assertEquals(headquarter0.getActualReservedSoldiers().get(Soldier.Rank.OFFICER_RANK), (Integer) 0);
 
         // Place flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Place and construct barracks
-        Point point2 = new Point(9, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+        var point2 = new Point(9, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         Utils.constructHouse(barracks0);
 
         // Place private in the barracks, burn it down, so it walks to the headquarters
-        Soldier soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.OFFICER_RANK, barracks0);
+        var soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.OFFICER_RANK, barracks0);
 
         barracks0.tearDown();
 
@@ -1331,14 +1304,13 @@ public class TestHeadquarter {
     public void testArrivingGeneralIsPutInInventoryWhenReservedAmountIsFull() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust resources in the headquarters
         headquarter0.setReservedSoldiers(Soldier.Rank.GENERAL_RANK, 0);
@@ -1356,20 +1328,20 @@ public class TestHeadquarter {
         assertEquals(headquarter0.getActualReservedSoldiers().get(Soldier.Rank.GENERAL_RANK), (Integer) 0);
 
         // Place flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Place and construct barracks
-        Point point2 = new Point(9, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+        var point2 = new Point(9, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         Utils.constructHouse(barracks0);
 
         // Place private in the barracks, burn it down, so it walks to the headquarters
-        Soldier soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.GENERAL_RANK, barracks0);
+        var soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.GENERAL_RANK, barracks0);
 
         barracks0.tearDown();
 
@@ -1385,14 +1357,13 @@ public class TestHeadquarter {
     public void testIncreasingReservedAmountMovesPrivateFromInventoryToHosted() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust resources in the headquarters
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 0);
@@ -1418,14 +1389,13 @@ public class TestHeadquarter {
     public void testIncreasingReservedAmountMovesPrivateFirstClassFromInventoryToHosted() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust resources in the headquarters
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
@@ -1451,14 +1421,13 @@ public class TestHeadquarter {
     public void testIncreasingReservedAmountMovesSergeantFromInventoryToHosted() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust resources in the headquarters
         headquarter0.setReservedSoldiers(Soldier.Rank.SERGEANT_RANK, 0);
@@ -1484,14 +1453,13 @@ public class TestHeadquarter {
     public void testIncreasingReservedAmountMovesOfficerFromInventoryToHosted() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust resources in the headquarters
         headquarter0.setReservedSoldiers(Soldier.Rank.OFFICER_RANK, 0);
@@ -1517,14 +1485,13 @@ public class TestHeadquarter {
     public void testIncreasingReservedAmountMovesGeneralFromInventoryToHosted() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust resources in the headquarters
         headquarter0.setReservedSoldiers(Soldier.Rank.GENERAL_RANK, 0);
@@ -1550,14 +1517,13 @@ public class TestHeadquarter {
     public void testDecreasingReservedAmountMovesPrivateFromHostedToInventory() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust resources in the headquarters
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 0);
@@ -1609,14 +1575,13 @@ public class TestHeadquarter {
     public void testReservedSoldiersArentPromoted() throws Exception {
 
         // Start single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 15, 15);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust resources in the headquarters
         Utils.setReservedSoldiers(headquarter0, 0, 0, 0, 0, 0);
@@ -1660,24 +1625,23 @@ public class TestHeadquarter {
     public void testReservedSoldiersDontDefendOtherBuilding() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 0's headquarters
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarters
-        Point point1 = new Point(37, 15);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(37, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Set remote defenders to max for player 1
         player1.setDefenseFromSurroundingBuildings(10);
@@ -1694,12 +1658,12 @@ public class TestHeadquarter {
         assertEquals(headquarter1.getActualReservedSoldiers().get(GENERAL_RANK), (Integer) 10);
 
         // Place barracks for player 0
-        Point point2 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+        var point2 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         // Place barracks for player 1
-        Point point3 = new Point(21, 15);
-        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+        var point3 = new Point(21, 15);
+        var barracks1 = map.placeBuilding(new Barracks(player1), point3);
 
         // Finish construction
         Utils.constructHouse(barracks0);
@@ -1734,24 +1698,23 @@ public class TestHeadquarter {
     public void testReservedSoldiersCantAttackOtherBuilding() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 0's headquarters
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarters
-        Point point1 = new Point(37, 15);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(37, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Set remote defenders to max for player 1
         player1.setDefenseFromSurroundingBuildings(10);
@@ -1763,12 +1726,12 @@ public class TestHeadquarter {
         Utils.adjustInventoryTo(headquarter1, GENERAL, 10);
 
         // Place barracks for player 0
-        Point point2 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+        var point2 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         // Place barracks for player 1
-        Point point3 = new Point(21, 15);
-        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+        var point3 = new Point(21, 15);
+        var barracks1 = map.placeBuilding(new Barracks(player1), point3);
 
         // Finish construction
         Utils.constructHouse(barracks0);
@@ -1798,18 +1761,17 @@ public class TestHeadquarter {
     public void testReservedSoldiersDontPopulateMilitaryBuildings() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
 
         // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place player 0's headquarters
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Set soldiers in inventory & reserve for player 1
         Utils.setReservedSoldiers(headquarter0, 0, 0, 0, 0, 0);
@@ -1834,8 +1796,8 @@ public class TestHeadquarter {
         assertEquals(headquarter0.getAmount(GENERAL), 0);
 
         // Place barracks for player 0
-        Point point2 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+        var point2 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         // Place road to the barracks
         var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());

@@ -54,8 +54,7 @@ public class TestMetalworks {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -107,8 +106,7 @@ public class TestMetalworks {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -120,8 +118,8 @@ public class TestMetalworks {
         var metalworks0 = map.placeBuilding(new Metalworks(player0), point1);
 
         // Deliver two plank and two stone
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var plankCargo = new Cargo(PLANK, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         metalworks0.putCargo(plankCargo);
         metalworks0.putCargo(plankCargo);
@@ -146,8 +144,7 @@ public class TestMetalworks {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -159,8 +156,8 @@ public class TestMetalworks {
         var metalworks0 = map.placeBuilding(new Metalworks(player0), point1);
 
         // Deliver one plank and two stone
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var plankCargo = new Cargo(PLANK, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         metalworks0.putCargo(plankCargo);
         metalworks0.putCargo(stoneCargo);
@@ -184,8 +181,7 @@ public class TestMetalworks {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -197,8 +193,8 @@ public class TestMetalworks {
         var metalworks0 = map.placeBuilding(new Metalworks(player0), point1);
 
         // Deliver two planks and one stones
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var plankCargo = new Cargo(PLANK, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         metalworks0.putCargo(plankCargo);
         metalworks0.putCargo(plankCargo);
@@ -222,8 +218,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -256,8 +251,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -298,8 +292,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -334,8 +327,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -375,8 +367,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -403,8 +394,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -496,8 +486,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -552,8 +541,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 20, 20);
 
@@ -620,8 +608,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -660,8 +647,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -705,8 +691,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -738,8 +723,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -772,8 +756,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -799,8 +782,7 @@ public class TestMetalworks {
         assertEquals(metalworks.getWorker(), metalworker0);
 
         // Deliver plank and iron bar to the metalworks
-        Map<Material, Integer> toolCount = new EnumMap<>(Material.class);
-
+        var toolCount = new EnumMap<Material, Integer>(Material.class);
         for (int i = 0; i < TOOLS.size() * 2; i++) {
             metalworks.putCargo(new Cargo(PLANK, map));
             metalworks.putCargo(new Cargo(IRON_BAR, map));
@@ -812,7 +794,7 @@ public class TestMetalworks {
 
             assertTrue(metalworks.getFlag().getStackedCargo().size() < 8);
 
-            int amount = toolCount.getOrDefault(metalworker0.getCargo().getMaterial(), 0);
+            var amount = toolCount.getOrDefault(metalworker0.getCargo().getMaterial(), 0);
 
             toolCount.put(metalworker0.getCargo().getMaterial(), amount + 1);
 
@@ -842,8 +824,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -880,8 +861,7 @@ public class TestMetalworks {
         assertEquals(metalworks.getWorker(), metalworker0);
 
         // Deliver plank and iron bar to the metalworks
-        Map<Material, Integer> toolCount = new EnumMap<>(Material.class);
-
+        var toolCount = new EnumMap<Material, Integer>(Material.class);
         for (int i = 0; i < TOOLS.size() * 2; i++) {
             metalworks.putCargo(new Cargo(PLANK, map));
             metalworks.putCargo(new Cargo(IRON_BAR, map));
@@ -893,7 +873,7 @@ public class TestMetalworks {
 
             assertTrue(metalworks.getFlag().getStackedCargo().size() < 8);
 
-            int amount = toolCount.getOrDefault(metalworker0.getCargo().getMaterial(), 0);
+            var amount = toolCount.getOrDefault(metalworker0.getCargo().getMaterial(), 0);
 
             toolCount.put(metalworker0.getCargo().getMaterial(), amount + 1);
 
@@ -927,8 +907,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -977,8 +956,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -1017,8 +995,7 @@ public class TestMetalworks {
         assertEquals(metalworks.getWorker(), metalworker0);
 
         // Deliver plank and iron bar to the metalworks
-        Map<Material, Integer> toolCount = new EnumMap<>(Material.class);
-
+        var toolCount = new EnumMap<Material, Integer>(Material.class);
         for (int i = 0; i < 15; i++) {
             metalworks.putCargo(new Cargo(PLANK, map));
             metalworks.putCargo(new Cargo(IRON_BAR, map));
@@ -1030,7 +1007,7 @@ public class TestMetalworks {
 
             assertTrue(metalworks.getFlag().getStackedCargo().size() < 8);
 
-            int amount = toolCount.getOrDefault(metalworker0.getCargo().getMaterial(), 0);
+            var amount = toolCount.getOrDefault(metalworker0.getCargo().getMaterial(), 0);
 
             toolCount.put(metalworker0.getCargo().getMaterial(), amount + 1);
 
@@ -1065,8 +1042,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -1099,8 +1075,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -1133,8 +1108,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -1165,8 +1139,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -1185,7 +1158,7 @@ public class TestMetalworks {
         Utils.constructHouse(metalworks);
 
         // Verify that it's not possible to set  production quota for anything else than a tool
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (TOOLS.contains(material)) {
                 continue;
             }
@@ -1205,8 +1178,7 @@ public class TestMetalworks {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -1225,8 +1197,8 @@ public class TestMetalworks {
         Utils.occupyBuilding(new Metalworker(player0, map), metalworks0);
 
         // Deliver material to the metalworks
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo ironBarCargo = new Cargo(IRON_BAR, map);
+        var plankCargo = new Cargo(PLANK, map);
+        var ironBarCargo = new Cargo(IRON_BAR, map);
 
         metalworks0.putCargo(plankCargo);
         metalworks0.putCargo(plankCargo);
@@ -1279,8 +1251,7 @@ public class TestMetalworks {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -1296,8 +1267,8 @@ public class TestMetalworks {
         Utils.constructHouse(metalworks0);
 
         // Deliver material to the metalworks
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo ironBarCargo = new Cargo(IRON_BAR, map);
+        var plankCargo = new Cargo(PLANK, map);
+        var ironBarCargo = new Cargo(IRON_BAR, map);
 
         metalworks0.putCargo(plankCargo);
         metalworks0.putCargo(plankCargo);
@@ -1330,7 +1301,7 @@ public class TestMetalworks {
         assertFalse(metalworks0.getFlag().getStackedCargo().isEmpty());
 
         // Wait to let the cargo remain at the flag without any connection to the storage
-        Cargo cargo = metalworks0.getFlag().getStackedCargo().getFirst();
+        var cargo = metalworks0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -1371,7 +1342,7 @@ public class TestMetalworks {
 
         var toolType = courier.getCargo().getMaterial();
 
-        int amount = headquarter0.getAmount(toolType);
+        var amount = headquarter0.getAmount(toolType);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
@@ -1385,8 +1356,7 @@ public class TestMetalworks {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -1416,7 +1386,7 @@ public class TestMetalworks {
         assertFalse(worker.isInsideBuilding());
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(METALWORKER);
+        var amount = headquarter0.getAmount(METALWORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
 
@@ -1429,8 +1399,7 @@ public class TestMetalworks {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -1464,7 +1433,7 @@ public class TestMetalworks {
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
+        var firstStep = true;
         for (var point : worker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
@@ -1480,8 +1449,7 @@ public class TestMetalworks {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 20, 20);
 
@@ -1500,8 +1468,8 @@ public class TestMetalworks {
         Utils.constructHouse(metalworks0);
 
         // Deliver material to the metalworks
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo ironBarCargo = new Cargo(IRON_BAR, map);
+        var plankCargo = new Cargo(PLANK, map);
+        var ironBarCargo = new Cargo(IRON_BAR, map);
 
         metalworks0.putCargo(plankCargo);
         metalworks0.putCargo(plankCargo);
@@ -1546,8 +1514,7 @@ public class TestMetalworks {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 20, 20);
 
@@ -1573,8 +1540,8 @@ public class TestMetalworks {
         assertTrue(worker.isInsideBuilding());
 
         // Deliver material to the metalworks
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo ironBarCargo = new Cargo(IRON_BAR, map);
+        var plankCargo = new Cargo(PLANK, map);
+        var ironBarCargo = new Cargo(IRON_BAR, map);
 
         metalworks0.putCargo(plankCargo);
         metalworks0.putCargo(plankCargo);
@@ -1619,8 +1586,7 @@ public class TestMetalworks {
 
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
         var map = new GameMap(players, 50, 50);
@@ -1640,13 +1606,13 @@ public class TestMetalworks {
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), metalworks0.getFlag());
 
         // Wait for metalworker to get assigned and leave the headquarter
-        List<Metalworker> workers = Utils.waitForWorkersOutsideBuilding(Metalworker.class, 1, player0);
+        var workers = Utils.waitForWorkersOutsideBuilding(Metalworker.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
 
         // Verify that the player is set correctly in the worker
-        Metalworker worker = workers.getFirst();
+        var worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1659,8 +1625,7 @@ public class TestMetalworks {
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
         players.add(player2);
@@ -1682,7 +1647,7 @@ public class TestMetalworks {
 
         // Place fortress for player 0
         var point2 = new Point(21, 9);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         // Finish construction of the fortress
         Utils.constructHouse(fortress0);
@@ -1711,8 +1676,7 @@ public class TestMetalworks {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1721,7 +1685,7 @@ public class TestMetalworks {
 
         // Place first flag
         var point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place metalworker
         var point2 = new Point(14, 4);
@@ -1773,8 +1737,7 @@ public class TestMetalworks {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1783,7 +1746,7 @@ public class TestMetalworks {
 
         // Place first flag
         var point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place metalworker
         var point2 = new Point(14, 4);
@@ -1838,8 +1801,7 @@ public class TestMetalworks {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -1849,7 +1811,7 @@ public class TestMetalworks {
 
         // Place first flag
         var point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place metalworks
         var point2 = new Point(14, 4);
@@ -1900,8 +1862,7 @@ public class TestMetalworks {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -1938,7 +1899,7 @@ public class TestMetalworks {
         assertFalse(metalworker.isInsideBuilding());
         assertEquals(metalworker.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(METALWORKER);
+        var amount = storehouse0.getAmount(METALWORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, metalworker, storehouse0.getPosition());
 
@@ -1951,8 +1912,7 @@ public class TestMetalworks {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -1992,7 +1952,7 @@ public class TestMetalworks {
         assertFalse(metalworker.isInsideBuilding());
         assertEquals(metalworker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(METALWORKER);
+        var amount = headquarter0.getAmount(METALWORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, metalworker, headquarter0.getPosition());
 
@@ -2005,8 +1965,7 @@ public class TestMetalworks {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -2049,7 +2008,7 @@ public class TestMetalworks {
         assertFalse(metalworker.isInsideBuilding());
         assertEquals(metalworker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(METALWORKER);
+        var amount = headquarter0.getAmount(METALWORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, metalworker, headquarter0.getPosition());
 
@@ -2062,8 +2021,7 @@ public class TestMetalworks {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -2097,7 +2055,7 @@ public class TestMetalworks {
         assertFalse(metalworker.isInsideBuilding());
         assertEquals(metalworker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(METALWORKER);
+        var amount = headquarter0.getAmount(METALWORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, metalworker, headquarter0.getPosition());
 
@@ -2110,8 +2068,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -2153,8 +2110,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -2170,7 +2126,7 @@ public class TestMetalworks {
         Utils.constructHouse(metalworks);
 
         // Populate the metalworks
-        Worker armorer0 = Utils.occupyBuilding(new Metalworker(player0, map), metalworks);
+        var armorer0 = Utils.occupyBuilding(new Metalworker(player0, map), metalworks);
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), metalworks);
@@ -2190,8 +2146,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -2207,7 +2162,7 @@ public class TestMetalworks {
         Utils.constructHouse(metalworks);
 
         // Populate the metalworks
-        Worker armorer0 = Utils.occupyBuilding(new Metalworker(player0, map), metalworks);
+        var armorer0 = Utils.occupyBuilding(new Metalworker(player0, map), metalworks);
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), metalworks);
@@ -2254,8 +2209,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -2271,7 +2225,7 @@ public class TestMetalworks {
         Utils.constructHouse(metalworks);
 
         // Populate the metalworks
-        Worker armorer0 = Utils.occupyBuilding(new Metalworker(player0, map), metalworks);
+        var armorer0 = Utils.occupyBuilding(new Metalworker(player0, map), metalworks);
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), metalworks);
@@ -2313,8 +2267,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -2342,8 +2295,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -2370,8 +2322,7 @@ public class TestMetalworks {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -2389,8 +2340,7 @@ public class TestMetalworks {
         // Verify that the reported output is correct
         assertEquals(metalworks0.getProducedMaterial().length, TOOLS.size());
 
-        Set<Material> producedMaterial = new HashSet<>(Arrays.asList(metalworks0.getProducedMaterial()));
-
+        var producedMaterial = new HashSet<Material>(Arrays.asList(metalworks0.getProducedMaterial()));
         for (var tool : TOOLS) {
             assertTrue(producedMaterial.contains(tool));
         }
@@ -2401,8 +2351,7 @@ public class TestMetalworks {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -2421,7 +2370,7 @@ public class TestMetalworks {
         assertEquals(metalworks0.getCanHoldAmount(PLANK), 2);
         assertEquals(metalworks0.getCanHoldAmount(STONE), 2);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
@@ -2435,8 +2384,7 @@ public class TestMetalworks {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 40, 40);
 
@@ -2458,7 +2406,7 @@ public class TestMetalworks {
         assertEquals(metalworks0.getCanHoldAmount(IRON_BAR), 6);
         assertEquals(metalworks0.getCanHoldAmount(PLANK), 6);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == IRON_BAR || material == PLANK) {
                 continue;
             }
@@ -2472,8 +2420,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 20, 20);
 
@@ -2541,8 +2488,7 @@ public class TestMetalworks {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 20, 20);
 
@@ -2630,8 +2576,7 @@ public class TestMetalworks {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2686,8 +2631,7 @@ public class TestMetalworks {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2751,8 +2695,7 @@ public class TestMetalworks {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2818,8 +2761,7 @@ public class TestMetalworks {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2856,8 +2798,7 @@ public class TestMetalworks {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2901,8 +2842,7 @@ public class TestMetalworks {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2961,8 +2901,7 @@ public class TestMetalworks {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2983,7 +2922,7 @@ public class TestMetalworks {
         Utils.waitForBuildingToBeConstructed(metalworks0);
 
         // Wait for a metalworker to start walking to the metalworks
-        Metalworker metalworker = Utils.waitForWorkerOutsideBuilding(Metalworker.class, player0);
+        var metalworker = Utils.waitForWorkerOutsideBuilding(Metalworker.class, player0);
 
         // Wait for the metalworker to go past the headquarter's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, metalworker, headquarter0.getFlag().getPosition());

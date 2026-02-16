@@ -32,23 +32,22 @@ public class TestSoldierCreationAndPromotion {
     public void createPrivate() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storage
-        Point point1 = new Point(10, 10);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(10, 10);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
 
         Utils.constructHouse(storehouse0);
 
-        int numberOfPrivates = storehouse0.getAmount(PRIVATE);
+        var numberOfPrivates = storehouse0.getAmount(PRIVATE);
 
         storehouse0.putCargo(new Cargo(Material.BEER, null));
         storehouse0.putCargo(new Cargo(Material.SWORD, null));
@@ -95,14 +94,13 @@ public class TestSoldierCreationAndPromotion {
     public void storageDoesNotPromote() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Utils.adjustInventoryTo(headquarter0, COIN, 10);
         Utils.adjustInventoryTo(headquarter0, GOLD, 10);
@@ -127,18 +125,17 @@ public class TestSoldierCreationAndPromotion {
     public void promoteWithoutMilitary() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place fortress
-        Point point1 = new Point(6, 12);
-        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
+        var point1 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         // Construct the fortress
         Utils.constructHouse(fortress0);
@@ -156,18 +153,17 @@ public class TestSoldierCreationAndPromotion {
     public void promoteWithOnlyGenerals() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place fortress
-        Point point1 = new Point(6, 12);
-        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
+        var point1 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         // Construct the fortress
         Utils.constructHouse(fortress0);
@@ -176,8 +172,8 @@ public class TestSoldierCreationAndPromotion {
         Utils.deliverCargo(fortress0, COIN);
 
         // Verify that no promotion happens when all occupants are generals
-        Soldier military0 = Utils.occupyMilitaryBuilding(GENERAL_RANK, fortress0);
-        Soldier military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, fortress0);
+        var military0 = Utils.occupyMilitaryBuilding(GENERAL_RANK, fortress0);
+        var military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, fortress0);
 
         Utils.fastForward(200, map);
 
@@ -190,25 +186,24 @@ public class TestSoldierCreationAndPromotion {
     public void promoteWithoutGold() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place fortress
-        Point point1 = new Point(6, 12);
-        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
+        var point1 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         // Construct the fortress
         Utils.constructHouse(fortress0);
 
         // Verify that no promotion happens without gold
-        Soldier military0 = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, fortress0);
-        Soldier military1 = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, fortress0);
+        var military0 = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, fortress0);
+        var military1 = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, fortress0);
 
         Utils.fastForward(100, map);
 
@@ -220,18 +215,17 @@ public class TestSoldierCreationAndPromotion {
     public void testPlayerIsCorrectInMilitaryDispatchedFromHeadquarter() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place barracks
-        Point point22 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        var point22 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
         // Finish construction of the barracks
         Utils.constructHouse(barracks0);
@@ -240,7 +234,7 @@ public class TestSoldierCreationAndPromotion {
         map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
         // Wait for a military to start walking to the barracks
-        Soldier military = Utils.waitForSoldierOutsideBuilding(player0);
+        var military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertNotNull(military);
         assertEquals(military.getPlayer(), player0);
@@ -250,27 +244,26 @@ public class TestSoldierCreationAndPromotion {
     public void testPromotedPrivateBecomesCorporal() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         // Construct the barracks
         Utils.constructHouse(barracks0);
 
         // Place a private in the barracks
-        Soldier military0 = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, barracks0);
+        var military0 = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, barracks0);
 
         // Add one coin
-        Cargo coinCargo = new Cargo(COIN, map);
+        var coinCargo = new Cargo(COIN, map);
         barracks0.promiseDelivery(COIN);
         barracks0.putCargo(coinCargo);
 
@@ -285,27 +278,26 @@ public class TestSoldierCreationAndPromotion {
     public void testPromotedCorporalBecomesSergeant() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         // Construct the barracks
         Utils.constructHouse(barracks0);
 
         // Place a corporal in the barracks
-        Soldier military0 = Utils.occupyMilitaryBuilding(PRIVATE_FIRST_CLASS_RANK, barracks0);
+        var military0 = Utils.occupyMilitaryBuilding(PRIVATE_FIRST_CLASS_RANK, barracks0);
 
         // Add one coin
-        Cargo coinCargo = new Cargo(COIN, map);
+        var coinCargo = new Cargo(COIN, map);
         barracks0.promiseDelivery(COIN);
         barracks0.putCargo(coinCargo);
 
@@ -320,27 +312,26 @@ public class TestSoldierCreationAndPromotion {
     public void testPromotedSergeantBecomesOfficer() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         // Construct the barracks
         Utils.constructHouse(barracks0);
 
         // Place a sergeant in the barracks
-        Soldier military0 = Utils.occupyMilitaryBuilding(SERGEANT_RANK, barracks0);
+        var military0 = Utils.occupyMilitaryBuilding(SERGEANT_RANK, barracks0);
 
         // Add one coin
-        Cargo coinCargo = new Cargo(COIN, map);
+        var coinCargo = new Cargo(COIN, map);
         barracks0.promiseDelivery(COIN);
         barracks0.putCargo(coinCargo);
 
@@ -355,27 +346,26 @@ public class TestSoldierCreationAndPromotion {
     public void testPromotedOfficerBecomesGeneral() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         // Construct the barracks
         Utils.constructHouse(barracks0);
 
         // Place an officer in the barracks
-        Soldier military0 = Utils.occupyMilitaryBuilding(OFFICER_RANK, barracks0);
+        var military0 = Utils.occupyMilitaryBuilding(OFFICER_RANK, barracks0);
 
         // Add one coin
-        Cargo coinCargo = new Cargo(COIN, map);
+        var coinCargo = new Cargo(COIN, map);
         barracks0.promiseDelivery(COIN);
         barracks0.putCargo(coinCargo);
 
@@ -390,27 +380,26 @@ public class TestSoldierCreationAndPromotion {
     public void testGeneralCannotBePromoted() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(6, 12);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         // Construct the barracks
         Utils.constructHouse(barracks0);
 
         // Place a general in the barracks
-        Soldier military0 = Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+        var military0 = Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
 
         // Add one coin
-        Cargo coinCargo = new Cargo(COIN, map);
+        var coinCargo = new Cargo(COIN, map);
         barracks0.promiseDelivery(COIN);
         barracks0.putCargo(coinCargo);
 
@@ -425,21 +414,20 @@ public class TestSoldierCreationAndPromotion {
     public void testUpgradeOfAllRanksAtSameTime() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place fortress
-        Point point1 = new Point(6, 12);
-        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
+        var point1 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         // Connect the headquarter with the fortress
-        Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
+        var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
         // Make sure the headquarter has only privates
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 5);
@@ -458,10 +446,9 @@ public class TestSoldierCreationAndPromotion {
 
         Utils.waitForBuildingToGetAmountOfMaterial(fortress0, COIN, 0);
 
-        Map<Soldier.Rank, Integer> rankCount = new HashMap<>();
-
-        for (Soldier military : fortress0.getHostedSoldiers()) {
-            int amount = rankCount.getOrDefault(military.getRank(), 0);
+        var rankCount = new HashMap<Soldier.Rank, Integer>();
+        for (var military : fortress0.getHostedSoldiers()) {
+            var amount = rankCount.getOrDefault(military.getRank(), 0);
 
             rankCount.put(military.getRank(), amount + 1);
         }
@@ -477,21 +464,20 @@ public class TestSoldierCreationAndPromotion {
     public void testUpgradeOfOnlyPrivates() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place fortress
-        Point point1 = new Point(6, 12);
-        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
+        var point1 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         // Connect the headquarter with the fortress
-        Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
+        var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
         // Make sure the headquarter has only privates
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 9);
@@ -510,10 +496,9 @@ public class TestSoldierCreationAndPromotion {
 
         Utils.waitForBuildingToGetAmountOfMaterial(fortress0, COIN, 0);
 
-        Map<Soldier.Rank, Integer> rankCount = new HashMap<>();
-
-        for (Soldier military : fortress0.getHostedSoldiers()) {
-            int amount = rankCount.getOrDefault(military.getRank(), 0);
+        var rankCount = new HashMap<Soldier.Rank, Integer>();
+        for (var military : fortress0.getHostedSoldiers()) {
+            var amount = rankCount.getOrDefault(military.getRank(), 0);
 
             rankCount.put(military.getRank(), amount + 1);
         }
@@ -529,21 +514,20 @@ public class TestSoldierCreationAndPromotion {
     public void testUpgradeOfPrivatesAndOnePrivateFirstRank() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place fortress
-        Point point1 = new Point(6, 12);
-        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
+        var point1 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         // Connect the headquarter with the fortress
-        Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
+        var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
         // Make sure the headquarter has only privates
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 8);
@@ -562,10 +546,9 @@ public class TestSoldierCreationAndPromotion {
 
         Utils.waitForBuildingToGetAmountOfMaterial(fortress0, COIN, 0);
 
-        Map<Soldier.Rank, Integer> rankCount = new HashMap<>();
-
-        for (Soldier military : fortress0.getHostedSoldiers()) {
-            int amount = rankCount.getOrDefault(military.getRank(), 0);
+        var rankCount = new HashMap<Soldier.Rank, Integer>();
+        for (var military : fortress0.getHostedSoldiers()) {
+            var amount = rankCount.getOrDefault(military.getRank(), 0);
 
             rankCount.put(military.getRank(), amount + 1);
         }
@@ -581,21 +564,20 @@ public class TestSoldierCreationAndPromotion {
     public void testUpgradeOfPrivatesAndPrivateFirstRankAndOneSergeant() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place fortress
-        Point point1 = new Point(6, 12);
-        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
+        var point1 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         // Connect the headquarter with the fortress
-        Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
+        var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
         // Make sure the headquarter has only privates
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 7);
@@ -614,10 +596,9 @@ public class TestSoldierCreationAndPromotion {
 
         Utils.waitForBuildingToGetAmountOfMaterial(fortress0, COIN, 0);
 
-        Map<Soldier.Rank, Integer> rankCount = new HashMap<>();
-
-        for (Soldier military : fortress0.getHostedSoldiers()) {
-            int amount = rankCount.getOrDefault(military.getRank(), 0);
+        var rankCount = new HashMap<Soldier.Rank, Integer>();
+        for (var military : fortress0.getHostedSoldiers()) {
+            var amount = rankCount.getOrDefault(military.getRank(), 0);
 
             rankCount.put(military.getRank(), amount + 1);
         }
@@ -633,21 +614,20 @@ public class TestSoldierCreationAndPromotion {
     public void testUpgradeOfPrivatesAndPrivateFirstRankAndOneSergeantAndOneOfficer() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place fortress
-        Point point1 = new Point(6, 12);
-        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
+        var point1 = new Point(6, 12);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         // Connect the headquarter with the fortress
-        Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
+        var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
         // Make sure the headquarter has only privates
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 6);
@@ -666,10 +646,9 @@ public class TestSoldierCreationAndPromotion {
 
         Utils.waitForBuildingToGetAmountOfMaterial(fortress0, COIN, 0);
 
-        Map<Soldier.Rank, Integer> rankCount = new HashMap<>();
-
-        for (Soldier military : fortress0.getHostedSoldiers()) {
-            int amount = rankCount.getOrDefault(military.getRank(), 0);
+        var rankCount = new HashMap<Soldier.Rank, Integer>();
+        for (var military : fortress0.getHostedSoldiers()) {
+            var amount = rankCount.getOrDefault(military.getRank(), 0);
 
             rankCount.put(military.getRank(), amount + 1);
         }
@@ -685,15 +664,14 @@ public class TestSoldierCreationAndPromotion {
     public void testPrivateIsSoldier() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust the inventory of the headquarter
         Utils.adjustInventoryTo(headquarter, PRIVATE, 1);
@@ -703,17 +681,17 @@ public class TestSoldierCreationAndPromotion {
         Utils.adjustInventoryTo(headquarter, GENERAL, 0);
 
         // Place storage
-        Point point1 = new Point(10, 10);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        var point1 = new Point(10, 10);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         // Connect the barracks to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
 
         // Wait for the barracks to get constructed
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         // Verify that the private walking to the barracks is really a soldier
-        Soldier soldier = Utils.waitForSoldierOutsideBuilding(player0);
+        var soldier = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertTrue(soldier.isSoldier());
     }
@@ -722,15 +700,14 @@ public class TestSoldierCreationAndPromotion {
     public void testPrivateFirstRankIsSoldier() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust the inventory of the headquarter
         Utils.adjustInventoryTo(headquarter, PRIVATE, 0);
@@ -740,17 +717,17 @@ public class TestSoldierCreationAndPromotion {
         Utils.adjustInventoryTo(headquarter, GENERAL, 0);
 
         // Place storage
-        Point point1 = new Point(10, 10);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        var point1 = new Point(10, 10);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         // Connect the barracks to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
 
         // Wait for the barracks to get constructed
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         // Verify that the private first class walking to the barracks is really a soldier
-        Soldier soldier = Utils.waitForSoldierOutsideBuilding(player0);
+        var soldier = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertEquals(soldier.getRank(), PRIVATE_FIRST_CLASS_RANK);
         assertTrue(soldier.isSoldier());
@@ -760,15 +737,14 @@ public class TestSoldierCreationAndPromotion {
     public void testSergeantIsSoldier() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust the inventory of the headquarter
         Utils.adjustInventoryTo(headquarter, PRIVATE, 0);
@@ -778,17 +754,17 @@ public class TestSoldierCreationAndPromotion {
         Utils.adjustInventoryTo(headquarter, GENERAL, 0);
 
         // Place storage
-        Point point1 = new Point(10, 10);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        var point1 = new Point(10, 10);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         // Connect the barracks to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
 
         // Wait for the barracks to get constructed
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         // Verify that the sergeant walking to the barracks is really a soldier
-        Soldier soldier = Utils.waitForSoldierOutsideBuilding(player0);
+        var soldier = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertEquals(soldier.getRank(), SERGEANT_RANK);
         assertTrue(soldier.isSoldier());
@@ -798,15 +774,14 @@ public class TestSoldierCreationAndPromotion {
     public void testOfficerIsSoldier() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust the inventory of the headquarter
         Utils.adjustInventoryTo(headquarter, PRIVATE, 0);
@@ -816,17 +791,17 @@ public class TestSoldierCreationAndPromotion {
         Utils.adjustInventoryTo(headquarter, GENERAL, 0);
 
         // Place storage
-        Point point1 = new Point(10, 10);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        var point1 = new Point(10, 10);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         // Connect the barracks to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
 
         // Wait for the barracks to get constructed
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         // Verify that the officer walking to the barracks is really a soldier
-        Soldier soldier = Utils.waitForSoldierOutsideBuilding(player0);
+        var soldier = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertEquals(soldier.getRank(), OFFICER_RANK);
         assertTrue(soldier.isSoldier());
@@ -836,15 +811,14 @@ public class TestSoldierCreationAndPromotion {
     public void testGeneralIsSoldier() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Adjust the inventory of the headquarter
         Utils.adjustInventoryTo(headquarter, PRIVATE, 0);
@@ -854,17 +828,17 @@ public class TestSoldierCreationAndPromotion {
         Utils.adjustInventoryTo(headquarter, GENERAL, 1);
 
         // Place storage
-        Point point1 = new Point(10, 10);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        var point1 = new Point(10, 10);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         // Connect the barracks to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
 
         // Wait for the barracks to get constructed
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         // Verify that the general walking to the barracks is really a soldier
-        Soldier soldier = Utils.waitForSoldierOutsideBuilding(player0);
+        var soldier = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertEquals(soldier.getRank(), GENERAL_RANK);
         assertTrue(soldier.isSoldier());

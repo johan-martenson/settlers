@@ -183,7 +183,7 @@ public class TestQuarry {
         constructHouse(quarry);
 
         // Wait for a stonemason to walk out
-        Stonemason stonemason0 = Utils.waitForWorkerOutsideBuilding(Stonemason.class, player0);
+        var stonemason0 = Utils.waitForWorkerOutsideBuilding(Stonemason.class, player0);
 
         // Verify that the stonemason is not a soldier
         assertFalse(stonemason0.isSoldier());
@@ -1088,7 +1088,7 @@ public class TestQuarry {
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
 
         // Assign a courier to the road
-        Courier courier = new Courier(player0, map);
+        var courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
 
@@ -1113,7 +1113,7 @@ public class TestQuarry {
         // Verify that the courier delivers the cargo to the headquarters
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(STONE);
+        var amount = headquarter0.getAmount(STONE);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
@@ -1155,7 +1155,7 @@ public class TestQuarry {
         assertFalse(stonemason.isInsideBuilding());
         assertEquals(stonemason.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(STONEMASON);
+        var amount = headquarter0.getAmount(STONEMASON);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
 
@@ -1200,7 +1200,7 @@ public class TestQuarry {
         assertEquals(stonemason.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
+        var firstStep = true;
         for (var point : stonemason.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
@@ -1469,13 +1469,13 @@ public class TestQuarry {
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
 
         // Wait for stonemason to get assigned and leave the headquarters
-        List<Stonemason> workers = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0);
+        var workers = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
 
         // Verify that the player is set correctly in the worker
-        Stonemason worker = workers.getFirst();
+        var worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1503,7 +1503,7 @@ public class TestQuarry {
 
         // Place fortress for player 0
         var point2 = new Point(21, 9);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         // Finish construction of the fortress
         constructHouse(fortress0);
@@ -1519,7 +1519,7 @@ public class TestQuarry {
         constructHouse(quarry0);
 
         // Occupy the quarry
-        Stonemason worker = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
+        var worker = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         // Verify that the worker goes back to its own storage when the fortress is torn down
         fortress0.tearDown();
@@ -1542,7 +1542,7 @@ public class TestQuarry {
 
         // Place first flag
         var point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place quarry
         var point2 = new Point(14, 4);
@@ -1559,7 +1559,7 @@ public class TestQuarry {
 
         Stonemason stoneMason = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Stonemason) {
                 stoneMason = (Stonemason) worker;
             }
@@ -1602,7 +1602,7 @@ public class TestQuarry {
 
         // Place first flag
         var point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place quarry
         var point2 = new Point(14, 4);
@@ -1619,7 +1619,7 @@ public class TestQuarry {
 
         Stonemason stoneMason = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Stonemason) {
                 stoneMason = (Stonemason) worker;
             }
@@ -1665,7 +1665,7 @@ public class TestQuarry {
 
         // Place first flag
         var point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place quarry
         var point2 = new Point(14, 4);
@@ -1682,7 +1682,7 @@ public class TestQuarry {
 
         Stonemason stonemason = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Stonemason) {
                 stonemason = (Stonemason) worker;
             }
@@ -1751,7 +1751,7 @@ public class TestQuarry {
         assertFalse(stonemason.isInsideBuilding());
         assertEquals(stonemason.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(STONEMASON);
+        var amount = storehouse0.getAmount(STONEMASON);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, storehouse0.getPosition());
 
@@ -1802,7 +1802,7 @@ public class TestQuarry {
         assertFalse(stonemason.isInsideBuilding());
         assertEquals(stonemason.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(STONEMASON);
+        var amount = headquarter0.getAmount(STONEMASON);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
 
@@ -1856,7 +1856,7 @@ public class TestQuarry {
         assertFalse(stonemason.isInsideBuilding());
         assertEquals(stonemason.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(STONEMASON);
+        var amount = headquarter0.getAmount(STONEMASON);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
 
@@ -1901,7 +1901,7 @@ public class TestQuarry {
         assertFalse(stonemason.isInsideBuilding());
         assertEquals(stonemason.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(STONEMASON);
+        var amount = headquarter0.getAmount(STONEMASON);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
 
@@ -1984,8 +1984,8 @@ public class TestQuarry {
         // Wait for the stonemasons to go out and try to get the same piece of stone
         Utils.waitForWorkersOutsideBuilding(Stonemason.class, 2, player0);
 
-        Worker stonemason0 = quarry0.getWorker();
-        Worker stonemason1 = quarry1.getWorker();
+        var stonemason0 = quarry0.getWorker();
+        var stonemason1 = quarry1.getWorker();
 
         assertEquals(stonemason0.getTarget(), stone.getPosition());
         assertEquals(stonemason0.getTarget(), stone.getPosition());
@@ -2034,7 +2034,7 @@ public class TestQuarry {
         constructHouse(quarry0);
 
         // Populate the quarry
-        Worker stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
+        var stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         assertTrue(stonemason.isInsideBuilding());
         assertEquals(stonemason.getHome(), quarry0);
@@ -2068,7 +2068,7 @@ public class TestQuarry {
         constructHouse(quarry0);
 
         // Populate the quarry
-        Worker quarry = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
+        var quarry = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         assertTrue(quarry.isInsideBuilding());
         assertEquals(quarry.getHome(), quarry0);
@@ -2125,7 +2125,7 @@ public class TestQuarry {
         constructHouse(quarry0);
 
         // Populate the quarry
-        Worker stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
+        var stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         assertTrue(stonemason.isInsideBuilding());
         assertEquals(stonemason.getHome(), quarry0);
@@ -2253,7 +2253,7 @@ public class TestQuarry {
         constructHouse(quarry0);
 
         // Populate the quarry
-        Worker stonemason0 = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
+        var stonemason0 = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         // Verify that the quarry can produce
         assertTrue(quarry0.canProduce());
@@ -2302,7 +2302,7 @@ public class TestQuarry {
         assertTrue(quarry0.getTypesOfMaterialNeeded().contains(PLANK));
         assertEquals(quarry0.getCanHoldAmount(PLANK), 2);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == PLANK) {
                 continue;
             }
@@ -2332,7 +2332,7 @@ public class TestQuarry {
         // Verify that the reported needed construction material is correct
         assertEquals(quarry0.getTypesOfMaterialNeeded().size(), 0);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             assertEquals(quarry0.getCanHoldAmount(material), 0);
         }
     }
@@ -2408,7 +2408,7 @@ public class TestQuarry {
         var road1 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2470,7 +2470,7 @@ public class TestQuarry {
         var road1 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2536,7 +2536,7 @@ public class TestQuarry {
 
         Utils.waitForBuildingToBeConstructed(quarry0);
 
-        Worker stonemason0 = Utils.waitForNonMilitaryBuildingToGetPopulated(quarry0);
+        var stonemason0 = Utils.waitForNonMilitaryBuildingToGetPopulated(quarry0);
 
         assertTrue(stonemason0.isInsideBuilding());
         assertEquals(stonemason0.getHome(), quarry0);
@@ -2596,7 +2596,7 @@ public class TestQuarry {
         // Wait for the quarry and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, quarry0);
 
-        Worker stonemason0 = quarry0.getWorker();
+        var stonemason0 = quarry0.getWorker();
 
         assertTrue(stonemason0.isInsideBuilding());
         assertEquals(stonemason0.getHome(), quarry0);
@@ -2655,7 +2655,7 @@ public class TestQuarry {
         // Wait for the quarry and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, quarry0);
 
-        Worker stonemason0 = quarry0.getWorker();
+        var stonemason0 = quarry0.getWorker();
 
         assertTrue(stonemason0.isInsideBuilding());
         assertEquals(stonemason0.getHome(), quarry0);

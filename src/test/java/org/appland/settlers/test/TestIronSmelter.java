@@ -39,8 +39,7 @@ public class TestIronSmelter {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -78,8 +77,7 @@ public class TestIronSmelter {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -116,8 +114,7 @@ public class TestIronSmelter {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -154,8 +151,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -187,8 +183,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -226,8 +221,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -259,8 +253,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -302,8 +295,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -339,8 +331,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -367,8 +358,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -425,8 +415,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -482,8 +471,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 20, 20);
 
@@ -542,8 +530,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 20, 20);
 
@@ -605,8 +592,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 20, 20);
 
@@ -681,8 +667,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -720,8 +705,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -762,8 +746,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -796,8 +779,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -830,8 +812,7 @@ public class TestIronSmelter {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -901,8 +882,7 @@ public class TestIronSmelter {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -988,7 +968,7 @@ public class TestIronSmelter {
         // Verify that the courier delivers the cargo to the headquarter
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(IRON_BAR);
+        var amount = headquarter0.getAmount(IRON_BAR);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
@@ -1002,8 +982,7 @@ public class TestIronSmelter {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1032,7 +1011,7 @@ public class TestIronSmelter {
         assertFalse(ironFounder.isInsideBuilding());
         assertEquals(ironFounder.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(IRON_FOUNDER);
+        var amount = headquarter0.getAmount(IRON_FOUNDER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, headquarter0.getPosition());
 
@@ -1045,8 +1024,7 @@ public class TestIronSmelter {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1079,7 +1057,7 @@ public class TestIronSmelter {
         assertEquals(ironFounder.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
+        var firstStep = true;
         for (var point : ironFounder.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
@@ -1095,8 +1073,7 @@ public class TestIronSmelter {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1140,8 +1117,7 @@ public class TestIronSmelter {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1168,8 +1144,7 @@ public class TestIronSmelter {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1196,8 +1171,7 @@ public class TestIronSmelter {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -1255,8 +1229,7 @@ public class TestIronSmelter {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 20, 20);
 
         // Place headquarter
@@ -1324,8 +1297,7 @@ public class TestIronSmelter {
 
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
         var map = new GameMap(players, 50, 50);
@@ -1364,8 +1336,7 @@ public class TestIronSmelter {
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
 
-        List<Player> players = new LinkedList<>();
-
+        var players = new LinkedList<Player>();
         players.add(player0);
         players.add(player1);
         players.add(player2);
@@ -1416,8 +1387,7 @@ public class TestIronSmelter {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1478,8 +1448,7 @@ public class TestIronSmelter {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1543,8 +1512,7 @@ public class TestIronSmelter {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1604,8 +1572,7 @@ public class TestIronSmelter {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1641,7 +1608,7 @@ public class TestIronSmelter {
         assertFalse(ironFounder.isInsideBuilding());
         assertEquals(ironFounder.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(IRON_FOUNDER);
+        var amount = storehouse0.getAmount(IRON_FOUNDER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, storehouse0.getPosition());
 
@@ -1654,8 +1621,7 @@ public class TestIronSmelter {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1694,7 +1660,7 @@ public class TestIronSmelter {
         assertFalse(ironFounder.isInsideBuilding());
         assertEquals(ironFounder.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(IRON_FOUNDER);
+        var amount = headquarter0.getAmount(IRON_FOUNDER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, headquarter0.getPosition());
 
@@ -1707,8 +1673,7 @@ public class TestIronSmelter {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1750,7 +1715,7 @@ public class TestIronSmelter {
         assertFalse(ironFounder.isInsideBuilding());
         assertEquals(ironFounder.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(IRON_FOUNDER);
+        var amount = headquarter0.getAmount(IRON_FOUNDER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, headquarter0.getPosition());
 
@@ -1763,8 +1728,7 @@ public class TestIronSmelter {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1797,7 +1761,7 @@ public class TestIronSmelter {
         assertFalse(ironFounder.isInsideBuilding());
         assertEquals(ironFounder.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(IRON_FOUNDER);
+        var amount = headquarter0.getAmount(IRON_FOUNDER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, headquarter0.getPosition());
 
@@ -1810,8 +1774,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1852,8 +1815,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1888,8 +1850,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -1949,8 +1910,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2002,8 +1962,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2038,8 +1997,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2065,8 +2023,7 @@ public class TestIronSmelter {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2090,8 +2047,7 @@ public class TestIronSmelter {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2123,8 +2079,7 @@ public class TestIronSmelter {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2159,8 +2114,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 20, 20);
 
@@ -2226,8 +2180,7 @@ public class TestIronSmelter {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(players, 20, 20);
 
@@ -2313,8 +2266,7 @@ public class TestIronSmelter {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2369,8 +2321,7 @@ public class TestIronSmelter {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2434,8 +2385,7 @@ public class TestIronSmelter {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2501,8 +2451,7 @@ public class TestIronSmelter {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2539,8 +2488,7 @@ public class TestIronSmelter {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2584,8 +2532,7 @@ public class TestIronSmelter {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter
@@ -2645,8 +2592,7 @@ public class TestIronSmelter {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(players, 40, 40);
 
         // Place headquarter

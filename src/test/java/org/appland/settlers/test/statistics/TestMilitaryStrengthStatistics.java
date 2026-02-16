@@ -288,7 +288,7 @@ public class TestMilitaryStrengthStatistics {
         Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         // Verify that the military strength is updated when the catapult kills a soldier.
-        StatisticsManager statisticsManager = map.getStatisticsManager();
+        var statisticsManager = map.getStatisticsManager();
         var generalStatistics = statisticsManager.getPlayerStatistics(player1);
 
         var soldiersBeforeHit = generalStatistics.soldiers().getMeasurements().getLast().value();

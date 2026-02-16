@@ -857,8 +857,7 @@ public class TestFarm {
         Utils.constructHouse(farm);
 
         // Fill all available points to plant with harvested crops
-        Set<Point> possibleSpotsToPlant = new HashSet<>();
-
+        var possibleSpotsToPlant = new HashSet<Point>();
         possibleSpotsToPlant.addAll(Arrays.asList(point3.getAdjacentPoints()));
         possibleSpotsToPlant.addAll(Arrays.asList(point3.upLeft().getAdjacentPoints()));
         possibleSpotsToPlant.addAll(Arrays.asList(point3.upRight().getAdjacentPoints()));
@@ -867,8 +866,7 @@ public class TestFarm {
         possibleSpotsToPlant.remove(point3.upLeft());
         possibleSpotsToPlant.remove(point3.upRight());
 
-        List<Crop> crops = new ArrayList<>();
-
+        var crops = new ArrayList<Crop>();
         //      ... place crops 
         for (var point : possibleSpotsToPlant) {
             crops.add(map.placeCrop(point, Crop.CropType.TYPE_1));
@@ -1159,7 +1157,7 @@ public class TestFarm {
         // Verify that the courier delivers the cargo to the headquarters
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(WHEAT);
+        var amount = headquarter0.getAmount(WHEAT);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
@@ -1201,7 +1199,7 @@ public class TestFarm {
         assertFalse(farmer.isInsideBuilding());
         assertEquals(farmer.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(FARMER);
+        var amount = headquarter0.getAmount(FARMER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getPosition());
 
@@ -1246,7 +1244,7 @@ public class TestFarm {
         assertEquals(farmer.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
+        var firstStep = true;
         for (var point : farmer.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
@@ -1625,7 +1623,7 @@ public class TestFarm {
             crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
 
             // Look for a point where there is no flag too close
-            boolean noCloseFlag = true;
+            var noCloseFlag = true;
             for (var point : crop.getPosition().getAdjacentPoints()) {
                 if (map.isFlagAtPoint(point)) {
                     noCloseFlag = false;
@@ -1677,7 +1675,7 @@ public class TestFarm {
             crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
 
             // Look for a point where there is no flag too close
-            boolean noCloseFlag = true;
+            var noCloseFlag = true;
             for (var point : crop.getPosition().getAdjacentPoints()) {
                 if (map.isFlagAtPoint(point)) {
                     noCloseFlag = false;
@@ -1730,7 +1728,7 @@ public class TestFarm {
             crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
 
             // Look for a point where there is no flag too close
-            boolean noCloseFlag = true;
+            var noCloseFlag = true;
             for (var point : crop.getPosition().getAdjacentPoints()) {
                 if (map.isFlagAtPoint(point)) {
                     noCloseFlag = false;
@@ -1778,7 +1776,7 @@ public class TestFarm {
             crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
 
             // Look for a point where there is no flag too close
-            boolean noCloseFlag = true;
+            var noCloseFlag = true;
             for (var point : crop.getPosition().getAdjacentPoints()) {
                 if (map.isFlagAtPoint(point)) {
                     noCloseFlag = false;
@@ -2036,7 +2034,7 @@ public class TestFarm {
         assertFalse(farmer.isInsideBuilding());
         assertEquals(farmer.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(FARMER);
+        var amount = storehouse0.getAmount(FARMER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, storehouse0.getPosition());
 
@@ -2089,7 +2087,7 @@ public class TestFarm {
         assertFalse(farmer.isInsideBuilding());
         assertEquals(farmer.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(FARMER);
+        var amount = headquarter0.getAmount(FARMER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getPosition());
 
@@ -2143,7 +2141,7 @@ public class TestFarm {
         assertFalse(farmer.isInsideBuilding());
         assertEquals(farmer.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(FARMER);
+        var amount = headquarter0.getAmount(FARMER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getPosition());
 
@@ -2188,7 +2186,7 @@ public class TestFarm {
         assertFalse(farmer.isInsideBuilding());
         assertEquals(farmer.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(FARMER);
+        var amount = headquarter0.getAmount(FARMER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getPosition());
 

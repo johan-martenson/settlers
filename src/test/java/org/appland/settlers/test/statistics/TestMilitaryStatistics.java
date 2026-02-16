@@ -27,15 +27,14 @@ public class TestMilitaryStatistics {
     public void testInitialMilitaryStatisticsIsCorrect() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the military statistics is correct
         var statisticsManager = map.getStatisticsManager();
@@ -55,23 +54,22 @@ public class TestMilitaryStatistics {
     public void testMilitaryStatisticsAreUpdatedWhenPrivateIsDrafted() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storage
-        Point point1 = new Point(10, 10);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(10, 10);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
 
         Utils.constructHouse(storehouse0);
 
-        int numberOfPrivates = storehouse0.getAmount(PRIVATE);
+        var numberOfPrivates = storehouse0.getAmount(PRIVATE);
 
         storehouse0.putCargo(new Cargo(Material.BEER, null));
         storehouse0.putCargo(new Cargo(Material.SWORD, null));
@@ -103,19 +101,18 @@ public class TestMilitaryStatistics {
     public void testListenToMilitaryStatistics() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storage, connect it to the headquarters, and wait for it to get constructed and occupied
-        Point point1 = new Point(10, 10);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(10, 10);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
 
         var road0 = map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), headquarter.getFlag());
 
@@ -124,7 +121,7 @@ public class TestMilitaryStatistics {
         Utils.waitForNonMilitaryBuildingToGetPopulated(storehouse0);
 
         // Control the amount of soldiers and promotion in the storehouse
-        int numberOfPrivates = storehouse0.getAmount(PRIVATE);
+        var numberOfPrivates = storehouse0.getAmount(PRIVATE);
 
         Utils.adjustInventoryTo(storehouse0, BEER, 1);
         Utils.adjustInventoryTo(storehouse0, SWORD, 2);

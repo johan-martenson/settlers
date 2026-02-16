@@ -152,13 +152,13 @@ public class TestGoodsStatistics {
 
         // Place the woodcutter
         var point1 = new Point(10, 4);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Construct the forester hut
         constructHouse(woodcutter);
 
         // Manually place forester
-        WoodcutterWorker wcWorker = new WoodcutterWorker(player0, map);
+        var wcWorker = new WoodcutterWorker(player0, map);
         Utils.occupyBuilding(wcWorker, woodcutter);
 
         // Let the woodcutter reach the tree and start cutting
@@ -174,7 +174,7 @@ public class TestGoodsStatistics {
         map.getStatisticsManager().addListener(monitor);
 
         // Verify that the good statistics is updated when the tree is cut down
-        StatisticsManager statisticsManager = map.getStatisticsManager();
+        var statisticsManager = map.getStatisticsManager();
         var goodsStatistics = statisticsManager.getPlayerStatistics(player0).goods();
         var nrMeasurementsBefore = goodsStatistics.getMeasurements().size();
         var valueBefore = goodsStatistics.getMeasurements().getLast().value();
@@ -229,7 +229,7 @@ public class TestGoodsStatistics {
          */
         Utils.waitForBuildingToHave(sawmill, Material.WOOD, 1);
 
-        StatisticsManager statisticsManager = map.getStatisticsManager();
+        var statisticsManager = map.getStatisticsManager();
         var goodsStatistics = statisticsManager.getPlayerStatistics(player0).goods();
         var nrMeasurementsBefore = goodsStatistics.getMeasurements().size();
 
@@ -277,7 +277,7 @@ public class TestGoodsStatistics {
 
         Utils.waitForFlagToHaveCargoWaiting(map, flag0, Material.WOOD);
 
-        StatisticsManager statisticsManager = map.getStatisticsManager();
+        var statisticsManager = map.getStatisticsManager();
         var goodsStatistics = statisticsManager.getPlayerStatistics(player0).goods();
         var nrMeasurementsBefore = goodsStatistics.getMeasurements().size();
         var valueBefore = goodsStatistics.getMeasurements().getLast().value();
@@ -321,7 +321,7 @@ public class TestGoodsStatistics {
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
 
         // Verify that the good statistics is updated when a stone is produced
-        StatisticsManager statisticsManager = map.getStatisticsManager();
+        var statisticsManager = map.getStatisticsManager();
         var goodsStatistics = statisticsManager.getPlayerStatistics(player0).goods();
 
         var goodsNrMeasurements = goodsStatistics.getMeasurements().size();
@@ -372,7 +372,7 @@ public class TestGoodsStatistics {
         map.getStatisticsManager().addListener(monitor);
 
         // Verify that the goods statistics are updated when the building is constructed
-        StatisticsManager statisticsManager = map.getStatisticsManager();
+        var statisticsManager = map.getStatisticsManager();
 
         var generalStatistics = statisticsManager.getPlayerStatistics(player0);
         var nrMeasurementsBefore = generalStatistics.goods().getMeasurements().size();
@@ -448,7 +448,7 @@ public class TestGoodsStatistics {
         // Wait for the catapult to throw a projectile
         assertTrue(catapult.isReady());
 
-        StatisticsManager statisticsManager = map.getStatisticsManager();
+        var statisticsManager = map.getStatisticsManager();
         var goodsStatistics = statisticsManager.getPlayerStatistics(player0).goods();
         var nrMeasurementsBefore = goodsStatistics.getMeasurements().size();
         var valueBefore = goodsStatistics.getMeasurements().getLast().value();
@@ -487,7 +487,7 @@ public class TestGoodsStatistics {
         Utils.adjustInventoryTo(headquarter0, SHIELD, 1);
 
         // Verify that the goods statistics are updated when a soldier is drafted
-        StatisticsManager statisticsManager = map.getStatisticsManager();
+        var statisticsManager = map.getStatisticsManager();
         var goodsStatistics = statisticsManager.getPlayerStatistics(player0).goods();
         var nrMeasurementsBefore = goodsStatistics.getMeasurements().size();
         var valueBefore = goodsStatistics.getMeasurements().getLast().value();
@@ -533,7 +533,7 @@ public class TestGoodsStatistics {
         Utils.waitForFishermanToStartFishing(fisherman, map);
 
         // Verify that the goods statistics are updated when a fish is caught
-        StatisticsManager statisticsManager = map.getStatisticsManager();
+        var statisticsManager = map.getStatisticsManager();
         var goodsStatistics = statisticsManager.getPlayerStatistics(player0).goods();
         var nrMeasurementsBefore = goodsStatistics.getMeasurements().size();
         var valueBefore = goodsStatistics.getMeasurements().getLast().value();
@@ -594,7 +594,7 @@ public class TestGoodsStatistics {
         Utils.waitForFarmerToStartHarvesting(map, farmer);
 
         // Verify that the goods statistics are updated when wheat is harvested
-        StatisticsManager statisticsManager = map.getStatisticsManager();
+        var statisticsManager = map.getStatisticsManager();
         var goodsStatistics = statisticsManager.getPlayerStatistics(player0).goods();
         var nrMeasurementsBefore = goodsStatistics.getMeasurements().size();
         var valueBefore = goodsStatistics.getMeasurements().getLast().value();
@@ -640,9 +640,9 @@ public class TestGoodsStatistics {
         map.getStatisticsManager().addListener(monitor);
 
         // Verify that the goods statistics is updated when the hunter catches a wild animal
-        StatisticsManager statisticsManager5 = map.getStatisticsManager();
+        var statisticsManager5 = map.getStatisticsManager();
         var nrMeasurementsBefore = statisticsManager5.getPlayerStatistics(player0).goods().getMeasurements().size();
-        StatisticsManager statisticsManager4 = map.getStatisticsManager();
+        var statisticsManager4 = map.getStatisticsManager();
         var valueBefore = statisticsManager4.getPlayerStatistics(player0).goods().getMeasurements().getLast().value();
         var nrStatisticsEventsBefore = monitor.getStatisticsEvents().size();
 
@@ -651,26 +651,26 @@ public class TestGoodsStatistics {
                 break;
             }
 
-            StatisticsManager statisticsManager1 = map.getStatisticsManager();
+            var statisticsManager1 = map.getStatisticsManager();
             assertEquals(statisticsManager1.getPlayerStatistics(player0).goods().getMeasurements().size(), nrMeasurementsBefore);
-            StatisticsManager statisticsManager = map.getStatisticsManager();
+            var statisticsManager = map.getStatisticsManager();
             assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), valueBefore);
 
             map.stepTime();
         }
 
         assertNotNull(hunter.getCargo());
-        StatisticsManager statisticsManager3 = map.getStatisticsManager();
+        var statisticsManager3 = map.getStatisticsManager();
         assertEquals(statisticsManager3.getPlayerStatistics(player0).goods().getMeasurements().size(), nrMeasurementsBefore + 1);
-        StatisticsManager statisticsManager2 = map.getStatisticsManager();
+        var statisticsManager2 = map.getStatisticsManager();
         assertEquals(statisticsManager2.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), valueBefore + 1);
         assertEquals(monitor.getStatisticsEvents().size(), nrStatisticsEventsBefore + 1);
 
         map.stepTime();
 
-        StatisticsManager statisticsManager1 = map.getStatisticsManager();
+        var statisticsManager1 = map.getStatisticsManager();
         assertEquals(statisticsManager1.getPlayerStatistics(player0).goods().getMeasurements().size(), nrMeasurementsBefore + 1);
-        StatisticsManager statisticsManager = map.getStatisticsManager();
+        var statisticsManager = map.getStatisticsManager();
         assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), valueBefore + 1);
         assertEquals(monitor.getStatisticsEvents().size(), nrStatisticsEventsBefore + 1);
     }
@@ -699,9 +699,9 @@ public class TestGoodsStatistics {
         map.getStatisticsManager().addListener(monitor);
 
         // Verify that the goods statistics is updated when the well produces a bucket of water
-        StatisticsManager statisticsManager5 = map.getStatisticsManager();
+        var statisticsManager5 = map.getStatisticsManager();
         var nrMeasurementsBefore = statisticsManager5.getPlayerStatistics(player0).goods().getMeasurements().size();
-        StatisticsManager statisticsManager4 = map.getStatisticsManager();
+        var statisticsManager4 = map.getStatisticsManager();
         var valueBefore = statisticsManager4.getPlayerStatistics(player0).goods().getMeasurements().getLast().value();
         var nrStatisticsEventsBefore = monitor.getStatisticsEvents().size();
 
@@ -710,26 +710,26 @@ public class TestGoodsStatistics {
                 break;
             }
 
-            StatisticsManager statisticsManager1 = map.getStatisticsManager();
+            var statisticsManager1 = map.getStatisticsManager();
             assertEquals(statisticsManager1.getPlayerStatistics(player0).goods().getMeasurements().size(), nrMeasurementsBefore);
-            StatisticsManager statisticsManager = map.getStatisticsManager();
+            var statisticsManager = map.getStatisticsManager();
             assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), valueBefore);
 
             map.stepTime();
         }
 
         assertNotNull(wellWorker.getCargo());
-        StatisticsManager statisticsManager3 = map.getStatisticsManager();
+        var statisticsManager3 = map.getStatisticsManager();
         assertEquals(statisticsManager3.getPlayerStatistics(player0).goods().getMeasurements().size(), nrMeasurementsBefore + 1);
-        StatisticsManager statisticsManager2 = map.getStatisticsManager();
+        var statisticsManager2 = map.getStatisticsManager();
         assertEquals(statisticsManager2.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), valueBefore + 1);
         assertEquals(monitor.getStatisticsEvents().size(), nrStatisticsEventsBefore + 1);
 
         map.stepTime();
 
-        StatisticsManager statisticsManager1 = map.getStatisticsManager();
+        var statisticsManager1 = map.getStatisticsManager();
         assertEquals(statisticsManager1.getPlayerStatistics(player0).goods().getMeasurements().size(), nrMeasurementsBefore + 1);
-        StatisticsManager statisticsManager = map.getStatisticsManager();
+        var statisticsManager = map.getStatisticsManager();
         assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), valueBefore + 1);
         assertEquals(monitor.getStatisticsEvents().size(), nrStatisticsEventsBefore + 1);
     }
@@ -764,9 +764,9 @@ public class TestGoodsStatistics {
         Utils.deliverCargo(metalworks, IRON_BAR);
 
         // Verify that the goods statistics is updated when the metalworks produces a tool
-        StatisticsManager statisticsManager5 = map.getStatisticsManager();
+        var statisticsManager5 = map.getStatisticsManager();
         var nrMeasurementsBefore = statisticsManager5.getPlayerStatistics(player0).goods().getMeasurements().size();
-        StatisticsManager statisticsManager4 = map.getStatisticsManager();
+        var statisticsManager4 = map.getStatisticsManager();
         var valueBefore = statisticsManager4.getPlayerStatistics(player0).goods().getMeasurements().getLast().value();
         var nrStatisticsEventsBefore = monitor.getStatisticsEvents().size();
 
@@ -775,26 +775,26 @@ public class TestGoodsStatistics {
                 break;
             }
 
-            StatisticsManager statisticsManager1 = map.getStatisticsManager();
+            var statisticsManager1 = map.getStatisticsManager();
             assertEquals(statisticsManager1.getPlayerStatistics(player0).goods().getMeasurements().size(), nrMeasurementsBefore);
-            StatisticsManager statisticsManager = map.getStatisticsManager();
+            var statisticsManager = map.getStatisticsManager();
             assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), valueBefore);
 
             map.stepTime();
         }
 
         assertNotNull(metalWorker.getCargo());
-        StatisticsManager statisticsManager3 = map.getStatisticsManager();
+        var statisticsManager3 = map.getStatisticsManager();
         assertEquals(statisticsManager3.getPlayerStatistics(player0).goods().getMeasurements().size(), nrMeasurementsBefore + 1);
-        StatisticsManager statisticsManager2 = map.getStatisticsManager();
+        var statisticsManager2 = map.getStatisticsManager();
         assertEquals(statisticsManager2.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), valueBefore - 1);
         assertEquals(monitor.getStatisticsEvents().size(), nrStatisticsEventsBefore + 1);
 
         map.stepTime();
 
-        StatisticsManager statisticsManager1 = map.getStatisticsManager();
+        var statisticsManager1 = map.getStatisticsManager();
         assertEquals(statisticsManager1.getPlayerStatistics(player0).goods().getMeasurements().size(), nrMeasurementsBefore + 1);
-        StatisticsManager statisticsManager = map.getStatisticsManager();
+        var statisticsManager = map.getStatisticsManager();
         assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), valueBefore - 1);
         assertEquals(monitor.getStatisticsEvents().size(), nrStatisticsEventsBefore + 1);
     }
@@ -827,9 +827,9 @@ public class TestGoodsStatistics {
         Utils.deliverCargo(mint, GOLD);
 
         // Verify that the goods statistics is updated when the mint produces a coin
-        StatisticsManager statisticsManager5 = map.getStatisticsManager();
+        var statisticsManager5 = map.getStatisticsManager();
         var nrMeasurementsBefore = statisticsManager5.getPlayerStatistics(player0).goods().getMeasurements().size();
-        StatisticsManager statisticsManager4 = map.getStatisticsManager();
+        var statisticsManager4 = map.getStatisticsManager();
         var valueBefore = statisticsManager4.getPlayerStatistics(player0).goods().getMeasurements().getLast().value();
         var nrStatisticsEventsBefore = monitor.getStatisticsEvents().size();
 
@@ -838,26 +838,26 @@ public class TestGoodsStatistics {
                 break;
             }
 
-            StatisticsManager statisticsManager1 = map.getStatisticsManager();
+            var statisticsManager1 = map.getStatisticsManager();
             assertEquals(statisticsManager1.getPlayerStatistics(player0).goods().getMeasurements().size(), nrMeasurementsBefore);
-            StatisticsManager statisticsManager = map.getStatisticsManager();
+            var statisticsManager = map.getStatisticsManager();
             assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), valueBefore);
 
             map.stepTime();
         }
 
         assertNotNull(minter.getCargo());
-        StatisticsManager statisticsManager3 = map.getStatisticsManager();
+        var statisticsManager3 = map.getStatisticsManager();
         assertEquals(statisticsManager3.getPlayerStatistics(player0).goods().getMeasurements().size(), nrMeasurementsBefore + 1);
-        StatisticsManager statisticsManager2 = map.getStatisticsManager();
+        var statisticsManager2 = map.getStatisticsManager();
         assertEquals(statisticsManager2.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), valueBefore - 1);
         assertEquals(monitor.getStatisticsEvents().size(), nrStatisticsEventsBefore + 1);
 
         map.stepTime();
 
-        StatisticsManager statisticsManager1 = map.getStatisticsManager();
+        var statisticsManager1 = map.getStatisticsManager();
         assertEquals(statisticsManager1.getPlayerStatistics(player0).goods().getMeasurements().size(), nrMeasurementsBefore + 1);
-        StatisticsManager statisticsManager = map.getStatisticsManager();
+        var statisticsManager = map.getStatisticsManager();
         assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), valueBefore - 1);
         assertEquals(monitor.getStatisticsEvents().size(), nrStatisticsEventsBefore + 1);
     }
@@ -890,9 +890,9 @@ public class TestGoodsStatistics {
         Utils.deliverCargo(armory, IRON_BAR);
 
         // Verify that the goods statistics is updated when the armory produces a weapon
-        StatisticsManager statisticsManager5 = map.getStatisticsManager();
+        var statisticsManager5 = map.getStatisticsManager();
         var nrMeasurementsBefore = statisticsManager5.getPlayerStatistics(player0).goods().getMeasurements().size();
-        StatisticsManager statisticsManager4 = map.getStatisticsManager();
+        var statisticsManager4 = map.getStatisticsManager();
         var valueBefore = statisticsManager4.getPlayerStatistics(player0).goods().getMeasurements().getLast().value();
         var nrStatisticsEventsBefore = monitor.getStatisticsEvents().size();
 
@@ -901,26 +901,26 @@ public class TestGoodsStatistics {
                 break;
             }
 
-            StatisticsManager statisticsManager1 = map.getStatisticsManager();
+            var statisticsManager1 = map.getStatisticsManager();
             assertEquals(statisticsManager1.getPlayerStatistics(player0).goods().getMeasurements().size(), nrMeasurementsBefore);
-            StatisticsManager statisticsManager = map.getStatisticsManager();
+            var statisticsManager = map.getStatisticsManager();
             assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), valueBefore);
 
             map.stepTime();
         }
 
         assertNotNull(armorer.getCargo());
-        StatisticsManager statisticsManager3 = map.getStatisticsManager();
+        var statisticsManager3 = map.getStatisticsManager();
         assertEquals(statisticsManager3.getPlayerStatistics(player0).goods().getMeasurements().size(), nrMeasurementsBefore + 1);
-        StatisticsManager statisticsManager2 = map.getStatisticsManager();
+        var statisticsManager2 = map.getStatisticsManager();
         assertEquals(statisticsManager2.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), valueBefore - 1);
         assertEquals(monitor.getStatisticsEvents().size(), nrStatisticsEventsBefore + 1);
 
         map.stepTime();
 
-        StatisticsManager statisticsManager1 = map.getStatisticsManager();
+        var statisticsManager1 = map.getStatisticsManager();
         assertEquals(statisticsManager1.getPlayerStatistics(player0).goods().getMeasurements().size(), nrMeasurementsBefore + 1);
-        StatisticsManager statisticsManager = map.getStatisticsManager();
+        var statisticsManager = map.getStatisticsManager();
         assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), valueBefore - 1);
         assertEquals(monitor.getStatisticsEvents().size(), nrStatisticsEventsBefore + 1);
     }

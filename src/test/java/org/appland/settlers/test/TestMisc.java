@@ -297,7 +297,7 @@ public class TestMisc {
         var armory0 = map.placeBuilding(new Armory(player0), point1);
 
         // Verify that the construction progress never goes backwards
-        int previousProgress = armory0.getConstructionProgress();
+        var previousProgress = armory0.getConstructionProgress();
         for (int i = 0; i < 1000; i++) {
             assertTrue(armory0.getConstructionProgress() >= previousProgress);
 
@@ -427,7 +427,7 @@ public class TestMisc {
         // Verify that an event is sent when the worker goes out to cut down the tree
         assertTrue(woodcutterWorker.isInsideBuilding());
 
-        int amountEvents = monitor.getEvents().size();
+        var amountEvents = monitor.getEvents().size();
 
         Utils.waitForWorkerToBeOutside(woodcutterWorker, map);
 
@@ -1211,7 +1211,7 @@ public class TestMisc {
         headquarter.pushOutAll(DONKEY);
 
         // Verify that donkeys can be pushed out
-        Donkey donkey = Utils.waitForWorkerOutsideBuilding(Donkey.class, player0);
+        var donkey = Utils.waitForWorkerOutsideBuilding(Donkey.class, player0);
 
         assertNotNull(donkey);
     }

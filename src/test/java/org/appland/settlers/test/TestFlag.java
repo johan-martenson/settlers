@@ -36,14 +36,13 @@ public class TestFlag {
     public void testFlagOnLandAtStartIsNormal() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the headquarter's flag is normal
         assertEquals(headquarter0.getFlag().getType(), NORMAL);
@@ -53,21 +52,20 @@ public class TestFlag {
     public void testFlagNextToWaterIsMarine() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place lake
-        Point point1 = new Point(10, 10);
+        var point1 = new Point(10, 10);
         Utils.surroundPointWithWater(point1, map);
 
         // Verify that a flag placed next to water is a marine flag
-        Flag flag0 = map.placeFlag(player0, point1.upLeft());
+        var flag0 = map.placeFlag(player0, point1.upLeft());
         assertEquals(flag0.getType(), MARINE);
     }
 
@@ -75,36 +73,35 @@ public class TestFlag {
     public void testFlagAtMainRoadIsMainFlag() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point38 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        var point38 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         // Place flag
-        Point point2 = new Point(5, 9);
-        Flag flag0 = map.placeFlag(player0, point2);
+        var point2 = new Point(5, 9);
+        var flag0 = map.placeFlag(player0, point2);
 
         // Place flag
-        Point point3 = new Point(5, 13);
-        Flag flag1 = map.placeFlag(player0, point3);
+        var point3 = new Point(5, 13);
+        var flag1 = map.placeFlag(player0, point3);
 
         // Place road between the headquarter and the first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
 
         // Place road between the headquarter and the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         // Place workers on the roads
-        Courier courier0 = Utils.occupyRoad(road0, map);
-        Courier courier1 = Utils.occupyRoad(road1, map);
+        var courier0 = Utils.occupyRoad(road0, map);
+        var courier1 = Utils.occupyRoad(road1, map);
 
         // Deliver 99 cargo and verify that the road does not become a main road
         for (int i = 0; i < 99; i++) {
-            Cargo cargo = new Cargo(COIN, map);
+            var cargo = new Cargo(COIN, map);
 
             flag1.putCargo(cargo);
 
@@ -126,7 +123,7 @@ public class TestFlag {
         }
 
         // Deliver one more cargo and verify that the road becomes a main road
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         flag1.putCargo(cargo);
 

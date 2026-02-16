@@ -11,13 +11,13 @@ public class TestPoint {
     @Test
     public void testCompareToOtherPoints() {
 
-        Point point = new Point(10, 10);
-        Point left = new Point(8, 10);
-        Point right = new Point(12, 10);
-        Point upLeft = new Point(9, 11);
-        Point downLeft = new Point(9, 9);
-        Point upRight = new Point(11, 11);
-        Point downRight = new Point(11, 9);
+        var point = new Point(10, 10);
+        var left = new Point(8, 10);
+        var right = new Point(12, 10);
+        var upLeft = new Point(9, 11);
+        var downLeft = new Point(9, 9);
+        var upRight = new Point(11, 11);
+        var downRight = new Point(11, 9);
 
         // Verify isLeftOf
         assertTrue(left.isLeftOf(point));
@@ -74,15 +74,15 @@ public class TestPoint {
     public void testPointIsAdjacent() {
 
         // Verify adjacent points
-        Point point = new Point(10, 10);
-        Point left = new Point(8, 10);
-        Point right = new Point(12, 10);
-        Point upLeft = new Point(9, 11);
-        Point downLeft = new Point(9, 9);
-        Point upRight = new Point(11, 11);
-        Point downRight = new Point(11, 9);
-        Point up = new Point(10, 12);
-        Point down = new Point(10, 8);
+        var point = new Point(10, 10);
+        var left = new Point(8, 10);
+        var right = new Point(12, 10);
+        var upLeft = new Point(9, 11);
+        var downLeft = new Point(9, 9);
+        var upRight = new Point(11, 11);
+        var downRight = new Point(11, 9);
+        var up = new Point(10, 12);
+        var down = new Point(10, 8);
 
         assertTrue(point.isAdjacent(left));
         assertTrue(point.isAdjacent(right));
@@ -98,15 +98,15 @@ public class TestPoint {
     public void testNonAdjacentPoints() {
 
         // Verify non adjacent points
-        Point point = new Point(10, 10);
-        Point left = new Point(6, 10);
-        Point right = new Point(14, 10);
-        Point upLeft = new Point(8, 12);
-        Point downLeft = new Point(8, 8);
-        Point upRight = new Point(12, 12);
-        Point downRight = new Point(12, 8);
-        Point up = new Point(10, 14);
-        Point down = new Point(10, 6);
+        var point = new Point(10, 10);
+        var left = new Point(6, 10);
+        var right = new Point(14, 10);
+        var upLeft = new Point(8, 12);
+        var downLeft = new Point(8, 8);
+        var upRight = new Point(12, 12);
+        var downRight = new Point(12, 8);
+        var up = new Point(10, 14);
+        var down = new Point(10, 6);
 
         assertFalse(point.isAdjacent(left));
         assertFalse(point.isAdjacent(right));
@@ -120,6 +120,6 @@ public class TestPoint {
 
     @Test (expected = RuntimeException.class)
     public void testInvalidPoint() {
-        Point point0 = new Point(0, -1);
+        var point0 = new Point(0, -1);
     }
 }

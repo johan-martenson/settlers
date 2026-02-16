@@ -150,19 +150,19 @@ public class TestToString {
         var catapult = map.placeBuilding(new Catapult(player0), point4);
 
         // Create messages
-        MilitaryBuildingReadyMessage militaryBuildingReadyMessage = new MilitaryBuildingReadyMessage(barracks0);
-        MilitaryBuildingOccupiedMessage militaryBuildingOccupiedMessage = new MilitaryBuildingOccupiedMessage(barracks0);
-        MilitaryBuildingCausedLostLandMessage militaryBuildingCausedLostLandMessage = new MilitaryBuildingCausedLostLandMessage(barracks0);
-        UnderAttackMessage underAttackMessage = new UnderAttackMessage(barracks0);
-        GeologistFindMessage geologistFindMessage = new GeologistFindMessage(point1, IRON);
-        NoMoreResourcesMessage noMoreResourcesMessage = new NoMoreResourcesMessage(fishery);
-        BuildingLostMessage buildingLostMessage = new BuildingLostMessage(barracks0);
-        BuildingCapturedMessage buildingCapturedMessage = new BuildingCapturedMessage(barracks0);
-        StoreHouseIsReadyMessage storeHouseIsReadyMessage = new StoreHouseIsReadyMessage(storehouse);
-        TreeConservationProgramActivatedMessage treeConservationProgramActivatedMessage = new TreeConservationProgramActivatedMessage();
-        TreeConservationProgramDeactivatedMessage treeConservationProgramDeactivatedMessage = new TreeConservationProgramDeactivatedMessage();
-        GameEndedMessage gameEndedMessage = new GameEndedMessage(player0);
-        BombardedByCatapultMessage bombardedByCatapultMessage = new BombardedByCatapultMessage(catapult, barracks0);
+        var militaryBuildingReadyMessage = new MilitaryBuildingReadyMessage(barracks0);
+        var militaryBuildingOccupiedMessage = new MilitaryBuildingOccupiedMessage(barracks0);
+        var militaryBuildingCausedLostLandMessage = new MilitaryBuildingCausedLostLandMessage(barracks0);
+        var underAttackMessage = new UnderAttackMessage(barracks0);
+        var geologistFindMessage = new GeologistFindMessage(point1, IRON);
+        var noMoreResourcesMessage = new NoMoreResourcesMessage(fishery);
+        var buildingLostMessage = new BuildingLostMessage(barracks0);
+        var buildingCapturedMessage = new BuildingCapturedMessage(barracks0);
+        var storeHouseIsReadyMessage = new StoreHouseIsReadyMessage(storehouse);
+        var treeConservationProgramActivatedMessage = new TreeConservationProgramActivatedMessage();
+        var treeConservationProgramDeactivatedMessage = new TreeConservationProgramDeactivatedMessage();
+        var gameEndedMessage = new GameEndedMessage(player0);
+        var bombardedByCatapultMessage = new BombardedByCatapultMessage(catapult, barracks0);
 
         // Verify the toString method of each message type
         assertEquals(militaryBuildingReadyMessage.toString(), "Message: Barracks (11, 5) is ready");
@@ -798,7 +798,7 @@ public class TestToString {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 

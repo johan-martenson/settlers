@@ -24,16 +24,15 @@ public class TestHeight {
     public void testDefaultHeight() throws Exception {
 
         // Creating new game map with size 100x100
-        Player player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new LinkedList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new LinkedList<Player>();        players.add(player0);
 
         // Creating game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Verify that the default height is 10
-        int startX = 1;
-        int startY = 1;
+        var startX = 1;
+        var startY = 1;
 
         for (int y = startY; y < map.getHeight(); y++) {
             for (int x = startX; x < map.getWidth(); x += 2) {
@@ -52,15 +51,14 @@ public class TestHeight {
     public void testSettingHeight() throws Exception {
 
         // Creating new game map with size 100x100
-        Player player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new LinkedList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new LinkedList<Player>();        players.add(player0);
 
         // Creating game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Verify that the height can be set
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.setHeightAtPoint(point0, 11);
 
         // Verify that the height is correct
@@ -71,24 +69,23 @@ public class TestHeight {
     public void testCannotPlaceFortressWithTooMuchHeightDifferenceOnLeft() throws Exception {
 
         // Creating new game map with size 100x100
-        Player player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new LinkedList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new LinkedList<Player>();        players.add(player0);
 
         // Creating game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.setHeightAtPoint(point0, 14);
 
         // Place headquarter
-        Point point1 = new Point(10, 18);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(10, 18);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Verify that it's not possible to place a fortress when the height difference is too big
         try {
-            Fortress fortress0 = map.placeBuilding(new Fortress(player0), point0.right());
+            var fortress0 = map.placeBuilding(new Fortress(player0), point0.right());
             Assert.fail();
         } catch (Exception e) {
         }
@@ -98,24 +95,23 @@ public class TestHeight {
     public void testCannotPlaceFortressWithTooMuchHeightDifferenceOnUpLeft() throws Exception {
 
         // Creating new game map with size 100x100
-        Player player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new LinkedList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new LinkedList<Player>();        players.add(player0);
 
         // Creating game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.setHeightAtPoint(point0, 14);
 
         // Place headquarter
-        Point point1 = new Point(10, 18);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(10, 18);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Verify that it's not possible to place a fortress when the height difference is too big
         try {
-            Fortress fortress0 = map.placeBuilding(new Fortress(player0), point0.downRight());
+            var fortress0 = map.placeBuilding(new Fortress(player0), point0.downRight());
             Assert.fail();
         } catch (Exception e) {
         }
@@ -125,24 +121,23 @@ public class TestHeight {
     public void testCannotPlaceFortressWithTooMuchHeightDifferenceOnUpRight() throws Exception {
 
         // Creating new game map with size 100x100
-        Player player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new LinkedList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new LinkedList<Player>();        players.add(player0);
 
         // Creating game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.setHeightAtPoint(point0, 14);
 
         // Place headquarter
-        Point point1 = new Point(10, 18);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(10, 18);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Verify that it's not possible to place a fortress when the height difference is too big
         try {
-            Fortress fortress0 = map.placeBuilding(new Fortress(player0), point0.downLeft());
+            var fortress0 = map.placeBuilding(new Fortress(player0), point0.downLeft());
             Assert.fail();
         } catch (Exception e) {
         }
@@ -152,24 +147,23 @@ public class TestHeight {
     public void testCannotPlaceFortressWithTooMuchHeightDifferenceOnRight() throws Exception {
 
         // Creating new game map with size 100x100
-        Player player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new LinkedList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new LinkedList<Player>();        players.add(player0);
 
         // Creating game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.setHeightAtPoint(point0, 14);
 
         // Place headquarter
-        Point point1 = new Point(10, 18);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(10, 18);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Verify that it's not possible to place a fortress when the height difference is too big
         try {
-            Fortress fortress0 = map.placeBuilding(new Fortress(player0), point0.left());
+            var fortress0 = map.placeBuilding(new Fortress(player0), point0.left());
             Assert.fail();
         } catch (Exception e) {
         }
@@ -179,24 +173,23 @@ public class TestHeight {
     public void testCannotPlaceFortressWithTooMuchHeightDifferenceOnDownRight() throws Exception {
 
         // Creating new game map with size 100x100
-        Player player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new LinkedList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new LinkedList<Player>();        players.add(player0);
 
         // Creating game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.setHeightAtPoint(point0, 14);
 
         // Place headquarter
-        Point point1 = new Point(10, 18);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(10, 18);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Verify that it's not possible to place a fortress when the height difference is too big
         try {
-            Fortress fortress0 = map.placeBuilding(new Fortress(player0), point0.upLeft());
+            var fortress0 = map.placeBuilding(new Fortress(player0), point0.upLeft());
 
             Assert.fail();
         } catch (Exception e) {
@@ -207,24 +200,23 @@ public class TestHeight {
     public void testCannotPlaceFortressWithTooMuchHeightDifferenceOnDownLeft() throws Exception {
 
         // Creating new game map with size 100x100
-        Player player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new LinkedList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new LinkedList<Player>();        players.add(player0);
 
         // Creating game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.setHeightAtPoint(point0, 14);
 
         // Place headquarter
-        Point point1 = new Point(10, 18);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(10, 18);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Verify that it's not possible to place a fortress when the height difference is too big
         try {
-            Fortress fortress0 = map.placeBuilding(new Fortress(player0), point0.upRight());
+            var fortress0 = map.placeBuilding(new Fortress(player0), point0.upRight());
             Assert.fail();
         } catch (Exception e) {
         }
@@ -234,20 +226,19 @@ public class TestHeight {
     public void testNoFortressAvailableWithTooMuchHeightDifferenceOnLeft() throws Exception {
 
         // Creating new game map with size 100x100
-        Player player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new LinkedList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new LinkedList<Player>();        players.add(player0);
 
         // Creating game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.setHeightAtPoint(point0, 14);
 
         // Place headquarter
-        Point point1 = new Point(10, 18);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(10, 18);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Verify that it's not possible to place a fortress when the height difference is too big
         assertNotEquals(map.isAvailableHousePoint(player0, point0.right()), LARGE);
@@ -257,20 +248,19 @@ public class TestHeight {
     public void testNoFortressAvailableWithTooMuchHeightDifferenceOnUpLeft() throws Exception {
 
         // Creating new game map with size 100x100
-        Player player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new LinkedList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new LinkedList<Player>();        players.add(player0);
 
         // Creating game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.setHeightAtPoint(point0, 14);
 
         // Place headquarter
-        Point point1 = new Point(10, 18);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(10, 18);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Verify that it's not possible to place a fortress when the height difference is too big
         assertNotEquals(map.isAvailableHousePoint(player0, point0.downRight()), LARGE);
@@ -280,20 +270,19 @@ public class TestHeight {
     public void testNoFortressAvailableWithTooMuchHeightDifferenceOnUpRight() throws Exception {
 
         // Creating new game map with size 100x100
-        Player player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new LinkedList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new LinkedList<Player>();        players.add(player0);
 
         // Creating game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.setHeightAtPoint(point0, 14);
 
         // Place headquarter
-        Point point1 = new Point(10, 18);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(10, 18);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Verify that it's not possible to place a fortress when the height difference is too big
         assertNotEquals(map.isAvailableHousePoint(player0, point0.downLeft()), LARGE);
@@ -303,20 +292,19 @@ public class TestHeight {
     public void testNoFortressAvailableWithTooMuchHeightDifferenceOnRight() throws Exception {
 
         // Creating new game map with size 100x100
-        Player player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new LinkedList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new LinkedList<Player>();        players.add(player0);
 
         // Creating game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.setHeightAtPoint(point0, 14);
 
         // Place headquarter
-        Point point1 = new Point(10, 18);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(10, 18);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Verify that it's not possible to place a fortress when the height difference is too big
         assertNotEquals(map.isAvailableHousePoint(player0, point0.left()), LARGE);
@@ -326,20 +314,19 @@ public class TestHeight {
     public void testNoFortressAvailableWithTooMuchHeightDifferenceDownRight() throws Exception {
 
         // Creating new game map with size 100x100
-        Player player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new LinkedList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new LinkedList<Player>();        players.add(player0);
 
         // Creating game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.setHeightAtPoint(point0, 14);
 
         // Place headquarter
-        Point point1 = new Point(10, 18);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(10, 18);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Verify that it's not possible to place a fortress when the height difference is too big
         assertNotEquals(map.isAvailableHousePoint(player0, point0.upLeft()), LARGE);
@@ -349,20 +336,19 @@ public class TestHeight {
     public void testNoFortressAvailableWithTooMuchHeightDifferenceOnDownLeft() throws Exception {
 
         // Creating new game map with size 100x100
-        Player player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new LinkedList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new LinkedList<Player>();        players.add(player0);
 
         // Creating game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.setHeightAtPoint(point0, 14);
 
         // Place headquarter
-        Point point1 = new Point(10, 18);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(10, 18);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         // Verify that it's not possible to place a fortress when the height difference is too big
         assertNotEquals(map.isAvailableHousePoint(player0, point0.upRight()), LARGE);

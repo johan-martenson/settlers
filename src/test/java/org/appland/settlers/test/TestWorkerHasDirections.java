@@ -43,24 +43,23 @@ public class TestWorkerHasDirections {
     public void testCourierLeavingHeadquartersHasDirectionDownRight() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Wait for the road's courier to come out from the headquarters
-        Courier courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
+        var courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
         // Verify that the courier has the right direction set
         assertEquals(courier.getDirection(), Direction.DOWN_RIGHT);
@@ -70,24 +69,23 @@ public class TestWorkerHasDirections {
     public void testCourierWalkingRightHasDirectionRight() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Wait for the road's courier to come out from the headquarters
-        Courier courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
+        var courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
         // Wait for the courier to reach the headquarters' flag
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
@@ -103,24 +101,23 @@ public class TestWorkerHasDirections {
     public void testCourierWalkingUpRightHasDirectionUpRight() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(8, 6);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(8, 6);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Wait for the road's courier to come out from the headquarters
-        Courier courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
+        var courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
         // Wait for the courier to reach the headquarters' flag
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
@@ -136,24 +133,23 @@ public class TestWorkerHasDirections {
     public void testCourierWalkingDownRightHasDirectionDownRight() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(8, 2);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(8, 2);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Wait for the road's courier to come out from the headquarters
-        Courier courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
+        var courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
         // Wait for the courier to reach the headquarters' flag
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
@@ -169,24 +165,23 @@ public class TestWorkerHasDirections {
     public void testCourierWalkingLeftHasDirectionLeft() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(7, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(4, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(4, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Wait for the road's courier to come out from the headquarters
-        Courier courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
+        var courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
         // Wait for the courier to reach the headquarters' flag
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
@@ -202,24 +197,23 @@ public class TestWorkerHasDirections {
     public void testCourierWalkingDownLeftHasDirectionDownLeft() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(7, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(6, 2);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(6, 2);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Wait for the road's courier to come out from the headquarters
-        Courier courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
+        var courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
         // Wait for the courier to reach the headquarters' flag
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
@@ -235,39 +229,38 @@ public class TestWorkerHasDirections {
     public void testCourierWalkingUpLeftHasDirectionUpLeft() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(7, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(12, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(12, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Wait for the road to get its courier assigned
-        Courier courier0 = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier0 = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
         // Place flag
-        Point point2 = new Point(10, 6);
-        Flag flag1 = map.placeFlag(player0, point2);
+        var point2 = new Point(10, 6);
+        var flag1 = map.placeFlag(player0, point2);
 
         // Place road
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         // Wait for the second road's courier to come out from the headquarters
         Courier courier1 = null;
 
         for (int i = 0; i < 200; i++) {
-            int nrCouriers = 0;
+            var nrCouriers = 0;
 
-            for (Worker worker : map.getWorkers()) {
+            for (var worker : map.getWorkers()) {
                 if (worker instanceof Courier) {
                     nrCouriers = nrCouriers + 1;
 
@@ -305,24 +298,23 @@ public class TestWorkerHasDirections {
     public void testCourierWalkingForNextPickupHasCorrectDirection() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Wait for the road's courier to come out from the headquarters
-        Courier courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
+        var courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
         // Wait for the courier to reach the headquarters' flag
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
@@ -331,8 +323,8 @@ public class TestWorkerHasDirections {
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, point1.left());
 
         // Place a house at the second flag so the courier needs to go and pick up cargos
-        Point point2 = new Point(9, 5);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
+        var point2 = new Point(9, 5);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
 
         Utils.waitForWorkerToSetTarget(map, courier, headquarter0.getFlag().getPosition());
 
@@ -344,35 +336,33 @@ public class TestWorkerHasDirections {
     public void testForesterReturnsHomeAfterPlantingTreeWithDirectionDownLeft() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(15, 9);
+        var point0 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place forester hut
-        Point point1 = new Point(10, 4);
-        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
+        var point1 = new Point(10, 4);
+        var foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         // Construct the forester hut
         constructHouse(foresterHut);
 
         // Manually place forester
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
+        var forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
         // Put stones on the map and leave only one point where the forester can plant a tree
-        Set<Point> pathPointSet = new HashSet<>();
-
+        var pathPointSet = new HashSet<Point>();
         var point2 = point1.downRight();
         var point3 = point2.downLeft().downLeft();
 
         pathPointSet.add(point2.downLeft());
         pathPointSet.add(point3);
 
-        for (Point point : Utils.getAllPointsOnMap(map)) {
+        for (var point : Utils.getAllPointsOnMap(map)) {
             if (pathPointSet.contains(point)) {
                 continue;
             }
@@ -394,7 +384,7 @@ public class TestWorkerHasDirections {
 
         assertFalse(forester.isInsideBuilding());
 
-        Point point = forester.getTarget();
+        var point = forester.getTarget();
 
         assertTrue(forester.isTraveling());
 
@@ -420,31 +410,30 @@ public class TestWorkerHasDirections {
     public void testCourierWithNewlyPickedUpCargoHasCorrectDirection() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(15, 9);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 9);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point3 = new Point(20, 8);
-        Flag flag0 = map.placeFlag(player0, point3);
+        var point3 = new Point(20, 8);
+        var flag0 = map.placeFlag(player0, point3);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
 
         // Wait for the road to get an assigned courier
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
         // Wait for the courier to stand in the middle of the road
         Utils.waitForWorkerToGoToPoint(map, courier, point3.left());
 
         // Place forester hut
-        Point point2 = new Point(19, 9);
-        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point2);
+        var point2 = new Point(19, 9);
+        var foresterHut = map.placeBuilding(new ForesterHut(player0), point2);
 
         // Wait for the courier to pick up a cargo for the forester hut
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
@@ -458,31 +447,30 @@ public class TestWorkerHasDirections {
     public void testFishermanFishingHasCorrectDirection() throws Exception {
 
         // Create a single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place a lake
-        Point point0 = new Point(4, 4);
+        var point0 = new Point(4, 4);
         Utils.surroundPointWithVegetation(point0, WATER, map);
 
         // Place headquarter
-        Point point3 = new Point(15, 9);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(15, 9);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Place fishery
-        Point point4 = new Point(7, 5);
-        Building fishery = map.placeBuilding(new Fishery(player0), point4);
+        var point4 = new Point(7, 5);
+        var fishery = map.placeBuilding(new Fishery(player0), point4);
 
         // Connect the fishery with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), fishery.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), fishery.getFlag());
 
         // Wait for the fishery to get constructed
         Utils.waitForBuildingToBeConstructed(fishery);
 
         // Wait for the fishery to get occupied
-        Fisherman fisherman = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
+        var fisherman = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
 
         // Let the fisherman rest
         Utils.fastForward(99, map);
@@ -490,8 +478,7 @@ public class TestWorkerHasDirections {
         assertTrue(fisherman.isInsideBuilding());
 
         // Wait for the fisherman to fish at all points around the lake
-        Map<Point, Direction> fishingDirection = new HashMap<>();
-
+        var fishingDirection = new HashMap<Point, Direction>();
         for (int i = 0; i < 20000; i++) {
 
             if (fishingDirection.size() == 6) {
@@ -548,10 +535,9 @@ public class TestWorkerHasDirections {
     public void testFishermanFishingOnHorizontalShoreWithWaterDownHasCorrectDirection() throws Exception {
 
         // Create a single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place a long horizontal shore
         for (int i = 0; i < 40; i++) {
@@ -561,27 +547,27 @@ public class TestWorkerHasDirections {
             }
 
             try {
-                Point point0 = new Point(i, 3);
+                var point0 = new Point(i, 3);
                 Utils.surroundPointWithVegetation(point0, WATER, map);
             } catch (Exception e) { }
         }
 
         // Place headquarter
-        Point point3 = new Point(15, 9);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(15, 9);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Place fishery
-        Point point4 = new Point(7, 5);
-        Building fishery = map.placeBuilding(new Fishery(player0), point4);
+        var point4 = new Point(7, 5);
+        var fishery = map.placeBuilding(new Fishery(player0), point4);
 
         // Connect the fishery with the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), fishery.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), fishery.getFlag());
 
         // Wait for the fishery to get constructed
         Utils.waitForBuildingToBeConstructed(fishery);
 
         // Wait for the fishery to get occupied
-        Fisherman fisherman = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
+        var fisherman = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
 
         // Let the fisherman rest
         Utils.fastForward(99, map);

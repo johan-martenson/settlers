@@ -398,7 +398,7 @@ public class TestWell {
         assertEquals(50, wellWorker.getPercentageOfDistanceTraveled());
 
         // Verify that the worker goes into the house with the water
-        int previousProgress = wellWorker.getPercentageOfDistanceTraveled();
+        var previousProgress = wellWorker.getPercentageOfDistanceTraveled();
 
         for (int i = 0; i < 2_000; i++) {
             if (Objects.equals(wellWorker.getPosition(), well.getPosition())) {
@@ -813,7 +813,7 @@ public class TestWell {
         assertFalse(well0.getFlag().getStackedCargo().isEmpty());
 
         // Wait to let the cargo remain at the flag without any connection to the storage
-        Cargo cargo = well0.getFlag().getStackedCargo().getFirst();
+        var cargo = well0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -849,7 +849,7 @@ public class TestWell {
         // Verify that the courier delivers the cargo to the headquarters
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(WATER);
+        var amount = headquarter0.getAmount(WATER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
@@ -891,7 +891,7 @@ public class TestWell {
         assertFalse(worker.isInsideBuilding());
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(WELL_WORKER);
+        var amount = headquarter0.getAmount(WELL_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
 
@@ -936,7 +936,7 @@ public class TestWell {
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
+        var firstStep = true;
         for (var point : worker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
@@ -1470,7 +1470,7 @@ public class TestWell {
         assertFalse(wellWorker.isInsideBuilding());
         assertEquals(wellWorker.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(WELL_WORKER);
+        var amount = storehouse0.getAmount(WELL_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, storehouse0.getPosition());
 
@@ -1524,7 +1524,7 @@ public class TestWell {
         assertFalse(wellWorker.isInsideBuilding());
         assertEquals(wellWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(WELL_WORKER);
+        var amount = headquarter0.getAmount(WELL_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, headquarter0.getPosition());
 
@@ -1578,7 +1578,7 @@ public class TestWell {
         assertFalse(wellWorker.isInsideBuilding());
         assertEquals(wellWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(WELL_WORKER);
+        var amount = headquarter0.getAmount(WELL_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, headquarter0.getPosition());
 
@@ -1623,7 +1623,7 @@ public class TestWell {
         assertFalse(wellWorker.isInsideBuilding());
         assertEquals(wellWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(WELL_WORKER);
+        var amount = headquarter0.getAmount(WELL_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, headquarter0.getPosition());
 

@@ -922,7 +922,7 @@ public class TestPigFarm {
         // Verify that the courier delivers the cargo to the headquarters
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(PIG);
+        var amount = headquarter0.getAmount(PIG);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
@@ -964,7 +964,7 @@ public class TestPigFarm {
         assertFalse(worker.isInsideBuilding());
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(PIG_BREEDER);
+        var amount = headquarter0.getAmount(PIG_BREEDER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
 
@@ -1009,7 +1009,7 @@ public class TestPigFarm {
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
         // Verify that the var plans to use the roads
-        boolean firstStep = true;
+        var firstStep = true;
         for (var point : worker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
@@ -1677,7 +1677,7 @@ public class TestPigFarm {
         assertFalse(pigBreeder.isInsideBuilding());
         assertEquals(pigBreeder.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(PIG_BREEDER);
+        var amount = storehouse0.getAmount(PIG_BREEDER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, storehouse0.getPosition());
 
@@ -1728,7 +1728,7 @@ public class TestPigFarm {
         assertFalse(pigBreeder.isInsideBuilding());
         assertEquals(pigBreeder.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(PIG_BREEDER);
+        var amount = headquarter0.getAmount(PIG_BREEDER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, headquarter0.getPosition());
 
@@ -1782,7 +1782,7 @@ public class TestPigFarm {
         assertFalse(pigBreeder.isInsideBuilding());
         assertEquals(pigBreeder.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(PIG_BREEDER);
+        var amount = headquarter0.getAmount(PIG_BREEDER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, headquarter0.getPosition());
 
@@ -1827,7 +1827,7 @@ public class TestPigFarm {
         assertFalse(pigBreeder.isInsideBuilding());
         assertEquals(pigBreeder.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(PIG_BREEDER);
+        var amount = headquarter0.getAmount(PIG_BREEDER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, headquarter0.getPosition());
 
@@ -2172,8 +2172,7 @@ public class TestPigFarm {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         var map = new GameMap(List.of(player0), 20, 20);
 

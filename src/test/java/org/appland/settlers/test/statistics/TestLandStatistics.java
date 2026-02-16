@@ -36,7 +36,7 @@ public class TestLandStatistics {
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Get the statistics manager instance
-        StatisticsManager statisticsManager = map.getStatisticsManager();
+        var statisticsManager = map.getStatisticsManager();
 
         // Verify that it's possible to get the land statistics
         assertEquals(statisticsManager.getPlayerStatistics(player0).land().getMeasurements().getFirst().value(), player0.getOwnedLand().size());
@@ -99,7 +99,7 @@ public class TestLandStatistics {
         var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Get the statistics manager instance
-        StatisticsManager statisticsManager = map.getStatisticsManager();
+        var statisticsManager = map.getStatisticsManager();
 
         // Verify that there is land statistics at start for each player
         assertEquals(statisticsManager.getPlayerStatistics(player0).land().getMeasurements().getFirst().value(), player0.getOwnedLand().size());
@@ -167,7 +167,7 @@ public class TestLandStatistics {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
         // Wait for the defender to go to the attacker
-        Soldier defender = Utils.findSoldierOutsideBuilding(player1);
+        var defender = Utils.findSoldierOutsideBuilding(player1);
 
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
@@ -337,7 +337,7 @@ public class TestLandStatistics {
         var headquarter2 = map.placeBuilding(new Headquarter(player2), point2);
 
         // Get the statistics manager instance
-        StatisticsManager statisticsManager = map.getStatisticsManager();
+        var statisticsManager = map.getStatisticsManager();
 
         // Verify that the land statistics are correct for each player
         assertEquals(statisticsManager.getPlayerStatistics(player0).land().getMeasurements().getFirst().value(), player0.getOwnedLand().size());

@@ -59,47 +59,46 @@ public class TestPrioritization {
     public void testMinesGetEqualAmountsOfFood() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Put small mountains with ore on the map
-        Point point0 = new Point(6, 10);
+        var point0 = new Point(6, 10);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
-        Point point1 = new Point(10, 14);
+        var point1 = new Point(10, 14);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
-        Point point2 = new Point(10, 6);
+        var point2 = new Point(10, 6);
         Utils.surroundPointWithMinableMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.SMALL, map);
 
-        Point point3 = new Point(20, 10);
+        var point3 = new Point(20, 10);
         Utils.surroundPointWithMinableMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
         // Place headquarter
-        Point point21 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place gold mine
-        Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
+        var goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
         // Place iron mine
-        Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
+        var ironMine0 = map.placeBuilding(new IronMine(player0), point1);
 
         // Place coal mine
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
 
         // Finish construction of the mines
         Utils.constructHouse(goldMine0);
@@ -128,8 +127,7 @@ public class TestPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that the mines get one bread each with the four first deliveries
-        Map<Building, Integer> breadAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var breadAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -140,18 +138,18 @@ public class TestPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
 
             // Keep track of where the breads end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!breadAllocation.containsKey(targetBuilding)) {
                 breadAllocation.put(targetBuilding, 0);
             }
 
-            int amount = breadAllocation.get(targetBuilding);
+            var amount = breadAllocation.get(targetBuilding);
             breadAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the bread to reach the mine
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -161,9 +159,9 @@ public class TestPrioritization {
             Utils.waitUntilAmountIs(target, BREAD, 0);
 
             // Exit after four delivered breads
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : breadAllocation.values()) {
+            for (var amountInBuilding : breadAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -184,47 +182,46 @@ public class TestPrioritization {
     public void testOnlyGoldMineGetsFood() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Put small mountains with ore on the map
-        Point point0 = new Point(6, 10);
+        var point0 = new Point(6, 10);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         Utils.putGoldAtSurroundingTiles(point0, Size.LARGE, map);
 
-        Point point1 = new Point(10, 14);
+        var point1 = new Point(10, 14);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
-        Point point2 = new Point(10, 6);
+        var point2 = new Point(10, 6);
         Utils.surroundPointWithMinableMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.SMALL, map);
 
-        Point point3 = new Point(20, 10);
+        var point3 = new Point(20, 10);
         Utils.surroundPointWithMinableMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
         // Place headquarter
-        Point point21 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place gold mine
-        Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
+        var goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
         // Place iron mine
-        Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
+        var ironMine0 = map.placeBuilding(new IronMine(player0), point1);
 
         // Place coal mine
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
 
         // Finish construction of the mines
         Utils.constructHouse(goldMine0);
@@ -259,8 +256,7 @@ public class TestPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that the mines get one bread each with the four first deliveries
-        Map<Building, Integer> breadAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var breadAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -271,18 +267,18 @@ public class TestPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
 
             // Keep track of where the breads end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!breadAllocation.containsKey(targetBuilding)) {
                 breadAllocation.put(targetBuilding, 0);
             }
 
-            int amount = breadAllocation.get(targetBuilding);
+            var amount = breadAllocation.get(targetBuilding);
             breadAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the bread to reach the mine
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -292,9 +288,9 @@ public class TestPrioritization {
             Utils.waitUntilAmountIs(target, BREAD, 0);
 
             // Exit after four delivered breads
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : breadAllocation.values()) {
+            for (var amountInBuilding : breadAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -312,47 +308,46 @@ public class TestPrioritization {
     public void testOnlyIronMineGetsFood() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Put small mountains with ore on the map
-        Point point0 = new Point(6, 10);
+        var point0 = new Point(6, 10);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
-        Point point1 = new Point(10, 14);
+        var point1 = new Point(10, 14);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.LARGE, map);
 
-        Point point2 = new Point(10, 6);
+        var point2 = new Point(10, 6);
         Utils.surroundPointWithMinableMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.SMALL, map);
 
-        Point point3 = new Point(20, 10);
+        var point3 = new Point(20, 10);
         Utils.surroundPointWithMinableMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
         // Place headquarter
-        Point point21 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place gold mine
-        Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
+        var goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
         // Place iron mine
-        Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
+        var ironMine0 = map.placeBuilding(new IronMine(player0), point1);
 
         // Place coal mine
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
 
         // Finish construction of the mines
         Utils.constructHouse(goldMine0);
@@ -387,8 +382,7 @@ public class TestPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that the mines get one bread each with the four first deliveries
-        Map<Building, Integer> breadAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var breadAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -399,18 +393,18 @@ public class TestPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
 
             // Keep track of where the breads end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!breadAllocation.containsKey(targetBuilding)) {
                 breadAllocation.put(targetBuilding, 0);
             }
 
-            int amount = breadAllocation.get(targetBuilding);
+            var amount = breadAllocation.get(targetBuilding);
             breadAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the bread to reach the mine
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -420,9 +414,9 @@ public class TestPrioritization {
             Utils.waitUntilAmountIs(target, BREAD, 0);
 
             // Exit after four delivered breads
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : breadAllocation.values()) {
+            for (var amountInBuilding : breadAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -440,47 +434,46 @@ public class TestPrioritization {
     public void testOnlyCoalMineGetsFood() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Put small mountains with ore on the map
-        Point point0 = new Point(6, 10);
+        var point0 = new Point(6, 10);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
-        Point point1 = new Point(10, 14);
+        var point1 = new Point(10, 14);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
-        Point point2 = new Point(10, 6);
+        var point2 = new Point(10, 6);
         Utils.surroundPointWithMinableMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.LARGE, map);
 
-        Point point3 = new Point(20, 10);
+        var point3 = new Point(20, 10);
         Utils.surroundPointWithMinableMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
         // Place headquarter
-        Point point21 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place gold mine
-        Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
+        var goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
         // Place iron mine
-        Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
+        var ironMine0 = map.placeBuilding(new IronMine(player0), point1);
 
         // Place coal mine
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
 
         // Finish construction of the mines
         Utils.constructHouse(goldMine0);
@@ -515,8 +508,7 @@ public class TestPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that the mines get one bread each with the four first deliveries
-        Map<Building, Integer> breadAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var breadAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -527,18 +519,18 @@ public class TestPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
 
             // Keep track of where the breads end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!breadAllocation.containsKey(targetBuilding)) {
                 breadAllocation.put(targetBuilding, 0);
             }
 
-            int amount = breadAllocation.get(targetBuilding);
+            var amount = breadAllocation.get(targetBuilding);
             breadAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the bread to reach the mine
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -548,9 +540,9 @@ public class TestPrioritization {
             Utils.waitUntilAmountIs(target, BREAD, 0);
 
             // Exit after four delivered breads
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : breadAllocation.values()) {
+            for (var amountInBuilding : breadAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -568,47 +560,46 @@ public class TestPrioritization {
     public void testOnlyGraniteMineGetsFood() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Put small mountains with ore on the map
-        Point point0 = new Point(5, 9);
+        var point0 = new Point(5, 9);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
-        Point point1 = new Point(9, 15);
+        var point1 = new Point(9, 15);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
-        Point point2 = new Point(9, 5);
+        var point2 = new Point(9, 5);
         Utils.surroundPointWithMinableMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.SMALL, map);
 
-        Point point3 = new Point(25, 11);
+        var point3 = new Point(25, 11);
         Utils.surroundPointWithMinableMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.LARGE, map);
 
         // Place headquarter
-        Point point21 = new Point(20, 10);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(20, 10);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place gold mine
-        Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
+        var goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
         // Place iron mine
-        Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
+        var ironMine0 = map.placeBuilding(new IronMine(player0), point1);
 
         // Place coal mine
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
 
         // Finish construction of the mines
         Utils.constructHouse(goldMine0);
@@ -643,8 +634,7 @@ public class TestPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that the mines get one bread each with the four first deliveries
-        Map<Building, Integer> breadAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var breadAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -655,18 +645,18 @@ public class TestPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
 
             // Keep track of where the breads end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!breadAllocation.containsKey(targetBuilding)) {
                 breadAllocation.put(targetBuilding, 0);
             }
 
-            int amount = breadAllocation.get(targetBuilding);
+            var amount = breadAllocation.get(targetBuilding);
             breadAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the bread to reach the mine
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -676,9 +666,9 @@ public class TestPrioritization {
             Utils.waitUntilAmountIs(target, BREAD, 0);
 
             // Exit after four delivered breads
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : breadAllocation.values()) {
+            for (var amountInBuilding : breadAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -696,39 +686,38 @@ public class TestPrioritization {
     public void testOtherMinesGetFoodWithCoalMissing() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Put small mountains with ore on the map
-        Point point0 = new Point(6, 10);
+        var point0 = new Point(6, 10);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
-        Point point1 = new Point(10, 14);
+        var point1 = new Point(10, 14);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
-        Point point3 = new Point(10, 6);
+        var point3 = new Point(10, 6);
         Utils.surroundPointWithMinableMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
         // Place headquarter
-        Point point21 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place gold mine
-        Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
+        var goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
         // Place iron mine
-        Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
+        var ironMine0 = map.placeBuilding(new IronMine(player0), point1);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
 
         // Finish construction of the mines
         Utils.constructHouse(goldMine0);
@@ -754,8 +743,7 @@ public class TestPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that the mines get one bread each with the four first deliveries
-        Map<Building, Integer> breadAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var breadAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -766,18 +754,18 @@ public class TestPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
 
             // Keep track of where the breads end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!breadAllocation.containsKey(targetBuilding)) {
                 breadAllocation.put(targetBuilding, 0);
             }
 
-            int amount = breadAllocation.get(targetBuilding);
+            var amount = breadAllocation.get(targetBuilding);
             breadAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the bread to reach the mine
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -787,9 +775,9 @@ public class TestPrioritization {
             Utils.waitUntilAmountIs(target, BREAD, 0);
 
             // Exit after four delivered breads
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : breadAllocation.values()) {
+            for (var amountInBuilding : breadAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -809,47 +797,46 @@ public class TestPrioritization {
     public void testOtherMinesGetFoodWithCoalMineNotReady() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Put small mountains with ore on the map
-        Point point0 = new Point(6, 10);
+        var point0 = new Point(6, 10);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
-        Point point1 = new Point(10, 14);
+        var point1 = new Point(10, 14);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
-        Point point2 = new Point(10, 6);
+        var point2 = new Point(10, 6);
         Utils.surroundPointWithMinableMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.SMALL, map);
 
-        Point point3 = new Point(20, 10);
+        var point3 = new Point(20, 10);
         Utils.surroundPointWithMinableMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
         // Place headquarter
-        Point point21 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place gold mine
-        Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
+        var goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
         // Place iron mine
-        Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
+        var ironMine0 = map.placeBuilding(new IronMine(player0), point1);
 
         // Place coal mine
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
 
         // Place granite mine
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
 
         // Finish construction of the mines
         Utils.constructHouse(goldMine0);
@@ -887,8 +874,7 @@ public class TestPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that the mines get one bread each with the four first deliveries
-        Map<Building, Integer> breadAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var breadAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -899,27 +885,27 @@ public class TestPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
 
             // Keep track of where the breads end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!breadAllocation.containsKey(targetBuilding)) {
                 breadAllocation.put(targetBuilding, 0);
             }
 
-            int amount = breadAllocation.get(targetBuilding);
+            var amount = breadAllocation.get(targetBuilding);
             breadAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the bread to reach the mine
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
             assertEquals(target.getAmount(BREAD), 1);
 
             // Exit after four delivered breads
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : breadAllocation.values()) {
+            for (var amountInBuilding : breadAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -940,51 +926,50 @@ public class TestPrioritization {
     public void testOtherMinesGetFoodWithFullyStockedCoalMine() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Put small mountains with ore on the map
-        Point point0 = new Point(6, 10);
+        var point0 = new Point(6, 10);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
-        Point point1 = new Point(10, 14);
+        var point1 = new Point(10, 14);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
-        Point point2 = new Point(10, 6);
+        var point2 = new Point(10, 6);
         Utils.surroundPointWithMinableMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.SMALL, map);
 
-        Point point3 = new Point(16, 14);
+        var point3 = new Point(16, 14);
         Utils.surroundPointWithMinableMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
         // Place headquarter
-        Point point21 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place gold mine
         assertTrue(map.isAvailableMinePoint(player0, point0));
-        Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
+        var goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
         // Place iron mine
         assertTrue(map.isAvailableMinePoint(player0, point1));
-        Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
+        var ironMine0 = map.placeBuilding(new IronMine(player0), point1);
 
         // Place coal mine
         assertTrue(map.isAvailableMinePoint(player0, point2));
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
 
         // Place granite mine
         assertTrue(map.isAvailableMinePoint(player0, point3));
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
+        var graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
 
         // Finish construction of the mines
         Utils.constructHouse(goldMine0);
@@ -1034,8 +1019,7 @@ public class TestPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that the mines get one bread each with the four first deliveries
-        Map<Building, Integer> breadAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var breadAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -1046,27 +1030,27 @@ public class TestPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
 
             // Keep track of where the breads end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!breadAllocation.containsKey(targetBuilding)) {
                 breadAllocation.put(targetBuilding, 0);
             }
 
-            int amount = breadAllocation.get(targetBuilding);
+            var amount = breadAllocation.get(targetBuilding);
             breadAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the bread to reach the mine
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
             assertEquals(target.getAmount(BREAD), 1);
 
             // Exit after four delivered breads
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : breadAllocation.values()) {
+            for (var amountInBuilding : breadAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -1086,23 +1070,22 @@ public class TestPrioritization {
     public void testFoodContinuesToBeAllocatedWhenQuotaIsReduced() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Put small mountains with ore on the map
-        Point point0 = new Point(6, 10);
+        var point0 = new Point(6, 10);
         Utils.surroundPointWithMinableMountain(point0, map);
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place gold mines
-        Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
+        var goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
         // Finish construction of the mines
         Utils.constructHouse(goldMine0);
@@ -1125,7 +1108,7 @@ public class TestPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Wait for the headquarter to deliver five breads to the mine
-        Worker carrier = headquarter0.getWorker();
+        var carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5; i++) {
 
@@ -1138,8 +1121,8 @@ public class TestPrioritization {
             assertEquals(carrier.getCargo().getTarget(), goldMine0);
 
             // Wait for the bread to reach the mine
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -1160,8 +1143,8 @@ public class TestPrioritization {
         assertEquals(carrier.getCargo().getTarget(), goldMine0);
 
         // Wait for the bread to reach the mine
-        Cargo cargo = carrier.getCargo();
-        Building target = cargo.getTarget();
+        var cargo = carrier.getCargo();
+        var target = cargo.getTarget();
 
         Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -1172,26 +1155,25 @@ public class TestPrioritization {
     public void testCoalConsumersGetEqualAmountsOfCoal() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place mint
-        Point point0 = new Point(6, 10);
-        Building mint0 = map.placeBuilding(new Mint(player0), point0);
+        var point0 = new Point(6, 10);
+        var mint0 = map.placeBuilding(new Mint(player0), point0);
 
         // Place iron smelter
-        Point point1 = new Point(10, 14);
-        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
+        var point1 = new Point(10, 14);
+        var ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
 
         // Place armory
-        Point point2 = new Point(10, 6);
-        Building armory0 = map.placeBuilding(new Armory(player0), point2);
+        var point2 = new Point(10, 6);
+        var armory0 = map.placeBuilding(new Armory(player0), point2);
 
         // Finish construction of the coal consumers
         Utils.constructHouse(mint0);
@@ -1215,8 +1197,7 @@ public class TestPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that the coal consumers get one coal each with the three first deliveries
-        Map<Building, Integer> coalAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var coalAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -1240,18 +1221,18 @@ public class TestPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
 
             // Keep track of where the coals end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!coalAllocation.containsKey(targetBuilding)) {
                 coalAllocation.put(targetBuilding, 0);
             }
 
-            int amount = coalAllocation.get(targetBuilding);
+            var amount = coalAllocation.get(targetBuilding);
             coalAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the coal to reach the consumer
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -1261,9 +1242,9 @@ public class TestPrioritization {
             Utils.waitUntilAmountIs(target, COAL, 0);
 
             // Exit after four delivered coals
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : coalAllocation.values()) {
+            for (var amountInBuilding : coalAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -1283,26 +1264,25 @@ public class TestPrioritization {
     public void testOnlyIronSmelterGetsCoal() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place mint
-        Point point0 = new Point(6, 10);
-        Building mint0 = map.placeBuilding(new Mint(player0), point0);
+        var point0 = new Point(6, 10);
+        var mint0 = map.placeBuilding(new Mint(player0), point0);
 
         // Place iron smelter
-        Point point1 = new Point(10, 14);
-        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
+        var point1 = new Point(10, 14);
+        var ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
 
         // Place armory
-        Point point2 = new Point(10, 6);
-        Building armory0 = map.placeBuilding(new Armory(player0), point2);
+        var point2 = new Point(10, 6);
+        var armory0 = map.placeBuilding(new Armory(player0), point2);
 
         // Finish construction of the coal consumers
         Utils.constructHouse(mint0);
@@ -1336,8 +1316,7 @@ public class TestPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that only the iron smelter gets any coal
-        Map<Building, Integer> coalAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var coalAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -1361,18 +1340,18 @@ public class TestPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
 
             // Keep track of where the coals end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!coalAllocation.containsKey(targetBuilding)) {
                 coalAllocation.put(targetBuilding, 0);
             }
 
-            int amount = coalAllocation.get(targetBuilding);
+            var amount = coalAllocation.get(targetBuilding);
             coalAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the coal to reach the consumer
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -1382,9 +1361,9 @@ public class TestPrioritization {
             Utils.waitUntilAmountIs(target, COAL, 0);
 
             // Exit after four delivered coals
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : coalAllocation.values()) {
+            for (var amountInBuilding : coalAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -1402,26 +1381,25 @@ public class TestPrioritization {
     public void testOnlyMintGetsCoal() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place mint
-        Point point0 = new Point(6, 10);
-        Building mint0 = map.placeBuilding(new Mint(player0), point0);
+        var point0 = new Point(6, 10);
+        var mint0 = map.placeBuilding(new Mint(player0), point0);
 
         // Place iron smelter
-        Point point1 = new Point(10, 14);
-        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
+        var point1 = new Point(10, 14);
+        var ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
 
         // Place armory
-        Point point2 = new Point(10, 6);
-        Building armory0 = map.placeBuilding(new Armory(player0), point2);
+        var point2 = new Point(10, 6);
+        var armory0 = map.placeBuilding(new Armory(player0), point2);
 
         // Finish construction of the coal consumers
         Utils.constructHouse(mint0);
@@ -1455,8 +1433,7 @@ public class TestPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that only the iron smelter gets any coal
-        Map<Building, Integer> coalAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var coalAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -1480,18 +1457,18 @@ public class TestPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
 
             // Keep track of where the coals end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!coalAllocation.containsKey(targetBuilding)) {
                 coalAllocation.put(targetBuilding, 0);
             }
 
-            int amount = coalAllocation.get(targetBuilding);
+            var amount = coalAllocation.get(targetBuilding);
             coalAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the coal to reach the consumer
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -1501,9 +1478,9 @@ public class TestPrioritization {
             Utils.waitUntilAmountIs(target, COAL, 0);
 
             // Exit after four delivered coals
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : coalAllocation.values()) {
+            for (var amountInBuilding : coalAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -1521,26 +1498,25 @@ public class TestPrioritization {
     public void testOnlyArmoryGetsCoal() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place mint
-        Point point0 = new Point(6, 10);
-        Building mint0 = map.placeBuilding(new Mint(player0), point0);
+        var point0 = new Point(6, 10);
+        var mint0 = map.placeBuilding(new Mint(player0), point0);
 
         // Place iron smelter
-        Point point1 = new Point(10, 14);
-        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
+        var point1 = new Point(10, 14);
+        var ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
 
         // Place armory
-        Point point2 = new Point(10, 6);
-        Building armory0 = map.placeBuilding(new Armory(player0), point2);
+        var point2 = new Point(10, 6);
+        var armory0 = map.placeBuilding(new Armory(player0), point2);
 
         // Finish construction of the coal consumers
         Utils.constructHouse(mint0);
@@ -1574,8 +1550,7 @@ public class TestPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that only the iron smelter gets any coal
-        Map<Building, Integer> coalAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var coalAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -1599,18 +1574,18 @@ public class TestPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
 
             // Keep track of where the coals end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!coalAllocation.containsKey(targetBuilding)) {
                 coalAllocation.put(targetBuilding, 0);
             }
 
-            int amount = coalAllocation.get(targetBuilding);
+            var amount = coalAllocation.get(targetBuilding);
             coalAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the coal to reach the consumer
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -1620,9 +1595,9 @@ public class TestPrioritization {
             Utils.waitUntilAmountIs(target, COAL, 0);
 
             // Exit after four delivered coals
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : coalAllocation.values()) {
+            for (var amountInBuilding : coalAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -1640,22 +1615,21 @@ public class TestPrioritization {
     public void testOtherConsumersGetCoalWithIronSmelterMissing() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place mint
-        Point point0 = new Point(6, 10);
-        Building mint0 = map.placeBuilding(new Mint(player0), point0);
+        var point0 = new Point(6, 10);
+        var mint0 = map.placeBuilding(new Mint(player0), point0);
 
         // Place armory
-        Point point2 = new Point(10, 14);
-        Building armory0 = map.placeBuilding(new Armory(player0), point2);
+        var point2 = new Point(10, 14);
+        var armory0 = map.placeBuilding(new Armory(player0), point2);
 
         // Finish construction of the coal consumers
         Utils.constructHouse(mint0);
@@ -1681,8 +1655,7 @@ public class TestPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that only the iron smelter gets any coal
-        Map<Building, Integer> coalAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var coalAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -1702,18 +1675,18 @@ public class TestPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
 
             // Keep track of where the coals end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!coalAllocation.containsKey(targetBuilding)) {
                 coalAllocation.put(targetBuilding, 0);
             }
 
-            int amount = coalAllocation.get(targetBuilding);
+            var amount = coalAllocation.get(targetBuilding);
             coalAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the coal to reach the consumer
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -1723,9 +1696,9 @@ public class TestPrioritization {
             Utils.waitUntilAmountIs(target, COAL, 0);
 
             // Exit after four delivered coals
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : coalAllocation.values()) {
+            for (var amountInBuilding : coalAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -1744,26 +1717,25 @@ public class TestPrioritization {
     public void testOtherConsumersGetCoalWithIronSmelterNotReady() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place mint
-        Point point0 = new Point(6, 10);
-        Building mint0 = map.placeBuilding(new Mint(player0), point0);
+        var point0 = new Point(6, 10);
+        var mint0 = map.placeBuilding(new Mint(player0), point0);
 
         // Place iron smelter
-        Point point1 = new Point(10, 10);
-        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
+        var point1 = new Point(10, 10);
+        var ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
 
         // Place armory
-        Point point2 = new Point(20, 10);
-        Building armory0 = map.placeBuilding(new Armory(player0), point2);
+        var point2 = new Point(20, 10);
+        var armory0 = map.placeBuilding(new Armory(player0), point2);
 
         // Finish construction of the coal consumers
         Utils.constructHouse(mint0);
@@ -1795,8 +1767,7 @@ public class TestPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that the other consumers get coal when the iron smelter is not yet constructed
-        Map<Building, Integer> coalAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var coalAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -1820,27 +1791,27 @@ public class TestPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
 
             // Keep track of where the coals end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!coalAllocation.containsKey(targetBuilding)) {
                 coalAllocation.put(targetBuilding, 0);
             }
 
-            int amount = coalAllocation.get(targetBuilding);
+            var amount = coalAllocation.get(targetBuilding);
             coalAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the coal to reach the consumer
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
             assertEquals(target.getAmount(COAL), 1);
 
             // Exit after six delivered coals
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : coalAllocation.values()) {
+            for (var amountInBuilding : coalAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -1860,26 +1831,25 @@ public class TestPrioritization {
     public void testOtherConsumersGetCoalWithFullyStockedIronSmelter() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place mint
-        Point point0 = new Point(6, 10);
-        Building mint0 = map.placeBuilding(new Mint(player0), point0);
+        var point0 = new Point(6, 10);
+        var mint0 = map.placeBuilding(new Mint(player0), point0);
 
         // Place iron smelter
-        Point point1 = new Point(10, 14);
-        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
+        var point1 = new Point(10, 14);
+        var ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
 
         // Place armory
-        Point point2 = new Point(10, 6);
-        Building armory0 = map.placeBuilding(new Armory(player0), point2);
+        var point2 = new Point(10, 6);
+        var armory0 = map.placeBuilding(new Armory(player0), point2);
 
         // Finish construction of the coal consumers
         Utils.constructHouse(mint0);
@@ -1920,8 +1890,7 @@ public class TestPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that the other consumers get coal when the iron smelter is already fully stocked and does not consume its resources
-        Map<Building, Integer> coalAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var coalAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -1945,27 +1914,27 @@ public class TestPrioritization {
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
 
             // Keep track of where the coals end up
-            Building targetBuilding = carrier.getCargo().getTarget();
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!coalAllocation.containsKey(targetBuilding)) {
                 coalAllocation.put(targetBuilding, 0);
             }
 
-            int amount = coalAllocation.get(targetBuilding);
+            var amount = coalAllocation.get(targetBuilding);
             coalAllocation.put(targetBuilding, amount + 1);
 
             // Wait for the coal to reach the mine
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
             assertEquals(target.getAmount(COAL), 1);
 
             // Exit after four delivered coals
-            int sum = 0;
+            var sum = 0;
 
-            for (Integer amountInBuilding : coalAllocation.values()) {
+            for (var amountInBuilding : coalAllocation.values()) {
                 sum += amountInBuilding;
             }
 
@@ -2007,24 +1976,23 @@ public class TestPrioritization {
     public void testCourierPicksUpCargoOfHighestPriority() throws Exception {
 
         // Create new game map with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 30, 30);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 30, 30);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(20, 14);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(20, 14);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Assign a courier to the road
-        Courier courier = new Courier(player0, map);
+        var courier = new Courier(player0, map);
 
         map.placeWorker(courier, flag0);
         courier.assignToRoad(road0);
@@ -2035,21 +2003,21 @@ public class TestPrioritization {
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
 
         // Place wood cargo to be delivered to the headquarter
-        Cargo woodCargo = new Cargo(WOOD, map);
+        var woodCargo = new Cargo(WOOD, map);
         woodCargo.setPosition(point1);
         woodCargo.setTarget(headquarter0);
 
         flag0.putCargo(woodCargo);
 
         // Place stone cargo to be delivered to the headquarter
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
         stoneCargo.setPosition(point1);
         stoneCargo.setTarget(headquarter0);
 
         flag0.putCargo(stoneCargo);
 
         // Place plank cargo to be delivered to the headquarter
-        Cargo plankCargo = new Cargo(PLANK, map);
+        var plankCargo = new Cargo(PLANK, map);
         plankCargo.setPosition(point1);
         plankCargo.setTarget(headquarter0);
 
@@ -2115,34 +2083,33 @@ public class TestPrioritization {
     public void testStorageWorkerHandsOutCargoOfHighestPriority() throws Exception {
 
         // Create new game map with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 50, 50);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mint
-        Point point1 = new Point(20, 14);
-        Mint mint0 = map.placeBuilding(new Mint(player0), point1);
+        var point1 = new Point(20, 14);
+        var mint0 = map.placeBuilding(new Mint(player0), point1);
 
         // Place bakery
-        Point point2 = new Point(24, 14);
-        Bakery bakery0 = map.placeBuilding(new Bakery(player0), point2);
+        var point2 = new Point(24, 14);
+        var bakery0 = map.placeBuilding(new Bakery(player0), point2);
 
         // Place sawmill
-        Point point3 = new Point(28, 14);
-        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point3);
+        var point3 = new Point(28, 14);
+        var sawmill0 = map.placeBuilding(new Sawmill(player0), point3);
 
         // Place mill
-        Point point4 = new Point(24, 10);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point4);
+        var point4 = new Point(24, 10);
+        var mill0 = map.placeBuilding(new Mill(player0), point4);
 
         // Place well
-        Point point5 = new Point(20, 10);
-        Well well0 = map.placeBuilding(new Well(player0), point5);
+        var point5 = new Point(20, 10);
+        var well0 = map.placeBuilding(new Well(player0), point5);
 
         // Construct all the buildings except the well
         Utils.constructHouse(mint0);
@@ -2157,11 +2124,11 @@ public class TestPrioritization {
         Utils.occupyBuilding(new Miller(player0, map), mill0);
 
         // Connect the buildings with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mint0.getFlag());
-        Road road1 = map.placeAutoSelectedRoad(player0, mint0.getFlag(), bakery0.getFlag());
-        Road road2 = map.placeAutoSelectedRoad(player0, bakery0.getFlag(), sawmill0.getFlag());
-        Road road3 = map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), mill0.getFlag());
-        Road road4 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), well0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mint0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, mint0.getFlag(), bakery0.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, bakery0.getFlag(), sawmill0.getFlag());
+        var road3 = map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), mill0.getFlag());
+        var road4 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), well0.getFlag());
 
         // Fill up the buildings so there is only space for one more resource of each type
         Utils.deliverCargos(mint0, COAL, 5);
@@ -2193,7 +2160,7 @@ public class TestPrioritization {
         assertTrue(mill0.needsMaterial(WHEAT));
         assertTrue(well0.needsMaterial(PLANK));
 
-        Worker storageWorker = headquarter0.getWorker();
+        var storageWorker = headquarter0.getWorker();
 
         assertNull(storageWorker.getCargo());
 
@@ -2214,7 +2181,7 @@ public class TestPrioritization {
         Utils.adjustInventoryTo(headquarter0, STONE, 20);
 
         // Verify that the storage worker first delivers wheat
-        Cargo currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
+        var currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
 
         assertNotNull(currentCargo);
         assertEquals(currentCargo.getMaterial(), WHEAT);
@@ -2277,14 +2244,13 @@ public class TestPrioritization {
     public void testReprioritizedMaterialsDoNotGetDuplicated() throws Exception {
 
         // Create new game map with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 50, 50);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Count initial number of times planks appear
         assertEquals(Utils.countNumberElementAppearsInList(player0.getTransportPriorities(), TransportCategory.PLANK), 1);
@@ -2308,14 +2274,13 @@ public class TestPrioritization {
     public void testCannotSetTransportPriorityToNegativeNumber() throws Exception {
 
         // Create new game map with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 50, 50);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that it's not possible to set transport priority for an item to a negative index
         try {
@@ -2331,14 +2296,13 @@ public class TestPrioritization {
     public void testCannotSetTransportPriorityToTooLargeNumber() throws Exception {
 
         // Create new game map with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 50, 50);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that it's not possible to set for an index higher than the number of items - 1
         try {
@@ -2354,14 +2318,13 @@ public class TestPrioritization {
     public void testCanSetTransportPriorityToLargeNumber() throws Exception {
 
         // Create new game map with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 50, 50);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that it's possible to set the largest number allowed (number of items - 1)
         player0.setTransportPriority(15, TransportCategory.WOOD); // There are 16 items, and indexing starts at 0

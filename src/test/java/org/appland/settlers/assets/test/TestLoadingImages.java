@@ -41,9 +41,9 @@ public class TestLoadingImages {
 
     @Test
     public void loadPalBmpFile() throws IOException, InvalidFormatException {
-        Palette palette = createFakePalette();
+        var palette = createFakePalette();
 
-        BitmapFile bitmap = BitmapDecoder.loadBitmapFile(TEST_BITMAP_PAL, palette, Optional.empty());
+        var bitmap = BitmapDecoder.loadBitmapFile(TEST_BITMAP_PAL, palette, Optional.empty());
 
         assertEquals(bitmap.getWidth(), 94);
         assertEquals(bitmap.getHeight(), 63);
@@ -63,9 +63,9 @@ public class TestLoadingImages {
 
     @Test
     public void loadLogoFile() throws InvalidFormatException, IOException {
-        Palette palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
+        var palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
 
-        BitmapFile bitmap = BitmapDecoder.loadBitmapFile(TEST_BITMAP_LOGO, palette, Optional.empty());
+        var bitmap = BitmapDecoder.loadBitmapFile(TEST_BITMAP_LOGO, palette, Optional.empty());
 
         assertNotNull(bitmap);
         assertEquals(bitmap.getWidth(), 50);
@@ -85,10 +85,10 @@ public class TestLoadingImages {
     }
 
     private Palette createFakePalette() {
-        byte[] colors = new byte[3 * 256];
+        var colors = new byte[3 * 256];
 
         for (int i = 0; i < 256; i++) {
-            int offset = i * 3;
+            var offset = i * 3;
 
             colors[offset] = (byte)(i & 0xFF);
             colors[offset + 1] = (byte)(i & 0xFF);
@@ -100,7 +100,7 @@ public class TestLoadingImages {
 
     @Test
     public void testLoadPalette() throws IOException {
-        Palette palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
+        var palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
 
         assertNotNull(palette);
         assertEquals(palette.getName(), "pal5.act(0)");
@@ -110,15 +110,15 @@ public class TestLoadingImages {
 
     @Test
     public void testLoadBbmPalette() throws IOException, InvalidFormatException {
-        List<GameResource> gameResourceList = BbmDecoder.loadBbmFile(TEST_BITMAP_PAL_BBM);
+        var gameResourceList = BbmDecoder.loadBbmFile(TEST_BITMAP_PAL_BBM);
 
         assertEquals(gameResourceList.size(), 2);
 
-        PaletteResource paletteResource1 = (PaletteResource) gameResourceList.get(0);
-        PaletteResource paletteResource2 = (PaletteResource) gameResourceList.get(1);
+        var paletteResource1 = (PaletteResource) gameResourceList.get(0);
+        var paletteResource2 = (PaletteResource) gameResourceList.get(1);
 
-        Palette palette1 = paletteResource1.getPalette();
-        Palette palette2 = paletteResource2.getPalette();
+        var palette1 = paletteResource1.getPalette();
+        var palette2 = paletteResource2.getPalette();
 
         assertEquals(palette1.getName(), "pal.bbm(0)");
         assertEquals(palette2.getName(), "pal.bbm(1)");
@@ -130,13 +130,13 @@ public class TestLoadingImages {
 
     @Test
     public void testLoadBitmapLbm() throws IOException, InvalidFormatException {
-        Palette palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
+        var palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
 
-        GameResource gameResource = LbmDecoder.loadLBMFile(TEST_BITMAP_LBM, palette);
+        var gameResource = LbmDecoder.loadLBMFile(TEST_BITMAP_LBM, palette);
 
-        LBMGameResource lbmGameResource = (LBMGameResource) gameResource;
+        var lbmGameResource = (LBMGameResource) gameResource;
 
-        AnimatedLBMFile lbmFile = lbmGameResource.getLbmFile();
+        var lbmFile = lbmGameResource.getLbmFile();
 
         assertNotNull(lbmFile);
 
@@ -148,21 +148,21 @@ public class TestLoadingImages {
         assertNotNull(lbmFile.getPalette());
         assertNotNull(lbmFile.getPaletteAnimations());
 
-        List<AnimatedPalette> animatedPaletteList = lbmFile.getPaletteAnimations();
+        var animatedPaletteList = lbmFile.getPaletteAnimations();
 
         assertEquals(animatedPaletteList.size(), 0);
     }
 
     @Test
     public void testLoadBitmapShadow() throws IOException, UnknownResourceTypeException, InvalidFormatException {
-        Palette palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
+        var palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
 
-        List<GameResource> gameResources = LstDecoder.loadLstFile(TEST_BITMAP_SHADOW, palette);
+        var gameResources = LstDecoder.loadLstFile(TEST_BITMAP_SHADOW, palette);
 
         assertEquals(gameResources.size(), 1);
 
-        BitmapResource playerBitmapResource = (BitmapResource) gameResources.getFirst();
-        Bitmap bitmap = playerBitmapResource.getBitmap();
+        var playerBitmapResource = (BitmapResource) gameResources.getFirst();
+        var bitmap = playerBitmapResource.getBitmap();
 
         assertNotNull(bitmap);
         assertEquals(bitmap.getWidth(), 57);
@@ -171,14 +171,14 @@ public class TestLoadingImages {
 
     @Test
     public void testLoadPlayerBitmap() throws IOException, UnknownResourceTypeException, InvalidFormatException {
-        Palette palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
+        var palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
 
-        List<GameResource> gameResources = LstDecoder.loadLstFile(TEST_PLAYER_BITMAP, palette);
+        var gameResources = LstDecoder.loadLstFile(TEST_PLAYER_BITMAP, palette);
 
         assertEquals(gameResources.size(), 1);
 
-        PlayerBitmapResource playerBitmapResource = (PlayerBitmapResource) gameResources.getFirst();
-        PlayerBitmap playerBitmap = playerBitmapResource.getBitmap();
+        var playerBitmapResource = (PlayerBitmapResource) gameResources.getFirst();
+        var playerBitmap = playerBitmapResource.getBitmap();
 
         assertNotNull(playerBitmap);
         assertEquals(playerBitmap.getWidth(), 40);
@@ -187,16 +187,16 @@ public class TestLoadingImages {
 
     @Test
     public void testLoadBitmapRLE() throws IOException, UnknownResourceTypeException, InvalidFormatException {
-        Palette palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
-        List<GameResource> resources = LstDecoder.loadLstFile(TEST_BITMAP_RLE, palette);
+        var palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
+        var resources = LstDecoder.loadLstFile(TEST_BITMAP_RLE, palette);
 
         assertEquals(resources.size(), 1);
 
-        BitmapRLEResource bitmapRLEResource = (BitmapRLEResource) resources.getFirst();
+        var bitmapRLEResource = (BitmapRLEResource) resources.getFirst();
 
         assertNotNull(bitmapRLEResource);
 
-        BitmapRLE bitmapRLE = bitmapRLEResource.getBitmap();
+        var bitmapRLE = bitmapRLEResource.getBitmap();
 
         assertNotNull(bitmapRLE);
         assertEquals(bitmapRLE.getWidth(), 20);
@@ -205,16 +205,16 @@ public class TestLoadingImages {
 
     @Test
     public void testLoadBitmapRaw() throws IOException, UnknownResourceTypeException, InvalidFormatException {
-        Palette palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
-        List<GameResource> resources = LstDecoder.loadLstFile(TEST_BITMAP_RAW, palette);
+        var palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
+        var resources = LstDecoder.loadLstFile(TEST_BITMAP_RAW, palette);
 
         assertEquals(resources.size(), 1);
 
-        BitmapRawResource bitmapRawResource = (BitmapRawResource) resources.getFirst();
+        var bitmapRawResource = (BitmapRawResource) resources.getFirst();
 
         assertNotNull(bitmapRawResource);
 
-        BitmapRaw bitmapRaw = bitmapRawResource.getBitmap();
+        var bitmapRaw = bitmapRawResource.getBitmap();
 
         assertNotNull(bitmapRaw);
         assertEquals(bitmapRaw.getWidth(), 50);
@@ -224,15 +224,15 @@ public class TestLoadingImages {
 
     @Test
     public void testLoadLbmTex() throws IOException, InvalidFormatException {
-        Palette palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
+        var palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
 
-        GameResource gameResource = LbmDecoder.loadLBMFile(TEST_TEX_LBM, palette);
+        var gameResource = LbmDecoder.loadLBMFile(TEST_TEX_LBM, palette);
 
         assertNotNull(gameResource);
 
-        LBMGameResource lbmGameResource = (LBMGameResource) gameResource;
+        var lbmGameResource = (LBMGameResource) gameResource;
 
-        AnimatedLBMFile lbmFile = lbmGameResource.getLbmFile();
+        var lbmFile = lbmGameResource.getLbmFile();
 
         assertEquals(lbmFile.getWidth(), 256);
         assertEquals(lbmFile.getHeight(), 256);
@@ -242,30 +242,30 @@ public class TestLoadingImages {
         assertNotNull(lbmFile.getPalette());
         assertNotNull(lbmFile.getPaletteAnimations());
 
-        List<AnimatedPalette> animatedPaletteList = lbmFile.getPaletteAnimations();
+        var animatedPaletteList = lbmFile.getPaletteAnimations();
 
         assertEquals(animatedPaletteList.size(), 16);
     }
 
     @Test
     public void testLoadDatIdx() throws IOException, UnknownResourceTypeException, InvalidFormatException {
-        Palette palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
+        var palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
 
-        List<GameResource> gameResourceList = DatDecoder.loadDatFile(TEST_DAT, palette);
+        var gameResourceList = DatDecoder.loadDatFile(TEST_DAT, palette);
 
         assertEquals(gameResourceList.size(), 1);
 
-        GameResource gameResource = gameResourceList.getFirst();
+        var gameResource = gameResourceList.getFirst();
 
-        FontResource fontResource = (FontResource) gameResource;
+        var fontResource = (FontResource) gameResource;
 
-        Map<String, PlayerBitmap> letterMap = fontResource.getLetterMap();
+        var letterMap = fontResource.getLetterMap();
 
         assertEquals(letterMap.size(), 123);
         assertTrue(letterMap.containsKey("U+8e"));
         assertNotNull(letterMap.get("U+83"));
 
-        PlayerBitmap playerBitmap = letterMap.get("U+8e");
+        var playerBitmap = letterMap.get("U+8e");
 
         assertEquals(playerBitmap.getWidth(), 11);
         assertEquals(playerBitmap.getHeight(), 11);

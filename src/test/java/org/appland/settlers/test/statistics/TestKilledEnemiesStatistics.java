@@ -95,7 +95,7 @@ public class TestKilledEnemiesStatistics {
         // Find the military that was chosen to attack.
         map.stepTime();
 
-        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
+        var attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);

@@ -30,15 +30,15 @@ public class TestSound {
 
     @Test
     public void testStereoWave() throws InvalidFormatException, IOException {
-        GameResource gameResource = WaveDecoder.loadSoundWaveFile(TEST_STEREO_WAVE_FILE);
+        var gameResource = WaveDecoder.loadSoundWaveFile(TEST_STEREO_WAVE_FILE);
 
         TestCase.assertEquals(gameResource.getType(), GameResourceType.WAVE_SOUND);
 
-        WaveGameResource waveGameResource = (WaveGameResource) gameResource;
+        var waveGameResource = (WaveGameResource) gameResource;
 
         assertNotNull(waveGameResource.getWaveFile());
 
-        WaveFile waveFile = waveGameResource.getWaveFile();
+        var waveFile = waveGameResource.getWaveFile();
 
         assertEquals(waveFile.getFormatId(), "fmt ");
         assertEquals(waveFile.getFormatSize(), 16);
@@ -54,15 +54,15 @@ public class TestSound {
 
     @Test
     public void testMonoWave() throws IOException, InvalidFormatException {
-        GameResource gameResource = WaveDecoder.loadSoundWaveFile(TEST_MONO_WAVE_FILE);
+        var gameResource = WaveDecoder.loadSoundWaveFile(TEST_MONO_WAVE_FILE);
 
         assertEquals(gameResource.getType(), GameResourceType.WAVE_SOUND);
 
-        WaveGameResource waveGameResource = (WaveGameResource) gameResource;
+        var waveGameResource = (WaveGameResource) gameResource;
 
         assertNotNull(waveGameResource.getWaveFile());
 
-        WaveFile waveFile = waveGameResource.getWaveFile();
+        var waveFile = waveGameResource.getWaveFile();
 
         assertEquals(waveFile.getFormatId(), "fmt ");
         assertEquals(waveFile.getFormatSize(), 16);
@@ -78,7 +78,7 @@ public class TestSound {
 
     @Test
     public void testMidi() throws IOException, InvalidFormatException {
-        MidiFile midiFile = MidiDecoder.loadSoundMidiFile(TEST_MIDI_FILE);
+        var midiFile = MidiDecoder.loadSoundMidiFile(TEST_MIDI_FILE);
 
         assertNotNull(midiFile);
         assertEquals(midiFile.getHeaderSize(), 6);
@@ -86,7 +86,7 @@ public class TestSound {
         assertEquals(midiFile.getNumberTracks(), 6);
         assertEquals(midiFile.getPulsePerQuarter(), 480);
 
-        List<MidiTrack> trackList = midiFile.getTracks();
+        var trackList = midiFile.getTracks();
 
         assertNotNull(trackList);
         assertEquals(trackList.size(), 6);
@@ -94,13 +94,13 @@ public class TestSound {
 
     @Test
     public void testXMidi() throws IOException, InvalidFormatException {
-        XMidiFile xMidiFile = MidiDecoder.loadSoundXMidiFile(TEST_XMIDI_FILE);
+        var xMidiFile = MidiDecoder.loadSoundXMidiFile(TEST_XMIDI_FILE);
 
         assertNotNull(xMidiFile);
         assertEquals(xMidiFile.headerSize(), 14);
         assertEquals(xMidiFile.numberTracks(), 1);
 
-        List<XMidiTrack> trackList = xMidiFile.trackList();
+        var trackList = xMidiFile.trackList();
 
         assertNotNull(trackList);
         assertEquals(trackList.size(), 1);

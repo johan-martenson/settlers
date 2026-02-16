@@ -39,33 +39,31 @@ public class TestConstructionPreparationPlayer {
     public void testCreatePlayer() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 10, 10);
+        var map = new GameMap(players, 10, 10);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ConstructionPreparationPlayer(player0, map);
+        var computerPlayer = new ConstructionPreparationPlayer(player0, map);
     }
 
     @Test
     public void testPlayerFirstPlacesForesterHut() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ConstructionPreparationPlayer(player0, map);
+        var computerPlayer = new ConstructionPreparationPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the player starts with placing a forester
@@ -88,50 +86,48 @@ public class TestConstructionPreparationPlayer {
     public void testPlayerDoesNothingUntilForesterHutIsCompleted() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ConstructionPreparationPlayer(player0, map);
+        var computerPlayer = new ConstructionPreparationPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Wait for the player to place a forester hut
-        ForesterHut foresterHut = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, ForesterHut.class);
+        var foresterHut = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, ForesterHut.class);
     }
 
     @Test
     public void testPlayerPlacesWoodcutterWhenForesterHutIsCompleted() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ConstructionPreparationPlayer(player0, map);
+        var computerPlayer = new ConstructionPreparationPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Wait for the player to place a forester hut
-        ForesterHut foresterHut = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, ForesterHut.class);
+        var foresterHut = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, ForesterHut.class);
 
         // Verify that the player now places two  woodcutters
-        int woodcutters = 0;
+        var woodcutters = 0;
         for (int i = 0; i < 1000; i++) {
 
-            for (Building b : player0.getBuildings()) {
+            for (var b : player0.getBuildings()) {
                 if (b instanceof Woodcutter) {
                     woodcutters++;
                 }
@@ -152,25 +148,24 @@ public class TestConstructionPreparationPlayer {
     public void testPlayerPlacesSawmillWhenWoodcutterIsCompleted() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ConstructionPreparationPlayer(player0, map);
+        var computerPlayer = new ConstructionPreparationPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Wait for the player to place a forester hut
-        ForesterHut foresterHut = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, ForesterHut.class);
+        var foresterHut = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, ForesterHut.class);
 
         // Wait for the player to place a woodcutter
-        Woodcutter woodcutter = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Woodcutter.class);
+        var woodcutter = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Woodcutter.class);
 
         // Verify that the player now places a sawmill
         Utils.verifyPlayerPlacesOnlyBuilding(computerPlayer, Sawmill.class);
@@ -180,29 +175,28 @@ public class TestConstructionPreparationPlayer {
     public void testPlayerPlacesQuarryAfterSawmillIsConstructed() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place stone
-        Point point1 = new Point(15, 17);
-        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
+        var point1 = new Point(15, 17);
+        var stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ConstructionPreparationPlayer(player0, map);
+        var computerPlayer = new ConstructionPreparationPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Wait for the player to place a forester hut
-        ForesterHut foresterHut = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, ForesterHut.class);
+        var foresterHut = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, ForesterHut.class);
 
         // Wait for the player to place a woodcutter
-        Woodcutter woodcutter = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Woodcutter.class);
+        var woodcutter = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Woodcutter.class);
 
         // Wait for the player to place the sawmill
         Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Sawmill.class);
@@ -215,35 +209,34 @@ public class TestConstructionPreparationPlayer {
     public void testPlayerPlacesQuarryCloseToStone() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place stone
-        Point point1 = new Point(15, 17);
-        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
+        var point1 = new Point(15, 17);
+        var stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ConstructionPreparationPlayer(player0, map);
+        var computerPlayer = new ConstructionPreparationPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Wait for the player to place a forester hut
-        ForesterHut foresterHut = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, ForesterHut.class);
+        var foresterHut = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, ForesterHut.class);
 
         // Wait for the player to place a woodcutter
-        Woodcutter woodcutter = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Woodcutter.class);
+        var woodcutter = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Woodcutter.class);
 
         // Wait for the player to place the sawmill
         Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Sawmill.class);
 
         // Wait for the player to build a quarry
-        Quarry quarry0 = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Quarry.class);
+        var quarry0 = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Quarry.class);
 
         // Verify that the quarry is built close to the stone
         assertTrue(quarry0.getPosition().distance(stone0.getPosition()) < 5);
@@ -253,26 +246,25 @@ public class TestConstructionPreparationPlayer {
     public void testPlayerDestroysQuarryWhenStoneRunsOut() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place stone
-        Point point1 = new Point(16, 10);
-        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
+        var point1 = new Point(16, 10);
+        var stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ConstructionPreparationPlayer(player0, map);
+        var computerPlayer = new ConstructionPreparationPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Fast forward until player builds quarry
-        Quarry quarry = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Quarry.class);
+        var quarry = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Quarry.class);
 
         assertNotNull(quarry);
         assertEquals(map.getBuildingAtPoint(quarry.getPosition()), quarry);
@@ -312,7 +304,7 @@ public class TestConstructionPreparationPlayer {
             try {
                 computerPlayer.turn();
             } catch (Exception e) {
-                for (StackTraceElement ste : e.getStackTrace()) {
+                for (var ste : e.getStackTrace()) {
                     System.out.println(ste.getClassName() + "." + ste.getMethodName() + ": " + ste.getLineNumber());
                 }
 
@@ -333,26 +325,25 @@ public class TestConstructionPreparationPlayer {
     public void testPlayerRemovesRoadWhenItRemovesQuarry() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 100);
 
         // Place stone
-        Point point1 = new Point(15, 17);
-        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 6);
+        var point1 = new Point(15, 17);
+        var stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 6);
 
         // Create the computer player
-        ComputerPlayer computerPlayer = new ConstructionPreparationPlayer(player0, map);
+        var computerPlayer = new ConstructionPreparationPlayer(player0, map);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 10);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Fast-forward until player builds quarry
-        Quarry quarry = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Quarry.class);
+        var quarry = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Quarry.class);
 
         // Wait for the quarry to get constructed and occupied
         assertNotNull(map.findWayWithExistingRoads(headquarter0.getPosition(), quarry.getPosition()));
@@ -370,12 +361,11 @@ public class TestConstructionPreparationPlayer {
         assertNotNull(quarry.getWorker());
 
         // Get the road from the quarry before it's destroyed
-        List<Point> points = map.findWayWithExistingRoads(headquarter0.getFlag().getPosition(), quarry.getFlag().getPosition());
+        var points = map.findWayWithExistingRoads(headquarter0.getFlag().getPosition(), quarry.getFlag().getPosition());
 
         // Collect all existing roads
-        Set<Point> otherRoads = new HashSet<>();
-
-        for (Building b : player0.getBuildings()) {
+        var otherRoads = new HashSet<Point>();
+        for (var b : player0.getBuildings()) {
             if (b.equals(quarry)) {
                 continue;
             }
@@ -398,7 +388,7 @@ public class TestConstructionPreparationPlayer {
         Utils.waitForBuildingToGetTornDown(computerPlayer, quarry);
 
         // Verify that the player removes the road as long as it doesn't connect to another building
-        for (Point point : points) {
+        for (var point : points) {
             if (otherRoads.contains(point)) {
                 continue;
             }

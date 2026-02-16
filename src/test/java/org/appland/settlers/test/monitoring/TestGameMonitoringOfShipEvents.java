@@ -32,25 +32,24 @@ public class TestGameMonitoringOfShipEvents {
     public void testMonitoringEventWhenShipwrightStartsBuildingShip() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place lake
-        Point point2 = new Point(15, 9);
+        var point2 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect the shipyard with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -61,7 +60,7 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(shipyard.isProducingShips());
 
         // Wait for a shipwright to occupy the shipyard
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -78,7 +77,7 @@ public class TestGameMonitoringOfShipEvents {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -96,11 +95,11 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         // Verify that a game monitoring event was sent
-        boolean foundEvent = false;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        var foundEvent = false;
+        for (var gameChangesList : monitor.getEvents()) {
             if (gameChangesList.newShips().contains(ship)) {
                 foundEvent = true;
 
@@ -115,25 +114,24 @@ public class TestGameMonitoringOfShipEvents {
     public void testMonitoringEventWhenShipwrightStartsBuildingShipIsOnlySentOnce() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place lake
-        Point point2 = new Point(15, 9);
+        var point2 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Connect the shipyard with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -144,7 +142,7 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(shipyard.isProducingShips());
 
         // Wait for a shipwright to occupy the shipyard
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -161,7 +159,7 @@ public class TestGameMonitoringOfShipEvents {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -179,11 +177,11 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         // Verify that a game monitoring event was sent
-        boolean foundEvent = false;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        var foundEvent = false;
+        for (var gameChangesList : monitor.getEvents()) {
             if (gameChangesList.newShips().contains(ship)) {
                 foundEvent = true;
 
@@ -194,11 +192,11 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(foundEvent);
 
         // Verify that the event is only sent once
-        GameChangesList lastEvent = monitor.getEvents().getLast();
+        var lastEvent = monitor.getEvents().getLast();
 
         Utils.fastForward(5, map);
 
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
+        for (var gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
             assertEquals(gameChangesList.newShips().size(), 0);
         }
     }
@@ -207,25 +205,24 @@ public class TestGameMonitoringOfShipEvents {
     public void testMonitoringEventWhenShipIsFinishedAndMovesToWater() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place lake
-        Point point2 = new Point(15, 9);
+        var point2 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -236,7 +233,7 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(shipyard.isProducingShips());
 
         // Wait for a shipwright to occupy the shipyard
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -264,7 +261,7 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertTrue(ship.isUnderConstruction());
         assertFalse(ship.isReady());
@@ -286,8 +283,8 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(ship.isReady());
 
         // Verify that a game monitoring event was sent when the ship moved from land to water
-        boolean foundEvent = false;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        var foundEvent = false;
+        for (var gameChangesList : monitor.getEvents()) {
             if (gameChangesList.finishedShips().contains(ship)) {
                 foundEvent = true;
 
@@ -302,25 +299,24 @@ public class TestGameMonitoringOfShipEvents {
     public void testMonitoringEventWhenShipIsFinishedAndMovesToWaterIsOnlySentOnce() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        var point1 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         // Place lake
-        Point point2 = new Point(15, 9);
+        var point2 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         // Place shipyard
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        var point0 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -331,7 +327,7 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(shipyard.isProducingShips());
 
         // Wait for a shipwright to occupy the shipyard
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -359,7 +355,7 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertTrue(ship.isUnderConstruction());
         assertFalse(ship.isReady());
@@ -381,8 +377,8 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(ship.isReady());
 
         // Agame monitoring event was sent when the ship moved from land to water
-        boolean foundEvent = false;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        var foundEvent = false;
+        for (var gameChangesList : monitor.getEvents()) {
             if (gameChangesList.finishedShips().contains(ship)) {
                 foundEvent = true;
 
@@ -393,11 +389,11 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(foundEvent);
 
         // Verify that the event is only sent once
-        GameChangesList lastEvent = monitor.getEvents().getLast();
+        var lastEvent = monitor.getEvents().getLast();
 
         Utils.fastForward(5, map);
 
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
+        for (var gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
             assertEquals(gameChangesList.finishedShips().size(), 0);
         }
     }
@@ -406,35 +402,34 @@ public class TestGameMonitoringOfShipEvents {
     public void testMonitoringEventWhenShipGetsTarget() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 80, 80);
 
         // Place a long, thin lake
         for (int i = 3; i < 53; i += 2) {
-            Point point = new Point(i, 11);
+            var point = new Point(i, 11);
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
 
         // Mark a possible place for a harbor
-        Point point0 = new Point(50, 8);
+        var point0 = new Point(50, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         // Mark a possible place for a harbor
-        Point point1 = new Point(6, 8);
+        var point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         // Place headquarter
-        Point point2 = new Point(16, 8);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(16, 8);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
-        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+        var harbor = map.placeBuilding(new Harbor(player0), point1);
 
         // Connect the harbor to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
@@ -446,15 +441,15 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(harbor.isReady());
 
         // Place shipyard
-        Point point3 = new Point(24, 8);
+        var point3 = new Point(24, 8);
 
         assertTrue(player0.getOwnedLand().contains(point3));
         assertTrue(player0.isWithinBorder(point3));
 
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
         // Connect the shipyard to the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         assertFalse(harbor.needsMaterial(BUILDER));
@@ -465,7 +460,7 @@ public class TestGameMonitoringOfShipEvents {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -482,7 +477,7 @@ public class TestGameMonitoringOfShipEvents {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -499,13 +494,13 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
 
         // Wait for the ship to get fully constructed
-        Point point4 = ship.getPosition();
+        var point4 = ship.getPosition();
 
         Utils.waitForShipToGetBuilt(map, ship);
 
@@ -534,7 +529,7 @@ public class TestGameMonitoringOfShipEvents {
         // Wait for the harbor to collect the required material for the expedition
         for (int i = 0; i < 10000; i++) {
 
-            Map<Material, Integer> expeditionMaterial = harbor.getMaterialForExpedition();
+            var expeditionMaterial = harbor.getMaterialForExpedition();
 
             if (expeditionMaterial.getOrDefault(PLANK, 0) == 4 &&
                     expeditionMaterial.getOrDefault(STONE, 0) == 6 &&
@@ -553,8 +548,8 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(ship.getTarget().distance(point1) < 4);
 
         // Verify that a game monitoring event was sent when the ship moved from land to water
-        boolean foundEvent = false;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        var foundEvent = false;
+        for (var gameChangesList : monitor.getEvents()) {
             if (gameChangesList.shipsWithNewTargets().contains(ship)) {
                 foundEvent = true;
 
@@ -569,35 +564,34 @@ public class TestGameMonitoringOfShipEvents {
     public void testMonitoringEventWhenShipGetsTargetIsOnlySentOnce() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 80, 80);
 
         // Place a long, thin lake
         for (int i = 3; i < 53; i += 2) {
-            Point point = new Point(i, 11);
+            var point = new Point(i, 11);
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
 
         // Mark a possible place for a harbor
-        Point point0 = new Point(50, 8);
+        var point0 = new Point(50, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         // Mark a possible place for a harbor
-        Point point1 = new Point(6, 8);
+        var point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         // Place headquarter
-        Point point2 = new Point(16, 8);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(16, 8);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
-        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+        var harbor = map.placeBuilding(new Harbor(player0), point1);
 
         // Connect the harbor to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
@@ -609,15 +603,15 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(harbor.isReady());
 
         // Place shipyard
-        Point point3 = new Point(24, 8);
+        var point3 = new Point(24, 8);
 
         assertTrue(player0.getOwnedLand().contains(point3));
         assertTrue(player0.isWithinBorder(point3));
 
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
         // Connect the shipyard to the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         assertFalse(harbor.needsMaterial(BUILDER));
@@ -628,7 +622,7 @@ public class TestGameMonitoringOfShipEvents {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -645,7 +639,7 @@ public class TestGameMonitoringOfShipEvents {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -662,13 +656,13 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
 
         // Wait for the ship to get fully constructed
-        Point point4 = ship.getPosition();
+        var point4 = ship.getPosition();
 
         Utils.waitForShipToGetBuilt(map, ship);
 
@@ -697,7 +691,7 @@ public class TestGameMonitoringOfShipEvents {
         // Wait for the harbor to collect the required material for the expedition
         for (int i = 0; i < 10000; i++) {
 
-            Map<Material, Integer> expeditionMaterial = harbor.getMaterialForExpedition();
+            var expeditionMaterial = harbor.getMaterialForExpedition();
 
             if (expeditionMaterial.getOrDefault(PLANK, 0) == 4 &&
                     expeditionMaterial.getOrDefault(STONE, 0) == 6 &&
@@ -716,8 +710,8 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(ship.getTarget().distance(point1) < 4);
 
         // Verify that a game monitoring event was sent when the ship moved from land to water
-        boolean foundEvent = false;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        var foundEvent = false;
+        for (var gameChangesList : monitor.getEvents()) {
             if (gameChangesList.shipsWithNewTargets().contains(ship)) {
                 foundEvent = true;
 
@@ -728,11 +722,11 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(foundEvent);
 
         // Verify that the event is only sent once
-        GameChangesList lastEvent = monitor.getEvents().getLast();
+        var lastEvent = monitor.getEvents().getLast();
 
         Utils.fastForward(5, map);
 
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
+        for (var gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
             assertEquals(gameChangesList.shipsWithNewTargets().size(), 0);
         }
     }

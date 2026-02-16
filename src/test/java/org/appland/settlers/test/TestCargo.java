@@ -36,21 +36,20 @@ public class TestCargo {
     public void testPuttingCargoAtFlagSetsPosition() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(12, 12);
+        var point0 = new Point(12, 12);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(8, 6);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(8, 6);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Verify that placing a cargo sets its position
-        Cargo cargo = new Cargo(PLANK, map);
+        var cargo = new Cargo(PLANK, map);
 
         flag0.putCargo(cargo);
 
@@ -61,32 +60,31 @@ public class TestCargo {
     public void testCargoIsReturnedToStorageWhenTargetBuildingIsRemoved() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place forester
-        Point point1 = new Point(10, 8);
-        ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
+        var point1 = new Point(10, 8);
+        var foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
         // Place flag
-        Point point2 = new Point(9, 5);
-        Flag flag0 = map.placeFlag(player0, point2);
+        var point2 = new Point(9, 5);
+        var flag0 = map.placeFlag(player0, point2);
 
         // Place road between (11, 7) and (9, 5)
-        Point point3 = new Point(11, 7);
-        Point point4 = new Point(10, 6);
-        Point point5 = new Point(7, 5);
-        Point point6 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point3, point4, point2);
+        var point3 = new Point(11, 7);
+        var point4 = new Point(10, 6);
+        var point5 = new Point(7, 5);
+        var point6 = new Point(6, 4);
+        var road0 = map.placeRoad(player0, point3, point4, point2);
 
         // Place road between (9, 5) and (6, 4)
-        Road road1 = map.placeRoad(player0, point2, point5, point6);
+        var road1 = map.placeRoad(player0, point2, point5, point6);
 
         // Place couriers on the roads
         Utils.occupyRoad(road0, map);
@@ -95,7 +93,7 @@ public class TestCargo {
         // Wait for a cargo with the forester hut as target to get picked up by the first courier
         for (int i = 0; i < 2000; i++) {
 
-            Cargo cargo = road1.getCourier().getCargo();
+            var cargo = road1.getCourier().getCargo();
 
             if (cargo != null && cargo.getTarget().equals(foresterHut0)) {
                 break;
@@ -108,8 +106,8 @@ public class TestCargo {
         foresterHut0.tearDown();
 
         // Verify that the courier delivers the cargo to the next flag
-        Courier courier = road1.getCourier();
-        Cargo cargo = courier.getCargo();
+        var courier = road1.getCourier();
+        var cargo = courier.getCargo();
 
         assertEquals(courier.getTarget(), point2);
         assertTrue(flag0.getStackedCargo().isEmpty());

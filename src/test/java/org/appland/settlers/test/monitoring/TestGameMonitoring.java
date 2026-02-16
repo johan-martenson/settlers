@@ -2219,7 +2219,7 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.workersWithNewTargets().size(), 1);
 
         // Verify that there is no more event sent before the forester plants a new tree
-        int amountEvents = monitor.getEvents().size();
+        var amountEvents = monitor.getEvents().size();
 
         for (int i = 0; i < 10; i++) {
             map.stepTime();
@@ -2748,7 +2748,7 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.workersWithNewTargets().size(), 1);
 
         // Verify that no more messages are sent before the stonemason is back in the quarry
-        int amountEvents = monitor.getEvents().size();
+        var amountEvents = monitor.getEvents().size();
 
         for (int i = 0; i < 10; i++) {
             map.stepTime();
@@ -2971,7 +2971,7 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.workersWithNewTargets().size(), 1);
 
         // Verify that no more messages are sent before the geologist places a new sign
-        int amountEvents = monitor.getEvents().size();
+        var amountEvents = monitor.getEvents().size();
 
         for (int i = 0; i < 6; i++) {
             map.stepTime();
@@ -3142,7 +3142,7 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.removedSigns().getFirst(), sign0);
 
         // Verify that no more events are sent
-        int amountEvents = monitor.getEvents().size();
+        var amountEvents = monitor.getEvents().size();
 
         for (int i = 0; i < 10; i++) {
             map.stepTime();
@@ -3597,7 +3597,7 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.removedBuildings().size(), 0);
 
         // Verify that the event is only sent once
-        int amountEvents = monitor.getEvents().size();
+        var amountEvents = monitor.getEvents().size();
 
         for (int i = 0; i < 10; i++) {
             map.stepTime();
@@ -3684,7 +3684,7 @@ public class TestGameMonitoring {
         assertTrue(gameChanges.workersWithNewTargets().contains(farmer));
 
         // Verify that no more messages are sent before the farmer enters the farm
-        int amountEvents = monitor.getEvents().size();
+        var amountEvents = monitor.getEvents().size();
 
         for (int i = 0; i < 10; i++) {
             map.stepTime();
@@ -3917,7 +3917,7 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.removedCrops().getFirst(), crop0);
 
         // Verify that no more messages are sent
-        int amountEvents = monitor.getEvents().size();
+        var amountEvents = monitor.getEvents().size();
 
         Utils.fastForward(10, map);
 
@@ -4197,7 +4197,7 @@ public class TestGameMonitoring {
         }
 
         // Verify that no more events are sent for discovered land
-        int amountEvents = monitor.getEvents().size();
+        var amountEvents = monitor.getEvents().size();
 
         for (int i = 0; i < 10; i++) {
             map.stepTime();
@@ -4298,7 +4298,7 @@ public class TestGameMonitoring {
         }
 
         // Verify that no more events are sent for discovered land
-        int amountEvents = monitor.getEvents().size();
+        var amountEvents = monitor.getEvents().size();
 
         for (int i = 0; i < 10; i++) {
             map.stepTime();
@@ -4365,7 +4365,7 @@ public class TestGameMonitoring {
         }
 
         // Verify that no more events are sent for discovered land
-        int amountEvents = monitor.getEvents().size();
+        var amountEvents = monitor.getEvents().size();
 
         for (int i = 0; i < 10; i++) {
             map.stepTime();
@@ -4678,8 +4678,8 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        boolean foundNewGround = false;
-        boolean wentToNewGround = false;
+        var foundNewGround = false;
+        var wentToNewGround = false;
 
         Point discoveredPoint = null;
 
@@ -4712,7 +4712,7 @@ public class TestGameMonitoring {
 
         assertTrue(monitor.getEvents().size() >= 1);
 
-        boolean discoveryReported = false;
+        var discoveryReported = false;
         for (var gameChangesList : monitor.getEvents()) {
             if (gameChangesList.newDiscoveredLand().contains(discoveredPoint)) {
                 discoveryReported = true;
@@ -4770,8 +4770,8 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        boolean foundNewGround = false;
-        boolean wentToNewGround = false;
+        var foundNewGround = false;
+        var wentToNewGround = false;
 
         Point discoveredPoint = null;
 
@@ -4804,7 +4804,7 @@ public class TestGameMonitoring {
 
         assertTrue(monitor.getEvents().size() >= 1);
 
-        boolean discoveryReported = false;
+        var discoveryReported = false;
         for (var gameChangesList : monitor.getEvents()) {
             if (gameChangesList.newDiscoveredLand().contains(discoveredPoint)) {
                 discoveryReported = true;
@@ -4818,7 +4818,7 @@ public class TestGameMonitoring {
         var gameChanges = monitor.getLastEvent();
 
         // Verify that the event is sent only once
-        int amountEvents = monitor.getEvents().size();
+        var amountEvents = monitor.getEvents().size();
 
         for (int i = 0; i < 5; i++) {
             map.stepTime();
@@ -4871,8 +4871,8 @@ public class TestGameMonitoring {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
 
-        boolean foundNewGround = false;
-        boolean wentToNewGround = false;
+        var foundNewGround = false;
+        var wentToNewGround = false;
 
         var discoveredLandBefore = new HashSet<>(player0.getDiscoveredLand());
 
@@ -4967,8 +4967,8 @@ public class TestGameMonitoring {
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
-        boolean foundNewGround = false;
-        boolean wentToNewGround = false;
+        var foundNewGround = false;
+        var wentToNewGround = false;
 
         var discoveredLandBefore = new HashSet<>(player0.getDiscoveredLand());
 
@@ -5655,8 +5655,7 @@ public class TestGameMonitoring {
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the second player's border changes
-        List<Point> visibleBorderBeforeChange = new ArrayList<>();
-
+        var visibleBorderBeforeChange = new ArrayList<Point>();
         for (var point : player1.getBorderPoints()) {
             if (!player0.getDiscoveredLand().contains(point)) {
                 continue;
@@ -5674,8 +5673,7 @@ public class TestGameMonitoring {
         assertTrue(gameChanges.time() > 0);
         assertTrue(gameChanges.changedBorders().size() > 0);
 
-        List<Point> visibleBorderAfterChange = new ArrayList<>();
-
+        var visibleBorderAfterChange = new ArrayList<Point>();
         for (var point : player1.getBorderPoints()) {
             if (!player0.getDiscoveredLand().contains(point)) {
                 continue;
@@ -5820,7 +5818,7 @@ public class TestGameMonitoring {
         assertNotNull(wildAnimal0.getTarget());
         assertFalse(wildAnimal0.isExactlyAtPoint());
 
-        boolean foundEvent = false;
+        var foundEvent = false;
         for (var gameChangesList : monitor.getEvents()) {
             if (gameChangesList.workersWithNewTargets().contains(wildAnimal0)) {
                 foundEvent = true;
@@ -5859,7 +5857,7 @@ public class TestGameMonitoring {
         assertNotNull(wildAnimal0.getTarget());
         assertFalse(wildAnimal0.isExactlyAtPoint());
 
-        boolean foundEvent = false;
+        var foundEvent = false;
         for (var gameChangesList : monitor.getEvents()) {
             if (gameChangesList.workersWithNewTargets().contains(wildAnimal0)) {
                 foundEvent = true;

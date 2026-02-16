@@ -28,24 +28,23 @@ public class TestProduction {
     public void testWrongMaterialToSawmill() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place quarry
-        Point point1 = new Point(10, 10);
-        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point1);
+        var point1 = new Point(10, 10);
+        var sawmill = map.placeBuilding(new Sawmill(player0), point1);
 
         assertTrue(sawmill.isPlanned());
         assertFalse(sawmill.needsWorker());
 
         // Connect the forester with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter0.getFlag());
 
         // Wait for the forester hut to get constructed
         Utils.waitForBuildingToBeConstructed(sawmill);
@@ -63,24 +62,23 @@ public class TestProduction {
     public void testDeliverMaterialToWoodcutter() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place woodcutter
-        Point point1 = new Point(10, 10);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 10);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         assertTrue(woodcutter.isPlanned());
         assertFalse(woodcutter.needsWorker());
 
         // Connect the forester with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
 
         // Wait for the forester hut to get constructed
         Utils.waitForBuildingToBeConstructed(woodcutter);
@@ -96,24 +94,23 @@ public class TestProduction {
     public void testDeliveryMaterialToQuarry() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place quarry
-        Point point1 = new Point(10, 10);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+        var point1 = new Point(10, 10);
+        var quarry = map.placeBuilding(new Quarry(player0), point1);
 
         assertTrue(quarry.isPlanned());
         assertFalse(quarry.needsWorker());
 
         // Connect the forester with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter0.getFlag());
 
         // Wait for the forester hut to get constructed
         Utils.waitForBuildingToBeConstructed(quarry);
@@ -127,7 +124,7 @@ public class TestProduction {
 
     @Test
     public void testGetWorkerTypeForBuildingNotNeedingWorker() {
-        Headquarter headquarter = new Headquarter(null);
+        var headquarter = new Headquarter(null);
 
         assertFalse(headquarter.needsWorker());
         assertNull(headquarter.getWorkerType());

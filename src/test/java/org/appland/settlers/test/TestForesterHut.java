@@ -43,8 +43,7 @@ public class TestForesterHut {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
@@ -56,7 +55,7 @@ public class TestForesterHut {
         var foresterHut0 = map.placeBuilding(new ForesterHut(player0), point22);
 
         // Deliver two planks
-        Cargo cargo = new Cargo(PLANK, map);
+        var cargo = new Cargo(PLANK, map);
 
         foresterHut0.putCargo(cargo);
         foresterHut0.putCargo(cargo);
@@ -79,8 +78,7 @@ public class TestForesterHut {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
@@ -114,8 +112,7 @@ public class TestForesterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
@@ -181,8 +178,7 @@ public class TestForesterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
@@ -209,8 +205,7 @@ public class TestForesterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
@@ -237,8 +232,7 @@ public class TestForesterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
@@ -275,8 +269,7 @@ public class TestForesterHut {
 
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create single player game
         var map = new GameMap(List.of(player0), 20, 20);
@@ -306,8 +299,7 @@ public class TestForesterHut {
 
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create single player game
         var map = new GameMap(List.of(player0), 20, 20);
@@ -338,8 +330,7 @@ public class TestForesterHut {
 
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create single player game
         var map = new GameMap(List.of(player0), 20, 20);
@@ -373,8 +364,7 @@ public class TestForesterHut {
 
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create single player game
         var map = new GameMap(List.of(player0), 20, 20);
@@ -409,8 +399,7 @@ public class TestForesterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
@@ -455,8 +444,7 @@ public class TestForesterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
@@ -505,8 +493,7 @@ public class TestForesterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
@@ -554,8 +541,7 @@ public class TestForesterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
@@ -611,8 +597,7 @@ public class TestForesterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
@@ -657,16 +642,16 @@ public class TestForesterHut {
         }
 
         // Verify that the planted trees are spread evenly enough
-        int totalX = 0;
-        int totalY = 0;
+        var totalX = 0;
+        var totalY = 0;
 
         for (var point : treeLocations) {
             totalX = totalX + point.x;
             totalY = totalY + point.y;
         }
 
-        double averageX = totalX / (double) 10;
-        double averageY = totalY / (double) 10;
+        var averageX = totalX / (double) 10;
+        var averageY = totalY / (double) 10;
 
         assertTrue(Math.abs(foresterHut.getPosition().x - averageX) < 4);
         assertTrue(Math.abs(foresterHut.getPosition().y - averageY) < 4);
@@ -677,8 +662,7 @@ public class TestForesterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
@@ -718,8 +702,7 @@ public class TestForesterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
@@ -781,8 +764,7 @@ public class TestForesterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
@@ -834,7 +816,7 @@ public class TestForesterHut {
         foresterHut.stopProduction();
 
         // Verify the growth of the tree
-        Tree tree = map.getTreeAtPoint(point);
+        var tree = map.getTreeAtPoint(point);
 
         assertFalse(forester.isPlanting());
         assertTrue(map.isTreeAtPoint(point));
@@ -882,8 +864,7 @@ public class TestForesterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
@@ -917,9 +898,9 @@ public class TestForesterHut {
 
             Utils.waitForForesterToStopPlantingTree(forester, map);
 
-            Tree tree = map.getTreeAtPoint(point2);
+            var tree = map.getTreeAtPoint(point2);
 
-            int currentAmount = treeTypeCount.getOrDefault(tree.getTreeType(), 0);
+            var currentAmount = treeTypeCount.getOrDefault(tree.getTreeType(), 0);
 
             treeTypeCount.put(tree.getTreeType(), currentAmount + 1);
 
@@ -944,8 +925,7 @@ public class TestForesterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
@@ -982,8 +962,7 @@ public class TestForesterHut {
 
         // Create a new game map with a single player
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
@@ -1034,8 +1013,7 @@ public class TestForesterHut {
 
         // Create a new game map with a single player
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
@@ -1094,8 +1072,7 @@ public class TestForesterHut {
 
         // Create a new game map with a single player
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
@@ -1151,8 +1128,7 @@ public class TestForesterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
@@ -1203,8 +1179,7 @@ public class TestForesterHut {
 
         // Create new game map with one player
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Create a small mountain
@@ -1217,7 +1192,7 @@ public class TestForesterHut {
 
         // Place headquarters
         var point0 = new Point(10, 10);
-        var headquarter =  map.placeBuilding(new Headquarter(player0), point0);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place forester hut
         var point1 = new Point(10, 14);
@@ -1267,8 +1242,7 @@ public class TestForesterHut {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
@@ -1298,7 +1272,7 @@ public class TestForesterHut {
         assertFalse(forester.isInsideBuilding());
         assertEquals(forester.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(FORESTER);
+        var amount = headquarter0.getAmount(FORESTER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getPosition());
 
@@ -1311,8 +1285,7 @@ public class TestForesterHut {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
@@ -1346,7 +1319,7 @@ public class TestForesterHut {
         assertEquals(forester.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
+        var firstStep = true;
         for (var point : forester.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
@@ -1362,8 +1335,7 @@ public class TestForesterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
@@ -1430,8 +1402,7 @@ public class TestForesterHut {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
         var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarters
@@ -1511,8 +1482,7 @@ public class TestForesterHut {
 
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create single player game
         var map = new GameMap(List.of(player0), 50, 50);
@@ -1893,7 +1863,7 @@ public class TestForesterHut {
         assertFalse(forester.isInsideBuilding());
         assertEquals(forester.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(FORESTER);
+        var amount = storehouse0.getAmount(FORESTER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, storehouse0.getPosition());
 
@@ -1948,7 +1918,7 @@ public class TestForesterHut {
         assertFalse(forester.isInsideBuilding());
         assertEquals(forester.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(FORESTER);
+        var amount = headquarter0.getAmount(FORESTER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getPosition());
 
@@ -2006,7 +1976,7 @@ public class TestForesterHut {
         assertFalse(forester.isInsideBuilding());
         assertEquals(forester.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(FORESTER);
+        var amount = headquarter0.getAmount(FORESTER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getPosition());
 
@@ -2052,7 +2022,7 @@ public class TestForesterHut {
         assertFalse(forester.isInsideBuilding());
         assertEquals(forester.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(FORESTER);
+        var amount = headquarter0.getAmount(FORESTER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getPosition());
 

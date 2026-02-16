@@ -22,29 +22,28 @@ public class TestStones {
     public void testStoneAmount() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place stone
-        Point point0 = new Point(5, 5);
-        Stone stone0 = map.placeStone(point0, Stone.StoneType.STONE_1, 6);
+        var point0 = new Point(5, 5);
+        var stone0 = map.placeStone(point0, Stone.StoneType.STONE_1, 6);
 
-        Point point1 = new Point(7, 5);
-        Stone stone1 = map.placeStone(point1, Stone.StoneType.STONE_1, 5);
+        var point1 = new Point(7, 5);
+        var stone1 = map.placeStone(point1, Stone.StoneType.STONE_1, 5);
 
-        Point point2 = new Point(9, 5);
-        Stone stone2 = map.placeStone(point2, Stone.StoneType.STONE_1, 4);
+        var point2 = new Point(9, 5);
+        var stone2 = map.placeStone(point2, Stone.StoneType.STONE_1, 4);
 
-        Point point3 = new Point(11, 5);
-        Stone stone3 = map.placeStone(point3, Stone.StoneType.STONE_1, 3);
+        var point3 = new Point(11, 5);
+        var stone3 = map.placeStone(point3, Stone.StoneType.STONE_1, 3);
 
-        Point point4 = new Point(13, 5);
-        Stone stone4 = map.placeStone(point4, Stone.StoneType.STONE_1, 2);
+        var point4 = new Point(13, 5);
+        var stone4 = map.placeStone(point4, Stone.StoneType.STONE_1, 2);
 
-        Point point5 = new Point(15, 5);
-        Stone stone5 = map.placeStone(point5, Stone.StoneType.STONE_1, 1);
+        var point5 = new Point(15, 5);
+        var stone5 = map.placeStone(point5, Stone.StoneType.STONE_1, 1);
 
         // Verify that the right stone amount is returned
         assertEquals(stone0.getStoneAmount(), FULL);
@@ -59,23 +58,22 @@ public class TestStones {
     public void testStoneAmountIsEqualForBothTypes() throws InvalidUserActionException {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place stones
-        Point point0 = new Point(5, 5);
-        Stone stone0 = map.placeStone(point0, Stone.StoneType.STONE_1, 6);
+        var point0 = new Point(5, 5);
+        var stone0 = map.placeStone(point0, Stone.StoneType.STONE_1, 6);
 
-        Point point1 = new Point(7, 5);
-        Stone stone1 = map.placeStone(point1, Stone.StoneType.STONE_2, 6);
+        var point1 = new Point(7, 5);
+        var stone1 = map.placeStone(point1, Stone.StoneType.STONE_2, 6);
 
-        Point point2 = new Point(9, 5);
-        Stone stone2 = map.placeStone(point2, Stone.StoneType.STONE_1, 4);
+        var point2 = new Point(9, 5);
+        var stone2 = map.placeStone(point2, Stone.StoneType.STONE_1, 4);
 
-        Point point3 = new Point(11, 5);
-        Stone stone3 = map.placeStone(point3, Stone.StoneType.STONE_2, 4);
+        var point3 = new Point(11, 5);
+        var stone3 = map.placeStone(point3, Stone.StoneType.STONE_2, 4);
 
         // Verify that the right stone amount is returned
         assertEquals(stone0.getStoneAmount(), stone1.getStoneAmount());

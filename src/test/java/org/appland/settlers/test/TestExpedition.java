@@ -58,10 +58,9 @@ public class TestExpedition {
     public void testAlreadyStoredMaterialIsUsedToPrepareExpeditionIfAvailable() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 100, 100);
 
         // Place a lake
         for (int i = 13; i < 53; i += 2) {
@@ -71,22 +70,22 @@ public class TestExpedition {
         }
 
         // Mark a possible place for a harbor
-        Point point0 = new Point(52, 8);
+        var point0 = new Point(52, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         // Mark a possible place for a harbor
-        Point point1 = new Point(12, 8);
+        var point1 = new Point(12, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         // Place headquarter
-        Point point2 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
-        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+        var harbor = map.placeBuilding(new Harbor(player0), point1);
 
         // Connect the harbor to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
@@ -124,10 +123,9 @@ public class TestExpedition {
     public void testCannotStartExpeditionInWrongDirection() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 100, 100);
 
         // Place a lake
         for (int i = 7; i < 59; i += 2) {
@@ -137,23 +135,23 @@ public class TestExpedition {
         }
 
         // Mark a possible place for a harbor
-        Point point0 = new Point(56, 8);
+        var point0 = new Point(56, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         // Mark a possible place for a harbor
-        Point point1 = new Point(7, 9);
+        var point1 = new Point(7, 9);
         map.setPossiblePlaceForHarbor(point1);
 
         // Place headquarter
-        Point point2 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place shipyard
-        Point point3 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+        var point3 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
         // Connect the shipyard to the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -162,7 +160,7 @@ public class TestExpedition {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -179,7 +177,7 @@ public class TestExpedition {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -196,7 +194,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -211,10 +209,10 @@ public class TestExpedition {
         shipyard.stopProduction();
 
         // Place harbor
-        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+        var harbor = map.placeBuilding(new Harbor(player0), point1);
 
         // Connect the harbor to the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
@@ -253,25 +251,24 @@ public class TestExpedition {
     public void testNoPossibleExpeditionsFromShipWithoutPreparingExpedition() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place a lake
-        Point point0 = new Point(13, 9);
+        var point0 = new Point(13, 9);
         Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         // Place headquarter
-        Point point2 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place shipyard
-        Point point3 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+        var point3 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
         // Connect the shipyard to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -280,7 +277,7 @@ public class TestExpedition {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -297,7 +294,7 @@ public class TestExpedition {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -314,7 +311,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -333,29 +330,28 @@ public class TestExpedition {
     public void testGetNoPossibleExpeditionsFromShip() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place a lake
-        Point point0 = new Point(13, 9);
+        var point0 = new Point(13, 9);
         Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         // Mark a possible place for a harbor
-        Point point1 = new Point(12, 6);
+        var point1 = new Point(12, 6);
         map.setPossiblePlaceForHarbor(point1);
 
         // Place headquarter
-        Point point2 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place shipyard
-        Point point3 = new Point(16, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+        var point3 = new Point(16, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
         // Connect the shipyard to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -364,7 +360,7 @@ public class TestExpedition {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -381,7 +377,7 @@ public class TestExpedition {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -398,7 +394,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -410,10 +406,10 @@ public class TestExpedition {
         assertFalse(ship.isUnderConstruction());
 
         // Place harbor
-        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+        var harbor = map.placeBuilding(new Harbor(player0), point1);
 
         // Connect the harbor to the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
@@ -435,10 +431,9 @@ public class TestExpedition {
     public void testCannotLaunchExpeditionInInvalidDirection() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 30, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 30, 40);
 
         // Place a lake
         for (int i = 9; i < 31; i += 2) {
@@ -448,23 +443,23 @@ public class TestExpedition {
         }
 
         // Mark a possible place for a harbor
-        Point point0 = new Point(9, 27);
+        var point0 = new Point(9, 27);
         map.setPossiblePlaceForHarbor(point0);
 
         // Mark a possible place for a harbor
-        Point point1 = new Point(9, 11);
+        var point1 = new Point(9, 11);
         map.setPossiblePlaceForHarbor(point1);
 
         // Place headquarter
-        Point point2 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place shipyard
-        Point point3 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+        var point3 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
         // Connect the shipyard to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -473,7 +468,7 @@ public class TestExpedition {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -490,7 +485,7 @@ public class TestExpedition {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -507,7 +502,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -519,10 +514,10 @@ public class TestExpedition {
         assertFalse(ship.isUnderConstruction());
 
         // Place harbor
-        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+        var harbor = map.placeBuilding(new Harbor(player0), point1);
 
         // Connect the harbor to the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
@@ -530,7 +525,7 @@ public class TestExpedition {
         Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
         // Verify that it's not possible to start an expedition in the wrong direction
-        Set<Direction> directions = ship.getPossibleDirectionsForExpedition();
+        var directions = ship.getPossibleDirectionsForExpedition();
 
         assertEquals(directions.size(), 1);
         assertTrue(directions.contains(UP));
@@ -546,10 +541,9 @@ public class TestExpedition {
     public void testGetPossibleExpeditionAboveFromShip() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 30, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 30, 40);
 
         // Place a lake
         for (int i = 9; i < 31; i += 2) {
@@ -559,23 +553,23 @@ public class TestExpedition {
         }
 
         // Mark a possible place for a harbor
-        Point point0 = new Point(9, 29);
+        var point0 = new Point(9, 29);
         map.setPossiblePlaceForHarbor(point0);
 
         // Mark a possible place for a harbor
-        Point point1 = new Point(9, 11);
+        var point1 = new Point(9, 11);
         map.setPossiblePlaceForHarbor(point1);
 
         // Place headquarter
-        Point point2 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place shipyard
-        Point point3 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+        var point3 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
         // Connect the shipyard to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -584,7 +578,7 @@ public class TestExpedition {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -601,7 +595,7 @@ public class TestExpedition {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -618,7 +612,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -630,10 +624,10 @@ public class TestExpedition {
         assertFalse(ship.isUnderConstruction());
 
         // Place harbor
-        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+        var harbor = map.placeBuilding(new Harbor(player0), point1);
 
         // Connect the harbor to the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
@@ -641,7 +635,7 @@ public class TestExpedition {
         Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
         // Verify that there are no possible expeditions from the harbor
-        Set<Direction> directions = ship.getPossibleDirectionsForExpedition();
+        var directions = ship.getPossibleDirectionsForExpedition();
 
         assertEquals(directions.size(), 1);
         assertTrue(directions.contains(UP));
@@ -651,10 +645,9 @@ public class TestExpedition {
     public void testGetPossibleExpeditionBelowFromShip() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 30, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 30, 40);
 
         // Place a lake
         for (int i = 9; i < 31; i += 2) {
@@ -664,23 +657,23 @@ public class TestExpedition {
         }
 
         // Mark a possible place for a harbor
-        Point point0 = new Point(9, 11);
+        var point0 = new Point(9, 11);
         map.setPossiblePlaceForHarbor(point0);
 
         // Mark a possible place for a harbor
-        Point point1 = new Point(9, 29);
+        var point1 = new Point(9, 29);
         map.setPossiblePlaceForHarbor(point1);
 
         // Place headquarter
-        Point point2 = new Point(5, 35);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(5, 35);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place shipyard
-        Point point3 = new Point(10, 36);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+        var point3 = new Point(10, 36);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
         // Connect the shipyard to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -689,7 +682,7 @@ public class TestExpedition {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -706,7 +699,7 @@ public class TestExpedition {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -723,7 +716,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -735,10 +728,10 @@ public class TestExpedition {
         assertFalse(ship.isUnderConstruction());
 
         // Place harbor
-        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+        var harbor = map.placeBuilding(new Harbor(player0), point1);
 
         // Connect the harbor to the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
@@ -746,7 +739,7 @@ public class TestExpedition {
         Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
         // Verify that there are no possible expeditions from the harbor
-        Set<Direction> directions = ship.getPossibleDirectionsForExpedition();
+        var directions = ship.getPossibleDirectionsForExpedition();
 
         assertEquals(directions.size(), 1);
         assertTrue(directions.contains(DOWN));
@@ -756,10 +749,9 @@ public class TestExpedition {
     public void testGetPossibleExpeditionRightOfShip() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 30, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 30, 40);
 
         // Place a lake
         for (int i = 7; i < 53; i += 2) {
@@ -769,23 +761,23 @@ public class TestExpedition {
         }
 
         // Mark a possible place for a harbor
-        Point point0 = new Point(52, 8);
+        var point0 = new Point(52, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         // Mark a possible place for a harbor
-        Point point1 = new Point(7, 9);
+        var point1 = new Point(7, 9);
         map.setPossiblePlaceForHarbor(point1);
 
         // Place headquarter
-        Point point2 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place shipyard
-        Point point3 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+        var point3 = new Point(10, 6);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
         // Connect the shipyard to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -794,7 +786,7 @@ public class TestExpedition {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -811,7 +803,7 @@ public class TestExpedition {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -828,7 +820,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -840,10 +832,10 @@ public class TestExpedition {
         assertFalse(ship.isUnderConstruction());
 
         // Place harbor
-        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+        var harbor = map.placeBuilding(new Harbor(player0), point1);
 
         // Connect the harbor to the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
@@ -851,7 +843,7 @@ public class TestExpedition {
         Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
         // Verify that there are no possible expeditions from the harbor
-        Set<Direction> directions = ship.getPossibleDirectionsForExpedition();
+        var directions = ship.getPossibleDirectionsForExpedition();
 
         assertEquals(directions.size(), 1);
         assertTrue(directions.contains(RIGHT));
@@ -861,36 +853,35 @@ public class TestExpedition {
     public void testGetPossibleExpeditionLeftOfShip() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 70, 70);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 70, 70);
 
         // Place a lake
         for (int i = 13; i < 53; i += 2) {
-            Point point = new Point(i, 11);
+            var point = new Point(i, 11);
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
 
         // Mark a possible place for a harbor
-        Point point0 = new Point(11, 9);
+        var point0 = new Point(11, 9);
         map.setPossiblePlaceForHarbor(point0);
 
         // Mark a possible place for a harbor
-        Point point1 = new Point(52, 8);
+        var point1 = new Point(52, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         // Place headquarter
-        Point point2 = new Point(60, 6);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(60, 6);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place shipyard
-        Point point3 = new Point(55, 9);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+        var point3 = new Point(55, 9);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
         // Connect the shipyard to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -899,7 +890,7 @@ public class TestExpedition {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -916,7 +907,7 @@ public class TestExpedition {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -933,7 +924,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -945,10 +936,10 @@ public class TestExpedition {
         assertFalse(ship.isUnderConstruction());
 
         // Place harbor
-        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+        var harbor = map.placeBuilding(new Harbor(player0), point1);
 
         // Connect the harbor to the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
@@ -956,7 +947,7 @@ public class TestExpedition {
         Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
         // Verify that there are no possible expeditions from the harbor
-        Set<Direction> directions = ship.getPossibleDirectionsForExpedition();
+        var directions = ship.getPossibleDirectionsForExpedition();
 
         assertEquals(directions.size(), 1);
         assertTrue(directions.contains(LEFT));
@@ -966,10 +957,9 @@ public class TestExpedition {
     public void testGetPossibleExpeditionUpLeftOfShip() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 70, 70);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 70, 70);
 
         // Place a bent lake
         for (int i = 13; i < 53; i += 2) {
@@ -985,23 +975,23 @@ public class TestExpedition {
         }
 
         // Mark a possible place for a harbor
-        Point point0 = new Point(16, 50);
+        var point0 = new Point(16, 50);
         map.setPossiblePlaceForHarbor(point0);
 
         // Mark a possible place for a harbor
-        Point point1 = new Point(50, 8);
+        var point1 = new Point(50, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         // Place headquarter
-        Point point2 = new Point(60, 6);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(60, 6);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place shipyard
-        Point point3 = new Point(55, 9);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+        var point3 = new Point(55, 9);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
         // Connect the shipyard to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -1010,7 +1000,7 @@ public class TestExpedition {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1027,7 +1017,7 @@ public class TestExpedition {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -1044,7 +1034,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -1056,10 +1046,10 @@ public class TestExpedition {
         assertFalse(ship.isUnderConstruction());
 
         // Place harbor
-        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+        var harbor = map.placeBuilding(new Harbor(player0), point1);
 
         // Connect the harbor to the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
@@ -1067,7 +1057,7 @@ public class TestExpedition {
         Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
         // Verify that there are no possible expeditions from the harbor
-        Set<Direction> directions = ship.getPossibleDirectionsForExpedition();
+        var directions = ship.getPossibleDirectionsForExpedition();
 
         assertEquals(directions.size(), 1);
         assertTrue(directions.contains(UP_LEFT));
@@ -1077,42 +1067,41 @@ public class TestExpedition {
     public void testGetPossibleExpeditionDownLeftOfShip() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 70, 70);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 70, 70);
 
         // Place a bent lake
         for (int i = 13; i < 53; i += 2) {
-            Point point = new Point(i, 55);
+            var point = new Point(i, 55);
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
 
         for (int i = 11; i < 53; i+= 2) {
-            Point point = new Point(13, i);
+            var point = new Point(13, i);
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
 
         // Mark a possible place for a harbor
-        Point point0 = new Point(14, 8);
+        var point0 = new Point(14, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         // Mark a possible place for a harbor
-        Point point1 = new Point(50, 52);
+        var point1 = new Point(50, 52);
         map.setPossiblePlaceForHarbor(point1);
 
         // Place headquarter
-        Point point2 = new Point(60, 56);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(60, 56);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place shipyard
-        Point point3 = new Point(55, 59);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+        var point3 = new Point(55, 59);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
         // Connect the shipyard to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -1121,7 +1110,7 @@ public class TestExpedition {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1138,7 +1127,7 @@ public class TestExpedition {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -1155,7 +1144,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -1167,10 +1156,10 @@ public class TestExpedition {
         assertFalse(ship.isUnderConstruction());
 
         // Place harbor
-        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+        var harbor = map.placeBuilding(new Harbor(player0), point1);
 
         // Connect the harbor to the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
@@ -1178,7 +1167,7 @@ public class TestExpedition {
         Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
         // Verify that there are no possible expeditions from the harbor
-        Set<Direction> directions = ship.getPossibleDirectionsForExpedition();
+        var directions = ship.getPossibleDirectionsForExpedition();
 
         assertEquals(directions.size(), 1);
         assertTrue(directions.contains(DOWN_LEFT));
@@ -1188,10 +1177,9 @@ public class TestExpedition {
     public void testGetPossibleExpeditionUpRightOfShip() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 70, 70);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 70, 70);
 
         // Place a bent lake
         for (int i = 3; i < 53; i += 2) {
@@ -1207,23 +1195,23 @@ public class TestExpedition {
         }
 
         // Mark a possible place for a harbor
-        Point point0 = new Point(49, 49);
+        var point0 = new Point(49, 49);
         map.setPossiblePlaceForHarbor(point0);
 
         // Mark a possible place for a harbor
-        Point point1 = new Point(5, 9);
+        var point1 = new Point(5, 9);
         map.setPossiblePlaceForHarbor(point1);
 
         // Place headquarter
-        Point point2 = new Point(4, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(4, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place shipyard
-        Point point3 = new Point(9, 7);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+        var point3 = new Point(9, 7);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
         // Connect the shipyard to the headquarters
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -1232,7 +1220,7 @@ public class TestExpedition {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1249,7 +1237,7 @@ public class TestExpedition {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -1266,7 +1254,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -1286,10 +1274,10 @@ public class TestExpedition {
         Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         // Place harbor
-        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+        var harbor = map.placeBuilding(new Harbor(player0), point1);
 
         // Connect the harbor to the headquarters
-        Road road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
@@ -1308,14 +1296,14 @@ public class TestExpedition {
 
         assertEquals(map.getShips().size(), 1);
 
-        Point target = ship.getTarget();
+        var target = ship.getTarget();
 
         assertTrue(harbor.getPosition().distance(target.x, target.y) < 4);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, ship, target);
 
         // Verify that there is a possible expedition up-right
-        Set<Direction> directions = ship.getPossibleDirectionsForExpedition();
+        var directions = ship.getPossibleDirectionsForExpedition();
 
         assertEquals(directions.size(), 1);
         assertTrue(directions.contains(UP_RIGHT));
@@ -1325,10 +1313,9 @@ public class TestExpedition {
     public void testGetPossibleExpeditionDownRightOfShip() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 70, 70);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 70, 70);
 
         // Place a bent lake
         for (int i = 3; i < 53; i += 2) {
@@ -1344,23 +1331,23 @@ public class TestExpedition {
         }
 
         // Mark a possible place for a harbor
-        Point point0 = new Point(49, 9);
+        var point0 = new Point(49, 9);
         map.setPossiblePlaceForHarbor(point0);
 
         // Mark a possible place for a harbor
-        Point point1 = new Point(5, 57);
+        var point1 = new Point(5, 57);
         map.setPossiblePlaceForHarbor(point1);
 
         // Place headquarter
-        Point point2 = new Point(6, 60);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(6, 60);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place shipyard
-        Point point3 = new Point(11, 59);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+        var point3 = new Point(11, 59);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
         // Connect the shipyard to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -1369,7 +1356,7 @@ public class TestExpedition {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1386,7 +1373,7 @@ public class TestExpedition {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -1403,7 +1390,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -1415,10 +1402,10 @@ public class TestExpedition {
         assertFalse(ship.isUnderConstruction());
 
         // Place harbor
-        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+        var harbor = map.placeBuilding(new Harbor(player0), point1);
 
         // Connect the harbor to the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
@@ -1426,7 +1413,7 @@ public class TestExpedition {
         Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
         // Verify that there are no possible expeditions from the harbor
-        Set<Direction> directions = ship.getPossibleDirectionsForExpedition();
+        var directions = ship.getPossibleDirectionsForExpedition();
 
         assertEquals(directions.size(), 1);
         assertTrue(directions.contains(DOWN_RIGHT));
@@ -1436,10 +1423,9 @@ public class TestExpedition {
     public void testGetPossibleExpeditionLeftAndDownLeftOfShip() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 70, 70);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 70, 70);
 
         // Place a bent lake
         for (int i = 13; i < 53; i += 2) {
@@ -1455,27 +1441,27 @@ public class TestExpedition {
         }
 
         // Mark place for harbor
-        Point pointX = new Point(9, 55);
+        var pointX = new Point(9, 55);
         map.setPossiblePlaceForHarbor(pointX);
 
         // Mark a possible place for a harbor
-        Point point0 = new Point(9, 15);
+        var point0 = new Point(9, 15);
         map.setPossiblePlaceForHarbor(point0);
 
         // Mark a possible place for a harbor
-        Point point1 = new Point(52, 52);
+        var point1 = new Point(52, 52);
         map.setPossiblePlaceForHarbor(point1);
 
         // Place headquarter
-        Point point2 = new Point(60, 56);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(60, 56);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place shipyard
-        Point point3 = new Point(55, 59);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+        var point3 = new Point(55, 59);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
         // Connect the shipyard to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
@@ -1484,7 +1470,7 @@ public class TestExpedition {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1501,7 +1487,7 @@ public class TestExpedition {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -1518,7 +1504,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -1530,10 +1516,10 @@ public class TestExpedition {
         assertFalse(ship.isUnderConstruction());
 
         // Place harbor
-        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+        var harbor = map.placeBuilding(new Harbor(player0), point1);
 
         // Connect the harbor to the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
@@ -1541,7 +1527,7 @@ public class TestExpedition {
         Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
         // Verify that there are no possible expeditions from the harbor
-        Set<Direction> directions = ship.getPossibleDirectionsForExpedition();
+        var directions = ship.getPossibleDirectionsForExpedition();
 
         assertEquals(directions.size(), 2);
         assertTrue(directions.contains(LEFT));
@@ -1552,10 +1538,9 @@ public class TestExpedition {
     public void testNotMoreThanRequiredMaterialIsCollected() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 100, 100);
 
         // Place a lake
         for (int i = 3; i < 59; i += 2) {
@@ -1565,22 +1550,22 @@ public class TestExpedition {
         }
 
         // Mark a possible place for a harbor
-        Point point0 = new Point(58, 8);
+        var point0 = new Point(58, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         // Mark a possible place for a harbor
-        Point point1 = new Point(8, 8);
+        var point1 = new Point(8, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         // Place headquarter
-        Point point2 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
-        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+        var harbor = map.placeBuilding(new Harbor(player0), point1);
 
         // Connect the harbor to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
@@ -1606,7 +1591,7 @@ public class TestExpedition {
         // Wait for the harbor to collect the required material for the expedition
         for (int i = 0; i < 10000; i++) {
 
-            Map<Material, Integer> expeditionMaterial = harbor.getMaterialForExpedition();
+            var expeditionMaterial = harbor.getMaterialForExpedition();
 
             if (expeditionMaterial.getOrDefault(PLANK, 0) == 4 &&
                     expeditionMaterial.getOrDefault(STONE, 0) == 6 &&
@@ -1619,7 +1604,7 @@ public class TestExpedition {
             map.stepTime();
         }
 
-        Map<Material, Integer> expeditionMaterial = harbor.getMaterialForExpedition();
+        var expeditionMaterial = harbor.getMaterialForExpedition();
 
         assertEquals((int)expeditionMaterial.getOrDefault(PLANK, 0), 4);
         assertEquals((int)expeditionMaterial.getOrDefault(STONE, 0), 6);
@@ -1637,10 +1622,9 @@ public class TestExpedition {
     public void testShipIsNotReusedWhenStartingNextExpedition() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 100, 100);
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
@@ -1650,24 +1634,24 @@ public class TestExpedition {
         }
 
         // Mark a possible place for a harbor
-        Point point0 = new Point(54, 8);
+        var point0 = new Point(54, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         assertTrue(map.isAvailableHarborPoint(point0));
 
         // Mark a possible place for a harbor
-        Point point1 = new Point(6, 8);
+        var point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         // Place headquarter
-        Point point2 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
-        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+        var harbor = map.placeBuilding(new Harbor(player0), point1);
 
         // Connect the harbor to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
@@ -1679,11 +1663,11 @@ public class TestExpedition {
         assertTrue(harbor.isReady());
 
         // Place shipyard
-        Point point3 = new Point(14, 8);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+        var point3 = new Point(14, 8);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
         // Connect the shipyard to the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
         assertFalse(harbor.needsMaterial(BUILDER));
@@ -1694,7 +1678,7 @@ public class TestExpedition {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1711,7 +1695,7 @@ public class TestExpedition {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -1728,7 +1712,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -1767,7 +1751,7 @@ public class TestExpedition {
         // Wait for the harbor to collect the required material for the expedition
         for (int i = 0; i < 10000; i++) {
 
-            Map<Material, Integer> expeditionMaterial = harbor.getMaterialForExpedition();
+            var expeditionMaterial = harbor.getMaterialForExpedition();
 
             if (expeditionMaterial.getOrDefault(PLANK, 0) == 4 &&
                     expeditionMaterial.getOrDefault(STONE, 0) == 6 &&
@@ -1781,7 +1765,7 @@ public class TestExpedition {
         }
 
         // Wait for the ship to sail to the harbor
-        Point target = ship.getTarget();
+        var target = ship.getTarget();
 
         assertTrue(point1.distance(target.x, target.y) < 4);
 
@@ -1792,13 +1776,12 @@ public class TestExpedition {
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(STONE, 0), 0);
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(BUILDER, 0), 0);
 
-        Set<Cargo> cargos = ship.getCargos();
+        var cargos = ship.getCargos();
 
-        Map<Material, Integer> materialInShip = new HashMap<>();
-
-        for (Cargo cargo : cargos) {
-            Material material = cargo.getMaterial();
-            int amount = materialInShip.getOrDefault(material, 0);
+        var materialInShip = new HashMap<Material, Integer>();
+        for (var cargo : cargos) {
+            var material = cargo.getMaterial();
+            var amount = materialInShip.getOrDefault(material, 0);
 
             amount = amount + 1;
 
@@ -1810,7 +1793,7 @@ public class TestExpedition {
         assertEquals((int)materialInShip.getOrDefault(BUILDER, 0), 1);
 
         // Check that there is an expedition available to the possible harbor point
-        Set<Direction> directions = ship.getPossibleDirectionsForExpedition();
+        var directions = ship.getPossibleDirectionsForExpedition();
 
         assertEquals(directions.size(), 1);
         assertTrue(directions.contains(RIGHT));
@@ -1853,35 +1836,34 @@ public class TestExpedition {
     public void testOnlyOneShipSailsToHarborToGetReadyForExpedition() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place a lake
         for (int i = 3; i < 53; i += 2) {
-            Point point = new Point(i, 11);
+            var point = new Point(i, 11);
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
 
         // Mark a possible place for a harbor
-        Point point0 = new Point(57, 11);
+        var point0 = new Point(57, 11);
         map.setPossiblePlaceForHarbor(point0);
 
         // Mark a possible place for a harbor
-        Point point1 = new Point(4, 8);
+        var point1 = new Point(4, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         // Place headquarter
-        Point point2 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
-        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+        var harbor = map.placeBuilding(new Harbor(player0), point1);
 
         // Connect the harbor to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
@@ -1893,11 +1875,11 @@ public class TestExpedition {
         assertTrue(harbor.isReady());
 
         // Place shipyard
-        Point point3 = new Point(14, 8);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+        var point3 = new Point(14, 8);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
         // Connect the shipyard to the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed
         assertFalse(harbor.needsMaterial(BUILDER));
@@ -1908,7 +1890,7 @@ public class TestExpedition {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -1925,7 +1907,7 @@ public class TestExpedition {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -1942,7 +1924,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -1960,7 +1942,7 @@ public class TestExpedition {
         assertTrue(map.getShips().get(0).isReady());
         assertTrue(map.getShips().get(1).isUnderConstruction());
 
-        Ship ship1 = map.getShips().get(1);
+        var ship1 = map.getShips().get(1);
 
         Utils.waitForShipToGetBuilt(map, ship1);
 
@@ -2008,9 +1990,9 @@ public class TestExpedition {
             map.stepTime();
         }
 
-        Point shipPosition = ship.getPosition();
-        Point ship1Position = ship1.getPosition();
-        Point harborPosition = harbor.getPosition();
+        var shipPosition = ship.getPosition();
+        var ship1Position = ship1.getPosition();
+        var harborPosition = harbor.getPosition();
 
         assertTrue(
                 (shipPosition.distance(harborPosition.x, harborPosition.y) < 4 && ship1Position.distance(harborPosition.x, harborPosition.y) > 4) ||
@@ -2021,35 +2003,34 @@ public class TestExpedition {
     public void testCanDoTwoExpeditions() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 20);
 
         // Place a lake
         for (int i = 3; i < 53; i += 2) {
-            Point point = new Point(i, 11);
+            var point = new Point(i, 11);
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
 
         // Mark a possible place for a harbor
-        Point point0 = new Point(57, 11);
+        var point0 = new Point(57, 11);
         map.setPossiblePlaceForHarbor(point0);
 
         // Mark a possible place for a harbor
-        Point point1 = new Point(4, 8);
+        var point1 = new Point(4, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         // Place headquarter
-        Point point2 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+        var point2 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
-        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+        var harbor = map.placeBuilding(new Harbor(player0), point1);
 
         // Connect the harbor to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
@@ -2061,11 +2042,11 @@ public class TestExpedition {
         assertTrue(harbor.isReady());
 
         // Place shipyard
-        Point point3 = new Point(14, 8);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+        var point3 = new Point(14, 8);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
         // Connect the shipyard to the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed
         assertFalse(harbor.needsMaterial(BUILDER));
@@ -2076,7 +2057,7 @@ public class TestExpedition {
         shipyard.produceShips();
 
         // Wait for the shipyard to get occupied
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+        var shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
@@ -2093,7 +2074,7 @@ public class TestExpedition {
 
         assertFalse(shipwright.isInsideBuilding());
 
-        Point point = shipwright.getTarget();
+        var point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
 
@@ -2110,7 +2091,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().getFirst();
+        var ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -2128,7 +2109,7 @@ public class TestExpedition {
         assertTrue(map.getShips().get(0).isReady());
         assertTrue(map.getShips().get(1).isUnderConstruction());
 
-        Ship ship1 = map.getShips().get(1);
+        var ship1 = map.getShips().get(1);
 
         Utils.waitForShipToGetBuilt(map, ship1);
 
@@ -2175,7 +2156,7 @@ public class TestExpedition {
             map.stepTime();
         }
 
-        Point harborPosition = harbor.getPosition();
+        var harborPosition = harbor.getPosition();
 
         assertTrue(
                 ship.getPosition().distance(harborPosition) < 4 ||

@@ -34,18 +34,17 @@ public class TestConstruction {
     public void testCreateNewWoodcutter() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players,40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players,40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place sawmill
-        Point point1 = new Point(9, 9);
-        Building sawmill0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(9, 9);
+        var sawmill0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Assign builder
         Utils.assignBuilder(sawmill0);
@@ -77,7 +76,7 @@ public class TestConstruction {
             map.stepTime();
         }
 
-        Cargo plankCargo = new Cargo(PLANK, null);
+        var plankCargo = new Cargo(PLANK, null);
 
         sawmill0.putCargo(plankCargo);
 
@@ -99,7 +98,7 @@ public class TestConstruction {
         assertEquals(sawmill0.getAmount(STONE), 0);
 
         // Verify that the sawmill doesn't need any material when it's finished
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             assertFalse(sawmill0.needsMaterial(material));
         }
 
@@ -120,19 +119,18 @@ public class TestConstruction {
     public void testCreateNewBarracks() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
 
-        GameMap map = new GameMap(players,30, 30);
+        var map = new GameMap(players,30, 30);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(13, 13);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        var point1 = new Point(13, 13);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         assertTrue(barracks0.isPlanned());
         assertTrue(barracks0.isMilitaryBuilding());
@@ -156,18 +154,17 @@ public class TestConstruction {
     public void testCreateNewSawmill() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players,40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players,40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place sawmill
-        Point point1 = new Point(9, 9);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
+        var point1 = new Point(9, 9);
+        var sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
         // Assign builder
         Utils.assignBuilder(sawmill0);
@@ -181,8 +178,8 @@ public class TestConstruction {
             map.stepTime();
         }
 
-        Cargo plankCargo = new Cargo(PLANK, null);
-        Cargo stoneCargo = new Cargo(STONE, null);
+        var plankCargo = new Cargo(PLANK, null);
+        var stoneCargo = new Cargo(STONE, null);
 
         sawmill0.promiseDelivery(PLANK);
         sawmill0.putCargo(plankCargo);
@@ -231,18 +228,17 @@ public class TestConstruction {
     public void testCreateFarm() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players,40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players,40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point1 = new Point(9, 9);
-        Building farm = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(9, 9);
+        var farm = map.placeBuilding(new Farm(player0), point1);
 
         // Assign builder
         Utils.assignBuilder(farm);
@@ -256,8 +252,8 @@ public class TestConstruction {
             map.stepTime();
         }
 
-        Cargo plankCargo = new Cargo(PLANK, null);
-        Cargo stoneCargo = new Cargo(STONE, null);
+        var plankCargo = new Cargo(PLANK, null);
+        var stoneCargo = new Cargo(STONE, null);
         farm.putCargo(plankCargo);
         farm.putCargo(plankCargo);
         farm.putCargo(plankCargo);
@@ -293,7 +289,7 @@ public class TestConstruction {
 
     @Test
     public void testInvalidDeliveryToUnfinishedSawmill() {
-        Sawmill sawmill0 = new Sawmill(null);
+        var sawmill0 = new Sawmill(null);
 
         try {
             sawmill0.putCargo(new Cargo(SWORD, null));
@@ -306,18 +302,17 @@ public class TestConstruction {
     public void testDeliveryToBurningSawmill() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players,40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players,40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place sawmill
-        Point point1 = new Point(9, 9);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
+        var point1 = new Point(9, 9);
+        var sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
         Utils.constructHouse(sawmill0);
 
@@ -336,18 +331,17 @@ public class TestConstruction {
     public void testDeliveryToDestroyedSawmill() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players,20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players,20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place sawmill
-        Point point1 = new Point(4, 4);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
+        var point1 = new Point(4, 4);
+        var sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
         // Finish construction of the sawmill
         Utils.constructHouse(sawmill0);
@@ -371,17 +365,16 @@ public class TestConstruction {
     public void testCannotPlaceMineOnTree() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players,20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players,20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mountain
-        Point point1 = new Point(14, 10);
+        var point1 = new Point(14, 10);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         // Place tree on the mountain
@@ -401,17 +394,16 @@ public class TestConstruction {
     public void testCannotPlaceMineOnStone() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players,20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players,20, 20);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place mountain
-        Point point1 = new Point(14, 10);
+        var point1 = new Point(14, 10);
         Utils.surroundPointWithMinableMountain(point1, map);
 
         // Place a stone on the mountain

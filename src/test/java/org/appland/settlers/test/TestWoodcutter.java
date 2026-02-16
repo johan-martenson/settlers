@@ -166,7 +166,7 @@ public class TestWoodcutter {
         // Run game logic twice, once to place courier and once to place var worker
         Utils.fastForward(2, map);
 
-        boolean foundWoodcutter = false;
+        var foundWoodcutter = false;
         for (var worker : map.getWorkers()) {
             if (worker instanceof WoodcutterWorker) {
                 foundWoodcutter = true;
@@ -234,7 +234,7 @@ public class TestWoodcutter {
         // Run game logic twice, once to place courier and once to place var worker
         Utils.fastForward(2, map);
 
-        boolean foundWoodcutter = false;
+        var foundWoodcutter = false;
         for (var worker : map.getWorkers()) {
             if (worker instanceof WoodcutterWorker) {
                 foundWoodcutter = true;
@@ -1495,7 +1495,7 @@ public class TestWoodcutter {
         // Verify that the courier delivers the cargo to the headquarters
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(WOOD);
+        var amount = headquarter0.getAmount(WOOD);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
@@ -1537,7 +1537,7 @@ public class TestWoodcutter {
         assertFalse(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(WOODCUTTER_WORKER);
+        var amount = headquarter0.getAmount(WOODCUTTER_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
 
@@ -1582,7 +1582,7 @@ public class TestWoodcutter {
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
+        var firstStep = true;
         for (var point : woodcutterWorker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
@@ -2197,7 +2197,7 @@ public class TestWoodcutter {
         assertFalse(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(WOODCUTTER_WORKER);
+        var amount = storehouse0.getAmount(WOODCUTTER_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, storehouse0.getPosition());
 
@@ -2248,7 +2248,7 @@ public class TestWoodcutter {
         assertFalse(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(WOODCUTTER_WORKER);
+        var amount = headquarter0.getAmount(WOODCUTTER_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
 
@@ -2302,7 +2302,7 @@ public class TestWoodcutter {
         assertFalse(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(WOODCUTTER_WORKER);
+        var amount = headquarter0.getAmount(WOODCUTTER_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
 
@@ -2347,7 +2347,7 @@ public class TestWoodcutter {
         assertFalse(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(WOODCUTTER_WORKER);
+        var amount = headquarter0.getAmount(WOODCUTTER_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
 

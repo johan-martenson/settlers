@@ -27,38 +27,37 @@ public class TestCourierWalksOnItsOwnRoad {
     public void testCourierWalksOnOwnRoadWhenDeliveringFromFirstFlagToSecondFlag() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(19, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(19, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(24, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(24, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place flag
-        Point point2 = new Point(28, 4);
-        Flag flag1 = map.placeFlag(player0, point2);
+        var point2 = new Point(28, 4);
+        var flag1 = map.placeFlag(player0, point2);
 
         // Place woodcutter
-        Point point3 = new Point(31, 5);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point3);
+        var point3 = new Point(31, 5);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point3);
 
         // Connect the headquarter with the first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         // Connect the second flag with the woodcutter
-        Road road2 = map.placeAutoSelectedRoad(player0, flag1, woodcutter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, flag1, woodcutter.getFlag());
 
         // Wait for the first road to get occupied
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
         // Wait for the courier to carry cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
@@ -75,10 +74,10 @@ public class TestCourierWalksOnItsOwnRoad {
         Utils.verifyWorkerDoesNotMove(map, courier, 20);
 
         // Place a second, longer road between the headquarter and the second flag
-        Road road3 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag1);
+        var road3 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag1);
 
         // Wait for the new road to get occupied
-        Courier courier1 = Utils.waitForRoadToGetAssignedCourier(map, road3);
+        var courier1 = Utils.waitForRoadToGetAssignedCourier(map, road3);
 
         // Wait for the new courier to carry a cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier1);
@@ -103,42 +102,41 @@ public class TestCourierWalksOnItsOwnRoad {
     public void testCourierWalksOnOwnRoadWhenDeliveringFromSecondFlagToFirstFlag() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(19, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(19, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(24, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(24, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place flag
-        Point point2 = new Point(28, 4);
-        Flag flag1 = map.placeFlag(player0, point2);
+        var point2 = new Point(28, 4);
+        var flag1 = map.placeFlag(player0, point2);
 
         // Place woodcutter
-        Point point3 = new Point(31, 5);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point3);
+        var point3 = new Point(31, 5);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point3);
 
         // Connect the headquarter with the first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         // Connect the second flag with the woodcutter
-        Road road2 = map.placeAutoSelectedRoad(player0, flag1, woodcutter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, flag1, woodcutter.getFlag());
 
         // Remove all planks from the headquarter
         Utils.adjustInventoryTo(headquarter, PLANK, 0);
 
         // Wait for the roads to get occupied
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road2);
-        Courier courier3 = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road2);
+        var courier3 = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         Utils.waitForCouriersToBeIdle(map, courier, courier3);
 
@@ -159,10 +157,10 @@ public class TestCourierWalksOnItsOwnRoad {
         Utils.verifyWorkerDoesNotMove(map, courier, 20);
 
         // Place a second, longer road between the second flag and the headquarter
-        Road road3 = map.placeAutoSelectedRoad(player0, flag0, woodcutter.getFlag());
+        var road3 = map.placeAutoSelectedRoad(player0, flag0, woodcutter.getFlag());
 
         // Wait for the new road to get occupied
-        Courier courier1 = Utils.waitForRoadToGetAssignedCourier(map, road3);
+        var courier1 = Utils.waitForRoadToGetAssignedCourier(map, road3);
 
         // Place a cargo for the courier to pick up
         Utils.placeCargo(map, GOLD, woodcutter.getFlag(), headquarter);
@@ -189,31 +187,30 @@ public class TestCourierWalksOnItsOwnRoad {
     public void testCourierWalksOnOwnRoadWhenDeliveringFromFirstFlagToSecondBuilding() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(19, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(19, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(24, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(24, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place woodcutter
-        Point point2 = new Point(27, 5);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
+        var point2 = new Point(27, 5);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
 
         // Connect the headquarters with the flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
 
         // Connect the flag with the woodcutter
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter.getFlag());
 
         // Wait for the first road to get occupied
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
         // Wait for the courier to carry cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
@@ -240,10 +237,10 @@ public class TestCourierWalksOnItsOwnRoad {
         Utils.placeCargos(map, STONE, 8, woodcutter.getFlag(), woodcutter);
 
         // Place a second, longer road between the headquarters and the woodcutter
-        Road road2 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), woodcutter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), woodcutter.getFlag());
 
         // Wait for the new road to get occupied
-        Courier courier1 = Utils.waitForRoadToGetAssignedCourier(map, road2);
+        var courier1 = Utils.waitForRoadToGetAssignedCourier(map, road2);
 
         // Wait for the new courier to carry a cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier1);
@@ -268,41 +265,40 @@ public class TestCourierWalksOnItsOwnRoad {
     public void testCourierWalksOnOwnRoadWhenDeliveringFromSecondFlagToFirstBuilding() throws InvalidUserActionException {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(19, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(19, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(24, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(24, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place flag
-        Point point2 = new Point(28, 4);
-        Flag flag1 = map.placeFlag(player0, point2);
+        var point2 = new Point(28, 4);
+        var flag1 = map.placeFlag(player0, point2);
 
         // Place woodcutter
-        Point point3 = new Point(31, 5);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point3);
+        var point3 = new Point(31, 5);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point3);
 
         // Connect the headquarter with the first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         // Connect the second flag with the woodcutter
-        Road road2 = map.placeAutoSelectedRoad(player0, flag1, woodcutter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, flag1, woodcutter.getFlag());
 
         // Remove all planks from the headquarter
         Utils.adjustInventoryTo(headquarter, PLANK, 0);
 
         // Wait for the second road to get occupied
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road2);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road2);
 
         // Place a cargo for the courier to pick up
         Utils.placeCargo(map, PLANK, woodcutter.getFlag(), headquarter);
@@ -322,10 +318,10 @@ public class TestCourierWalksOnItsOwnRoad {
         Utils.verifyWorkerDoesNotMove(map, courier, 20);
 
         // Place a second, longer road between the second flag and the headquarter
-        Road road3 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), woodcutter.getFlag());
+        var road3 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), woodcutter.getFlag());
 
         // Wait for the new road to get occupied
-        Courier courier1 = Utils.waitForRoadToGetAssignedCourier(map, road3);
+        var courier1 = Utils.waitForRoadToGetAssignedCourier(map, road3);
 
         // Place a cargo for the courier to pick up
         Utils.placeCargo(map, GOLD, woodcutter.getFlag(), headquarter);

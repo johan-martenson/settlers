@@ -34,7 +34,7 @@ public class TestWildAnimal {
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Verify that wild animals appear spontaneously
-        int animalsAtStart = map.getWildAnimals().size();
+        var animalsAtStart = map.getWildAnimals().size();
 
         for (int i = 0; i < 500; i++) {
             if (map.getWildAnimals().size() > animalsAtStart) {
@@ -85,7 +85,7 @@ public class TestWildAnimal {
 
         // Verify that the animal moves sometimes
         var oldPlace = animal.getPosition();
-        int timeInSamePlace = 0;
+        var timeInSamePlace = 0;
 
         for (int i = 0; i < 1000; i++) {
 
@@ -111,17 +111,16 @@ public class TestWildAnimal {
         var map = new GameMap(List.of(player0), 100, 100);
 
         // Verify that animals are created across the map
-        int minX = Integer.MAX_VALUE;
-        int maxX = Integer.MIN_VALUE;
-        int minY = Integer.MAX_VALUE;
-        int maxY = Integer.MIN_VALUE;
+        var minX = Integer.MAX_VALUE;
+        var maxX = Integer.MIN_VALUE;
+        var minY = Integer.MAX_VALUE;
+        var maxY = Integer.MIN_VALUE;
 
-        Set<WildAnimal> currentAnimals = new HashSet<>();
-
+        var currentAnimals = new HashSet<WildAnimal>();
         for (int i = 0; i < 5000; i++) {
 
             // Find min and max of newly created animals
-            for (WildAnimal worker : map.getWildAnimals()) {
+            for (var worker : map.getWildAnimals()) {
 
                 // Filter already handled animals
                 if (currentAnimals.contains(worker)) {
@@ -222,7 +221,7 @@ public class TestWildAnimal {
         assertTrue(map.getWildAnimals().size() > 0);
 
         // Verify that the wild animal stays in the spot because it has nowhere to go
-        WildAnimal wildAnimal0 = map.getWildAnimals().getFirst();
+        var wildAnimal0 = map.getWildAnimals().getFirst();
 
         assertNotNull(wildAnimal0);
         assertEquals(wildAnimal0.getPosition(), point0);
@@ -264,7 +263,7 @@ public class TestWildAnimal {
         Utils.fillMapWithVegetation(map, MEADOW_1);
 
         // Verify that wild animals appear
-        boolean sawWildAnimal = false;
+        var sawWildAnimal = false;
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
 
@@ -287,7 +286,7 @@ public class TestWildAnimal {
         Utils.fillMapWithVegetation(map, SWAMP);
 
         // Verify that wild animals appear
-        boolean sawWildAnimal = false;
+        var sawWildAnimal = false;
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
 
@@ -310,7 +309,7 @@ public class TestWildAnimal {
         Utils.fillMapWithVegetation(map, MOUNTAIN_1);
 
         // Verify that wild animals appear
-        boolean sawWildAnimal = false;
+        var sawWildAnimal = false;
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
 
@@ -333,7 +332,7 @@ public class TestWildAnimal {
         Utils.fillMapWithVegetation(map, SAVANNAH);
 
         // Verify that wild animals appear
-        boolean sawWildAnimal = false;
+        var sawWildAnimal = false;
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
 
@@ -356,7 +355,7 @@ public class TestWildAnimal {
         Utils.fillMapWithVegetation(map, SNOW);
 
         // Verify that wild animals appear
-        boolean sawWildAnimal = false;
+        var sawWildAnimal = false;
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
 
@@ -379,7 +378,7 @@ public class TestWildAnimal {
         Utils.fillMapWithVegetation(map, DESERT_1);
 
         // Verify that wild animals appear
-        boolean sawWildAnimal = false;
+        var sawWildAnimal = false;
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
 
@@ -402,7 +401,7 @@ public class TestWildAnimal {
         Utils.fillMapWithVegetation(map, STEPPE);
 
         // Verify that wild animals appear
-        boolean sawWildAnimal = false;
+        var sawWildAnimal = false;
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
 
@@ -425,7 +424,7 @@ public class TestWildAnimal {
         Utils.fillMapWithVegetation(map, MOUNTAIN_MEADOW);
 
         // Verify that wild animals appear
-        boolean sawWildAnimal = false;
+        var sawWildAnimal = false;
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
 
@@ -448,7 +447,7 @@ public class TestWildAnimal {
         Utils.fillMapWithVegetation(map, BUILDABLE_MOUNTAIN);
 
         // Verify that wild animals appear
-        boolean sawWildAnimal = false;
+        var sawWildAnimal = false;
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
 
