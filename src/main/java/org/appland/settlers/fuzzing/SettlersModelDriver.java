@@ -88,7 +88,7 @@ public class SettlersModelDriver {
 
         FileInputStream inputStream = new FileInputStream(file);
 
-        /* Set up the building class map */
+        // Set up the building class map
         buildingClassMap.put(0, Armory.class);
         buildingClassMap.put(1, Bakery.class);
         buildingClassMap.put(2, Barracks.class);
@@ -117,12 +117,12 @@ public class SettlersModelDriver {
         buildingClassMap.put(25, Well.class);
         buildingClassMap.put(26, Woodcutter.class);
 
-        /* Set up the vegetation map */
+        // Set up the vegetation map
         for (int i = 0; i < Vegetation.values().length; i++) {
             vegetationMap.put(i, Vegetation.values()[i]);
         }
 
-        /* Create game map */
+        // Create game map
         List<Player> players = new ArrayList<>();
 
         for (int i = 0; i < mapFile.getStartingPoints().size(); i++) {
@@ -133,14 +133,14 @@ public class SettlersModelDriver {
 
         map.setPlayers(players);
 
-        /* Start monitoring for each player */
+        // Start monitoring for each player
         for (Player player : players) {
             player.monitorGameView((player1, gameChangesList) -> {
 
             });
         }
 
-        /* Execute the commands from the input file */
+        // Execute the commands from the input file
         ArgumentsHandler arguments = new ArgumentsHandler(inputStream);
 
         while (true) {

@@ -197,7 +197,7 @@ public class Harbor extends Storehouse {
     public void onConstructionFinished() {
         getPlayer().reportHarborReady(this);
 
-        /* Add a storage worker manually if this is a separate settlement */
+        // Add a storage worker manually if this is a separate settlement
         if (isOwnSettlement) {
             Player player = getPlayer();
             GameMap map = getMap();

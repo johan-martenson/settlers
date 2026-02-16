@@ -1158,7 +1158,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
     public void onClose(Session session) {
         System.out.println(">> Websocket session closed.");
 
-        /* Remove the closed session */
+        // Remove the closed session
         gameListListeners.remove(session);
         gameInfoListeners.forEach((game, listeners) -> listeners.remove(session));
         chatRoomListeners.forEach((chatRoom, listeners) -> listeners.remove(session));
@@ -1179,7 +1179,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
         System.out.println(throwable.getMessage());
         System.out.println(Arrays.toString(throwable.getStackTrace()));
 
-        /* Remove the error session */
+        // Remove the error session
         gameListListeners.remove(session);
         gameInfoListeners.forEach((game, listeners) -> listeners.remove(session));
         chatRoomListeners.forEach((chatRoom, listeners) -> listeners.remove(session));

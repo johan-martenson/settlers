@@ -17,11 +17,11 @@ import java.util.List;
 public class GameUtils {
     public static void startGame(GameResource gameResource, GameTicker gameTicker) throws Exception {
 
-        /* Create the game map */
+        // Create the game map
         gameResource.createGameMap();
         GameMap map = gameResource.getGameMap();
 
-        /* Limit the amount of wild animals to make performance bearable -- temporary! */
+        // Limit the amount of wild animals to make performance bearable -- temporary!
         List<WildAnimal> wildAnimals = map.getWildAnimals();
         List<WildAnimal> reducedWildAnimals = new ArrayList<>(wildAnimals);
 
@@ -33,7 +33,7 @@ public class GameUtils {
 
         wildAnimals.addAll(reducedWildAnimals);
 
-        /* Place a headquarters for each player */
+        // Place a headquarters for each player
         List<Player> players = map.getPlayers();
         List<Point> startingPoints = map.getStartingPoints();
 
@@ -45,10 +45,10 @@ public class GameUtils {
             map.placeBuilding(new Headquarter(players.get(i)), startingPoints.get(i));
         }
 
-        /* Adjust the initial set of resources */
+        // Adjust the initial set of resources
         adjustResources(map, gameResource.getResources());
 
-        /* Start the time for the game by adding it to the game ticker */
+        // Start the time for the game by adding it to the game ticker
         gameTicker.startGame(gameResource);
 
         gameResource.setStatus(GameStatus.STARTED);

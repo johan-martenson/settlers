@@ -78,7 +78,7 @@ public class StorehouseWorker extends Worker {
 
         countdown.countFrom(RESTING_TIME);
 
-        /* Set the initial assignments of food to zero */
+        // Set the initial assignments of food to zero
         assignedFood = new HashMap<>();
 
         assignedFood.put(GoldMine.class, 0);
@@ -86,14 +86,14 @@ public class StorehouseWorker extends Worker {
         assignedFood.put(CoalMine.class, 0);
         assignedFood.put(GraniteMine.class, 0);
 
-        /* Set the initial assignments of coal to zero */
+        // Set the initial assignments of coal to zero
         assignedCoal = new HashMap<>();
 
         assignedCoal.put(IronSmelter.class, 0);
         assignedCoal.put(Mint.class, 0);
         assignedCoal.put(Armory.class, 0);
 
-        /* Set the initial assignments of wheat to zero */
+        // Set the initial assignments of wheat to zero
         assignedWheat = new HashMap<>();
 
         assignedWheat.put(Mill.class, 0);
@@ -101,7 +101,7 @@ public class StorehouseWorker extends Worker {
         assignedWheat.put(PigFarm.class, 0);
         assignedWheat.put(Brewery.class, 0);
 
-        /* Set the initial assignments of water to zero */
+        // Set the initial assignments of water to zero
         assignedWater = new HashMap<>();
 
         assignedWater.put(Bakery.class, 0);
@@ -109,7 +109,7 @@ public class StorehouseWorker extends Worker {
         assignedWater.put(PigFarm.class, 0);
         assignedWater.put(Brewery.class, 0);
 
-        /* Set the initial assignments of iron bars to zero */
+        // Set the initial assignments of iron bars to zero
         assignedIronBars = new HashMap<>();
 
         assignedIronBars.put(Armory.class, 0);
@@ -121,20 +121,20 @@ public class StorehouseWorker extends Worker {
 
         for (Material material : getPlayer().getTransportPrioritiesForEachMaterial()) {
 
-            /* Don't try to deliver materials that are not in stock */
+            // Don't try to deliver materials that are not in stock
             if (!ownStorehouse.isInStock(material)) {
                 continue;
             }
 
-            /* Send out the material if it's ordered to be pushed out */
+            // Send out the material if it's ordered to be pushed out
             if (ownStorehouse.isPushedOut(material)) {
 
-                /* Find receiving storehouse */
+                // Find receiving storehouse
                 Storehouse receivingStorehouse = getPlayer().getClosestStorage(getHome().getPosition(), getHome());
 
                 Cargo cargo = ownStorehouse.retrieve(material);
 
-                /* Deliver to the building if it exists, otherwise just put the cargo on the flag */
+                // Deliver to the building if it exists, otherwise just put the cargo on the flag
                 if (receivingStorehouse != null) {
 
                     receivingStorehouse.promiseDelivery(material);
@@ -151,17 +151,17 @@ public class StorehouseWorker extends Worker {
             */
             for (Building building : player.getBuildings()) {
 
-                /* Don't deliver to itself */
+                // Don't deliver to itself
                 if (ownStorehouse.equals(building)) {
                     continue;
                 }
 
-                /* Don't deliver to burning or destroyed buildings */
+                // Don't deliver to burning or destroyed buildings
                 if (building.isBurningDown() || building.isDestroyed()) {
                     continue;
                 }
 
-                /* Make sure planks are only used for plank production if the amount is critically low */
+                // Make sure planks are only used for plank production if the amount is critically low
                 if (material == PLANK) {
 
                     if (getPlayer().isTreeConservationProgramActive() &&
@@ -173,28 +173,28 @@ public class StorehouseWorker extends Worker {
                     }
                 }
 
-                /* Check if the building needs the material */
+                // Check if the building needs the material
                 if (!building.needsMaterial(material)) {
                     continue;
                 }
 
-                /* Check that the building type is within its assigned quota */
+                // Check that the building type is within its assigned quota
                 if (!isWithinQuota(building, material) && !(resetAllocationIfNeeded(material) && isWithinQuota(building, material))) {
                     continue;
                 }
 
-                /* Filter out buildings that cannot be reached from the storage */
+                // Filter out buildings that cannot be reached from the storage
                 if (!map.arePointsConnectedByRoads(getHome().getPosition(), building.getPosition())) {
                     continue;
                 }
 
-                /* Deliver to the building */
+                // Deliver to the building
                 building.promiseDelivery(material);
 
                 Cargo cargo = ownStorehouse.retrieve(material);
                 cargo.setTarget(building);
 
-                /* Track allocation */
+                // Track allocation
                 trackAllocation(building, material);
 
                 return cargo;
@@ -322,7 +322,7 @@ public class StorehouseWorker extends Worker {
 
         if (material.isFood()) {
 
-        /* Reset count if all building types have reached their quota */
+        // Reset count if all building types have reached their quota
             Set<Building> reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
 
             if ((!needyConsumerExists(reachableBuildings, GoldMine.class, material) || overQuota(GoldMine.class, material)) &&
@@ -338,7 +338,7 @@ public class StorehouseWorker extends Worker {
             }
         } else if (material == COAL) {
 
-            /* Reset count if all building types have reached their quota */
+            // Reset count if all building types have reached their quota
             Set<Building> reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
 
             if ((!needyConsumerExists(reachableBuildings, IronSmelter.class, COAL) || overQuota(IronSmelter.class, material)) &&
@@ -352,7 +352,7 @@ public class StorehouseWorker extends Worker {
             }
         } else if (material == WHEAT) {
 
-            /* Reset count if all type of buildings have reached their quota */
+            // Reset count if all type of buildings have reached their quota
             Set<Building> reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
 
             if ((!needyConsumerExists(reachableBuildings, Mill.class, WHEAT) || overQuota(Mill.class, WHEAT)) &&
@@ -368,7 +368,7 @@ public class StorehouseWorker extends Worker {
             return true;
         } else if (material == WATER) {
 
-            /* Reset count if all type of buildings have reached their quota */
+            // Reset count if all type of buildings have reached their quota
             Set<Building> reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
 
             if ((!needyConsumerExists(reachableBuildings, Bakery.class, WATER) || overQuota(Bakery.class, WATER)) &&
@@ -384,7 +384,7 @@ public class StorehouseWorker extends Worker {
             return true;
         } else if (material == IRON_BAR) {
 
-            /* Reset count if all type of buildings have reached their quota */
+            // Reset count if all type of buildings have reached their quota
             Set<Building> reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
 
             if ((!needyConsumerExists(reachableBuildings, Armory.class, IRON_BAR) || overQuota(Armory.class, IRON_BAR)) &&
@@ -444,13 +444,13 @@ public class StorehouseWorker extends Worker {
             return assignedIronBars.get(building.getClass()) < quota;
         }
 
-        /* All other materials are without quota */
+        // All other materials are without quota
         return true;
     }
 
     private boolean overQuota(Class<? extends Building> buildingType, Material material) {
 
-        /* Handle food quota for mines */
+        // Handle food quota for mines
         if (material.isFood() &&
             (buildingType.equals(GoldMine.class) ||
             buildingType.equals(IronMine.class) ||
@@ -459,7 +459,7 @@ public class StorehouseWorker extends Worker {
             return assignedFood.get(buildingType) >= player.getFoodQuota(buildingType);
         }
 
-        /* Handle coal quota for coal consumers */
+        // Handle coal quota for coal consumers
         if (material == COAL &&
             (buildingType.equals(IronSmelter.class) ||
             buildingType.equals(Mint.class) ||
@@ -467,7 +467,7 @@ public class StorehouseWorker extends Worker {
             return assignedCoal.get(buildingType) >= player.getCoalQuota(buildingType);
         }
 
-        /* Handle wheat quota for wheat consumers */
+        // Handle wheat quota for wheat consumers
         if (material == WHEAT &&
             (buildingType.equals(Mill.class) ||
             buildingType.equals(DonkeyFarm.class) ||
@@ -476,7 +476,7 @@ public class StorehouseWorker extends Worker {
             return assignedWheat.get(buildingType) >= player.getWheatQuota(buildingType);
         }
 
-        /* Handle water quota for consumers */
+        // Handle water quota for consumers
         if (material == WATER &&
             (buildingType.equals(Bakery.class) ||
             buildingType.equals(DonkeyFarm.class) ||
@@ -485,14 +485,14 @@ public class StorehouseWorker extends Worker {
             return assignedWater.get(buildingType) >= player.getWaterQuota((buildingType));
         }
 
-        /* Handle iron bar quota for consumers */
+        // Handle iron bar quota for consumers
         if (material == IRON_BAR &&
             (buildingType.equals(Armory.class) ||
             buildingType.equals(Metalworks.class))) {
             return assignedIronBars.get(buildingType) >= player.getIronBarQuota(buildingType);
         }
 
-        /* All other buildings have no quota */
+        // All other buildings have no quota
         return false;
     }
 
@@ -512,15 +512,15 @@ public class StorehouseWorker extends Worker {
     @Override
     protected void onWalkingAndAtFixedPoint() {
 
-        /* Return to storage if the planned path no longer exists */
+        // Return to storage if the planned path no longer exists
         if (state == State.WALKING_TO_TARGET &&
             map.isFlagAtPoint(getPosition()) &&
             !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
 
-            /* Don't try to enter the storage upon arrival */
+            // Don't try to enter the storage upon arrival
             clearTargetBuilding();
 
-            /* Go back to the storage */
+            // Go back to the storage
             returnToStorage();
         }
     }

@@ -81,7 +81,7 @@ public class FoodProducer implements ComputerPlayer {
             }
         } else if (state == State.NEEDS_FOOD || state == State.BUILDING_FISHERY_FAILED) {
 
-            /* Try to build a fishery if there isn't already one placed */
+            // Try to build a fishery if there isn't already one placed
             if (fisheries.isEmpty() && state != State.BUILDING_FISHERY_FAILED) {
                 state = State.BUILD_FISHERY;
             } else if (hunterHuts.isEmpty()) {
@@ -89,7 +89,7 @@ public class FoodProducer implements ComputerPlayer {
             }
         } else if (state == State.BUILD_FISHERY) {
 
-            /* Find a spot to build a fishery on */
+            // Find a spot to build a fishery on
             Point pointForFishery = findPointForFishery();
 
             if (pointForFishery == null) {
@@ -101,36 +101,36 @@ public class FoodProducer implements ComputerPlayer {
                 return;
             }
 
-            /* Build the fishery */
+            // Build the fishery
             Fishery fishery = map.placeBuilding(new Fishery(controlledPlayer), pointForFishery);
 
             fisheries.add(fishery);
 
-            /* Connect the fishery with the headquarter */
+            // Connect the fishery with the headquarter
             Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, fishery.getFlag().getPosition(), headquarter);
 
-            /* Fill the road with flags */
+            // Fill the road with flags
             GamePlayUtils.fillRoadWithFlags(map, road);
 
             state = State.WAITING_FOR_FISHERY;
         } else if (state == State.BUILD_HUNTER_HUT) {
 
-            /* Find a spot to build a hunter hut on */
+            // Find a spot to build a hunter hut on
             Point pointForHunterHut = findPointForHunterHut();
 
             if (pointForHunterHut == null) {
                 return;
             }
 
-            /* Build the hunter hut */
+            // Build the hunter hut
             HunterHut hunterHut = map.placeBuilding(new HunterHut(controlledPlayer), pointForHunterHut);
 
             hunterHuts.add(hunterHut);
 
-            /* Connect the hunter hut with the headquarter */
+            // Connect the hunter hut with the headquarter
             Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, hunterHut.getFlag().getPosition(), headquarter);
 
-            /* Fill the road with flags */
+            // Fill the road with flags
             GamePlayUtils.fillRoadWithFlags(map, road);
 
             state = State.WAITING_FOR_HUNTER_HUT;
@@ -163,19 +163,19 @@ public class FoodProducer implements ComputerPlayer {
         } else if (state == State.NEEDS_BREAD) {
             if (!GamePlayUtils.buildingInPlace(farm)) {
 
-                /* Place a farm */
+                // Place a farm
                 farm = GamePlayUtils.placeBuilding(controlledPlayer, headquarter, new Farm(controlledPlayer));
             } else if (GamePlayUtils.buildingDone(farm) && !GamePlayUtils.buildingInPlace(well)) {
 
-                /* Place a well */
+                // Place a well
                 well = GamePlayUtils.placeBuilding(controlledPlayer, headquarter, new Well(controlledPlayer));
             } else if (GamePlayUtils.buildingDone(well) && !GamePlayUtils.buildingInPlace(mill)) {
 
-                /* Place a mill */
+                // Place a mill
                 mill = GamePlayUtils.placeBuilding(controlledPlayer, headquarter, new Mill(controlledPlayer));
             } else if (GamePlayUtils.buildingDone(mill) && !GamePlayUtils.buildingInPlace(bakery)) {
 
-                /* Place bakery */
+                // Place bakery
                 bakery = GamePlayUtils.placeBuilding(controlledPlayer, headquarter, new Bakery(controlledPlayer));
             }
         }
@@ -193,18 +193,18 @@ public class FoodProducer implements ComputerPlayer {
 
     private Point findPointForFishery() {
 
-        /* Look for water */
+        // Look for water
         for (Point point : controlledPlayer.getOwnedLand()) {
 
-            /* Filter non-water points */
+            // Filter non-water points
             if (!map.isInWater(point)) {
                 continue;
             }
 
-            /* Find point close by to build a fishery */
+            // Find point close by to build a fishery
             for (Point p : map.getPointsWithinRadius(point, RANGE_FISHERY_TO_WATER)) {
 
-                /* Filter points where it's not possible to build */
+                // Filter points where it's not possible to build
                 if (map.isAvailableHousePoint(controlledPlayer, p) == null) {
                     continue;
                 }
@@ -218,13 +218,13 @@ public class FoodProducer implements ComputerPlayer {
 
     private Point findPointForHunterHut() {
 
-        /* Find a good point to build on, close to the headquarter */
+        // Find a good point to build on, close to the headquarter
         Point site = null;
         double distance = Double.MAX_VALUE;
 
         for (Point point : controlledPlayer.getOwnedLand()) {
 
-            /* Filter out points where it's not possible to build */
+            // Filter out points where it's not possible to build
             if (map.isAvailableHousePoint(controlledPlayer, point) == null) {
                 continue;
             }

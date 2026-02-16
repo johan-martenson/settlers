@@ -29,7 +29,7 @@ public class Flag implements EndPoint {
         promisedCargo    = new HashSet<>();
         fightIsHappening = false;
 
-        /* Default flag type is normal */
+        // Default flag type is normal
         flagType = FlagType.NORMAL;
     }
 
@@ -49,13 +49,13 @@ public class Flag implements EndPoint {
         cargo.setPosition(getPosition());
         stackedCargo.add(cargo);
 
-        /* Give the cargo a chance to re-plan */
+        // Give the cargo a chance to re-plan
         cargo.rerouteIfNeeded();
 
-        /* Remove the promise for this cargo */
+        // Remove the promise for this cargo
         promisedCargo.remove(cargo);
 
-        /* Report that the flag has changed */
+        // Report that the flag has changed
         if (player != null) {
             GameMap map = player.getMap();
 
@@ -153,7 +153,7 @@ public class Flag implements EndPoint {
 
     public void onRemove() {
 
-        /* Break delivery promises for any stacked cargo */
+        // Break delivery promises for any stacked cargo
         for (Cargo cargo : stackedCargo) {
 
             if (!cargo.isPickupPromised()) {

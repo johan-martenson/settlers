@@ -97,11 +97,11 @@ public class Miner extends Worker {
                         state = State.MINING;
                         countdown.countFrom(TIME_TO_MINE);
 
-                        /* Note that the next production cycle starts */
+                        // Note that the next production cycle starts
                         productivityMeasurer.nextProductivityCycle();
                     } else {
 
-                        /* Report that the miner wasn't able to start mining because of missing food */
+                        // Report that the miner wasn't able to start mining because of missing food
                         productivityMeasurer.reportUnproductivity();
                     }
                 } else {
@@ -113,18 +113,18 @@ public class Miner extends Worker {
                     if (map.getAmountOfMineralAtPoint(mineral, getPosition()) > 0) {
                         consumeFood();
 
-                        /* Report the production */
+                        // Report the production
                         productivityMeasurer.reportProductivity();
 
                         map.getStatisticsManager().mined(player, map.getTime(), mineral);
 
-                        /* Handle transportation */
+                        // Handle transportation
                         if (getHome().getFlag().hasPlaceForMoreCargo()) {
                             Cargo cargo = map.mineMineralAtPoint(mineral, getPosition());
 
                             setCargo(cargo);
 
-                            /* Go out to delivery the cargo to the flag */
+                            // Go out to delivery the cargo to the flag
                             setTarget(getHome().getFlag().getPosition());
 
                             state = State.GOING_OUT_TO_FLAG;
@@ -135,7 +135,7 @@ public class Miner extends Worker {
                         }
                     } else {
 
-                        /* Report that there is no more ore available in the mine */
+                        // Report that there is no more ore available in the mine
                         getHome().reportNoMoreNaturalResources();
 
                         getPlayer().reportNoMoreResourcesForBuilding(getHome());
@@ -152,7 +152,7 @@ public class Miner extends Worker {
 
                     setCargo(cargo);
 
-                    /* Go out to delivery the cargo to the flag */
+                    // Go out to delivery the cargo to the flag
                     setTarget(getHome().getFlag().getPosition());
 
                     state = State.GOING_OUT_TO_FLAG;
@@ -212,7 +212,7 @@ public class Miner extends Worker {
             storehouse.depositWorker(this);
         } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
-            /* Go to the closest storage */
+            // Go to the closest storage
             Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, MINER);
 
             if (storehouse != null) {
@@ -270,15 +270,15 @@ public class Miner extends Worker {
     @Override
     protected void onWalkingAndAtFixedPoint() {
 
-        /* Return to storage if the planned path no longer exists */
+        // Return to storage if the planned path no longer exists
         if (state == WALKING_TO_TARGET &&
             map.isFlagAtPoint(getPosition()) &&
             !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
 
-            /* Don't try to enter the mine upon arrival */
+            // Don't try to enter the mine upon arrival
             clearTargetBuilding();
 
-            /* Go back to the storage */
+            // Go back to the storage
             returnToStorage();
         }
     }
@@ -286,7 +286,7 @@ public class Miner extends Worker {
     @Override
     public int getProductivity() {
 
-        /* Measure productivity across the length of four rest-work periods */
+        // Measure productivity across the length of four rest-work periods
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
                         (productivityMeasurer.getNumberOfCycles())) * 100);

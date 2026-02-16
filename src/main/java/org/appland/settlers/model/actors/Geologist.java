@@ -67,12 +67,12 @@ public class Geologist extends Worker {
 
                 nrSitesInvestigated++;
 
-                /* Report the find */
+                // Report the find
                 if (foundMaterial != null) {
                     getPlayer().reportGeologicalFinding(getPosition(), foundMaterial);
                 }
 
-                /* Return after investigating five sites */
+                // Return after investigating five sites
                 if (nrSitesInvestigated == 10) {
                     state = RETURNING_TO_FLAG;
 
@@ -214,7 +214,7 @@ public class Geologist extends Worker {
     @Override
     protected void onWalkingAndAtFixedPoint() {
 
-        /* Return to storage if the planned path no longer exists */
+        // Return to storage if the planned path no longer exists
         if (state == WALKING_TO_TARGET &&
             map.isFlagAtPoint(getPosition()) &&
             !map.arePointsConnectedByRoads(getPosition(), getTarget())) {

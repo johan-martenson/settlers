@@ -274,7 +274,7 @@ public class MapLoader {
             System.out.printf("Warning: Not zeros although mandatory. Are instead %s%n", Arrays.toString(unusedBytes));
         }
 
-        /* Extra 01 00 bytes may appear here but no files seen so far have this -- might be bug in one map */
+        // Extra 01 00 bytes may appear here but no files seen so far have this -- might be bug in one map
         // TODO: implement using streamReader
 
         // Read actual width and height, as used by map loaders

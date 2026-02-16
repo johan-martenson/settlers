@@ -40,7 +40,7 @@ public class Land {
 
         borderPoints.removeAll(borderPointsToPrune);
 
-        /* Separate border points into consistent borders */
+        // Separate border points into consistent borders
         while (!borderPoints.isEmpty()) {
             var root = borderPoints.iterator().next();
             List<Point> collectingBorder = new LinkedList<>();

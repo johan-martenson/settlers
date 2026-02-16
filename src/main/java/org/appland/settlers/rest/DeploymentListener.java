@@ -26,10 +26,10 @@ class DeploymentListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         System.out.println("Context initialized event.");
 
-        /* Start the game ticker */
+        // Start the game ticker
         GameTicker.GAME_TICKER.activate();
 
-        /* Load all maps and put them into the servlet context */
+        // Load all maps and put them into the servlet context
         String largeMapDirectoryPath = "maps/WORLDS/";
 
         File largeMapDirectory = new File(largeMapDirectoryPath);
@@ -58,7 +58,7 @@ class DeploymentListener implements ServletContextListener {
             );
         }
 
-        /* Pick the single reference map */
+        // Pick the single reference map
         File mapFile = Paths.get("src/test/resources/000.SWD").toFile();
 
         try {

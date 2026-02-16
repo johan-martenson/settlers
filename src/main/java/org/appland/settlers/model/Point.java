@@ -14,7 +14,7 @@ import static java.lang.Math.abs;
 public class Point extends java.awt.Point {
     private static final long serialVersionUID = 1L;
 
-    /* Uncomment below to track allocations of points */
+    // Uncomment below to track allocations of points
     //static Map<String, Integer> allocators = new HashMap<>();
     //static int printCount = 0;
 
@@ -25,12 +25,12 @@ public class Point extends java.awt.Point {
     public Point(int x, int y) {
         super(x, y);
 
-        /* Throw an exception if the sum of x and y is odd which is clearly invalid */
+        // Throw an exception if the sum of x and y is odd which is clearly invalid
         if ((x + y) % 2 != 0) {
             throw new RuntimeException("Can't create point " + x + ", " + y);
         }
 
-        /* Uncomment below to track allocations of points */
+        // Uncomment below to track allocations of points
         /*StackTraceElement frame1 = Thread.currentThread().getStackTrace()[2];
         StackTraceElement frame2 = Thread.currentThread().getStackTrace()[3];
         String method1 = frame1.getClassName() + "::" + frame1.getMethodName();
@@ -59,10 +59,10 @@ public class Point extends java.awt.Point {
         double faultX = x - roundedGameX;
         double faultY = y - roundedGameY;
 
-        /* Call the handler directly if both points are odd or even */
+        // Call the handler directly if both points are odd or even
         if ((roundedGameX + roundedGameY) % 2 != 0) {
 
-            /* Find the closest valid point (odd-odd, or even-even) */
+            // Find the closest valid point (odd-odd, or even-even)
             if (abs(faultX) > abs(faultY)) {
 
                 if (faultX > 0) {

@@ -47,7 +47,7 @@ public class PlankProductionPlayer implements ComputerPlayer {
         player = p;
         map    = m;
 
-        /* Set the initial state */
+        // Set the initial state
         state = State.NO_CONSTRUCTION;
     }
 
@@ -55,69 +55,69 @@ public class PlankProductionPlayer implements ComputerPlayer {
     public void turn() throws Exception {
         State stateBefore = state;
 
-        /* Construct a forester */
+        // Construct a forester
         if (state == State.NO_CONSTRUCTION) {
 
-            /* Find headquarter */
+            // Find headquarter
             headquarter = GamePlayUtils.findHeadquarter(player);
 
-            /* Find a site for the forester hut */
+            // Find a site for the forester hut
             Point site = findSpotForForesterHut();
 
-            /* Place forester hut */
+            // Place forester hut
             foresterHut = map.placeBuilding(new ForesterHut(player), site);
 
-            /* Connect the forester hut with the headquarter */
+            // Connect the forester hut with the headquarter
             Road road = map.placeAutoSelectedRoad(player, foresterHut.getFlag(), headquarter.getFlag());
 
-            /* Place flags where possible */
+            // Place flags where possible
             GamePlayUtils.fillRoadWithFlags(map, road);
 
-            /* Change state to wait for the forester to be ready */
+            // Change state to wait for the forester to be ready
             state = State.WAITING_FOR_FORESTER;
         } else if (state == State.WAITING_FOR_FORESTER) {
 
-            /* Check if the forester hut is constructed */
+            // Check if the forester hut is constructed
             if (foresterHut.isReady()) {
                 state = State.FORESTER_CONSTRUCTED;
             }
         } else if (state == State.FORESTER_CONSTRUCTED) {
 
-            /* Find a site for the woodcutter close to the forester hut */
+            // Find a site for the woodcutter close to the forester hut
             Point site = findSpotForWoodcutterNextToForesterHut(foresterHut);
 
-            /* Place the woodcutter */
+            // Place the woodcutter
             woodcutter = map.placeBuilding(new Woodcutter(player), site);
 
-            /* Connect the forester hut with the headquarter */
+            // Connect the forester hut with the headquarter
             Road road = map.placeAutoSelectedRoad(player, foresterHut.getFlag(), woodcutter.getFlag());
 
-            /* Place flags where possible */
+            // Place flags where possible
             GamePlayUtils.fillRoadWithFlags(map, road);
 
-            /* Change state to wait for the woodcutter */
+            // Change state to wait for the woodcutter
             state = State.WAITING_FOR_WOODCUTTER;
         } else if (state == State.WAITING_FOR_WOODCUTTER) {
 
-            /* Check if the woodcutter is constructed */
+            // Check if the woodcutter is constructed
             if (woodcutter.isReady()) {
                 state = State.WOODCUTTER_CONSTRUCTED;
             }
         } else if (state == State.WOODCUTTER_CONSTRUCTED) {
 
-            /* Find a site for the sawmill close to the headquarter */
+            // Find a site for the sawmill close to the headquarter
             Point site = findSpotForSawmill(headquarter);
 
-            /* Place the sawmill */
+            // Place the sawmill
             sawmill = map.placeBuilding(new Sawmill(player), site);
 
-            /* Connect the sawmill with the headquarter */
+            // Connect the sawmill with the headquarter
             Road road = map.placeAutoSelectedRoad(player, sawmill.getFlag(), headquarter.getFlag());
 
-            /* Place flags where possible */
+            // Place flags where possible
             GamePlayUtils.fillRoadWithFlags(map, road);
 
-            /* Change state to wait for the woodcutter */
+            // Change state to wait for the woodcutter
             state = State.WAITING_FOR_SAWMILL;
         }
     }
@@ -133,29 +133,29 @@ public class PlankProductionPlayer implements ComputerPlayer {
 
     private Point findSpotForWoodcutterNextToForesterHut(ForesterHut foresterHut) {
 
-        /* Find available spots close to the forester */
+        // Find available spots close to the forester
         List<Point> spots = GamePlayUtils.findAvailableHousePointsWithinRadius(map, player, foresterHut.getPosition(), SMALL, 4);
 
-        /* Return null if there are no available spots */
+        // Return null if there are no available spots
         if (spots.isEmpty()) {
             return null;
         }
 
-        /* Return any point from the available ones */
+        // Return any point from the available ones
         return spots.getFirst();
     }
 
     private Point findSpotForSawmill(Headquarter headquarter) {
 
-        /* Find available spots close to the forester */
+        // Find available spots close to the forester
         List<Point> spots = GamePlayUtils.findAvailableHousePointsWithinRadius(map, player, headquarter.getPosition(), MEDIUM, 4);
 
-        /* Return null if there are no available spots */
+        // Return null if there are no available spots
         if (spots.isEmpty()) {
             return null;
         }
 
-        /* Return any point from the available ones */
+        // Return any point from the available ones
         return spots.getFirst();
     }
 

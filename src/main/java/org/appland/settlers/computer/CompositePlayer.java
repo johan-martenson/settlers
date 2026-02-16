@@ -127,27 +127,27 @@ public class CompositePlayer implements ComputerPlayer {
                 player.setFoodQuota(IronMine.class, 10);
             }
 
-            /* Change transport priorities if needed */
+            // Change transport priorities if needed
             tuneTransportPriorities();
 
             duration.after("Tune transport priorities");
         }
 
-        /* Scan for new potential mines periodically */
+        // Scan for new potential mines periodically
         if (counter % PERIODIC_SCAN_FOR_NEW_MINERALS == 0 ) {
             mineralsPlayer.scanForNewMinerals();
 
             duration.after("Scan for new minerals");
         }
 
-        /* Scan for lakes periodically */
+        // Scan for lakes periodically
         if (counter % PERIODIC_LAKE_SCAN == 0) {
             foodPlayer.scanForNewLakes();
 
             duration.after("Scan for new lakes");
         }
 
-        /* Ensure plank production is active */
+        // Ensure plank production is active
         if (!constructionPlayer.plankProductionWorking()) {
             constructionPlayer.turn();
 
@@ -155,7 +155,7 @@ public class CompositePlayer implements ComputerPlayer {
 
             duration.after("Construction player turn");
 
-        /* Ensure stones are collected. Explore land directly if there are no stones available */
+        // Ensure stones are collected. Explore land directly if there are no stones available
         } else if (!constructionPlayer.stoneProductionWorking()) {
             if (constructionPlayer.hasAccessToStone()) {
                 constructionPlayer.turn();
@@ -171,7 +171,7 @@ public class CompositePlayer implements ComputerPlayer {
                 duration.after("Expanding land player turn");
             }
 
-        /* Scan for minerals if there are unknown areas and re-scan periodically */
+        // Scan for minerals if there are unknown areas and re-scan periodically
         } else if (!mineralsPlayer.allCurrentMineralsKnown()) {
             mineralsPlayer.turn();
 
@@ -179,7 +179,7 @@ public class CompositePlayer implements ComputerPlayer {
 
             duration.after("Minerals player turn");
 
-        /* Build first level of food production if it's missing and there are mines needing it */
+        // Build first level of food production if it's missing and there are mines needing it
         } else if (mineralsPlayer.hasMines() && !foodPlayer.basicFoodProductionDone()) {
             foodPlayer.turn();
 
@@ -187,7 +187,7 @@ public class CompositePlayer implements ComputerPlayer {
 
             duration.after("Food player turn");
 
-        /* Build up coin production if gold is available */
+        // Build up coin production if gold is available
         } else if (player.getInventory().get(GOLD) > 0 && !coinPlayer.coinProductionDone()) {
             coinPlayer.turn();
 
@@ -195,7 +195,7 @@ public class CompositePlayer implements ComputerPlayer {
 
             duration.after("Coin player turn");
 
-        /* Build up full food production after the coin production is available */
+        // Build up full food production after the coin production is available
         } else if (mineralsPlayer.hasCoalMine() &&
                    mineralsPlayer.hasIronMine() &&
                    !foodPlayer.fullFoodProductionDone()) {
@@ -205,7 +205,7 @@ public class CompositePlayer implements ComputerPlayer {
 
             duration.after("Food player turn");
 
-        /* Build up military production when full food production is done */
+        // Build up military production when full food production is done
         } else if (mineralsPlayer.hasCoalMine() &&
                    mineralsPlayer.hasIronMine() &&
                    !militaryProducer.productionDone()){
@@ -216,7 +216,7 @@ public class CompositePlayer implements ComputerPlayer {
 
             duration.after("Military producer turn");
 
-        /* Handle ongoing attacks */
+        // Handle ongoing attacks
         } else if (attackingPlayer.isAttacking() && counter % ATTACK_FOLLOW_UP == 0) {
 
             attackingPlayer.turn();
@@ -225,25 +225,25 @@ public class CompositePlayer implements ComputerPlayer {
 
             duration.after("Attacking player turn");
 
-        /* Handle the case where an ongoing attack has been won */
+        // Handle the case where an ongoing attack has been won
         } else if (attackingPlayer.hasWonBuildings()) {
             System.out.println("\nComposite player: Has won building\n");
             System.out.println("  " + attackingPlayer.getWonBuildings());
 
-            /* Notify the expanding player about newly acquired enemy buildings */
+            // Notify the expanding player about newly acquired enemy buildings
             expandingPlayer.registerBuildings(attackingPlayer.getWonBuildings());
             attackingPlayer.clearWonBuildings();
 
             duration.after("Won buildings");
 
-        /* Look for enemies to attack */
+        // Look for enemies to attack
         } else if (expandingPlayer.hasNewBuildings() || counter % PERIODIC_ENEMY_SCAN == 0) {
             expandingPlayer.clearNewBuildings();
 
-            /* Wait with attack if there is gold available but not enough promotions yet */
+            // Wait with attack if there is gold available but not enough promotions yet
             if (mineralsPlayer.hasGoldMine()) {
 
-                /* Wait to get a chance to get promoted soldiers before attacking */
+                // Wait to get a chance to get promoted soldiers before attacking
                 if (countdown.isActive()) {
                     if (!countdown.hasReachedZero()) {
                         countdown.step();
@@ -257,7 +257,7 @@ public class CompositePlayer implements ComputerPlayer {
                 }
             }
 
-            /* Look for enemies close by to attack */
+            // Look for enemies close by to attack
             Building enemyBuilding = GamePlayUtils.getCloseEnemyBuilding(player);
 
             duration.after("Look for enemy buildings to attack");
@@ -267,7 +267,7 @@ public class CompositePlayer implements ComputerPlayer {
                 return;
             }
 
-            /* Attack if possible */
+            // Attack if possible
             if (player.getAvailableAttackersForBuilding(enemyBuilding) > 0) {
                 System.out.println("Composite player: Can attack");
                 attackingPlayer.turn();
@@ -280,7 +280,7 @@ public class CompositePlayer implements ComputerPlayer {
                 System.out.println("Composite player: Cannot attack enemy at " + enemyBuilding.getPosition());
             }
 
-        /* Expand the land if there is nothing else to do */
+        // Expand the land if there is nothing else to do
         } else {
             expandingPlayer.turn();
 
@@ -318,7 +318,7 @@ public class CompositePlayer implements ComputerPlayer {
 
     private void tuneTransportPriorities() throws InvalidUserActionException {
 
-        /* Create a baseline for materials that tend to overflow */
+        // Create a baseline for materials that tend to overflow
         player.setTransportPriority(0, TransportCategory.GOLD);
         player.setTransportPriority(1, TransportCategory.WEAPONS);
         player.setTransportPriority(2, TransportCategory.IRON_BAR);
@@ -337,18 +337,18 @@ public class CompositePlayer implements ComputerPlayer {
            Handle backwards to get the priority right
         */
 
-        /* First stones */
+        // First stones
         if (player.getInventory().get(STONE) < 20) {
             player.setTransportPriority(0, TransportCategory.STONE);
         }
 
-        /* Then planks */
+        // Then planks
         if (player.getInventory().get(PLANK) < 20) {
             player.setTransportPriority(0, TransportCategory.PLANK);
             player.setTransportPriority(1, TransportCategory.WOOD);
         }
 
-        /* Then privates - handle beer */
+        // Then privates - handle beer
         if (player.getInventory().get(BEER) < 5) {
             player.setTransportPriority(0, TransportCategory.BEER);
 
@@ -361,7 +361,7 @@ public class CompositePlayer implements ComputerPlayer {
             }
         }
 
-        /* Then privates - handle weapons */
+        // Then privates - handle weapons
         if (player.getInventory().get(BEER) > 10) {
             player.setTransportPriority(0, TransportCategory.WEAPONS);
 
@@ -387,7 +387,7 @@ public class CompositePlayer implements ComputerPlayer {
             }
         }
 
-        /* Then gold */
+        // Then gold
         if (player.getInventory().get(COIN) < 5) {
             player.setTransportPriority(0, TransportCategory.COIN);
             player.setTransportPriority(1, TransportCategory.COAL);

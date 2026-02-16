@@ -134,12 +134,12 @@ public class GameResource implements PlayerChangeListener {
     public void createGameMap() throws Exception {
         this.map = gamePlaceholderToGame(this);
 
-        /* Assign the map to each player */
+        // Assign the map to each player
         for (Player player : players) {
             player.setMap(map);
         }
 
-        /* Assign the map to each computer player */
+        // Assign the map to each computer player
         for (ComputerPlayer computerPlayer : computerPlayers.values()) {
             computerPlayer.setMap(map);
         }

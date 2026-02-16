@@ -89,7 +89,7 @@ public class Shipwright extends Worker {
                             getHome().consumeOne(PLANK);
                         } else {
 
-                            /* Report that it's not possible to harvest or plant */
+                            // Report that it's not possible to harvest or plant
                             productivityMeasurer.reportUnproductivity();
                         }
                     }
@@ -102,7 +102,7 @@ public class Shipwright extends Worker {
                 countdown.step();
             } else {
 
-                /* Report that the shipwright isn't working (or resting) */
+                // Report that the shipwright isn't working (or resting)
                 productivityMeasurer.reportUnproductivity();
             }
         } else if (state == State.HAMMERING) {
@@ -121,7 +121,7 @@ public class Shipwright extends Worker {
 
                 state = State.GOING_TO_FLAG_WITH_CARGO;
 
-                /* Tell the flag that the cargo will be delivered */
+                // Tell the flag that the cargo will be delivered
                 getHome().getFlag().promiseCargo(getCargo());
             } else {
                 state = State.WAITING_FOR_SPACE_ON_FLAG;
@@ -136,7 +136,7 @@ public class Shipwright extends Worker {
 
                 setTarget(getHome().getFlag().getPosition());
 
-                /* Tell the flag that the cargo will be delivered */
+                // Tell the flag that the cargo will be delivered
                 getHome().getFlag().promiseCargo(getCargo());
             }
         } else if (state == State.DEAD) {
@@ -149,23 +149,23 @@ public class Shipwright extends Worker {
             if (countdown.hasReachedZero()) {
                 if (getHome().getAmount(PLANK) >= PLANKS_NEEDED_FOR_BOAT) {
 
-                    /* Report that the shipwright produced a boat */
+                    // Report that the shipwright produced a boat
                     productivityMeasurer.reportProductivity();
                     productivityMeasurer.nextProductivityCycle();
 
                     map.getStatisticsManager().boatProduced(player, map.getTime());
 
-                    /* Consume the planks */
+                    // Consume the planks
                     getHome().consumeOne(PLANK);
                     getHome().consumeOne(PLANK);
 
-                    /* Handle transportation */
+                    // Handle transportation
                     if (getHome().getFlag().hasPlaceForMoreCargo()) {
                         Cargo cargo = new Cargo(BOAT, map);
 
                         setCargo(cargo);
 
-                        /* Go out to the flag to deliver the water */
+                        // Go out to the flag to deliver the water
                         setTarget(getHome().getFlag().getPosition());
 
                         state = State.GOING_TO_FLAG_WITH_CARGO;
@@ -176,7 +176,7 @@ public class Shipwright extends Worker {
                     }
                 } else {
 
-                    /* Report the that the shipwright was unproductive */
+                    // Report the that the shipwright was unproductive
                     productivityMeasurer.reportUnproductivity();
                 }
             } else {
@@ -188,16 +188,16 @@ public class Shipwright extends Worker {
     private Point findPlaceToBuildShip() {
         Set<Point> largeSurroundingArea = GameUtils.getHexagonAreaAroundPoint(getHome().getPosition(), 8, map);
 
-        /* Find points that are on the water's edge */
+        // Find points that are on the water's edge
         for (Point point : largeSurroundingArea) {
             List<Vegetation> surroundingVegetation = map.getSurroundingTiles(point);
 
-            /* Filter points that are not on the water's edge */
+            // Filter points that are not on the water's edge
             if (!GameUtils.isSomeButNotAll(surroundingVegetation, Vegetation.WATER)) {
                 continue;
             }
 
-            /* Filter points that can't be reached */
+            // Filter points that can't be reached
             // TODO: test that shipwright doesn't pick point it cannot go to
             if (map.findWayOffroad(getHome().getFlag().getPosition(), point, null) == null) {
                 continue;
@@ -253,7 +253,7 @@ public class Shipwright extends Worker {
             storehouse.depositWorker(this);
         } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
-            /* Go to the closest storage */
+            // Go to the closest storage
             Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SHIPWRIGHT);
 
             if (storehouse != null) {
@@ -305,15 +305,15 @@ public class Shipwright extends Worker {
     @Override
     protected void onWalkingAndAtFixedPoint() {
 
-        /* Return to storage if the planned path no longer exists */
+        // Return to storage if the planned path no longer exists
         if (state == State.WALKING_TO_TARGET &&
                 map.isFlagAtPoint(getPosition()) &&
                 !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
 
-            /* Don't try to enter the shipyard upon arrival */
+            // Don't try to enter the shipyard upon arrival
             clearTargetBuilding();
 
-            /* Go back to the storage */
+            // Go back to the storage
             returnToStorage();
         }
     }
@@ -321,7 +321,7 @@ public class Shipwright extends Worker {
     @Override
     public int getProductivity() {
 
-        /* Measure productivity across the length of four rest-work periods */
+        // Measure productivity across the length of four rest-work periods
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
                         (productivityMeasurer.getNumberOfCycles())) * 100);

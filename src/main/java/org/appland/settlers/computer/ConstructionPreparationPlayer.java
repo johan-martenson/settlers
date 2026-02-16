@@ -57,27 +57,27 @@ public class ConstructionPreparationPlayer implements ComputerPlayer {
     @Override
     public void turn() throws Exception {
 
-        /* Find the headquarters if needed */
+        // Find the headquarters if needed
         if (headquarter == null) {
             headquarter = GamePlayUtils.findHeadquarter(player);
         }
 
-        /* Construct a forester */
+        // Construct a forester
         if (noForester()) {
 
-            /* Place a forester hut */
+            // Place a forester hut
             foresterHut = GamePlayUtils.placeBuilding(player, headquarter, new ForesterHut(player));
             System.out.printf(" - Built forester at %s%n", foresterHut.getPosition());
         } else if (woodCuttersNotPlaced()) {
 
-            /* Place the woodcutter */
+            // Place the woodcutter
             if (!GamePlayUtils.buildingInPlace(woodcutter0)) {
                 woodcutter0 = GamePlayUtils.placeBuilding(player, foresterHut, new Woodcutter(player));
 
                 System.out.printf(" - Built woodcutter at %s%n", woodcutter0.getPosition());
             }
 
-            /* Place the woodcutter */
+            // Place the woodcutter
             if (!GamePlayUtils.buildingInPlace(woodcutter1)) {
                 woodcutter1 = GamePlayUtils.placeBuilding(player, foresterHut, new Woodcutter(player));
 
@@ -86,48 +86,48 @@ public class ConstructionPreparationPlayer implements ComputerPlayer {
 
         } else if (noSawmill()) {
 
-            /* Place the sawmill */
+            // Place the sawmill
             sawmill = GamePlayUtils.placeBuilding(player, headquarter, new Sawmill(player));
             System.out.println(" - Built sawmill at " + sawmill.getPosition());
         } else if (noQuarry()) {
 
-            /* Look for stone within the border */
+            // Look for stone within the border
             Point stonePoint = findStoneWithinBorder();
 
-            /* Write a warning and exit if no stone is found */
+            // Write a warning and exit if no stone is found
             if (stonePoint == null) {
                 System.out.println("WARNING: No stone found within border");
 
                 return;
             }
 
-            /* Find spot close to stone to place quarry */
+            // Find spot close to stone to place quarry
             List<Point> points = GamePlayUtils.findAvailableHousePointsWithinRadius(map, player, stonePoint, SMALL, 5);
 
-            /* Return null if there are no available places */
+            // Return null if there are no available places
             if (points.isEmpty()) {
                 System.out.println(" -- No site available to build quarry!");
                 return;
             }
 
-            /* Place the quarry */
+            // Place the quarry
             quarry = map.placeBuilding(new Quarry(player), points.getFirst());
             System.out.println(" - Built quarry at " + quarry.getPosition());
 
-            /* Connect the quarry to the headquarters */
+            // Connect the quarry to the headquarters
             Road road = GamePlayUtils.connectPointToBuilding(player, map, quarry.getFlag().getPosition(), headquarter);
 
-            /* Place flags on the road where possible */
+            // Place flags on the road where possible
             if (road != null) {
                 System.out.println(" - Connected the quarry: " + road.getWayPoints());
                 GamePlayUtils.fillRoadWithFlags(map, road);
             }
         } else if (quarryDone() && quarry.isOutOfNaturalResources()) {
             System.out.println(" - No more stone in quarry");
-            /* Destroy the quarry if it can't reach any stone */
+            // Destroy the quarry if it can't reach any stone
             quarry.tearDown();
 
-            /* Remove the part of the road that is used only by the quarry */
+            // Remove the part of the road that is used only by the quarry
             GamePlayUtils.removeRoadWithoutAffectingOthers(map, quarry.getFlag());
 
             quarry = null;
@@ -155,7 +155,7 @@ public class ConstructionPreparationPlayer implements ComputerPlayer {
     }
     boolean basicConstructionDone() {
 
-        /* Periodically check if there are remaining stones */
+        // Periodically check if there are remaining stones
         if (stoneRecheckCounter < STONE_RECHECK_COUNTER_MAX) {
             stoneRecheckCounter++;
         } else {
@@ -213,7 +213,7 @@ public class ConstructionPreparationPlayer implements ComputerPlayer {
 
     public boolean stoneProductionWorking() {
 
-        /* Periodically check if there are remaining stones */
+        // Periodically check if there are remaining stones
         if (stoneRecheckCounter < STONE_RECHECK_COUNTER_MAX) {
             stoneRecheckCounter++;
         } else {

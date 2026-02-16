@@ -82,29 +82,29 @@ public class MilitaryProducer implements ComputerPlayer {
             }
         } else if (state == State.NEEDS_IRON_SMELTER) {
 
-            /* Determine if there already are iron smelters built */
+            // Determine if there already are iron smelters built
             if (GamePlayUtils.buildingTypeExists(controlledPlayer.getBuildings(), IronSmelter.class)) {
                 ironSmelters.addAll(GamePlayUtils.getBuildingsOfType(controlledPlayer.getBuildings(), IronSmelter.class));
 
         	    state = State.WAITING_FOR_IRON_SMELTER;
             } else {
 
-                /* Find a spot for the iron smelter */
+                // Find a spot for the iron smelter
                 Point ironSmelterPoint = GamePlayUtils.findPointForBuildingCloseToPoint(headquarter.getPosition(), MEDIUM, controlledPlayer, map);
 
             	if (ironSmelterPoint == null) {
             		return;
             	}
 
-            	/* Build the iron smelter */
+            	// Build the iron smelter
             	IronSmelter ironSmelter = map.placeBuilding(new IronSmelter(controlledPlayer), ironSmelterPoint);
 
             	ironSmelters.add(ironSmelter);
 
-            	/* Connect the iron smelter with the headquarter */
+            	// Connect the iron smelter with the headquarter
                 Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, ironSmelter.getFlag().getPosition(), headquarter);
 
-                /* Fill the road with flags */
+                // Fill the road with flags
                 GamePlayUtils.fillRoadWithFlags(map, road);
 
                 state = State.WAITING_FOR_IRON_SMELTER;
@@ -115,29 +115,29 @@ public class MilitaryProducer implements ComputerPlayer {
         	}
         } else if (state == State.NEEDS_ARMORY) {
 
-            /* Determine if there already are armories built */
+            // Determine if there already are armories built
             if (GamePlayUtils.buildingTypeExists(controlledPlayer.getBuildings(), Armory.class)) {
                 armories.addAll(GamePlayUtils.getBuildingsOfType(controlledPlayer.getBuildings(), Armory.class));
 
         	    state = State.WAITING_FOR_IRON_SMELTER;
             } else {
 
-                /* Find a spot for the armory */
+                // Find a spot for the armory
                 Point armoryPoint = GamePlayUtils.findPointForBuildingCloseToPoint(headquarter.getPosition(), MEDIUM, controlledPlayer, map);
 
             	if (armoryPoint == null) {
             		return;
             	}
 
-            	/* Build the armory */
+            	// Build the armory
             	Armory armory = map.placeBuilding(new Armory(controlledPlayer), armoryPoint);
 
             	armories.add(armory);
 
-                /* Connect the armory with the headquarters */
+                // Connect the armory with the headquarters
                 Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, armory.getFlag().getPosition(), headquarter);
 
-                /* Fill the road with flags */
+                // Fill the road with flags
                 GamePlayUtils.fillRoadWithFlags(map, road);
 
                 state = State.WAITING_FOR_ARMORY;
@@ -148,29 +148,29 @@ public class MilitaryProducer implements ComputerPlayer {
         	}
         } else if (state == State.NEEDS_FARM) {
 
-            /* Determine if there are already existing farm */
+            // Determine if there are already existing farm
             if (GamePlayUtils.buildingTypeExists(controlledPlayer.getBuildings(), Farm.class)) {
                 farms.addAll(GamePlayUtils.getBuildingsOfType(controlledPlayer.getBuildings(), Farm.class));
 
                 state = State.WAITING_FOR_FARM;
             } else {
 
-                /* Find a spot for the farm */
+                // Find a spot for the farm
                 Point farmSpot = GamePlayUtils.findPointForBuildingCloseToPoint(headquarter.getPosition(), LARGE, controlledPlayer, map);
 
                 if (farmSpot == null) {
                     return;
                 }
 
-                /* Build the farm */
+                // Build the farm
                 Farm farm = map.placeBuilding(new Farm(controlledPlayer), farmSpot);
 
                 farms.add(farm);
 
-                /* Connect the farm with the headquarters */
+                // Connect the farm with the headquarters
                 Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, farm.getFlag().getPosition(), headquarter);
 
-                /* Fill the road with flags */
+                // Fill the road with flags
                 GamePlayUtils.fillRoadWithFlags(map, road);
 
                 state = State.WAITING_FOR_FARM;
@@ -181,29 +181,29 @@ public class MilitaryProducer implements ComputerPlayer {
             }
         } else if (state == State.NEEDS_WELL) {
 
-            /* Determine if there already are wells built */
+            // Determine if there already are wells built
             if (GamePlayUtils.buildingTypeExists(controlledPlayer.getBuildings(), Well.class)) {
                 wells.addAll(GamePlayUtils.getBuildingsOfType(controlledPlayer.getBuildings(), Well.class));
 
                 state = State.WAITING_FOR_WELL;
             } else {
 
-                /* Find a spot for the brewery */
+                // Find a spot for the brewery
                 Point wellPoint = GamePlayUtils.findPointForBuildingCloseToPoint(headquarter.getPosition(), SMALL, controlledPlayer, map);
 
                 if (wellPoint == null) {
                     return;
                 }
 
-                /* Build the well */
+                // Build the well
                 Well well = map.placeBuilding(new Well(controlledPlayer), wellPoint);
 
                 wells.add(well);
 
-                /* Connect the well with the headquarters */
+                // Connect the well with the headquarters
                 Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, well.getFlag().getPosition(), headquarter);
 
-                /* Fill the road with flags */
+                // Fill the road with flags
                 GamePlayUtils.fillRoadWithFlags(map, road);
 
                 state = State.WAITING_FOR_WELL;
@@ -214,29 +214,29 @@ public class MilitaryProducer implements ComputerPlayer {
             }
         } else if (state == State.NEEDS_BREWERY) {
 
-            /* Determine if there already are breweries built */
+            // Determine if there already are breweries built
             if (GamePlayUtils.buildingTypeExists(controlledPlayer.getBuildings(), Brewery.class)) {
         	    breweries.addAll(GamePlayUtils.getBuildingsOfType(controlledPlayer.getBuildings(), Brewery.class));
 
         	    state = State.WAITING_FOR_BREWERY;
             } else {
 
-                /* Find a spot for the brewery */
+                // Find a spot for the brewery
             	Point breweryPoint = GamePlayUtils.findPointForBuildingCloseToPoint(headquarter.getPosition(), MEDIUM, controlledPlayer, map);
 
             	if (breweryPoint == null) {
                     return;
             	}
 
-            	/* Build the brewery */
+            	// Build the brewery
             	Brewery brewery = map.placeBuilding(new Brewery(controlledPlayer), breweryPoint);
 
             	breweries.add(brewery);
 
-            	/* Connect the brewery with the headquarters */
+            	// Connect the brewery with the headquarters
                 Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, brewery.getFlag().getPosition(), headquarter);
 
-                /* Fill the road with flags */
+                // Fill the road with flags
                 GamePlayUtils.fillRoadWithFlags(map, road);
 
                 state = State.WAITING_FOR_BREWERY;

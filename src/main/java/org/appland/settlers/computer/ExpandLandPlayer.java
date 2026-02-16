@@ -72,13 +72,13 @@ public class ExpandLandPlayer implements ComputerPlayer {
 
         placedBarracks = new HashSet<>();
 
-        /* Set the initial state */
+        // Set the initial state
         state = State.INITIAL_STATE;
 
         newBuildings = false;
         impossibleSpots = new HashSet<>();
 
-        /* Set default configuration */
+        // Set default configuration
         preferEnemyDirection = false;
         waitUntilOccupied = false;
     }
@@ -103,13 +103,13 @@ public class ExpandLandPlayer implements ComputerPlayer {
             unfinishedBarracks = map.getBuildingAtPoint(unfinishedBarracks.getPosition());
         }
 
-        /* Start with finding the headquarters */
+        // Start with finding the headquarters
         if (state == State.INITIAL_STATE) {
 
-            /* Find headquarter */
+            // Find headquarter
             headquarter = GamePlayUtils.findHeadquarter(player);
 
-            /* Change the state to ready to build */
+            // Change the state to ready to build
             state = State.READY_FOR_CONSTRUCTION;
 
             duration.after("Find headquarter");
@@ -122,45 +122,45 @@ public class ExpandLandPlayer implements ComputerPlayer {
                 return;
             }
 
-            /* Find the spot for the next barracks */
+            // Find the spot for the next barracks
             Point site = findSpotForNextBarracks(player, impossibleSpots);
 
             duration.after("Find spot for next barracks");
 
-            /* Stay in the ready to build state if there is no suitable site to build at */
+            // Stay in the ready to build state if there is no suitable site to build at
             if (site == null) {
                 return;
             }
 
-            /* Place barracks */
+            // Place barracks
             unfinishedBarracks = map.placeBuilding(new Barracks(player), site);
 
-            /* Connect the barracks with the headquarters */
+            // Connect the barracks with the headquarters
             Road road = GamePlayUtils.connectPointToBuilding(player, map, unfinishedBarracks.getFlag().getPosition(), headquarter);
 
             if (!map.getRoads().contains(road)) {
                 System.out.println("\nBarracks at " + site + " is not connected!");
             }
 
-            /* Place flags where possible */
+            // Place flags where possible
             GamePlayUtils.fillRoadWithFlags(map, road);
 
-            /* Change state to wait for the barracks to be ready and occupied */
+            // Change state to wait for the barracks to be ready and occupied
             state = State.WAITING_FOR_CONSTRUCTION;
 
             duration.after("Build new barracks");
         } else if (state == State.WAITING_FOR_CONSTRUCTION) {
 
-            /* Build a new barracks if this barracks was destroyed */
+            // Build a new barracks if this barracks was destroyed
             if (unfinishedBarracks.isBurningDown() || unfinishedBarracks.isDestroyed() || !map.isBuildingAtPoint(unfinishedBarracks.getPosition())) {
 
-                /* Set state to build new barracks */
+                // Set state to build new barracks
                 state = State.READY_FOR_CONSTRUCTION;
 
-            /* Disable promotions directly when the barracks is ready */
+            // Disable promotions directly when the barracks is ready
             } else if (unfinishedBarracks.isReady() && unfinishedBarracks.getNumberOfHostedSoldiers() == 0) {
 
-                /* Disable promotions if the barracks is not close to the enemy */
+                // Disable promotions if the barracks is not close to the enemy
                 if (unfinishedBarracks.isPromotionEnabled() &&
                     GamePlayUtils.distanceToKnownEnemiesWithinRange(unfinishedBarracks, 20) > 9) {
 
@@ -169,7 +169,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
                     }
                 } else {
 
-                    /* Upgrade barracks close to the enemy */
+                    // Upgrade barracks close to the enemy
                     if (unfinishedBarracks instanceof Barracks && !unfinishedBarracks.isUpgrading()) {
                         unfinishedBarracks.upgrade();
                     }
@@ -177,50 +177,50 @@ public class ExpandLandPlayer implements ComputerPlayer {
 
                 duration.after("Disable promotions and do upgrades");
 
-            /* Check if construction is done and the building is occupied */
+            // Check if construction is done and the building is occupied
             } else if (unfinishedBarracks.isReady() && unfinishedBarracks.getNumberOfHostedSoldiers() > 0) {
 
-                /* Save the barracks */
+                // Save the barracks
                 placedBarracks.add(unfinishedBarracks);
 
-                /* Evacuate any buildings far enough from the border */
+                // Evacuate any buildings far enough from the border
                 evacuateWherePossible(player);
 
-                /* Change the state to construction done */
+                // Change the state to construction done
                 state = State.READY_FOR_CONSTRUCTION;
 
-                /* Signal that there is at least one new building in place */
+                // Signal that there is at least one new building in place
                 newBuildings = true;
 
                 duration.after("Handle construction done");
 
-            /* Verify that the barracks under construction is still reachable from the headquarters */
+            // Verify that the barracks under construction is still reachable from the headquarters
             } else if (!map.areFlagsOrBuildingsConnectedViaRoads(headquarter, unfinishedBarracks)) {
 
-                /* Try to repair the connection */
+                // Try to repair the connection
                 state = State.BUILDING_NOT_CONNECTED;
             }
         } else if (state == State.BUILDING_NOT_CONNECTED) {
 
-            /* Try to repair the connection */
+            // Try to repair the connection
             GamePlayUtils.repairConnection(map, player, unfinishedBarracks.getFlag(), headquarter.getFlag());
 
-            /* Wait for the building to get constructed if the repair worked */
+            // Wait for the building to get constructed if the repair worked
             if (map.areFlagsOrBuildingsConnectedViaRoads(headquarter, unfinishedBarracks)) {
 
-                /* Wait for construction */
+                // Wait for construction
                 state = State.WAITING_FOR_CONSTRUCTION;
 
-            /* Destroy the building if the repair failed */
+            // Destroy the building if the repair failed
             } else {
 
-                /* Destroy the building */
+                // Destroy the building
                 unfinishedBarracks.tearDown();
 
-                /* Remember that this spot didn't work out */
+                // Remember that this spot didn't work out
                 impossibleSpots.add(unfinishedBarracks.getPosition());
 
-                /* Construct a new building */
+                // Construct a new building
                 state = State.READY_FOR_CONSTRUCTION;
             }
 
@@ -258,25 +258,25 @@ public class ExpandLandPlayer implements ComputerPlayer {
         Set<Building> enemyMilitaryBuildings = GamePlayUtils.getDiscoveredEnemyMilitaryBuildingsForPlayer(player);
         Set<Flag> flagsReachableFromHeadquarter = GameUtils.findFlagsReachableFromPoint(player, headquarter.getPosition());
 
-        /* Score the candidates and pick the one with the best score */
+        // Score the candidates and pick the one with the best score
         int bestScore = 0;
         Point bestPoint = null;
 
-        /* First collect all possible points to build on */
+        // First collect all possible points to build on
         for (Point borderPoint : player.getBorderPoints()) {
 
-            /* Filter border points that are too close to the edge of the map */
+            // Filter border points that are too close to the edge of the map
             if (borderPoint.x < 3 || borderPoint.x > map.getWidth() - 3 &&
                 borderPoint.y < 3 || borderPoint.y > map.getHeight() - 3) {
                 continue;
             }
 
-            /* Go through points for construction close to the border point */
+            // Go through points for construction close to the border point
             for (Point point : map.getPointsWithinRadius(borderPoint, MAX_DISTANCE_FROM_BORDER)) {
 
                 CumulativeDuration innerDuration = stats.measureCumulativeDuration("ExpandLandPlayer.findSpotForNextBarracks.innerFor", collectEachTurnGroup);
 
-                /* Filter out border too close to the edge of the map */
+                // Filter out border too close to the edge of the map
                 if (point.x < MIN_DISTANCE_TO_EDGE || point.x > map.getWidth() - MIN_DISTANCE_TO_EDGE ||
                     point.y < MIN_DISTANCE_TO_EDGE || point.y > map.getHeight() - MIN_DISTANCE_TO_EDGE) {
 
@@ -287,7 +287,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
                     continue;
                 }
 
-                /* Don't re-examine already added candidates */
+                // Don't re-examine already added candidates
                 if (investigated.contains(point)) {
 
                     innerDuration.after("Exit on investigated filter");
@@ -297,10 +297,10 @@ public class ExpandLandPlayer implements ComputerPlayer {
                     continue;
                 }
 
-                /* Make sure this point will not be investigated again */
+                // Make sure this point will not be investigated again
                 investigated.add(point);
 
-                /* Filter points the player doesn't own */
+                // Filter points the player doesn't own
                 if (!player.getOwnedLand().contains(point)) {
 
                     innerDuration.after("Exit on land owned filter");
@@ -310,7 +310,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
                     continue;
                 }
 
-                /* Filter out spots we have tried before and failed at */
+                // Filter out spots we have tried before and failed at
                 if (ignore.contains(point)) {
 
                     innerDuration.after("Exit on ignore filter");
@@ -320,7 +320,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
                     continue;
                 }
 
-                /* Filter out impossible points */
+                // Filter out impossible points
                 if (impossibleSpots.contains(point)) {
 
                     innerDuration.after("Exit on impossible filter");
@@ -333,7 +333,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
 
                 innerDuration.after("Quick filters");
 
-                /* Filter out points that cannot be built on */
+                // Filter out points that cannot be built on
                 if (map.isAvailableHousePoint(player, point) == null) {
 
                     innerDuration.after("Is available house point");
@@ -347,7 +347,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
 
                 int candidateScore = 0;
 
-                /* Determine if this point is close to an enemy */
+                // Determine if this point is close to an enemy
                 if (preferEnemyDirection) {
 
                     for (Building enemyMilitaryBuilding : enemyMilitaryBuildings) {
@@ -364,7 +364,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
 
                 innerDuration.after("Close to enemy");
 
-                /* Reward points that are far from own military buildings */
+                // Reward points that are far from own military buildings
                 double distanceToClosestMilitaryBuilding = Double.MAX_VALUE;
 
                 for (Building militaryBuilding : ownMilitaryBuildings) {
@@ -378,10 +378,10 @@ public class ExpandLandPlayer implements ComputerPlayer {
 
                 innerDuration.after("Far from own military building");
 
-                /* Filter points that cannot be connected to the headquarters */
+                // Filter points that cannot be connected to the headquarters
                 Point pointDownRight = point.downRight();
 
-                /* Can a road be placed directly to the headquarters? */
+                // Can a road be placed directly to the headquarters?
                 Set<Point> avoid = new HashSet<>();
                 avoid.add(point);
 
@@ -389,7 +389,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
 
                 boolean canPlaceRoadToHeadquarter = wayPoints != null;
 
-                /* Can a road be placed to the closest flag? */
+                // Can a road be placed to the closest flag?
                 boolean canReachClosestFlag = false;
 
                 if (!canPlaceRoadToHeadquarter) {
@@ -425,10 +425,10 @@ public class ExpandLandPlayer implements ComputerPlayer {
 
                 innerDuration.after("Can connect building");
 
-                /* Add the point as a candidate if it passed the filters */
+                // Add the point as a candidate if it passed the filters
                 candidates.add(point);
 
-                /* Look for the best score */
+                // Look for the best score
                 candidateScore = candidateScore + (int)distanceToClosestMilitaryBuilding;
 
                 if (candidateScore > bestScore) {
@@ -437,7 +437,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
                     bestPoint = point;
                 }
 
-                /* Stop early if we find a score that's good enough */
+                // Stop early if we find a score that's good enough
                 if (candidateScore > GOOD_ENOUGH_SCORE) {
                     bestPoint = point;
 
@@ -452,57 +452,57 @@ public class ExpandLandPlayer implements ComputerPlayer {
 
         duration.report();
 
-        /* Track the score */
+        // Track the score
         Variable scoreVariable = stats.addVariableIfMissing("ExpandLandPlayer.NewBarracks.score");
 
         scoreVariable.reportValue(bestScore);
 
-        /* Return the least bad alternative if no good point was found */
+        // Return the least bad alternative if no good point was found
         return bestPoint;
     }
 
     private void evacuateWherePossible(Player player) {
 
-        /* Go through the buildings and evacuate where possible */
+        // Go through the buildings and evacuate where possible
         for (Building storedBuilding : placedBarracks) {
 
-            /* Cater for upgrades */
+            // Cater for upgrades
             Building building = map.getBuildingAtPoint(storedBuilding.getPosition());
 
-            /* Only investigate military buildings */
+            // Only investigate military buildings
             if (!building.isMilitaryBuilding()) {
                 continue;
             }
 
-            /* Skip buildings that are already evacuated */
+            // Skip buildings that are already evacuated
             if (building.isEvacuated()) {
                 continue;
             }
 
-            /* Check if the building is far enough from the border */
+            // Check if the building is far enough from the border
             boolean borderClose = false;
 
             for (Point borderPoint : player.getBorderPoints()) {
 
-                /* Filter points beyond the evacuation threshold */
+                // Filter points beyond the evacuation threshold
                 if (borderPoint.distance(building.getPosition()) >= THRESHOLD_FOR_EVACUATION) {
                     continue;
                 }
 
-                /* Filter points at the edge of the map since no attack can come that way */
+                // Filter points at the edge of the map since no attack can come that way
                 if (borderPoint.x < 3 || borderPoint.x > map.getWidth() - 3 ||
                     borderPoint.y < 3 || borderPoint.y > map.getHeight() - 3) {
                     continue;
                 }
 
-                /* The border is close if we made it here */
+                // The border is close if we made it here
                 borderClose = true;
 
                 break;
             }
 
 
-            /* Evacuate the building if it's not close to the border */
+            // Evacuate the building if it's not close to the border
             if (!borderClose) {
                 building.evacuate();
             }
@@ -521,7 +521,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
 
         for (Building building : wonBuildings) {
 
-            /* Connect the building to the headquarters if it's not already done */
+            // Connect the building to the headquarters if it's not already done
             try {
                 if (!map.areFlagsOrBuildingsConnectedViaRoads(headquarter, building)) {
                     Road road = GamePlayUtils.connectPointToBuilding(player, map, building.getFlag().getPosition(), headquarter);
@@ -534,7 +534,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
                 }
             } catch (Exception e) { }
 
-            /* Disable promotions if the barracks is not close to the enemy */
+            // Disable promotions if the barracks is not close to the enemy
             if (GamePlayUtils.distanceToKnownEnemiesWithinRange(building, 20) > 9) {
                 if (building.isPromotionEnabled()) {
                     building.disablePromotions();
@@ -542,13 +542,13 @@ public class ExpandLandPlayer implements ComputerPlayer {
 
             } else {
 
-                /* Upgrade barracks close to the enemy */
+                // Upgrade barracks close to the enemy
                 if (!building.isUpgrading() && building instanceof Barracks) {
                     building.upgrade();
                 }
             }
 
-            /* Treat these as regular buildings placed by the expand land player */
+            // Treat these as regular buildings placed by the expand land player
             if (!placedBarracks.contains(building)) {
                 placedBarracks.add(building);
             }
@@ -566,22 +566,22 @@ public class ExpandLandPlayer implements ComputerPlayer {
     private boolean militaryBuildingsFullyOccupied(Player player) {
         for (Building building : player.getBuildings()) {
 
-            /* Filter non-military buildings */
+            // Filter non-military buildings
             if (!building.isMilitaryBuilding()) {
                 continue;
             }
 
-            /* Filter evacuated buildings */
+            // Filter evacuated buildings
             if (building.isEvacuated()) {
                 continue;
             }
 
-            /* Filter not constructed buildings */
+            // Filter not constructed buildings
             if (!building.isReady()) {
                 continue;
             }
 
-            /* Check if the building is fully occupied */
+            // Check if the building is fully occupied
             if (building.getNumberOfHostedSoldiers() < building.getMaxHostedSoldiers()) {
                 return false;
             }

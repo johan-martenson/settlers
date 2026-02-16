@@ -75,16 +75,16 @@ public class WildAnimal extends Worker {
         if (state == State.ALIVE) {
             if (countdown.hasReachedZero()) {
 
-                /* Should the animal stand still or move? */
+                // Should the animal stand still or move?
                 if (RANDOM.nextBoolean()) {
 
-                    /* Stand still for a while */
+                    // Stand still for a while
                     countdown.countFrom(TIME_TO_STAND);
                 } else {
 
                     List<Point> pathToNextPoint = findNextPoint();
 
-                    /* Walk if there is an available spot */
+                    // Walk if there is an available spot
                     if (pathToNextPoint != null) {
                         setOffroadTargetWithPath(pathToNextPoint); // FIXME: HOTSPOT
                     }
@@ -100,12 +100,12 @@ public class WildAnimal extends Worker {
 
             MapPoint mapPoint = map.getMapPoint(point);
 
-            /* Filter buildings as animals can't walk into buildings */
+            // Filter buildings as animals can't walk into buildings
             if (mapPoint.isBuilding()) {
                 continue;
             }
 
-            /* Filter points surrounded by shallow water as animals can't walk on water */
+            // Filter points surrounded by shallow water as animals can't walk on water
             Collection<Vegetation> surroundingVegetation = map.getSurroundingTiles(point);
 
             if (cannotWalkOnAny(surroundingVegetation)) {

@@ -382,7 +382,7 @@ public class Storehouse extends Building {
 
     public Soldier retrieveSoldierToPopulateBuilding() {
 
-        /* Go through the list in order of preference and try to retrieve a soldier */
+        // Go through the list in order of preference and try to retrieve a soldier
         for (var rank : GameUtils.strengthToRank(getPlayer().getStrengthOfSoldiersPopulatingBuildings())) {
             var preferredSoldierType = rank.toMaterial();
 

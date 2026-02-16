@@ -239,7 +239,7 @@ public class Armorer extends Worker {
             // Don't try to enter the armory upon arrival.
             clearTargetBuilding();
 
-            /* Go back to the storage */
+            // Go back to the storage
             returnToStorage();
         }
     }

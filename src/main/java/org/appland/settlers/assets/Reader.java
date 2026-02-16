@@ -107,7 +107,7 @@ public class Reader {
     private Map<String, List<GameResource>> loadDirectory(String assetDir, String type) throws IOException, InvalidFormatException {
         Map<String, List<GameResource>> gameResourceMap = new HashMap<>();
 
-        /* List all files */
+        // List all files
         List<Path> paths = Files.find(
                 Paths.get(assetDir),
                 Integer.MAX_VALUE,

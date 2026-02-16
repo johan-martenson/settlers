@@ -303,14 +303,14 @@ public class Bitmap {
 
         int sourceStartY = sourceMiddleY;
 
-        /* Walk down the diagonal line left-middle, to bottom-middle */
+        // Walk down the diagonal line left-middle, to bottom-middle
         for (int sourceStartX = x0; sourceStartX < sourceMiddleX; sourceStartX++) {
             int sx = sourceStartX;
             int sy = sourceStartY;
 
             int dx = 0;
 
-            /* Walk diagonally up-right */
+            // Walk diagonally up-right
             for (int i = 0; i < destinationWidth; i++) {
                 byte blue = getBlueAsByte(sx, sy);
                 byte green = getGreenAsByte(sx, sy);

@@ -91,16 +91,16 @@ public class Brewer extends Worker {
                 if (getHome().getAmount(WATER) > 0 && getHome().getAmount(WHEAT) > 0 && getHome().isProductionEnabled()) {
                     if (countdown.hasReachedZero()) {
 
-                        /* Consume the ingredients */
+                        // Consume the ingredients
                         getHome().consumeOne(WATER);
                         getHome().consumeOne(WHEAT);
 
-                        /* Report the production */
+                        // Report the production
                         productivityMeasurer.reportProductivity();
 
                         map.getStatisticsManager().beerProduced(player, map.getTime());
 
-                        /* Handle transportation of the produced beer */
+                        // Handle transportation of the produced beer
                         if (!getHome().getFlag().hasPlaceForMoreCargo()) {
                             state = WAITING_FOR_SPACE_ON_FLAG;
                         } else {
@@ -225,7 +225,7 @@ public class Brewer extends Worker {
             // Don't try to enter upon arrival
             clearTargetBuilding();
 
-            /* Go back to the storage */
+            // Go back to the storage
             returnToStorage();
         }
     }

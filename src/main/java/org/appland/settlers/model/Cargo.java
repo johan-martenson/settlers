@@ -132,7 +132,7 @@ public class Cargo {
     // FIXME: ALLOCATION HOTSPOT
     void rerouteIfNeeded() {
 
-        /* Handle the case where the targeted building cannot receive the cargo */
+        // Handle the case where the targeted building cannot receive the cargo
         if (target == null) {
             returnToClosestStorage();
         } else if (!target.equals(map.getBuildingAtPoint(target.getPosition()))) {
@@ -149,17 +149,17 @@ public class Cargo {
             */
             if (!map.isValidRouteThroughFlagsAndBuildingsViaRoads(getPosition(), target.getPosition())) {
 
-                /* Find the best way from this flag */
+                // Find the best way from this flag
                 Flag flag = map.getFlagAtPoint(getPosition());
                 List<Point> closestPath = map.findWayWithExistingRoadsInFlagsAndBuildings(flag, getTarget());
 
-                /* Return the cargo to storage if there is no available route to the target */
+                // Return the cargo to storage if there is no available route to the target
                 if (closestPath == null) {
 
-                    /* Break the promise to deliver to the target */
+                    // Break the promise to deliver to the target
                     getTarget().cancelPromisedDelivery(this);
 
-                    /* Return the cargo to the storage */
+                    // Return the cargo to the storage
                     returnToStorage();
                 }
             }

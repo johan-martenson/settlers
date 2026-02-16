@@ -106,7 +106,7 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
 
             lookForNewPointsToHandle();
 
-            /* Update points to investigate */
+            // Update points to investigate
             List<Point> noLongerValid = new LinkedList<>();
 
             for (Point p : pointsToInvestigate) {
@@ -123,15 +123,15 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
                 state = State.ALL_CURRENTLY_CONCLUDED;
             } else {
 
-                /* Send out geologists if needed and possible */
+                // Send out geologists if needed and possible
                 for (Point p : pointsToInvestigate) {
 
-                    /* Skip un-reachable points */
+                    // Skip un-reachable points
                     if (unreachablePoints.contains(p)) {
                         continue;
                     }
 
-                    /* Temporarily skip points if needed */
+                    // Temporarily skip points if needed
                     if (map.isBuildingAtPoint(p)) {
                         continue;
                     }
@@ -144,7 +144,7 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
                         continue;
                     }
 
-                    /* Look for a suitable flag close to the point */
+                    // Look for a suitable flag close to the point
                     Flag flag = findFlagCloseBy(p);
 
                     if (flag == null) {
@@ -154,10 +154,10 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
                         if (flagPoint != null) {
                             flag = map.placeFlag(controlledPlayer, flagPoint);
 
-                            /* Build a road that connects with the headquarter */
+                            // Build a road that connects with the headquarter
                             Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, flagPoint, headquarter);
 
-                            /* Fill the road with flags */
+                            // Fill the road with flags
                             GamePlayUtils.fillRoadWithFlags(map, road);
                         } else {
                             unreachablePoints.add(p);
@@ -169,11 +169,11 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
 
                         geologistFlag = flag;
 
-                        /* Call two geologist to speed up search */
+                        // Call two geologist to speed up search
                         flag.callGeologist();
                         flag.callGeologist();
 
-                        /* Set a countdown for how long to wait for the geologist */
+                        // Set a countdown for how long to wait for the geologist
                         countdown.countFrom(GEOLOGIST_WAIT_TIMEOUT);
 
                         break;
@@ -199,7 +199,7 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
 
             if (countdown.hasReachedZero()) {
 
-                /* Give up on waiting for the geologist if the timeout expired */
+                // Give up on waiting for the geologist if the timeout expired
                 state = State.LOOKING_FOR_MINERALS;
             } else {
                 countdown.step();
@@ -208,7 +208,7 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
 
             List<Point> newlyInvestigatedPoints = new LinkedList<>();
 
-            /* Find any new results */
+            // Find any new results
             for (Point p : pointsToInvestigate) {
 
                 if (!map.isSignAtPoint(p)) {
@@ -227,7 +227,7 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
 
                 if (buildMineIfPossible(p, sign.getType())) {
 
-                    /* Remove the flag as well from the list of points to investigate */
+                    // Remove the flag as well from the list of points to investigate
                     newlyInvestigatedPoints.add(p.downRight());
                 }
             }
@@ -248,7 +248,7 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
     }
 
     private void lookForNewPointsToHandle() {
-        /* Look for any new points to handle */
+        // Look for any new points to handle
         for (Point point : controlledPlayer.getOwnedLand()) {
 
             if (concludedPoints.contains(point)) {

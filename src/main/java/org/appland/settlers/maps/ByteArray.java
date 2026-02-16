@@ -21,7 +21,7 @@ public class ByteArray {
         byte[] stringAsBytes = new byte[length];
         bytes.asReadOnlyBuffer().get(stringAsBytes, 0, length);
 
-        /* Find the null termination byte if there is one */
+        // Find the null termination byte if there is one
         int indexOfZero = -1;
         for (int i = 0; i < length; i++) {
             if (tempViewToFindNullChar.get(i) == 0) {

@@ -31,14 +31,14 @@ class VariableImpl implements Variable {
     public void reportValue(long value) {
         latestValue = value;
 
-        /* Keep track of the average */
+        // Keep track of the average
         if (numberOfMeasurements == 0) {
             average = value;
         } else {
             average = (average * numberOfMeasurements + value) / (numberOfMeasurements + 1);
         }
 
-        /* Check if this is the highest or lowest value reported so far */
+        // Check if this is the highest or lowest value reported so far
         if (value > currentHighestValue) {
             isLatestHighest = true;
 
@@ -55,7 +55,7 @@ class VariableImpl implements Variable {
             isLatestLowest = false;
         }
 
-        /* Count the number of reported measurements */
+        // Count the number of reported measurements
         numberOfMeasurements = numberOfMeasurements + 1;
     }
 

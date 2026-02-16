@@ -55,24 +55,24 @@ public class CatapultWorker extends Worker {
     protected void onIdle() {
         if (state == State.RESTING_IN_HOUSE) {
 
-            /* Countdown if there are stones available */
+            // Countdown if there are stones available
             if (getHome().getAmount(STONE) > 0) {
 
                 if (countdown.hasReachedZero()) {
                     Building target = findReachableTarget();
 
-                    /* Fire a projectile if there was a suitable target */
+                    // Fire a projectile if there was a suitable target
                     if (target != null) {
                         Projectile projectile = new Projectile((Catapult)getHome(), target, map);
 
                         map.placeProjectile(projectile);
 
-                        /* Consume the stone */
+                        // Consume the stone
                         getHome().consumeOne(STONE);
 
                         map.getStatisticsManager().stoneThrown((Catapult) getHome(), map.getTime());
 
-                        /* Rest again */
+                        // Rest again
                         countdown.countFrom(RESTING_TIME);
                     }
                 } else {
@@ -126,24 +126,24 @@ public class CatapultWorker extends Worker {
 
             MapPoint mapPoint = map.getMapPoint(point);
 
-            /* Filter points without a building */
+            // Filter points without a building
             if (!mapPoint.isBuilding()) {
                 continue;
             }
 
             Building building = mapPoint.getBuilding();
 
-            /* Filter buildings belonging to the same player */
+            // Filter buildings belonging to the same player
             if (building.getPlayer().equals(getPlayer())) {
                 continue;
             }
 
-            /* Filter non-military buildings */
+            // Filter non-military buildings
             if (!building.isMilitaryBuilding()) {
                 continue;
             }
 
-            /* Filer buildings that are not ready */
+            // Filer buildings that are not ready
             if (!building.isReady()) {
                 continue;
             }
@@ -157,15 +157,15 @@ public class CatapultWorker extends Worker {
     @Override
     protected void onWalkingAndAtFixedPoint() {
 
-        /* Return to storage if the planned path no longer exists */
+        // Return to storage if the planned path no longer exists
         if (state == State.WALKING_TO_TARGET &&
             map.isFlagAtPoint(getPosition()) &&
             !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
 
-            /* Don't try to enter the catapult upon arrival */
+            // Don't try to enter the catapult upon arrival
             clearTargetBuilding();
 
-            /* Go back to the storage */
+            // Go back to the storage
             returnToStorage();
         }
     }

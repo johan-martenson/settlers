@@ -80,7 +80,7 @@ public class Crop {
     public Cargo harvest() {
         state = HARVESTED;
 
-        /* Countdown until the crop should disappear */
+        // Countdown until the crop should disappear
         growthCountdown.countFrom(TIME_TO_WITHER);
 
         return new Cargo(WHEAT, null);

@@ -56,7 +56,7 @@ public class Projectile {
 
         if (countdown.hasReachedZero()) {
 
-            /* Determine if the projectile hit the target - the hit rate is 75% */
+            // Determine if the projectile hit the target - the hit rate is 75%
             if (RANDOM.nextDouble() > FAIL_RATE) {
                 target.hitByCatapult(source);
             }
