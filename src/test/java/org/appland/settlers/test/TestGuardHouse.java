@@ -15,12 +15,8 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Soldier;
-import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.buildings.GuardHouse;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -28,9 +24,6 @@ import org.appland.settlers.model.buildings.WatchTower;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.*;
@@ -50,27 +43,27 @@ public class TestGuardHouse {
     public void testGuardHouseNeedsThreePlanksAndTwoStonesForConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Deliver three planks and two stones
-        Cargo cargo = new Cargo(PLANK, map);
+        var cargo = new Cargo(PLANK, map);
 
         guardHouse0.putCargo(cargo);
         guardHouse0.putCargo(cargo);
         guardHouse0.putCargo(cargo);
 
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         guardHouse0.putCargo(stoneCargo);
         guardHouse0.putCargo(stoneCargo);
@@ -92,26 +85,26 @@ public class TestGuardHouse {
     public void testGuardHouseCannotBeConstructedWithOnePlankTooLittle() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Deliver one plank and three stones
-        Cargo cargo = new Cargo(PLANK, map);
+        var cargo = new Cargo(PLANK, map);
 
         guardHouse0.putCargo(cargo);
         guardHouse0.putCargo(cargo);
 
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         guardHouse0.putCargo(stoneCargo);
         guardHouse0.putCargo(stoneCargo);
@@ -133,27 +126,27 @@ public class TestGuardHouse {
     public void testGuardHouseCannotBeConstructedWithOneStoneTooLittle() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Deliver one plank and three stones
-        Cargo cargo = new Cargo(PLANK, map);
+        var cargo = new Cargo(PLANK, map);
 
         guardHouse0.putCargo(cargo);
         guardHouse0.putCargo(cargo);
         guardHouse0.putCargo(cargo);
 
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         guardHouse0.putCargo(stoneCargo);
 
@@ -174,21 +167,21 @@ public class TestGuardHouse {
     public void testGuardHouseGetPopulatedWhenFinished() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Connect the guard house with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
 
         // Wait for the guard house to finish construction
         Utils.fastForwardUntilBuildingIsConstructed(guardHouse0);
@@ -198,8 +191,8 @@ public class TestGuardHouse {
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
-        Soldier military = null;
-        for (Worker worker : map.getWorkers()) {
+        var military = (Soldier) null;
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier) {
                 military = (Soldier)worker;
             }
@@ -219,26 +212,26 @@ public class TestGuardHouse {
     public void testBorderIsNotExtendedWhenGuardHouseIsFinished() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 17);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 17);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(5, 23);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(5, 23);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
 
         // Wait for the guard house to finish construction
-        Point point2 = new Point(6, 26);
+        var point2 = new Point(6, 26);
 
         assertTrue(player0.getBorderPoints().contains(point2));
 
@@ -251,23 +244,23 @@ public class TestGuardHouse {
     public void testBorderIsExtendedWhenGuardHouseIsPopulated() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(5, 23);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(5, 23);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
 
         // Wait for the guard house to finish construction
         Utils.fastForwardUntilBuildingIsConstructed(guardHouse0);
@@ -279,8 +272,8 @@ public class TestGuardHouse {
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
-        Soldier military = null;
-        for (Worker worker : map.getWorkers()) {
+        var military = (Soldier) null;
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier) {
                 military = (Soldier)worker;
             }
@@ -289,8 +282,8 @@ public class TestGuardHouse {
         assertNotNull(military);
 
         // Verify that the border is extended when the military reaches the guard house
-        Point point2 = new Point(6, 24);
-        Point point3 = new Point(6, 32);
+        var point2 = new Point(6, 24);
+        var point3 = new Point(6, 32);
 
         assertEquals(military.getTarget(), guardHouse0.getPosition());
         assertTrue(player0.getBorderPoints().contains(point2));
@@ -306,18 +299,18 @@ public class TestGuardHouse {
     public void testGuardHouseOnlyNeedsThreeSoldiers() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
@@ -334,23 +327,23 @@ public class TestGuardHouse {
     public void testGuardHouseCannotHoldSoldiersBeforeFinished() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Verify that the guard house can't hold soldiers before it's finished
         assertFalse(guardHouse0.needsMilitaryManning());
 
-        Soldier military = new Soldier(player0, PRIVATE_RANK, map);
+        var military = new Soldier(player0, PRIVATE_RANK, map);
 
         map.placeWorker(military, guardHouse0);
 
@@ -365,18 +358,18 @@ public class TestGuardHouse {
     public void testGuardHouseCannotHoldMoreThanThreeSoldiers() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
@@ -386,7 +379,7 @@ public class TestGuardHouse {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         // Verify that the guard house does not need another military
-        Soldier military = new Soldier(player0, PRIVATE_RANK, map);
+        var military = new Soldier(player0, PRIVATE_RANK, map);
 
         map.placeWorker(military, guardHouse0);
 
@@ -401,18 +394,18 @@ public class TestGuardHouse {
     public void testGuardHouseNeedsCoin() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
@@ -423,18 +416,18 @@ public class TestGuardHouse {
     public void testUnfinishedGuardHouseNotNeedsCoin() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         assertFalse(guardHouse0.needsMaterial(COIN));
     }
@@ -443,25 +436,25 @@ public class TestGuardHouse {
     public void testGuardHouseCanHoldTwoCoins() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
         assertTrue(guardHouse0.needsMaterial(COIN));
 
         // Deliver one coin to the guard house
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         guardHouse0.promiseDelivery(COIN);
         guardHouse0.promiseDelivery(COIN);
@@ -485,28 +478,28 @@ public class TestGuardHouse {
     public void testPrivateIsPromotedWhenCoinIsAvailable() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
         // Deliver one coin to the guard house
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         guardHouse0.putCargo(cargo);
 
         // Occupy the guard house with one private
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         // Verify that the private is promoted at the right time
         for (int i = 0; i < 100; i++) {
@@ -521,29 +514,29 @@ public class TestGuardHouse {
     public void testOnlyOnePrivateIsPromoted() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
         // Deliver one coin to the guard house
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         guardHouse0.putCargo(cargo);
 
         // Occupy the guard house with one private
-        Soldier military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
-        Soldier military2 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
+        var military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
+        var military2 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         // Wait for the promotion to happen
         Utils.fastForward(100, map);
@@ -556,23 +549,23 @@ public class TestGuardHouse {
     public void testTimeSpentWithCoinButNoMilitaryDoesNotSpeedUpPromotion() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
         // Deliver one coin to the guard house
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         guardHouse0.putCargo(cargo);
 
@@ -580,7 +573,7 @@ public class TestGuardHouse {
         Utils.fastForward(200, map);
 
         // Occupy the guard house with one private
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         // Verify that it still takes the same time for the private to get promoted
         Utils.fastForward(99, map);
@@ -596,28 +589,28 @@ public class TestGuardHouse {
     public void testPromotionConsumesCoin() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
         // Deliver one coin to the guard house
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         guardHouse0.putCargo(cargo);
 
         // Occupy the guard house with one private
-        Soldier military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
+        var military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         // Verify that the promotion consumes the coin
         assertEquals(guardHouse0.getAmount(COIN), 1);
@@ -631,30 +624,30 @@ public class TestGuardHouse {
     public void testPromotionOnlyConsumesOneCoin() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
         // Deliver one coin to the guard house
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         guardHouse0.putCargo(cargo);
         guardHouse0.putCargo(cargo);
 
         // Occupy the guard house with one private
-        Soldier military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
-        Soldier military2 = Utils.occupyMilitaryBuilding(SERGEANT_RANK, guardHouse0);
+        var military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
+        var military2 = Utils.occupyMilitaryBuilding(SERGEANT_RANK, guardHouse0);
 
         // Verify that the promotion consumes the coin
         assertEquals(guardHouse0.getAmount(COIN), 2);
@@ -668,29 +661,29 @@ public class TestGuardHouse {
     public void testGuardHouseWithNoPromotionPossibleDoesNotConsumeCoin() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
         // Deliver one coin to the guard house
-        Cargo cargo = new Cargo(COIN, map);
+        var cargo = new Cargo(COIN, map);
 
         guardHouse0.putCargo(cargo);
 
         // Occupy the guard house with one private
-        Soldier military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, guardHouse0);
-        Soldier military2 = Utils.occupyMilitaryBuilding(GENERAL_RANK, guardHouse0);
+        var military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, guardHouse0);
+        var military2 = Utils.occupyMilitaryBuilding(GENERAL_RANK, guardHouse0);
 
         // Verify that coin is not consumed
         assertEquals(guardHouse0.getAmount(COIN), 1);
@@ -704,18 +697,18 @@ public class TestGuardHouse {
     public void testCanDisableCoinsToGuardHouse() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
@@ -732,18 +725,18 @@ public class TestGuardHouse {
     public void testOccupiedGuardHouseCanBeEvacuated() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Connect headquarter and guard house
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
@@ -752,7 +745,7 @@ public class TestGuardHouse {
         Utils.constructHouse(guardHouse0);
 
         // Occupy the guard house
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         // Evacuate the guard house and verify that the military leaves the guard house
         assertTrue(military.isInsideBuilding());
@@ -769,18 +762,18 @@ public class TestGuardHouse {
     public void testEvacuatedMilitaryReturnsToStorage() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Connect headquarter and guard house
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
@@ -789,7 +782,7 @@ public class TestGuardHouse {
         Utils.constructHouse(guardHouse0);
 
         // Occupy the guard house
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         // Evacuate the guard house
         assertTrue(military.isInsideBuilding());
@@ -802,7 +795,7 @@ public class TestGuardHouse {
 
         // Verify that the evacuated military returns to the storage
         assertEquals(military.getTarget(), headquarter0.getPosition());
-        int amount = headquarter0.getAmount(PRIVATE);
+        var amount = headquarter0.getAmount(PRIVATE);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
 
@@ -814,24 +807,24 @@ public class TestGuardHouse {
     public void testEvacuatedSoldierReturnsOffroadWhenNotConnected() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
 
         // Occupy the guard house
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         // Evacuate the guard house
         assertTrue(military.isInsideBuilding());
@@ -844,7 +837,7 @@ public class TestGuardHouse {
 
         // Verify that the evacuated military returns to the storage
         assertEquals(military.getTarget(), headquarter0.getPosition());
-        int amount = headquarter0.getAmount(PRIVATE);
+        var amount = headquarter0.getAmount(PRIVATE);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
 
@@ -856,18 +849,18 @@ public class TestGuardHouse {
     public void testNoMilitaryIsDispatchedToEvacuatedGuardHouse() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Connect headquarters and guard house
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
@@ -889,24 +882,24 @@ public class TestGuardHouse {
     public void testEvacuationCanBeCanceled() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
 
         // Occupy the guard house
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         // Evacuate the guard house
         assertTrue(military.isInsideBuilding());
@@ -919,7 +912,7 @@ public class TestGuardHouse {
 
         // Wait for the evacuated military to return to the storage
         assertEquals(military.getTarget(), headquarter0.getPosition());
-        int amount = headquarter0.getAmount(PRIVATE);
+        var amount = headquarter0.getAmount(PRIVATE);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
 
@@ -938,18 +931,18 @@ public class TestGuardHouse {
     public void testMilitaryGoesBackToStorageWhenGuardHouseIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(8, 8);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(8, 8);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
@@ -963,9 +956,9 @@ public class TestGuardHouse {
         guardHouse0.tearDown();
 
         // Verify that the worker leaves the building and goes back to the headquarter
-        Soldier military = Utils.waitForSoldierOutsideBuilding(player0);
+        var military = Utils.waitForSoldierOutsideBuilding(player0);
 
-        int amount = headquarter0.getAmount(PRIVATE);
+        var amount = headquarter0.getAmount(PRIVATE);
 
         assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
@@ -980,18 +973,18 @@ public class TestGuardHouse {
     public void testMilitaryGoesBackOnToStorageOnRoadsIfPossibleWhenGuardHouseIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(8, 8);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(8, 8);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Connect the guard house with the headquarter
         map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
@@ -1008,14 +1001,14 @@ public class TestGuardHouse {
         guardHouse0.tearDown();
 
         // Verify that the worker leaves the building and goes back to the headquarter
-        Soldier military = Utils.waitForSoldierOutsideBuilding(player0);
+        var military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
 
         // Verify that the worker plans to use the roads
-        boolean firstStep = true;
-        for (Point point : military.getPlannedPath()) {
+        var firstStep = true;
+        for (var point : military.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -1029,18 +1022,18 @@ public class TestGuardHouse {
     public void testProductionCannotBeResumedInGuardHouse() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(8, 8);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(8, 8);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
@@ -1057,23 +1050,23 @@ public class TestGuardHouse {
     public void testCannotStopProductionInGuardhouse() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 17);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 17);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(5, 23);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(5, 23);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
 
         // Wait for the guard house to finish construction
         Utils.fastForwardUntilBuildingIsConstructed(guardHouse0);
@@ -1092,18 +1085,18 @@ public class TestGuardHouse {
     public void testGuardHouseCanProduce() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house mine
-        Point point1 = new Point(10, 10);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(10, 10);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
@@ -1119,18 +1112,18 @@ public class TestGuardHouse {
     public void testGuardHouseReportsCorrectOutput() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Construct the guard house
         Utils.constructHouse(guardHouse0);
@@ -1143,18 +1136,18 @@ public class TestGuardHouse {
     public void testGuardHouseReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Verify that the reported needed construction material is correct
         assertEquals(guardHouse0.getTypesOfMaterialNeeded().size(), 2);
@@ -1163,7 +1156,7 @@ public class TestGuardHouse {
         assertEquals(guardHouse0.getCanHoldAmount(PLANK), 3);
         assertEquals(guardHouse0.getCanHoldAmount(STONE), 2);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
@@ -1176,18 +1169,18 @@ public class TestGuardHouse {
     public void testGuardHouseReportsCorrectMaterialsNeededForProduction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Construct the guard house
         Utils.constructHouse(guardHouse0);
@@ -1196,7 +1189,7 @@ public class TestGuardHouse {
         assertEquals(guardHouse0.getTypesOfMaterialNeeded().size(), 1);
         assertEquals(guardHouse0.getCanHoldAmount(COIN), 2);
 
-        for (Material material : Material.values()) {
+        for (var material : Material.values()) {
             if (material == COIN) {
                 continue;
             }
@@ -1209,18 +1202,18 @@ public class TestGuardHouse {
     public void testHostedMilitaryListIsEmptyForGuardHouseUnderConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Verify that the list of hosted soldiers is empty
         assertEquals(0, guardHouse0.getHostedSoldiers().size());
@@ -1230,18 +1223,18 @@ public class TestGuardHouse {
     public void testHostedMilitaryListIsEmptyForEmptyGuardHouse() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Construct guard house
         Utils.constructHouse(guardHouse0);
@@ -1254,18 +1247,18 @@ public class TestGuardHouse {
     public void testAddingMilitaryUpsHostedMilitaryList() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Construct guard house
         Utils.constructHouse(guardHouse0);
@@ -1282,18 +1275,18 @@ public class TestGuardHouse {
     public void testRankIsCorrectInHostedMilitaryList() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Construct guard house
         Utils.constructHouse(guardHouse0);
@@ -1309,18 +1302,18 @@ public class TestGuardHouse {
     public void testBorderForGuardHouseIsCorrect() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var map = new GameMap(players, 80, 80);
 
         // Place headquarter
-        Point point0 = new Point(30, 30);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(30, 30);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(25, 23);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(25, 23);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Construct and occupy the barracks
         Utils.constructHouse(guardHouse0);
@@ -1337,13 +1330,13 @@ public class TestGuardHouse {
 
          */
 
-        int radius = 9;
-        Set<Point> barracksHexagonBorder = Utils.getHexagonBorder(guardHouse0.getPosition(), radius);
-        Set<Point> headquarterHexagonBorder = Utils.getHexagonBorder(headquarter0.getPosition(), 9);
+        var radius = 9;
+        var barracksHexagonBorder = Utils.getHexagonBorder(guardHouse0.getPosition(), radius);
+        var headquarterHexagonBorder = Utils.getHexagonBorder(headquarter0.getPosition(), 9);
 
         // Verify that all points in the hexagon are part of the actual border
-        Set<Point> border = player0.getBorderPoints();
-        for (Point point : barracksHexagonBorder) {
+        var border = player0.getBorderPoints();
+        for (var point : barracksHexagonBorder) {
 
             // Ignore points that are within the player's land
             if (player0.getOwnedLand().contains(point)) {
@@ -1354,7 +1347,7 @@ public class TestGuardHouse {
         }
 
         // Verify that all points in the actual border are part of the hexagon border
-        for (Point point : border) {
+        for (var point : border) {
 
             // Ignore points that are part of the hexagon around the headquarter
             if (headquarterHexagonBorder.contains(point)) {
@@ -1369,18 +1362,18 @@ public class TestGuardHouse {
     public void testLandForGuardHouseIsCorrect() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var map = new GameMap(players, 80, 80);
 
         // Place headquarter
-        Point point0 = new Point(30, 30);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(30, 30);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(25, 23);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(25, 23);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Construct and occupy the barracks
         Utils.constructHouse(guardHouse0);
@@ -1396,11 +1389,11 @@ public class TestGuardHouse {
                 -8, -8  -------  +8, +8
 
          */
-        Set<Point> area = Utils.getAreaInsideHexagon(8, guardHouse0.getPosition());
+        var area = Utils.getAreaInsideHexagon(8, guardHouse0.getPosition());
 
         // Verify that all points in the hexagon land are part of the actual land
-        Collection<Point> land = guardHouse0.getDefendedLand();
-        for (Point point : land) {
+        var land = guardHouse0.getDefendedLand();
+        for (var point : land) {
 
             // Ignore points that are part of the headquarters land
             if (headquarter0.getDefendedLand().contains(point)) {
@@ -1411,7 +1404,7 @@ public class TestGuardHouse {
         }
 
         // Verify that all points in the actual land are part of the hexagon land
-        for (Point point : area) {
+        for (var point : area) {
             assertTrue(land.contains(point));
         }
     }
@@ -1420,18 +1413,18 @@ public class TestGuardHouse {
     public void testDiscoveredLandForGuardHouseIsCorrect() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var map = new GameMap(players, 80, 80);
 
         // Place headquarter
-        Point point0 = new Point(30, 30);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(30, 30);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(25, 23);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(25, 23);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Construct and occupy the barracks
         Utils.constructHouse(guardHouse0);
@@ -1449,12 +1442,12 @@ public class TestGuardHouse {
                 -8, -8  -------  +8, +8
 
          */
-        Set<Point> guardHouseHexagonDiscoveredArea = Utils.getAreaInsideHexagon(13, guardHouse0.getPosition());
-        Set<Point> headquarterDiscoveredLand = Utils.getAreaInsideHexagon(13, headquarter0.getPosition());
+        var guardHouseHexagonDiscoveredArea = Utils.getAreaInsideHexagon(13, guardHouse0.getPosition());
+        var headquarterDiscoveredLand = Utils.getAreaInsideHexagon(13, headquarter0.getPosition());
 
         // Verify that all points in the hexagon land are part of the actual land
-        Collection<Point> discoveredLand = player0.getDiscoveredLand();
-        for (Point point : discoveredLand) {
+        var discoveredLand = player0.getDiscoveredLand();
+        for (var point : discoveredLand) {
 
             // Ignore points within the discovered land for the headquarter
             if (headquarterDiscoveredLand.contains(point)) {
@@ -1465,7 +1458,7 @@ public class TestGuardHouse {
         }
 
         // Verify that all points in the actual land are part of the hexagon land
-        for (Point point : guardHouseHexagonDiscoveredArea) {
+        for (var point : guardHouseHexagonDiscoveredArea) {
 
             // Filter points outside the map
             if (point.x < 0 || point.y < 0) {
@@ -1480,25 +1473,25 @@ public class TestGuardHouse {
     public void testDiscoveredLandForPlayerCannotBeOutsideTheMap() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var map = new GameMap(players, 80, 80);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 10);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(3, 3);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(3, 3);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Construct and occupy the barracks
         Utils.constructHouse(guardHouse0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         // Verify that the discovered land is only inside the map
-        for (Point point : player0.getDiscoveredLand()) {
+        for (var point : player0.getDiscoveredLand()) {
             assertTrue(point.x >= 0);
             assertTrue(point.y >= 0);
         }
@@ -1508,25 +1501,25 @@ public class TestGuardHouse {
     public void testOwnedLandForPlayerCannotBeOutsideTheMap() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 80, 80);
+        var map = new GameMap(players, 80, 80);
 
         // Place headquarter
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(10, 10);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(3, 3);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(3, 3);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Construct and occupy the barracks
         Utils.constructHouse(guardHouse0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         // Verify that the discovered land is only inside the map
-        for (Point point : player0.getOwnedLand()) {
+        for (var point : player0.getOwnedLand()) {
             assertTrue(point.x >= 0);
             assertTrue(point.y >= 0);
         }
@@ -1536,23 +1529,23 @@ public class TestGuardHouse {
     public void testGuardHouseCanBeUpgraded() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(21, 5);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(21, 5);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Connect the barracks with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
 
         // Finish construction of the barracks
         Utils.constructHouse(guardHouse0);
@@ -1566,7 +1559,7 @@ public class TestGuardHouse {
         guardHouse0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         guardHouse0.promiseDelivery(STONE);
         guardHouse0.promiseDelivery(STONE);
@@ -1585,7 +1578,7 @@ public class TestGuardHouse {
             map.stepTime();
         }
 
-        Building upgradedBuilding = map.getBuildingAtPoint(guardHouse0.getPosition());
+        var upgradedBuilding = map.getBuildingAtPoint(guardHouse0.getPosition());
 
         assertFalse(map.getBuildings().contains(guardHouse0));
         assertTrue(map.getBuildings().contains(upgradedBuilding));
@@ -1600,23 +1593,23 @@ public class TestGuardHouse {
     public void testUnfinishedGuardHouseCannotBeUpgraded() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(13, 5);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(13, 5);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Connect the guard house with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
 
         // Upgrade the guard house
         try {
@@ -1630,23 +1623,23 @@ public class TestGuardHouse {
     public void testBurningGuardHouseCannotBeUpgraded() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(13, 5);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(13, 5);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Connect the guard house with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
@@ -1666,20 +1659,20 @@ public class TestGuardHouse {
     public void testCannotUpgradeGuardHouseWithoutMaterial() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(21, 5);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(21, 5);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
@@ -1691,7 +1684,7 @@ public class TestGuardHouse {
         guardHouse0.upgrade();
 
         // Add materials but not enough for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         guardHouse0.promiseDelivery(STONE);
         guardHouse0.promiseDelivery(STONE);
@@ -1723,23 +1716,23 @@ public class TestGuardHouse {
     public void testCannotUpgradeGuardHouseBeingUpgraded() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(13, 5);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(13, 5);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Connect the guard house with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
@@ -1762,27 +1755,27 @@ public class TestGuardHouse {
     public void testUpgradingCausesMaterialToGetDelivered() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Make sure there is material for upgrading
         Utils.adjustInventoryTo(headquarter0, PLANK, 10);
         Utils.adjustInventoryTo(headquarter0, STONE, 10);
 
         // Place guard house
-        Point point1 = new Point(21, 5);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(21, 5);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Connect the guard house with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
@@ -1796,7 +1789,7 @@ public class TestGuardHouse {
         // Place the courier on the road
         assertNotNull(road0.getCourier());
 
-        Courier courier0 = road0.getCourier();
+        var courier0 = road0.getCourier();
 
         // Verify that the guard house doesn't need stone before the upgrade
         assertFalse(guardHouse0.needsMaterial(STONE));
@@ -1856,20 +1849,20 @@ public class TestGuardHouse {
     public void testOccupiedGuardHouseIsOccupiedAfterUpgrade() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(21, 5);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(21, 5);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
@@ -1883,7 +1876,7 @@ public class TestGuardHouse {
         guardHouse0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         guardHouse0.promiseDelivery(STONE);
         guardHouse0.promiseDelivery(STONE);
@@ -1902,7 +1895,7 @@ public class TestGuardHouse {
         }
 
         // Verify that the upgraded building is also occupied
-        Building watchTower0 = map.getBuildingAtPoint(guardHouse0.getPosition());
+        var watchTower0 = map.getBuildingAtPoint(guardHouse0.getPosition());
 
         assertTrue(watchTower0.isOccupied());
         assertEquals(watchTower0.getNumberOfHostedSoldiers(), 1);
@@ -1912,20 +1905,20 @@ public class TestGuardHouse {
     public void testCoinRemainsAfterUpgrade() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(21, 5);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(21, 5);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
@@ -1934,7 +1927,7 @@ public class TestGuardHouse {
         guardHouse0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         guardHouse0.promiseDelivery(STONE);
         guardHouse0.promiseDelivery(STONE);
@@ -1945,7 +1938,7 @@ public class TestGuardHouse {
         guardHouse0.putCargo(stoneCargo);
 
         // Put a coin in the building
-        Cargo coinCargo = new Cargo(COIN, map);
+        var coinCargo = new Cargo(COIN, map);
 
         guardHouse0.promiseDelivery(COIN);
 
@@ -1962,7 +1955,7 @@ public class TestGuardHouse {
         }
 
         // Verify that the coin is still in the building
-        Building watchTower0 = map.getBuildingAtPoint(guardHouse0.getPosition());
+        var watchTower0 = map.getBuildingAtPoint(guardHouse0.getPosition());
 
         assertEquals(watchTower0.getAmount(COIN), 1);
     }
@@ -1971,20 +1964,20 @@ public class TestGuardHouse {
     public void testBuildingDuringUpgradeCanBeDestroyed() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(21, 5);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(21, 5);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
@@ -1998,7 +1991,7 @@ public class TestGuardHouse {
         guardHouse0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         guardHouse0.promiseDelivery(STONE);
         guardHouse0.promiseDelivery(STONE);
@@ -2026,24 +2019,24 @@ public class TestGuardHouse {
     public void testPlayerIsCorrectAfterUpgrade() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        Player player2 = new Player("Player 2", PlayerColor.GRAY, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.GRAY, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player2);
         players.add(player0);
         players.add(player1);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(21, 5);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(21, 5);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
@@ -2057,7 +2050,7 @@ public class TestGuardHouse {
         guardHouse0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         guardHouse0.promiseDelivery(STONE);
         guardHouse0.promiseDelivery(STONE);
@@ -2068,7 +2061,7 @@ public class TestGuardHouse {
         guardHouse0.putCargo(stoneCargo);
 
         // Put a coin in the building
-        Cargo coinCargo = new Cargo(COIN, map);
+        var coinCargo = new Cargo(COIN, map);
 
         guardHouse0.promiseDelivery(COIN);
 
@@ -2084,7 +2077,7 @@ public class TestGuardHouse {
         }
 
         // Verify that the player is set correctly in the upgraded building
-        Building watchTower0 = map.getBuildingAtPoint(guardHouse0.getPosition());
+        var watchTower0 = map.getBuildingAtPoint(guardHouse0.getPosition());
 
         assertEquals(watchTower0.getPlayer(), player0);
     }
@@ -2093,20 +2086,20 @@ public class TestGuardHouse {
     public void testCanHostRightNumberOfSoldiersAfterUpgraded() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(21, 5);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(21, 5);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
@@ -2120,7 +2113,7 @@ public class TestGuardHouse {
         guardHouse0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         guardHouse0.promiseDelivery(STONE);
         guardHouse0.promiseDelivery(STONE);
@@ -2139,7 +2132,7 @@ public class TestGuardHouse {
         }
 
         // Verify that two more soldiers can be hosted in the building
-        Building watchTower0 = map.getBuildingAtPoint(guardHouse0.getPosition());
+        var watchTower0 = map.getBuildingAtPoint(guardHouse0.getPosition());
 
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
@@ -2149,20 +2142,20 @@ public class TestGuardHouse {
     public void testBorderIsExpandedAfterUpgrade() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(7, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(21, 5);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(21, 5);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
@@ -2176,7 +2169,7 @@ public class TestGuardHouse {
         guardHouse0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         guardHouse0.promiseDelivery(STONE);
         guardHouse0.promiseDelivery(STONE);
@@ -2187,8 +2180,8 @@ public class TestGuardHouse {
         guardHouse0.putCargo(stoneCargo);
 
         // Verify the border before the upgrade
-        Point point2 = new Point(37, 7);
-        Point point3 = new Point(39, 7);
+        var point2 = new Point(37, 7);
+        var point3 = new Point(39, 7);
 
         assertTrue(player0.getBorderPoints().contains(point2));
         assertFalse(player0.getBorderPoints().contains(point3));
@@ -2212,20 +2205,20 @@ public class TestGuardHouse {
     public void testFlagIsCorrectAfterUpgrade() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(21, 5);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(21, 5);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
@@ -2239,7 +2232,7 @@ public class TestGuardHouse {
         guardHouse0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         guardHouse0.promiseDelivery(STONE);
         guardHouse0.promiseDelivery(STONE);
@@ -2258,7 +2251,7 @@ public class TestGuardHouse {
         }
 
         // Verify that the flag is correct after the upgrade
-        Building buildingAfterUpgrade = map.getBuildingAtPoint(point1);
+        var buildingAfterUpgrade = map.getBuildingAtPoint(point1);
 
         assertNotNull(buildingAfterUpgrade);
         assertNotNull(buildingAfterUpgrade.getFlag());
@@ -2269,20 +2262,20 @@ public class TestGuardHouse {
     public void testOccupiedBuildingRemainsOccupiedDuringUpgrade() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(21, 5);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(21, 5);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
@@ -2299,7 +2292,7 @@ public class TestGuardHouse {
         assertTrue(guardHouse0.isOccupied());
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         guardHouse0.promiseDelivery(STONE);
         guardHouse0.promiseDelivery(STONE);
@@ -2323,18 +2316,18 @@ public class TestGuardHouse {
     public void testEvacuatedBuildingKeepsSendingHomeMilitary() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
@@ -2349,7 +2342,7 @@ public class TestGuardHouse {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
 
         // Occupy the guard house
-        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
+        var military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         // Verify that the military comes out immediately
 
@@ -2363,20 +2356,20 @@ public class TestGuardHouse {
     public void testCanUpgradeAfterDisablingPromotions() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(21, 5);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(21, 5);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
@@ -2395,7 +2388,7 @@ public class TestGuardHouse {
         guardHouse0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         guardHouse0.promiseDelivery(STONE);
         guardHouse0.promiseDelivery(STONE);
@@ -2414,7 +2407,7 @@ public class TestGuardHouse {
         }
 
         // Verify that the guard house is upgraded
-        Building buildingAfterUpgrade = map.getBuildingAtPoint(point1);
+        var buildingAfterUpgrade = map.getBuildingAtPoint(point1);
 
         assertNotNull(buildingAfterUpgrade);
         assertEquals(buildingAfterUpgrade.getClass(), WatchTower.class);
@@ -2424,20 +2417,20 @@ public class TestGuardHouse {
     public void testUpgradeDoesNotDestroyNearbyHouses() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place barracks
-        Point point1 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        var point1 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         // Finish construction of the barracks
         Utils.constructHouse(barracks0);
@@ -2446,8 +2439,8 @@ public class TestGuardHouse {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
         // Place a guard house
-        Point point2 = new Point(26, 6);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point2);
+        var point2 = new Point(26, 6);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point2);
 
         // Construct the guard house
         Utils.constructHouse(guardHouse0);
@@ -2456,11 +2449,11 @@ public class TestGuardHouse {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, guardHouse0);
 
         // Place regular building
-        Point point3 = new Point(30, 6);
-        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point3);
+        var point3 = new Point(30, 6);
+        var foresterHut0 = map.placeBuilding(new ForesterHut(player0), point3);
 
         // Connect the buildings with a road
-        Road road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), foresterHut0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), foresterHut0.getFlag());
 
         // Evacuate the guard house and wait for the guard house to become empty
         guardHouse0.evacuate();
@@ -2480,7 +2473,7 @@ public class TestGuardHouse {
         guardHouse0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         guardHouse0.promiseDelivery(STONE);
         guardHouse0.promiseDelivery(STONE);
@@ -2509,20 +2502,20 @@ public class TestGuardHouse {
     public void testUnoccupiedBuildingRemainsUnoccupiedDuringAndAfterUpgrade() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(7, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(21, 5);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(21, 5);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
@@ -2536,7 +2529,7 @@ public class TestGuardHouse {
         assertFalse(guardHouse0.isOccupied());
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         guardHouse0.promiseDelivery(STONE);
         guardHouse0.promiseDelivery(STONE);
@@ -2547,8 +2540,8 @@ public class TestGuardHouse {
         guardHouse0.putCargo(stoneCargo);
 
         // Verify that the guard house is unoccupied during and after the upgrade
-        Point point2 = new Point(25, 5);
-        Point point3 = new Point(27, 5);
+        var point2 = new Point(25, 5);
+        var point3 = new Point(27, 5);
 
         for (int i = 0; i < 100; i++) {
 
@@ -2570,23 +2563,23 @@ public class TestGuardHouse {
     public void testUpgradeOfBuildingWithMilitaryDoesNotCauseOverAllocation() throws Exception {
 
         // Creating new player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
 
         // Create game map
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place guard house
-        Point point1 = new Point(21, 5);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(21, 5);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         // Connect the guard house with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
 
         // Finish construction of the guard house
         Utils.constructHouse(guardHouse0);
@@ -2603,7 +2596,7 @@ public class TestGuardHouse {
         guardHouse0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         guardHouse0.promiseDelivery(STONE);
         guardHouse0.promiseDelivery(STONE);
@@ -2616,7 +2609,7 @@ public class TestGuardHouse {
         // Wait for the upgrade to happen
         assertEquals(guardHouse0.getNumberOfHostedSoldiers(), 3);
 
-        Building watchTower0 = Utils.waitForBuildingToGetUpgraded(guardHouse0);
+        var watchTower0 = Utils.waitForBuildingToGetUpgraded(guardHouse0);
 
         assertEquals(watchTower0.getNumberOfHostedSoldiers(), 3);
         assertEquals(map.getBuildingAtPoint(guardHouse0.getPosition()), watchTower0);
@@ -2643,26 +2636,26 @@ public class TestGuardHouse {
     public void testUpgradedGuardHouseGetsPopulatedFully() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Add privates to the headquarter
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 20);
 
         // Place guard house
-        Point point1 = new Point(6, 12);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        var point1 = new Point(6, 12);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
         // Connect the guard house to the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
 
         // Wait for the guard house to get occupied
         for (int i = 0; i < 1000; i++) {
@@ -2680,7 +2673,7 @@ public class TestGuardHouse {
         guardHouse0.upgrade();
 
         // Add materials for the upgrade
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         guardHouse0.promiseDelivery(STONE);
         guardHouse0.promiseDelivery(STONE);
@@ -2691,7 +2684,7 @@ public class TestGuardHouse {
         guardHouse0.putCargo(stoneCargo);
 
         // Wait for the upgrade to happen
-        Building watchTower0 = Utils.waitForBuildingToGetUpgraded(guardHouse0);
+        var watchTower0 = Utils.waitForBuildingToGetUpgraded(guardHouse0);
 
         assertEquals(map.getBuildingAtPoint(guardHouse0.getPosition()), watchTower0);
         assertEquals(watchTower0.getMaxHostedSoldiers(), 6);
