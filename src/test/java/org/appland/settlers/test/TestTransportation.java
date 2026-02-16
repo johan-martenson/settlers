@@ -496,11 +496,11 @@ public class TestTransportation {
         var storehouse = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place flag
-        Point point1 = new Point(10, 10); // headquarter to middle 6 steps
+        var point1 = new Point(10, 10); // headquarter to middle 6 steps
         var middleFlag = map.placeFlag(player0, point1);
 
         // Place flag
-        Point point2 = new Point(10, 14); // end to middle 4 steps
+        var point2 = new Point(10, 14); // end to middle 4 steps
         var endFlag = map.placeFlag(player0, point2);
 
         // Place road
@@ -605,7 +605,7 @@ public class TestTransportation {
         assertFalse(hqToMiddleRoad.needsCourier());
 
         // Courier needs to walk to road before it's assigned
-        Courier courier = null;
+        var courier = (Courier) null;
         for (var worker : map.getWorkers()) {
             if (worker instanceof Courier) {
                 courier = (Courier)worker;

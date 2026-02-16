@@ -1718,7 +1718,7 @@ public class TestFishery {
         // Wait for the fisherman to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Fisherman.class, 1, player0);
 
-        Fisherman fisherman = null;
+        var fisherman = (Fisherman) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Fisherman) {
@@ -1778,7 +1778,7 @@ public class TestFishery {
         // Wait for the fisherman to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Fisherman.class, 1, player0);
 
-        Fisherman fisherman = null;
+        var fisherman = (Fisherman) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Fisherman) {
@@ -1841,7 +1841,7 @@ public class TestFishery {
         // Wait for the fisherman to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Fisherman.class, 1, player0);
 
-        Fisherman fisherman = null;
+        var fisherman = (Fisherman) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Fisherman) {

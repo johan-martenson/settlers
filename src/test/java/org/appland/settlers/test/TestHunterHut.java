@@ -1247,7 +1247,7 @@ public class TestHunterHut {
         // Wait for the hunter to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Hunter.class, 1, player0);
 
-        Hunter hunter = null;
+        var hunter = (Hunter) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Hunter) {
@@ -1307,7 +1307,7 @@ public class TestHunterHut {
         // Wait for the hunter to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Hunter.class, 1, player0);
 
-        Hunter hunter = null;
+        var hunter = (Hunter) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Hunter) {
@@ -1370,7 +1370,7 @@ public class TestHunterHut {
         // Wait for the hunter to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Hunter.class, 1, player0);
 
-        Hunter hunter = null;
+        var hunter = (Hunter) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Hunter) {

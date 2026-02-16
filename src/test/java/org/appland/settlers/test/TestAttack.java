@@ -2155,7 +2155,7 @@ public class TestAttack {
         assertEquals(attackers.size(), 2);
 
         // Get the first attacker
-        Soldier firstAttacker = null;
+        var firstAttacker = (Soldier) null;
 
         for (var military : attackers) {
             if (military.getTarget().equals(barracks1.getFlag().getPosition())) {
@@ -4753,7 +4753,7 @@ public class TestAttack {
 
         Utils.waitForSoldiersToReachTargets(map, defenders);
 
-        var defenderPositions = new HashSet<>();
+        var defenderPositions = new HashSet<Point>();
 
         defenders.forEach(soldier -> defenderPositions.add(soldier.getPosition()));
 
@@ -4877,7 +4877,7 @@ public class TestAttack {
 
         Utils.waitForSoldiersToReachTargets(map, defenders);
 
-        var defenderPositions = new HashSet<>();
+        var defenderPositions = new HashSet<Point>();
 
         defenders.forEach(soldier -> defenderPositions.add(soldier.getPosition()));
 
@@ -5139,7 +5139,7 @@ public class TestAttack {
 
         Utils.waitForSoldiersToReachTargets(map, remoteDefenders);
 
-        var defenderPositions = new HashSet<>();
+        var defenderPositions = new HashSet<Point>();
 
         remoteDefenders.forEach(soldier -> {
             defenderPositions.add(soldier.getPosition());
@@ -5239,7 +5239,7 @@ public class TestAttack {
 
         Utils.waitForSoldiersToReachTargets(map, attackers);
 
-        var attackerPositions = new HashSet<>();
+        var attackerPositions = new HashSet<Point>();
 
         attackers.forEach(soldier -> attackerPositions.add(soldier.getPosition()));
 
@@ -5523,7 +5523,7 @@ public class TestAttack {
         // Wait for the fight to end and verify a waiting attacker goes to the flag and continues the fight
         Utils.waitForSoldierToBeDying(mainAttacker0, map);
 
-        Soldier mainAttacker1 = null;
+        var mainAttacker1 = (Soldier) null;
 
         for (int i = 0; i < 30; i++) {
             for (var attacker : Utils.findSoldiersOutsideBuilding(player1)) {
@@ -5740,7 +5740,7 @@ public class TestAttack {
         // Wait for the fight to end and verify a waiting attacker goes to the flag and continues the fight
         Utils.waitForSoldierToBeDying(mainAttacker0, map);
 
-        Soldier mainAttacker1 = null;
+        var mainAttacker1 = (Soldier) null;
 
         for (int i = 0; i < 30; i++) {
             for (var attacker : Utils.findSoldiersOutsideBuilding(player1)) {

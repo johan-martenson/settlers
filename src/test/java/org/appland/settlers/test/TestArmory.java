@@ -188,7 +188,7 @@ public class TestArmory {
         assertTrue(map.getWorkers().size() >= 3);
 
         // Let the armory worker reach the armory
-        Armorer armorer0 = null;
+        var armorer0 = (Armorer) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Armorer) {
@@ -235,7 +235,7 @@ public class TestArmory {
         assertTrue(map.getWorkers().size() >= 3);
 
         // Verify that the armorer is not a soldier
-        Armorer armorer0 = null;
+        var armorer0 = (Armorer) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Armorer) {
@@ -280,7 +280,7 @@ public class TestArmory {
         assertTrue(map.getWorkers().size() >= 3);
 
         // Let the armory worker reach the armory
-        Armorer armorer0 = null;
+        var armorer0 = (Armorer) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Armorer) {
@@ -1191,7 +1191,7 @@ public class TestArmory {
         // Wait for the armorer to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Armorer.class, 1, player0);
 
-        Armorer armorer0 = null;
+        var armorer0 = (Armorer) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Armorer) {
@@ -1251,7 +1251,7 @@ public class TestArmory {
         // Wait for the armorer to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Armorer.class, 1, player0);
 
-        Armorer armorer0 = null;
+        var armorer0 = (Armorer) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Armorer) {
@@ -1327,7 +1327,7 @@ public class TestArmory {
         // Wait for the armorer to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Armorer.class, 1, player0);
 
-        Armorer armorer0 = null;
+        var armorer0 = (Armorer) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Armorer) {

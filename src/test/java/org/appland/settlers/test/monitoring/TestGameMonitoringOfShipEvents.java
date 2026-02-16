@@ -82,7 +82,7 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(shipwright.isTraveling());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Let the shipwright reach the spot and start to build a ship
@@ -164,7 +164,7 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(shipwright.isTraveling());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Let the shipwright reach the spot and start to build a ship
@@ -254,7 +254,7 @@ public class TestGameMonitoringOfShipEvents {
         Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the shipwright to build a ship
@@ -348,7 +348,7 @@ public class TestGameMonitoringOfShipEvents {
         Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the shipwright to build a ship
@@ -511,7 +511,7 @@ public class TestGameMonitoringOfShipEvents {
         shipyard.stopProduction();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Prepare for the expedition
@@ -673,7 +673,7 @@ public class TestGameMonitoringOfShipEvents {
         shipyard.stopProduction();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Prepare for the expedition

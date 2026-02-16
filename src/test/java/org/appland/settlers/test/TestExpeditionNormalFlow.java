@@ -89,7 +89,7 @@ public class TestExpeditionNormalFlow {
 
         // Place a lake
         for (int i = 5; i < 53; i += 2) {
-            Point point = new Point(i, 11);  // 5, 11  --  51, 11
+            var point = new Point(i, 11);  // 5, 11  --  51, 11
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -198,7 +198,7 @@ public class TestExpeditionNormalFlow {
 
         // Place a lake
         for (int i = 7; i < 57; i += 2) {
-            Point point = new Point(i, 11);  // 13, 11  --  55, 11
+            var point = new Point(i, 11);  // 13, 11  --  55, 11
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -763,7 +763,7 @@ public class TestExpeditionNormalFlow {
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
-            Point point = new Point(i, 11);  // 3, 11  --  55, 11
+            var point = new Point(i, 11);  // 3, 11  --  55, 11
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -938,7 +938,7 @@ public class TestExpeditionNormalFlow {
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
-            Point point = new Point(i, 11);  // 3, 11  --  55, 11
+            var point = new Point(i, 11);  // 3, 11  --  55, 11
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -1102,7 +1102,7 @@ public class TestExpeditionNormalFlow {
         // Start the expedition
         ship.startExpedition(RIGHT);
 
-        Point point5 = new Point(54, 10); // Closest water point for the potential harbor site
+        var point5 = new Point(54, 10); // Closest water point for the potential harbor site
 
         assertTrue(ship.getTarget().distance(point5) < 4);
         assertTrue(ship.getPosition().distance(point0.downRight()) > 4);
@@ -1125,7 +1125,7 @@ public class TestExpeditionNormalFlow {
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
-            Point point = new Point(i, 11);  // 3, 11  --  55, 11
+            var point = new Point(i, 11);  // 3, 11  --  55, 11
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -1294,7 +1294,7 @@ public class TestExpeditionNormalFlow {
         // Start the expedition
         ship.startExpedition(RIGHT);
 
-        Point point5 = new Point(56, 10); // Closest water point for the potential harbor site
+        var point5 = new Point(56, 10); // Closest water point for the potential harbor site
 
         assertEquals(ship.getTarget(), point5);
         assertNotEquals(ship.getPosition(), point0.downRight());
@@ -1323,7 +1323,7 @@ public class TestExpeditionNormalFlow {
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
-            Point point = new Point(i, 11);  // 3, 11  --  55, 11
+            var point = new Point(i, 11);  // 3, 11  --  55, 11
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -1487,7 +1487,7 @@ public class TestExpeditionNormalFlow {
         // Start the expedition
         ship.startExpedition(RIGHT);
 
-        Point point5 = new Point(54, 10); // Closest water point for the potential harbor site
+        var point5 = new Point(54, 10); // Closest water point for the potential harbor site
 
         assertTrue(ship.getTarget().distance(point5) < 4);
         assertTrue(ship.getPosition().distance(point0.downRight()) > 4);
@@ -1523,7 +1523,7 @@ public class TestExpeditionNormalFlow {
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
-            Point point = new Point(i, 11);  // 3, 11  --  55, 11
+            var point = new Point(i, 11);  // 3, 11  --  55, 11
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -1701,7 +1701,7 @@ public class TestExpeditionNormalFlow {
         // Start the expedition
         ship.startExpedition(RIGHT);
 
-        Point point5 = new Point(54, 10); // Closest water point for the potential harbor site
+        var point5 = new Point(54, 10); // Closest water point for the potential harbor site
 
         assertTrue(ship.getTarget().distance(point5) < 4);
         assertTrue(ship.getPosition().distance(point0.downRight()) > 4);
@@ -1745,7 +1745,7 @@ public class TestExpeditionNormalFlow {
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
-            Point point = new Point(i, 11);  // 3, 11  --  55, 11
+            var point = new Point(i, 11);  // 3, 11  --  55, 11
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -1910,7 +1910,7 @@ public class TestExpeditionNormalFlow {
         // Start the expedition
         ship.startExpedition(RIGHT);
 
-        Point point5 = new Point(54, 10); // Closest water point for the potential harbor site
+        var point5 = new Point(54, 10); // Closest water point for the potential harbor site
 
         assertTrue(ship.getTarget().distance(point5) < 4);
         assertTrue(ship.getPosition().distance(point0.downRight()) > 4);
@@ -1941,7 +1941,7 @@ public class TestExpeditionNormalFlow {
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
-            Point point = new Point(i, 11);  // 3, 11  --  55, 11
+            var point = new Point(i, 11);  // 3, 11  --  55, 11
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -2106,7 +2106,7 @@ public class TestExpeditionNormalFlow {
         // Start the expedition
         ship.startExpedition(RIGHT);
 
-        Point point5 = new Point(54, 10); // Closest water point for the potential harbor site
+        var point5 = new Point(54, 10); // Closest water point for the potential harbor site
 
         assertTrue(ship.getTarget().distance(point5) < 4);
         assertTrue(ship.getPosition().distance(point0.downRight()) > 4);
@@ -2148,7 +2148,7 @@ public class TestExpeditionNormalFlow {
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
-            Point point = new Point(i, 11);  // 3, 11  --  55, 11
+            var point = new Point(i, 11);  // 3, 11  --  55, 11
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -2380,7 +2380,7 @@ public class TestExpeditionNormalFlow {
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
-            Point point = new Point(i, 11);  // 3, 11  --  55, 11
+            var point = new Point(i, 11);  // 3, 11  --  55, 11
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -2559,7 +2559,7 @@ public class TestExpeditionNormalFlow {
         // Start the expedition
         ship.startExpedition(RIGHT);
 
-        Point point5 = new Point(54, 10); // Closest water point for the potential harbor site
+        var point5 = new Point(54, 10); // Closest water point for the potential harbor site
 
         assertTrue(ship.getTarget().distance(point5) < 4);
         assertTrue(ship.getPosition().distance(point0.downRight()) > 4);

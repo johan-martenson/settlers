@@ -1665,7 +1665,7 @@ public class TestForesterHut {
         // Wait for the forester to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Forester.class, 1, player0);
 
-        Forester forester = null;
+        var forester = (Forester) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Forester) {
@@ -1725,7 +1725,7 @@ public class TestForesterHut {
         // Wait for the forester to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Forester.class, 1, player0);
 
-        Forester forester = null;
+        var forester = (Forester) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Forester) {
@@ -1788,7 +1788,7 @@ public class TestForesterHut {
         // Wait for the forester to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Forester.class, 1, player0);
 
-        Forester forester = null;
+        var forester = (Forester) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Forester) {

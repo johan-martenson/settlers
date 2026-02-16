@@ -57,7 +57,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -98,7 +98,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -150,7 +150,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -194,7 +194,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -241,7 +241,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -282,7 +282,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -334,7 +334,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -384,7 +384,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -437,7 +437,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -478,7 +478,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -533,7 +533,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -579,7 +579,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -632,7 +632,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -680,7 +680,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -735,7 +735,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -781,7 +781,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -827,7 +827,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -868,7 +868,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -920,7 +920,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -964,7 +964,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -1018,7 +1018,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -1063,7 +1063,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -1117,7 +1117,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -1164,7 +1164,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -1211,7 +1211,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -1252,7 +1252,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -1310,7 +1310,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -1360,7 +1360,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -1417,7 +1417,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -1467,7 +1467,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -1514,7 +1514,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -1560,7 +1560,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -1622,7 +1622,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -1671,7 +1671,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -1718,7 +1718,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -1764,7 +1764,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -1817,7 +1817,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -1863,7 +1863,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -1925,7 +1925,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -1974,7 +1974,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -2021,7 +2021,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -2065,7 +2065,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -2127,7 +2127,7 @@ public class TestMonitoringOfAvailableConstruction {
         var crop = Utils.waitForFarmerToPlantCrop(map, (Farmer)farm0.getWorker());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -2176,7 +2176,7 @@ public class TestMonitoringOfAvailableConstruction {
         var crop = Utils.waitForFarmerToPlantCrop(map, (Farmer)farm0.getWorker());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -2232,7 +2232,7 @@ public class TestMonitoringOfAvailableConstruction {
         var crop = Utils.waitForFarmerToPlantCrop(map, (Farmer)farm0.getWorker());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -2285,7 +2285,7 @@ public class TestMonitoringOfAvailableConstruction {
         var crop = Utils.waitForFarmerToPlantCrop(map, (Farmer)farm0.getWorker());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -2359,7 +2359,7 @@ public class TestMonitoringOfAvailableConstruction {
         assertFalse(player0.getBorderPoints().contains(point4));
 
         // Set up monitoring subscription for the player and store the currently available construction
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -2429,7 +2429,7 @@ public class TestMonitoringOfAvailableConstruction {
         assertFalse(player0.getBorderPoints().contains(point4));
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -2508,7 +2508,7 @@ public class TestMonitoringOfAvailableConstruction {
         assertTrue(player0.getBorderPoints().contains(point4));
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -2579,7 +2579,7 @@ public class TestMonitoringOfAvailableConstruction {
         assertTrue(player0.getBorderPoints().contains(point4));
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -2651,7 +2651,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         monitor.setAvailableConstruction(
@@ -2719,7 +2719,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -2787,7 +2787,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         map.stepTime();

@@ -153,7 +153,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Place a flag and get the corresponding event
@@ -195,7 +195,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         // Verify that no event is sent when a flag is placed for player 0
@@ -227,7 +227,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Place flag
@@ -285,7 +285,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         // Verify that no event is sent when a flag is removed for player 0
@@ -316,7 +316,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Place flag
@@ -362,7 +362,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify an event is sent when a road is placed
@@ -411,7 +411,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Place a road and get the event
@@ -461,7 +461,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         // Verify that no event is sent when a road is placed for player 0
@@ -500,7 +500,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Place a road
@@ -555,7 +555,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Place a road
@@ -619,7 +619,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         // Place a road
@@ -653,7 +653,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that three events are sent when a house is placed - for the house, the road, and the flag
@@ -696,7 +696,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that three events are sent when a house is placed - for the house, the road, and the flag
@@ -750,7 +750,7 @@ public class TestGameMonitoring {
         var builder = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that an event is sent when a house changes from planned to under construction
@@ -798,7 +798,7 @@ public class TestGameMonitoring {
         var builder = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that an event is sent when a house changes from planned to under construction
@@ -850,7 +850,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         // Verify that no events are sent when a house is placed - for the house, the road, and the flag
@@ -888,7 +888,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that the event is sent when the house is removed
@@ -939,7 +939,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that the event is sent when the house is removed
@@ -984,7 +984,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that the event is sent when the house is removed
@@ -1031,7 +1031,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that the event is sent when the house is removed
@@ -1086,7 +1086,7 @@ public class TestGameMonitoring {
         var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Connect the woodcutter with the headquarters
@@ -1122,7 +1122,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Connect the woodcutter with the headquarters
@@ -1168,7 +1168,7 @@ public class TestGameMonitoring {
         var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         // Connect the woodcutter with the headquarters
@@ -1211,7 +1211,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         // Verify that no event is sent to player 1 when the house is removed
@@ -1245,7 +1245,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that the event is sent when the house is removed
@@ -1299,7 +1299,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that the event is sent when the house is removed
@@ -1355,7 +1355,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         // Verify that the event is sent when the house is removed
@@ -1394,7 +1394,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that the event is sent when the house is removed
@@ -1461,7 +1461,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that the event is sent when the house is removed
@@ -1533,7 +1533,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         // Verify that no event is sent to player 1 when the house is removed
@@ -1577,7 +1577,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Place road
@@ -1624,7 +1624,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Place road and get the events for the road and the courier
@@ -1675,7 +1675,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         // Place road
@@ -1707,7 +1707,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Place road and get the events for the road and the courier
@@ -1787,7 +1787,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Place road and get the events for the road and the courier
@@ -1868,7 +1868,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         // Place road and get the events for the road and the courier
@@ -1932,7 +1932,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -1997,7 +1997,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -2046,7 +2046,7 @@ public class TestGameMonitoring {
         assertFalse(forester.isInsideBuilding());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -2126,7 +2126,7 @@ public class TestGameMonitoring {
         assertFalse(forester.isInsideBuilding());
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -2189,7 +2189,7 @@ public class TestGameMonitoring {
         assertFalse(forester.isInsideBuilding());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -2281,7 +2281,7 @@ public class TestGameMonitoring {
         assertTrue(wcWorker.isAt(point));
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -2366,7 +2366,7 @@ public class TestGameMonitoring {
         assertTrue(wcWorker.isAt(point));
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -2442,7 +2442,7 @@ public class TestGameMonitoring {
         assertTrue(wcWorker.isAt(point));
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -2517,7 +2517,7 @@ public class TestGameMonitoring {
         var stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 6);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -2587,7 +2587,7 @@ public class TestGameMonitoring {
         var point1 = new Point(12, 4);
         var stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 6);
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -2661,7 +2661,7 @@ public class TestGameMonitoring {
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -2730,7 +2730,7 @@ public class TestGameMonitoring {
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -2804,7 +2804,7 @@ public class TestGameMonitoring {
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -2846,7 +2846,7 @@ public class TestGameMonitoring {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -2863,7 +2863,7 @@ public class TestGameMonitoring {
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -2928,7 +2928,7 @@ public class TestGameMonitoring {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -2945,7 +2945,7 @@ public class TestGameMonitoring {
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -3016,7 +3016,7 @@ public class TestGameMonitoring {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -3033,7 +3033,7 @@ public class TestGameMonitoring {
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -3073,7 +3073,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -3123,7 +3123,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -3178,7 +3178,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -3212,7 +3212,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -3258,7 +3258,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -3304,7 +3304,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -3369,7 +3369,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -3465,7 +3465,7 @@ public class TestGameMonitoring {
         Utils.waitForWorkerToGoToPoint(map, farmer, crop.getPosition());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -3560,7 +3560,7 @@ public class TestGameMonitoring {
         Utils.waitForWorkerToGoToPoint(map, farmer, crop.getPosition());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -3660,7 +3660,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -3752,7 +3752,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -3819,7 +3819,7 @@ public class TestGameMonitoring {
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getPosition());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -3901,7 +3901,7 @@ public class TestGameMonitoring {
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getPosition());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -3984,7 +3984,7 @@ public class TestGameMonitoring {
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getPosition());
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -4023,7 +4023,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -4094,7 +4094,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -4133,7 +4133,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -4232,7 +4232,7 @@ public class TestGameMonitoring {
         Utils.waitForMilitaryBuildingsToGetPopulated(barracks0);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -4336,7 +4336,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -4407,7 +4407,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         // Verify that no event is sent to player 1 when the barracks get populated and the player discovers new land
@@ -4449,7 +4449,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -4506,7 +4506,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -4567,7 +4567,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for player 1
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -4619,7 +4619,7 @@ public class TestGameMonitoring {
         assertTrue(newlyDiscovered.size() > 0);
 
         // Verify that no message is sent for the new discovered area when the monitoring starts after
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -4659,7 +4659,7 @@ public class TestGameMonitoring {
         // Wait for the scout to go to the flag
         map.stepTime();
 
-        Scout scout = null;
+        var scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
@@ -4673,7 +4673,7 @@ public class TestGameMonitoring {
         Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
 
         // Verify that an event is sent when the scout discovers new ground
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -4681,7 +4681,7 @@ public class TestGameMonitoring {
         var foundNewGround = false;
         var wentToNewGround = false;
 
-        Point discoveredPoint = null;
+        var discoveredPoint = (Point) null;
 
         var discoveredLandBefore = new HashSet<>(player0.getDiscoveredLand());
 
@@ -4751,7 +4751,7 @@ public class TestGameMonitoring {
         // Wait for the scout to go to the flag
         map.stepTime();
 
-        Scout scout = null;
+        var scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
@@ -4765,7 +4765,7 @@ public class TestGameMonitoring {
         Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
 
         // Verify that an event is sent when the scout discovers new ground
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -4773,7 +4773,7 @@ public class TestGameMonitoring {
         var foundNewGround = false;
         var wentToNewGround = false;
 
-        Point discoveredPoint = null;
+        var discoveredPoint = (Point) null;
 
         var discoveredLandBefore = new HashSet<>(player0.getDiscoveredLand());
 
@@ -4858,7 +4858,7 @@ public class TestGameMonitoring {
         // Wait for the scout to go to the flag
         map.stepTime();
 
-        Scout scout = null;
+        var scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
@@ -4904,7 +4904,7 @@ public class TestGameMonitoring {
         Utils.waitForWorkerToSetTarget(map, scout, flag.getPosition());
 
         // Verify that there is no message about discovered land when starting monitoring
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -4950,7 +4950,7 @@ public class TestGameMonitoring {
         // Wait for the scout to go to the flag
         map.stepTime();
 
-        Scout scout = null;
+        var scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
@@ -4964,7 +4964,7 @@ public class TestGameMonitoring {
         Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
 
         // Verify that no event is sent to player 1 when the scout discovers new ground
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         var foundNewGround = false;
@@ -5029,7 +5029,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -5116,7 +5116,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that three events are sent when a house is placed - for the house, the road, and the flag
@@ -5155,7 +5155,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player, start subscription twice
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
         player0.monitorGameView(monitor);
 
@@ -5224,7 +5224,7 @@ public class TestGameMonitoring {
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the courier to deliver the cargo
@@ -5289,7 +5289,7 @@ public class TestGameMonitoring {
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the courier to deliver the cargo
@@ -5347,7 +5347,7 @@ public class TestGameMonitoring {
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANK);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that an event is sent when the courier puts the cargo down by the flag
@@ -5401,7 +5401,7 @@ public class TestGameMonitoring {
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANK);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that an event is sent when the courier puts the cargo down by the flag
@@ -5467,7 +5467,7 @@ public class TestGameMonitoring {
         assertEquals(headquarter0.getFlag().getStackedCargo().size(), 1);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the courier picks up the plank from the flag
@@ -5530,7 +5530,7 @@ public class TestGameMonitoring {
         assertEquals(headquarter0.getFlag().getStackedCargo().size(), 1);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the courier picks up the plank from the flag
@@ -5612,7 +5612,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), flag1.getPosition().right());
@@ -5651,7 +5651,7 @@ public class TestGameMonitoring {
         var road0 = map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), fortress0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the second player's border changes
@@ -5684,7 +5684,7 @@ public class TestGameMonitoring {
 
         var borderChanges = gameChanges.changedBorders();
 
-        BorderChange borderChangePlayer1 = null;
+        var borderChangePlayer1 = (BorderChange) null;
 
         for (var borderChange : borderChanges) {
             if (borderChange.player().equals(player1)) {
@@ -5736,7 +5736,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that an event is sent when the dead tree is removed
@@ -5769,7 +5769,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that an event is sent when the dead tree is removed
@@ -5803,7 +5803,7 @@ public class TestGameMonitoring {
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Place wild animal
@@ -5842,7 +5842,7 @@ public class TestGameMonitoring {
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Place wild animal

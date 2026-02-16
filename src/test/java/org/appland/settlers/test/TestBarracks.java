@@ -138,7 +138,7 @@ public class TestBarracks {
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
-        Soldier military = null;
+        var military = (Soldier) null;
         for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier) {
                 military = (Soldier)worker;
@@ -243,7 +243,7 @@ public class TestBarracks {
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
-        Soldier military = null;
+        var military = (Soldier) null;
         for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier) {
                 military = (Soldier)worker;
@@ -1986,7 +1986,7 @@ public class TestBarracks {
         Utils.constructHouse(barracks0);
 
         // Wait for a military to start walking to the barracks
-        Soldier military = null;
+        var military = (Soldier) null;
         for (int i = 0; i < 1000; i++) {
             for (var worker : map.getWorkers()) {
                 if (worker instanceof Soldier && worker.getTarget().equals(barracks0.getPosition())) {
@@ -2062,7 +2062,7 @@ public class TestBarracks {
         Utils.constructHouse(barracks0);
 
         // Wait for a military to start walking to the barracks
-        Soldier military = null;
+        var military = (Soldier) null;
         for (int i = 0; i < 1000; i++) {
             for (var worker : map.getWorkers()) {
                 if (worker instanceof Soldier && worker.getTarget().equals(barracks0.getPosition())) {
@@ -2306,7 +2306,7 @@ public class TestBarracks {
         assertTrue(guardHouse0.needsMilitaryManning());
         assertEquals(guardHouse0.getNumberOfHostedSoldiers(), 2);
 
-        Soldier military0 = null;
+        var military0 = (Soldier) null;
         for (int i = 0; i < 2000; i++) {
             military0 = Utils.findSoldierOutsideBuilding(player0);
 

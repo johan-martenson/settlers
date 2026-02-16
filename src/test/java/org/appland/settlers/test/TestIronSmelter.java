@@ -1408,7 +1408,7 @@ public class TestIronSmelter {
         // Wait for the iron founder to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(IronFounder.class, 1, player0);
 
-        IronFounder ironFounder = null;
+        var ironFounder = (IronFounder) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof IronFounder) {
@@ -1469,7 +1469,7 @@ public class TestIronSmelter {
         // Wait for the iron founder to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(IronFounder.class, 1, player0);
 
-        IronFounder ironFounder = null;
+        var ironFounder = (IronFounder) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof IronFounder) {
@@ -1533,7 +1533,7 @@ public class TestIronSmelter {
         // Wait for the iron founder to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(IronFounder.class, 1, player0);
 
-        IronFounder ironFounder = null;
+        var ironFounder = (IronFounder) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof IronFounder) {

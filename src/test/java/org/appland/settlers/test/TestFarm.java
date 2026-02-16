@@ -1617,7 +1617,7 @@ public class TestFarm {
         var farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
         // Wait for the farmer to plant a crop
-        Crop crop = null;
+        var crop = (Crop) null;
 
         for (int i = 0; i < 1000; i++) {
             crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
@@ -1669,7 +1669,7 @@ public class TestFarm {
         var farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
         // Wait for the farmer to plant a crop
-        Crop crop = null;
+        var crop = (Crop) null;
 
         for (int i = 0; i < 1000; i++) {
             crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
@@ -1722,7 +1722,7 @@ public class TestFarm {
         var farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
         // Wait for the farmer to plant a crop
-        Crop crop = null;
+        var crop = (Crop) null;
 
         for (int i = 0; i < 1000; i++) {
             crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
@@ -1770,7 +1770,7 @@ public class TestFarm {
         var farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
         // Wait for the farmer to plant a crop
-        Crop crop = null;
+        var crop = (Crop) null;
 
         for (int i = 0; i < 1000; i++) {
             crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
@@ -1838,7 +1838,7 @@ public class TestFarm {
         // Wait for the farmer to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Farmer.class, 1, player0);
 
-        Farmer farmer = null;
+        var farmer = (Farmer) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Farmer) {
@@ -1898,7 +1898,7 @@ public class TestFarm {
         // Wait for the farmer to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Farmer.class, 1, player0);
 
-        Farmer farmer = null;
+        var farmer = (Farmer) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Farmer) {
@@ -1961,7 +1961,7 @@ public class TestFarm {
         // Wait for the farmer to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Farmer.class, 1, player0);
 
-        Farmer farmer = null;
+        var farmer = (Farmer) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Farmer) {

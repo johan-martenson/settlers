@@ -192,7 +192,7 @@ public class TestLookoutTower {
         assertTrue(map.getWorkers().size() >= 3);
 
         // Let the lookout tower worker reach the lookout tower
-        Scout Scout = null;
+        var Scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
@@ -244,7 +244,7 @@ public class TestLookoutTower {
         assertTrue(map.getWorkers().size() >= 3);
 
         // Let the lookout tower worker reach the lookout tower
-        Scout Scout = null;
+        var Scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
@@ -324,7 +324,7 @@ public class TestLookoutTower {
 
         // Verifies that the lookout tower discovers new land when it gets occupied
         var discoveredLandBefore = new HashSet<Point>(player0.getDiscoveredLand());
-        Scout Scout = null;
+        var Scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
@@ -695,7 +695,7 @@ public class TestLookoutTower {
         // Wait for the Scout to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0);
 
-        Scout Scout = null;
+        var Scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
@@ -756,7 +756,7 @@ public class TestLookoutTower {
         // Wait for the Scout to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0);
 
-        Scout Scout = null;
+        var Scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
@@ -820,7 +820,7 @@ public class TestLookoutTower {
         // Wait for the Scout to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0);
 
-        Scout Scout = null;
+        var Scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {

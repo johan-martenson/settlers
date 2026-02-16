@@ -1460,7 +1460,7 @@ public class TestCourier {
         var flag0 = map.placeFlag(player0, point1);
 
         // Make sure to get a fat courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -1552,7 +1552,7 @@ public class TestCourier {
         var flag0 = map.placeFlag(player0, point1);
 
         // Make sure to get a fat courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -1602,7 +1602,7 @@ public class TestCourier {
         var flag0 = map.placeFlag(player0, point1);
 
         // Make sure to get a fat courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -1698,7 +1698,7 @@ public class TestCourier {
             var flag0 = map.placeFlag(player0, point1);
 
             // Make sure to get a fat courier
-            Courier courier = null;
+            var courier = (Courier) null;
 
             for (int i = 0; i < 20; i++) {
 
@@ -1755,7 +1755,7 @@ public class TestCourier {
         var flag0 = map.placeFlag(player0, point1);
 
         // Make sure to get a thin courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -1808,7 +1808,7 @@ public class TestCourier {
         var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Make sure to get a thin courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -1862,7 +1862,7 @@ public class TestCourier {
         var flag0 = map.placeFlag(player0, point1);
 
         // Make sure to get a thin courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -1912,7 +1912,7 @@ public class TestCourier {
         var flag0 = map.placeFlag(player0, point1);
 
         // Make sure to get a thin courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -2008,7 +2008,7 @@ public class TestCourier {
             var flag0 = map.placeFlag(player0, point1);
 
             // Make sure to get a fat courier
-            Courier courier = null;
+            var courier = (Courier) null;
 
             for (int i = 0; i < 20; i++) {
 
@@ -2064,7 +2064,7 @@ public class TestCourier {
         var flag0 = map.placeFlag(player0, point1);
 
         // Make sure to get a thin courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -2117,7 +2117,7 @@ public class TestCourier {
         var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Make sure to get a thin courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -2171,7 +2171,7 @@ public class TestCourier {
         var flag0 = map.placeFlag(player0, point1);
 
         // Make sure to get a thin courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -2221,7 +2221,7 @@ public class TestCourier {
         var flag0 = map.placeFlag(player0, point1);
 
         // Make sure to get a thin courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -2318,7 +2318,7 @@ public class TestCourier {
             var flag0 = map.placeFlag(player0, point1);
 
             // Make sure to get a fat courier
-            Courier courier = null;
+            var courier = (Courier) null;
 
             for (int i = 0; i < 20; i++) {
 
@@ -2374,7 +2374,7 @@ public class TestCourier {
         var flag0 = map.placeFlag(player0, point1);
 
         // Make sure to get a thin courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -2427,7 +2427,7 @@ public class TestCourier {
         var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Make sure to get a thin courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -2481,7 +2481,7 @@ public class TestCourier {
         var flag0 = map.placeFlag(player0, point1);
 
         // Make sure to get a thin courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -2531,7 +2531,7 @@ public class TestCourier {
         var flag0 = map.placeFlag(player0, point1);
 
         // Make sure to get a thin courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -2626,7 +2626,7 @@ public class TestCourier {
         var flag0 = map.placeFlag(player0, point1);
 
         // Make sure to get a thin courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -2681,7 +2681,7 @@ public class TestCourier {
         var flag0 = map.placeFlag(player0, point1);
 
         // Make sure to get a fat courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -2734,7 +2734,7 @@ public class TestCourier {
         var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         // Make sure to get a fat courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -2788,7 +2788,7 @@ public class TestCourier {
         var flag0 = map.placeFlag(player0, point1);
 
         // Make sure to get a fat courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -2838,7 +2838,7 @@ public class TestCourier {
         var flag0 = map.placeFlag(player0, point1);
 
         // Make sure to get a fat courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -2935,7 +2935,7 @@ public class TestCourier {
             var flag0 = map.placeFlag(player0, point1);
 
             // Make sure to get a fat courier
-            Courier courier = null;
+            var courier = (Courier) null;
 
             for (int i = 0; i < 20; i++) {
 
@@ -2991,7 +2991,7 @@ public class TestCourier {
         var flag0 = map.placeFlag(player0, point1);
 
         // Make sure to get a fat courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -3039,7 +3039,7 @@ public class TestCourier {
         var flag0 = map.placeFlag(player0, point1);
 
         // Make sure to get a thin courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 

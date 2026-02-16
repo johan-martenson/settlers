@@ -1323,7 +1323,7 @@ public class TestSawmill {
         // Wait for the carpenter to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Carpenter.class, 1, player0);
 
-        Carpenter carpenter = null;
+        var carpenter = (Carpenter) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Carpenter) {
@@ -1383,7 +1383,7 @@ public class TestSawmill {
         // Wait for the carpenter to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Carpenter.class, 1, player0);
 
-        Carpenter carpenter = null;
+        var carpenter = (Carpenter) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Carpenter) {
@@ -1446,7 +1446,7 @@ public class TestSawmill {
         // Wait for the carpenter to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Carpenter.class, 1, player0);
 
-        Carpenter carpenter = null;
+        var carpenter = (Carpenter) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Carpenter) {

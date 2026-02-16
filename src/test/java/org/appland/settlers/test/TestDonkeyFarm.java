@@ -591,7 +591,7 @@ public class TestDonkeyFarm {
         assertEquals(map.getWorkers().size(), amount + 1);
         assertNull(donkeyBreeder.getCargo());
 
-        Donkey donkey = null;
+        var donkey = (Donkey) null;
         for (var worker : map.getWorkers()) {
             if (worker instanceof Donkey && worker.getTarget().equals(headquarter.getPosition())) {
                 donkey = (Donkey)worker;
@@ -1389,7 +1389,7 @@ public class TestDonkeyFarm {
         assertTrue(donkeyBreeder.isInsideBuilding());
 
         // Wait for the donkey farm to create a donkey
-        Donkey donkey = null;
+        var donkey = (Donkey) null;
 
         for (int i = 0; i < 500; i++) {
             for (var worker : map.getWorkers()) {
@@ -1411,7 +1411,7 @@ public class TestDonkeyFarm {
         assertNotNull(donkey);
 
         // Verify that the donkey walks to the storage on existing roads
-        Point previous = null;
+        var previous = (Point) null;
 
         for (var point : donkey.getPlannedPath()) {
             if (previous == null) {
@@ -1466,7 +1466,7 @@ public class TestDonkeyFarm {
         assertTrue(donkeyBreeder.isInsideBuilding());
 
         // Wait for the donkey farm to create a donkey
-        Donkey donkey = null;
+        var donkey = (Donkey) null;
 
         for (int i = 0; i < 500; i++) {
             for (var worker : map.getWorkers()) {
@@ -1615,7 +1615,7 @@ public class TestDonkeyFarm {
         // Wait for the donkey breeder to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(DonkeyBreeder.class, 1, player0);
 
-        DonkeyBreeder donkeyBreeder = null;
+        var donkeyBreeder = (DonkeyBreeder) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof DonkeyBreeder) {
@@ -1676,7 +1676,7 @@ public class TestDonkeyFarm {
         // Wait for the donkey breeder to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(DonkeyBreeder.class, 1, player0);
 
-        DonkeyBreeder donkeyBreeder = null;
+        var donkeyBreeder = (DonkeyBreeder) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof DonkeyBreeder) {
@@ -1740,7 +1740,7 @@ public class TestDonkeyFarm {
         // Wait for the donkey breeder to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(DonkeyBreeder.class, 1, player0);
 
-        DonkeyBreeder donkeyBreeder = null;
+        var donkeyBreeder = (DonkeyBreeder) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof DonkeyBreeder) {

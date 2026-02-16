@@ -1060,7 +1060,7 @@ public class TestRoads {
                 woodcutter.getFlag().getPosition());
 
         // Wait for a courier to reach the first half of the road
-        Courier courier = null;
+        var courier = (Courier) null;
         for (int i = 0; i < 1000; i++) {
             for (var worker : map.getWorkers()) {
                 if (worker instanceof Courier) {
@@ -1129,7 +1129,7 @@ public class TestRoads {
                 woodcutter.getFlag().getPosition());
 
         // Wait for a courier to reach the first half of the road
-        Courier courier = null;
+        var courier = (Courier) null;
         for (int i = 0; i < 1000; i++) {
             for (var worker : map.getWorkers()) {
                 if (worker instanceof Courier) {
@@ -1592,7 +1592,7 @@ public class TestRoads {
 
         assertEquals(map.getWorkers().size(), 3);
 
-        Worker worker2 = null;
+        var worker2 = (Worker) null;
 
         for (var worker : map.getWorkers()) {
             if (!(worker instanceof Courier)) {

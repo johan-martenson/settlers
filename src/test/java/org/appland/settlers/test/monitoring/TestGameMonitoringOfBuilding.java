@@ -65,7 +65,7 @@ public class TestGameMonitoringOfBuilding {
         var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // No house updated event is sent when the headquarters receives cargo
@@ -164,7 +164,7 @@ public class TestGameMonitoringOfBuilding {
         Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Request detailed monitoring of the headquarters
@@ -218,7 +218,7 @@ public class TestGameMonitoringOfBuilding {
         Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // No house updated event is sent when the first plank leaves the headquarters
@@ -276,7 +276,7 @@ public class TestGameMonitoringOfBuilding {
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that events are sent when enough progress has been made (but not otherwise)
@@ -324,7 +324,7 @@ public class TestGameMonitoringOfBuilding {
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 10);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // No house updated event is sent when the reserve limit is raised the first time
@@ -407,7 +407,7 @@ public class TestGameMonitoringOfBuilding {
         headquarter0.setReservedSoldiers(Soldier.Rank.GENERAL_RANK, 0);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // No house updated event is sent when the reserve limit is raised the first time
@@ -495,7 +495,7 @@ public class TestGameMonitoringOfBuilding {
         Utils.fastForwardUntilWorkerReachesPoint(map, military0, watchTower.getPosition());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Add detailed monitoring of the house
@@ -545,7 +545,7 @@ public class TestGameMonitoringOfBuilding {
         watchTower.evacuate();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Add detailed monitoring of the house
@@ -595,7 +595,7 @@ public class TestGameMonitoringOfBuilding {
         watchTower.disablePromotions();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Add detailed monitoring of the house
@@ -642,7 +642,7 @@ public class TestGameMonitoringOfBuilding {
         Utils.constructHouse(watchTower);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Add detailed monitoring of the house
@@ -692,7 +692,7 @@ public class TestGameMonitoringOfBuilding {
         Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Disable production
@@ -767,7 +767,7 @@ public class TestGameMonitoringOfBuilding {
         Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that no event comes when the production is disabled
@@ -846,7 +846,7 @@ public class TestGameMonitoringOfBuilding {
         Utils.waitForBuildingToGetAmountOfMaterial(sawmill0, WOOD, 1);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Stop production in the sawmill
@@ -938,7 +938,7 @@ public class TestGameMonitoringOfBuilding {
         Utils.adjustInventoryTo(headquarter0, WOOD, 1);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the sawmill to get occupied
@@ -1027,7 +1027,7 @@ public class TestGameMonitoringOfBuilding {
         Utils.fastForwardUntilWorkerReachesPoint(map, military0, watchTower.getPosition());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Add detailed monitoring of the house
@@ -1097,7 +1097,7 @@ public class TestGameMonitoringOfBuilding {
         map.placeStone(point2, Stone.StoneType.STONE_1, 10);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait until the worker stops carrying the cargo
@@ -1162,7 +1162,7 @@ public class TestGameMonitoringOfBuilding {
         Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that no event is sent when the barracks is upgraded
@@ -1274,7 +1274,7 @@ public class TestGameMonitoringOfBuilding {
         Utils.removeAllSoldiersFromStorage(headquarter0);
 
         // Start monitoring
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Add detailed monitoring
@@ -1347,7 +1347,7 @@ public class TestGameMonitoringOfBuilding {
         assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 0);
 
         // Start monitoring, and add detailed monitoring for player 0 of player 1's headquarters
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         player0.addDetailedMonitoring(headquarter1);
@@ -1422,7 +1422,7 @@ public class TestGameMonitoringOfBuilding {
         assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 0);
 
         // Start monitoring
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for two soldiers to enter the watch tower
@@ -1492,7 +1492,7 @@ public class TestGameMonitoringOfBuilding {
         assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 0);
 
         // Start monitoring
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for two soldiers to enter the watch tower
@@ -1551,7 +1551,7 @@ public class TestGameMonitoringOfBuilding {
         var tree = map.placeTree(point2, Tree.TreeType.OAK, Tree.TreeSize.FULL_GROWN);
 
         // Start monitoring
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the woodcutter to get constructed
@@ -1720,7 +1720,7 @@ public class TestGameMonitoringOfBuilding {
         assertEquals(courier.getNextPoint(), headquarter0.getPosition());
 
         // Start monitoring and add detailed monitoring of the headquarters
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         player0.addDetailedMonitoring(headquarter0);
@@ -1776,7 +1776,7 @@ public class TestGameMonitoringOfBuilding {
         assertEquals(stonemason.getNextPoint(), headquarter0.getPosition());
 
         // Start monitoring and add detailed monitoring of the headquarters
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         player0.addDetailedMonitoring(headquarter0);
@@ -1819,7 +1819,7 @@ public class TestGameMonitoringOfBuilding {
         Utils.waitForBuildingToBeConstructed(fortress);
 
         // Start monitoring and add detailed monitoring of the headquarters
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         player0.addDetailedMonitoring(headquarter0);
@@ -1877,7 +1877,7 @@ public class TestGameMonitoringOfBuilding {
         var road0 = map.placeAutoSelectedRoad(player0, woodcutterHut.getFlag(), headquarter0.getFlag());
 
         // Start monitoring and add detailed monitoring of the headquarters
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         player0.addDetailedMonitoring(headquarter0);

@@ -1271,7 +1271,7 @@ public class TestWoodcutter {
         // Run game logic twice, once to place courier and once to place var worker
         Utils.fastForward(2, map);
 
-        WoodcutterWorker woodcutterWorker = null;
+        var woodcutterWorker = (WoodcutterWorker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof WoodcutterWorker) {
@@ -2003,7 +2003,7 @@ public class TestWoodcutter {
         // Wait for the var worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0);
 
-        WoodcutterWorker woodcutterWorker = null;
+        var woodcutterWorker = (WoodcutterWorker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof WoodcutterWorker) {
@@ -2063,7 +2063,7 @@ public class TestWoodcutter {
         // Wait for the var worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0);
 
-        WoodcutterWorker woodcutterWorker = null;
+        var woodcutterWorker = (WoodcutterWorker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof WoodcutterWorker) {
@@ -2126,7 +2126,7 @@ public class TestWoodcutter {
         // Wait for the var worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0);
 
-        WoodcutterWorker woodcutterWorker = null;
+        var woodcutterWorker = (WoodcutterWorker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof WoodcutterWorker) {

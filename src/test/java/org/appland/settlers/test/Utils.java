@@ -81,7 +81,7 @@ public class Utils {
     }
 
     public static void assertNoStepDirectlyUpwards(List<Point> route) {
-        Point previous = null;
+        var previous = (Point) null;
 
         for (var iterator : route) {
             if (previous == null) {
@@ -542,7 +542,7 @@ public class Utils {
     public static Soldier findSoldierOutsideBuilding(Player player) {
         var map = player.getMap();
 
-        Soldier soldier = null;
+        var soldier = (Soldier) null;
         for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier soldier1 && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
                 soldier = soldier1;
@@ -685,7 +685,7 @@ public class Utils {
 
     public static Soldier getMainAttacker(Building building, Collection<Soldier> attackers) throws InvalidUserActionException {
         var map = building.getMap();
-        Soldier firstAttacker = null;
+        var firstAttacker = (Soldier) null;
 
         for (var attacker : attackers) {
             if (attacker.getTarget().equals(building.getFlag().getPosition())) {
@@ -705,7 +705,7 @@ public class Utils {
 
     public static Projectile waitForCatapultToThrowProjectile(Catapult catapult) throws InvalidUserActionException {
         var map = catapult.getMap();
-        Projectile projectile = null;
+        var projectile = (Projectile) null;
 
         assertTrue(map.getProjectiles().isEmpty());
 
@@ -753,7 +753,7 @@ public class Utils {
     }
 
     public static WildAnimal waitForWildAnimalCloseToPoint(Point point, GameMap map) throws InvalidUserActionException {
-        WildAnimal animal = null;
+        var animal = (WildAnimal) null;
 
         for (int i = 0; i < 5000; i++) {
 
@@ -1039,7 +1039,7 @@ public class Utils {
     }
 
     public static Courier waitForRoadToGetAssignedCourier(GameMap map, Road road0) throws InvalidUserActionException {
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 10000; i++) {
             courier = road0.getCourier();
@@ -1058,7 +1058,7 @@ public class Utils {
 
     public static Worker waitForNonMilitaryBuildingToGetPopulated(Building building) throws InvalidUserActionException {
         var map = building.getMap();
-        Worker worker = null;
+        var worker = (Worker) null;
 
         for (int i = 0; i < 1000; i++) {
             worker = building.getWorker();
@@ -1076,7 +1076,7 @@ public class Utils {
     }
 
     public static Cargo waitForFlagToHaveCargoWaiting(GameMap map, Flag flag) throws InvalidUserActionException {
-        Cargo cargo = null;
+        var cargo = (Cargo) null;
 
         for (int i = 0; i < 1000; i++) {
             if (flag.getStackedCargo().size() > 0) {
@@ -1094,7 +1094,7 @@ public class Utils {
     }
 
     public static Cargo waitForFlagToHaveCargoWaiting(GameMap map, Flag flag, Material material) throws InvalidUserActionException {
-        Cargo cargo = null;
+        var cargo = (Cargo) null;
 
         for (int i = 0; i < 10_000; i++) {
             cargo = flag.getStackedCargo().stream()
@@ -2112,7 +2112,7 @@ public class Utils {
 
     public static Builder waitForBuilderToGetAssignedToBuilding(Building building) throws InvalidUserActionException {
         var map = building.getMap();
-        Builder builder = null;
+        var builder = (Builder) null;
 
         for (int i = 0; i < 10000; i++) {
             for (var worker : map.getWorkers()) {
@@ -2510,7 +2510,7 @@ public class Utils {
     }
 
     public static Worker fastForwardUntilOneOfWorkersCarriesCargo(GameMap map, Cargo cargo, Worker... workers) throws InvalidUserActionException {
-        Worker workerWithCargo = null;
+        var workerWithCargo = (Worker) null;
 
         for (int j = 0; j < 20000; j++) {
             for (var worker : workers) {
@@ -2612,7 +2612,7 @@ public class Utils {
     }
 
     public static Soldier waitForSoldierToBeDying(GameMap map, Soldier... soldiers) throws InvalidUserActionException {
-        Soldier dyingSoldier = null;
+        var dyingSoldier = (Soldier) null;
 
         for (int i = 0; i < 2000; i++) {
             if (Arrays.stream(soldiers).anyMatch(Soldier::isDying)) {
@@ -2785,7 +2785,7 @@ public class Utils {
                 continue;
             }
 
-            Point previous = null;
+            var previous = (Point) null;
             for (var point : road.getWayPoints()) {
                 if (Objects.equals(point, road.getStart()) || Objects.equals(point, road.getEnd())) {
                     previous = point;
@@ -3211,8 +3211,8 @@ public class Utils {
             var availableMinesOnMap = map.getAvailableMinePoints(player);
 
             for (var point : gameChangesList.changedAvailableConstruction()) {
-                AvailableConstruction.PossibleBuildings possibleBuilding = NO_BUILDING_POSSIBLE;
-                AvailableConstruction.PossibleFlag possibleFlag = NO_FLAG_POSSIBLE;
+                var possibleBuilding = NO_BUILDING_POSSIBLE;
+                var possibleFlag = NO_FLAG_POSSIBLE;
 
                 if (!availableConstruction.containsKey(point)) {
                     availableConstruction.put(point, new AvailableConstruction(NO_BUILDING_POSSIBLE, NO_FLAG_POSSIBLE, point));
@@ -3559,7 +3559,7 @@ public class Utils {
     T waitForComputerPlayerToPlaceBuilding(ComputerPlayer computerPlayer, Class<T> aClass) throws Exception {
         var player = computerPlayer.getControlledPlayer();
         var map = player.getMap();
-        T found = null;
+        var found = (T) null;
 
         var buildingsBefore = new HashSet<Building>(player.getBuildings());
         for (int i = 0; i < 10000; i++) {

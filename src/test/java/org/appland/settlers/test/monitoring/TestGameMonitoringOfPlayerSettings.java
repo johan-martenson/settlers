@@ -32,7 +32,7 @@ public class TestGameMonitoringOfPlayerSettings {
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Start monitoring
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Place flag

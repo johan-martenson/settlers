@@ -1885,7 +1885,7 @@ public class TestPlacement {
 
         // Verify that it's possible to build on all available house sites
         for (var pair : map.getAvailableHousePoints(player0).entrySet()) {
-            Building building = null;
+            var building = (Building) null;
 
             // Filter points that are not available
             if (pair.getValue() == null) {
@@ -1955,7 +1955,7 @@ public class TestPlacement {
 
         // Verify that it's possible to build on all available house sites
         for (var pair : map.getAvailableHousePoints(player0).entrySet()) {
-            Building building = null;
+            var building = (Building) null;
 
             // Filter points that are not available
             if (pair.getValue() == null) {

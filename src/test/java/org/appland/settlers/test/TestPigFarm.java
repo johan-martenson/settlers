@@ -1483,7 +1483,7 @@ public class TestPigFarm {
         // Wait for the pig breeder to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(PigBreeder.class, 1, player0);
 
-        PigBreeder pigBreeder = null;
+        var pigBreeder = (PigBreeder) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof PigBreeder) {
@@ -1543,7 +1543,7 @@ public class TestPigFarm {
         // Wait for the pig breeder to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(PigBreeder.class, 1, player0);
 
-        PigBreeder pigBreeder = null;
+        var pigBreeder = (PigBreeder) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof PigBreeder) {
@@ -1606,7 +1606,7 @@ public class TestPigFarm {
         // Wait for the pig breeder to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(PigBreeder.class, 1, player0);
 
-        PigBreeder pigBreeder = null;
+        var pigBreeder = (PigBreeder) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof PigBreeder) {

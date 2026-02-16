@@ -92,7 +92,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -152,7 +152,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -226,7 +226,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), bakery.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Make the bakery create some bread with full resources available
@@ -283,7 +283,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), bakery.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Make the bakery create some bread with full resources available
@@ -347,7 +347,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), brewery.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -404,7 +404,7 @@ public class TestMonitoringProductivity {
         // Connect the brewery with the headquarter
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), brewery.getFlag());
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -481,7 +481,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), coalMine.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -539,7 +539,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), coalMine.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -608,7 +608,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), donkeyFarm.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -666,7 +666,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), donkeyFarm.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -739,7 +739,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -789,7 +789,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -858,7 +858,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fishery.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -912,7 +912,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fishery.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -981,7 +981,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), goldMine.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -1039,7 +1039,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), goldMine.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -1112,7 +1112,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), graniteMine.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -1170,7 +1170,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), graniteMine.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -1239,7 +1239,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), hunterHut0.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Place a wild animal on the map
@@ -1303,7 +1303,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), hunterHut0.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Place a wild animal on the map
@@ -1385,7 +1385,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), ironMine.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -1444,7 +1444,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), ironMine.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -1514,7 +1514,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), ironSmelter.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
 
@@ -1575,7 +1575,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), ironSmelter.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
 
@@ -1635,7 +1635,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), metalworks.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -1694,7 +1694,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), metalworks.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -1768,7 +1768,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mill.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -1823,7 +1823,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mill.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -1878,7 +1878,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mint.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -1937,7 +1937,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mint.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -1996,7 +1996,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), pigFarm.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -2055,7 +2055,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), pigFarm.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -2114,7 +2114,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Place a stone on the map
@@ -2173,7 +2173,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Place a stone on the map
@@ -2232,7 +2232,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -2287,7 +2287,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -2357,7 +2357,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), slaughterHouse.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -2412,7 +2412,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), slaughterHouse.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -2467,7 +2467,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), well.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -2518,7 +2518,7 @@ public class TestMonitoringProductivity {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), well.getFlag());
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a monitoring event is sent when the productivity increases
@@ -2565,7 +2565,7 @@ public class TestMonitoringProductivity {
         Utils.fastForward(300, map);
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Populate the woodcutter hut
@@ -2622,7 +2622,7 @@ public class TestMonitoringProductivity {
         Utils.fastForward(300, map);
 
         // Start monitoring the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Populate the woodcutter hut

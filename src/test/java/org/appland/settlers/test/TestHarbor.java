@@ -1503,7 +1503,7 @@ public class TestHarbor {
         // Wait for the harbor worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0);
 
-        StorehouseWorker harborWorker = null;
+        var harborWorker = (StorehouseWorker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof StorehouseWorker && harbor0.getPosition().equals(worker.getTarget())) {
@@ -1574,7 +1574,7 @@ public class TestHarbor {
         // Wait for the harbor worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0);
 
-        StorehouseWorker harborWorker = null;
+        var harborWorker = (StorehouseWorker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof StorehouseWorker && harbor0.getPosition().equals(worker.getTarget())) {
@@ -1647,7 +1647,7 @@ public class TestHarbor {
         // Wait for the harbor worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0);
 
-        StorehouseWorker harborWorker = null;
+        var harborWorker = (StorehouseWorker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof StorehouseWorker && harbor0.getPosition().equals(worker.getTarget())) {

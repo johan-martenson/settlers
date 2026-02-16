@@ -1675,7 +1675,7 @@ public class TestMetalworks {
         // Wait for the metalworker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Metalworker.class, 1, player0);
 
-        Metalworker metalworker = null;
+        var metalworker = (Metalworker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Metalworker) {
@@ -1736,7 +1736,7 @@ public class TestMetalworks {
         // Wait for the metalworker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Metalworker.class, 1, player0);
 
-        Metalworker metalworker = null;
+        var metalworker = (Metalworker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Metalworker) {
@@ -1800,7 +1800,7 @@ public class TestMetalworks {
         // Wait for the metalworker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Metalworker.class, 1, player0);
 
-        Metalworker metalworker = null;
+        var metalworker = (Metalworker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Metalworker) {

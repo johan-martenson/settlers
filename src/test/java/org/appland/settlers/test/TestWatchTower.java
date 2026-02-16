@@ -206,7 +206,7 @@ public class TestWatchTower {
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
-        Soldier military = null;
+        var military = (Soldier) null;
         for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier) {
                 military = (Soldier)worker;
@@ -282,7 +282,7 @@ public class TestWatchTower {
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
-        Soldier military = null;
+        var military = (Soldier) null;
         for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier) {
                 military = (Soldier)worker;

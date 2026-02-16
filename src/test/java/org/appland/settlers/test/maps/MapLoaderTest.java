@@ -14,7 +14,7 @@ public class MapLoaderTest {
 
     @Test
     public void testEvenHeightEvenY() {
-        Dimension dimension = new Dimension(100, 50); // Even height
+        var dimension = new Dimension(100, 50); // Even height
         java.awt.Point mapFilePosition = new java.awt.Point(10, 20); // Even y-coordinate
 
         var result = mapLoader.mapFilePositionToGamePoint(mapFilePosition, dimension);
@@ -24,7 +24,7 @@ public class MapLoaderTest {
 
     @Test
     public void testEvenHeightOddY() {
-        Dimension dimension = new Dimension(100, 50); // Even height
+        var dimension = new Dimension(100, 50); // Even height
         java.awt.Point mapFilePosition = new java.awt.Point(10, 21); // Odd y-coordinate
 
         var result = mapLoader.mapFilePositionToGamePoint(mapFilePosition, dimension);
@@ -34,7 +34,7 @@ public class MapLoaderTest {
 
     @Test
     public void testOddHeightEvenY() {
-        Dimension dimension = new Dimension(100, 51); // Odd height
+        var dimension = new Dimension(100, 51); // Odd height
         java.awt.Point mapFilePosition = new java.awt.Point(10, 20); // Even y-coordinate
 
         var result = mapLoader.mapFilePositionToGamePoint(mapFilePosition, dimension);
@@ -44,7 +44,7 @@ public class MapLoaderTest {
 
     @Test
     public void testOddHeightOddY() {
-        Dimension dimension = new Dimension(100, 51); // Odd height
+        var dimension = new Dimension(100, 51); // Odd height
         java.awt.Point mapFilePosition = new java.awt.Point(10, 21); // Odd y-coordinate
 
         var result = mapLoader.mapFilePositionToGamePoint(mapFilePosition, dimension);
@@ -54,7 +54,7 @@ public class MapLoaderTest {
 
     @Test
     public void testEdgeCaseZeroZero() {
-        Dimension dimension = new Dimension(100, 50); // Even height
+        var dimension = new Dimension(100, 50); // Even height
         java.awt.Point mapFilePosition = new java.awt.Point(0, 0);
 
         var result = mapLoader.mapFilePositionToGamePoint(mapFilePosition, dimension);
@@ -64,7 +64,7 @@ public class MapLoaderTest {
 
     @Test
     public void testEdgeCaseMaxValues() {
-        Dimension dimension = new Dimension(100, 50); // Even height
+        var dimension = new Dimension(100, 50); // Even height
         java.awt.Point mapFilePosition = new java.awt.Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
         var result = mapLoader.mapFilePositionToGamePoint(mapFilePosition, dimension);
@@ -77,7 +77,7 @@ public class MapLoaderTest {
 
     @Test
     public void testEdgeCaseNegativeValues() {
-        Dimension dimension = new Dimension(100, 50); // Even height
+        var dimension = new Dimension(100, 50); // Even height
         java.awt.Point mapFilePosition = new java.awt.Point(-10, -10);
 
         var result = mapLoader.mapFilePositionToGamePoint(mapFilePosition, dimension);

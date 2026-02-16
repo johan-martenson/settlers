@@ -300,7 +300,7 @@ public class TestStorehouse {
         // Run game logic once to let the headquartersassign a storage worker to the storage
         map.stepTime();
 
-        Worker storageWorker = null;
+        var storageWorker = (Worker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof StorehouseWorker) {
@@ -343,7 +343,7 @@ public class TestStorehouse {
         // Run game logic once to let the headquartersassign a storage worker to the storage
         map.stepTime();
 
-        Worker storageWorker = null;
+        var storageWorker = (Worker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof StorehouseWorker) {
@@ -1341,7 +1341,7 @@ public class TestStorehouse {
         // Wait for the storage worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0);
 
-        StorehouseWorker storehouseWorker = null;
+        var storehouseWorker = (StorehouseWorker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof StorehouseWorker && storehouse0.getPosition().equals(worker.getTarget())) {
@@ -1405,7 +1405,7 @@ public class TestStorehouse {
         // Wait for the storage worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0);
 
-        StorehouseWorker storehouseWorker = null;
+        var storehouseWorker = (StorehouseWorker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof StorehouseWorker && storehouse0.getPosition().equals(worker.getTarget())) {
@@ -1472,7 +1472,7 @@ public class TestStorehouse {
         // Wait for the storage worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0);
 
-        StorehouseWorker storehouseWorker = null;
+        var storehouseWorker = (StorehouseWorker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof StorehouseWorker && storehouse0.getPosition().equals(worker.getTarget())) {

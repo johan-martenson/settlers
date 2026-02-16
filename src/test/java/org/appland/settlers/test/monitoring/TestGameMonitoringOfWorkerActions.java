@@ -761,7 +761,7 @@ public class TestGameMonitoringOfWorkerActions {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -1023,7 +1023,7 @@ public class TestGameMonitoringOfWorkerActions {
         var flag0 = map.placeFlag(player0, point3);
 
         // Make sure to get a fat courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -1104,7 +1104,7 @@ public class TestGameMonitoringOfWorkerActions {
         var flag0 = map.placeFlag(player0, point3);
 
         // Make sure to get a thin courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -1187,7 +1187,7 @@ public class TestGameMonitoringOfWorkerActions {
         var flag0 = map.placeFlag(player0, point3);
 
         // Make sure to get a thin courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -1270,7 +1270,7 @@ public class TestGameMonitoringOfWorkerActions {
         var flag0 = map.placeFlag(player0, point3);
 
         // Make sure to get a thin courier
-        Courier courier = null;
+        var courier = (Courier) null;
 
         for (int i = 0; i < 20; i++) {
 
@@ -1537,7 +1537,7 @@ public class TestGameMonitoringOfWorkerActions {
             Utils.waitForFightToStart(map, attacker, defender);
 
             // Find out if a soldier stands aside during the fight
-            Soldier soldierJumpingBack = null;
+            var soldierJumpingBack = (Soldier) null;
 
             for (int j = 0; j < 10000; j++) {
                 if (attacker.isJumpingBack()) {
@@ -1728,7 +1728,7 @@ public class TestGameMonitoringOfWorkerActions {
             Utils.waitForFightToStart(map, attacker, defender);
 
             // Find out if a soldier stands aside during the fight
-            Soldier soldierStandingAside = null;
+            var soldierStandingAside = (Soldier) null;
 
             for (int j = 0; j < 10000; j++) {
                 if (attacker.isStandingAside()) {

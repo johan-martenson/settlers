@@ -51,7 +51,7 @@ public class TestGameMonitoringOfDecorations {
             assertEquals(map.getDecorations().get(point1), decoration);
 
             // Set up monitoring subscription for the player
-            Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+            var monitor = new Utils.GameViewMonitor();
             player0.monitorGameView(monitor);
 
             // Verify that a flag can be placed on the decoration
@@ -94,7 +94,7 @@ public class TestGameMonitoringOfDecorations {
             assertEquals(map.getDecorations().get(point1), decoration);
 
             // Set up monitoring subscription for the player
-            Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+            var monitor = new Utils.GameViewMonitor();
             player0.monitorGameView(monitor);
 
             // Verify that a flag can be placed on the decoration

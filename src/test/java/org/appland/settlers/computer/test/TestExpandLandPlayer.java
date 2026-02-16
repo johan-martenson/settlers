@@ -496,7 +496,7 @@ public class TestExpandLandPlayer {
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 10);
 
         // Wait for player 0 to place a barracks close to player 1's barracks
-        Building barracksToAttack = null;
+        var barracksToAttack = (Building) null;
 
         for (int i = 0; i < 10000; i++) {
 
@@ -637,7 +637,7 @@ public class TestExpandLandPlayer {
         /* Verify that the player enables promotions in barracks close to the
            enemy
         */
-        Barracks latestBarracks = null;
+        var latestBarracks = (Barracks) null;
 
         for (int i = 0; i < 100; i++) {
 
@@ -700,7 +700,7 @@ public class TestExpandLandPlayer {
         Utils.adjustInventoryTo(headquarter, PRIVATE, 500);
 
         // Verify that the player upgrades barracks close to the enemy
-        Barracks latestBarracks = null;
+        var latestBarracks = (Barracks) null;
 
         for (int i = 0; i < 100; i++) {
 

@@ -203,7 +203,7 @@ public class TestBakery {
         assertTrue(map.getWorkers().size() >= 3);
 
         // Let the bakery worker reach the bakery
-        Baker baker = null;
+        var baker = (Baker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Baker) {
@@ -250,7 +250,7 @@ public class TestBakery {
         assertTrue(map.getWorkers().size() >= 3);
 
         // Verify that the baker is not a soldier
-        Baker baker = null;
+        var baker = (Baker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Baker) {
@@ -295,7 +295,7 @@ public class TestBakery {
         assertTrue(map.getWorkers().size() >= 3);
 
         // Let the bakery worker reach the bakery
-        Baker baker = null;
+        var baker = (Baker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Baker) {
@@ -1343,7 +1343,7 @@ public class TestBakery {
         // Wait for the baker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Baker.class, 1, player0);
 
-        Baker baker = null;
+        var baker = (Baker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Baker) {
@@ -1403,7 +1403,7 @@ public class TestBakery {
         // Wait for the baker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Baker.class, 1, player0);
 
-        Baker baker = null;
+        var baker = (Baker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Baker) {
@@ -1466,7 +1466,7 @@ public class TestBakery {
         // Wait for the baker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Baker.class, 1, player0);
 
-        Baker baker = null;
+        var baker = (Baker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Baker) {

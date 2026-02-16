@@ -258,7 +258,7 @@ public class TestMint {
         assertTrue(map.getWorkers().size() >= 3);
 
         // Let the mint worker reach the mint
-        Minter minter = null;
+        var minter = (Minter) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Minter) {
@@ -348,7 +348,7 @@ public class TestMint {
         assertTrue(map.getWorkers().size() >= 3);
 
         // Let the mint worker reach the mint
-        Minter minter = null;
+        var minter = (Minter) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Minter) {
@@ -1416,7 +1416,7 @@ public class TestMint {
         // Wait for the minter to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Minter.class, 1, player0);
 
-        Minter minter = null;
+        var minter = (Minter) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Minter) {
@@ -1477,7 +1477,7 @@ public class TestMint {
         // Wait for the minter to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Minter.class, 1, player0);
 
-        Minter minter = null;
+        var minter = (Minter) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Minter) {
@@ -1541,7 +1541,7 @@ public class TestMint {
         // Wait for the minter to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Minter.class, 1, player0);
 
-        Minter minter = null;
+        var minter = (Minter) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Minter) {

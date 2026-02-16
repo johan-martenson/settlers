@@ -1528,7 +1528,7 @@ public class TestGraniteMine {
         // Wait for the miner to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
 
-        Miner miner = null;
+        var miner = (Miner) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Miner) {
@@ -1593,7 +1593,7 @@ public class TestGraniteMine {
         // Wait for the miner to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
 
-        Miner miner = null;
+        var miner = (Miner) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Miner) {
@@ -1661,7 +1661,7 @@ public class TestGraniteMine {
         // Wait for the miner to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
 
-        Miner miner = null;
+        var miner = (Miner) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Miner) {

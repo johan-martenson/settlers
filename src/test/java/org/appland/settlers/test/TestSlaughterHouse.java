@@ -195,7 +195,7 @@ public class TestSlaughterHouse {
         assertTrue(map.getWorkers().size() >= 3);
 
         // Let the slaughterhouse worker reach the slaughterhouse
-        Butcher butcher = null;
+        var butcher = (Butcher) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Butcher) {
@@ -276,7 +276,7 @@ public class TestSlaughterHouse {
         assertTrue(map.getWorkers().size() >= 3);
 
         // Let the slaughterhouse worker reach the slaughterhouse
-        Butcher butcher = null;
+        var butcher = (Butcher) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Butcher) {
@@ -1316,7 +1316,7 @@ public class TestSlaughterHouse {
         // Wait for the butcher to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Butcher.class, 1, player0);
 
-        Butcher butcher = null;
+        var butcher = (Butcher) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Butcher) {
@@ -1376,7 +1376,7 @@ public class TestSlaughterHouse {
         // Wait for the butcher to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Butcher.class, 1, player0);
 
-        Butcher butcher = null;
+        var butcher = (Butcher) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Butcher) {
@@ -1439,7 +1439,7 @@ public class TestSlaughterHouse {
         // Wait for the butcher to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Butcher.class, 1, player0);
 
-        Butcher butcher = null;
+        var butcher = (Butcher) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Butcher) {

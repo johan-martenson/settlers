@@ -201,7 +201,7 @@ public class TestScout {
         // Wait for the scout to go to the flag
         map.stepTime();
 
-        Worker scout = null;
+        var scout = (Worker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
@@ -248,7 +248,7 @@ public class TestScout {
         // Wait for the scout to go to the flag
         map.stepTime();
 
-        Scout scout = null;
+        var scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
@@ -295,7 +295,7 @@ public class TestScout {
         // Wait for the scout to go to the flag
         map.stepTime();
 
-        Scout scout = null;
+        var scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
@@ -350,7 +350,7 @@ public class TestScout {
         // Wait for the scout to go to the flag
         map.stepTime();
 
-        Scout scout = null;
+        var scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
@@ -413,7 +413,7 @@ public class TestScout {
         // Wait for the scout to go to the flag
         map.stepTime();
 
-        Scout scout = null;
+        var scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
@@ -467,7 +467,7 @@ public class TestScout {
         // Wait for the scout to go to the flag
         map.stepTime();
 
-        Scout scout = null;
+        var scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
@@ -524,7 +524,7 @@ public class TestScout {
         // Wait for the scout to go to the flag
         map.stepTime();
 
-        Scout scout = null;
+        var scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
@@ -647,7 +647,7 @@ public class TestScout {
         // Wait for the scout to go to the flag
         map.stepTime();
 
-        Scout scout = null;
+        var scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
@@ -735,7 +735,7 @@ public class TestScout {
         // Wait for the scout to go to the flag
         map.stepTime();
 
-        Scout scout = null;
+        var scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
@@ -879,7 +879,7 @@ public class TestScout {
         // Wait for the scout to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0);
 
-        Scout scout = null;
+        var scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
@@ -945,7 +945,7 @@ public class TestScout {
         // Wait for the scout to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0);
 
-        Scout scout = null;
+        var scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
@@ -1012,7 +1012,7 @@ public class TestScout {
         // Wait for the scout to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0);
 
-        Scout scout = null;
+        var scout = (Scout) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {

@@ -347,7 +347,7 @@ public class TestMisc {
         map.stepTime();
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -360,7 +360,7 @@ public class TestMisc {
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
 
         // Wait for the woodcutter to get constructed
-        GameChangesList lastEvent = null;
+        var lastEvent = (GameChangesList) null;
         for (int i = 0; i < 1000; i++) {
             if (woodcutter0.isReady()) {
                 break;
@@ -419,7 +419,7 @@ public class TestMisc {
         var tree0 = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
@@ -1859,7 +1859,7 @@ public class TestMisc {
         Utils.waitForMilitaryBuildingToGetPopulated(barracks1);
 
         // Start monitoring
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Let the first barracks get occupied and verify that an event is sent with its discovered points

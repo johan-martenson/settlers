@@ -74,7 +74,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed
@@ -121,7 +121,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed
@@ -173,7 +173,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed
@@ -220,7 +220,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed
@@ -280,7 +280,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed
@@ -333,7 +333,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed
@@ -393,7 +393,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed
@@ -446,7 +446,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed
@@ -511,7 +511,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road1 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed
@@ -570,7 +570,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road1 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed
@@ -637,7 +637,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road2 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed
@@ -694,7 +694,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed
@@ -765,7 +765,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed
@@ -833,7 +833,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed
@@ -880,7 +880,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed
@@ -938,7 +938,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed
@@ -991,7 +991,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed
@@ -1065,7 +1065,7 @@ public class TestGameMonitoringWhenDiscovering {
         Utils.fastForwardUntilWorkerReachesPoint(map, courier0, point5);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed
@@ -1133,7 +1133,7 @@ public class TestGameMonitoringWhenDiscovering {
         Utils.fastForwardUntilWorkerReachesPoint(map, courier0, point5);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed
@@ -1192,7 +1192,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road0 = map.placeAutoSelectedRoad(player1, fortress0.getFlag(), headquarter1.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the fortress to get constructed
@@ -1258,7 +1258,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road0 = map.placeAutoSelectedRoad(player1, fortress0.getFlag(), headquarter1.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the fortress to get constructed
@@ -1390,7 +1390,7 @@ public class TestGameMonitoringWhenDiscovering {
         Utils.waitForFightToStart(map, attacker, defender);
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that an event is sent when the general beats the private
@@ -1432,7 +1432,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a game monitoring message is sent when the dead tree is discovered
@@ -1476,7 +1476,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Verify that a game monitoring message is sent when the dead tree is discovered
@@ -1554,7 +1554,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed
@@ -1607,7 +1607,7 @@ public class TestGameMonitoringWhenDiscovering {
         var road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Set up monitoring subscription for the player
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         // Wait for the lookout tower to get constructed

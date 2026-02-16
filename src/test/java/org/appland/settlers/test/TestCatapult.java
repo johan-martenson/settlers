@@ -1064,7 +1064,7 @@ public class TestCatapult {
         // Wait for the catapult worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0);
 
-        CatapultWorker catapultWorker = null;
+        var catapultWorker = (CatapultWorker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof CatapultWorker) {
@@ -1125,7 +1125,7 @@ public class TestCatapult {
         // Wait for the catapult worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0);
 
-        CatapultWorker catapultWorker = null;
+        var catapultWorker = (CatapultWorker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof CatapultWorker) {
@@ -1192,7 +1192,7 @@ public class TestCatapult {
         // Wait for the catapult worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0);
 
-        CatapultWorker catapultWorker = null;
+        var catapultWorker = (CatapultWorker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof CatapultWorker) {

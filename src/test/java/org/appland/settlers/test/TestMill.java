@@ -339,7 +339,7 @@ public class TestMill {
         Utils.fastForward(2, map);
 
         // Get the miller
-        Miller miller = null;
+        var miller = (Miller) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Miller) {
@@ -1360,7 +1360,7 @@ public class TestMill {
         // Wait for the miller to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Miller.class, 1, player0);
 
-        Miller miller = null;
+        var miller = (Miller) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Miller) {
@@ -1421,7 +1421,7 @@ public class TestMill {
         // Wait for the miller to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Miller.class, 1, player0);
 
-        Miller miller = null;
+        var miller = (Miller) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Miller) {
@@ -1485,7 +1485,7 @@ public class TestMill {
         // Wait for the miller to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Miller.class, 1, player0);
 
-        Miller miller = null;
+        var miller = (Miller) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Miller) {

@@ -255,7 +255,7 @@ public class TestWorkerHasDirections {
         var road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         // Wait for the second road's courier to come out from the headquarters
-        Courier courier1 = null;
+        var courier1 = (Courier) null;
 
         for (int i = 0; i < 200; i++) {
             var nrCouriers = 0;

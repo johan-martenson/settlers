@@ -274,7 +274,7 @@ public class TestGameLogic {
         // Step time to make the headquarter assign new workers
         map.stepTime();
 
-        Soldier military = null;
+        var military = (Soldier) null;
 
         for (var worker : map.getWorkers()) {
             if (worker.isSoldier()) {
@@ -334,7 +334,7 @@ public class TestGameLogic {
         assertEquals(map.getWorkers().size(), 7);
         assertFalse(foresterHut0.needsWorker());
 
-        Forester forester = null;
+        var forester = (Forester) null;
         for (var worker : map.getWorkers()) {
             if (worker instanceof Forester) {
                 forester = (Forester)worker;

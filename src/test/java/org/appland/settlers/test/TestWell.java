@@ -267,7 +267,7 @@ public class TestWell {
         Utils.fastForward(2, map);
 
         // Get the var worker
-        WellWorker wellWorker = null;
+        var wellWorker = (WellWorker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof WellWorker) {
@@ -1273,7 +1273,7 @@ public class TestWell {
         // Wait for the var worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(WellWorker.class, 1, player0);
 
-        WellWorker wellWorker = null;
+        var wellWorker = (WellWorker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof WellWorker) {
@@ -1333,7 +1333,7 @@ public class TestWell {
         // Wait for the var worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(WellWorker.class, 1, player0);
 
-        WellWorker wellWorker = null;
+        var wellWorker = (WellWorker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof WellWorker) {
@@ -1396,7 +1396,7 @@ public class TestWell {
         // Wait for the var worker to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(WellWorker.class, 1, player0);
 
-        WellWorker wellWorker = null;
+        var wellWorker = (WellWorker) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof WellWorker) {

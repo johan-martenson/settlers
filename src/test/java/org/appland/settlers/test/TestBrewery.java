@@ -1128,7 +1128,7 @@ public class TestBrewery {
         // Wait for the brewer to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Brewer.class, 1, player0);
 
-        Brewer brewer = null;
+        var brewer = (Brewer) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Brewer) {
@@ -1188,7 +1188,7 @@ public class TestBrewery {
         // Wait for the brewer to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Brewer.class, 1, player0);
 
-        Brewer brewer = null;
+        var brewer = (Brewer) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Brewer) {
@@ -1251,7 +1251,7 @@ public class TestBrewery {
         // Wait for the brewer to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Brewer.class, 1, player0);
 
-        Brewer brewer = null;
+        var brewer = (Brewer) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Brewer) {

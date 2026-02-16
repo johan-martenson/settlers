@@ -209,7 +209,7 @@ public class TestFortress {
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
-        Soldier military = null;
+        var military = (Soldier) null;
         for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier) {
                 military = (Soldier)worker;
@@ -287,7 +287,7 @@ public class TestFortress {
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
-        Soldier military = null;
+        var military = (Soldier) null;
         for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier) {
                 military = (Soldier)worker;

@@ -563,7 +563,7 @@ public class TestWildAnimal {
         var animal = Utils.waitForAnimalToAppear(map);
 
         // Verify that it's possible to get the type of the wild animal
-        WildAnimal.Type type = animal.getType();
+        var type = animal.getType();
 
         assertNotNull(type);
     }

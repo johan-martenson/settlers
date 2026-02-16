@@ -181,7 +181,7 @@ public class TestMessages {
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
-        Soldier military = null;
+        var military = (Soldier) null;
         for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier) {
                 military = (Soldier) worker;
@@ -431,7 +431,7 @@ public class TestMessages {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -501,7 +501,7 @@ public class TestMessages {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -1156,7 +1156,7 @@ public class TestMessages {
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
-        Soldier military = null;
+        var military = (Soldier) null;
         for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier) {
                 military = (Soldier) worker;
@@ -1217,7 +1217,7 @@ public class TestMessages {
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
-        Soldier military = null;
+        var military = (Soldier) null;
         for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier) {
                 military = (Soldier) worker;
@@ -1505,8 +1505,8 @@ public class TestMessages {
         assertTrue(player1.getBuildings().getFirst().isBurningDown());
         assertEquals(player0.getMessages().getLast().getMessageType(), GAME_ENDED);
 
-        GameEndedMessage messageForPlayer0 = null;
-        GameEndedMessage messageForPlayer1 = null;
+        var messageForPlayer0 = (GameEndedMessage) null;
+        var messageForPlayer1 = (GameEndedMessage) null;
 
         for (var message : player0.getMessages()) {
             if (message.getMessageType() == GAME_ENDED) {
@@ -1592,7 +1592,7 @@ public class TestMessages {
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 0);
 
         var numberOfBombardedByCatapultMessages = 0;
-        BombardedByCatapultMessage bombardedByCatapultMessage = null;
+        var bombardedByCatapultMessage = (BombardedByCatapultMessage) null;
 
         for (var message : player1.getMessages()) {
             if (message.getMessageType() == BOMBARDED_BY_CATAPULT) {
@@ -1673,7 +1673,7 @@ public class TestMessages {
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 0);
 
         var numberOfBombardedByCatapultMessages = 0;
-        BombardedByCatapultMessage bombardedByCatapultMessage = null;
+        var bombardedByCatapultMessage = (BombardedByCatapultMessage) null;
 
         for (var message : player1.getMessages()) {
             if (message.getMessageType() == BOMBARDED_BY_CATAPULT) {

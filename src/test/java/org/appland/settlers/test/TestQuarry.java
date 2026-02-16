@@ -1557,7 +1557,7 @@ public class TestQuarry {
         // Wait for the stonemason to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0);
 
-        Stonemason stoneMason = null;
+        var stoneMason = (Stonemason) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Stonemason) {
@@ -1617,7 +1617,7 @@ public class TestQuarry {
         // Wait for the stonemason to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0);
 
-        Stonemason stoneMason = null;
+        var stoneMason = (Stonemason) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Stonemason) {
@@ -1680,7 +1680,7 @@ public class TestQuarry {
         // Wait for the stonemason to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0);
 
-        Stonemason stonemason = null;
+        var stonemason = (Stonemason) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Stonemason) {

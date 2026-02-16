@@ -64,7 +64,7 @@ public class TestExpedition {
 
         // Place a lake
         for (int i = 13; i < 53; i += 2) {
-            Point point = new Point(i, 11);  // 13, 11  --  51, 11
+            var point = new Point(i, 11);  // 13, 11  --  51, 11
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -129,7 +129,7 @@ public class TestExpedition {
 
         // Place a lake
         for (int i = 7; i < 59; i += 2) {
-            Point point = new Point(i, 11);  // 7, 11  --  57, 11
+            var point = new Point(i, 11);  // 7, 11  --  57, 11
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -437,7 +437,7 @@ public class TestExpedition {
 
         // Place a lake
         for (int i = 9; i < 31; i += 2) {
-            Point point = new Point(13, i);  // 13, 9  --  13, 29
+            var point = new Point(13, i);  // 13, 9  --  13, 29
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -547,7 +547,7 @@ public class TestExpedition {
 
         // Place a lake
         for (int i = 9; i < 31; i += 2) {
-            Point point = new Point(13, i);  // 13, 9  --  13, 29
+            var point = new Point(13, i);  // 13, 9  --  13, 29
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -651,7 +651,7 @@ public class TestExpedition {
 
         // Place a lake
         for (int i = 9; i < 31; i += 2) {
-            Point point = new Point(13, i);  // 13, 9  --  13, 29
+            var point = new Point(13, i);  // 13, 9  --  13, 29
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -755,7 +755,7 @@ public class TestExpedition {
 
         // Place a lake
         for (int i = 7; i < 53; i += 2) {
-            Point point = new Point(i, 11);  // 13, 11  --  51, 11
+            var point = new Point(i, 11);  // 13, 11  --  51, 11
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -963,13 +963,13 @@ public class TestExpedition {
 
         // Place a bent lake
         for (int i = 13; i < 53; i += 2) {
-            Point point = new Point(i, 11);  // 13, 11  --  51, 11
+            var point = new Point(i, 11);  // 13, 11  --  51, 11
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
 
         for (int i = 11; i < 53; i+= 2) {
-            Point point = new Point(13, i);  // 13, 11  --  13, 51
+            var point = new Point(13, i);  // 13, 11  --  13, 51
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -1183,13 +1183,13 @@ public class TestExpedition {
 
         // Place a bent lake
         for (int i = 3; i < 53; i += 2) {
-            Point point = new Point(i, 11); // 3, 11  --  51, 11
+            var point = new Point(i, 11); // 3, 11  --  51, 11
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
 
         for (int i = 11; i < 53; i+= 2) {
-            Point point = new Point(53, i); // 53, 11  --  53, 51
+            var point = new Point(53, i); // 53, 11  --  53, 51
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -1319,13 +1319,13 @@ public class TestExpedition {
 
         // Place a bent lake
         for (int i = 3; i < 53; i += 2) {
-            Point point = new Point(i, 55);  // 3, 55  --  51, 55
+            var point = new Point(i, 55);  // 3, 55  --  51, 55
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
 
         for (int i = 7; i < 53; i+= 2) {
-            Point point = new Point(53, i);  // 53, 7  --  53, 51
+            var point = new Point(53, i);  // 53, 7  --  53, 51
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -1429,13 +1429,13 @@ public class TestExpedition {
 
         // Place a bent lake
         for (int i = 13; i < 53; i += 2) {
-            Point point = new Point(i, 55);  // 13, 55  --  51, 55
+            var point = new Point(i, 55);  // 13, 55  --  51, 55
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
 
         for (int i = 11; i < 53; i+= 2) {
-            Point point = new Point(13, i);  // 13, 11  --  13, 51
+            var point = new Point(13, i);  // 13, 11  --  13, 51
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -1544,7 +1544,7 @@ public class TestExpedition {
 
         // Place a lake
         for (int i = 3; i < 59; i += 2) {
-            Point point = new Point(i, 11);  // 3, 11  -- 51, 11
+            var point = new Point(i, 11);  // 3, 11  -- 51, 11
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -1628,7 +1628,7 @@ public class TestExpedition {
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
-            Point point = new Point(i, 11);  // 3, 11  -- 55, 11
+            var point = new Point(i, 11);  // 3, 11  -- 55, 11
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
@@ -1801,7 +1801,7 @@ public class TestExpedition {
         // Start the expedition
         ship.startExpedition(RIGHT);
 
-        Point point5 = new Point(54, 10); // Closest water point for the potential harbor site
+        var point5 = new Point(54, 10); // Closest water point for the potential harbor site
 
         assertTrue(ship.getTarget().distance(point5) < 4);
         assertFalse(ship.getPosition().distance(point0.downRight()) < 4);

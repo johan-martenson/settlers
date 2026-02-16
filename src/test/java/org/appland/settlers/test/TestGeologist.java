@@ -148,7 +148,7 @@ public class TestGeologist {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Worker geologist = null;
+        var geologist = (Worker) null;
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
                 geologist = worker;
@@ -193,7 +193,7 @@ public class TestGeologist {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -256,7 +256,7 @@ public class TestGeologist {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -307,7 +307,7 @@ public class TestGeologist {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -351,7 +351,7 @@ public class TestGeologist {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -499,7 +499,7 @@ public class TestGeologist {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -560,7 +560,7 @@ public class TestGeologist {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -621,7 +621,7 @@ public class TestGeologist {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -682,7 +682,7 @@ public class TestGeologist {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -743,7 +743,7 @@ public class TestGeologist {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -801,7 +801,7 @@ public class TestGeologist {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -885,7 +885,7 @@ public class TestGeologist {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -1110,7 +1110,7 @@ public class TestGeologist {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -1245,7 +1245,7 @@ public class TestGeologist {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -1332,7 +1332,7 @@ public class TestGeologist {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -1457,7 +1457,7 @@ public class TestGeologist {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
         for (int i = 0; i < 200; i++) {
             for (var worker : map.getWorkers()) {
                 if (worker instanceof Geologist) {
@@ -1531,7 +1531,7 @@ public class TestGeologist {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
         for (int i = 0; i < 200; i++) {
             for (var worker : map.getWorkers()) {
                 if (worker instanceof Geologist) {
@@ -1614,7 +1614,7 @@ public class TestGeologist {
         // Wait for the geologist to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0);
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
 
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
@@ -1679,7 +1679,7 @@ public class TestGeologist {
         // Wait for the geologist to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0);
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
                 geologist = (Geologist) worker;
@@ -1744,7 +1744,7 @@ public class TestGeologist {
         // Wait for the geologist to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0);
 
-        Geologist geologist = null;
+        var geologist = (Geologist) null;
         for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
                 geologist = (Geologist) worker;
