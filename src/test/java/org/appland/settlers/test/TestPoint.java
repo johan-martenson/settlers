@@ -19,7 +19,7 @@ public class TestPoint {
         Point upRight = new Point(11, 11);
         Point downRight = new Point(11, 9);
 
-        /* Verify isLeftOf */
+        // Verify isLeftOf
         assertTrue(left.isLeftOf(point));
         assertFalse(upLeft.isLeftOf(point));
         assertFalse(downLeft.isLeftOf(point));
@@ -28,7 +28,7 @@ public class TestPoint {
         assertFalse(downRight.isLeftOf(point));
         assertFalse(left.up().isLeftOf(point));
 
-        /* Verify isRightOf */
+        // Verify isRightOf
         assertTrue(right.isRightOf(point));
         assertFalse(left.isRightOf(point));
         assertFalse(upLeft.isRightOf(point));
@@ -37,7 +37,7 @@ public class TestPoint {
         assertFalse(downRight.isRightOf(point));
         assertFalse(right.up().isRightOf(point));
 
-        /* Verify isUpLeftOf */
+        // Verify isUpLeftOf
         assertTrue(upLeft.isUpLeftOf(point));
         assertFalse(left.isUpLeftOf(point));
         assertFalse(downLeft.isUpLeftOf(point));
@@ -45,7 +45,7 @@ public class TestPoint {
         assertFalse(upRight.isUpLeftOf(point));
         assertFalse(downRight.isUpLeftOf(point));
 
-        /* Verify isDownLeftOf */
+        // Verify isDownLeftOf
         assertTrue(downLeft.isDownLeftOf(point));
         assertFalse(left.isDownLeftOf(point));
         assertFalse(upLeft.isDownLeftOf(point));
@@ -53,7 +53,7 @@ public class TestPoint {
         assertFalse(upRight.isDownLeftOf(point));
         assertFalse(downRight.isDownLeftOf(point));
 
-        /* Verify isUpRightOf */
+        // Verify isUpRightOf
         assertTrue(upRight.isUpRightOf(point));
         assertFalse(left.isUpRightOf(point));
         assertFalse(upLeft.isUpRightOf(point));
@@ -61,7 +61,7 @@ public class TestPoint {
         assertFalse(right.isUpRightOf(point));
         assertFalse(downRight.isUpRightOf(point));
 
-        /* Verify isDownRightOf */
+        // Verify isDownRightOf
         assertTrue(downRight.isDownRightOf(point));
         assertFalse(left.isDownRightOf(point));
         assertFalse(upLeft.isDownRightOf(point));
@@ -73,7 +73,7 @@ public class TestPoint {
     @Test
     public void testPointIsAdjacent() {
 
-        /* Verify adjacent points */
+        // Verify adjacent points
         Point point = new Point(10, 10);
         Point left = new Point(8, 10);
         Point right = new Point(12, 10);
@@ -97,7 +97,7 @@ public class TestPoint {
     @Test
     public void testNonAdjacentPoints() {
 
-        /* Verify non adjacent points */
+        // Verify non adjacent points
         Point point = new Point(10, 10);
         Point left = new Point(6, 10);
         Point right = new Point(14, 10);

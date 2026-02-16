@@ -34,22 +34,22 @@ public class TestAttackPlayer {
     @Test
     public void testAttackerDoesNotBuild() throws Exception {
 
-        /* Create players */
+        // Create players
         Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        /* Create game map */
+        // Create game map
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Create the computer player */
+        // Create the computer player
         ComputerPlayer computerPlayer = new AttackPlayer(player0, map);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(10, 10);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Verify that the player does not place any buildings */
+        // Verify that the player does not place any buildings
         for (int i = 0; i < 1000; i++) {
 
             computerPlayer.turn();
@@ -64,39 +64,39 @@ public class TestAttackPlayer {
     @Test
     public void testAttackerWithBuildingInReachAttacks() throws Exception {
 
-        /* Create players */
+        // Create players
         Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
 
-        /* Create game map */
+        // Create game map
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Create the computer player */
+        // Create the computer player
         ComputerPlayer computerPlayer = new AttackPlayer(player0, map);
 
-        /* Place headquarter for player 0*/
+        // Place headquarter for player 0
         Point point0 = new Point(10, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        // Place headquarter for player 1
         Point point1 = new Point(44, 10);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place and occupy barracks for player 0 */
+        // Place and occupy barracks for player 0
         Point point2 = new Point(24, 10);
         Barracks barracks0 = Utils.placeAndOccupyBarracks(player0, point2);
 
-        /* Place and occupy barracks for player 1 */
+        // Place and occupy barracks for player 1
         Point point3 = new Point(34, 10);
         Barracks barracks1 = Utils.placeAndOccupyBarracks(player1, point3);
 
-        /* Add an extra soldier to the attacking player's barracks */
+        // Add an extra soldier to the attacking player's barracks
         Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, barracks0);
 
-        /* Verify that the player attacks the other player */
+        // Verify that the player attacks the other player
         assertEquals(player0.getAvailableAttackersForBuilding(barracks1), 1);
 
         for (int i = 0; i < 100; i++) {

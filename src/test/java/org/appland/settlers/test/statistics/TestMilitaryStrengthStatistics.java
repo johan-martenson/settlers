@@ -274,10 +274,10 @@ public class TestMilitaryStrengthStatistics {
         var point3 = new Point(21, 5);
         var catapult = map.placeBuilding(new Catapult(player0), point3);
 
-        /* Finish construction of the catapult */
+        // Finish construction of the catapult
         Utils.constructHouse(catapult);
 
-        /* Occupy the catapult */
+        // Occupy the catapult
         var catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);
 
         assertTrue(catapultWorker0.isInsideBuilding());
@@ -307,7 +307,7 @@ public class TestMilitaryStrengthStatistics {
 
             Utils.waitForProjectileToReachTarget(projectile, map);
 
-            /* Check if the projectile hit and destroyed the barracks */
+            // Check if the projectile hit and destroyed the barracks
             if (barracks0.getHostedSoldiers().size() == 1) {
                 break;
             }

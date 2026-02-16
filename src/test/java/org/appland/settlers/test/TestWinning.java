@@ -34,21 +34,21 @@ public class TestWinning {
     @Test
     public void testOnePlayerDoesNotWinAutomatically() throws Exception {
 
-        /* Create player list with two players */
+        // Create player list with two players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
         players.add(player0);
 
-        /* Create game map choosing two players */
+        // Create game map choosing two players
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarter */
+        // Place player 0's headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Verify that the only player does not win automatically */
+        // Verify that the only player does not win automatically
         for (int i = 0; i < 100; i++) {
 
             assertNull(map.getWinner());
@@ -60,7 +60,7 @@ public class TestWinning {
     @Test
     public void testPlayerWinsWhenBeatingOnlyOtherPlayer() throws Exception {
 
-        /* Create player list with two players */
+        // Create player list with two players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
@@ -69,45 +69,45 @@ public class TestWinning {
         players.add(player0);
         players.add(player1);
 
-        /* Create game map choosing two players */
+        // Create game map choosing two players
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarter */
+        // Place player 0's headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        // Place player 1's headquarter
         Point point1 = new Point(39, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place barracks for player 0 */
+        // Place barracks for player 0
         Point point2 = new Point(19, 5);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
-        /* Finish construction */
+        // Finish construction
         Utils.constructHouse(fortress0);
 
-        /* Populate player 0's barracks */
+        // Populate player 0's barracks
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, fortress0);
 
-        /* Empty all soldiers from the second player's headquarter */
+        // Empty all soldiers from the second player's headquarter
         Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
         Utils.adjustInventoryTo(headquarter1, SERGEANT, 0);
         Utils.adjustInventoryTo(headquarter1, GENERAL, 0);
 
-        /* Order an attack */
+        // Order an attack
         assertTrue(player0.getAvailableAttackersForBuilding(headquarter1) > 0);
 
         player0.attack(headquarter1, 1, AttackStrength.STRONG);
 
-        /* Find the military that was chosen to attack */
+        // Find the military that was chosen to attack
         map.stepTime();
 
         Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
 
-        /* Wait for the attacker to get to the attacked buildings flag */
+        // Wait for the attacker to get to the attacked buildings flag
         assertEquals(attacker.getTarget(), headquarter1.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getFlag().getPosition());
@@ -116,7 +116,7 @@ public class TestWinning {
 
         assertEquals(attacker.getPosition(), headquarter1.getFlag().getPosition());
 
-        /* Verify that the headquarters is destroyed and the first player won the game */
+        // Verify that the headquarters is destroyed and the first player won the game
         assertEquals(headquarter1.getNumberOfHostedSoldiers(), 0);
         assertEquals(headquarter1.getPlayer(), player1);
         assertEquals(attacker.getTarget(), headquarter1.getPosition());

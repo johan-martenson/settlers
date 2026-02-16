@@ -49,7 +49,7 @@ public class TestFighting {
     @Test
     public void testFightStartsAndOneSoldierHitsWhileTheOtherGetsHitOrAvoids() throws Exception {
 
-        /* Create player list with two players */
+        // Create player list with two players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
@@ -58,48 +58,48 @@ public class TestFighting {
         players.add(player0);
         players.add(player1);
 
-        /* Create game map choosing two players */
+        // Create game map choosing two players
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarters */
+        // Place player 0's headquarters
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarters */
+        // Place player 1's headquarters
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Clear soldiers from the headquarters */
+        // Clear soldiers from the headquarters
         Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
         Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
 
-        /* Place barracks for player 0 */
+        // Place barracks for player 0
         Point point2 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
-        /* Place barracks for player 1 */
+        // Place barracks for player 1
         Point point3 = new Point(23, 15);
         Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
 
-        /* Finish construction */
+        // Finish construction
         Utils.constructHouse(barracks0);
         Utils.constructHouse(barracks1);
 
-        /* Populate player 0's barracks */
+        // Populate player 0's barracks
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Populate player 1's barracks */
+        // Populate player 1's barracks
         assertTrue(barracks1.isReady());
 
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
 
-        /* Order an attack */
+        // Order an attack
         assertTrue(player0.canAttack(barracks1));
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        /* Find the military that was chosen to attack */
+        // Find the military that was chosen to attack
         map.stepTime();
 
         Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -108,7 +108,7 @@ public class TestFighting {
         assertEquals(attacker.getPlayer(), player0);
         assertFalse(attacker.isFighting());
 
-        /* Wait for the military to reach the attacked building */
+        // Wait for the military to reach the attacked building
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
@@ -117,7 +117,7 @@ public class TestFighting {
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
-        /* Wait for the defender to go to the attacker */
+        // Wait for the defender to go to the attacker
         Soldier defender = Utils.findSoldierOutsideBuilding(player1);
 
         assertNotNull(defender);
@@ -128,7 +128,7 @@ public class TestFighting {
 
         assertEquals(defender.getPosition(), attacker.getPosition());
 
-        /* Verify that the attacker and the defender walk apart */
+        // Verify that the attacker and the defender walk apart
         assertFalse(attacker.isFighting());
         assertFalse(defender.isFighting());
 
@@ -170,7 +170,7 @@ public class TestFighting {
         assertEquals(attackersDistance, 50);
         assertEquals(defendersDistance, 50);
 
-        /* Verify that one soldier is attacking and the other is defending or getting hit */
+        // Verify that one soldier is attacking and the other is defending or getting hit
         assertTrue(attacker.isFighting());
         assertTrue(defender.isFighting());
 
@@ -196,15 +196,15 @@ public class TestFighting {
         );
         assertFalse(attacker.isAttacking() && defender.isAttacking());
 
-        /* Wait for one of the soldiers to be dying */
+        // Wait for one of the soldiers to be dying
         Soldier dyingSoldier = Utils.waitForSoldierToBeDying(map, attacker, defender);
 
-        /* Wait for the dying soldier to die */
+        // Wait for the dying soldier to die
         Utils.waitForWorkerToDie(map, dyingSoldier);
 
         assertTrue(!map.getWorkers().contains(attacker) || !map.getWorkers().contains(defender));
 
-        /* Get the winner */
+        // Get the winner
         Soldier winner;
 
         if (attacker.isDead()) {
@@ -213,7 +213,7 @@ public class TestFighting {
             winner = attacker;
         }
 
-        /* Give the winner some time to notice that it's won */
+        // Give the winner some time to notice that it's won
         for (int i = 0; i < 5; i++) {
             if (!winner.isFighting()) {
                 break;
@@ -224,10 +224,10 @@ public class TestFighting {
             map.stepTime();
         }
 
-        /* Verify that the winner isn't fighting when it's walking back */
+        // Verify that the winner isn't fighting when it's walking back
         assertFalse(winner.isFighting());
 
-        /* Verify that the winner walks back to the flag */
+        // Verify that the winner walks back to the flag
         assertEquals(winner.getTarget(), barracks1.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, winner, barracks1.getFlag().getPosition());
@@ -238,7 +238,7 @@ public class TestFighting {
     @Test
     public void testBothAttackerAndDefenderCanMakeFirstHitInFight() throws Exception {
 
-        /* Create player list with two players */
+        // Create player list with two players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
@@ -247,50 +247,50 @@ public class TestFighting {
         players.add(player0);
         players.add(player1);
 
-        /* Create game map choosing two players */
+        // Create game map choosing two players
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarters */
+        // Place player 0's headquarters
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarters */
+        // Place player 1's headquarters
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Remove all soldiers from the headquarters */
+        // Remove all soldiers from the headquarters
         Utils.clearInventory(headquarter0, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER, Material.GENERAL);
         Utils.clearInventory(headquarter1, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER, Material.GENERAL);
 
-        /* Place barracks for player 0 */
+        // Place barracks for player 0
         Point point2 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
-        /* Place barracks for player 1 */
+        // Place barracks for player 1
         Point point3 = new Point(23, 15);
         Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
 
-        /* Finish construction */
+        // Finish construction
         Utils.constructHouse(barracks0);
         Utils.constructHouse(barracks1);
 
-        /* Verify that both the attacker and the defender can make the first hit */
+        // Verify that both the attacker and the defender can make the first hit
         boolean attackerHasMadeFirstHit = false;
         boolean defenderHasMadeFirstHit = false;
 
-        /* Make sure both barracks have soldiers */
+        // Make sure both barracks have soldiers
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks1);
 
-        /* Order an attack */
+        // Order an attack
         assertTrue(player0.canAttack(barracks1));
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        /* Do continuous attacking until both the attacker and the defender has initiated the fight with a hit */
+        // Do continuous attacking until both the attacker and the defender has initiated the fight with a hit
         for (int i = 0; i < 200; i++) {
 
-            /* Make sure both barracks have soldiers */
+            // Make sure both barracks have soldiers
             if (barracks0.getNumberOfHostedSoldiers() < 2) {
                 Utils.occupyMilitaryBuilding(
                         PRIVATE_RANK,
@@ -302,10 +302,10 @@ public class TestFighting {
                 Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
             }
 
-            /* Find the soldier that was chosen to attack */
+            // Find the soldier that was chosen to attack
             Soldier attacker = Utils.waitForSoldierNotDyingOutsideBuilding(player0);
 
-            /* Wait for the military to reach the attacked building */
+            // Wait for the military to reach the attacked building
             if (attacker.isTraveling() && attacker.getTarget().equals(barracks1.getFlag().getPosition())) {
                 assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
@@ -314,7 +314,7 @@ public class TestFighting {
 
             assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
 
-            /* Wait for the defender to go to the attacker */
+            // Wait for the defender to go to the attacker
             Soldier defender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
 
             assertFalse(defender.isDead());
@@ -326,13 +326,13 @@ public class TestFighting {
 
             assertEquals(defender.getPosition(), attacker.getPosition());
 
-            /* Wait for the fight to start */
+            // Wait for the fight to start
             assertFalse(attacker.isFighting());
             assertFalse(defender.isFighting());
 
             Utils.waitForFightToStart(map, attacker, defender);
 
-            /* Verify that one soldier is attacking and the other is defending or getting hit */
+            // Verify that one soldier is attacking and the other is defending or getting hit
             assertTrue(attacker.isFighting());
             assertTrue(defender.isFighting());
 
@@ -346,12 +346,12 @@ public class TestFighting {
                 break;
             }
 
-            /* Wait for the fight to end */
+            // Wait for the fight to end
             Utils.waitForFightToEnd(map, attacker, defender);
 
             assertTrue(attacker.isDead() || defender.isDead());
 
-            /* If the attacker won, the next defender should come out */
+            // If the attacker won, the next defender should come out
             if (defender.isDead()) {
                 if (attacker.isFighting()) {
                     Utils.waitForSoldierToWinFight(attacker, map);
@@ -361,7 +361,7 @@ public class TestFighting {
                     Utils.waitForSoldierToWinFight(defender, map);
                 }
 
-                /* Wait for the defender to go back to the barracks */
+                // Wait for the defender to go back to the barracks
                 for (int k = 0; k < 200; k++) {
                     assertNotEquals(defender.getTarget(), headquarter1.getPosition());
 
@@ -376,7 +376,7 @@ public class TestFighting {
 
                 Utils.fastForwardUntilWorkerReachesPoint(map, defender, barracks1.getPosition());
 
-                /* Order a new attack */
+                // Order a new attack
                 assertTrue(player0.canAttack(barracks1));
 
                 player0.attack(barracks1, 1, AttackStrength.STRONG);
@@ -386,12 +386,12 @@ public class TestFighting {
                 fail();
             }
 
-            /* Make sure player 0's barracks is occupied */
+            // Make sure player 0's barracks is occupied
             if (barracks0.getNumberOfHostedSoldiers() < 1) {
                 Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
             }
 
-            /* Make sure player 1's barracks is occupied */
+            // Make sure player 1's barracks is occupied
             if (barracks1.getNumberOfHostedSoldiers() < 1) {
                 Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
             }
@@ -403,7 +403,7 @@ public class TestFighting {
     @Test
     public void testGeneralHealth() throws Exception {
 
-        /* Create player list with two players */
+        // Create player list with two players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
@@ -412,51 +412,51 @@ public class TestFighting {
         players.add(player0);
         players.add(player1);
 
-        /* Create game map choosing two players */
+        // Create game map choosing two players
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarters */
+        // Place player 0's headquarters
         Point point0 = new Point(9, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarters */
+        // Place player 1's headquarters
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Remove all soldiers from the headquarters and place one general in player 0's headquarters */
+        // Remove all soldiers from the headquarters and place one general in player 0's headquarters
         Utils.clearInventory(headquarter0, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER);
         Utils.clearInventory(headquarter1, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER, Material.GENERAL);
 
         Utils.adjustInventoryTo(headquarter0, GENERAL, 2);
 
-        /* Set no reserved soldiers in the headquarters */
+        // Set no reserved soldiers in the headquarters
         Utils.setNoReservedSoldiers(headquarter0);
         Utils.setNoReservedSoldiers(headquarter1);
 
-        /* Place barracks for player 1 */
+        // Place barracks for player 1
         Point point3 = new Point(23, 15);
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
-        /* Finish construction */
+        // Finish construction
         Utils.constructHouse(fortress);
 
-        /* Make sure both barracks have soldiers */
+        // Make sure both barracks have soldiers
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress);
 
-        /* Order an attack on player 1's fortress */
+        // Order an attack on player 1's fortress
         assertTrue(player0.canAttack(fortress));
 
         player0.attack(fortress, 1, AttackStrength.STRONG);
 
-        /* Get the attacking general */
+        // Get the attacking general
         map.stepTime();
 
         Soldier attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
 
-        /* Verify that the general dies after seven hits */
+        // Verify that the general dies after seven hits
         for (int i = 0; i < 200; i++) {
 
-            /* Wait for the attacking general to get hit */
+            // Wait for the attacking general to get hit
             Utils.waitForSoldierToGetHit(attackingGeneral, map);
 
             assertTrue(attackingGeneral.isGettingHit());
@@ -465,7 +465,7 @@ public class TestFighting {
 
             assertFalse(attackingGeneral.isGettingHit());
 
-            /* Verify that the general is dying after the right amount of hits */
+            // Verify that the general is dying after the right amount of hits
             if (attackingGeneral.isDying()) {
                 assertEquals(i, 6);
 
@@ -481,7 +481,7 @@ public class TestFighting {
     @Test
     public void testOfficerHealth() throws Exception {
 
-        /* Create player list with two players */
+        // Create player list with two players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
@@ -490,51 +490,51 @@ public class TestFighting {
         players.add(player0);
         players.add(player1);
 
-        /* Create game map choosing two players */
+        // Create game map choosing two players
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarters */
+        // Place player 0's headquarters
         Point point0 = new Point(9, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarters */
+        // Place player 1's headquarters
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Remove all soldiers from the headquarters and place one general in player 0's headquarters */
+        // Remove all soldiers from the headquarters and place one general in player 0's headquarters
         Utils.clearInventory(headquarter0, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER);
         Utils.clearInventory(headquarter1, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER, Material.GENERAL);
 
         Utils.adjustInventoryTo(headquarter0, OFFICER, 2);
 
-        /* Set no reserved soldiers in the headquarters */
+        // Set no reserved soldiers in the headquarters
         Utils.setNoReservedSoldiers(headquarter0);
         Utils.setNoReservedSoldiers(headquarter1);
 
-        /* Place barracks for player 1 */
+        // Place barracks for player 1
         Point point3 = new Point(23, 15);
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
-        /* Finish construction */
+        // Finish construction
         Utils.constructHouse(fortress);
 
-        /* Make sure both barracks have soldiers */
+        // Make sure both barracks have soldiers
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress);
 
-        /* Order an attack on player 1's fortress */
+        // Order an attack on player 1's fortress
         assertTrue(player0.canAttack(fortress));
 
         player0.attack(fortress, 1, AttackStrength.STRONG);
 
-        /* Get the attacking general */
+        // Get the attacking general
         map.stepTime();
 
         Soldier attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
 
-        /* Verify that the general dies after seven hits */
+        // Verify that the general dies after seven hits
         for (int i = 0; i < 200; i++) {
 
-            /* Wait for the attacking general to get hit */
+            // Wait for the attacking general to get hit
             Utils.waitForSoldierToGetHit(attackingGeneral, map);
 
             assertTrue(attackingGeneral.isGettingHit());
@@ -543,7 +543,7 @@ public class TestFighting {
 
             assertFalse(attackingGeneral.isGettingHit());
 
-            /* Verify that the general is dying after the right amount of hits */
+            // Verify that the general is dying after the right amount of hits
             if (attackingGeneral.isDying()) {
                 assertEquals(i, 5);
 
@@ -559,7 +559,7 @@ public class TestFighting {
     @Test
     public void testSergeantHealth() throws Exception {
 
-        /* Create player list with two players */
+        // Create player list with two players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
@@ -568,51 +568,51 @@ public class TestFighting {
         players.add(player0);
         players.add(player1);
 
-        /* Create game map choosing two players */
+        // Create game map choosing two players
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarters */
+        // Place player 0's headquarters
         Point point0 = new Point(9, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarters */
+        // Place player 1's headquarters
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Remove all soldiers from the headquarters and place one general in player 0's headquarters */
+        // Remove all soldiers from the headquarters and place one general in player 0's headquarters
         Utils.clearInventory(headquarter0, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER);
         Utils.clearInventory(headquarter1, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER, Material.GENERAL);
 
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 2);
 
-        /* Set no reserved soldiers in the headquarters */
+        // Set no reserved soldiers in the headquarters
         Utils.setNoReservedSoldiers(headquarter0);
         Utils.setNoReservedSoldiers(headquarter1);
 
-        /* Place barracks for player 1 */
+        // Place barracks for player 1
         Point point3 = new Point(23, 15);
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
-        /* Finish construction */
+        // Finish construction
         Utils.constructHouse(fortress);
 
-        /* Make sure both barracks have soldiers */
+        // Make sure both barracks have soldiers
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress);
 
-        /* Order an attack on player 1's fortress */
+        // Order an attack on player 1's fortress
         assertTrue(player0.canAttack(fortress));
 
         player0.attack(fortress, 1, AttackStrength.STRONG);
 
-        /* Get the attacking general */
+        // Get the attacking general
         map.stepTime();
 
         Soldier attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
 
-        /* Verify that the general dies after seven hits */
+        // Verify that the general dies after seven hits
         for (int i = 0; i < 200; i++) {
 
-            /* Wait for the attacking general to get hit */
+            // Wait for the attacking general to get hit
             Utils.waitForSoldierToGetHit(attackingGeneral, map);
 
             assertTrue(attackingGeneral.isGettingHit());
@@ -621,7 +621,7 @@ public class TestFighting {
 
             assertFalse(attackingGeneral.isGettingHit());
 
-            /* Verify that the general is dying after the right amount of hits */
+            // Verify that the general is dying after the right amount of hits
             if (attackingGeneral.isDying()) {
                 assertEquals(i, 4);
 
@@ -637,7 +637,7 @@ public class TestFighting {
     @Test
     public void testPrivateFirstRankHealth() throws Exception {
 
-        /* Create player list with two players */
+        // Create player list with two players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
@@ -646,51 +646,51 @@ public class TestFighting {
         players.add(player0);
         players.add(player1);
 
-        /* Create game map choosing two players */
+        // Create game map choosing two players
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarters */
+        // Place player 0's headquarters
         Point point0 = new Point(9, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarters */
+        // Place player 1's headquarters
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Remove all soldiers from the headquarters and place one general in player 0's headquarters */
+        // Remove all soldiers from the headquarters and place one general in player 0's headquarters
         Utils.clearInventory(headquarter0, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER);
         Utils.clearInventory(headquarter1, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER, Material.GENERAL);
 
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 2);
 
-        /* Set no reserved soldiers in the headquarters */
+        // Set no reserved soldiers in the headquarters
         Utils.setNoReservedSoldiers(headquarter0);
         Utils.setNoReservedSoldiers(headquarter1);
 
-        /* Place barracks for player 1 */
+        // Place barracks for player 1
         Point point3 = new Point(23, 15);
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
-        /* Finish construction */
+        // Finish construction
         Utils.constructHouse(fortress);
 
-        /* Make sure both barracks have soldiers */
+        // Make sure both barracks have soldiers
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress);
 
-        /* Order an attack on player 1's fortress */
+        // Order an attack on player 1's fortress
         assertTrue(player0.canAttack(fortress));
 
         player0.attack(fortress, 1, AttackStrength.STRONG);
 
-        /* Get the attacking general */
+        // Get the attacking general
         map.stepTime();
 
         Soldier attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
 
-        /* Verify that the general dies after seven hits */
+        // Verify that the general dies after seven hits
         for (int i = 0; i < 200; i++) {
 
-            /* Wait for the attacking general to get hit */
+            // Wait for the attacking general to get hit
             Utils.waitForSoldierToGetHit(attackingGeneral, map);
 
             assertTrue(attackingGeneral.isGettingHit());
@@ -699,7 +699,7 @@ public class TestFighting {
 
             assertFalse(attackingGeneral.isGettingHit());
 
-            /* Verify that the general is dying after the right amount of hits */
+            // Verify that the general is dying after the right amount of hits
             if (attackingGeneral.isDying()) {
                 assertEquals(i, 3);
 
@@ -715,7 +715,7 @@ public class TestFighting {
     @Test
     public void testPrivateHealth() throws Exception {
 
-        /* Create player list with two players */
+        // Create player list with two players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
@@ -724,51 +724,51 @@ public class TestFighting {
         players.add(player0);
         players.add(player1);
 
-        /* Create game map choosing two players */
+        // Create game map choosing two players
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarters */
+        // Place player 0's headquarters
         Point point0 = new Point(9, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarters */
+        // Place player 1's headquarters
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Remove all soldiers from the headquarters and place one general in player 0's headquarters */
+        // Remove all soldiers from the headquarters and place one general in player 0's headquarters
         Utils.clearInventory(headquarter0, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER);
         Utils.clearInventory(headquarter1, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER, Material.GENERAL);
 
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 2);
 
-        /* Set no reserved soldiers in the headquarters */
+        // Set no reserved soldiers in the headquarters
         Utils.setNoReservedSoldiers(headquarter0);
         Utils.setNoReservedSoldiers(headquarter1);
 
-        /* Place barracks for player 1 */
+        // Place barracks for player 1
         Point point3 = new Point(23, 15);
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
-        /* Finish construction */
+        // Finish construction
         Utils.constructHouse(fortress);
 
-        /* Make sure both barracks have soldiers */
+        // Make sure both barracks have soldiers
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress);
 
-        /* Order an attack on player 1's fortress */
+        // Order an attack on player 1's fortress
         assertTrue(player0.canAttack(fortress));
 
         player0.attack(fortress, 1, AttackStrength.STRONG);
 
-        /* Get the attacking general */
+        // Get the attacking general
         map.stepTime();
 
         Soldier attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
 
-        /* Verify that the general dies after seven hits */
+        // Verify that the general dies after seven hits
         for (int i = 0; i < 200; i++) {
 
-            /* Wait for the attacking general to get hit */
+            // Wait for the attacking general to get hit
             Utils.waitForSoldierToGetHit(attackingGeneral, map);
 
             assertTrue(attackingGeneral.isGettingHit());
@@ -777,7 +777,7 @@ public class TestFighting {
 
             assertFalse(attackingGeneral.isGettingHit());
 
-            /* Verify that the general is dying after the right amount of hits */
+            // Verify that the general is dying after the right amount of hits
             if (attackingGeneral.isDying()) {
                 assertEquals(i, 2);
 
@@ -793,7 +793,7 @@ public class TestFighting {
     @Test
     public void testGeneralHitProbability() throws Exception {
 
-        /* Create player list with two players */
+        // Create player list with two players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
@@ -802,38 +802,38 @@ public class TestFighting {
         players.add(player0);
         players.add(player1);
 
-        /* Create game map choosing two players */
+        // Create game map choosing two players
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarters */
+        // Place player 0's headquarters
         Point point0 = new Point(9, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarters */
+        // Place player 1's headquarters
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Set no reserved soldiers in the headquarters */
+        // Set no reserved soldiers in the headquarters
         Utils.setNoReservedSoldiers(headquarter0);
         Utils.setNoReservedSoldiers(headquarter1);
 
-        /* Remove all soldiers from the headquarters and place one general in player 0's headquarters */
+        // Remove all soldiers from the headquarters and place one general in player 0's headquarters
         Utils.clearInventory(headquarter0, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER);
         Utils.clearInventory(headquarter1, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER, Material.GENERAL);
 
         Utils.adjustInventoryTo(headquarter0, GENERAL, 2);
 
-        /* Place barracks for player 1 */
+        // Place barracks for player 1
         Point point3 = new Point(23, 15);
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
-        /* Finish construction */
+        // Finish construction
         Utils.constructHouse(fortress);
 
-        /* Occupy the fortress */
+        // Occupy the fortress
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress);
 
-        /* Collect statistics on attempts to hit and successful hits */
+        // Collect statistics on attempts to hit and successful hits
         int attempts = 0;
         int hits = 0;
 
@@ -841,28 +841,28 @@ public class TestFighting {
 
             assertEquals(fortress.getHostedSoldiers().size(), 9);
 
-            /* Order an attack on player 1's fortress */
+            // Order an attack on player 1's fortress
             assertTrue(player0.canAttack(fortress));
 
             player0.attack(fortress, 1, AttackStrength.STRONG);
 
-            /* Get the attacking general */
+            // Get the attacking general
             map.stepTime();
 
             Soldier attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
 
-            /* Find the defending soldier */
+            // Find the defending soldier
             Soldier defender = Utils.waitForSoldierOutsideBuilding(player1);
 
             assertNotNull(defender);
 
-            /* Count attempts to hit and successful hits */
+            // Count attempts to hit and successful hits
             for (int j = 0; j < 200; j++) {
                 if (attackingGeneral.isDying()) {
                     break;
                 }
 
-                /* Wait for the attacking general to attempt to hit */
+                // Wait for the attacking general to attempt to hit
                 assertFalse(attackingGeneral.isHitting());
 
                 Utils.waitForSoldierToHitOrBeDying(attackingGeneral, map);
@@ -879,7 +879,7 @@ public class TestFighting {
 
                 hits += attackingGeneral.getOpponent().isGettingHit() ? 1 : 0;
 
-                /* Wait for the attacking general to stop hitting */
+                // Wait for the attacking general to stop hitting
                 Utils.waitForSoldierToStopHitting(attackingGeneral, map);
 
                 assertFalse(attackingGeneral.isHitting());
@@ -887,7 +887,7 @@ public class TestFighting {
 
             assertTrue(attackingGeneral.isDying());
 
-            /* Wait for player 1's soldiers to go back into their houses */
+            // Wait for player 1's soldiers to go back into their houses
             for (int  k = 0; k < 500; k++) {
                 if (map.getWorkers().stream().filter(worker -> Objects.equals(player1, worker.getPlayer()))
                         .filter(worker -> !worker.isInsideBuilding())
@@ -902,14 +902,14 @@ public class TestFighting {
                     .filter(worker -> !worker.isInsideBuilding())
                     .noneMatch(Worker::isSoldier));
 
-            /* Make sure the fortress is fully occupied */
+            // Make sure the fortress is fully occupied
             Utils.occupyMilitaryBuilding(GENERAL_RANK, 9 - fortress.getHostedSoldiers().size(), fortress);
 
-            /* Make sure there is an available attacker in the headquarters */
+            // Make sure there is an available attacker in the headquarters
             Utils.adjustInventoryTo(headquarter0, GENERAL, 2);
         }
 
-        /* Verify the hit rate */
+        // Verify the hit rate
         System.out.println(hits);
         System.out.println(attempts);
         System.out.println(((double) hits / attempts));
@@ -921,7 +921,7 @@ public class TestFighting {
     @Test
     public void testOfficerHitProbability() throws Exception {
 
-        /* Create player list with two players */
+        // Create player list with two players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
@@ -930,38 +930,38 @@ public class TestFighting {
         players.add(player0);
         players.add(player1);
 
-        /* Create game map choosing two players */
+        // Create game map choosing two players
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarters */
+        // Place player 0's headquarters
         Point point0 = new Point(9, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarters */
+        // Place player 1's headquarters
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Set no reserved soldiers in the headquarters */
+        // Set no reserved soldiers in the headquarters
         Utils.setNoReservedSoldiers(headquarter0);
         Utils.setNoReservedSoldiers(headquarter1);
 
-        /* Remove all soldiers from the headquarters and place one general in player 0's headquarters */
+        // Remove all soldiers from the headquarters and place one general in player 0's headquarters
         Utils.clearInventory(headquarter0, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER, GENERAL);
         Utils.clearInventory(headquarter1, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER, Material.GENERAL);
 
         Utils.adjustInventoryTo(headquarter0, OFFICER, 2);
 
-        /* Place barracks for player 1 */
+        // Place barracks for player 1
         Point point3 = new Point(23, 15);
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
-        /* Finish construction */
+        // Finish construction
         Utils.constructHouse(fortress);
 
-        /* Occupy the fortress */
+        // Occupy the fortress
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress);
 
-        /* Collect statistics on attempts to hit and successful hits */
+        // Collect statistics on attempts to hit and successful hits
         int attempts = 0;
         int hits = 0;
 
@@ -969,28 +969,28 @@ public class TestFighting {
 
             assertEquals(fortress.getHostedSoldiers().size(), 9);
 
-            /* Order an attack on player 1's fortress */
+            // Order an attack on player 1's fortress
             assertTrue(player0.canAttack(fortress));
 
             player0.attack(fortress, 1, AttackStrength.STRONG);
 
-            /* Get the attacking general */
+            // Get the attacking general
             map.stepTime();
 
             Soldier attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
 
-            /* Find the defending soldier */
+            // Find the defending soldier
             Soldier defender = Utils.waitForSoldierOutsideBuilding(player1);
 
             assertNotNull(defender);
 
-            /* Count attempts to hit and successful hits */
+            // Count attempts to hit and successful hits
             for (int j = 0; j < 200; j++) {
                 if (attackingGeneral.isDying()) {
                     break;
                 }
 
-                /* Wait for the attacking general to attempt to hit */
+                // Wait for the attacking general to attempt to hit
                 Utils.waitForSoldierToHitOrBeDying(attackingGeneral, map);
 
                 if (attackingGeneral.isDying()) {
@@ -1003,7 +1003,7 @@ public class TestFighting {
 
                 hits += attackingGeneral.getOpponent().isGettingHit() ? 1 : 0;
 
-                /* Wait for the attacking general to stop hitting */
+                // Wait for the attacking general to stop hitting
                 Utils.waitForSoldierToStopHitting(attackingGeneral, map);
 
                 assertFalse(attackingGeneral.isHitting());
@@ -1011,7 +1011,7 @@ public class TestFighting {
 
             assertTrue(attackingGeneral.isDying());
 
-            /* Wait for player 1's soldiers to go back into their houses */
+            // Wait for player 1's soldiers to go back into their houses
             for (int  k = 0; k < 500; k++) {
                 if (map.getWorkers().stream().filter(worker -> Objects.equals(player1, worker.getPlayer()))
                         .filter(worker -> !worker.isInsideBuilding())
@@ -1026,14 +1026,14 @@ public class TestFighting {
                     .filter(worker -> !worker.isInsideBuilding())
                     .noneMatch(Worker::isSoldier));
 
-            /* Make sure the fortress is fully occupied */
+            // Make sure the fortress is fully occupied
             Utils.occupyMilitaryBuilding(GENERAL_RANK, 9 - fortress.getHostedSoldiers().size(), fortress);
 
-            /* Make sure there is an available attacker in the headquarters */
+            // Make sure there is an available attacker in the headquarters
             Utils.adjustInventoryTo(headquarter0, OFFICER, 2);
         }
 
-        /* Verify the hit rate */
+        // Verify the hit rate
         System.out.println(hits);
         System.out.println(attempts);
         System.out.println(((double) hits / attempts));
@@ -1046,7 +1046,7 @@ public class TestFighting {
     @Test
     public void testSergeantHitProbability() throws Exception {
 
-        /* Create player list with two players */
+        // Create player list with two players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
@@ -1055,38 +1055,38 @@ public class TestFighting {
         players.add(player0);
         players.add(player1);
 
-        /* Create game map choosing two players */
+        // Create game map choosing two players
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarters */
+        // Place player 0's headquarters
         Point point0 = new Point(9, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarters */
+        // Place player 1's headquarters
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Set no reserved soldiers in the headquarters */
+        // Set no reserved soldiers in the headquarters
         Utils.setNoReservedSoldiers(headquarter0);
         Utils.setNoReservedSoldiers(headquarter1);
 
-        /* Remove all soldiers from the headquarters and place one general in player 0's headquarters */
+        // Remove all soldiers from the headquarters and place one general in player 0's headquarters
         Utils.clearInventory(headquarter0, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER, GENERAL);
         Utils.clearInventory(headquarter1, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER, Material.GENERAL);
 
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 2);
 
-        /* Place barracks for player 1 */
+        // Place barracks for player 1
         Point point3 = new Point(23, 15);
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
-        /* Finish construction */
+        // Finish construction
         Utils.constructHouse(fortress);
 
-        /* Occupy the fortress */
+        // Occupy the fortress
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress);
 
-        /* Collect statistics on attempts to hit and successful hits */
+        // Collect statistics on attempts to hit and successful hits
         int attempts = 0;
         int hits = 0;
 
@@ -1094,28 +1094,28 @@ public class TestFighting {
 
             assertEquals(fortress.getHostedSoldiers().size(), 9);
 
-            /* Order an attack on player 1's fortress */
+            // Order an attack on player 1's fortress
             assertTrue(player0.canAttack(fortress));
 
             player0.attack(fortress, 1, AttackStrength.STRONG);
 
-            /* Get the attacking general */
+            // Get the attacking general
             map.stepTime();
 
             Soldier attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
 
-            /* Find the defending soldier */
+            // Find the defending soldier
             Soldier defender = Utils.waitForSoldierOutsideBuilding(player1);
 
             assertNotNull(defender);
 
-            /* Count attempts to hit and successful hits */
+            // Count attempts to hit and successful hits
             for (int j = 0; j < 200; j++) {
                 if (attackingGeneral.isDying()) {
                     break;
                 }
 
-                /* Wait for the attacking general to attempt to hit */
+                // Wait for the attacking general to attempt to hit
                 Utils.waitForSoldierToHitOrBeDying(attackingGeneral, map);
 
                 if (attackingGeneral.isDying()) {
@@ -1128,7 +1128,7 @@ public class TestFighting {
 
                 hits += attackingGeneral.getOpponent().isGettingHit() ? 1 : 0;
 
-                /* Wait for the attacking general to stop hitting */
+                // Wait for the attacking general to stop hitting
                 Utils.waitForSoldierToStopHitting(attackingGeneral, map);
 
                 assertFalse(attackingGeneral.isHitting());
@@ -1136,7 +1136,7 @@ public class TestFighting {
 
             assertTrue(attackingGeneral.isDying());
 
-            /* Wait for player 1's soldiers to go back into their houses */
+            // Wait for player 1's soldiers to go back into their houses
             for (int  k = 0; k < 500; k++) {
                 if (map.getWorkers().stream().filter(worker -> Objects.equals(player1, worker.getPlayer()))
                         .filter(worker -> !worker.isInsideBuilding())
@@ -1151,14 +1151,14 @@ public class TestFighting {
                     .filter(worker -> !worker.isInsideBuilding())
                     .noneMatch(Worker::isSoldier));
 
-            /* Make sure the fortress is fully occupied */
+            // Make sure the fortress is fully occupied
             Utils.occupyMilitaryBuilding(GENERAL_RANK, 9 - fortress.getHostedSoldiers().size(), fortress);
 
-            /* Make sure there is an available attacker in the headquarters */
+            // Make sure there is an available attacker in the headquarters
             Utils.adjustInventoryTo(headquarter0, SERGEANT, 2);
         }
 
-        /* Verify the hit rate */
+        // Verify the hit rate
         System.out.println(hits);
         System.out.println(attempts);
         System.out.println(Math.abs(0.3 - ((double) hits / attempts)));
@@ -1169,7 +1169,7 @@ public class TestFighting {
     @Test
     public void testPrivateFirstClassHitProbability() throws Exception {
 
-        /* Create player list with two players */
+        // Create player list with two players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
@@ -1178,38 +1178,38 @@ public class TestFighting {
         players.add(player0);
         players.add(player1);
 
-        /* Create game map choosing two players */
+        // Create game map choosing two players
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarters */
+        // Place player 0's headquarters
         Point point0 = new Point(9, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarters */
+        // Place player 1's headquarters
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Set no reserved soldiers in the headquarters */
+        // Set no reserved soldiers in the headquarters
         Utils.setNoReservedSoldiers(headquarter0);
         Utils.setNoReservedSoldiers(headquarter1);
 
-        /* Remove all soldiers from the headquarters and place one general in player 0's headquarters */
+        // Remove all soldiers from the headquarters and place one general in player 0's headquarters
         Utils.clearInventory(headquarter0, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER, GENERAL);
         Utils.clearInventory(headquarter1, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER, Material.GENERAL);
 
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 2);
 
-        /* Place barracks for player 1 */
+        // Place barracks for player 1
         Point point3 = new Point(23, 15);
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
-        /* Finish construction */
+        // Finish construction
         Utils.constructHouse(fortress);
 
-        /* Occupy the fortress */
+        // Occupy the fortress
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress);
 
-        /* Collect statistics on attempts to hit and successful hits */
+        // Collect statistics on attempts to hit and successful hits
         int attempts = 0;
         int hits = 0;
 
@@ -1217,28 +1217,28 @@ public class TestFighting {
 
             assertEquals(fortress.getHostedSoldiers().size(), 9);
 
-            /* Order an attack on player 1's fortress */
+            // Order an attack on player 1's fortress
             assertTrue(player0.canAttack(fortress));
 
             player0.attack(fortress, 1, AttackStrength.STRONG);
 
-            /* Get the attacking general */
+            // Get the attacking general
             map.stepTime();
 
             Soldier attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
 
-            /* Find the defending soldier */
+            // Find the defending soldier
             Soldier defender = Utils.waitForSoldierOutsideBuilding(player1);
 
             assertNotNull(defender);
 
-            /* Count attempts to hit and successful hits */
+            // Count attempts to hit and successful hits
             for (int j = 0; j < 200; j++) {
                 if (attackingGeneral.isDying()) {
                     break;
                 }
 
-                /* Wait for the attacking general to attempt to hit */
+                // Wait for the attacking general to attempt to hit
                 Utils.waitForSoldierToHitOrBeDying(attackingGeneral, map);
 
                 if (attackingGeneral.isDying()) {
@@ -1251,7 +1251,7 @@ public class TestFighting {
 
                 hits += attackingGeneral.getOpponent().isGettingHit() ? 1 : 0;
 
-                /* Wait for the attacking general to stop hitting */
+                // Wait for the attacking general to stop hitting
                 Utils.waitForSoldierToStopHitting(attackingGeneral, map);
 
                 assertFalse(attackingGeneral.isHitting());
@@ -1259,7 +1259,7 @@ public class TestFighting {
 
             assertTrue(attackingGeneral.isDying());
 
-            /* Wait for player 1's soldiers to go back into their houses */
+            // Wait for player 1's soldiers to go back into their houses
             for (int  k = 0; k < 500; k++) {
                 if (map.getWorkers().stream().filter(worker -> Objects.equals(player1, worker.getPlayer()))
                         .filter(worker -> !worker.isInsideBuilding())
@@ -1274,14 +1274,14 @@ public class TestFighting {
                     .filter(worker -> !worker.isInsideBuilding())
                     .noneMatch(Worker::isSoldier));
 
-            /* Make sure the fortress is fully occupied */
+            // Make sure the fortress is fully occupied
             Utils.occupyMilitaryBuilding(GENERAL_RANK, 9 - fortress.getHostedSoldiers().size(), fortress);
 
-            /* Make sure there is an available attacker in the headquarters */
+            // Make sure there is an available attacker in the headquarters
             Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 2);
         }
 
-        /* Verify the hit rate */
+        // Verify the hit rate
         System.out.println(hits);
         System.out.println(attempts);
         System.out.println(Math.abs(0.2 - ((double) hits / attempts)));
@@ -1292,7 +1292,7 @@ public class TestFighting {
     @Test
     public void testPrivateHitProbability() throws Exception {
 
-        /* Create player list with two players */
+        // Create player list with two players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
@@ -1301,38 +1301,38 @@ public class TestFighting {
         players.add(player0);
         players.add(player1);
 
-        /* Create game map choosing two players */
+        // Create game map choosing two players
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarters */
+        // Place player 0's headquarters
         Point point0 = new Point(9, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarters */
+        // Place player 1's headquarters
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Set no reserved soldiers in the headquarters */
+        // Set no reserved soldiers in the headquarters
         Utils.setNoReservedSoldiers(headquarter0);
         Utils.setNoReservedSoldiers(headquarter1);
 
-        /* Remove all soldiers from the headquarters and place one general in player 0's headquarters */
+        // Remove all soldiers from the headquarters and place one general in player 0's headquarters
         Utils.clearInventory(headquarter0, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER, GENERAL);
         Utils.clearInventory(headquarter1, PRIVATE, Material.PRIVATE_FIRST_CLASS, Material.SERGEANT, Material.OFFICER, Material.GENERAL);
 
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 2);
 
-        /* Place barracks for player 1 */
+        // Place barracks for player 1
         Point point3 = new Point(23, 15);
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
-        /* Finish construction */
+        // Finish construction
         Utils.constructHouse(fortress);
 
-        /* Occupy the fortress */
+        // Occupy the fortress
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress);
 
-        /* Collect statistics on attempts to hit and successful hits */
+        // Collect statistics on attempts to hit and successful hits
         int attempts = 0;
         int hits = 0;
 
@@ -1340,28 +1340,28 @@ public class TestFighting {
 
             assertEquals(fortress.getHostedSoldiers().size(), 9);
 
-            /* Order an attack on player 1's fortress */
+            // Order an attack on player 1's fortress
             assertTrue(player0.canAttack(fortress));
 
             player0.attack(fortress, 1, AttackStrength.STRONG);
 
-            /* Get the attacking general */
+            // Get the attacking general
             map.stepTime();
 
             Soldier attackingGeneral = Utils.findSoldierOutsideBuilding(player0);
 
-            /* Find the defending soldier */
+            // Find the defending soldier
             Soldier defender = Utils.waitForSoldierOutsideBuilding(player1);
 
             assertNotNull(defender);
 
-            /* Count attempts to hit and successful hits */
+            // Count attempts to hit and successful hits
             for (int j = 0; j < 200; j++) {
                 if (attackingGeneral.isDying()) {
                     break;
                 }
 
-                /* Wait for the attacking general to attempt to hit */
+                // Wait for the attacking general to attempt to hit
                 Utils.waitForSoldierToHitOrBeDying(attackingGeneral, map);
 
                 if (attackingGeneral.isDying()) {
@@ -1374,7 +1374,7 @@ public class TestFighting {
 
                 hits += attackingGeneral.getOpponent().isGettingHit() ? 1 : 0;
 
-                /* Wait for the attacking general to stop hitting */
+                // Wait for the attacking general to stop hitting
                 Utils.waitForSoldierToStopHitting(attackingGeneral, map);
 
                 assertFalse(attackingGeneral.isHitting());
@@ -1382,7 +1382,7 @@ public class TestFighting {
 
             assertTrue(attackingGeneral.isDying());
 
-            /* Wait for player 1's soldiers to go back into their houses */
+            // Wait for player 1's soldiers to go back into their houses
             for (int  k = 0; k < 500; k++) {
                 if (map.getWorkers().stream().filter(worker -> Objects.equals(player1, worker.getPlayer()))
                         .filter(worker -> !worker.isInsideBuilding())
@@ -1397,14 +1397,14 @@ public class TestFighting {
                     .filter(worker -> !worker.isInsideBuilding())
                     .noneMatch(Worker::isSoldier));
 
-            /* Make sure the fortress is fully occupied */
+            // Make sure the fortress is fully occupied
             Utils.occupyMilitaryBuilding(GENERAL_RANK, 9 - fortress.getHostedSoldiers().size(), fortress);
 
-            /* Make sure there is an available attacker in the headquarters */
+            // Make sure there is an available attacker in the headquarters
             Utils.adjustInventoryTo(headquarter0, PRIVATE, 2);
         }
 
-        /* Verify the hit rate */
+        // Verify the hit rate
         assertTrue(Math.abs(0.1 - ((double) hits / attempts)) < 0.1);
     }
 }

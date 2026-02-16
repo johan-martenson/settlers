@@ -31,18 +31,18 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void createPrivate() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place storage */
+        // Place storage
         Point point1 = new Point(10, 10);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
 
@@ -94,13 +94,13 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void storageDoesNotPromote() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -126,27 +126,27 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void promoteWithoutMilitary() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place fortress */
+        // Place fortress
         Point point1 = new Point(6, 12);
         Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
-        /* Construct the fortress */
+        // Construct the fortress
         Utils.constructHouse(fortress0);
 
-        /* Put gold in the fortress */
+        // Put gold in the fortress
         Utils.deliverCargo(fortress0, COIN);
 
-        /* Verify that no promotion happens when no military is present */
+        // Verify that no promotion happens when no military is present
         Utils.fastForward(200, map);
 
         assertEquals(fortress0.getAmount(COIN), 1);
@@ -155,27 +155,27 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void promoteWithOnlyGenerals() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place fortress */
+        // Place fortress
         Point point1 = new Point(6, 12);
         Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
-        /* Construct the fortress */
+        // Construct the fortress
         Utils.constructHouse(fortress0);
 
-        /* Put gold in the fortress */
+        // Put gold in the fortress
         Utils.deliverCargo(fortress0, COIN);
 
-        /* Verify that no promotion happens when all occupants are generals */
+        // Verify that no promotion happens when all occupants are generals
         Soldier military0 = Utils.occupyMilitaryBuilding(GENERAL_RANK, fortress0);
         Soldier military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, fortress0);
 
@@ -189,24 +189,24 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void promoteWithoutGold() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place fortress */
+        // Place fortress
         Point point1 = new Point(6, 12);
         Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
-        /* Construct the fortress */
+        // Construct the fortress
         Utils.constructHouse(fortress0);
 
-        /* Verify that no promotion happens without gold */
+        // Verify that no promotion happens without gold
         Soldier military0 = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, fortress0);
         Soldier military1 = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, fortress0);
 
@@ -219,27 +219,27 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void testPlayerIsCorrectInMilitaryDispatchedFromHeadquarter() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Place barracks */
+        // Place barracks
         Point point22 = new Point(6, 12);
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
-        /* Connect the barracks to the headquarter */
+        // Connect the barracks to the headquarter
         map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for a military to start walking to the barracks */
+        // Wait for a military to start walking to the barracks
         Soldier military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertNotNull(military);
@@ -249,32 +249,32 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void testPromotedPrivateBecomesCorporal() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
+        // Place barracks
         Point point1 = new Point(6, 12);
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Construct the barracks */
+        // Construct the barracks
         Utils.constructHouse(barracks0);
 
-        /* Place a private in the barracks */
+        // Place a private in the barracks
         Soldier military0 = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, barracks0);
 
-        /* Add one coin */
+        // Add one coin
         Cargo coinCargo = new Cargo(COIN, map);
         barracks0.promiseDelivery(COIN);
         barracks0.putCargo(coinCargo);
 
-        /* Wait for the promotion to happen */
+        // Wait for the promotion to happen
         Utils.fastForward(100, map);
 
         assertEquals(barracks0.getHostedSoldiers().size(), 1);
@@ -284,32 +284,32 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void testPromotedCorporalBecomesSergeant() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
+        // Place barracks
         Point point1 = new Point(6, 12);
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Construct the barracks */
+        // Construct the barracks
         Utils.constructHouse(barracks0);
 
-        /* Place a corporal in the barracks */
+        // Place a corporal in the barracks
         Soldier military0 = Utils.occupyMilitaryBuilding(PRIVATE_FIRST_CLASS_RANK, barracks0);
 
-        /* Add one coin */
+        // Add one coin
         Cargo coinCargo = new Cargo(COIN, map);
         barracks0.promiseDelivery(COIN);
         barracks0.putCargo(coinCargo);
 
-        /* Wait for the promotion to happen */
+        // Wait for the promotion to happen
         Utils.fastForward(100, map);
 
         assertEquals(barracks0.getHostedSoldiers().size(), 1);
@@ -319,32 +319,32 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void testPromotedSergeantBecomesOfficer() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
+        // Place barracks
         Point point1 = new Point(6, 12);
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Construct the barracks */
+        // Construct the barracks
         Utils.constructHouse(barracks0);
 
-        /* Place a sergeant in the barracks */
+        // Place a sergeant in the barracks
         Soldier military0 = Utils.occupyMilitaryBuilding(SERGEANT_RANK, barracks0);
 
-        /* Add one coin */
+        // Add one coin
         Cargo coinCargo = new Cargo(COIN, map);
         barracks0.promiseDelivery(COIN);
         barracks0.putCargo(coinCargo);
 
-        /* Wait for the promotion to happen */
+        // Wait for the promotion to happen
         Utils.fastForward(100, map);
 
         assertEquals(barracks0.getHostedSoldiers().size(), 1);
@@ -354,32 +354,32 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void testPromotedOfficerBecomesGeneral() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
+        // Place barracks
         Point point1 = new Point(6, 12);
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Construct the barracks */
+        // Construct the barracks
         Utils.constructHouse(barracks0);
 
-        /* Place an officer in the barracks */
+        // Place an officer in the barracks
         Soldier military0 = Utils.occupyMilitaryBuilding(OFFICER_RANK, barracks0);
 
-        /* Add one coin */
+        // Add one coin
         Cargo coinCargo = new Cargo(COIN, map);
         barracks0.promiseDelivery(COIN);
         barracks0.putCargo(coinCargo);
 
-        /* Wait for the promotion to happen */
+        // Wait for the promotion to happen
         Utils.fastForward(100, map);
 
         assertEquals(barracks0.getHostedSoldiers().size(), 1);
@@ -389,32 +389,32 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void testGeneralCannotBePromoted() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
+        // Place barracks
         Point point1 = new Point(6, 12);
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Construct the barracks */
+        // Construct the barracks
         Utils.constructHouse(barracks0);
 
-        /* Place a general in the barracks */
+        // Place a general in the barracks
         Soldier military0 = Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
 
-        /* Add one coin */
+        // Add one coin
         Cargo coinCargo = new Cargo(COIN, map);
         barracks0.promiseDelivery(COIN);
         barracks0.putCargo(coinCargo);
 
-        /* Verify that no promotion happens */
+        // Verify that no promotion happens
         Utils.fastForward(100, map);
 
         assertEquals(barracks0.getHostedSoldiers().size(), 1);
@@ -424,36 +424,36 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void testUpgradeOfAllRanksAtSameTime() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place fortress */
+        // Place fortress
         Point point1 = new Point(6, 12);
         Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
-        /* Connect the headquarter with the fortress */
+        // Connect the headquarter with the fortress
         Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
-        /* Make sure the headquarter has only privates */
+        // Make sure the headquarter has only privates
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 5);
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 1);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 1);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 1);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 1);
 
-        /* Wait for the fortress to get constructed and populated */
+        // Wait for the fortress to get constructed and populated
         Utils.waitForBuildingToBeConstructed(fortress0);
 
         Utils.waitForMilitaryBuildingToGetPopulated(fortress0, 9);
 
-        /* Verify that adding a coin will promote one of each type of soldier */
+        // Verify that adding a coin will promote one of each type of soldier
         Utils.deliverCargo(fortress0, COIN);
 
         Utils.waitForBuildingToGetAmountOfMaterial(fortress0, COIN, 0);
@@ -476,36 +476,36 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void testUpgradeOfOnlyPrivates() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place fortress */
+        // Place fortress
         Point point1 = new Point(6, 12);
         Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
-        /* Connect the headquarter with the fortress */
+        // Connect the headquarter with the fortress
         Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
-        /* Make sure the headquarter has only privates */
+        // Make sure the headquarter has only privates
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 9);
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 0);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 0);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 0);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
 
-        /* Wait for the fortress to get constructed and populated */
+        // Wait for the fortress to get constructed and populated
         Utils.waitForBuildingToBeConstructed(fortress0);
 
         Utils.waitForMilitaryBuildingToGetPopulated(fortress0, 9);
 
-        /* Verify that adding a coin will promote one of each type of soldier */
+        // Verify that adding a coin will promote one of each type of soldier
         Utils.deliverCargo(fortress0, COIN);
 
         Utils.waitForBuildingToGetAmountOfMaterial(fortress0, COIN, 0);
@@ -528,36 +528,36 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void testUpgradeOfPrivatesAndOnePrivateFirstRank() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place fortress */
+        // Place fortress
         Point point1 = new Point(6, 12);
         Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
-        /* Connect the headquarter with the fortress */
+        // Connect the headquarter with the fortress
         Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
-        /* Make sure the headquarter has only privates */
+        // Make sure the headquarter has only privates
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 8);
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 1);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 0);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 0);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
 
-        /* Wait for the fortress to get constructed and populated */
+        // Wait for the fortress to get constructed and populated
         Utils.waitForBuildingToBeConstructed(fortress0);
 
         Utils.waitForMilitaryBuildingToGetPopulated(fortress0, 9);
 
-        /* Verify that adding a coin will promote one of each type of soldier */
+        // Verify that adding a coin will promote one of each type of soldier
         Utils.deliverCargo(fortress0, COIN);
 
         Utils.waitForBuildingToGetAmountOfMaterial(fortress0, COIN, 0);
@@ -580,36 +580,36 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void testUpgradeOfPrivatesAndPrivateFirstRankAndOneSergeant() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place fortress */
+        // Place fortress
         Point point1 = new Point(6, 12);
         Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
-        /* Connect the headquarter with the fortress */
+        // Connect the headquarter with the fortress
         Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
-        /* Make sure the headquarter has only privates */
+        // Make sure the headquarter has only privates
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 7);
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 1);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 1);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 0);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
 
-        /* Wait for the fortress to get constructed and populated */
+        // Wait for the fortress to get constructed and populated
         Utils.waitForBuildingToBeConstructed(fortress0);
 
         Utils.waitForMilitaryBuildingToGetPopulated(fortress0, 9);
 
-        /* Verify that adding a coin will promote one of each type of soldier */
+        // Verify that adding a coin will promote one of each type of soldier
         Utils.deliverCargo(fortress0, COIN);
 
         Utils.waitForBuildingToGetAmountOfMaterial(fortress0, COIN, 0);
@@ -632,36 +632,36 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void testUpgradeOfPrivatesAndPrivateFirstRankAndOneSergeantAndOneOfficer() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place fortress */
+        // Place fortress
         Point point1 = new Point(6, 12);
         Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
-        /* Connect the headquarter with the fortress */
+        // Connect the headquarter with the fortress
         Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
-        /* Make sure the headquarter has only privates */
+        // Make sure the headquarter has only privates
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 6);
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 1);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 1);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 1);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
 
-        /* Wait for the fortress to get constructed and populated */
+        // Wait for the fortress to get constructed and populated
         Utils.waitForBuildingToBeConstructed(fortress0);
 
         Utils.waitForMilitaryBuildingToGetPopulated(fortress0, 9);
 
-        /* Verify that adding a coin will promote one of each type of soldier */
+        // Verify that adding a coin will promote one of each type of soldier
         Utils.deliverCargo(fortress0, COIN);
 
         Utils.waitForBuildingToGetAmountOfMaterial(fortress0, COIN, 0);
@@ -684,35 +684,35 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void testPrivateIsSoldier() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Adjust the inventory of the headquarter */
+        // Adjust the inventory of the headquarter
         Utils.adjustInventoryTo(headquarter, PRIVATE, 1);
         Utils.adjustInventoryTo(headquarter, PRIVATE_FIRST_CLASS, 0);
         Utils.adjustInventoryTo(headquarter, SERGEANT, 0);
         Utils.adjustInventoryTo(headquarter, OFFICER, 0);
         Utils.adjustInventoryTo(headquarter, GENERAL, 0);
 
-        /* Place storage */
+        // Place storage
         Point point1 = new Point(10, 10);
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Connect the barracks to the headquarter */
+        // Connect the barracks to the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
 
-        /* Wait for the barracks to get constructed */
+        // Wait for the barracks to get constructed
         Utils.waitForBuildingToBeConstructed(barracks0);
 
-        /* Verify that the private walking to the barracks is really a soldier */
+        // Verify that the private walking to the barracks is really a soldier
         Soldier soldier = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertTrue(soldier.isSoldier());
@@ -721,35 +721,35 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void testPrivateFirstRankIsSoldier() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Adjust the inventory of the headquarter */
+        // Adjust the inventory of the headquarter
         Utils.adjustInventoryTo(headquarter, PRIVATE, 0);
         Utils.adjustInventoryTo(headquarter, PRIVATE_FIRST_CLASS, 1);
         Utils.adjustInventoryTo(headquarter, SERGEANT, 0);
         Utils.adjustInventoryTo(headquarter, OFFICER, 0);
         Utils.adjustInventoryTo(headquarter, GENERAL, 0);
 
-        /* Place storage */
+        // Place storage
         Point point1 = new Point(10, 10);
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Connect the barracks to the headquarter */
+        // Connect the barracks to the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
 
-        /* Wait for the barracks to get constructed */
+        // Wait for the barracks to get constructed
         Utils.waitForBuildingToBeConstructed(barracks0);
 
-        /* Verify that the private first class walking to the barracks is really a soldier */
+        // Verify that the private first class walking to the barracks is really a soldier
         Soldier soldier = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertEquals(soldier.getRank(), PRIVATE_FIRST_CLASS_RANK);
@@ -759,35 +759,35 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void testSergeantIsSoldier() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Adjust the inventory of the headquarter */
+        // Adjust the inventory of the headquarter
         Utils.adjustInventoryTo(headquarter, PRIVATE, 0);
         Utils.adjustInventoryTo(headquarter, PRIVATE_FIRST_CLASS, 0);
         Utils.adjustInventoryTo(headquarter, SERGEANT, 1);
         Utils.adjustInventoryTo(headquarter, OFFICER, 0);
         Utils.adjustInventoryTo(headquarter, GENERAL, 0);
 
-        /* Place storage */
+        // Place storage
         Point point1 = new Point(10, 10);
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Connect the barracks to the headquarter */
+        // Connect the barracks to the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
 
-        /* Wait for the barracks to get constructed */
+        // Wait for the barracks to get constructed
         Utils.waitForBuildingToBeConstructed(barracks0);
 
-        /* Verify that the sergeant walking to the barracks is really a soldier */
+        // Verify that the sergeant walking to the barracks is really a soldier
         Soldier soldier = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertEquals(soldier.getRank(), SERGEANT_RANK);
@@ -797,35 +797,35 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void testOfficerIsSoldier() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Adjust the inventory of the headquarter */
+        // Adjust the inventory of the headquarter
         Utils.adjustInventoryTo(headquarter, PRIVATE, 0);
         Utils.adjustInventoryTo(headquarter, PRIVATE_FIRST_CLASS, 0);
         Utils.adjustInventoryTo(headquarter, SERGEANT, 0);
         Utils.adjustInventoryTo(headquarter, OFFICER, 1);
         Utils.adjustInventoryTo(headquarter, GENERAL, 0);
 
-        /* Place storage */
+        // Place storage
         Point point1 = new Point(10, 10);
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Connect the barracks to the headquarter */
+        // Connect the barracks to the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
 
-        /* Wait for the barracks to get constructed */
+        // Wait for the barracks to get constructed
         Utils.waitForBuildingToBeConstructed(barracks0);
 
-        /* Verify that the officer walking to the barracks is really a soldier */
+        // Verify that the officer walking to the barracks is really a soldier
         Soldier soldier = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertEquals(soldier.getRank(), OFFICER_RANK);
@@ -835,35 +835,35 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void testGeneralIsSoldier() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Adjust the inventory of the headquarter */
+        // Adjust the inventory of the headquarter
         Utils.adjustInventoryTo(headquarter, PRIVATE, 0);
         Utils.adjustInventoryTo(headquarter, PRIVATE_FIRST_CLASS, 0);
         Utils.adjustInventoryTo(headquarter, SERGEANT, 0);
         Utils.adjustInventoryTo(headquarter, OFFICER, 0);
         Utils.adjustInventoryTo(headquarter, GENERAL, 1);
 
-        /* Place storage */
+        // Place storage
         Point point1 = new Point(10, 10);
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Connect the barracks to the headquarter */
+        // Connect the barracks to the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
 
-        /* Wait for the barracks to get constructed */
+        // Wait for the barracks to get constructed
         Utils.waitForBuildingToBeConstructed(barracks0);
 
-        /* Verify that the general walking to the barracks is really a soldier */
+        // Verify that the general walking to the barracks is really a soldier
         Soldier soldier = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertEquals(soldier.getRank(), GENERAL_RANK);

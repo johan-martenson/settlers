@@ -25,17 +25,17 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     @Test
     public void testDefaultPopulationOfMilitaryBuildings() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Verify the default strength of population of new military buildings */
+        // Verify the default strength of population of new military buildings
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingCloseToBorder(), 10);
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingAwayFromBorder(), 10);
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingFarFromBorder(), 10);
@@ -44,31 +44,31 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     @Test
     public void testMinimumPopulationOfMilitaryBuildingsCloseToBorder() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Set the population of military buildings close to the border */
+        // Set the population of military buildings close to the border
         player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(0);
 
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingCloseToBorder(), 0);
 
-        /* Place fortress */
+        // Place fortress
         var point1 = new Point(19, 5);
         var fortress = map.placeBuilding(new Fortress(player0), point1);
 
-        /* Connect the fortress with the headquarters and wait for it to get constructed */
+        // Connect the fortress with the headquarters and wait for it to get constructed
         var road0 = map.placeAutoSelectedRoad(player0, fortress.getFlag(), headquarter0.getFlag());
 
         Utils.waitForBuildingToBeConstructed(fortress);
 
-        /* Verify that only one soldier is sent out to occupy the fortress */
+        // Verify that only one soldier is sent out to occupy the fortress
         Utils.waitForMilitaryBuildingToGetPopulated(fortress);
 
         assertEquals(fortress.getHostedSoldiers().size(), 1);
@@ -81,31 +81,31 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     @Test
     public void testMaximumPopulationOfMilitaryBuildingsCloseToBorder() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Set the population of military buildings close to the border */
+        // Set the population of military buildings close to the border
         player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(10);
 
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingCloseToBorder(), 10);
 
-        /* Place fortress */
+        // Place fortress
         var point1 = new Point(19, 5);
         var fortress = map.placeBuilding(new Fortress(player0), point1);
 
-        /* Connect the fortress with the headquarters and wait for it to get constructed */
+        // Connect the fortress with the headquarters and wait for it to get constructed
         var road0 = map.placeAutoSelectedRoad(player0, fortress.getFlag(), headquarter0.getFlag());
 
         Utils.waitForBuildingToBeConstructed(fortress);
 
-        /* Verify that only one soldier is sent out to occupy the fortress */
+        // Verify that only one soldier is sent out to occupy the fortress
         Utils.waitForMilitaryBuildingToGetPopulated(fortress);
 
         Utils.fastForward(200, map);
@@ -116,31 +116,31 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     @Test
     public void testMediumPopulationOfMilitaryBuildingsCloseToBorder() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Set the population of military buildings close to the border */
+        // Set the population of military buildings close to the border
         player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(5);
 
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingCloseToBorder(), 5);
 
-        /* Place fortress */
+        // Place fortress
         var point1 = new Point(19, 5);
         var fortress = map.placeBuilding(new Fortress(player0), point1);
 
-        /* Connect the fortress with the headquarters and wait for it to get constructed */
+        // Connect the fortress with the headquarters and wait for it to get constructed
         var road0 = map.placeAutoSelectedRoad(player0, fortress.getFlag(), headquarter0.getFlag());
 
         Utils.waitForBuildingToBeConstructed(fortress);
 
-        /* Verify that only one soldier is sent out to occupy the fortress */
+        // Verify that only one soldier is sent out to occupy the fortress
         Utils.waitForMilitaryBuildingToGetPopulated(fortress);
 
         Utils.fastForward(200, map);
@@ -151,38 +151,38 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     @Test
     public void testChangeMinimumToMediumPopulationOfMilitaryBuildingsCloseToBorder() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Set the population of military buildings close to the border */
+        // Set the population of military buildings close to the border
         player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(0);
 
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingCloseToBorder(), 0);
 
-        /* Place fortress */
+        // Place fortress
         var point1 = new Point(19, 5);
         var fortress = map.placeBuilding(new Fortress(player0), point1);
 
-        /* Connect the fortress with the headquarters and wait for it to get constructed */
+        // Connect the fortress with the headquarters and wait for it to get constructed
         var road0 = map.placeAutoSelectedRoad(player0, fortress.getFlag(), headquarter0.getFlag());
 
         Utils.waitForBuildingToBeConstructed(fortress);
 
-        /* Only one soldier is sent out to occupy the fortress */
+        // Only one soldier is sent out to occupy the fortress
         Utils.waitForMilitaryBuildingToGetPopulated(fortress);
 
         Utils.fastForward(200, map);
 
         assertEquals(fortress.getHostedSoldiers().size(), 1);
 
-        /* Verify that more soldiers are sent out to the fortress when the setting is changed */
+        // Verify that more soldiers are sent out to the fortress when the setting is changed
         player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(5);
 
         Utils.fastForward(200, map);
@@ -197,38 +197,38 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     @Test
     public void testChangeMaximumToMediumPopulationOfMilitaryBuildingsCloseToBorder() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Set the population of military buildings close to the border */
+        // Set the population of military buildings close to the border
         player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(10);
 
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingCloseToBorder(), 10);
 
-        /* Place fortress */
+        // Place fortress
         var point1 = new Point(19, 5);
         var fortress = map.placeBuilding(new Fortress(player0), point1);
 
-        /* Connect the fortress with the headquarters and wait for it to get constructed */
+        // Connect the fortress with the headquarters and wait for it to get constructed
         var road0 = map.placeAutoSelectedRoad(player0, fortress.getFlag(), headquarter0.getFlag());
 
         Utils.waitForBuildingToBeConstructed(fortress);
 
-        /* Only one soldier is sent out to occupy the fortress */
+        // Only one soldier is sent out to occupy the fortress
         Utils.waitForMilitaryBuildingToGetPopulated(fortress);
 
         Utils.fastForward(200, map);
 
         assertEquals(fortress.getHostedSoldiers().size(), 9);
 
-        /* Verify that more soldiers are sent out to the fortress when the setting is changed */
+        // Verify that more soldiers are sent out to the fortress when the setting is changed
         player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(5);
 
         Utils.fastForward(200, map);
@@ -243,24 +243,24 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     @Test
     public void testPreferredSoldierStaysWhenChangeMaximumToMediumPopulationOfMilitaryBuildingsCloseToBorder() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Change soldier inventory */
+        // Change soldier inventory
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 1);
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 2);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 2);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 2);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 2);
 
-        /* Military settings - no reserve and prefer strong population */
+        // Military settings - no reserve and prefer strong population
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 0);
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
         headquarter0.setReservedSoldiers(Soldier.Rank.SERGEANT_RANK, 0);
@@ -269,21 +269,21 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         player0.setStrengthOfSoldiersPopulatingBuildings(10);
 
-        /* Set the population of military buildings close to the border */
+        // Set the population of military buildings close to the border
         player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(10);
 
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingCloseToBorder(), 10);
 
-        /* Place fortress */
+        // Place fortress
         var point1 = new Point(19, 5);
         var fortress = map.placeBuilding(new Fortress(player0), point1);
 
-        /* Connect the fortress with the headquarters and wait for it to get constructed */
+        // Connect the fortress with the headquarters and wait for it to get constructed
         var road0 = map.placeAutoSelectedRoad(player0, fortress.getFlag(), headquarter0.getFlag());
 
         Utils.waitForBuildingToBeConstructed(fortress);
 
-        /* Only one soldier is sent out to occupy the fortress */
+        // Only one soldier is sent out to occupy the fortress
         Utils.waitForMilitaryBuildingToGetPopulated(fortress);
 
         Utils.fastForward(200, map);
@@ -295,7 +295,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         assertEquals(fortress.getHostedSoldiersWithRank(Soldier.Rank.OFFICER_RANK), 2);
         assertEquals(fortress.getHostedSoldiersWithRank(Soldier.Rank.GENERAL_RANK), 2);
 
-        /* Verify that more soldiers are sent out to the fortress when the setting is changed */
+        // Verify that more soldiers are sent out to the fortress when the setting is changed
         player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(5);
 
         Utils.fastForward(200, map);
@@ -315,24 +315,24 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     @Test
     public void testSettingPopulationCloseToBorderDoesNotAffectOtherMilitaryBuildings () throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(15, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Change soldier inventory */
+        // Change soldier inventory
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 50);
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 2);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 2);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 2);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 2);
 
-        /* Military settings - no reserve and prefer strong population */
+        // Military settings - no reserve and prefer strong population
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 0);
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
         headquarter0.setReservedSoldiers(Soldier.Rank.SERGEANT_RANK, 0);
@@ -341,12 +341,12 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         player0.setStrengthOfSoldiersPopulatingBuildings(10);
 
-        /* Set the population of military buildings close to the border to minimum */
+        // Set the population of military buildings close to the border to minimum
         player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(0);
 
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingCloseToBorder(), 0);
 
-        /* Place barracks - one in center and four around it */
+        // Place barracks - one in center and four around it
         var point1 = new Point(19, 15);
         var point2 = new Point(17, 23);
         var point3 = new Point(17, 13);
@@ -359,7 +359,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         var barracks3 = map.placeBuilding(new Barracks(player0), point4);
         var barracks4 = map.placeBuilding(new Barracks(player0), point5);
 
-        /* Connect the barracks and wait for them to get constructed and populated */
+        // Connect the barracks and wait for them to get constructed and populated
         var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
         var road1 = map.placeAutoSelectedRoad(player0, barracks1.getFlag(), headquarter0.getFlag());
         var road2 = map.placeAutoSelectedRoad(player0, barracks2.getFlag(), headquarter0.getFlag());
@@ -370,14 +370,14 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(barracks0, barracks1, barracks2, barracks3, barracks4);
 
-        /* Verify that the setting for population of the barracks close to the border does not affect the center barracks */
+        // Verify that the setting for population of the barracks close to the border does not affect the center barracks
         assertEquals(barracks0.getHostedSoldiers().size(), 2);
         assertEquals(barracks1.getHostedSoldiers().size(), 1);
         assertEquals(barracks2.getHostedSoldiers().size(), 1);
         assertEquals(barracks3.getHostedSoldiers().size(), 1);
         assertEquals(barracks4.getHostedSoldiers().size(), 1);
 
-        /* Set population close to the border to max */
+        // Set population close to the border to max
         player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(10);
 
         Utils.fastForward(300, map);
@@ -388,7 +388,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         assertEquals(barracks3.getHostedSoldiers().size(), 2);
         assertEquals(barracks4.getHostedSoldiers().size(), 2);
 
-        /* Verify that reducing the population at the border does not affect the barracks in the center */
+        // Verify that reducing the population at the border does not affect the barracks in the center
         player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(0);
 
         Utils.fastForward(300, map);
@@ -403,29 +403,29 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     @Test
     public void testMinimumPopulationOfMilitaryBuildingsAwayFromBorder() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(15, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Change soldier inventory */
+        // Change soldier inventory
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 50);
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 2);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 2);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 2);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 2);
 
-        /* Set the population of military buildings away from the border */
+        // Set the population of military buildings away from the border
         player0.setAmountOfSoldiersWhenPopulatingAwayFromBorder(0);
 
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingAwayFromBorder(), 0);
 
-        /* Place barracks - one in center and four around it */
+        // Place barracks - one in center and four around it
         var point1 = new Point(19, 15);
         var point2 = new Point(17, 23);
         var point3 = new Point(17, 13);
@@ -438,7 +438,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         var barracks3 = map.placeBuilding(new Barracks(player0), point4);
         var barracks4 = map.placeBuilding(new Barracks(player0), point5);
 
-        /* Connect the barracks and wait for them to get constructed and populated */
+        // Connect the barracks and wait for them to get constructed and populated
         var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
         var road1 = map.placeAutoSelectedRoad(player0, barracks1.getFlag(), headquarter0.getFlag());
         var road2 = map.placeAutoSelectedRoad(player0, barracks2.getFlag(), headquarter0.getFlag());
@@ -449,7 +449,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(barracks0, barracks1, barracks2, barracks3, barracks4);
 
-        /* Verify that the barracks in the center gets minimal population and other barracks are not affected */
+        // Verify that the barracks in the center gets minimal population and other barracks are not affected
         Utils.fastForward(300, map);
 
         assertEquals(barracks0.getHostedSoldiers().size(), 1);
@@ -462,29 +462,29 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     @Test
     public void testMaximumPopulationOfMilitaryBuildingsAwayFromBorder() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(15, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Change soldier inventory */
+        // Change soldier inventory
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 50);
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 2);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 2);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 2);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 2);
 
-        /* Set the population of military buildings away from the border */
+        // Set the population of military buildings away from the border
         player0.setAmountOfSoldiersWhenPopulatingAwayFromBorder(10);
 
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingAwayFromBorder(), 10);
 
-        /* Place barracks - one in center and four around it */
+        // Place barracks - one in center and four around it
         var point1 = new Point(19, 15);
         var point2 = new Point(17, 23);
         var point3 = new Point(17, 13);
@@ -497,7 +497,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         var barracks3 = map.placeBuilding(new Barracks(player0), point4);
         var barracks4 = map.placeBuilding(new Barracks(player0), point5);
 
-        /* Connect the barracks and wait for them to get constructed and populated */
+        // Connect the barracks and wait for them to get constructed and populated
         var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
         var road1 = map.placeAutoSelectedRoad(player0, barracks1.getFlag(), headquarter0.getFlag());
         var road2 = map.placeAutoSelectedRoad(player0, barracks2.getFlag(), headquarter0.getFlag());
@@ -508,7 +508,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(barracks0, barracks1, barracks2, barracks3, barracks4);
 
-        /* Verify that the barracks in the center gets minimal population and other barracks are not affected */
+        // Verify that the barracks in the center gets minimal population and other barracks are not affected
         Utils.fastForward(300, map);
 
         assertEquals(barracks0.getHostedSoldiers().size(), 2);
@@ -521,39 +521,39 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     @Test
     public void testMediumPopulationOfMilitaryBuildingsAwayFromBorder() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(15, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Change soldier inventory */
+        // Change soldier inventory
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 50);
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 2);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 2);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 2);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 2);
 
-        /* Set the population of military buildings away from the border */
+        // Set the population of military buildings away from the border
         player0.setAmountOfSoldiersWhenPopulatingAwayFromBorder(5);
 
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingAwayFromBorder(), 5);
 
-        /* Place center guard house */
+        // Place center guard house
         var point1 = new Point(23, 15);
         var guardHouse = map.placeBuilding(new GuardHouse(player0), point1);
         var road0 = map.placeAutoSelectedRoad(player0, guardHouse.getFlag(), headquarter0.getFlag());
 
-        /* Wait for it to get constructed and occupied */
+        // Wait for it to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(guardHouse);
 
         Utils.waitForMilitaryBuildingToGetPopulated(guardHouse);
 
-        /* Place barracks - one in center and four around it */
+        // Place barracks - one in center and four around it
         var point2 = new Point(15, 23);
         var point3 = new Point(17, 11);
         var point4 = new Point(27, 23);
@@ -566,7 +566,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         var guardHouse4 = map.placeBuilding(new GuardHouse(player0), point5);
         var guardHouse5 = map.placeBuilding(new GuardHouse(player0), point6);
 
-        /* Connect the barracks and wait for them to get constructed and populated */
+        // Connect the barracks and wait for them to get constructed and populated
         var road1 = map.placeAutoSelectedRoad(player0, guardHouse1.getFlag(), headquarter0.getFlag());
         var road2 = map.placeAutoSelectedRoad(player0, guardHouse2.getFlag(), headquarter0.getFlag());
         var road3 = map.placeAutoSelectedRoad(player0, guardHouse3.getFlag(), guardHouse.getFlag());
@@ -577,7 +577,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(guardHouse, guardHouse1, guardHouse2, guardHouse3, guardHouse4, guardHouse5);
 
-        /* Verify that the barracks in the center gets minimal population and other barracks are not affected */
+        // Verify that the barracks in the center gets minimal population and other barracks are not affected
         Utils.fastForward(300, map);
 
         assertEquals(guardHouse.getHostedSoldiers().size(), 2);
@@ -590,29 +590,29 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     @Test
     public void testChangeMinimumToMediumPopulationOfMilitaryBuildingsAwayFromBorder() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(15, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Change soldier inventory */
+        // Change soldier inventory
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 50);
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 2);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 2);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 2);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 2);
 
-        /* Set the population of military buildings away from the border */
+        // Set the population of military buildings away from the border
         player0.setAmountOfSoldiersWhenPopulatingAwayFromBorder(0);
 
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingAwayFromBorder(), 0);
 
-        /* Start with the center guard house */
+        // Start with the center guard house
         var point1 = new Point(23, 15);
         var guardHouse = map.placeBuilding(new GuardHouse(player0), point1);
 
@@ -622,7 +622,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingToGetPopulated(guardHouse);
 
-        /* Place barracks - one in center and four around it */
+        // Place barracks - one in center and four around it
         var point2 = new Point(21, 19);
         var point3 = new Point(21, 13);
         var point4 = new Point(31, 19);
@@ -633,7 +633,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         var barracks3 = map.placeBuilding(new Barracks(player0), point4);
         var barracks4 = map.placeBuilding(new Barracks(player0), point5);
 
-        /* Connect the barracks and wait for them to get constructed and populated */
+        // Connect the barracks and wait for them to get constructed and populated
         var road1 = map.placeAutoSelectedRoad(player0, barracks1.getFlag(), headquarter0.getFlag());
         var road2 = map.placeAutoSelectedRoad(player0, barracks2.getFlag(), headquarter0.getFlag());
         var road3 = map.placeAutoSelectedRoad(player0, barracks3.getFlag(), guardHouse.getFlag());
@@ -643,7 +643,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(guardHouse, barracks1, barracks2, barracks3, barracks4);
 
-        /* Wait for the barracks in the center to get minimal population */
+        // Wait for the barracks in the center to get minimal population
         Utils.fastForward(300, map);
 
         assertEquals(guardHouse.getHostedSoldiers().size(), 1);
@@ -652,7 +652,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         assertEquals(barracks3.getHostedSoldiers().size(), 2);
         assertEquals(barracks4.getHostedSoldiers().size(), 2);
 
-        /* Verify that the population is increased (only) in the center guard house when the setting is changed */
+        // Verify that the population is increased (only) in the center guard house when the setting is changed
         player0.setAmountOfSoldiersWhenPopulatingAwayFromBorder(5);
 
         Utils.fastForward(300, map);
@@ -667,29 +667,29 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     @Test
     public void testChangeMaximumToMediumPopulationOfMilitaryBuildingsAwayFromBorder() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(15, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Change soldier inventory */
+        // Change soldier inventory
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 50);
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 2);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 2);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 2);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 2);
 
-        /* Set the population of military buildings away from the border */
+        // Set the population of military buildings away from the border
         player0.setAmountOfSoldiersWhenPopulatingAwayFromBorder(10);
 
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingAwayFromBorder(), 10);
 
-        /* Start with the center guard house */
+        // Start with the center guard house
         var point1 = new Point(23, 15);
         var guardHouse = map.placeBuilding(new GuardHouse(player0), point1);
 
@@ -699,7 +699,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingToGetPopulated(guardHouse);
 
-        /* Place barracks - one in center and four around it */
+        // Place barracks - one in center and four around it
         var point2 = new Point(21, 19);
         var point3 = new Point(21, 13);
         var point4 = new Point(31, 19);
@@ -710,7 +710,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         var barracks3 = map.placeBuilding(new Barracks(player0), point4);
         var barracks4 = map.placeBuilding(new Barracks(player0), point5);
 
-        /* Connect the barracks and wait for them to get constructed and populated */
+        // Connect the barracks and wait for them to get constructed and populated
         var road1 = map.placeAutoSelectedRoad(player0, barracks1.getFlag(), headquarter0.getFlag());
         var road2 = map.placeAutoSelectedRoad(player0, barracks2.getFlag(), headquarter0.getFlag());
         var road3 = map.placeAutoSelectedRoad(player0, barracks3.getFlag(), guardHouse.getFlag());
@@ -720,7 +720,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(guardHouse, barracks1, barracks2, barracks3, barracks4);
 
-        /* Wait for the barracks in the center to get minimal population */
+        // Wait for the barracks in the center to get minimal population
         Utils.fastForward(300, map);
 
         assertEquals(guardHouse.getHostedSoldiers().size(), 3);
@@ -729,7 +729,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         assertEquals(barracks3.getHostedSoldiers().size(), 2);
         assertEquals(barracks4.getHostedSoldiers().size(), 2);
 
-        /* Verify that the population is increased (only) in the center guard house when the setting is changed */
+        // Verify that the population is increased (only) in the center guard house when the setting is changed
         player0.setAmountOfSoldiersWhenPopulatingAwayFromBorder(5);
 
         Utils.fastForward(300, map);
@@ -744,34 +744,34 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     @Test
     public void testMinimumPopulationOfMilitaryBuildingsFarAwayFromBorder() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(39, 35);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Fill in lots of resources in the headquarters */
+        // Fill in lots of resources in the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 500);
         Utils.adjustInventoryTo(headquarter0, STONE, 500);
         Utils.adjustInventoryTo(headquarter0, BUILDER, 100);
 
-        /* Change soldier inventory */
+        // Change soldier inventory
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 200);
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 2);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 2);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 2);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 2);
 
-        /* Set the population of military buildings away from the border */
+        // Set the population of military buildings away from the border
         player0.setAmountOfSoldiersWhenPopulatingFarFromBorder(0);
 
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingFarFromBorder(), 0);
 
-        /* Place barracks - one in center and four around it */
+        // Place barracks - one in center and four around it
         var point1 = new Point(43, 35);
         var point2 = new Point(41, 43);
         var point3 = new Point(41, 33);
@@ -784,7 +784,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         var guardHouse3 = map.placeBuilding(new GuardHouse(player0), point4);
         var guardHouse4 = map.placeBuilding(new GuardHouse(player0), point5);
 
-        /* Connect the barracks and wait for them to get constructed and populated */
+        // Connect the barracks and wait for them to get constructed and populated
         var road0 = map.placeAutoSelectedRoad(player0, guardHouse.getFlag(), headquarter0.getFlag());
         var road1 = map.placeAutoSelectedRoad(player0, guardHouse1.getFlag(), headquarter0.getFlag());
         var road2 = map.placeAutoSelectedRoad(player0, guardHouse2.getFlag(), headquarter0.getFlag());
@@ -795,7 +795,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(guardHouse, guardHouse1, guardHouse2, guardHouse3, guardHouse4);
 
-        /* Place one ring of fortresses */
+        // Place one ring of fortresses
         var point6 = new Point(29, 43);
         var point7 = new Point(53, 43);
         var point8 = new Point(53, 29);
@@ -815,7 +815,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(fortress, fortress1, fortress2, fortress3);
 
-        /* Place more fortresses */
+        // Place more fortresses
         var point10 = new Point(19, 29);
         var point11 = new Point(21, 21);
         var point12 = new Point(45, 21);
@@ -835,7 +835,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(fortress4, fortress5, fortress6, fortress7);
 
-        /* Verify that the barracks in the center gets minimal population and others are not affected */
+        // Verify that the barracks in the center gets minimal population and others are not affected
         Utils.fastForward(300, map);
 
         assertEquals(guardHouse.getHostedSoldiers().size(), 1);
@@ -856,34 +856,34 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     @Test
     public void testMaximumPopulationOfMilitaryBuildingsFarAwayFromBorder() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(39, 35);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Fill in lots of resources in the headquarters */
+        // Fill in lots of resources in the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 500);
         Utils.adjustInventoryTo(headquarter0, STONE, 500);
         Utils.adjustInventoryTo(headquarter0, BUILDER, 100);
 
-        /* Change soldier inventory */
+        // Change soldier inventory
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 200);
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 2);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 2);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 2);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 2);
 
-        /* Set the population of military buildings away from the border */
+        // Set the population of military buildings away from the border
         player0.setAmountOfSoldiersWhenPopulatingFarFromBorder(10);
 
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingFarFromBorder(), 10);
 
-        /* Place barracks - one in center and four around it */
+        // Place barracks - one in center and four around it
         var point1 = new Point(43, 35);
         var point2 = new Point(41, 43);
         var point3 = new Point(41, 33);
@@ -896,7 +896,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         var guardHouse3 = map.placeBuilding(new GuardHouse(player0), point4);
         var guardHouse4 = map.placeBuilding(new GuardHouse(player0), point5);
 
-        /* Connect the barracks and wait for them to get constructed and populated */
+        // Connect the barracks and wait for them to get constructed and populated
         var road0 = map.placeAutoSelectedRoad(player0, guardHouse.getFlag(), headquarter0.getFlag());
         var road1 = map.placeAutoSelectedRoad(player0, guardHouse1.getFlag(), headquarter0.getFlag());
         var road2 = map.placeAutoSelectedRoad(player0, guardHouse2.getFlag(), headquarter0.getFlag());
@@ -907,7 +907,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(guardHouse, guardHouse1, guardHouse2, guardHouse3, guardHouse4);
 
-        /* Place one ring of fortresses */
+        // Place one ring of fortresses
         var point6 = new Point(29, 43);
         var point7 = new Point(53, 43);
         var point8 = new Point(53, 29);
@@ -927,7 +927,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(fortress, fortress1, fortress2, fortress3);
 
-        /* Place more fortresses */
+        // Place more fortresses
         var point10 = new Point(19, 29);
         var point11 = new Point(21, 21);
         var point12 = new Point(45, 21);
@@ -947,7 +947,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(fortress4, fortress5, fortress6, fortress7);
 
-        /* Verify that the barracks in the center gets minimal population and others are not affected */
+        // Verify that the barracks in the center gets minimal population and others are not affected
         Utils.fastForward(300, map);
 
         assertEquals(guardHouse.getHostedSoldiers().size(), 3);
@@ -968,34 +968,34 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     @Test
     public void testMediumPopulationOfMilitaryBuildingsFarAwayFromBorder() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(39, 35);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Fill in lots of resources in the headquarters */
+        // Fill in lots of resources in the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 500);
         Utils.adjustInventoryTo(headquarter0, STONE, 500);
         Utils.adjustInventoryTo(headquarter0, BUILDER, 100);
 
-        /* Change soldier inventory */
+        // Change soldier inventory
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 200);
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 2);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 2);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 2);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 2);
 
-        /* Set the population of military buildings away from the border */
+        // Set the population of military buildings away from the border
         player0.setAmountOfSoldiersWhenPopulatingFarFromBorder(5);
 
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingFarFromBorder(), 5);
 
-        /* Place barracks - one in center and four around it */
+        // Place barracks - one in center and four around it
         var point1 = new Point(43, 35);
         var point2 = new Point(41, 43);
         var point3 = new Point(41, 33);
@@ -1008,7 +1008,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         var guardHouse3 = map.placeBuilding(new GuardHouse(player0), point4);
         var guardHouse4 = map.placeBuilding(new GuardHouse(player0), point5);
 
-        /* Connect the barracks and wait for them to get constructed and populated */
+        // Connect the barracks and wait for them to get constructed and populated
         var road0 = map.placeAutoSelectedRoad(player0, guardHouse.getFlag(), headquarter0.getFlag());
         var road1 = map.placeAutoSelectedRoad(player0, guardHouse1.getFlag(), headquarter0.getFlag());
         var road2 = map.placeAutoSelectedRoad(player0, guardHouse2.getFlag(), headquarter0.getFlag());
@@ -1019,7 +1019,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(guardHouse, guardHouse1, guardHouse2, guardHouse3, guardHouse4);
 
-        /* Place one ring of fortresses */
+        // Place one ring of fortresses
         var point6 = new Point(29, 43);
         var point7 = new Point(53, 43);
         var point8 = new Point(53, 29);
@@ -1039,7 +1039,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(fortress, fortress1, fortress2, fortress3);
 
-        /* Place more fortresses */
+        // Place more fortresses
         var point10 = new Point(19, 29);
         var point11 = new Point(21, 21);
         var point12 = new Point(45, 21);
@@ -1059,7 +1059,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(fortress4, fortress5, fortress6, fortress7);
 
-        /* Verify that the barracks in the center gets minimal population and others are not affected */
+        // Verify that the barracks in the center gets minimal population and others are not affected
         Utils.fastForward(300, map);
 
         assertEquals(guardHouse.getHostedSoldiers().size(), 2);
@@ -1080,34 +1080,34 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     @Test
     public void testChangeMinimumToMediumPopulationOfMilitaryBuildingsFarAwayFromBorder() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(39, 35);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Fill in lots of resources in the headquarters */
+        // Fill in lots of resources in the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 500);
         Utils.adjustInventoryTo(headquarter0, STONE, 500);
         Utils.adjustInventoryTo(headquarter0, BUILDER, 100);
 
-        /* Change soldier inventory */
+        // Change soldier inventory
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 200);
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 2);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 2);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 2);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 2);
 
-        /* Set the population of military buildings away from the border */
+        // Set the population of military buildings away from the border
         player0.setAmountOfSoldiersWhenPopulatingFarFromBorder(0);
 
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingFarFromBorder(), 0);
 
-        /* Place barracks - one in center and four around it */
+        // Place barracks - one in center and four around it
         var point1 = new Point(43, 35);
         var point2 = new Point(41, 43);
         var point3 = new Point(41, 33);
@@ -1120,7 +1120,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         var guardHouse3 = map.placeBuilding(new GuardHouse(player0), point4);
         var guardHouse4 = map.placeBuilding(new GuardHouse(player0), point5);
 
-        /* Connect the barracks and wait for them to get constructed and populated */
+        // Connect the barracks and wait for them to get constructed and populated
         var road0 = map.placeAutoSelectedRoad(player0, guardHouse.getFlag(), headquarter0.getFlag());
         var road1 = map.placeAutoSelectedRoad(player0, guardHouse1.getFlag(), headquarter0.getFlag());
         var road2 = map.placeAutoSelectedRoad(player0, guardHouse2.getFlag(), headquarter0.getFlag());
@@ -1131,7 +1131,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(guardHouse, guardHouse1, guardHouse2, guardHouse3, guardHouse4);
 
-        /* Place one ring of fortresses */
+        // Place one ring of fortresses
         var point6 = new Point(29, 43);
         var point7 = new Point(53, 43);
         var point8 = new Point(53, 29);
@@ -1151,7 +1151,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(fortress, fortress1, fortress2, fortress3);
 
-        /* Place more fortresses */
+        // Place more fortresses
         var point10 = new Point(19, 29);
         var point11 = new Point(21, 21);
         var point12 = new Point(45, 21);
@@ -1171,7 +1171,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(fortress4, fortress5, fortress6, fortress7);
 
-        /* The barracks in the center get minimal population and others are not affected */
+        // The barracks in the center get minimal population and others are not affected
         Utils.fastForward(300, map);
 
         assertEquals(guardHouse.getHostedSoldiers().size(), 1);
@@ -1188,7 +1188,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         assertEquals(fortress6.getHostedSoldiers().size(), 9);
         assertEquals(fortress7.getHostedSoldiers().size(), 9);
 
-        /* Verify that changing to medium setting affects the center buildings */
+        // Verify that changing to medium setting affects the center buildings
         player0.setAmountOfSoldiersWhenPopulatingFarFromBorder(5);
 
         Utils.fastForward(300, map);
@@ -1211,34 +1211,34 @@ public class TestSettingsForPopulatingMilitaryBuildings {
     @Test
     public void testChangeMaximumToMediumPopulationOfMilitaryBuildingsFarAwayFromBorder() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(39, 35);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Fill in lots of resources in the headquarters */
+        // Fill in lots of resources in the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 500);
         Utils.adjustInventoryTo(headquarter0, STONE, 500);
         Utils.adjustInventoryTo(headquarter0, BUILDER, 100);
 
-        /* Change soldier inventory */
+        // Change soldier inventory
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 200);
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 2);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 2);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 2);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 2);
 
-        /* Set the population of military buildings away from the border */
+        // Set the population of military buildings away from the border
         player0.setAmountOfSoldiersWhenPopulatingFarFromBorder(10);
 
         assertEquals(player0.getAmountOfSoldiersWhenPopulatingFarFromBorder(), 10);
 
-        /* Place barracks - one in center and four around it */
+        // Place barracks - one in center and four around it
         var point1 = new Point(43, 35);
         var point2 = new Point(41, 43);
         var point3 = new Point(41, 33);
@@ -1251,7 +1251,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         var guardHouse3 = map.placeBuilding(new GuardHouse(player0), point4);
         var guardHouse4 = map.placeBuilding(new GuardHouse(player0), point5);
 
-        /* Connect the barracks and wait for them to get constructed and populated */
+        // Connect the barracks and wait for them to get constructed and populated
         var road0 = map.placeAutoSelectedRoad(player0, guardHouse.getFlag(), headquarter0.getFlag());
         var road1 = map.placeAutoSelectedRoad(player0, guardHouse1.getFlag(), headquarter0.getFlag());
         var road2 = map.placeAutoSelectedRoad(player0, guardHouse2.getFlag(), headquarter0.getFlag());
@@ -1262,7 +1262,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(guardHouse, guardHouse1, guardHouse2, guardHouse3, guardHouse4);
 
-        /* Place one ring of fortresses */
+        // Place one ring of fortresses
         var point6 = new Point(29, 43);
         var point7 = new Point(53, 43);
         var point8 = new Point(53, 29);
@@ -1282,7 +1282,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(fortress, fortress1, fortress2, fortress3);
 
-        /* Place more fortresses */
+        // Place more fortresses
         var point10 = new Point(19, 29);
         var point11 = new Point(21, 21);
         var point12 = new Point(45, 21);
@@ -1302,7 +1302,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
 
         Utils.waitForMilitaryBuildingsToGetPopulated(fortress4, fortress5, fortress6, fortress7);
 
-        /* The barracks in the center gets minimal population and others are not affected */
+        // The barracks in the center gets minimal population and others are not affected
         Utils.fastForward(300, map);
 
         assertEquals(guardHouse.getHostedSoldiers().size(), 3);
@@ -1319,7 +1319,7 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         assertEquals(fortress6.getHostedSoldiers().size(), 9);
         assertEquals(fortress7.getHostedSoldiers().size(), 9);
 
-        /* Verify that changing the setting to medium affects the center buildings */
+        // Verify that changing the setting to medium affects the center buildings
         player0.setAmountOfSoldiersWhenPopulatingFarFromBorder(5);
 
         Utils.fastForward(100, map);

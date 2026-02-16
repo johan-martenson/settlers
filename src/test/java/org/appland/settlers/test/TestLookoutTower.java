@@ -46,21 +46,21 @@ public class TestLookoutTower {
     @Test
     public void testLookoutTowerOnlyNeedsFourPlanksForConstruction() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point22 = new Point(6, 12);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point22);
 
-        /* Deliver two plank and two stone */
+        // Deliver two plank and two stone
         Cargo plankCargo = new Cargo(PLANK, map);
 
         lookoutTower0.putCargo(plankCargo);
@@ -68,10 +68,10 @@ public class TestLookoutTower {
         lookoutTower0.putCargo(plankCargo);
         lookoutTower0.putCargo(plankCargo);
 
-        /* Assign builder */
+        // Assign builder
         Utils.assignBuilder(lookoutTower0);
 
-        /* Verify that this is enough to construct the lookout tower */
+        // Verify that this is enough to construct the lookout tower
         for (int i = 0; i < 100; i++) {
             assertTrue(lookoutTower0.isUnderConstruction());
 
@@ -84,21 +84,21 @@ public class TestLookoutTower {
     @Test
     public void testLookoutTowerCannotBeConstructedWithTooFewPlanks() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point22 = new Point(6, 12);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point22);
 
-        /* Deliver one plank and two stone */
+        // Deliver one plank and two stone
         Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo = new Cargo(STONE, map);
 
@@ -106,10 +106,10 @@ public class TestLookoutTower {
         lookoutTower0.putCargo(plankCargo);
         lookoutTower0.putCargo(plankCargo);
 
-        /* Assign builder */
+        // Assign builder
         Utils.assignBuilder(lookoutTower0);
 
-        /* Verify that this is not enough to construct the lookout tower */
+        // Verify that this is not enough to construct the lookout tower
         for (int i = 0; i < 500; i++) {
             assertTrue(lookoutTower0.isUnderConstruction());
 
@@ -122,21 +122,21 @@ public class TestLookoutTower {
     @Test
     public void testLookoutTowerNeedsWorker() throws Exception {
 
-        /* Create new single player game */
+        // Create new single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point3 = new Point(7, 9);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the lookout tower with the headquarter */
+        // Connect the lookout tower with the headquarter
         Point point4 = new Point(8, 8);
         Point point5 = new Point(7, 7);
         Point point6 = new Point(8, 6);
@@ -144,10 +144,10 @@ public class TestLookoutTower {
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
-        /* Unfinished lookout tower doesn't need worker */
+        // Unfinished lookout tower doesn't need worker
         assertFalse(lookoutTower0.needsWorker());
 
-        /* Finish construction of the lookout tower */
+        // Finish construction of the lookout tower
         Utils.constructHouse(lookoutTower0);
 
         assertTrue(lookoutTower0.needsWorker());
@@ -163,21 +163,21 @@ public class TestLookoutTower {
     @Test
     public void testLookoutTowerGetsAssignedWorker() throws Exception {
 
-        /* Create new single player game */
+        // Create new single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point3 = new Point(7, 9);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the lookout tower with the headquarter */
+        // Connect the lookout tower with the headquarter
         Point point4 = new Point(8, 8);
         Point point5 = new Point(7, 7);
         Point point6 = new Point(8, 6);
@@ -185,17 +185,17 @@ public class TestLookoutTower {
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
-        /* Finish construction of the lookout tower */
+        // Finish construction of the lookout tower
         Utils.constructHouse(lookoutTower0);
 
         assertTrue(lookoutTower0.needsWorker());
 
-        /* Verify that a lookout tower worker leaves the headquarter */
+        // Verify that a lookout tower worker leaves the headquarter
         Utils.fastForward(3, map);
 
         assertTrue(map.getWorkers().size() >= 3);
 
-        /* Let the lookout tower worker reach the lookout tower */
+        // Let the lookout tower worker reach the lookout tower
         Scout Scout = null;
 
         for (Worker worker : map.getWorkers()) {
@@ -217,38 +217,38 @@ public class TestLookoutTower {
     @Test
     public void testScoutIsCreatedFromBowAndAssignedToLookoutTower() throws Exception {
 
-        /* Create new single player game */
+        // Create new single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Remove all scouts from the headquarter and add a bow */
+        // Remove all scouts from the headquarter and add a bow
         Utils.adjustInventoryTo(headquarter, SCOUT, 0);
         Utils.adjustInventoryTo(headquarter, Material.BOW, 1);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point3 = new Point(7, 9);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the lookout tower with the headquarter */
+        // Connect the lookout tower with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter.getFlag());
 
-        /* Finish construction of the lookout tower */
+        // Finish construction of the lookout tower
         Utils.constructHouse(lookoutTower0);
 
         assertTrue(lookoutTower0.needsWorker());
 
-        /* Verify that a lookout tower worker leaves the headquarter */
+        // Verify that a lookout tower worker leaves the headquarter
         Utils.fastForward(3, map);
 
         assertTrue(map.getWorkers().size() >= 3);
 
-        /* Let the lookout tower worker reach the lookout tower */
+        // Let the lookout tower worker reach the lookout tower
         Scout Scout = null;
 
         for (Worker worker : map.getWorkers()) {
@@ -270,21 +270,21 @@ public class TestLookoutTower {
     @Test
     public void testUnoccupiedLookoutTowerDoesNotDiscoverLand() throws Exception {
 
-        /* Create new single player game */
+        // Create new single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point3 = new Point(7, 9);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the lookout tower with the headquarter */
+        // Connect the lookout tower with the headquarter
         Point point4 = new Point(8, 8);
         Point point5 = new Point(7, 7);
         Point point6 = new Point(8, 6);
@@ -292,7 +292,7 @@ public class TestLookoutTower {
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
-        /* Verify that the unoccupied lookout tower does not discover any land */
+        // Verify that the unoccupied lookout tower does not discover any land
         Set<Point> discoveredLandBefore = new HashSet<>(player0.getDiscoveredLand());
 
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
@@ -303,34 +303,34 @@ public class TestLookoutTower {
     @Test
     public void testLookoutTowerDiscoversLandWhenOccupied() throws Exception {
 
-        /* Create new single player game */
+        // Create new single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(9, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point3 = new Point(23, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the lookout tower with the headquarter */
+        // Connect the lookout tower with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), lookoutTower0.getFlag());
 
-        /* Wait for construction of the lookout tower */
+        // Wait for construction of the lookout tower
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
         assertTrue(lookoutTower0.needsWorker());
 
-        /* Verify that a lookout tower worker leaves the headquarter */
+        // Verify that a lookout tower worker leaves the headquarter
         Utils.fastForward(3, map);
 
         assertTrue(map.getWorkers().size() >= 3);
 
-        /* Verifies that the lookout tower discovers new land when it gets occupied */
+        // Verifies that the lookout tower discovers new land when it gets occupied
         Set<Point> discoveredLandBefore = new HashSet<>(player0.getDiscoveredLand());
 
         Scout Scout = null;
@@ -355,31 +355,31 @@ public class TestLookoutTower {
     @Test
     public void testOccupiedLookoutTowerProducesNothing() throws Exception {
 
-        /* Create new single player game */
+        // Create new single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point3 = new Point(7, 9);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Finish construction of the lookout tower */
+        // Finish construction of the lookout tower
         Utils.constructHouse(lookoutTower0);
 
-        /* Populate the lookout tower */
+        // Populate the lookout tower
         Worker Scout = Utils.occupyBuilding(new Scout(player0, map), lookoutTower0);
 
         assertTrue(Scout.isInsideBuilding());
         assertEquals(Scout.getHome(), lookoutTower0);
         assertEquals(lookoutTower0.getWorker(), Scout);
 
-        /* Verify that the lookout tower doesn't produce anything */
+        // Verify that the lookout tower doesn't produce anything
         for (int i = 0; i < 500; i++) {
             assertTrue(lookoutTower0.getFlag().getStackedCargo().isEmpty());
             assertNull(Scout.getCargo());
@@ -390,24 +390,24 @@ public class TestLookoutTower {
     @Test
     public void testUnoccupiedLookoutTowerProducesNothing() throws Exception {
 
-        /* Create new single player game */
+        // Create new single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point3 = new Point(7, 9);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Finish construction of the lookout tower */
+        // Finish construction of the lookout tower
         Utils.constructHouse(lookoutTower0);
 
-        /* Verify that the lookout tower doesn't produce anything */
+        // Verify that the lookout tower doesn't produce anything
         for (int i = 0; i < 500; i++) {
             assertTrue(lookoutTower0.getFlag().getStackedCargo().isEmpty());
             map.stepTime();
@@ -417,27 +417,27 @@ public class TestLookoutTower {
     @Test
     public void testScoutGoesBackToStorageWhenLookoutTowerIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point26 = new Point(8, 8);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point26);
 
-        /* Finish construction of the lookout tower */
+        // Finish construction of the lookout tower
         Utils.constructHouse(lookoutTower0);
 
-        /* Occupy the lookout tower */
+        // Occupy the lookout tower
         Utils.occupyBuilding(new Scout(player0, map), lookoutTower0);
 
-        /* Destroy the lookout tower */
+        // Destroy the lookout tower
         Worker Scout = lookoutTower0.getWorker();
 
         assertTrue(Scout.isInsideBuilding());
@@ -445,7 +445,7 @@ public class TestLookoutTower {
 
         lookoutTower0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(Scout.isInsideBuilding());
         assertEquals(Scout.getTarget(), headquarter0.getPosition());
 
@@ -453,37 +453,37 @@ public class TestLookoutTower {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, Scout, headquarter0.getPosition());
 
-        /* Verify that the Scout is stored correctly in the headquarter */
+        // Verify that the Scout is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(SCOUT), amount + 1);
     }
 
     @Test
     public void testScoutGoesBackOnToStorageOnRoadsIfPossibleWhenLookoutTowerIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point26 = new Point(8, 8);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point26);
 
-        /* Connect the lookout tower with the headquarter */
+        // Connect the lookout tower with the headquarter
         map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Finish construction of the lookout tower */
+        // Finish construction of the lookout tower
         Utils.constructHouse(lookoutTower0);
 
-        /* Occupy the lookout tower */
+        // Occupy the lookout tower
         Utils.occupyBuilding(new Scout(player0, map), lookoutTower0);
 
-        /* Destroy the lookout tower */
+        // Destroy the lookout tower
         Worker Scout = lookoutTower0.getWorker();
 
         assertTrue(Scout.isInsideBuilding());
@@ -491,11 +491,11 @@ public class TestLookoutTower {
 
         lookoutTower0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(Scout.isInsideBuilding());
         assertEquals(Scout.getTarget(), headquarter0.getPosition());
 
-        /* Verify that the worker plans to use the roads */
+        // Verify that the worker plans to use the roads
         boolean firstStep = true;
         for (Point point : Scout.getPlannedPath()) {
             if (firstStep) {
@@ -510,37 +510,37 @@ public class TestLookoutTower {
     @Test
     public void testProductionInLookoutTowerCannotBeStopped() throws Exception {
 
-        /* Create game map */
+        // Create game map
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point1 = new Point(8, 6);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
-        /* Connect the lookout tower and the headquarter */
+        // Connect the lookout tower and the headquarter
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
-        /* Finish the lookout tower */
+        // Finish the lookout tower
         Utils.constructHouse(lookoutTower0);
 
-        /* Assign a worker to the lookout tower */
+        // Assign a worker to the lookout tower
         Scout Scout = new Scout(player0, map);
 
         Utils.occupyBuilding(Scout, lookoutTower0);
 
         assertTrue(Scout.isInsideBuilding());
 
-        /* Verify that it's not possible to stop production in the lookout tower */
+        // Verify that it's not possible to stop production in the lookout tower
         try {
             lookoutTower0.stopProduction();
 
@@ -553,37 +553,37 @@ public class TestLookoutTower {
     @Test
     public void testProductionInLookoutTowerCannotBeResumed() throws Exception {
 
-        /* Create game map */
+        // Create game map
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point1 = new Point(8, 6);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
-        /* Connect the lookout tower and the headquarter */
+        // Connect the lookout tower and the headquarter
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
-        /* Finish the lookout tower */
+        // Finish the lookout tower
         Utils.constructHouse(lookoutTower0);
 
-        /* Assign a worker to the lookout tower */
+        // Assign a worker to the lookout tower
         Scout Scout = new Scout(player0, map);
 
         Utils.occupyBuilding(Scout, lookoutTower0);
 
         assertTrue(Scout.isInsideBuilding());
 
-        /* Verify that production cannot be resumed in the lookout tower */
+        // Verify that production cannot be resumed in the lookout tower
         try {
             lookoutTower0.resumeProduction();
 
@@ -594,35 +594,35 @@ public class TestLookoutTower {
     @Test
     public void testAssignedScoutHasCorrectSetPlayer() throws Exception {
 
-        /* Create players */
+        // Create players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        /* Create game map */
+        // Create game map
         GameMap map = new GameMap(players, 50, 50);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(15, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point1 = new Point(20, 14);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
-        /* Finish construction of the lookout tower */
+        // Finish construction of the lookout tower
         Utils.constructHouse(lookoutTower0);
 
-        /* Connect the lookout tower with the headquarter */
+        // Connect the lookout tower with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), lookoutTower0.getFlag());
 
-        /* Wait for Scout to get assigned and leave the headquarter */
+        // Wait for Scout to get assigned and leave the headquarter
         List<Scout> workers = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
 
-        /* Verify that the player is set correctly in the worker */
+        // Verify that the player is set correctly in the worker
         Scout worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
@@ -631,7 +631,7 @@ public class TestLookoutTower {
     @Test
     public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
 
-        /* Create player list with two players */
+        // Create player list with two players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         Player player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
@@ -642,42 +642,42 @@ public class TestLookoutTower {
         players.add(player1);
         players.add(player2);
 
-        /* Create game map choosing two players */
+        // Create game map choosing two players
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 2's headquarter */
+        // Place player 2's headquarter
         Point point10 = new Point(70, 70);
         Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
-        /* Place player 0's headquarter */
+        // Place player 0's headquarter
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        // Place player 1's headquarter
         Point point1 = new Point(45, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place fortress for player 0 */
+        // Place fortress for player 0
         Point point2 = new Point(21, 9);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
-        /* Finish construction of the fortress */
+        // Finish construction of the fortress
         Utils.constructHouse(fortress0);
 
-        /* Occupy the fortress */
+        // Occupy the fortress
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
-        /* Place lookout tower close to the new border */
+        // Place lookout tower close to the new border
         Point point4 = new Point(28, 18);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point4);
 
-        /* Finish construction of the lookout tower */
+        // Finish construction of the lookout tower
         Utils.constructHouse(lookoutTower0);
 
-        /* Occupy the lookout tower */
+        // Occupy the lookout tower
         Scout worker = Utils.occupyBuilding(new Scout(player0, map), lookoutTower0);
 
-        /* Verify that the worker goes back to its own storage when the fortress is torn down */
+        // Verify that the worker goes back to its own storage when the fortress is torn down
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
@@ -686,31 +686,31 @@ public class TestLookoutTower {
     @Test
     public void testScoutReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place first flag */
+        // Place first flag
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point2 = new Point(14, 4);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2.upLeft());
 
-        /* Connect headquarter and first flag */
+        // Connect headquarter and first flag
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Connect the first flag with the second flag */
+        // Connect the first flag with the second flag
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, lookoutTower0.getFlag());
 
-        /* Wait for the Scout to be on the second road on its way to the flag */
+        // Wait for the Scout to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0);
 
         Scout Scout = null;
@@ -728,18 +728,18 @@ public class TestLookoutTower {
 
         map.stepTime();
 
-        /* See that the Scout has started walking */
+        // See that the Scout has started walking
         assertFalse(Scout.isExactlyAtPoint());
 
-        /* Remove the next road */
+        // Remove the next road
         map.removeRoad(road1);
 
-        /* Verify that the Scout continues walking to the flag */
+        // Verify that the Scout continues walking to the flag
         Utils.fastForwardUntilWorkerReachesPoint(map, Scout, flag0.getPosition());
 
         assertEquals(Scout.getPosition(), flag0.getPosition());
 
-        /* Verify that the Scout returns to the headquarter when it reaches the flag */
+        // Verify that the Scout returns to the headquarter when it reaches the flag
         assertEquals(Scout.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, Scout, headquarter0.getPosition());
@@ -748,31 +748,31 @@ public class TestLookoutTower {
     @Test
     public void testScoutContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place first flag */
+        // Place first flag
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point2 = new Point(14, 4);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2.upLeft());
 
-        /* Connect headquarter and first flag */
+        // Connect headquarter and first flag
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Connect the first flag with the second flag */
+        // Connect the first flag with the second flag
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, lookoutTower0.getFlag());
 
-        /* Wait for the Scout to be on the second road on its way to the flag */
+        // Wait for the Scout to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0);
 
         Scout Scout = null;
@@ -790,54 +790,54 @@ public class TestLookoutTower {
 
         map.stepTime();
 
-        /* See that the Scout has started walking */
+        // See that the Scout has started walking
         assertFalse(Scout.isExactlyAtPoint());
 
-        /* Remove the current road */
+        // Remove the current road
         map.removeRoad(road0);
 
-        /* Verify that the Scout continues walking to the flag */
+        // Verify that the Scout continues walking to the flag
         Utils.fastForwardUntilWorkerReachesPoint(map, Scout, flag0.getPosition());
 
         assertEquals(Scout.getPosition(), flag0.getPosition());
 
-        /* Verify that the Scout continues to the final flag */
+        // Verify that the Scout continues to the final flag
         assertEquals(Scout.getTarget(), lookoutTower0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, Scout, lookoutTower0.getFlag().getPosition());
 
-        /* Verify that the Scout goes out to Scout instead of going directly back */
+        // Verify that the Scout goes out to Scout instead of going directly back
         assertNotEquals(Scout.getTarget(), headquarter0.getPosition());
     }
 
     @Test
     public void testScoutReturnsToStorageIfLookoutTowerIsDestroyed() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place first flag */
+        // Place first flag
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point2 = new Point(14, 4);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2.upLeft());
 
-        /* Connect headquarter and first flag */
+        // Connect headquarter and first flag
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Connect the first flag with the second flag */
+        // Connect the first flag with the second flag
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, lookoutTower0.getFlag());
 
-        /* Wait for the Scout to be on the second road on its way to the flag */
+        // Wait for the Scout to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0);
 
         Scout Scout = null;
@@ -851,57 +851,57 @@ public class TestLookoutTower {
         assertNotNull(Scout);
         assertEquals(Scout.getTarget(), lookoutTower0.getPosition());
 
-        /* Wait for the Scout to reach the first flag */
+        // Wait for the Scout to reach the first flag
         Utils.fastForwardUntilWorkerReachesPoint(map, Scout, flag0.getPosition());
 
         map.stepTime();
 
-        /* See that the Scout has started walking */
+        // See that the Scout has started walking
         assertFalse(Scout.isExactlyAtPoint());
 
-        /* Tear down the lookout tower */
+        // Tear down the lookout tower
         lookoutTower0.tearDown();
 
-        /* Verify that the Scout continues walking to the next flag */
+        // Verify that the Scout continues walking to the next flag
         Utils.fastForwardUntilWorkerReachesPoint(map, Scout, lookoutTower0.getFlag().getPosition());
 
         assertEquals(Scout.getPosition(), lookoutTower0.getFlag().getPosition());
 
-        /* Verify that the Scout goes back to storage */
+        // Verify that the Scout goes back to storage
         assertEquals(Scout.getTarget(), headquarter0.getPosition());
     }
 
     @Test
     public void testScoutGoesOffroadBackToClosestStorageWhenLookoutTowerIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point26 = new Point(17, 17);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point26);
 
-        /* Finish construction of the lookout tower */
+        // Finish construction of the lookout tower
         Utils.constructHouse(lookoutTower0);
 
-        /* Occupy the lookout tower */
+        // Occupy the lookout tower
         Utils.occupyBuilding(new Scout(player0, map), lookoutTower0);
 
-        /* Place a second storage closer to the lookout tower */
+        // Place a second storage closer to the lookout tower
         Point point2 = new Point(13, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Finish construction of the storage */
+        // Finish construction of the storage
         Utils.constructHouse(storehouse0);
 
-        /* Destroy the lookout tower */
+        // Destroy the lookout tower
         Worker Scout = lookoutTower0.getWorker();
 
         assertTrue(Scout.isInsideBuilding());
@@ -909,7 +909,7 @@ public class TestLookoutTower {
 
         lookoutTower0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(Scout.isInsideBuilding());
         assertEquals(Scout.getTarget(), storehouse0.getPosition());
 
@@ -917,44 +917,44 @@ public class TestLookoutTower {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, Scout, storehouse0.getPosition());
 
-        /* Verify that the Scout is stored correctly in the headquarter */
+        // Verify that the Scout is stored correctly in the headquarter
         assertEquals(storehouse0.getAmount(SCOUT), amount + 1);
     }
 
     @Test
     public void testScoutReturnsOffroadAndAvoidsBurningStorageWhenLookoutTowerIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point26 = new Point(17, 17);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point26);
 
-        /* Finish construction of the lookout tower */
+        // Finish construction of the lookout tower
         Utils.constructHouse(lookoutTower0);
 
-        /* Occupy the lookout tower */
+        // Occupy the lookout tower
         Utils.occupyBuilding(new Scout(player0, map), lookoutTower0);
 
-        /* Place a second storage closer to the lookout tower */
+        // Place a second storage closer to the lookout tower
         Point point2 = new Point(13, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Finish construction of the storage */
+        // Finish construction of the storage
         Utils.constructHouse(storehouse0);
 
-        /* Destroy the storage */
+        // Destroy the storage
         storehouse0.tearDown();
 
-        /* Destroy the lookout tower */
+        // Destroy the lookout tower
         Worker Scout = lookoutTower0.getWorker();
 
         assertTrue(Scout.isInsideBuilding());
@@ -962,7 +962,7 @@ public class TestLookoutTower {
 
         lookoutTower0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(Scout.isInsideBuilding());
         assertEquals(Scout.getTarget(), headquarter0.getPosition());
 
@@ -970,47 +970,47 @@ public class TestLookoutTower {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, Scout, headquarter0.getPosition());
 
-        /* Verify that the Scout is stored correctly in the headquarter */
+        // Verify that the Scout is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(SCOUT), amount + 1);
     }
 
     @Test
     public void testScoutReturnsOffroadAndAvoidsDestroyedStorageWhenLookoutTowerIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point26 = new Point(17, 17);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point26);
 
-        /* Finish construction of the lookout tower */
+        // Finish construction of the lookout tower
         Utils.constructHouse(lookoutTower0);
 
-        /* Occupy the lookout tower */
+        // Occupy the lookout tower
         Utils.occupyBuilding(new Scout(player0, map), lookoutTower0);
 
-        /* Place a second storage closer to the lookout tower */
+        // Place a second storage closer to the lookout tower
         Point point2 = new Point(13, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Finish construction of the storage */
+        // Finish construction of the storage
         Utils.constructHouse(storehouse0);
 
-        /* Destroy the storage */
+        // Destroy the storage
         storehouse0.tearDown();
 
-        /* Wait for the storage to burn down */
+        // Wait for the storage to burn down
         Utils.waitForBuildingToBurnDown(storehouse0);
 
-        /* Destroy the lookout tower */
+        // Destroy the lookout tower
         Worker Scout = lookoutTower0.getWorker();
 
         assertTrue(Scout.isInsideBuilding());
@@ -1018,7 +1018,7 @@ public class TestLookoutTower {
 
         lookoutTower0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(Scout.isInsideBuilding());
         assertEquals(Scout.getTarget(), headquarter0.getPosition());
 
@@ -1026,38 +1026,38 @@ public class TestLookoutTower {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, Scout, headquarter0.getPosition());
 
-        /* Verify that the Scout is stored correctly in the headquarter */
+        // Verify that the Scout is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(SCOUT), amount + 1);
     }
 
     @Test
     public void testScoutReturnsOffroadAndAvoidsUnfinishedStorageWhenLookoutTowerIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point26 = new Point(17, 17);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point26);
 
-        /* Finish construction of the lookout tower */
+        // Finish construction of the lookout tower
         Utils.constructHouse(lookoutTower0);
 
-        /* Occupy the lookout tower */
+        // Occupy the lookout tower
         Utils.occupyBuilding(new Scout(player0, map), lookoutTower0);
 
-        /* Place a second storage closer to the lookout tower */
+        // Place a second storage closer to the lookout tower
         Point point2 = new Point(13, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Destroy the lookout tower */
+        // Destroy the lookout tower
         Worker Scout = lookoutTower0.getWorker();
 
         assertTrue(Scout.isInsideBuilding());
@@ -1065,7 +1065,7 @@ public class TestLookoutTower {
 
         lookoutTower0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter instead of the unfinished closer storage building */
+        // Verify that the worker leaves the building and goes back to the headquarter instead of the unfinished closer storage building
         assertFalse(Scout.isInsideBuilding());
         assertEquals(Scout.getTarget(), headquarter0.getPosition());
 
@@ -1073,43 +1073,43 @@ public class TestLookoutTower {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, Scout, headquarter0.getPosition());
 
-        /* Verify that the Scout is stored correctly in the headquarter */
+        // Verify that the Scout is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(SCOUT), amount + 1);
     }
 
     @Test
     public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point26 = new Point(17, 17);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point26);
 
-        /* Place road to connect the headquarter and the lookout tower */
+        // Place road to connect the headquarter and the lookout tower
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), lookoutTower0.getFlag());
 
-        /* Finish construction of the lookout tower */
+        // Finish construction of the lookout tower
         Utils.constructHouse(lookoutTower0);
 
-        /* Wait for a worker to start walking to the building */
+        // Wait for a worker to start walking to the building
         Worker worker = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).getFirst();
 
-        /* Wait for the worker to get to the building's flag */
+        // Wait for the worker to get to the building's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, lookoutTower0.getFlag().getPosition());
 
-        /* Tear down the building */
+        // Tear down the building
         lookoutTower0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
+        // Verify that the worker goes to the building and then returns to the headquarter instead of entering
         assertEquals(worker.getTarget(), lookoutTower0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, lookoutTower0.getPosition());
@@ -1122,31 +1122,31 @@ public class TestLookoutTower {
     @Test
     public void testLookoutTowerAlwaysHasZeroProductivity() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point1 = new Point(7, 9);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
-        /* Finish construction of the lookout tower */
+        // Finish construction of the lookout tower
         Utils.constructHouse(lookoutTower0);
 
-        /* Populate the lookout tower */
+        // Populate the lookout tower
         Worker armorer0 = Utils.occupyBuilding(new Scout(player0, map), lookoutTower0);
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), lookoutTower0);
         assertEquals(lookoutTower0.getWorker(), armorer0);
 
-        /* Verify that the productivity is 0% */
+        // Verify that the productivity is 0%
         for (int i = 0; i < 500; i++) {
             assertTrue(lookoutTower0.getFlag().getStackedCargo().isEmpty());
             assertNull(armorer0.getCargo());
@@ -1158,24 +1158,24 @@ public class TestLookoutTower {
     @Test
     public void testUnoccupiedLookoutTowerHasNoProductivity() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point1 = new Point(7, 9);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
-        /* Finish construction of the lookout tower */
+        // Finish construction of the lookout tower
         Utils.constructHouse(lookoutTower0);
 
-        /* Verify that the unoccupied lookout tower is unproductive */
+        // Verify that the unoccupied lookout tower is unproductive
         for (int i = 0; i < 1000; i++) {
             assertEquals(lookoutTower0.getProductivity(), 0);
 
@@ -1186,72 +1186,72 @@ public class TestLookoutTower {
     @Test
     public void testLookoutTowerCannotProduce() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point1 = new Point(7, 9);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
-        /* Finish construction of the lookout tower */
+        // Finish construction of the lookout tower
         Utils.constructHouse(lookoutTower0);
 
-        /* Populate the lookout tower */
+        // Populate the lookout tower
         Worker Scout0 = Utils.occupyBuilding(new Scout(player0, map), lookoutTower0);
 
-        /* Verify that the lookout tower can't produce */
+        // Verify that the lookout tower can't produce
         assertFalse(lookoutTower0.canProduce());
     }
 
     @Test
     public void testLookoutTowerReportsCorrectOutput() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point1 = new Point(6, 12);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
-        /* Construct the lookout tower */
+        // Construct the lookout tower
         Utils.constructHouse(lookoutTower0);
 
-        /* Verify that the reported output is correct */
+        // Verify that the reported output is correct
         assertEquals(lookoutTower0.getProducedMaterial().length, 0);
     }
 
     @Test
     public void testLookoutTowerReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point1 = new Point(6, 12);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
-        /* Verify that the reported needed construction material is correct */
+        // Verify that the reported needed construction material is correct
         assertEquals(lookoutTower0.getTypesOfMaterialNeeded().size(), 1);
         assertTrue(lookoutTower0.getTypesOfMaterialNeeded().contains(PLANK));
         assertFalse(lookoutTower0.getTypesOfMaterialNeeded().contains(STONE));
@@ -1269,62 +1269,62 @@ public class TestLookoutTower {
     @Test
     public void testLookoutTowerReportsCorrectMaterialsNeededForProduction() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point1 = new Point(6, 12);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
-        /* Construct the lookout tower */
+        // Construct the lookout tower
         Utils.constructHouse(lookoutTower0);
 
-        /* Verify that the reported needed construction material is correct */
+        // Verify that the reported needed construction material is correct
         assertEquals(lookoutTower0.getTypesOfMaterialNeeded().size(), 0);
     }
 
     @Test
     public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndLookoutTowerIsTornDown() throws Exception {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place storehouse */
+        // Place storehouse
         Point point1 = new Point(5, 5);
         Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point2 = new Point(18, 6);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2);
 
-        /* Place road to connect the storehouse with the headquarter */
+        // Place road to connect the storehouse with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        /* Place road to connect the headquarter with the lookout tower */
+        // Place road to connect the headquarter with the lookout tower
         Road road1 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Add a lot of planks and stones to the headquarter */
+        // Add a lot of planks and stones to the headquarter
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        /* Wait for the lookout tower and the storehouse to get constructed */
+        // Wait for the lookout tower and the storehouse to get constructed
         Utils.waitForBuildingsToBeConstructed(storehouse, lookoutTower0);
 
-        /* Wait for the lookout tower and the storage to get occupied */
+        // Wait for the lookout tower and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, lookoutTower0);
 
         Worker scout0 = lookoutTower0.getWorker();
@@ -1333,7 +1333,7 @@ public class TestLookoutTower {
         assertEquals(scout0.getHome(), lookoutTower0);
         assertEquals(lookoutTower0.getWorker(), scout0);
 
-        /* Verify that the worker goes to the storage when the lookout tower is torn down */
+        // Verify that the worker goes to the storage when the lookout tower is torn down
         headquarter0.blockDeliveryOfMaterial(SCOUT);
 
         lookoutTower0.tearDown();
@@ -1354,38 +1354,38 @@ public class TestLookoutTower {
     @Test
     public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndLookoutTowerIsTornDown() throws Exception {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place storehouse */
+        // Place storehouse
         Point point1 = new Point(5, 5);
         Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point2 = new Point(18, 6);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2);
 
-        /* Place road to connect the storehouse with the headquarter */
+        // Place road to connect the storehouse with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        /* Place road to connect the headquarter with the lookout tower */
+        // Place road to connect the headquarter with the lookout tower
         Road road1 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Add a lot of planks and stones to the headquarter */
+        // Add a lot of planks and stones to the headquarter
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        /* Wait for the lookout tower and the storehouse to get constructed */
+        // Wait for the lookout tower and the storehouse to get constructed
         Utils.waitForBuildingsToBeConstructed(storehouse, lookoutTower0);
 
-        /* Wait for the lookout tower and the storage to get occupied */
+        // Wait for the lookout tower and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, lookoutTower0);
 
         Worker scout0 = lookoutTower0.getWorker();
@@ -1394,7 +1394,7 @@ public class TestLookoutTower {
         assertEquals(scout0.getHome(), lookoutTower0);
         assertEquals(lookoutTower0.getWorker(), scout0);
 
-        /* Verify that the worker goes to the storage off-road when the lookout tower is torn down */
+        // Verify that the worker goes to the storage off-road when the lookout tower is torn down
         headquarter0.blockDeliveryOfMaterial(SCOUT);
 
         lookoutTower0.tearDown();
@@ -1417,17 +1417,17 @@ public class TestLookoutTower {
     @Test
     public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, SCOUT, 1);
 
         assertEquals(headquarter0.getAmount(SCOUT), 1);
@@ -1455,17 +1455,17 @@ public class TestLookoutTower {
     @Test
     public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, SCOUT, 1);
 
         headquarter0.blockDeliveryOfMaterial(SCOUT);
@@ -1500,27 +1500,27 @@ public class TestLookoutTower {
     @Test
     public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point1 = new Point(7, 9);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
-        /* Place road to connect the lookout tower with the headquarter */
+        // Place road to connect the lookout tower with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        /* Wait for the lookout tower to get constructed and occupied */
+        // Wait for the lookout tower to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
@@ -1560,38 +1560,38 @@ public class TestLookoutTower {
     @Test
     public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point1 = new Point(7, 9);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
-        /* Place road to connect the lookout tower with the headquarter */
+        // Place road to connect the lookout tower with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for a scout to start walking to the lookout tower */
+        // Wait for a scout to start walking to the lookout tower
         Scout scout = Utils.waitForWorkerOutsideBuilding(Scout.class, player0);
 
-        /* Wait for the scout to go past the headquarter's flag */
+        // Wait for the scout to go past the headquarter's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, scout, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
-        /* Verify that the scout goes away and dies when the house has been torn down and storage is not possible */
+        // Verify that the scout goes away and dies when the house has been torn down and storage is not possible
         assertEquals(scout.getTarget(), lookoutTower0.getPosition());
 
         headquarter0.blockDeliveryOfMaterial(SCOUT);

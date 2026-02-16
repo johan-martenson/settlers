@@ -42,226 +42,226 @@ public class TestWorkerHasDirections {
     @Test
     public void testCourierLeavingHeadquartersHasDirectionDownRight() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
+        // Place flag
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Wait for the road's courier to come out from the headquarters */
+        // Wait for the road's courier to come out from the headquarters
         Courier courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
-        /* Verify that the courier has the right direction set */
+        // Verify that the courier has the right direction set
         assertEquals(courier.getDirection(), Direction.DOWN_RIGHT);
     }
 
     @Test
     public void testCourierWalkingRightHasDirectionRight() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
+        // Place flag
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Wait for the road's courier to come out from the headquarters */
+        // Wait for the road's courier to come out from the headquarters
         Courier courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
-        /*  Wait for the courier to reach the headquarters' flag */
+        // Wait for the courier to reach the headquarters' flag
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
 
-        /* Let the courier take a first step on the next road */
+        // Let the courier take a first step on the next road
         map.stepTime();
 
-        /* Verify that the courier has the right direction set */
+        // Verify that the courier has the right direction set
         assertEquals(courier.getDirection(), Direction.RIGHT);
     }
 
     @Test
     public void testCourierWalkingUpRightHasDirectionUpRight() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
+        // Place flag
         Point point1 = new Point(8, 6);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Wait for the road's courier to come out from the headquarters */
+        // Wait for the road's courier to come out from the headquarters
         Courier courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
-        /*  Wait for the courier to reach the headquarters' flag */
+        // Wait for the courier to reach the headquarters' flag
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
 
-        /* Let the courier take a first step on the next road */
+        // Let the courier take a first step on the next road
         map.stepTime();
 
-        /* Verify that the courier has the right direction set */
+        // Verify that the courier has the right direction set
         assertEquals(courier.getDirection(), Direction.UP_RIGHT);
     }
 
     @Test
     public void testCourierWalkingDownRightHasDirectionDownRight() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
+        // Place flag
         Point point1 = new Point(8, 2);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Wait for the road's courier to come out from the headquarters */
+        // Wait for the road's courier to come out from the headquarters
         Courier courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
-        /*  Wait for the courier to reach the headquarters' flag */
+        // Wait for the courier to reach the headquarters' flag
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
 
-        /* Let the courier take a first step on the next road */
+        // Let the courier take a first step on the next road
         map.stepTime();
 
-        /* Verify that the courier has the right direction set */
+        // Verify that the courier has the right direction set
         assertEquals(courier.getDirection(), Direction.DOWN_RIGHT);
     }
 
     @Test
     public void testCourierWalkingLeftHasDirectionLeft() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
+        // Place flag
         Point point1 = new Point(4, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Wait for the road's courier to come out from the headquarters */
+        // Wait for the road's courier to come out from the headquarters
         Courier courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
-        /*  Wait for the courier to reach the headquarters' flag */
+        // Wait for the courier to reach the headquarters' flag
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
 
-        /* Let the courier take a first step on the next road */
+        // Let the courier take a first step on the next road
         map.stepTime();
 
-        /* Verify that the courier has the right direction set */
+        // Verify that the courier has the right direction set
         assertEquals(courier.getDirection(), Direction.LEFT);
     }
 
     @Test
     public void testCourierWalkingDownLeftHasDirectionDownLeft() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
+        // Place flag
         Point point1 = new Point(6, 2);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Wait for the road's courier to come out from the headquarters */
+        // Wait for the road's courier to come out from the headquarters
         Courier courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
-        /*  Wait for the courier to reach the headquarters' flag */
+        // Wait for the courier to reach the headquarters' flag
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
 
-        /* Let the courier take a first step on the next road */
+        // Let the courier take a first step on the next road
         map.stepTime();
 
-        /* Verify that the courier has the right direction set */
+        // Verify that the courier has the right direction set
         assertEquals(courier.getDirection(), Direction.DOWN_LEFT);
     }
 
     @Test
     public void testCourierWalkingUpLeftHasDirectionUpLeft() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
+        // Place flag
         Point point1 = new Point(12, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Wait for the road to get its courier assigned */
+        // Wait for the road to get its courier assigned
         Courier courier0 = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
-        /* Place flag */
+        // Place flag
         Point point2 = new Point(10, 6);
         Flag flag1 = map.placeFlag(player0, point2);
 
-        /* Place road */
+        // Place road
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
-        /* Wait for the second road's courier to come out from the headquarters */
+        // Wait for the second road's courier to come out from the headquarters
         Courier courier1 = null;
 
         for (int i = 0; i < 200; i++) {
@@ -286,16 +286,16 @@ public class TestWorkerHasDirections {
 
         assertNotNull(courier1);
 
-        /*  Wait for the second courier to reach the headquarters' flag */
+        // Wait for the second courier to reach the headquarters' flag
         Utils.fastForwardUntilWorkerReachesPoint(map, courier1, headquarter0.getFlag().getPosition());
 
-        /* Wait for the courier to reach the second flag */
+        // Wait for the courier to reach the second flag
         Utils.fastForwardUntilWorkerReachesPoint(map, courier1, flag0.getPosition());
 
-        /* Let the courier take a first step on the next road */
+        // Let the courier take a first step on the next road
         map.stepTime();
 
-        /* Verify that the courier has the right direction set */
+        // Verify that the courier has the right direction set
         assertEquals(courier1.getDirection(), Direction.UP_LEFT);
     }
 
@@ -304,66 +304,66 @@ public class TestWorkerHasDirections {
     @Test
     public void testCourierWalkingForNextPickupHasCorrectDirection() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
+        // Place flag
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Wait for the road's courier to come out from the headquarters */
+        // Wait for the road's courier to come out from the headquarters
         Courier courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
-        /*  Wait for the courier to reach the headquarters' flag */
+        // Wait for the courier to reach the headquarters' flag
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
 
-        /* Let the courier get to the the middle of its road */
+        // Let the courier get to the the middle of its road
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, point1.left());
 
-        /* Place a house at the second flag so the courier needs to go and pick up cargos */
+        // Place a house at the second flag so the courier needs to go and pick up cargos
         Point point2 = new Point(9, 5);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
 
         Utils.waitForWorkerToSetTarget(map, courier, headquarter0.getFlag().getPosition());
 
-        /* Verify that the courier has the right direction set */
+        // Verify that the courier has the right direction set
         assertEquals(courier.getDirection(), Direction.LEFT);
     }
 
     @Test
     public void testForesterReturnsHomeAfterPlantingTreeWithDirectionDownLeft() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place forester hut */
+        // Place forester hut
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Construct the forester hut */
+        // Construct the forester hut
         constructHouse(foresterHut);
 
-        /* Manually place forester */
+        // Manually place forester
         Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
-        /* Put stones on the map and leave only one point where the forester can plant a tree */
+        // Put stones on the map and leave only one point where the forester can plant a tree
         Set<Point> pathPointSet = new HashSet<>();
 
         var point2 = point1.downRight();
@@ -384,12 +384,12 @@ public class TestWorkerHasDirections {
             map.placeStone(point, Stone.StoneType.STONE_1, 7);
         }
 
-        /* Let the forester rest */
+        // Let the forester rest
         Utils.fastForward(99, map);
 
         assertTrue(forester.isInsideBuilding());
 
-        /* Step once and make sure the forester goes out of the hut */
+        // Step once and make sure the forester goes out of the hut
         map.stepTime();
 
         assertFalse(forester.isInsideBuilding());
@@ -404,10 +404,10 @@ public class TestWorkerHasDirections {
         assertTrue(forester.isAt(point));
         assertTrue(forester.isPlanting());
 
-        /* Wait for the forester to plant the tree */
+        // Wait for the forester to plant the tree
         Utils.waitForForesterToStopPlantingTree(forester, map);
 
-        /* Verify that the forester goes back home */
+        // Verify that the forester goes back home
         assertFalse(forester.isPlanting());
         assertTrue(map.isTreeAtPoint(point));
         assertEquals(forester.getTarget(), foresterHut.getPosition());
@@ -419,37 +419,37 @@ public class TestWorkerHasDirections {
     @Test
     public void testCourierWithNewlyPickedUpCargoHasCorrectDirection() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
+        // Place flag
         Point point3 = new Point(20, 8);
         Flag flag0 = map.placeFlag(player0, point3);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
 
-        /* Wait for the road to get an assigned courier */
+        // Wait for the road to get an assigned courier
         Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
-        /* Wait for the courier to stand in the middle of the road */
+        // Wait for the courier to stand in the middle of the road
         Utils.waitForWorkerToGoToPoint(map, courier, point3.left());
 
-        /* Place forester hut */
+        // Place forester hut
         Point point2 = new Point(19, 9);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point2);
 
-        /* Wait for the courier to pick up a cargo for the forester hut */
+        // Wait for the courier to pick up a cargo for the forester hut
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
 
-        /* Verify that the worker has the right direction set */
+        // Verify that the worker has the right direction set
         assertEquals(courier.getPosition(), headquarter.getFlag().getPosition());
         assertEquals(courier.getDirection(), Direction.RIGHT);
     }
@@ -457,39 +457,39 @@ public class TestWorkerHasDirections {
     @Test
     public void testFishermanFishingHasCorrectDirection() throws Exception {
 
-        /* Create a single player game */
+        // Create a single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place a lake */
+        // Place a lake
         Point point0 = new Point(4, 4);
         Utils.surroundPointWithVegetation(point0, WATER, map);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point3 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
-        /* Place fishery */
+        // Place fishery
         Point point4 = new Point(7, 5);
         Building fishery = map.placeBuilding(new Fishery(player0), point4);
 
-        /* Connect the fishery with the headquarters */
+        // Connect the fishery with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), fishery.getFlag());
 
-        /* Wait for the fishery to get constructed */
+        // Wait for the fishery to get constructed
         Utils.waitForBuildingToBeConstructed(fishery);
 
-        /* Wait for the fishery to get occupied */
+        // Wait for the fishery to get occupied
         Fisherman fisherman = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
 
-        /* Let the fisherman rest */
+        // Let the fisherman rest
         Utils.fastForward(99, map);
 
         assertTrue(fisherman.isInsideBuilding());
 
-        /* Wait for the fisherman to fish at all points around the lake */
+        // Wait for the fisherman to fish at all points around the lake
         Map<Point, Direction> fishingDirection = new HashMap<>();
 
         for (int i = 0; i < 20000; i++) {
@@ -498,13 +498,13 @@ public class TestWorkerHasDirections {
                 break;
             }
 
-            /* Wait for the fisherman to leave the house */
+            // Wait for the fisherman to leave the house
             Utils.waitForWorkerToBeOutside(fisherman, map);
 
-            /* Wait for the fisherman to get to the fishing spot */
+            // Wait for the fisherman to get to the fishing spot
             Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fisherman.getTarget());
 
-            /* Store the direction the fisherman has while he's fishing */
+            // Store the direction the fisherman has while he's fishing
             map.stepTime();
 
             assertTrue(fisherman.isFishing());
@@ -515,15 +515,15 @@ public class TestWorkerHasDirections {
                 assertEquals(fisherman.getDirection(), fishingDirection.get(fisherman.getPosition()));
             }
 
-            /* Wait for the fisherman to finish fishing */
+            // Wait for the fisherman to finish fishing
             Utils.waitForFishermanToStopFishing(fisherman, map);
 
-            /* Wait for the fisherman to go back to the fishery */
+            // Wait for the fisherman to go back to the fishery
             assertEquals(fisherman.getTarget(), fishery.getPosition());
 
             Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getPosition());
 
-            /* Wait for the fisherman to leave the fish by the flag and go back to the house */
+            // Wait for the fisherman to leave the fish by the flag and go back to the house
             Utils.waitForWorkerToBeOutside(fisherman, map);
 
             assertEquals(fisherman.getTarget(), fishery.getFlag().getPosition());
@@ -547,13 +547,13 @@ public class TestWorkerHasDirections {
     @Test
     public void testFishermanFishingOnHorizontalShoreWithWaterDownHasCorrectDirection() throws Exception {
 
-        /* Create a single player game */
+        // Create a single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place a long horizontal shore */
+        // Place a long horizontal shore
         for (int i = 0; i < 40; i++) {
 
             if ((i + 3) % 2 != 0) {
@@ -566,37 +566,37 @@ public class TestWorkerHasDirections {
             } catch (Exception e) { }
         }
 
-        /* Place headquarter */
+        // Place headquarter
         Point point3 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
-        /* Place fishery */
+        // Place fishery
         Point point4 = new Point(7, 5);
         Building fishery = map.placeBuilding(new Fishery(player0), point4);
 
-        /* Connect the fishery with the headquarters */
+        // Connect the fishery with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), fishery.getFlag());
 
-        /* Wait for the fishery to get constructed */
+        // Wait for the fishery to get constructed
         Utils.waitForBuildingToBeConstructed(fishery);
 
-        /* Wait for the fishery to get occupied */
+        // Wait for the fishery to get occupied
         Fisherman fisherman = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
 
-        /* Let the fisherman rest */
+        // Let the fisherman rest
         Utils.fastForward(99, map);
 
         assertTrue(fisherman.isInsideBuilding());
 
-        /* Wait for the fisherman to fish by the lake */
+        // Wait for the fisherman to fish by the lake
 
-        /* Wait for the fisherman to leave the house */
+        // Wait for the fisherman to leave the house
         Utils.waitForWorkerToBeOutside(fisherman, map);
 
-        /* Wait for the fisherman to get to the fishing spot */
+        // Wait for the fisherman to get to the fishing spot
         Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fisherman.getTarget());
 
-        /* Verify the direction the fisherman has while he's fishing */
+        // Verify the direction the fisherman has while he's fishing
         map.stepTime();
 
         assertTrue(fisherman.isFishing());

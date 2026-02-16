@@ -102,18 +102,18 @@ public class TestDecorations {
 
         for (DecorationType decoration : PURE_DECORATIONS) {
 
-            /* Create new game map */
+            // Create new game map
             Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
             List<Player> players = new ArrayList<>();
             players.add(player0);
 
             GameMap map = new GameMap(players, 100, 100);
 
-            /* Place headquarters */
+            // Place headquarters
             Point point0 = new Point(5, 27);
             Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-            /* Place decoration that should not have any impact on the game */
+            // Place decoration that should not have any impact on the game
             Point point1 = new Point(10, 26);
             map.placeDecoration(point1, decoration);
 
@@ -122,7 +122,7 @@ public class TestDecorations {
             assertTrue(map.getDecorations().containsKey(point1));
             assertEquals(map.getDecorations().get(point1), decoration);
 
-            /* Verify that there is available construction on the decoration */
+            // Verify that there is available construction on the decoration
             assertEquals(map.isAvailableHousePoint(player0, point1), LARGE);
             assertTrue(map.isAvailableFlagPoint(player0, point1));
         }
@@ -132,18 +132,18 @@ public class TestDecorations {
     public void testPlaceFlagOnPureDecorations() throws InvalidUserActionException {
         for (DecorationType decoration : PURE_DECORATIONS) {
 
-            /* Create new game map */
+            // Create new game map
             Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
             List<Player> players = new ArrayList<>();
             players.add(player0);
 
             GameMap map = new GameMap(players, 100, 100);
 
-            /* Place headquarters */
+            // Place headquarters
             Point point0 = new Point(5, 27);
             Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-            /* Place decoration that should not have any impact on the game */
+            // Place decoration that should not have any impact on the game
             Point point1 = new Point(10, 26);
             map.placeDecoration(point1, decoration);
 
@@ -152,7 +152,7 @@ public class TestDecorations {
             assertTrue(map.getDecorations().containsKey(point1));
             assertEquals(map.getDecorations().get(point1), decoration);
 
-            /* Verify that a flag can be placed on the decoration */
+            // Verify that a flag can be placed on the decoration
             Flag flag = map.placeFlag(player0, point1);
 
             assertTrue(map.isFlagAtPoint(point1));
@@ -165,18 +165,18 @@ public class TestDecorations {
     public void testPlaceBuildingOnPureDecorations() throws InvalidUserActionException {
         for (DecorationType decoration : PURE_DECORATIONS) {
 
-            /* Create new game map */
+            // Create new game map
             Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
             List<Player> players = new ArrayList<>();
             players.add(player0);
 
             GameMap map = new GameMap(players, 100, 100);
 
-            /* Place headquarters */
+            // Place headquarters
             Point point0 = new Point(5, 27);
             Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-            /* Place decoration that should not have any impact on the game */
+            // Place decoration that should not have any impact on the game
             Point point1 = new Point(10, 26);
             map.placeDecoration(point1, decoration);
 
@@ -185,7 +185,7 @@ public class TestDecorations {
             assertTrue(map.getDecorations().containsKey(point1));
             assertEquals(map.getDecorations().get(point1), decoration);
 
-            /* Verify that a building can be placed on the decoration */
+            // Verify that a building can be placed on the decoration
             Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
             assertTrue(map.isBuildingAtPoint(point1));
@@ -198,18 +198,18 @@ public class TestDecorations {
     public void testPlaceRoadOnPureDecorations() throws InvalidUserActionException {
         for (DecorationType decoration : PURE_DECORATIONS) {
 
-            /* Create new game map */
+            // Create new game map
             Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
             List<Player> players = new ArrayList<>();
             players.add(player0);
 
             GameMap map = new GameMap(players, 100, 100);
 
-            /* Place headquarters */
+            // Place headquarters
             Point point0 = new Point(5, 27);
             Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-            /* Place decoration that should not have any impact on the game */
+            // Place decoration that should not have any impact on the game
             Point point1 = new Point(7, 27);
             map.placeDecoration(point1, decoration);
 
@@ -218,11 +218,11 @@ public class TestDecorations {
             assertTrue(map.getDecorations().containsKey(point1));
             assertEquals(map.getDecorations().get(point1), decoration);
 
-            /* Place flag */
+            // Place flag
             Point point2 = new Point(9, 27);
             Flag flag = map.placeFlag(player0, point2);
 
-            /* Verify that a road can be placed on the decoration */
+            // Verify that a road can be placed on the decoration
             Road road = map.placeRoad(player0, headquarter0.getFlag().getPosition(), point1, flag.getPosition());
 
             assertTrue(map.isRoadAtPoint(point1));
@@ -235,14 +235,14 @@ public class TestDecorations {
     public void testForesterPlantsTreeOnPureDecorations() throws InvalidUserActionException {
         for (DecorationType decoration : PURE_DECORATIONS) {
 
-            /* Create new game map */
+            // Create new game map
             Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
             List<Player> players = new ArrayList<>();
             players.add(player0);
 
             GameMap map = new GameMap(players, 100, 100);
 
-            /* Place decorations that should not have any impact on the game all over the map */
+            // Place decorations that should not have any impact on the game all over the map
             for (int x = 0; x < 100; x++) {
                 for (int y = 0; y < 100; y++) {
 
@@ -260,33 +260,33 @@ public class TestDecorations {
                 }
             }
 
-            /* Place headquarters */
+            // Place headquarters
             Point point0 = new Point(5, 27);
             Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-            /* Place forester hut */
+            // Place forester hut
             Point point2 = new Point(9, 27);
             ForesterHut foresterHut = map.placeBuilding(new ForesterHut(player0), point2);
 
-            /* Connect the forester hut with the headquarter */
+            // Connect the forester hut with the headquarter
             Road road = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter0.getFlag());
 
-            /* Wait for the forester hut to get constructed and populated */
+            // Wait for the forester hut to get constructed and populated
             Utils.waitForBuildingToBeConstructed(foresterHut);
 
             Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut);
 
-            /* Wait for the forester to go out to plant */
+            // Wait for the forester to go out to plant
             assertTrue(forester.isInsideBuilding());
 
             Utils.waitForWorkerToBeOutside(forester, map);
 
-            /* Wait for the forester to reach the point to plant */
+            // Wait for the forester to reach the point to plant
             assertNotNull(forester.getTarget());
 
             Utils.fastForwardUntilWorkerReachesPoint(map, forester, forester.getTarget());
 
-            /* Verify that the forester places a tree on a decoration (and that the decoration then is removed) */
+            // Verify that the forester places a tree on a decoration (and that the decoration then is removed)
             Point point3 = forester.getPosition();
 
             assertFalse(map.isTreeAtPoint(point3));
@@ -302,7 +302,7 @@ public class TestDecorations {
     @Test
     public void testSkeletonAppearsWhenSoldierDies() throws Exception {
 
-        /* Create player list with two players */
+        // Create player list with two players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
@@ -311,46 +311,46 @@ public class TestDecorations {
         players.add(player0);
         players.add(player1);
 
-        /* Create game map choosing two players */
+        // Create game map choosing two players
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarters */
+        // Place player 0's headquarters
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarters */
+        // Place player 1's headquarters
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Clear soldiers from the inventories */
+        // Clear soldiers from the inventories
         Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
         Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
 
-        /* Place barracks for player 0 */
+        // Place barracks for player 0
         Point point2 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
-        /* Place barracks for player 1 */
+        // Place barracks for player 1
         Point point3 = new Point(23, 15);
         Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
 
-        /* Finish construction */
+        // Finish construction
         Utils.constructHouses(barracks0, barracks1);
 
-        /* Populate player 0's barracks */
+        // Populate player 0's barracks
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 2, barracks0);
 
-        /* Populate player 1's barracks */
+        // Populate player 1's barracks
         assertTrue(barracks1.isReady());
 
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
 
-        /* Order an attack */
+        // Order an attack
         assertTrue(player0.canAttack(barracks1));
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        /* Find the military that was chosen to attack */
+        // Find the military that was chosen to attack
         map.stepTime();
 
         Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -358,7 +358,7 @@ public class TestDecorations {
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
 
-        /* Verify that a military leaves the attacked building to defend when the attacker reaches the flag */
+        // Verify that a military leaves the attacked building to defend when the attacker reaches the flag
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
@@ -367,18 +367,18 @@ public class TestDecorations {
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
-        /* Get the defender */
+        // Get the defender
         Soldier defender = Utils.findSoldierOutsideBuilding(player1);
 
         assertNotNull(defender);
 
-        /* Wait for the fight to start */
+        // Wait for the fight to start
         Utils.waitForFightToStart(map, attacker, defender);
 
-        /* Wait for the fight to end and the defender to be dying */
+        // Wait for the fight to end and the defender to be dying
         Utils.waitForSoldierToBeDying(defender, map);
 
-        /* Verify that a skeleton is placed when the defender dies */
+        // Verify that a skeleton is placed when the defender dies
         assertFalse(map.isDecoratedAtPoint(defender.getPosition()));
         assertNotEquals(map.getDecorations().get(defender.getPosition()), HUMAN_SKELETON_1);
         assertNotEquals(map.getDecorationAtPoint(defender.getPosition()), HUMAN_SKELETON_1);
@@ -394,22 +394,22 @@ public class TestDecorations {
     @Test
     public void testStoneDecorationIsPlacedWhenStoneRunsOut() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 15, 15);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place stone */
+        // Place stone
         Point point1 = new Point(5, 5);
         Stone stone0 = map.placeStone(point1, STONE_1, 7);
 
-        /* Remove all but one pats of the stone */
+        // Remove all but one pats of the stone
         for (int i = 0; i < 6; i++) {
             stone0.removeOnePart();
 
@@ -418,7 +418,7 @@ public class TestDecorations {
             assertTrue(map.isStoneAtPoint(point1));
         }
 
-        /* Verify that a stone decoration is placed when the stone runs out */
+        // Verify that a stone decoration is placed when the stone runs out
         assertFalse(map.isDecoratedAtPoint(stone0.getPosition()));
         assertNotEquals(map.getDecorations().get(stone0.getPosition()), FEW_SMALL_STONES);
         assertNotEquals(map.getDecorationAtPoint(stone0.getPosition()), ANIMAL_SKELETON_1);

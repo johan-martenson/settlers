@@ -26,64 +26,64 @@ public class TestCourierWalksOnItsOwnRoad {
     @Test
     public void testCourierWalksOnOwnRoadWhenDeliveringFromFirstFlagToSecondFlag() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(19, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
+        // Place flag
         Point point1 = new Point(24, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place flag */
+        // Place flag
         Point point2 = new Point(28, 4);
         Flag flag1 = map.placeFlag(player0, point2);
 
-        /* Place woodcutter */
+        // Place woodcutter
         Point point3 = new Point(31, 5);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point3);
 
-        /* Connect the headquarter with the first flag */
+        // Connect the headquarter with the first flag
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
 
-        /* Connect the first flag with the second flag */
+        // Connect the first flag with the second flag
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
-        /* Connect the second flag with the woodcutter */
+        // Connect the second flag with the woodcutter
         Road road2 = map.placeAutoSelectedRoad(player0, flag1, woodcutter.getFlag());
 
-        /* Wait for the first road to get occupied */
+        // Wait for the first road to get occupied
         Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
-        /* Wait for the courier to carry cargo */
+        // Wait for the courier to carry cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
 
         assertEquals(courier.getCargo().getTarget(), woodcutter);
 
-        /* Fill up the flag to make it impossible to deliver cargo the fast way */
+        // Fill up the flag to make it impossible to deliver cargo the fast way
         Utils.placeCargos(map, STONE, 8, flag0, headquarter);
 
-        /* Wait for the courier to get blocked */
+        // Wait for the courier to get blocked
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition().left());
 
-        /* Make sure the courier is stuck */
+        // Make sure the courier is stuck
         Utils.verifyWorkerDoesNotMove(map, courier, 20);
 
-        /* Place a second, longer road between the headquarter and the second flag */
+        // Place a second, longer road between the headquarter and the second flag
         Road road3 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag1);
 
-        /* Wait for the new road to get occupied */
+        // Wait for the new road to get occupied
         Courier courier1 = Utils.waitForRoadToGetAssignedCourier(map, road3);
 
-        /* Wait for the new courier to carry a cargo */
+        // Wait for the new courier to carry a cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier1);
 
-        /* Verify that the courier walks to the woodcutter following its own road */
+        // Verify that the courier walks to the woodcutter following its own road
         assertEquals(courier1.getPosition(), headquarter.getFlag().getPosition());
         assertNotNull(courier1.getCargo());
         assertEquals(courier1.getCargo().getTarget(), woodcutter);
@@ -102,75 +102,75 @@ public class TestCourierWalksOnItsOwnRoad {
     @Test
     public void testCourierWalksOnOwnRoadWhenDeliveringFromSecondFlagToFirstFlag() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(19, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
+        // Place flag
         Point point1 = new Point(24, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place flag */
+        // Place flag
         Point point2 = new Point(28, 4);
         Flag flag1 = map.placeFlag(player0, point2);
 
-        /* Place woodcutter */
+        // Place woodcutter
         Point point3 = new Point(31, 5);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point3);
 
-        /* Connect the headquarter with the first flag */
+        // Connect the headquarter with the first flag
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
 
-        /* Connect the first flag with the second flag */
+        // Connect the first flag with the second flag
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
-        /* Connect the second flag with the woodcutter */
+        // Connect the second flag with the woodcutter
         Road road2 = map.placeAutoSelectedRoad(player0, flag1, woodcutter.getFlag());
 
-        /* Remove all planks from the headquarter */
+        // Remove all planks from the headquarter
         Utils.adjustInventoryTo(headquarter, PLANK, 0);
 
-        /* Wait for the roads to get occupied */
+        // Wait for the roads to get occupied
         Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road2);
         Courier courier3 = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         Utils.waitForCouriersToBeIdle(map, courier, courier3);
 
-        /* Place cargo for the couriers to pick up */
+        // Place cargo for the couriers to pick up
         Utils.placeCargo(map, PLANK, woodcutter.getFlag(), headquarter);
         Utils.placeCargo(map, STONE, flag0, woodcutter);
 
-        /* Wait for the couriers to carry cargo */
+        // Wait for the couriers to carry cargo
         Utils.fastForwardUntilWorkersCarryCargo(map, courier, courier3);
 
-        /* Fill up the first flag to make it impossible to deliver cargo the fast way */
+        // Fill up the first flag to make it impossible to deliver cargo the fast way
         Utils.placeCargos(map, STONE, 8, flag1, woodcutter);
 
-        /* Wait for the courier to get blocked */
+        // Wait for the courier to get blocked
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag1.getPosition().right());
 
-        /* Make sure the courier is stuck */
+        // Make sure the courier is stuck
         Utils.verifyWorkerDoesNotMove(map, courier, 20);
 
-        /* Place a second, longer road between the second flag and the headquarter */
+        // Place a second, longer road between the second flag and the headquarter
         Road road3 = map.placeAutoSelectedRoad(player0, flag0, woodcutter.getFlag());
 
-        /* Wait for the new road to get occupied */
+        // Wait for the new road to get occupied
         Courier courier1 = Utils.waitForRoadToGetAssignedCourier(map, road3);
 
-        /* Place a cargo for the courier to pick up */
+        // Place a cargo for the courier to pick up
         Utils.placeCargo(map, GOLD, woodcutter.getFlag(), headquarter);
 
-        /* Wait for the new courier to carry a cargo */
+        // Wait for the new courier to carry a cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier1);
 
-        /* Verify that the courier walks to the woodcutter following its own road */
+        // Verify that the courier walks to the woodcutter following its own road
         assertEquals(courier1.getPosition(), woodcutter.getFlag().getPosition());
         assertNotNull(courier1.getCargo());
         assertEquals(courier1.getCargo().getTarget(), headquarter);
@@ -188,67 +188,67 @@ public class TestCourierWalksOnItsOwnRoad {
     @Test
     public void testCourierWalksOnOwnRoadWhenDeliveringFromFirstFlagToSecondBuilding() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(19, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
+        // Place flag
         Point point1 = new Point(24, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place woodcutter */
+        // Place woodcutter
         Point point2 = new Point(27, 5);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
 
-        /* Connect the headquarters with the flag */
+        // Connect the headquarters with the flag
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
 
-        /* Connect the flag with the woodcutter */
+        // Connect the flag with the woodcutter
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter.getFlag());
 
-        /* Wait for the first road to get occupied */
+        // Wait for the first road to get occupied
         Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
-        /* Wait for the courier to carry cargo */
+        // Wait for the courier to carry cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
 
         assertEquals(courier.getCargo().getTarget(), woodcutter);
 
-        /* Fill up the flag to make it impossible to deliver cargo the fast way */
+        // Fill up the flag to make it impossible to deliver cargo the fast way
         Utils.placeCargos(map, STONE, 8, flag0, headquarter);
 
-        /* Wait for the courier to get blocked */
+        // Wait for the courier to get blocked
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition().left());
 
-        /* Make sure the courier is stuck */
+        // Make sure the courier is stuck
         Utils.verifyWorkerDoesNotMove(map, courier, 20);
 
-        /* Wait for a second cargo for the woodcutter to get placed on the headquarters' flag */
+        // Wait for a second cargo for the woodcutter to get placed on the headquarters' flag
         Utils.waitForFlagToGetStackedCargo(map, headquarter.getFlag(), 1);
 
         assertEquals(headquarter.getFlag().getStackedCargo().size(), 1);
         assertEquals(headquarter.getFlag().getStackedCargo().getFirst().getTarget(), woodcutter);
         assertEquals(woodcutter.getFlag().getStackedCargo().size(), 0);
 
-        /* Fill up the woodcutter's flag to make it impossible to deliver cargo to it */
+        // Fill up the woodcutter's flag to make it impossible to deliver cargo to it
         Utils.placeCargos(map, STONE, 8, woodcutter.getFlag(), woodcutter);
 
-        /* Place a second, longer road between the headquarters and the woodcutter */
+        // Place a second, longer road between the headquarters and the woodcutter
         Road road2 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), woodcutter.getFlag());
 
-        /* Wait for the new road to get occupied */
+        // Wait for the new road to get occupied
         Courier courier1 = Utils.waitForRoadToGetAssignedCourier(map, road2);
 
-        /* Wait for the new courier to carry a cargo */
+        // Wait for the new courier to carry a cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier1);
 
-        /* Verify that the courier walks to the woodcutter following its own road */
+        // Verify that the courier walks to the woodcutter following its own road
         assertEquals(courier1.getPosition(), headquarter.getFlag().getPosition());
         assertNotNull(courier1.getCargo());
         assertEquals(courier1.getCargo().getTarget(), woodcutter);
@@ -267,73 +267,73 @@ public class TestCourierWalksOnItsOwnRoad {
     @Test
     public void testCourierWalksOnOwnRoadWhenDeliveringFromSecondFlagToFirstBuilding() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(19, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
+        // Place flag
         Point point1 = new Point(24, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place flag */
+        // Place flag
         Point point2 = new Point(28, 4);
         Flag flag1 = map.placeFlag(player0, point2);
 
-        /* Place woodcutter */
+        // Place woodcutter
         Point point3 = new Point(31, 5);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point3);
 
-        /* Connect the headquarter with the first flag */
+        // Connect the headquarter with the first flag
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
 
-        /* Connect the first flag with the second flag */
+        // Connect the first flag with the second flag
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
-        /* Connect the second flag with the woodcutter */
+        // Connect the second flag with the woodcutter
         Road road2 = map.placeAutoSelectedRoad(player0, flag1, woodcutter.getFlag());
 
-        /* Remove all planks from the headquarter */
+        // Remove all planks from the headquarter
         Utils.adjustInventoryTo(headquarter, PLANK, 0);
 
-        /* Wait for the second road to get occupied */
+        // Wait for the second road to get occupied
         Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road2);
 
-        /* Place a cargo for the courier to pick up */
+        // Place a cargo for the courier to pick up
         Utils.placeCargo(map, PLANK, woodcutter.getFlag(), headquarter);
 
-        /* Wait for the courier to carry cargo */
+        // Wait for the courier to carry cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
 
         assertEquals(courier.getCargo().getTarget(), headquarter);
 
-        /* Fill up the first flag to make it impossible to deliver cargo the fast way */
+        // Fill up the first flag to make it impossible to deliver cargo the fast way
         Utils.placeCargos(map, STONE, 8, flag1, woodcutter);
 
-        /* Wait for the courier to get blocked */
+        // Wait for the courier to get blocked
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag1.getPosition().right());
 
-        /* Make sure the courier is stuck */
+        // Make sure the courier is stuck
         Utils.verifyWorkerDoesNotMove(map, courier, 20);
 
-        /* Place a second, longer road between the second flag and the headquarter */
+        // Place a second, longer road between the second flag and the headquarter
         Road road3 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), woodcutter.getFlag());
 
-        /* Wait for the new road to get occupied */
+        // Wait for the new road to get occupied
         Courier courier1 = Utils.waitForRoadToGetAssignedCourier(map, road3);
 
-        /* Place a cargo for the courier to pick up */
+        // Place a cargo for the courier to pick up
         Utils.placeCargo(map, GOLD, woodcutter.getFlag(), headquarter);
 
-        /* Wait for the new courier to carry a cargo */
+        // Wait for the new courier to carry a cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier1);
 
-        /* Verify that the courier walks to the woodcutter following its own road */
+        // Verify that the courier walks to the woodcutter following its own road
         assertEquals(courier1.getPosition(), woodcutter.getFlag().getPosition());
         assertNotNull(courier1.getCargo());
         assertEquals(courier1.getCargo().getTarget(), headquarter);

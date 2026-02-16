@@ -34,37 +34,37 @@ public class TestPlankProductionPlayer {
     @Test
     public void testCreatePlankProductionPlayer() throws Exception {
 
-        /* Create players */
+        // Create players
         Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        /* Create game map */
+        // Create game map
         GameMap map = new GameMap(players, 10, 10);
 
-        /* Create the computer player */
+        // Create the computer player
         ComputerPlayer computerPlayer = new PlankProductionPlayer(player0, map);
     }
 
     @Test
     public void testPlayerFirstPlacesForesterHut() throws Exception {
 
-        /* Create players */
+        // Create players
         Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        /* Create game map */
+        // Create game map
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Create the computer player */
+        // Create the computer player
         ComputerPlayer computerPlayer = new PlankProductionPlayer(player0, map);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Verify that the player starts with placing a forester */
+        // Verify that the player starts with placing a forester
         for (int i = 0; i < 20; i++) {
             computerPlayer.turn();
 
@@ -83,25 +83,25 @@ public class TestPlankProductionPlayer {
     @Test
     public void testPlayerDoesNothingUntilForesterHutIsCompleted() throws Exception {
 
-        /* Create players */
+        // Create players
         Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        /* Create game map */
+        // Create game map
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Create the computer player */
+        // Create the computer player
         ComputerPlayer computerPlayer = new PlankProductionPlayer(player0, map);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Wait for the player to place a forester hut */
+        // Wait for the player to place a forester hut
         ForesterHut foresterHut = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, ForesterHut.class);
 
-        /* Verify that the player doesn't build anything else until the forester hut is done */
+        // Verify that the player doesn't build anything else until the forester hut is done
         int amount = player0.getBuildings().size();
 
         for (int i = 0; i < 1000; i++) {
@@ -122,99 +122,99 @@ public class TestPlankProductionPlayer {
     @Test
     public void testPlayerPlacesWoodcutterWhenForesterHutIsCompleted() throws Exception {
 
-        /* Create players */
+        // Create players
         Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        /* Create game map */
+        // Create game map
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Create the computer player */
+        // Create the computer player
         ComputerPlayer computerPlayer = new PlankProductionPlayer(player0, map);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Wait for the player to place a forester hut */
+        // Wait for the player to place a forester hut
         ForesterHut foresterHut = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, ForesterHut.class);
 
-        /* Wait for the forester hut to get finished */
+        // Wait for the forester hut to get finished
         Utils.waitForBuildingToGetConstructedWithComputerPlayer(computerPlayer, foresterHut);
 
-        /* Verify that the player now places a woodcutter */
+        // Verify that the player now places a woodcutter
         Utils.verifyPlayerPlacesOnlyBuilding(computerPlayer, Woodcutter.class);
     }
 
     @Test
     public void testPlayerPlacesSawmillWhenWoodcutterIsCompleted() throws Exception {
 
-        /* Create players */
+        // Create players
         Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        /* Create game map */
+        // Create game map
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Create the computer player */
+        // Create the computer player
         ComputerPlayer computerPlayer = new PlankProductionPlayer(player0, map);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Wait for the player to place a forester hut */
+        // Wait for the player to place a forester hut
         ForesterHut foresterHut = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, ForesterHut.class);
 
-        /* Wait for the forester hut to get finished */
+        // Wait for the forester hut to get finished
         Utils.waitForBuildingToGetConstructedWithComputerPlayer(computerPlayer, foresterHut);
 
-        /* Wait for the player to place a woodcutter */
+        // Wait for the player to place a woodcutter
         Woodcutter woodcutter = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Woodcutter.class);
 
-        /* Wait for the woodcutter to get finished */
+        // Wait for the woodcutter to get finished
         Utils.waitForBuildingToGetConstructedWithComputerPlayer(computerPlayer, woodcutter);
 
-        /* Verify that the player now places a sawmill */
+        // Verify that the player now places a sawmill
         Utils.verifyPlayerPlacesOnlyBuilding(computerPlayer, Sawmill.class);
     }
 
     @Test
     public void testPlayerDoesNothingAfterPlacingSawmill() throws Exception {
 
-        /* Create players */
+        // Create players
         Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        /* Create game map */
+        // Create game map
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Create the computer player */
+        // Create the computer player
         ComputerPlayer computerPlayer = new PlankProductionPlayer(player0, map);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Wait for the player to place a forester hut */
+        // Wait for the player to place a forester hut
         ForesterHut foresterHut = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, ForesterHut.class);
 
-        /* Wait for the forester hut to get finished */
+        // Wait for the forester hut to get finished
         Utils.waitForBuildingToGetConstructedWithComputerPlayer(computerPlayer, foresterHut);
 
-        /* Wait for the player to place a woodcutter */
+        // Wait for the player to place a woodcutter
         Woodcutter woodcutter = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Woodcutter.class);
 
-        /* Wait for the woodcutter to get finished */
+        // Wait for the woodcutter to get finished
         Utils.waitForBuildingToGetConstructedWithComputerPlayer(computerPlayer, woodcutter);
 
-        /* Wait for the player to place the sawmill */
+        // Wait for the player to place the sawmill
         Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Sawmill.class);
 
-        /* Verify that the player does nothing after the sawmill is placed */
+        // Verify that the player does nothing after the sawmill is placed
         int amount = player0.getBuildings().size();
 
         for (int i = 0; i < 1000; i++) {

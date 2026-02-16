@@ -31,26 +31,26 @@ public class TestGameLogic {
     @Test
     public void testInitiateNewDeliveries() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players,30, 30);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place woodcutter */
+        // Place woodcutter
         Point point1 = new Point(5, 11);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Place road to connect the woodcutter and the headquarter */
+        // Place road to connect the woodcutter and the headquarter
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), woodcutter0.getFlag());
 
         Utils.constructHouse(woodcutter0);
 
-        /* Since the woodcutter is finished it does not need any deliveries, verify that no new deliveries are initiated */
+        // Since the woodcutter is finished it does not need any deliveries, verify that no new deliveries are initiated
         assertTrue(headquarter.getFlag().getStackedCargo().isEmpty());
         assertNull(headquarter.getWorker().getCargo());
 
@@ -59,17 +59,17 @@ public class TestGameLogic {
         assertTrue(headquarter.getFlag().getStackedCargo().isEmpty());
         assertNull(headquarter.getWorker().getCargo());
 
-        /* Fast forward so the worker in the headquarter is rested */
+        // Fast forward so the worker in the headquarter is rested
         Utils.fastForward(20, map);
 
-        /* Place an unfinished sawmill on the map and verify that it needs deliveries */
+        // Place an unfinished sawmill on the map and verify that it needs deliveries
         Point point2 = new Point(10, 10);
         Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point2);
 
-        /* Connect the sawmill with the headquarter */
+        // Connect the sawmill with the headquarter
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), sawmill0.getFlag());
 
-        /* Verify that a new delivery is initiated for the sawmill */
+        // Verify that a new delivery is initiated for the sawmill
         assertTrue(sawmill0.needsMaterial(PLANK));
         assertTrue(sawmill0.needsMaterial(STONE));
         assertTrue(headquarter.getFlag().getStackedCargo().isEmpty());
@@ -82,32 +82,32 @@ public class TestGameLogic {
     @Test
     public void testAssignWorkToIdleCouriers() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 30, 30);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(15, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
+        // Place flag
         Point point1 = new Point(10, 10);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place sawmill */
+        // Place sawmill
         Point point2 = new Point(5, 5);
         Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point2);
 
-        /* Place road to connect the flag with the sawmill's flag */
+        // Place road to connect the flag with the sawmill's flag
         Road road0 = map.placeAutoSelectedRoad(player0, flag0, sawmill0.getFlag());
 
-        /* Occupy the road */
+        // Occupy the road
         Courier courier = Utils.occupyRoad(road0, map);
 
-        /* Fast forward so the courier can reach its road and be assigned */
+        // Fast forward so the courier can reach its road and be assigned
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
 
         Cargo cargo = new Cargo(PLANK, map);
@@ -116,20 +116,20 @@ public class TestGameLogic {
         cargo.setTarget(sawmill0);
         flag0.putCargo(cargo);
 
-        /* Verify that the worker is idle */
+        // Verify that the worker is idle
         assertTrue(courier.isIdle());
         assertNull(courier.getCargo());
         assertTrue(courier.isArrived());
         assertFalse(courier.isTraveling());
 
-        /* Verify that the worker picks up the cargo and has the sawmill as target */
+        // Verify that the worker picks up the cargo and has the sawmill as target
         map.stepTime();
 
         assertEquals(courier.getTarget(), flag0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
 
-        /* Verify that the courier has picked up the cargo */
+        // Verify that the courier has picked up the cargo
         assertNotNull(courier.getCargo());
         assertEquals(cargo, courier.getCargo());
         assertEquals(courier.getTarget(), sawmill0.getPosition());
@@ -138,32 +138,32 @@ public class TestGameLogic {
     @Test
     public void testDeliverForWorkersAtTarget() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 30, 30);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(17, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
+        // Place flag
         Point point1 = new Point(5, 5);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place woodcutter */
+        // Place woodcutter
         Point point2 = new Point(11, 5);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
 
-        /* Place road to connect the flag with the woodcutter's flag */
+        // Place road to connect the flag with the woodcutter's flag
         Road road0 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
 
-        /* Occupy the road */
+        // Occupy the road
         Courier courier = Utils.occupyRoad(road0, map);
 
-        /* Fast forward to let the courier reach its road and get assigned */
+        // Fast forward to let the courier reach its road and get assigned
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
 
         Cargo cargo0 = new Cargo(PLANK, map);
@@ -171,7 +171,7 @@ public class TestGameLogic {
         flag0.putCargo(cargo0);
         cargo0.setTarget(woodcutter0);
 
-        /* Let the courier detect and pick up the cargo */
+        // Let the courier detect and pick up the cargo
         map.stepTime();
 
         assertEquals(courier.getTarget(), flag0.getPosition());
@@ -180,14 +180,14 @@ public class TestGameLogic {
 
         assertEquals(courier.getCargo(), cargo0);
 
-        /* Move worker to the sawmill */
+        // Move worker to the sawmill
         assertEquals(courier.getTarget(), woodcutter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter0.getPosition());
 
         assertTrue(courier.isAt(woodcutter0.getPosition()));
 
-        /* Verify the worker delivers the cargo when it has reached the target */
+        // Verify the worker delivers the cargo when it has reached the target
         assertNull(courier.getCargo());
         assertTrue(courier.isAt(woodcutter0.getPosition()));
         assertEquals(woodcutter0.getAmount(PLANK), 1);
@@ -196,39 +196,39 @@ public class TestGameLogic {
     @Test
     public void testAssignNewWorkerToUnoccupiedPlaces() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players,30, 30);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place the barracks' flag */
+        // Place the barracks' flag
         Point point1 = new Point(6, 10);
         Flag flag0 = map.placeFlag(player0, point1.downRight());
 
-        /* Place the forester hut's flag */
+        // Place the forester hut's flag
         Point point2 = new Point(10, 10);
         Flag flag1 = map.placeFlag(player0, point2.downRight());
 
-        /* Assign new workers to unoccupied places. Since there are no places that require workers this should not do anything */
+        // Assign new workers to unoccupied places. Since there are no places that require workers this should not do anything
         assertEquals(map.getWorkers().size(), 1);
 
-        /* Step time to make the headquarter assign new workers */
+        // Step time to make the headquarter assign new workers
         Utils.fastForward(3, map);
 
         assertEquals(map.getWorkers().size(), 1);
 
-        /* Construct a road without any courier assigned */
+        // Construct a road without any courier assigned
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         assertEquals(map.getWorkers().size(), 1);
 
-        /* Prep the headquarter's inventory */
+        // Prep the headquarter's inventory
         assertTrue(headquarter0.getAmount(PRIVATE) >= 10);
         assertTrue(headquarter0.getAmount(FORESTER) >= 3);
         assertEquals(map.getWorkers().size(), 1);
@@ -248,7 +248,7 @@ public class TestGameLogic {
         Courier courier0 = (Courier)map.getWorkers().get(1);
         Courier courier1 = (Courier)map.getWorkers().get(2);
 
-        /* Fast forward to let the couriers reach their roads */
+        // Fast forward to let the couriers reach their roads
         Utils.fastForwardUntilWorkersReachTarget(map, courier0, courier1);
 
         assertEquals(courier0.getAssignedRoad(), road0);
@@ -263,7 +263,7 @@ public class TestGameLogic {
 
         assertEquals(map.getWorkers().size(), 3);
 
-        /* Construct the barracks */
+        // Construct the barracks
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         assertTrue(barracks0.isPlanned());
@@ -277,7 +277,7 @@ public class TestGameLogic {
         assertTrue(barracks0.needsMilitaryManning());
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 0);
 
-        /* Step time to make the headquarter assign new workers */
+        // Step time to make the headquarter assign new workers
         map.stepTime();
 
         Soldier military = null;
@@ -296,14 +296,14 @@ public class TestGameLogic {
 
         assertEquals(headquarter0.getAmount(PRIVATE), currentNumberOfMilitary - 1);
 
-        /* Let the military reach the barracks */
+        // Let the military reach the barracks
         Utils.fastForwardUntilWorkersReachTarget(map, military);
 
         assertTrue(map.getWorkers().size() >= 5);
         assertTrue(military.isArrived());
         assertFalse(military.isTraveling());
 
-        /* Make traveling workers that have arrived enter their building or road */
+        // Make traveling workers that have arrived enter their building or road
         List<Soldier> soldiersOutside = Utils.findSoldiersOutsideBuilding(player0);
 
         assertEquals(soldiersOutside.size(), 1);
@@ -322,7 +322,7 @@ public class TestGameLogic {
 
         assertEquals(map.getWorkers().size(), 6);
 
-        /* Finish construction of the forester hut which requires a forester worker to function */
+        // Finish construction of the forester hut which requires a forester worker to function
         ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point2);
         Utils.constructHouse(foresterHut0);
 
@@ -334,7 +334,7 @@ public class TestGameLogic {
         assertTrue(headquarter0.getAmount(FORESTER) >= 3);
         assertTrue(foresterHut0.needsWorker());
 
-        /* Step time to make the headquarter assign new workers */
+        // Step time to make the headquarter assign new workers
         map.stepTime();
 
         assertEquals(map.getWorkers().size(), 7);
@@ -347,7 +347,7 @@ public class TestGameLogic {
             }
         }
 
-        /* Let the forester reach the forester hut */
+        // Let the forester reach the forester hut
         Utils.fastForwardUntilWorkersReachTarget(map, forester);
 
         assertNotNull(foresterHut0.getWorker());

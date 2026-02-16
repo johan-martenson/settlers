@@ -33,27 +33,27 @@ public class TestConstruction {
     @Test
     public void testCreateNewWoodcutter() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players,40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place sawmill */
+        // Place sawmill
         Point point1 = new Point(9, 9);
         Building sawmill0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Assign builder */
+        // Assign builder
         Utils.assignBuilder(sawmill0);
 
-        /* Verify that the sawmill is not a military building */
+        // Verify that the sawmill is not a military building
         assertFalse(sawmill0.isMilitaryBuilding());
 
-        /* Verify that the sawmill needs the right amount of material for construction */
+        // Verify that the sawmill needs the right amount of material for construction
         assertEquals(sawmill0.getAmount(WOOD), 0);
         assertEquals(sawmill0.getAmount(PLANK), 0);
         assertTrue(sawmill0.isUnderConstruction());
@@ -70,7 +70,7 @@ public class TestConstruction {
         sawmill0.promiseDelivery(PLANK);
         assertFalse(sawmill0.needsMaterial(PLANK));
 
-        /* Verify that construction doesn't finish before material is delivered */
+        // Verify that construction doesn't finish before material is delivered
         for (int i = 0; i < 1000; i++) {
             assertTrue(sawmill0.isUnderConstruction());
 
@@ -87,18 +87,18 @@ public class TestConstruction {
             map.stepTime();
         }
 
-        /* Verify that construction can finish when all material is delivered */
+        // Verify that construction can finish when all material is delivered
         sawmill0.putCargo(plankCargo);
         map.stepTime();
 
         assertTrue(sawmill0.isReady());
         assertFalse(sawmill0.isMilitaryBuilding());
 
-        /* Verify that all material was consumed by the construction */
+        // Verify that all material was consumed by the construction
         assertEquals(sawmill0.getAmount(PLANK), 0);
         assertEquals(sawmill0.getAmount(STONE), 0);
 
-        /* Verify that the sawmill doesn't need any material when it's finished */
+        // Verify that the sawmill doesn't need any material when it's finished
         for (Material material : Material.values()) {
             assertFalse(sawmill0.needsMaterial(material));
         }
@@ -119,18 +119,18 @@ public class TestConstruction {
     @Test
     public void testCreateNewBarracks() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players,30, 30);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place barracks */
+        // Place barracks
         Point point1 = new Point(13, 13);
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
@@ -141,7 +141,7 @@ public class TestConstruction {
         assertEquals(barracks0.getPromisedSoldier(), 0);
         assertFalse(barracks0.needsMilitaryManning());
 
-        /* Construct the barracks */
+        // Construct the barracks
         Utils.constructHouse(barracks0);
 
         assertTrue(barracks0.isMilitaryBuilding());
@@ -155,26 +155,26 @@ public class TestConstruction {
     @Test
     public void testCreateNewSawmill() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players,40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place sawmill */
+        // Place sawmill
         Point point1 = new Point(9, 9);
         Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
-        /* Assign builder */
+        // Assign builder
         Utils.assignBuilder(sawmill0);
 
         assertTrue(sawmill0.isUnderConstruction());
 
-        /* Verify that construction doesn't finish before material is delivered */
+        // Verify that construction doesn't finish before material is delivered
         for (int i = 0; i < 1000; i++) {
             assertTrue(sawmill0.isUnderConstruction());
 
@@ -199,7 +199,7 @@ public class TestConstruction {
             map.stepTime();
         }
 
-        /* Verify that construction can finish when all material is delivered */
+        // Verify that construction can finish when all material is delivered
         sawmill0.promiseDelivery(STONE);
         sawmill0.putCargo(stoneCargo);
 
@@ -207,11 +207,11 @@ public class TestConstruction {
 
         assertTrue(sawmill0.isReady());
 
-        /* Verify that all material was consumed by the construction */
+        // Verify that all material was consumed by the construction
         assertEquals(sawmill0.getAmount(PLANK), 0);
         assertEquals(sawmill0.getAmount(STONE), 0);
 
-        /* Verify that the sawmill needs only WOOD when it's finished */
+        // Verify that the sawmill needs only WOOD when it's finished
         assertTrue(sawmill0.needsMaterial(WOOD));
         assertFalse(sawmill0.needsMaterial(PLANK));
         assertFalse(sawmill0.needsMaterial(STONE));
@@ -230,26 +230,26 @@ public class TestConstruction {
     @Test
     public void testCreateFarm() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players,40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point1 = new Point(9, 9);
         Building farm = map.placeBuilding(new Farm(player0), point1);
 
-        /* Assign builder */
+        // Assign builder
         Utils.assignBuilder(farm);
 
         assertTrue(farm.isUnderConstruction());
 
-        /* Verify that construction doesn't finish before material is delivered */
+        // Verify that construction doesn't finish before material is delivered
         for (int i = 0; i < 1000; i++) {
             assertTrue(farm.isUnderConstruction());
 
@@ -270,13 +270,13 @@ public class TestConstruction {
             map.stepTime();
         }
 
-        /* Verify that construction can finish when all material is delivered */
+        // Verify that construction can finish when all material is delivered
         farm.putCargo(stoneCargo);
         map.stepTime();
 
         assertTrue(farm.isReady());
 
-        /* Verify that all material was consumed by the construction */
+        // Verify that all material was consumed by the construction
         assertEquals(farm.getAmount(PLANK), 0);
         assertEquals(farm.getAmount(STONE), 0);
 
@@ -305,17 +305,17 @@ public class TestConstruction {
     @Test
     public void testDeliveryToBurningSawmill() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players,40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place sawmill */
+        // Place sawmill
         Point point1 = new Point(9, 9);
         Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
@@ -335,31 +335,31 @@ public class TestConstruction {
     @Test
     public void testDeliveryToDestroyedSawmill() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players,20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place sawmill */
+        // Place sawmill
         Point point1 = new Point(4, 4);
         Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
-        /* Finish construction of the sawmill */
+        // Finish construction of the sawmill
         Utils.constructHouse(sawmill0);
 
         assertTrue(sawmill0.isReady());
 
-        /* Tear down the sawmill */
+        // Tear down the sawmill
         sawmill0.tearDown();
 
         Utils.fastForward(1000, map);
 
-        /* Verify that it's not possible to deliver wood to a sawmill that doesn't exist on the map */
+        // Verify that it's not possible to deliver wood to a sawmill that doesn't exist on the map
         try {
             sawmill0.putCargo(new Cargo(WOOD, null));
 
@@ -370,24 +370,24 @@ public class TestConstruction {
     @Test
     public void testCannotPlaceMineOnTree() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players,20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place mountain */
+        // Place mountain
         Point point1 = new Point(14, 10);
         Utils.surroundPointWithMinableMountain(point1, map);
 
-        /* Place tree on the mountain */
+        // Place tree on the mountain
         map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
-        /* Verify that it's not possible to place a mine on the tree */
+        // Verify that it's not possible to place a mine on the tree
         assertFalse(map.isAvailableMinePoint(player0, point1));
 
         try {
@@ -400,24 +400,24 @@ public class TestConstruction {
     @Test
     public void testCannotPlaceMineOnStone() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players,20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place mountain */
+        // Place mountain
         Point point1 = new Point(14, 10);
         Utils.surroundPointWithMinableMountain(point1, map);
 
-        /* Place a stone on the mountain */
+        // Place a stone on the mountain
         map.placeStone(point1, Stone.StoneType.STONE_1, 10);
 
-        /* Verify that it's not possible to place a mine on the stone */
+        // Verify that it's not possible to place a mine on the stone
         assertFalse(map.isAvailableMinePoint(player0, point1));
 
         try {

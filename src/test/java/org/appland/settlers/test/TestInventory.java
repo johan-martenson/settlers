@@ -38,22 +38,22 @@ public class TestInventory {
     @Before
     public void initTests() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place storehouse */
+        // Place storehouse
         Point point1 = new Point(10, 10);
         storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
-        /* Finish construction of the storehouse */
+        // Finish construction of the storehouse
         Utils.constructHouse(storehouse);
     }
 
@@ -192,7 +192,7 @@ public class TestInventory {
 
     @Test
     public void testRetrieveCourierFromEmptyInventory() {
-        /* This should always work */
+        // This should always work
 
         Courier courier = storehouse.retrieveCourier();
 

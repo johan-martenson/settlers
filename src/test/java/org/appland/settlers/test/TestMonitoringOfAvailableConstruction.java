@@ -45,19 +45,19 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceFlag() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -67,7 +67,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a flag is placed is correct */
+        // Verify that the event for the changed available construction when a flag is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -87,19 +87,19 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceFlagIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -109,7 +109,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a flag is placed is correct */
+        // Verify that the event for the changed available construction when a flag is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -125,7 +125,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -136,23 +136,23 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenRemovingFlag() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
+        // Place flag
         Point point1 = new Point(10, 10);
         Flag flag0 = map.placeFlag(player0, point1);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -162,7 +162,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a flag is removed is correct */
+        // Verify that the event for the changed available construction when a flag is removed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -181,23 +181,23 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenRemovingFlagIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
+        // Place flag
         Point point1 = new Point(10, 10);
         Flag flag0 = map.placeFlag(player0, point1);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -207,7 +207,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a flag is removed is correct */
+        // Verify that the event for the changed available construction when a flag is removed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -222,7 +222,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -233,19 +233,19 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceTree() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -255,7 +255,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a flag is placed is correct */
+        // Verify that the event for the changed available construction when a flag is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -275,19 +275,19 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceTreeIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -297,7 +297,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a flag is placed is correct */
+        // Verify that the event for the changed available construction when a flag is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -313,7 +313,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -324,23 +324,23 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenRemovingTree() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place tree */
+        // Place tree
         Point point1 = new Point(10, 10);
         Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -350,17 +350,17 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Place a woodcutter close to the tree */
+        // Place a woodcutter close to the tree
         Point point2 = new Point(13, 13);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
 
-        /* Connect the woodcutter with the headquarters */
+        // Connect the woodcutter with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the woodcutter to get constructed */
+        // Wait for the woodcutter to get constructed
         Utils.waitForBuildingToBeConstructed(woodcutter);
 
-        /* Verify that the event for the changed available construction when a tree is removed is correct */
+        // Verify that the event for the changed available construction when a tree is removed is correct
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
         Utils.waitForTreeToDisappearFromMap(tree0, map);
@@ -375,23 +375,23 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenRemovingTreeIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place tree */
+        // Place tree
         Point point1 = new Point(10, 10);
         Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -401,17 +401,17 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Place a woodcutter close to the tree */
+        // Place a woodcutter close to the tree
         Point point2 = new Point(13, 13);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
 
-        /* Connect the woodcutter with the headquarters */
+        // Connect the woodcutter with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the woodcutter to get constructed */
+        // Wait for the woodcutter to get constructed
         Utils.waitForBuildingToBeConstructed(woodcutter);
 
-        /* Verify that the event for the changed available construction when a tree is removed is correct */
+        // Verify that the event for the changed available construction when a tree is removed is correct
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
         Utils.waitForTreeToDisappearFromMap(tree0, map);
@@ -422,7 +422,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -433,19 +433,19 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceSmallBuilding() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -455,7 +455,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a flag is placed is correct */
+        // Verify that the event for the changed available construction when a flag is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -475,19 +475,19 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceSmallBuildingIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -497,7 +497,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a flag is placed is correct */
+        // Verify that the event for the changed available construction when a flag is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -513,7 +513,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -524,26 +524,26 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenTearingDownSmallBuilding() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place woodcutter */
+        // Place woodcutter
         Point point1 = new Point(10, 10);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Construct the woodcutter */
+        // Construct the woodcutter
         Utils.constructHouse(woodcutter0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -553,7 +553,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a small building is removed is correct */
+        // Verify that the event for the changed available construction when a small building is removed is correct
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
         woodcutter0.tearDown();
@@ -571,26 +571,26 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenTearingDownSmallBuildingIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place woodcutter */
+        // Place woodcutter
         Point point1 = new Point(10, 10);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Construct the woodcutter */
+        // Construct the woodcutter
         Utils.constructHouse(woodcutter0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -600,7 +600,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a small building is removed is correct */
+        // Verify that the event for the changed available construction when a small building is removed is correct
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
         woodcutter0.tearDown();
@@ -614,7 +614,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -625,26 +625,26 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenSmallBuildingIsDestroyed() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place woodcutter */
+        // Place woodcutter
         Point point1 = new Point(10, 10);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Construct the woodcutter */
+        // Construct the woodcutter
         Utils.constructHouse(woodcutter0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -654,7 +654,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a small building is removed is correct */
+        // Verify that the event for the changed available construction when a small building is removed is correct
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
         woodcutter0.tearDown();
@@ -674,26 +674,26 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenSmallBuildingIsDestroyedIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place woodcutter */
+        // Place woodcutter
         Point point1 = new Point(10, 10);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Construct the woodcutter */
+        // Construct the woodcutter
         Utils.constructHouse(woodcutter0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -703,7 +703,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a small building is removed is correct */
+        // Verify that the event for the changed available construction when a small building is removed is correct
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
         woodcutter0.tearDown();
@@ -719,7 +719,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -730,26 +730,26 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenSmallBuildingDisappears() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place woodcutter */
+        // Place woodcutter
         Point point1 = new Point(10, 10);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Construct the woodcutter */
+        // Construct the woodcutter
         Utils.constructHouse(woodcutter0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -759,7 +759,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a small building is removed is correct */
+        // Verify that the event for the changed available construction when a small building is removed is correct
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
         woodcutter0.tearDown();
@@ -777,26 +777,26 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenSmallBuildingDisappearsIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place woodcutter */
+        // Place woodcutter
         Point point1 = new Point(10, 10);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Construct the woodcutter */
+        // Construct the woodcutter
         Utils.constructHouse(woodcutter0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -806,7 +806,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a small building is removed is correct */
+        // Verify that the event for the changed available construction when a small building is removed is correct
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
         woodcutter0.tearDown();
@@ -820,7 +820,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -831,19 +831,19 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceMediumBuilding() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -853,7 +853,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a flag is placed is correct */
+        // Verify that the event for the changed available construction when a flag is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -873,19 +873,19 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceMediumBuildingIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -895,7 +895,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a flag is placed is correct */
+        // Verify that the event for the changed available construction when a flag is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -911,7 +911,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -922,23 +922,23 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenTearingDownMediumBuilding() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place sawmill */
+        // Place sawmill
         Point point1 = new Point(10, 10);
         Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -948,7 +948,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a medium building is torn down is correct */
+        // Verify that the event for the changed available construction when a medium building is torn down is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -967,23 +967,23 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenTearingDownMediumBuildingIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place sawmill */
+        // Place sawmill
         Point point1 = new Point(10, 10);
         Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -993,7 +993,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a medium building is torn down is correct */
+        // Verify that the event for the changed available construction when a medium building is torn down is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -1008,7 +1008,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -1019,26 +1019,26 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenMediumBuildingIsDestroyed() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place sawmill */
+        // Place sawmill
         Point point1 = new Point(10, 10);
         Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
-        /* Construct the sawmill */
+        // Construct the sawmill
         Utils.constructHouse(sawmill0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -1048,7 +1048,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a medium building has burnt down is correct */
+        // Verify that the event for the changed available construction when a medium building has burnt down is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -1065,26 +1065,26 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenMediumBuildingIsDestroyedIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place sawmill */
+        // Place sawmill
         Point point1 = new Point(10, 10);
         Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
-        /* Construct the sawmill */
+        // Construct the sawmill
         Utils.constructHouse(sawmill0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -1094,7 +1094,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a medium building has burnt down is correct */
+        // Verify that the event for the changed available construction when a medium building has burnt down is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -1109,7 +1109,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -1120,26 +1120,26 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenMediumBuildingDisappears() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place sawmill */
+        // Place sawmill
         Point point1 = new Point(10, 10);
         Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
-        /* Construct the sawmill */
+        // Construct the sawmill
         Utils.constructHouse(sawmill0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -1149,7 +1149,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a medium building has burnt down is correct */
+        // Verify that the event for the changed available construction when a medium building has burnt down is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -1168,26 +1168,26 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenMediumBuildingDisappearsIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place sawmill */
+        // Place sawmill
         Point point1 = new Point(10, 10);
         Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
-        /* Construct the sawmill */
+        // Construct the sawmill
         Utils.constructHouse(sawmill0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -1197,7 +1197,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a medium building has burnt down is correct */
+        // Verify that the event for the changed available construction when a medium building has burnt down is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -1212,7 +1212,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -1223,19 +1223,19 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceLargeBuilding() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -1245,7 +1245,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a flag is placed is correct */
+        // Verify that the event for the changed available construction when a flag is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -1265,19 +1265,19 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceLargeBuildingIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -1287,7 +1287,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a flag is placed is correct */
+        // Verify that the event for the changed available construction when a flag is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -1303,7 +1303,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -1314,29 +1314,29 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenLargeBuildingIsTornDown() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point1 = new Point(10, 10);
         Farm farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Connect the farm with the headquarters */
+        // Connect the farm with the headquarters
         Road road = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the farm to get constructed */
+        // Wait for the farm to get constructed
         Utils.waitForBuildingToBeConstructed(farm0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -1346,7 +1346,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a flag is placed is correct */
+        // Verify that the event for the changed available construction when a flag is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -1365,29 +1365,29 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenLargeBuildingIsTornDownIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point1 = new Point(10, 10);
         Farm farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Connect the farm with the headquarters */
+        // Connect the farm with the headquarters
         Road road = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the farm to get constructed */
+        // Wait for the farm to get constructed
         Utils.waitForBuildingToBeConstructed(farm0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -1397,7 +1397,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a flag is placed is correct */
+        // Verify that the event for the changed available construction when a flag is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -1412,7 +1412,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -1423,29 +1423,29 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenLargeBuildingIsDestroyed() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point1 = new Point(10, 10);
         Farm farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Connect the farm with the headquarters */
+        // Connect the farm with the headquarters
         Road road = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the farm to get constructed */
+        // Wait for the farm to get constructed
         Utils.waitForBuildingToBeConstructed(farm0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -1455,7 +1455,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a flag is placed is correct */
+        // Verify that the event for the changed available construction when a flag is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -1474,29 +1474,29 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenLargeBuildingIsDestroyedIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point1 = new Point(10, 10);
         Farm farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Connect the farm with the headquarters */
+        // Connect the farm with the headquarters
         Road road = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the farm to get constructed */
+        // Wait for the farm to get constructed
         Utils.waitForBuildingToBeConstructed(farm0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -1506,7 +1506,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a flag is placed is correct */
+        // Verify that the event for the changed available construction when a flag is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -1521,7 +1521,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -1532,19 +1532,19 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceHorizontalRoad() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(22, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -1554,7 +1554,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a road is placed is correct */
+        // Verify that the event for the changed available construction when a road is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -1579,19 +1579,19 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceHorizontalRoadIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(22, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -1601,7 +1601,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a road is placed is correct */
+        // Verify that the event for the changed available construction when a road is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -1622,7 +1622,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -1633,17 +1633,17 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenRemovingHorizontalRoad() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(22, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place road */
+        // Place road
         Point point1 = new Point(10, 10);
         Point point2 = new Point(18, 10);
 
@@ -1654,7 +1654,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -1664,7 +1664,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a road is placed is correct */
+        // Verify that the event for the changed available construction when a road is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -1683,17 +1683,17 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenRemovingHorizontalRoadIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(22, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place road */
+        // Place road
         Point point1 = new Point(10, 10);
         Point point2 = new Point(18, 10);
 
@@ -1704,7 +1704,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -1714,7 +1714,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a road is placed is correct */
+        // Verify that the event for the changed available construction when a road is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -1729,7 +1729,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -1740,19 +1740,19 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceLeftToRightDiagonalRoad() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(20, 12);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -1762,7 +1762,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a road is placed is correct */
+        // Verify that the event for the changed available construction when a road is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -1787,19 +1787,19 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceLeftToRightDiagonalRoadIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(20, 12);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -1809,7 +1809,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a road is placed is correct */
+        // Verify that the event for the changed available construction when a road is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -1830,7 +1830,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -1841,19 +1841,19 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenRemovingLeftToRightDiagonalRoad() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(20, 12);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -1863,7 +1863,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a road is placed is correct */
+        // Verify that the event for the changed available construction when a road is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -1888,19 +1888,19 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenRemovingLeftToRightDiagonalRoadIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(20, 12);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -1910,7 +1910,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a road is placed is correct */
+        // Verify that the event for the changed available construction when a road is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -1931,7 +1931,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -1942,17 +1942,17 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenRemovingRightToLeftDiagonalRoad() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(16, 12);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place road */
+        // Place road
         Point point1 = new Point(14, 14);
         Point point2 = new Point(10, 10);
 
@@ -1963,7 +1963,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -1973,7 +1973,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a road is placed is correct */
+        // Verify that the event for the changed available construction when a road is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -1992,17 +1992,17 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenRemovingRightToLeftDiagonalRoadIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(22, 12);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place road */
+        // Place road
         Point point1 = new Point(14, 14);
         Point point2 = new Point(10, 10);
 
@@ -2013,7 +2013,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -2023,7 +2023,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a road is placed is correct */
+        // Verify that the event for the changed available construction when a road is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -2038,7 +2038,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -2049,19 +2049,19 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceCrop() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -2071,7 +2071,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a road is placed is correct */
+        // Verify that the event for the changed available construction when a road is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -2094,19 +2094,19 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceCropIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -2116,7 +2116,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when a road is placed is correct */
+        // Verify that the event for the changed available construction when a road is placed is correct
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -2133,7 +2133,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -2144,32 +2144,32 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenHarvestedCrop() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(10, 16);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm near the crop */
+        // Place farm near the crop
         Point point2 = new Point(16, 16);
         Farm farm0 = map.placeBuilding(new Farm(player0), point2);
 
-        /* Connect the farm with the headquarters */
+        // Connect the farm with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the farm to get constructed and occupied */
+        // Wait for the farm to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(farm0);
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(farm0);
 
-        /* Wait for the farmer to plant a crop */
+        // Wait for the farmer to plant a crop
         Crop crop = Utils.waitForFarmerToPlantCrop(map, (Farmer)farm0.getWorker());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -2179,7 +2179,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when the farmer harvests the crop */
+        // Verify that the event for the changed available construction when the farmer harvests the crop
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -2194,32 +2194,32 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenHarvestedCropIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(10, 16);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm near the crop */
+        // Place farm near the crop
         Point point2 = new Point(16, 16);
         Farm farm0 = map.placeBuilding(new Farm(player0), point2);
 
-        /* Connect the farm with the headquarters */
+        // Connect the farm with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the farm to get constructed and occupied */
+        // Wait for the farm to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(farm0);
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(farm0);
 
-        /* Wait for the farmer to plant a crop */
+        // Wait for the farmer to plant a crop
         Crop crop = Utils.waitForFarmerToPlantCrop(map, (Farmer)farm0.getWorker());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -2229,7 +2229,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when the farmer harvests the crop */
+        // Verify that the event for the changed available construction when the farmer harvests the crop
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -2240,7 +2240,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -2251,32 +2251,32 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenHarvestedCropDisappears() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(10, 16);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm near the crop */
+        // Place farm near the crop
         Point point2 = new Point(16, 16);
         Farm farm0 = map.placeBuilding(new Farm(player0), point2);
 
-        /* Connect the farm with the headquarters */
+        // Connect the farm with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the farm to get constructed and occupied */
+        // Wait for the farm to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(farm0);
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(farm0);
 
-        /* Wait for the farmer to plant a crop */
+        // Wait for the farmer to plant a crop
         Crop crop = Utils.waitForFarmerToPlantCrop(map, (Farmer)farm0.getWorker());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -2286,7 +2286,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when the farmer harvests the crop */
+        // Verify that the event for the changed available construction when the farmer harvests the crop
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -2305,32 +2305,32 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenHarvestedCropDisappearsIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(10, 16);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm near the crop */
+        // Place farm near the crop
         Point point2 = new Point(16, 16);
         Farm farm0 = map.placeBuilding(new Farm(player0), point2);
 
-        /* Connect the farm with the headquarters */
+        // Connect the farm with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the farm to get constructed and occupied */
+        // Wait for the farm to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(farm0);
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(farm0);
 
-        /* Wait for the farmer to plant a crop */
+        // Wait for the farmer to plant a crop
         Crop crop = Utils.waitForFarmerToPlantCrop(map, (Farmer)farm0.getWorker());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -2340,7 +2340,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event for the changed available construction when the farmer harvests the crop */
+        // Verify that the event for the changed available construction when the farmer harvests the crop
         assertEquals(monitor.getEvents().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -2355,7 +2355,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -2366,29 +2366,29 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenBorderIsExtended() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        /* Create game map */
+        // Create game map
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Place barracks */
+        // Place barracks
         Point point22 = new Point(15, 11);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
-        /* Wait for the barracks to finish construction */
+        // Wait for the barracks to finish construction
         Utils.fastForwardUntilBuildingIsConstructed(barracks0);
 
-        /* Wait for a military sent from the headquarters */
+        // Wait for a military sent from the headquarters
         assertTrue(headquarter0.getAmount(PRIVATE) > 0);
 
         map.stepTime();
@@ -2397,7 +2397,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         assertNotNull(military);
 
-        /* Verify that an event is sent when the military reaches the barracks and the border is extended */
+        // Verify that an event is sent when the military reaches the barracks and the border is extended
         Point point3 = new Point(21, 13);
         Point point4 = new Point(29, 13);
 
@@ -2405,7 +2405,7 @@ public class TestMonitoringOfAvailableConstruction {
         assertTrue(player0.getBorderPoints().contains(point3));
         assertFalse(player0.getBorderPoints().contains(point4));
 
-        /* Set up monitoring subscription for the player and store the currently available construction */
+        // Set up monitoring subscription for the player and store the currently available construction
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -2415,7 +2415,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that all changed available construction is reported when the border is extended */
+        // Verify that all changed available construction is reported when the border is extended
         assertNull(map.isAvailableHousePoint(player0, barracks0.getFlag().getPosition().downLeft().downLeft()));
         assertTrue(map.isAvailableFlagPoint(player0, barracks0.getFlag().getPosition().downLeft().downLeft()));
 
@@ -2437,29 +2437,29 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenBorderIsExtendedIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        /* Create game map */
+        // Create game map
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Place barracks */
+        // Place barracks
         Point point22 = new Point(5, 23);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
-        /* Wait for the barracks to finish construction */
+        // Wait for the barracks to finish construction
         Utils.fastForwardUntilBuildingIsConstructed(barracks0);
 
-        /* Wait for a military sent from the headquarters */
+        // Wait for a military sent from the headquarters
         assertTrue(headquarter0.getAmount(PRIVATE) > 0);
 
         map.stepTime();
@@ -2468,7 +2468,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         assertNotNull(military);
 
-        /* Verify that an event is sent when the military reaches the barracks, and the border is extended */
+        // Verify that an event is sent when the military reaches the barracks, and the border is extended
         Point point3 = new Point(6, 24);
         Point point4 = new Point(5, 31);
 
@@ -2476,7 +2476,7 @@ public class TestMonitoringOfAvailableConstruction {
         assertTrue(player0.getBorderPoints().contains(point3));
         assertFalse(player0.getBorderPoints().contains(point4));
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -2499,7 +2499,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         monitor.clearEvents();
 
         Utils.fastForward(10, map);
@@ -2512,29 +2512,29 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenBorderIsLost() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        /* Create game map */
+        // Create game map
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Place barracks */
+        // Place barracks
         Point point22 = new Point(5, 23);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
-        /* Wait for the barracks to finish construction */
+        // Wait for the barracks to finish construction
         Utils.fastForwardUntilBuildingIsConstructed(barracks0);
 
-        /* Wait for a military sent from the headquarters */
+        // Wait for a military sent from the headquarters
         assertTrue(headquarter0.getAmount(PRIVATE) > 0);
 
         map.stepTime();
@@ -2543,7 +2543,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         assertNotNull(military);
 
-        /* Wait for the barracks to get occupied so the border extends */
+        // Wait for the barracks to get occupied so the border extends
         Point point3 = new Point(6, 24);
         Point point4 = new Point(5, 31);
 
@@ -2556,7 +2556,7 @@ public class TestMonitoringOfAvailableConstruction {
         assertFalse(player0.getBorderPoints().contains(point3));
         assertTrue(player0.getBorderPoints().contains(point4));
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -2568,7 +2568,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         map.stepTime();
 
-        /* Verify that an event is sent and that the available construction is monitored correctly when border is lost */
+        // Verify that an event is sent and that the available construction is monitored correctly when border is lost
         barracks0.tearDown();
 
         map.stepTime();
@@ -2584,29 +2584,29 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenBorderIsLostIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        /* Create game map */
+        // Create game map
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Place barracks */
+        // Place barracks
         Point point22 = new Point(5, 23);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
-        /* Wait for the barracks to finish construction */
+        // Wait for the barracks to finish construction
         Utils.fastForwardUntilBuildingIsConstructed(barracks0);
 
-        /* Wait for a military sent from the headquarters */
+        // Wait for a military sent from the headquarters
         assertTrue(headquarter0.getAmount(PRIVATE) > 0);
 
         map.stepTime();
@@ -2615,7 +2615,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         assertNotNull(military);
 
-        /* Wait for the barracks to get occupied so the border extends */
+        // Wait for the barracks to get occupied so the border extends
         Point point3 = new Point(6, 24);
         Point point4 = new Point(5, 31);
 
@@ -2628,7 +2628,7 @@ public class TestMonitoringOfAvailableConstruction {
         assertFalse(player0.getBorderPoints().contains(point3));
         assertTrue(player0.getBorderPoints().contains(point4));
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -2640,7 +2640,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         map.stepTime();
 
-        /* Verify that an event is sent and that the available construction is monitored correctly when border is lost */
+        // Verify that an event is sent and that the available construction is monitored correctly when border is lost
         barracks0.tearDown();
 
         map.stepTime();
@@ -2652,7 +2652,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
@@ -2663,31 +2663,31 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenStoneDisappearsAfterAllHasBeenRetrieved() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(10, 10);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
+        // Place quarry
         Point point2 = new Point(10, 4);
         Building quarry = map.placeBuilding(new Quarry(player0), point2);
 
-        /* Construct the quarry */
+        // Construct the quarry
         Utils.constructHouse(quarry);
 
-        /* Connect the quarry to the headquarters */
+        // Connect the quarry to the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
 
-        /* Place stone */
+        // Place stone
         Point point1 = new Point(12, 4);
         Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
-        /* Remove all except the last part of the stone */
+        // Remove all except the last part of the stone
         for (int i = 0; i < 6; i++) {
             stone0.removeOnePart();
 
@@ -2696,12 +2696,12 @@ public class TestMonitoringOfAvailableConstruction {
 
         assertEquals(stone0.getAmount(), 1);
 
-        /* Let the stonemason remove the final part of the stone and verify that an event is sent */
+        // Let the stonemason remove the final part of the stone and verify that an event is sent
         Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).getFirst();
 
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -2732,31 +2732,31 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenStoneDisappearsAfterAllHasBeenRetrievedIsOnlySentOnce() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(10, 10);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
+        // Place quarry
         Point point2 = new Point(10, 4);
         Building quarry = map.placeBuilding(new Quarry(player0), point2);
 
-        /* Construct the quarry */
+        // Construct the quarry
         Utils.constructHouse(quarry);
 
-        /* Connect the quarry to the headquarters */
+        // Connect the quarry to the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
 
-        /* Place stone */
+        // Place stone
         Point point1 = new Point(12, 4);
         Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
-        /* Remove all except the last part of the stone */
+        // Remove all except the last part of the stone
         for (int i = 0; i < 6; i++) {
             stone0.removeOnePart();
 
@@ -2765,12 +2765,12 @@ public class TestMonitoringOfAvailableConstruction {
 
         assertEquals(stone0.getAmount(), 1);
 
-        /* Let the stonemason remove the final part of the stone and verify that an event is sent */
+        // Let the stonemason remove the final part of the stone and verify that an event is sent
         Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).getFirst();
 
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -2795,7 +2795,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
@@ -2806,27 +2806,27 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenMultipleStonesDisappear() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(10, 10);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
+        // Place quarry
         Point point2 = new Point(14, 4);
         Building quarry = map.placeBuilding(new Quarry(player0), point2);
 
-        /* Construct the quarry */
+        // Construct the quarry
         Utils.constructHouse(quarry);
 
-        /* Connect the quarry to the headquarters */
+        // Connect the quarry to the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
 
-        /* Place stones */
+        // Place stones
         Point point1 = new Point(12, 4);
         Point point3 = new Point(13, 3);
         Point point4 = new Point(11, 3);
@@ -2834,12 +2834,12 @@ public class TestMonitoringOfAvailableConstruction {
         Stone stone1 = map.placeStone(point3, Stone.StoneType.STONE_1, 7);
         Stone stone2 = map.placeStone(point4, Stone.StoneType.STONE_1, 7);
 
-        /* Let the stonemason remove the final part of the stone and verify that an event is sent */
+        // Let the stonemason remove the final part of the stone and verify that an event is sent
         Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).getFirst();
 
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -2851,7 +2851,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        /* Verify that there are three correct events for available construction when the stones are gone */
+        // Verify that there are three correct events for available construction when the stones are gone
         Utils.waitForStonesToDisappear(map, stone0, stone1, stone2);
 
         assertFalse(map.isStoneAtPoint(point1));

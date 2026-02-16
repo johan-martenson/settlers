@@ -31,49 +31,49 @@ public class TestGameMonitoringOfShipEvents {
     @Test
     public void testMonitoringEventWhenShipwrightStartsBuildingShip() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place lake */
+        // Place lake
         Point point2 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place shipyard */
+        // Place shipyard
         Point point0 = new Point(10, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
-        /* Connect the shipyard with the headquarter */
+        // Connect the shipyard with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
-        /* Wait for the shipyard to get constructed and occupied */
+        // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
 
-        /* Instruct the shipyard to construct ships */
+        // Instruct the shipyard to construct ships
         shipyard.produceShips();
 
         assertTrue(shipyard.isProducingShips());
 
-        /* Wait for a shipwright to occupy the shipyard */
+        // Wait for a shipwright to occupy the shipyard
         Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
-        /* Ensure the shipyard has plenty of materials */
+        // Ensure the shipyard has plenty of materials
         Utils.deliverCargos(shipyard, PLANK, 4);
 
-        /* Let the shipwright rest */
+        // Let the shipwright rest
         Utils.fastForward(99, map);
 
         assertTrue(shipwright.isInsideBuilding());
 
-        /* Step once and make sure the shipwright goes out of the shipyard */
+        // Step once and make sure the shipwright goes out of the shipyard
         map.stepTime();
 
         assertFalse(shipwright.isInsideBuilding());
@@ -82,11 +82,11 @@ public class TestGameMonitoringOfShipEvents {
 
         assertTrue(shipwright.isTraveling());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Let the shipwright reach the spot and start to build a ship */
+        // Let the shipwright reach the spot and start to build a ship
         assertEquals(map.getShips().size(), 0);
 
         Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
@@ -98,7 +98,7 @@ public class TestGameMonitoringOfShipEvents {
 
         Ship ship = map.getShips().getFirst();
 
-        /* Verify that a game monitoring event was sent */
+        // Verify that a game monitoring event was sent
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
             if (gameChangesList.newShips().contains(ship)) {
@@ -114,49 +114,49 @@ public class TestGameMonitoringOfShipEvents {
     @Test
     public void testMonitoringEventWhenShipwrightStartsBuildingShipIsOnlySentOnce() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place lake */
+        // Place lake
         Point point2 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place shipyard */
+        // Place shipyard
         Point point0 = new Point(10, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
-        /* Connect the shipyard with the headquarter */
+        // Connect the shipyard with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
-        /* Wait for the shipyard to get constructed and occupied */
+        // Wait for the shipyard to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(shipyard);
 
-        /* Instruct the shipyard to construct ships */
+        // Instruct the shipyard to construct ships
         shipyard.produceShips();
 
         assertTrue(shipyard.isProducingShips());
 
-        /* Wait for a shipwright to occupy the shipyard */
+        // Wait for a shipwright to occupy the shipyard
         Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
-        /* Ensure the shipyard has plenty of materials */
+        // Ensure the shipyard has plenty of materials
         Utils.deliverCargos(shipyard, PLANK, 4);
 
-        /* Let the shipwright rest */
+        // Let the shipwright rest
         Utils.fastForward(99, map);
 
         assertTrue(shipwright.isInsideBuilding());
 
-        /* Step once and make sure the shipwright goes out of the shipyard */
+        // Step once and make sure the shipwright goes out of the shipyard
         map.stepTime();
 
         assertFalse(shipwright.isInsideBuilding());
@@ -165,11 +165,11 @@ public class TestGameMonitoringOfShipEvents {
 
         assertTrue(shipwright.isTraveling());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Let the shipwright reach the spot and start to build a ship */
+        // Let the shipwright reach the spot and start to build a ship
         assertEquals(map.getShips().size(), 0);
 
         Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
@@ -181,7 +181,7 @@ public class TestGameMonitoringOfShipEvents {
 
         Ship ship = map.getShips().getFirst();
 
-        /* Verify that a game monitoring event was sent */
+        // Verify that a game monitoring event was sent
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
             if (gameChangesList.newShips().contains(ship)) {
@@ -193,7 +193,7 @@ public class TestGameMonitoringOfShipEvents {
 
         assertTrue(foundEvent);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         GameChangesList lastEvent = monitor.getEvents().getLast();
 
         Utils.fastForward(5, map);
@@ -206,61 +206,61 @@ public class TestGameMonitoringOfShipEvents {
     @Test
     public void testMonitoringEventWhenShipIsFinishedAndMovesToWater() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place lake */
+        // Place lake
         Point point2 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
-        /* Place shipyard */
+        // Place shipyard
         Point point0 = new Point(10, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
-        /* Wait for the shipyard to get constructed */
+        // Wait for the shipyard to get constructed
         Utils.waitForBuildingToBeConstructed(shipyard);
 
-        /* Instruct the shipyard to construct ships */
+        // Instruct the shipyard to construct ships
         shipyard.produceShips();
 
         assertTrue(shipyard.isProducingShips());
 
-        /* Wait for a shipwright to occupy the shipyard */
+        // Wait for a shipwright to occupy the shipyard
         Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
-        /* Ensure the shipyard has plenty of materials */
+        // Ensure the shipyard has plenty of materials
         Utils.deliverCargos(shipyard, PLANK, 4);
 
-        /* Wait for the shipwright to rest */
+        // Wait for the shipwright to rest
         Utils.fastForward(99, map);
 
         assertTrue(shipwright.isInsideBuilding());
 
-        /* Step once to let the shipwright go out to start building a ship */
+        // Step once to let the shipwright go out to start building a ship
         map.stepTime();
 
         assertFalse(shipwright.isInsideBuilding());
 
-        /* Wait for the shipwright to reach the position where the new ship will be built */
+        // Wait for the shipwright to reach the position where the new ship will be built
         Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the shipwright to build a ship */
+        // Wait for the shipwright to build a ship
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
@@ -285,7 +285,7 @@ public class TestGameMonitoringOfShipEvents {
 
         assertTrue(ship.isReady());
 
-        /* Verify that a game monitoring event was sent when the ship moved from land to water */
+        // Verify that a game monitoring event was sent when the ship moved from land to water
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
             if (gameChangesList.finishedShips().contains(ship)) {
@@ -301,61 +301,61 @@ public class TestGameMonitoringOfShipEvents {
     @Test
     public void testMonitoringEventWhenShipIsFinishedAndMovesToWaterIsOnlySentOnce() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place lake */
+        // Place lake
         Point point2 = new Point(15, 9);
         Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
-        /* Place shipyard */
+        // Place shipyard
         Point point0 = new Point(10, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
-        /* Wait for the shipyard to get constructed */
+        // Wait for the shipyard to get constructed
         Utils.waitForBuildingToBeConstructed(shipyard);
 
-        /* Instruct the shipyard to construct ships */
+        // Instruct the shipyard to construct ships
         shipyard.produceShips();
 
         assertTrue(shipyard.isProducingShips());
 
-        /* Wait for a shipwright to occupy the shipyard */
+        // Wait for a shipwright to occupy the shipyard
         Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
-        /* Ensure the shipyard has plenty of materials */
+        // Ensure the shipyard has plenty of materials
         Utils.deliverCargos(shipyard, PLANK, 4);
 
-        /* Wait for the shipwright to rest */
+        // Wait for the shipwright to rest
         Utils.fastForward(99, map);
 
         assertTrue(shipwright.isInsideBuilding());
 
-        /* Step once to let the shipwright go out to start building a ship */
+        // Step once to let the shipwright go out to start building a ship
         map.stepTime();
 
         assertFalse(shipwright.isInsideBuilding());
 
-        /* Wait for the shipwright to reach the position where the new ship will be built */
+        // Wait for the shipwright to reach the position where the new ship will be built
         Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the shipwright to build a ship */
+        // Wait for the shipwright to build a ship
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
@@ -380,7 +380,7 @@ public class TestGameMonitoringOfShipEvents {
 
         assertTrue(ship.isReady());
 
-        /* Agame monitoring event was sent when the ship moved from land to water */
+        // Agame monitoring event was sent when the ship moved from land to water
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
             if (gameChangesList.finishedShips().contains(ship)) {
@@ -392,7 +392,7 @@ public class TestGameMonitoringOfShipEvents {
 
         assertTrue(foundEvent);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         GameChangesList lastEvent = monitor.getEvents().getLast();
 
         Utils.fastForward(5, map);
@@ -405,38 +405,38 @@ public class TestGameMonitoringOfShipEvents {
     @Test
     public void testMonitoringEventWhenShipGetsTarget() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place a long, thin lake */
+        // Place a long, thin lake
         for (int i = 3; i < 53; i += 2) {
             Point point = new Point(i, 11);
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
 
-        /* Mark a possible place for a harbor */
+        // Mark a possible place for a harbor
         Point point0 = new Point(50, 8);
         map.setPossiblePlaceForHarbor(point0);
 
-        /* Mark a possible place for a harbor */
+        // Mark a possible place for a harbor
         Point point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point2 = new Point(16, 8);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
-        /* Place harbor */
+        // Place harbor
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor to the headquarter */
+        // Connect the harbor to the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
-        /* Wait for the harbor to get constructed and occupied */
+        // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
 
         Utils.fastForward(2000, map);
@@ -445,7 +445,7 @@ public class TestGameMonitoringOfShipEvents {
 
         assertTrue(harbor.isReady());
 
-        /* Place shipyard */
+        // Place shipyard
         Point point3 = new Point(24, 8);
 
         assertTrue(player0.getOwnedLand().contains(point3));
@@ -453,31 +453,31 @@ public class TestGameMonitoringOfShipEvents {
 
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        /* Connect the shipyard to the headquarter */
+        // Connect the shipyard to the headquarter
         Road road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
-        /* Wait for the shipyard to get constructed and occupied */
+        // Wait for the shipyard to get constructed and occupied
         assertFalse(harbor.needsMaterial(BUILDER));
 
         Utils.waitForBuildingToBeConstructed(shipyard);
 
-        /* Set the shipyard to build ships */
+        // Set the shipyard to build ships
         shipyard.produceShips();
 
-        /* Wait for the shipyard to get occupied */
+        // Wait for the shipyard to get occupied
         Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
-        /* Ensure the shipyard has plenty of materials */
+        // Ensure the shipyard has plenty of materials
         Utils.deliverCargos(shipyard, PLANK, 4);
 
-        /* Wait for the shipwright to rest */
+        // Wait for the shipwright to rest
         Utils.fastForward(99, map);
 
         assertTrue(shipwright.isInsideBuilding());
 
-        /* Step once to let the shipwright go out to start building a ship */
+        // Step once to let the shipwright go out to start building a ship
         map.stepTime();
 
         assertFalse(shipwright.isInsideBuilding());
@@ -486,14 +486,14 @@ public class TestGameMonitoringOfShipEvents {
 
         assertTrue(shipwright.isTraveling());
 
-        /* Let the shipwright reach the intended spot and start to build the ship */
+        // Let the shipwright reach the intended spot and start to build the ship
         Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
         assertTrue(shipwright.isHammering());
 
-        /* Wait for the shipwright to hammer */
+        // Wait for the shipwright to hammer
         Utils.fastForward(19, map);
 
         assertTrue(shipwright.isHammering());
@@ -504,7 +504,7 @@ public class TestGameMonitoringOfShipEvents {
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
 
-        /* Wait for the ship to get fully constructed */
+        // Wait for the ship to get fully constructed
         Point point4 = ship.getPosition();
 
         Utils.waitForShipToGetBuilt(map, ship);
@@ -512,14 +512,14 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(ship.isReady());
         assertFalse(ship.isUnderConstruction());
 
-        /* Turn off ship production to make sure there is only one ship */
+        // Turn off ship production to make sure there is only one ship
         shipyard.stopProduction();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Prepare for the expedition */
+        // Prepare for the expedition
         Utils.adjustInventoryTo(headquarter, PLANK, 30);
         Utils.adjustInventoryTo(headquarter, STONE, 30);
         Utils.adjustInventoryTo(headquarter, BUILDER, 30);
@@ -531,7 +531,7 @@ public class TestGameMonitoringOfShipEvents {
 
         harbor.prepareForExpedition();
 
-        /* Wait for the harbor to collect the required material for the expedition */
+        // Wait for the harbor to collect the required material for the expedition
         for (int i = 0; i < 10000; i++) {
 
             Map<Material, Integer> expeditionMaterial = harbor.getMaterialForExpedition();
@@ -547,12 +547,12 @@ public class TestGameMonitoringOfShipEvents {
             map.stepTime();
         }
 
-        /* Wait for the ship to sail to the harbor */
+        // Wait for the ship to sail to the harbor
         assertEquals(map.getShips().size(), 1);
 
         assertTrue(ship.getTarget().distance(point1) < 4);
 
-        /* Verify that a game monitoring event was sent when the ship moved from land to water */
+        // Verify that a game monitoring event was sent when the ship moved from land to water
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
             if (gameChangesList.shipsWithNewTargets().contains(ship)) {
@@ -568,38 +568,38 @@ public class TestGameMonitoringOfShipEvents {
     @Test
     public void testMonitoringEventWhenShipGetsTargetIsOnlySentOnce() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place a long, thin lake */
+        // Place a long, thin lake
         for (int i = 3; i < 53; i += 2) {
             Point point = new Point(i, 11);
 
             Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
 
-        /* Mark a possible place for a harbor */
+        // Mark a possible place for a harbor
         Point point0 = new Point(50, 8);
         map.setPossiblePlaceForHarbor(point0);
 
-        /* Mark a possible place for a harbor */
+        // Mark a possible place for a harbor
         Point point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point2 = new Point(16, 8);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
-        /* Place harbor */
+        // Place harbor
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor to the headquarter */
+        // Connect the harbor to the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
-        /* Wait for the harbor to get constructed and occupied */
+        // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
 
         Utils.fastForward(2000, map);
@@ -608,7 +608,7 @@ public class TestGameMonitoringOfShipEvents {
 
         assertTrue(harbor.isReady());
 
-        /* Place shipyard */
+        // Place shipyard
         Point point3 = new Point(24, 8);
 
         assertTrue(player0.getOwnedLand().contains(point3));
@@ -616,31 +616,31 @@ public class TestGameMonitoringOfShipEvents {
 
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        /* Connect the shipyard to the headquarter */
+        // Connect the shipyard to the headquarter
         Road road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
-        /* Wait for the shipyard to get constructed and occupied */
+        // Wait for the shipyard to get constructed and occupied
         assertFalse(harbor.needsMaterial(BUILDER));
 
         Utils.waitForBuildingToBeConstructed(shipyard);
 
-        /* Set the shipyard to build ships */
+        // Set the shipyard to build ships
         shipyard.produceShips();
 
-        /* Wait for the shipyard to get occupied */
+        // Wait for the shipyard to get occupied
         Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         assertTrue(shipwright.isInsideBuilding());
 
-        /* Ensure the shipyard has plenty of materials */
+        // Ensure the shipyard has plenty of materials
         Utils.deliverCargos(shipyard, PLANK, 4);
 
-        /* Wait for the shipwright to rest */
+        // Wait for the shipwright to rest
         Utils.fastForward(99, map);
 
         assertTrue(shipwright.isInsideBuilding());
 
-        /* Step once to let the shipwright go out to start building a ship */
+        // Step once to let the shipwright go out to start building a ship
         map.stepTime();
 
         assertFalse(shipwright.isInsideBuilding());
@@ -649,14 +649,14 @@ public class TestGameMonitoringOfShipEvents {
 
         assertTrue(shipwright.isTraveling());
 
-        /* Let the shipwright reach the intended spot and start to build the ship */
+        // Let the shipwright reach the intended spot and start to build the ship
         Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
         assertTrue(shipwright.isHammering());
 
-        /* Wait for the shipwright to hammer */
+        // Wait for the shipwright to hammer
         Utils.fastForward(19, map);
 
         assertTrue(shipwright.isHammering());
@@ -667,7 +667,7 @@ public class TestGameMonitoringOfShipEvents {
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
 
-        /* Wait for the ship to get fully constructed */
+        // Wait for the ship to get fully constructed
         Point point4 = ship.getPosition();
 
         Utils.waitForShipToGetBuilt(map, ship);
@@ -675,14 +675,14 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(ship.isReady());
         assertFalse(ship.isUnderConstruction());
 
-        /* Turn off ship production to make sure there is only one ship */
+        // Turn off ship production to make sure there is only one ship
         shipyard.stopProduction();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Prepare for the expedition */
+        // Prepare for the expedition
         Utils.adjustInventoryTo(headquarter, PLANK, 30);
         Utils.adjustInventoryTo(headquarter, STONE, 30);
         Utils.adjustInventoryTo(headquarter, BUILDER, 30);
@@ -694,7 +694,7 @@ public class TestGameMonitoringOfShipEvents {
 
         harbor.prepareForExpedition();
 
-        /* Wait for the harbor to collect the required material for the expedition */
+        // Wait for the harbor to collect the required material for the expedition
         for (int i = 0; i < 10000; i++) {
 
             Map<Material, Integer> expeditionMaterial = harbor.getMaterialForExpedition();
@@ -710,12 +710,12 @@ public class TestGameMonitoringOfShipEvents {
             map.stepTime();
         }
 
-        /* Wait for the ship to sail to the harbor */
+        // Wait for the ship to sail to the harbor
         assertEquals(map.getShips().size(), 1);
 
         assertTrue(ship.getTarget().distance(point1) < 4);
 
-        /* Verify that a game monitoring event was sent when the ship moved from land to water */
+        // Verify that a game monitoring event was sent when the ship moved from land to water
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
             if (gameChangesList.shipsWithNewTargets().contains(ship)) {
@@ -727,7 +727,7 @@ public class TestGameMonitoringOfShipEvents {
 
         assertTrue(foundEvent);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         GameChangesList lastEvent = monitor.getEvents().getLast();
 
         Utils.fastForward(5, map);

@@ -21,13 +21,13 @@ public class TestStones {
     @Test
     public void testStoneAmount() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place stone */
+        // Place stone
         Point point0 = new Point(5, 5);
         Stone stone0 = map.placeStone(point0, Stone.StoneType.STONE_1, 6);
 
@@ -46,7 +46,7 @@ public class TestStones {
         Point point5 = new Point(15, 5);
         Stone stone5 = map.placeStone(point5, Stone.StoneType.STONE_1, 1);
 
-        /* Verify that the right stone amount is returned */
+        // Verify that the right stone amount is returned
         assertEquals(stone0.getStoneAmount(), FULL);
         assertEquals(stone1.getStoneAmount(), ALMOST_FULL);
         assertEquals(stone2.getStoneAmount(), MIDDLE);
@@ -58,13 +58,13 @@ public class TestStones {
     @Test
     public void testStoneAmountIsEqualForBothTypes() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place stones */
+        // Place stones
         Point point0 = new Point(5, 5);
         Stone stone0 = map.placeStone(point0, Stone.StoneType.STONE_1, 6);
 
@@ -77,7 +77,7 @@ public class TestStones {
         Point point3 = new Point(11, 5);
         Stone stone3 = map.placeStone(point3, Stone.StoneType.STONE_2, 4);
 
-        /* Verify that the right stone amount is returned */
+        // Verify that the right stone amount is returned
         assertEquals(stone0.getStoneAmount(), stone1.getStoneAmount());
         assertEquals(stone2.getStoneAmount(), stone3.getStoneAmount());
     }

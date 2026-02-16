@@ -22,31 +22,31 @@ public class TestGameMonitoringOfPlayerSettings {
     @Test
     public void testEventWhenTransportPriorityIsChanged() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Start monitoring */
+        // Start monitoring
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Place flag */
+        // Place flag
         var point1 = new Point(9, 5);
         var flag = map.placeFlag(player0, point1);
 
         map.stepTime();
 
-        /* Verify that the event does not include changes to the transport priority */
+        // Verify that the event does not include changes to the transport priority
         assertNotEquals(monitor.getEvents().size(), 0);
         assertFalse(monitor.getLastEvent().transportPriorityChanged());
 
-        /* Verify that an event is sent when the transport priority is */
+        // Verify that an event is sent when the transport priority is
         monitor.clearEvents();
 
         player0.setTransportPriority(3, TransportCategory.WOOD);
@@ -55,7 +55,7 @@ public class TestGameMonitoringOfPlayerSettings {
 
         assertTrue(monitor.getLastEvent().transportPriorityChanged());
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         monitor.clearEvents();
 
         map.stepTime();

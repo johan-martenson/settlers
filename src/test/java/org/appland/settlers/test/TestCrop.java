@@ -24,69 +24,69 @@ public class TestCrop {
     @Test
     public void testFarmerPlantsWhenThereAreFreeSpotsAndNothingToHarvest() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point3 = new Point(10, 6);
         Farm farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarter */
+        // Connect the farm with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
-        /* Wait for the farm to get constructed and occupied */
+        // Wait for the farm to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(farm);
 
         Farmer farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Wait for the farmer to plant a crop */
+        // Wait for the farmer to plant a crop
         Utils.waitForFarmerToPlantCrop(map, farmer);
 
         assertTrue(map.isCropAtPoint(farmer.getPosition()));
 
         Crop crop = map.getCropAtPoint(farmer.getPosition());
 
-        /* Verify that the crop is of type 1 or type 2 */
+        // Verify that the crop is of type 1 or type 2
         assertTrue(crop.getType() == Crop.CropType.TYPE_1 || crop.getType() == Crop.CropType.TYPE_2);
     }
 
     @Test
     public void testFarmerPlantsBothTypesOfCrops() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point3 = new Point(10, 6);
         Farm farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarter */
+        // Connect the farm with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
-        /* Wait for the farm to get constructed and occupied */
+        // Wait for the farm to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(farm);
 
         Farmer farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Wait for the farmer to plant 20 crops */
+        // Wait for the farmer to plant 20 crops
         var crops = new HashMap<Crop.CropType, Integer>();
 
         for (int i = 0; i < 20; i++) {
@@ -101,7 +101,7 @@ public class TestCrop {
             crops.put(crop.getType(), amount + 1);
         }
 
-        /* Verify that the farmer planted both types of crops */
+        // Verify that the farmer planted both types of crops
         assertTrue(crops.getOrDefault(Crop.CropType.TYPE_1, 0) > 0);
         assertTrue(crops.getOrDefault(Crop.CropType.TYPE_2, 0) > 0);
     }

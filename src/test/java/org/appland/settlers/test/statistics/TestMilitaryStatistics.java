@@ -26,14 +26,14 @@ public class TestMilitaryStatistics {
     @Test
     public void testInitialMilitaryStatisticsIsCorrect() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -54,18 +54,18 @@ public class TestMilitaryStatistics {
     @Test
     public void testMilitaryStatisticsAreUpdatedWhenPrivateIsDrafted() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place storage */
+        // Place storage
         Point point1 = new Point(10, 10);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
 
@@ -102,18 +102,18 @@ public class TestMilitaryStatistics {
     @Test
     public void testListenToMilitaryStatistics() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place storage, connect it to the headquarters, and wait for it to get constructed and occupied  */
+        // Place storage, connect it to the headquarters, and wait for it to get constructed and occupied
         Point point1 = new Point(10, 10);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
 

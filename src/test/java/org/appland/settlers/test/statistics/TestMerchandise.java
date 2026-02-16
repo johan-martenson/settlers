@@ -342,23 +342,23 @@ public class TestMerchandise {
     @Test
     public void testMerchandiseStatisticsWhenWoodIsProduced() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(10, 10);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place and grow the tree */
+        // Place and grow the tree
         Point point2 = new Point(12, 4);
         Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
-        /* Place the woodcutter, connect it to the headquarters, and wait for it to get constructed and occupied */
+        // Place the woodcutter, connect it to the headquarters, and wait for it to get constructed and occupied
         Point point1 = new Point(10, 4);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
@@ -386,17 +386,17 @@ public class TestMerchandise {
     @Test
     public void testMerchandiseStatisticsWhenPlankIsProduced() throws InvalidUserActionException {
 
-        /* Create a single player game */
+        // Create a single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place sawmill, connect it to the headquarters, and wait for it to get constructed and occupied */
+        // Place sawmill, connect it to the headquarters, and wait for it to get constructed and occupied
         Point point3 = new Point(7, 9);
         Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
@@ -425,17 +425,17 @@ public class TestMerchandise {
     @Test
     public void testMerchandiseStatisticsWhenStoneIsProduced() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(10, 10);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry, connect it to the headquarters, and wait for it to get constructed and occupied */
+        // Place quarry, connect it to the headquarters, and wait for it to get constructed and occupied
         Point point1 = new Point(10, 4);
         Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
 
@@ -445,7 +445,7 @@ public class TestMerchandise {
 
         var stonemason = (Stonemason) Utils.waitForNonMilitaryBuildingToGetPopulated(quarry);
 
-        /* Place stone */
+        // Place stone
         Point point2 = new Point(11, 5);
         Stone stone = map.placeStone(point2, STONE_1, 7);
 
@@ -467,31 +467,31 @@ public class TestMerchandise {
     @Test
     public void testMerchandiseStatisticsWhenFishIsProduced() throws InvalidUserActionException {
 
-        /* Create a single player game */
+        // Create a single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place fish on one tile */
+        // Place fish on one tile
         Point point2 = new Point(5, 5);
         map.setVegetationBelow(point2, WATER);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point3 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
-        /* Place fishery */
+        // Place fishery
         Point point4 = new Point(7, 5);
         Building fishery = map.placeBuilding(new Fishery(player0), point4);
 
-        /* Connect the fishery with the headquarters */
+        // Connect the fishery with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
-        /* Wait for the fishery to get constructed */
+        // Wait for the fishery to get constructed
         Utils.waitForBuildingToBeConstructed(fishery);
 
-        /* Wait for the fishery to get occupied */
+        // Wait for the fishery to get occupied
         Fisherman fisherman = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
 
         assertTrue(fisherman.isInsideBuilding());
@@ -516,17 +516,17 @@ public class TestMerchandise {
     @Test
     public void testMerchandiseStatisticsWhenMeatIsProducedByButcher() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place slaughterhouse, connect it to the headquarters, and wait for it to get constructed and occupied */
+        // Place slaughterhouse, connect it to the headquarters, and wait for it to get constructed and occupied
         Point point3 = new Point(7, 9);
         SlaughterHouse slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
@@ -559,17 +559,17 @@ public class TestMerchandise {
     @Test
     public void testMerchandiseStatisticsWhenMeatIsProducedByHunter() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(15, 9);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place hunter hut, connect with the headquarters, and wait for it to get constructed and occupied */
+        // Place hunter hut, connect with the headquarters, and wait for it to get constructed and occupied
         Point point1 = new Point(10, 4);
         Building hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
@@ -581,7 +581,7 @@ public class TestMerchandise {
 
         assertTrue(hunter.isInsideBuilding());
 
-        /* Wait for a wild animal to come close to the hut */
+        // Wait for a wild animal to come close to the hut
         Utils.waitForWildAnimalCloseToPoint(hunterHut.getPosition(), map);
 
         // Verify that merchandise statistics for food are updated when the hunter picks up the meat
@@ -601,19 +601,19 @@ public class TestMerchandise {
     @Test
     public void testMerchandiseStatisticsWhenBreadIsProduced() throws InvalidUserActionException {
 
-        /* Create new single player game */
+        // Create new single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place bakery */
+        // Place bakery
         var point3 = new Point(7, 9);
         var bakery = map.placeBuilding(new Bakery(player0), point3);
 
-        /* Connect the bakery with the headquarters */
+        // Connect the bakery with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         // Wait for the bakery to get constructed and occupied
@@ -625,7 +625,7 @@ public class TestMerchandise {
         assertEquals(baker.getHome(), bakery);
         assertEquals(bakery.getWorker(), baker);
 
-        /* Deliver ingredients to the bakery */
+        // Deliver ingredients to the bakery
         bakery.putCargo(new Cargo(Material.WATER, map));
         bakery.putCargo(new Cargo(FLOUR, map));
 
@@ -646,17 +646,17 @@ public class TestMerchandise {
     @Test
     public void testMerchandiseStatisticsWhenWaterIsProduced() throws InvalidUserActionException {
 
-        /* Create gamemap */
+        // Create gamemap
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place well, connect to the headquarters, and wait for it to get constructed and occupied */
+        // Place well, connect to the headquarters, and wait for it to get constructed and occupied
         Point point1 = new Point(8, 6);
         Well well = map.placeBuilding(new Well(player0), point1);
 
@@ -687,18 +687,18 @@ public class TestMerchandise {
     @Test
     public void testMerchandiseStatisticsWhenBeerIsProduced() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place brewery, connect with the headquarters, and wait for the brewery to get constructed and occupied */
+        // Place brewery, connect with the headquarters, and wait for the brewery to get constructed and occupied
         Point point3 = new Point(7, 9);
         Brewery brewery = map.placeBuilding(new Brewery(player0), point3);
 
@@ -712,7 +712,7 @@ public class TestMerchandise {
         assertEquals(brewer0.getHome(), brewery);
         assertEquals(brewery.getWorker(), brewer0);
 
-        /* Deliver wheat and water to the brewery */
+        // Deliver wheat and water to the brewery
         brewery.putCargo(new Cargo(WHEAT, map));
         brewery.putCargo(new Cargo(Material.WATER, map));
 
@@ -733,22 +733,22 @@ public class TestMerchandise {
     @Test
     public void testMerchandiseStatisticsWhenCoalIsProduced() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
-        /* Place a headquarter */
+        // Place a headquarter
         Point point1 = new Point(15, 15);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place a gold mine, connect it to the headquarters, and wait for it to get constructed and occupied */
+        // Place a gold mine, connect it to the headquarters, and wait for it to get constructed and occupied
         Building mine = map.placeBuilding(new CoalMine(player0), point0);
 
         var road0 = map.placeAutoSelectedRoad(player0, mine.getFlag(), headquarter.getFlag());
@@ -776,22 +776,22 @@ public class TestMerchandise {
     @Test
     public void testMerchandiseStatisticsWhenIronIsProduced() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
-        /* Place a headquarter */
+        // Place a headquarter
         Point point1 = new Point(15, 15);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place an iron mine, connect it to the headquarters, and wait for it to get constructed and occupied */
+        // Place an iron mine, connect it to the headquarters, and wait for it to get constructed and occupied
         Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         var road0 = map.placeAutoSelectedRoad(player0, mine.getFlag(), headquarter.getFlag());
@@ -819,22 +819,22 @@ public class TestMerchandise {
     @Test
     public void testMerchandiseStatisticsWhenGoldIsProduced() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
-        /* Place a headquarter */
+        // Place a headquarter
         Point point1 = new Point(15, 15);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place an iron mine, connect it to the headquarters, and wait for it to get constructed and occupied */
+        // Place an iron mine, connect it to the headquarters, and wait for it to get constructed and occupied
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
 
         var road0 = map.placeAutoSelectedRoad(player0, mine.getFlag(), headquarter.getFlag());
@@ -862,17 +862,17 @@ public class TestMerchandise {
     @Test
     public void testMerchandiseStatisticsUpdatedWhenIronBarIsProduced() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place iron smelter, connect it to the headquarters, and wait for it to get constructed and occupied */
+        // Place iron smelter, connect it to the headquarters, and wait for it to get constructed and occupied
         Point point3 = new Point(7, 9);
         Building ironSmelter = map.placeBuilding(new IronSmelter(player0), point3);
 
@@ -905,21 +905,21 @@ public class TestMerchandise {
     @Test
     public void testMerchaniseStaticsWhenCoinIsProduced() throws InvalidUserActionException {
 
-        /* Create a single player game */
+        // Create a single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place mint */
+        // Place mint
         Point point3 = new Point(7, 9);
         Mint mint = map.placeBuilding(new Mint(player0), point3);
 
-        /* Connect the mint with the headquarters */
+        // Connect the mint with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
 
         // Wait for the mint to get constructed and occupied
@@ -931,7 +931,7 @@ public class TestMerchandise {
         assertEquals(minter.getHome(), mint);
         assertEquals(mint.getWorker(), minter);
 
-        /* Deliver wood to the mint */
+        // Deliver wood to the mint
         mint.putCargo(new Cargo(GOLD, map));
         mint.putCargo(new Cargo(COAL, map));
 
@@ -953,18 +953,18 @@ public class TestMerchandise {
     public void testMerchandiseStatisticsUpdatedWhenToolsAreProduced() throws InvalidUserActionException {
         for (var tool : TOOLS) {
 
-            /* Create single player game */
+            // Create single player game
             Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
             List<Player> players = new ArrayList<>();
             players.add(player0);
 
             GameMap map = new GameMap(players, 40, 40);
 
-            /* Place headquarter */
+            // Place headquarter
             Point point0 = new Point(5, 5);
             Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-            /* Place metalworks, connect it to the headquarters, and wait for it to get constructed and occupied */
+            // Place metalworks, connect it to the headquarters, and wait for it to get constructed and occupied
             Point point3 = new Point(7, 9);
             Building metalworks = map.placeBuilding(new Metalworks(player0), point3);
 
@@ -985,7 +985,7 @@ public class TestMerchandise {
 
             player0.setProductionQuotaForTool(tool, 10);
 
-            /* Deliver plank and iron bar to the metalworks */
+            // Deliver plank and iron bar to the metalworks
             metalworks.putCargo(new Cargo(PLANK, map));
             metalworks.putCargo(new Cargo(IRON_BAR, map));
 
@@ -1007,24 +1007,24 @@ public class TestMerchandise {
     @Test
     public void testMerchandiseStatisticsUpdatedWhenWeaponIsProduced() throws InvalidUserActionException {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place armory */
+        // Place armory
         Point point1 = new Point(7, 9);
         Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        /* Place road to connect the armory with the headquarter */
+        // Place road to connect the armory with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the armory to get constructed and occupied */
+        // Wait for the armory to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(armory0);
 
         var armorer0 = Utils.waitForNonMilitaryBuildingToGetPopulated(armory0);
@@ -1033,7 +1033,7 @@ public class TestMerchandise {
         assertEquals(armorer0.getHome(), armory0);
         assertEquals(armory0.getWorker(), armorer0);
 
-        /* Deliver material to the armory */
+        // Deliver material to the armory
         Utils.deliverCargo(armory0, IRON_BAR);
         Utils.deliverCargo(armory0, COAL);
 
@@ -1059,29 +1059,29 @@ public class TestMerchandise {
     @Test
     public void testMerchandiseStatisticsUpdatedWhenBoatIsProduced() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place shipyard */
+        // Place shipyard
         Point point0 = new Point(14, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
-        /* Connect the shipyard with the headquarter */
+        // Connect the shipyard with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
-        /* Wait for the shipyard to get constructed and assigned a worker */
+        // Wait for the shipyard to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(shipyard);
         var shipwright = Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
-        /* Give planks to the shipyard */
+        // Give planks to the shipyard
         Utils.deliverCargos(shipyard, PLANK, 2);
 
         // Verify that the merchandise statistics are updated when a boat is produced
@@ -1106,23 +1106,23 @@ public class TestMerchandise {
     @Test
     public void testListeningToMerchandiseStatisticsWhenWoodIsProduced() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(10, 10);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place and grow the tree */
+        // Place and grow the tree
         Point point2 = new Point(12, 4);
         Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
-        /* Place the woodcutter, connect it to the headquarters, and wait for it to get constructed and occupied */
+        // Place the woodcutter, connect it to the headquarters, and wait for it to get constructed and occupied
         Point point1 = new Point(10, 4);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
@@ -1157,17 +1157,17 @@ public class TestMerchandise {
     @Test
     public void testListeningToMerchandiseStatisticsWhenPlankIsProduced() throws InvalidUserActionException {
 
-        /* Create a single player game */
+        // Create a single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place sawmill, connect it to the headquarters, and wait for it to get constructed and occupied */
+        // Place sawmill, connect it to the headquarters, and wait for it to get constructed and occupied
         Point point3 = new Point(7, 9);
         Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
@@ -1203,17 +1203,17 @@ public class TestMerchandise {
     @Test
     public void testListeningToMerchandiseStatisticsWhenStoneIsProduced() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(10, 10);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry, connect it to the headquarters, and wait for it to get constructed and occupied */
+        // Place quarry, connect it to the headquarters, and wait for it to get constructed and occupied
         Point point1 = new Point(10, 4);
         Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
 
@@ -1223,7 +1223,7 @@ public class TestMerchandise {
 
         var stonemason = (Stonemason) Utils.waitForNonMilitaryBuildingToGetPopulated(quarry);
 
-        /* Place stone */
+        // Place stone
         Point point2 = new Point(11, 5);
         Stone stone = map.placeStone(point2, STONE_1, 7);
 
@@ -1252,31 +1252,31 @@ public class TestMerchandise {
     @Test
     public void testListeningToMerchandiseStatisticsWhenFishIsProduced() throws InvalidUserActionException {
 
-        /* Create a single player game */
+        // Create a single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place fish on one tile */
+        // Place fish on one tile
         Point point2 = new Point(5, 5);
         map.setVegetationBelow(point2, WATER);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point3 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
-        /* Place fishery */
+        // Place fishery
         Point point4 = new Point(7, 5);
         Building fishery = map.placeBuilding(new Fishery(player0), point4);
 
-        /* Connect the fishery with the headquarters */
+        // Connect the fishery with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
-        /* Wait for the fishery to get constructed */
+        // Wait for the fishery to get constructed
         Utils.waitForBuildingToBeConstructed(fishery);
 
-        /* Wait for the fishery to get occupied */
+        // Wait for the fishery to get occupied
         Fisherman fisherman = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
 
         assertTrue(fisherman.isInsideBuilding());
@@ -1308,19 +1308,19 @@ public class TestMerchandise {
     @Test
     public void testListeningToMerchandiseStatisticsWhenBreadIsProduced() throws InvalidUserActionException {
 
-        /* Create new single player game */
+        // Create new single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place bakery */
+        // Place bakery
         var point3 = new Point(7, 9);
         var bakery = map.placeBuilding(new Bakery(player0), point3);
 
-        /* Connect the bakery with the headquarters */
+        // Connect the bakery with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         // Wait for the bakery to get constructed and occupied
@@ -1332,7 +1332,7 @@ public class TestMerchandise {
         assertEquals(baker.getHome(), bakery);
         assertEquals(bakery.getWorker(), baker);
 
-        /* Deliver ingredients to the bakery */
+        // Deliver ingredients to the bakery
         bakery.putCargo(new Cargo(Material.WATER, map));
         bakery.putCargo(new Cargo(FLOUR, map));
 
@@ -1366,17 +1366,17 @@ public class TestMerchandise {
     @Test
     public void testListeningToMerchandiseStatisticsWhenMeatIsProducedByButcher() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place slaughterhouse, connect it to the headquarters, and wait for it to get constructed and occupied */
+        // Place slaughterhouse, connect it to the headquarters, and wait for it to get constructed and occupied
         Point point3 = new Point(7, 9);
         SlaughterHouse slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
@@ -1416,17 +1416,17 @@ public class TestMerchandise {
     @Test
     public void testListeningToMerchandiseStatisticsWhenMeatIsProducedByHunter() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(15, 9);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place hunter hut, connect with the headquarters, and wait for it to get constructed and occupied */
+        // Place hunter hut, connect with the headquarters, and wait for it to get constructed and occupied
         Point point1 = new Point(10, 4);
         Building hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
@@ -1438,7 +1438,7 @@ public class TestMerchandise {
 
         assertTrue(hunter.isInsideBuilding());
 
-        /* Wait for a wild animal to come close to the hut */
+        // Wait for a wild animal to come close to the hut
         Utils.waitForWildAnimalCloseToPoint(hunterHut.getPosition(), map);
 
         // Start listening to statistics events
@@ -1465,17 +1465,17 @@ public class TestMerchandise {
     @Test
     public void testListeningToMerchandiseStatisticsWhenWaterIsProduced() throws InvalidUserActionException {
 
-        /* Create gamemap */
+        // Create gamemap
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place well, connect to the headquarters, and wait for it to get constructed and occupied */
+        // Place well, connect to the headquarters, and wait for it to get constructed and occupied
         Point point1 = new Point(8, 6);
         Well well = map.placeBuilding(new Well(player0), point1);
 
@@ -1513,18 +1513,18 @@ public class TestMerchandise {
     @Test
     public void testListeningToMerchandiseStatisticsWhenBeerIsProduced() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place brewery, connect with the headquarters, and wait for the brewery to get constructed and occupied */
+        // Place brewery, connect with the headquarters, and wait for the brewery to get constructed and occupied
         Point point3 = new Point(7, 9);
         Brewery brewery = map.placeBuilding(new Brewery(player0), point3);
 
@@ -1538,7 +1538,7 @@ public class TestMerchandise {
         assertEquals(brewer0.getHome(), brewery);
         assertEquals(brewery.getWorker(), brewer0);
 
-        /* Deliver wheat and water to the brewery */
+        // Deliver wheat and water to the brewery
         brewery.putCargo(new Cargo(WHEAT, map));
         brewery.putCargo(new Cargo(Material.WATER, map));
 
@@ -1566,22 +1566,22 @@ public class TestMerchandise {
     @Test
     public void testListeningToMerchandiseStatisticsWhenCoalIsProduced() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
-        /* Place a headquarter */
+        // Place a headquarter
         Point point1 = new Point(15, 15);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place a gold mine, connect it to the headquarters, and wait for it to get constructed and occupied */
+        // Place a gold mine, connect it to the headquarters, and wait for it to get constructed and occupied
         Building mine = map.placeBuilding(new CoalMine(player0), point0);
 
         var road0 = map.placeAutoSelectedRoad(player0, mine.getFlag(), headquarter.getFlag());
@@ -1616,22 +1616,22 @@ public class TestMerchandise {
     @Test
     public void testListeningToMerchandiseStatisticsWhenIronIsProduced() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
-        /* Place a headquarter */
+        // Place a headquarter
         Point point1 = new Point(15, 15);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place an iron mine, connect it to the headquarters, and wait for it to get constructed and occupied */
+        // Place an iron mine, connect it to the headquarters, and wait for it to get constructed and occupied
         Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         var road0 = map.placeAutoSelectedRoad(player0, mine.getFlag(), headquarter.getFlag());
@@ -1666,22 +1666,22 @@ public class TestMerchandise {
     @Test
     public void testListeningToMerchandiseStatisticsWhenGoldIsProduced() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
-        /* Place a headquarter */
+        // Place a headquarter
         Point point1 = new Point(15, 15);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place an iron mine, connect it to the headquarters, and wait for it to get constructed and occupied */
+        // Place an iron mine, connect it to the headquarters, and wait for it to get constructed and occupied
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
 
         var road0 = map.placeAutoSelectedRoad(player0, mine.getFlag(), headquarter.getFlag());
@@ -1716,17 +1716,17 @@ public class TestMerchandise {
     @Test
     public void testListeningToMerchandiseStatisticsUpdatedWhenIronBarIsProduced() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place iron smelter, connect it to the headquarters, and wait for it to get constructed and occupied */
+        // Place iron smelter, connect it to the headquarters, and wait for it to get constructed and occupied
         Point point3 = new Point(7, 9);
         Building ironSmelter = map.placeBuilding(new IronSmelter(player0), point3);
 
@@ -1766,21 +1766,21 @@ public class TestMerchandise {
     @Test
     public void testListeningToMerchandiseStaticsWhenCoinIsProduced() throws InvalidUserActionException {
 
-        /* Create a single player game */
+        // Create a single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place mint */
+        // Place mint
         Point point3 = new Point(7, 9);
         Mint mint = map.placeBuilding(new Mint(player0), point3);
 
-        /* Connect the mint with the headquarters */
+        // Connect the mint with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
 
         // Wait for the mint to get constructed and occupied
@@ -1792,7 +1792,7 @@ public class TestMerchandise {
         assertEquals(minter.getHome(), mint);
         assertEquals(mint.getWorker(), minter);
 
-        /* Deliver wood to the mint */
+        // Deliver wood to the mint
         mint.putCargo(new Cargo(GOLD, map));
         mint.putCargo(new Cargo(COAL, map));
 
@@ -1821,18 +1821,18 @@ public class TestMerchandise {
     public void testListeningToMerchandiseStatisticsUpdatedWhenToolsAreProduced() throws InvalidUserActionException {
         for (var tool : TOOLS) {
 
-            /* Create single player game */
+            // Create single player game
             Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
             List<Player> players = new ArrayList<>();
             players.add(player0);
 
             GameMap map = new GameMap(players, 40, 40);
 
-            /* Place headquarter */
+            // Place headquarter
             Point point0 = new Point(5, 5);
             Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-            /* Place metalworks, connect it to the headquarters, and wait for it to get constructed and occupied */
+            // Place metalworks, connect it to the headquarters, and wait for it to get constructed and occupied
             Point point3 = new Point(7, 9);
             Building metalworks = map.placeBuilding(new Metalworks(player0), point3);
 
@@ -1853,7 +1853,7 @@ public class TestMerchandise {
 
             player0.setProductionQuotaForTool(tool, 10);
 
-            /* Deliver plank and iron bar to the metalworks */
+            // Deliver plank and iron bar to the metalworks
             metalworks.putCargo(new Cargo(PLANK, map));
             metalworks.putCargo(new Cargo(IRON_BAR, map));
 
@@ -1882,24 +1882,24 @@ public class TestMerchandise {
     @Test
     public void testListeningToMerchandiseStatisticsUpdatedWhenWeaponIsProduced() throws InvalidUserActionException {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place armory */
+        // Place armory
         Point point1 = new Point(7, 9);
         Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        /* Place road to connect the armory with the headquarter */
+        // Place road to connect the armory with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the armory to get constructed and occupied */
+        // Wait for the armory to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(armory0);
 
         var armorer0 = Utils.waitForNonMilitaryBuildingToGetPopulated(armory0);
@@ -1908,7 +1908,7 @@ public class TestMerchandise {
         assertEquals(armorer0.getHome(), armory0);
         assertEquals(armory0.getWorker(), armorer0);
 
-        /* Deliver material to the armory */
+        // Deliver material to the armory
         Utils.deliverCargo(armory0, IRON_BAR);
         Utils.deliverCargo(armory0, COAL);
 
@@ -1940,29 +1940,29 @@ public class TestMerchandise {
     @Test
     public void testListeningToMerchandiseStatisticsUpdatedWhenBoatIsProduced() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place shipyard */
+        // Place shipyard
         Point point0 = new Point(14, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
-        /* Connect the shipyard with the headquarter */
+        // Connect the shipyard with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
-        /* Wait for the shipyard to get constructed and assigned a worker */
+        // Wait for the shipyard to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(shipyard);
         var shipwright = Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
-        /* Give planks to the shipyard */
+        // Give planks to the shipyard
         Utils.deliverCargos(shipyard, PLANK, 2);
 
         // Start listening to statistics events

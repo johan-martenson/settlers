@@ -35,21 +35,21 @@ public class TestCargo {
     @Test
     public void testPuttingCargoAtFlagSetsPosition() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(12, 12);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
+        // Place flag
         Point point1 = new Point(8, 6);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Verify that placing a cargo sets its position */
+        // Verify that placing a cargo sets its position
         Cargo cargo = new Cargo(PLANK, map);
 
         flag0.putCargo(cargo);
@@ -60,39 +60,39 @@ public class TestCargo {
     @Test
     public void testCargoIsReturnedToStorageWhenTargetBuildingIsRemoved() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place forester */
+        // Place forester
         Point point1 = new Point(10, 8);
         ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Place flag */
+        // Place flag
         Point point2 = new Point(9, 5);
         Flag flag0 = map.placeFlag(player0, point2);
 
-        /* Place road between (11, 7) and (9, 5) */
+        // Place road between (11, 7) and (9, 5)
         Point point3 = new Point(11, 7);
         Point point4 = new Point(10, 6);
         Point point5 = new Point(7, 5);
         Point point6 = new Point(6, 4);
         Road road0 = map.placeRoad(player0, point3, point4, point2);
 
-        /* Place road between (9, 5) and (6, 4) */
+        // Place road between (9, 5) and (6, 4)
         Road road1 = map.placeRoad(player0, point2, point5, point6);
 
-        /* Place couriers on the roads */
+        // Place couriers on the roads
         Utils.occupyRoad(road0, map);
         Utils.occupyRoad(road1, map);
 
-        /* Wait for a cargo with the forester hut as target to get picked up by the first courier */
+        // Wait for a cargo with the forester hut as target to get picked up by the first courier
         for (int i = 0; i < 2000; i++) {
 
             Cargo cargo = road1.getCourier().getCargo();
@@ -104,10 +104,10 @@ public class TestCargo {
             map.stepTime();
         }
 
-        /* Remove the forester hut */
+        // Remove the forester hut
         foresterHut0.tearDown();
 
-        /* Verify that the courier delivers the cargo to the next flag */
+        // Verify that the courier delivers the cargo to the next flag
         Courier courier = road1.getCourier();
         Cargo cargo = courier.getCargo();
 
@@ -116,7 +116,7 @@ public class TestCargo {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, point2);
 
-        /* Verify that the courier picks up the cargo again and returns it to the storage */
+        // Verify that the courier picks up the cargo again and returns it to the storage
         for (int i = 0; i < 200; i++) {
 
             if (cargo.equals(courier.getCargo())) {

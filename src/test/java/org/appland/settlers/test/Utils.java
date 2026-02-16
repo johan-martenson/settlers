@@ -353,7 +353,7 @@ public class Utils {
     public static void constructHouse(Building building) throws InvalidUserActionException {
         var map = building.getMap();
 
-        /* Assign builder */
+        // Assign builder
         Builder builder = new Builder(building.getPlayer(), building.getMap());
         map.placeWorker(builder, building.getFlag());
 
@@ -761,7 +761,7 @@ public class Utils {
 
         for (int i = 0; i < 5000; i++) {
 
-            /* Check if there is a wild animal close to the hut */
+            // Check if there is a wild animal close to the hut
             for (WildAnimal wa : map.getWildAnimals()) {
                 if (wa.getPosition().distance(point) < 20) {
                     animal = wa;
@@ -770,7 +770,7 @@ public class Utils {
                 }
             }
 
-            /* Exit the loop if an animal was found */
+            // Exit the loop if an animal was found
             if (animal != null) {
                 break;
             }
@@ -1500,10 +1500,10 @@ public class Utils {
         var map = player.getMap();
         Barracks barracks = map.placeBuilding(new Barracks(player), point);
 
-        /* Finish construction of barracks */
+        // Finish construction of barracks
         constructHouse(barracks);
 
-        /* Occupy barracks */
+        // Occupy barracks
         occupyMilitaryBuilding(PRIVATE_RANK, barracks);
 
         return barracks;
@@ -1785,7 +1785,7 @@ public class Utils {
     public static void constructHouses(Building... buildings) throws InvalidUserActionException {
         var map = buildings[0].getMap();
 
-        /* Place builders */
+        // Place builders
         List<Worker> builders = new ArrayList<>();
         for (var building : buildings) {
             var player = building.getPlayer();
@@ -1799,10 +1799,10 @@ public class Utils {
             builders.add(builder);
         }
 
-        /* Make the builders reach the buildings */
+        // Make the builders reach the buildings
         fastForwardUntilWorkersReachTarget(map, builders);
 
-        /* Wait for the buildings to get constructed */
+        // Wait for the buildings to get constructed
         for (var building : buildings) {
             assertTrue(building.isUnderConstruction());
 
@@ -3222,7 +3222,7 @@ public class Utils {
 
             gameChanges.add(copiedGameChangesList);
 
-            /* Update the monitoring of available construction */
+            // Update the monitoring of available construction
             var map = player.getMap();
             Map<Point, Size> availableBuildingsOnMap = map.getAvailableHousePoints(player);
             Collection<Point> availableFlagsOnMap = map.getAvailableFlagPoints(player);
@@ -3331,7 +3331,7 @@ public class Utils {
             Collection<Point> availableFlagsOnMap = map.getAvailableFlagPoints(player0);
             List<Point> availableMinesOnMap = map.getAvailableMinePoints(player0);
 
-            /* Run monitored against real */
+            // Run monitored against real
             for (Map.Entry<Point, AvailableConstruction> entry : availableConstruction.entrySet()) {
                 Point point = entry.getKey();
 
@@ -3372,7 +3372,7 @@ public class Utils {
                 }
             }
 
-            /* Run real against monitored */
+            // Run real against monitored
             for (Point point : player0.getDiscoveredLand()) {
                 Size availableHouse = map.isAvailableHousePoint(player0, point);
                 boolean availableMine = map.isAvailableMinePoint(player0, point);
@@ -3666,7 +3666,7 @@ public class Utils {
 
     public static double distanceToKnownBorder(Barracks barracks, Player player) {
 
-        /* Check how close the barracks is to the enemy's border */
+        // Check how close the barracks is to the enemy's border
         double distance = Double.MAX_VALUE;
 
         for (Point p : player.getBorderPoints()) {

@@ -51,42 +51,42 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringTree() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Place a tree to discover */
+        // Place a tree to discover
         Point point1 = new Point(33, 5);
         Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point2 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         assertFalse(player0.getDiscoveredLand().contains(tree0.getPosition()));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly discovered tree */
+        // Verify that an event was sent for the newly discovered tree
         assertTrue(player0.getDiscoveredLand().contains(tree0.getPosition()));
         assertTrue(monitor.getEvents().size() >= 1);
 
@@ -99,42 +99,42 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringTreeIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Place a tree to discover */
+        // Place a tree to discover
         Point point1 = new Point(33, 5);
         Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point2 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         assertFalse(player0.getDiscoveredLand().contains(tree0.getPosition()));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly discovered tree */
+        // Verify that an event was sent for the newly discovered tree
         assertTrue(player0.getDiscoveredLand().contains(tree0.getPosition()));
         assertTrue(monitor.getEvents().size() >= 1);
 
@@ -143,7 +143,7 @@ public class TestGameMonitoringWhenDiscovering {
         assertEquals(gameChangesList.newTrees().size(), 1);
         assertEquals(gameChangesList.newTrees().getFirst(), tree0);
 
-        /* Verify that the new tree event is not sent again */
+        // Verify that the new tree event is not sent again
         for (GameChangesList changes : monitor.getEventsAfterEvent(gameChangesList)) {
             assertEquals(changes.newTrees().size(), 0);
         }
@@ -152,42 +152,42 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringStone() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Place a stone to discover */
+        // Place a stone to discover
         Point point1 = new Point(33, 5);
         Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point2 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         assertFalse(player0.getDiscoveredLand().contains(stone0.getPosition()));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly discovered stone */
+        // Verify that an event was sent for the newly discovered stone
         assertTrue(player0.getDiscoveredLand().contains(stone0.getPosition()));
         assertTrue(monitor.getEvents().size() >= 1);
 
@@ -200,42 +200,42 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringStoneIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Place a stone to discover */
+        // Place a stone to discover
         Point point1 = new Point(33, 5);
         Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point2 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         assertFalse(player0.getDiscoveredLand().contains(stone0.getPosition()));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly discovered stone */
+        // Verify that an event was sent for the newly discovered stone
         assertTrue(player0.getDiscoveredLand().contains(stone0.getPosition()));
         assertTrue(monitor.getEvents().size() >= 1);
 
@@ -244,7 +244,7 @@ public class TestGameMonitoringWhenDiscovering {
         assertEquals(gameChangesList.newStones().size(), 1);
         assertEquals(gameChangesList.newStones().getFirst(), stone0);
 
-        /* Verify that the event is not sent again */
+        // Verify that the event is not sent again
         Utils.fastForward(200, map);
 
         for (GameChangesList changes : monitor.getEventsAfterEvent(gameChangesList)) {
@@ -255,7 +255,7 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringFlag() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
@@ -263,40 +263,40 @@ public class TestGameMonitoringWhenDiscovering {
         players.add(player1);
         GameMap map = new GameMap(players, 80, 40);
 
-        /* Place headquarter for player 0 */
+        // Place headquarter for player 0
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        // Place headquarter for player 1
         Point point1 = new Point(45, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Place a flag for player 0 to discover */
+        // Place a flag for player 0 to discover
         Point point2 = new Point(33, 5);
         Flag flag0 = map.placeFlag(player1, point2);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point3 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         assertFalse(player0.getDiscoveredLand().contains(flag0.getPosition()));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly discovered stone */
+        // Verify that an event was sent for the newly discovered stone
         assertTrue(player0.getDiscoveredLand().contains(flag0.getPosition()));
         assertTrue(monitor.getEvents().size() >= 1);
 
@@ -309,7 +309,7 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringFlagIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
@@ -317,40 +317,40 @@ public class TestGameMonitoringWhenDiscovering {
         players.add(player1);
         GameMap map = new GameMap(players, 80, 40);
 
-        /* Place headquarter for player 0 */
+        // Place headquarter for player 0
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        // Place headquarter for player 1
         Point point1 = new Point(45, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Place a flag for player 0 to discover */
+        // Place a flag for player 0 to discover
         Point point2 = new Point(33, 5);
         Flag flag0 = map.placeFlag(player1, point2);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point3 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         assertFalse(player0.getDiscoveredLand().contains(flag0.getPosition()));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly discovered stone */
+        // Verify that an event was sent for the newly discovered stone
         assertTrue(player0.getDiscoveredLand().contains(flag0.getPosition()));
         assertTrue(monitor.getEvents().size() >= 1);
 
@@ -359,7 +359,7 @@ public class TestGameMonitoringWhenDiscovering {
         assertEquals(gameChangesList.newFlags().size(), 1);
         assertEquals(gameChangesList.newFlags().getFirst(), flag0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
@@ -370,7 +370,7 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringHouse() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
@@ -378,40 +378,40 @@ public class TestGameMonitoringWhenDiscovering {
         players.add(player1);
         GameMap map = new GameMap(players, 80, 40);
 
-        /* Place headquarter for player 0 */
+        // Place headquarter for player 0
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        // Place headquarter for player 1
         Point point1 = new Point(45, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Place a house for player 0 to discover */
+        // Place a house for player 0 to discover
         Point point2 = new Point(33, 5);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player1), point2);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point3 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         assertFalse(player0.getDiscoveredLand().contains(woodcutter0.getPosition()));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly discovered stone */
+        // Verify that an event was sent for the newly discovered stone
         assertTrue(player0.getDiscoveredLand().contains(woodcutter0.getPosition()));
         assertTrue(monitor.getEvents().size() >= 1);
 
@@ -424,7 +424,7 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringHouseIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
@@ -432,40 +432,40 @@ public class TestGameMonitoringWhenDiscovering {
         players.add(player1);
         GameMap map = new GameMap(players, 80, 40);
 
-        /* Place headquarter for player 0 */
+        // Place headquarter for player 0
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        // Place headquarter for player 1
         Point point1 = new Point(45, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Place a house for player 0 to discover */
+        // Place a house for player 0 to discover
         Point point2 = new Point(33, 5);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player1), point2);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point3 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         assertFalse(player0.getDiscoveredLand().contains(woodcutter0.getPosition()));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly discovered stone */
+        // Verify that an event was sent for the newly discovered stone
         assertTrue(player0.getDiscoveredLand().contains(woodcutter0.getPosition()));
         assertTrue(monitor.getEvents().size() >= 1);
 
@@ -474,7 +474,7 @@ public class TestGameMonitoringWhenDiscovering {
         assertEquals(gameChangesList.newBuildings().size(), 1);
         assertEquals(gameChangesList.newBuildings().getFirst(), woodcutter0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
@@ -485,7 +485,7 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringRoad() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
@@ -493,17 +493,17 @@ public class TestGameMonitoringWhenDiscovering {
         players.add(player1);
         GameMap map = new GameMap(players, 80, 40);
 
-        /* Place headquarter for player 0 */
+        // Place headquarter for player 0
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        // Place headquarter for player 1
         Point point1 = new Point(49, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Place a road for player 0 to discover */
+        // Place a road for player 0 to discover
         Point point2 = new Point(33, 5);
         Point point3 = new Point(37, 5);
 
@@ -512,27 +512,27 @@ public class TestGameMonitoringWhenDiscovering {
 
         Road road0 = map.placeAutoSelectedRoad(player1, flag0, flag1);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point4 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point4);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road1 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         Point point5 = new Point(35, 5);
         assertFalse(player0.getDiscoveredLand().contains(point5));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly discovered stone */
+        // Verify that an event was sent for the newly discovered stone
         assertTrue(player0.getDiscoveredLand().contains(point5));
         assertTrue(monitor.getEvents().size() >= 1);
 
@@ -545,7 +545,7 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringRoadIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
@@ -553,17 +553,17 @@ public class TestGameMonitoringWhenDiscovering {
         players.add(player1);
         GameMap map = new GameMap(players, 80, 40);
 
-        /* Place headquarter for player 0 */
+        // Place headquarter for player 0
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        // Place headquarter for player 1
         Point point1 = new Point(43, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Place a road for player 0 to discover */
+        // Place a road for player 0 to discover
         Point point2 = new Point(33, 5);
         Point point3 = new Point(37, 5);
 
@@ -572,27 +572,27 @@ public class TestGameMonitoringWhenDiscovering {
 
         Road road0 = map.placeAutoSelectedRoad(player1, flag0, flag1);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point4 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point4);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road1 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         Point point5 = new Point(35, 5);
         assertFalse(player0.getDiscoveredLand().contains(point5));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly discovered stone */
+        // Verify that an event was sent for the newly discovered stone
         assertTrue(player0.getDiscoveredLand().contains(point5));
         assertTrue(monitor.getEvents().size() >= 1);
 
@@ -601,7 +601,7 @@ public class TestGameMonitoringWhenDiscovering {
         assertTrue(gameChangesList.newRoads().size() >= 1);
         assertTrue(gameChangesList.newRoads().contains(road0));
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
@@ -612,7 +612,7 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringFlagWithRoads() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
@@ -620,17 +620,17 @@ public class TestGameMonitoringWhenDiscovering {
         players.add(player1);
         GameMap map = new GameMap(players, 80, 40);
 
-        /* Place headquarter for player 0 */
+        // Place headquarter for player 0
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        // Place headquarter for player 1
         Point point1 = new Point(43, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Place a road for player 0 to discover */
+        // Place a road for player 0 to discover
         Point point2 = new Point(33, 5);
         Point point3 = new Point(37, 5);
 
@@ -640,27 +640,27 @@ public class TestGameMonitoringWhenDiscovering {
         Road road0 = map.placeAutoSelectedRoad(player1, flag0, flag1);
         Road road1 = map.placeAutoSelectedRoad(player1, flag0, flag1);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point4 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point4);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road2 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         Point point5 = new Point(35, 5);
         assertFalse(player0.getDiscoveredLand().contains(point5));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly discovered stone */
+        // Verify that an event was sent for the newly discovered stone
         assertTrue(monitor.getEvents().size() >= 1);
 
         GameChangesList gameChangesList = monitor.getLastEvent();
@@ -675,7 +675,7 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringBorder() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
@@ -683,41 +683,41 @@ public class TestGameMonitoringWhenDiscovering {
         players.add(player1);
         GameMap map = new GameMap(players, 80, 40);
 
-        /* Place headquarter for player 0 */
+        // Place headquarter for player 0
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        // Place headquarter for player 1
         Point point1 = new Point(51, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Pick a border point for player 0 to discover */
+        // Pick a border point for player 0 to discover
         Point point2 = new Point(33, 5);
 
         assertTrue(player1.getBorderPoints().contains(point2));
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point3 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         assertFalse(player0.getDiscoveredLand().contains(point2));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly discovered border */
+        // Verify that an event was sent for the newly discovered border
         assertTrue(player0.getDiscoveredLand().contains(point2));
         assertTrue(monitor.getEvents().size() >= 1);
 
@@ -747,7 +747,7 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringBorderIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
@@ -755,41 +755,41 @@ public class TestGameMonitoringWhenDiscovering {
         players.add(player1);
         GameMap map = new GameMap(players, 80, 40);
 
-        /* Place headquarter for player 0 */
+        // Place headquarter for player 0
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        // Place headquarter for player 1
         Point point1 = new Point(51, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Pick a border point for player 0 to discover */
+        // Pick a border point for player 0 to discover
         Point point2 = new Point(33, 5);
 
         assertTrue(player1.getBorderPoints().contains(point2));
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point3 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         assertFalse(player0.getDiscoveredLand().contains(point2));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly discovered border */
+        // Verify that an event was sent for the newly discovered border
         assertTrue(player0.getDiscoveredLand().contains(point2));
         assertTrue(monitor.getEvents().size() >= 1);
 
@@ -812,7 +812,7 @@ public class TestGameMonitoringWhenDiscovering {
 
         assertTrue(otherBorderFound);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
@@ -823,42 +823,42 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringSign() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Place a sign to discover */
+        // Place a sign to discover
         Point point1 = new Point(33, 5);
         Sign sign0 = map.placeSign(IRON, LARGE, point1);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point2 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         assertFalse(player0.getDiscoveredLand().contains(sign0.getPosition()));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly discovered sign */
+        // Verify that an event was sent for the newly discovered sign
         assertTrue(player0.getDiscoveredLand().contains(sign0.getPosition()));
         assertTrue(monitor.getEvents().size() >= 1);
 
@@ -871,42 +871,42 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringSignIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarters */
+        // Place headquarters
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Place a sign to discover */
+        // Place a sign to discover
         Point point1 = new Point(33, 5);
         Sign sign0 = map.placeSign(IRON, LARGE, point1);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point2 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         assertFalse(player0.getDiscoveredLand().contains(sign0.getPosition()));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly discovered sign */
+        // Verify that an event was sent for the newly discovered sign
         assertTrue(player0.getDiscoveredLand().contains(sign0.getPosition()));
         assertTrue(monitor.getEvents().size() >= 1);
 
@@ -915,7 +915,7 @@ public class TestGameMonitoringWhenDiscovering {
         assertEquals(gameChangesList.newSigns().size(), 1);
         assertEquals(gameChangesList.newSigns().getFirst(), sign0);
 
-        /* Verify that the new sign event is not sent again */
+        // Verify that the new sign event is not sent again
         for (GameChangesList changes : monitor.getEventsAfterEvent(gameChangesList)) {
             assertEquals(changes.newSigns().size(), 0);
         }
@@ -924,7 +924,7 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringCrop() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
@@ -932,40 +932,40 @@ public class TestGameMonitoringWhenDiscovering {
         players.add(player1);
         GameMap map = new GameMap(players, 80, 40);
 
-        /* Place headquarter for player 0 */
+        // Place headquarter for player 0
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        // Place headquarter for player 1
         Point point1 = new Point(45, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Place a crop for player 0 to discover */
+        // Place a crop for player 0 to discover
         Point point2 = new Point(33, 5);
         Crop crop0 = map.placeCrop(point2, Crop.CropType.TYPE_1);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point3 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         assertFalse(player0.getDiscoveredLand().contains(crop0.getPosition()));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly discovered stone */
+        // Verify that an event was sent for the newly discovered stone
         assertTrue(player0.getDiscoveredLand().contains(crop0.getPosition()));
         assertTrue(monitor.getEvents().size() >= 1);
 
@@ -978,7 +978,7 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringCropIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
@@ -986,40 +986,40 @@ public class TestGameMonitoringWhenDiscovering {
         players.add(player1);
         GameMap map = new GameMap(players, 80, 40);
 
-        /* Place headquarter for player 0 */
+        // Place headquarter for player 0
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        // Place headquarter for player 1
         Point point1 = new Point(45, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Place a crop for player 0 to discover */
+        // Place a crop for player 0 to discover
         Point point2 = new Point(33, 5);
         Crop crop0 = map.placeCrop(point2, Crop.CropType.TYPE_1);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point3 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         assertFalse(player0.getDiscoveredLand().contains(crop0.getPosition()));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly discovered stone */
+        // Verify that an event was sent for the newly discovered stone
         assertTrue(player0.getDiscoveredLand().contains(crop0.getPosition()));
         assertTrue(monitor.getEvents().size() >= 1);
 
@@ -1028,7 +1028,7 @@ public class TestGameMonitoringWhenDiscovering {
         assertEquals(gameChangesList.newCrops().size(), 1);
         assertEquals(gameChangesList.newCrops().getFirst(), crop0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
@@ -1039,7 +1039,7 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringWorker() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
@@ -1047,17 +1047,17 @@ public class TestGameMonitoringWhenDiscovering {
         players.add(player1);
         GameMap map = new GameMap(players, 80, 40);
 
-        /* Place headquarter for player 0 */
+        // Place headquarter for player 0
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        // Place headquarter for player 1
         Point point1 = new Point(43, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Place a road for player 0 to discover */
+        // Place a road for player 0 to discover
         Point point2 = new Point(33, 5);
         Point point3 = new Point(37, 5);
 
@@ -1066,35 +1066,35 @@ public class TestGameMonitoringWhenDiscovering {
 
         Road road0 = map.placeAutoSelectedRoad(player1, flag0, flag1);
 
-        /* Connect the road with the headquarters */
+        // Connect the road with the headquarters
         Road road1 = map.placeAutoSelectedRoad(player1, flag0, headquarter1.getFlag());
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point4 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point4);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road2 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the road to get a courier standing at the middle */
+        // Wait for the road to get a courier standing at the middle
         Courier courier0 = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
         Point point5 = new Point(35, 5);
         Utils.fastForwardUntilWorkerReachesPoint(map, courier0, point5);
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         assertFalse(player0.getDiscoveredLand().contains(point5));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly worker */
+        // Verify that an event was sent for the newly worker
         assertTrue(player0.getDiscoveredLand().contains(point5));
         assertTrue(monitor.getEvents().size() >= 1);
 
@@ -1108,7 +1108,7 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringWorkerIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
@@ -1116,17 +1116,17 @@ public class TestGameMonitoringWhenDiscovering {
         players.add(player1);
         GameMap map = new GameMap(players, 80, 40);
 
-        /* Place headquarter for player 0 */
+        // Place headquarter for player 0
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        // Place headquarter for player 1
         Point point1 = new Point(43, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Place a road for player 0 to discover */
+        // Place a road for player 0 to discover
         Point point2 = new Point(33, 5);
         Point point3 = new Point(37, 5);
 
@@ -1135,35 +1135,35 @@ public class TestGameMonitoringWhenDiscovering {
 
         Road road0 = map.placeAutoSelectedRoad(player1, flag0, flag1);
 
-        /* Connect the road with the headquarters */
+        // Connect the road with the headquarters
         Road road1 = map.placeAutoSelectedRoad(player1, flag0, headquarter1.getFlag());
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point4 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point4);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road2 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the road to get a courier standing at the middle */
+        // Wait for the road to get a courier standing at the middle
         Courier courier0 = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
         Point point5 = new Point(35, 5);
         Utils.fastForwardUntilWorkerReachesPoint(map, courier0, point5);
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         assertFalse(player0.getDiscoveredLand().contains(point5));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the new worker */
+        // Verify that an event was sent for the new worker
         assertTrue(player0.getDiscoveredLand().contains(point5));
         System.out.println(monitor.getEvents());
         assertTrue(monitor.getEvents().size() >= 1);
@@ -1174,7 +1174,7 @@ public class TestGameMonitoringWhenDiscovering {
         assertEquals(gameChangesList.newWorkers().getFirst(), courier0);
         assertFalse(gameChangesList.workersWithNewTargets().contains(courier0));
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
@@ -1186,7 +1186,7 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringBorderThroughEnemyExpansion() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
@@ -1194,31 +1194,31 @@ public class TestGameMonitoringWhenDiscovering {
         players.add(player1);
         GameMap map = new GameMap(players, 80, 40);
 
-        /* Place headquarter for player 0 */
+        // Place headquarter for player 0
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        // Place headquarter for player 1
         Point point1 = new Point(51, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Place a fortress for player 1 */
+        // Place a fortress for player 1
         Point point2 = new Point(35, 5);
         Fortress fortress0 = map.placeBuilding(new Fortress(player1), point2);
 
-        /* Connect the fortress to the headquarters */
+        // Connect the fortress to the headquarters
         Road road0 = map.placeAutoSelectedRoad(player1, fortress0.getFlag(), headquarter1.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the fortress to get constructed */
+        // Wait for the fortress to get constructed
         Utils.waitForBuildingToBeConstructed(fortress0);
 
-        /* Verify that a game monitoring message is sent when player 0 discovers player 1's border */
+        // Verify that a game monitoring message is sent when player 0 discovers player 1's border
         for (Point point : player1.getBorderPoints()) {
             assertFalse(player0.getDiscoveredLand().contains(point));
         }
@@ -1253,7 +1253,7 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringBorderThroughEnemyExpansionIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
@@ -1261,31 +1261,31 @@ public class TestGameMonitoringWhenDiscovering {
         players.add(player1);
         GameMap map = new GameMap(players, 80, 40);
 
-        /* Place headquarter for player 0 */
+        // Place headquarter for player 0
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        // Place headquarter for player 1
         Point point1 = new Point(51, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Place a fortress for player 1 */
+        // Place a fortress for player 1
         Point point2 = new Point(35, 5);
         Fortress fortress0 = map.placeBuilding(new Fortress(player1), point2);
 
-        /* Connect the fortress to the headquarters */
+        // Connect the fortress to the headquarters
         Road road0 = map.placeAutoSelectedRoad(player1, fortress0.getFlag(), headquarter1.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the fortress to get constructed */
+        // Wait for the fortress to get constructed
         Utils.waitForBuildingToBeConstructed(fortress0);
 
-        /* Verify that a game monitoring message is sent when player 0 discovers player 1's border */
+        // Verify that a game monitoring message is sent when player 0 discovers player 1's border
         for (Point point : player1.getBorderPoints()) {
             assertFalse(player0.getDiscoveredLand().contains(point));
         }
@@ -1316,7 +1316,7 @@ public class TestGameMonitoringWhenDiscovering {
 
         assertTrue(otherBorderFound);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         GameChangesList gameChanges = monitor.getLastEvent();
 
         Utils.fastForward(100, map);
@@ -1329,7 +1329,7 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringWhenSoldierDies() throws Exception {
 
-        /* Create player list with two players */
+        // Create player list with two players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
@@ -1338,47 +1338,47 @@ public class TestGameMonitoringWhenDiscovering {
         players.add(player0);
         players.add(player1);
 
-        /* Create game map choosing two players */
+        // Create game map choosing two players
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarters */
+        // Place player 0's headquarters
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarters */
+        // Place player 1's headquarters
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Clear the soldiers from the inventories */
+        // Clear the soldiers from the inventories
         Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
         Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
 
-        /* Place barracks for player 0 */
+        // Place barracks for player 0
         Point point2 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
-        /* Place barracks for player 1 */
+        // Place barracks for player 1
         Point point3 = new Point(23, 15);
         Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
 
-        /* Finish construction */
+        // Finish construction
         Utils.constructHouse(barracks0);
         Utils.constructHouse(barracks1);
 
-        /* Populate player 0's barracks */
+        // Populate player 0's barracks
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 2, barracks0);
 
-        /* Populate player 1's barracks */
+        // Populate player 1's barracks
         assertTrue(barracks1.isReady());
 
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
 
-        /* Order an attack */
+        // Order an attack
         assertTrue(player0.canAttack(barracks1));
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        /* Find the military that was chosen to attack */
+        // Find the military that was chosen to attack
         map.stepTime();
 
         Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -1386,7 +1386,7 @@ public class TestGameMonitoringWhenDiscovering {
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
 
-        /* Verify that a military leaves the attacked building to defend when the attacker reaches the flag */
+        // Verify that a military leaves the attacked building to defend when the attacker reaches the flag
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
@@ -1395,12 +1395,12 @@ public class TestGameMonitoringWhenDiscovering {
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
-        /* Get the defender */
+        // Get the defender
         Soldier defender = Utils.findSoldierOutsideBuilding(player1);
 
         assertNotNull(defender);
 
-        /* Wait for the defender to go to the attacker */
+        // Wait for the defender to go to the attacker
         assertEquals(defender.getTarget(), attacker.getPosition());
         assertTrue(barracks1.isUnderAttack());
 
@@ -1408,14 +1408,14 @@ public class TestGameMonitoringWhenDiscovering {
 
         assertEquals(defender.getPosition(), attacker.getPosition());
 
-        /* Verify that the soldiers are fighting */
+        // Verify that the soldiers are fighting
         Utils.waitForFightToStart(map, attacker, defender);
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that an event is sent when the general beats the private */
+        // Verify that an event is sent when the general beats the private
         Utils.waitForSoldierToWinFight(attacker, map);
 
         assertFalse(attacker.isFighting());
@@ -1430,7 +1430,7 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringDeadTree() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
 
@@ -1438,28 +1438,28 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameMap map = new GameMap(players, 80, 40);
 
-        /* Place headquarter for player 0 */
+        // Place headquarter for player 0
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place dead tree to discover */
+        // Place dead tree to discover
         Point point1 = new Point(10, 20);
         map.placeDeadTree(point1);
 
         assertFalse(player0.getDiscoveredLand().contains(point1));
 
-        /* Place a lookout tower */
+        // Place a lookout tower
         Point point2 = new Point(10, 12);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2);
 
-        /* Connect the lookout tower to the headquarters */
+        // Connect the lookout tower to the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that a game monitoring message is sent when the dead tree is discovered */
+        // Verify that a game monitoring message is sent when the dead tree is discovered
         assertFalse(player0.getDiscoveredLand().contains(point1));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
@@ -1476,7 +1476,7 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringDeadTreeIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
 
@@ -1484,28 +1484,28 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameMap map = new GameMap(players, 80, 40);
 
-        /* Place headquarter for player 0 */
+        // Place headquarter for player 0
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place dead tree to discover */
+        // Place dead tree to discover
         Point point1 = new Point(4, 20);
         map.placeDeadTree(point1);
 
         assertFalse(player0.getDiscoveredLand().contains(point1));
 
-        /* Place a lookout tower */
+        // Place a lookout tower
         Point point2 = new Point(4, 12);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2);
 
-        /* Connect the lookout tower to the headquarters */
+        // Connect the lookout tower to the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that a game monitoring message is sent when the dead tree is discovered */
+        // Verify that a game monitoring message is sent when the dead tree is discovered
         assertFalse(player0.getDiscoveredLand().contains(point1));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
@@ -1518,13 +1518,13 @@ public class TestGameMonitoringWhenDiscovering {
         assertTrue(gameChangesList.discoveredDeadTrees().size() > 0);
         assertTrue(gameChangesList.discoveredDeadTrees().contains(point1));
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
 
-        /* Place a second lookout tower to discover more land */
+        // Place a second lookout tower to discover more land
         Point point3 = new Point(12, 12);
         LookoutTower lookoutTower1 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the new lookout tower to the headquarter and wait for it to get constructed and occupied */
+        // Connect the new lookout tower to the headquarter and wait for it to get constructed and occupied
         Road road1 = map.placeAutoSelectedRoad(player0, lookoutTower1.getFlag(), headquarter0.getFlag());
 
         Utils.waitForBuildingToBeConstructed(lookoutTower1);
@@ -1551,7 +1551,7 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringDecoration() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
@@ -1559,35 +1559,35 @@ public class TestGameMonitoringWhenDiscovering {
         players.add(player1);
         GameMap map = new GameMap(players, 80, 40);
 
-        /* Place headquarter for player 0 */
+        // Place headquarter for player 0
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        // Place headquarter for player 1
         Point point1 = new Point(45, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Place a decoration for player 0 to discover */
+        // Place a decoration for player 0 to discover
         Point point2 = new Point(33, 5);
         map.placeDecoration(point2, DecorationType.TOADSTOOL);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point3 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         int count = Utils.countMonitoredEventsForNewDecoration(point2, monitor);
 
         assertEquals(count, 0);
@@ -1595,7 +1595,7 @@ public class TestGameMonitoringWhenDiscovering {
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly discovered stone */
+        // Verify that an event was sent for the newly discovered stone
         count = Utils.countMonitoredEventsForNewDecoration(point2, monitor);
 
         assertTrue(player0.getDiscoveredLand().contains(point2));
@@ -1605,7 +1605,7 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringDecorationIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
@@ -1613,35 +1613,35 @@ public class TestGameMonitoringWhenDiscovering {
         players.add(player1);
         GameMap map = new GameMap(players, 80, 40);
 
-        /* Place headquarter for player 0 */
+        // Place headquarter for player 0
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        // Place headquarter for player 1
         Point point1 = new Point(45, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Place a decoration for player 0 to discover */
+        // Place a decoration for player 0 to discover
         Point point2 = new Point(33, 5);
         map.placeDecoration(point2, DecorationType.TOADSTOOL);
 
-        /* Place lookout tower */
+        // Place lookout tower
         Point point3 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the lookout tower with the headquarters */
+        // Connect the lookout tower with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the lookout tower to get constructed */
+        // Wait for the lookout tower to get constructed
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
-        /* Wait for the lookout tower to get occupied */
+        // Wait for the lookout tower to get occupied
         int count = Utils.countMonitoredEventsForNewDecoration(point2, monitor);
 
         assertEquals(count, 0);
@@ -1649,13 +1649,13 @@ public class TestGameMonitoringWhenDiscovering {
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly discovered stone */
+        // Verify that an event was sent for the newly discovered stone
         count = Utils.countMonitoredEventsForNewDecoration(point2, monitor);
 
         assertTrue(player0.getDiscoveredLand().contains(point2));
         assertEquals(count, 1);
 
-        /* Verify that the message is only sent once */
+        // Verify that the message is only sent once
         Utils.fastForward(10, map);
 
         count = Utils.countMonitoredEventsForNewDecoration(point2, monitor);

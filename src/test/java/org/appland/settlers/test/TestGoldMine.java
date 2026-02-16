@@ -48,47 +48,47 @@ public class TestGoldMine {
     @Test
     public void testGoldMineCanHoldTwoFishTwoBreadsTwoMeats() throws InvalidUserActionException {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place mountain */
+        // Place mountain
         Point point1 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point1, map);
 
-        /* Place gold mine */
+        // Place gold mine
         var goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Connect the gold mine with the headquarters */
+        // Connect the gold mine with the headquarters
         Road road0 = map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
 
-        /* Make sure the headquarters has enough resources */
+        // Make sure the headquarters has enough resources
         Utils.adjustInventoryTo(headquarter0, PLANK, 20);
         Utils.adjustInventoryTo(headquarter0, STONE, 20);
         Utils.adjustInventoryTo(headquarter0, FISH, 20);
         Utils.adjustInventoryTo(headquarter0, MEAT, 20);
         Utils.adjustInventoryTo(headquarter0, BREAD, 20);
 
-        /* Wait for the gold mine to get constructed and occupied */
+        // Wait for the gold mine to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(goldMine0);
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(goldMine0);
 
-        /* Stop production */
+        // Stop production
         goldMine0.stopProduction();
 
-        /* Wait for the gold mine to get six iron bars and six planks */
+        // Wait for the gold mine to get six iron bars and six planks
         Utils.waitForBuildingToGetAmountOfMaterial(goldMine0, FISH, 2);
         Utils.waitForBuildingToGetAmountOfMaterial(goldMine0, MEAT, 2);
         Utils.waitForBuildingToGetAmountOfMaterial(goldMine0, BREAD, 2);
 
-        /* Verify that the gold mine doesn't need any more resources and doesn't get any more deliveries */
+        // Verify that the gold mine doesn't need any more resources and doesn't get any more deliveries
         assertFalse(goldMine0.needsMaterial(FISH));
         assertFalse(goldMine0.needsMaterial(MEAT));
         assertFalse(goldMine0.needsMaterial(BREAD));
@@ -108,24 +108,24 @@ public class TestGoldMine {
     @Test
     public void testGoldMineOnlyNeedsFourPlanksForConstruction() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point22 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point22, map);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point22);
 
-        /* Deliver four planks */
+        // Deliver four planks
         Cargo plankCargo = new Cargo(PLANK, map);
 
         goldMine0.putCargo(plankCargo);
@@ -133,10 +133,10 @@ public class TestGoldMine {
         goldMine0.putCargo(plankCargo);
         goldMine0.putCargo(plankCargo);
 
-        /* Assign builder */
+        // Assign builder
         Utils.assignBuilder(goldMine0);
 
-        /* Verify that this is enough to construct the gold mine */
+        // Verify that this is enough to construct the gold mine
         for (int i = 0; i < 100; i++) {
             assertTrue(goldMine0.isUnderConstruction());
 
@@ -149,34 +149,34 @@ public class TestGoldMine {
     @Test
     public void testGoldMineCannotBeConstructedWithTooFewPlanks() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point22 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point22, map);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point21 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point22);
 
-        /* Deliver two plank and three stone */
+        // Deliver two plank and three stone
         Cargo plankCargo = new Cargo(PLANK, map);
 
         goldMine0.putCargo(plankCargo);
         goldMine0.putCargo(plankCargo);
         goldMine0.putCargo(plankCargo);
 
-        /* Assign builder */
+        // Assign builder
         Utils.assignBuilder(goldMine0);
 
-        /* Verify that this is not enough to construct the gold mine */
+        // Verify that this is not enough to construct the gold mine
         for (int i = 0; i < 500; i++) {
             assertTrue(goldMine0.isUnderConstruction());
 
@@ -189,21 +189,21 @@ public class TestGoldMine {
     @Test
     public void testConstructGoldMine() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(8, 14);
         Utils.surroundPointWithMinableMountain(point0, map);
 
-        /* Place a headquarter */
+        // Place a headquarter
         Point point1 = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place a goldmine */
+        // Place a goldmine
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
 
         assertTrue(mine.isPlanned());
@@ -216,24 +216,24 @@ public class TestGoldMine {
     @Test
     public void testGoldmineIsNotMilitary() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(8, 14);
         Utils.surroundPointWithMinableMountain(point0, map);
 
-        /* Place a headquarter */
+        // Place a headquarter
         Point point1 = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place a gold mine */
+        // Place a gold mine
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
 
-        /* Verify that the mine is not a military building */
+        // Verify that the mine is not a military building
         assertFalse(mine.isMilitaryBuilding());
 
         constructHouse(mine);
@@ -244,89 +244,89 @@ public class TestGoldMine {
     @Test
     public void testGoldmineUnderConstructionNotNeedsMiner() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(8, 14);
         Utils.surroundPointWithMinableMountain(point0, map);
 
-        /* Place a headquarter */
+        // Place a headquarter
         Point point1 = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place a gold mine */
+        // Place a gold mine
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
 
-        /* Verify that the unfinished mine does not need a worker */
+        // Verify that the unfinished mine does not need a worker
         assertFalse(mine.needsWorker());
     }
 
     @Test
     public void testFinishedGoldmineNeedsMiner() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(8, 14);
         Utils.surroundPointWithMinableMountain(point0, map);
 
-        /* Place a headquarter */
+        // Place a headquarter
         Point point1 = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place a gold mine */
+        // Place a gold mine
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
 
         constructHouse(mine);
 
-        /* Verify that the finished mine needs a worker */
+        // Verify that the finished mine needs a worker
         assertTrue(mine.needsWorker());
     }
 
     @Test
     public void testMinerIsAssignedToFinishedGoldmine() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place a headquarter */
+        // Place a headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point1 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point1, map);
 
-        /* Place a gold mine */
+        // Place a gold mine
         Building mine = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Place a road between the headquarter and the goldmine */
+        // Place a road between the headquarter and the goldmine
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
 
-        /* Construct the mine */
+        // Construct the mine
         constructHouse(mine);
 
         assertTrue(mine.isReady());
 
-        /* Run game logic twice, once to place courier and once to place miner */
+        // Run game logic twice, once to place courier and once to place miner
         Utils.fastForward(2, map);
 
         assertTrue(map.getWorkers().size() >= 3);
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Miner.class);
 
-        /* Keep running the game loop and make sure no more workers are allocated */
+        // Keep running the game loop and make sure no more workers are allocated
         Utils.fastForward(200, map);
 
         assertTrue(map.getWorkers().size() >= 3);
@@ -335,21 +335,21 @@ public class TestGoldMine {
     @Test
     public void testCanPlaceMineOnPointSurroundedByMountain() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place a headquarter */
+        // Place a headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point1 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point1, map);
 
-        /* Place a gold mine */
+        // Place a gold mine
         Building mine = map.placeBuilding(new GoldMine(player0), point1);
 
         assertEquals(map.getBuildings().size(), 2);
@@ -358,34 +358,34 @@ public class TestGoldMine {
     @Test
     public void testArrivedMinerRests() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
 
-        /* Place a headquarter */
+        // Place a headquarter
         Point point1 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place a gold mine */
+        // Place a gold mine
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
 
-        /* Construct the gold mine */
+        // Construct the gold mine
         constructHouse(mine);
 
-        /* Manually place miner */
+        // Manually place miner
         Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
         assertTrue(miner.isInsideBuilding());
 
-        /* Run the game logic 99 times and make sure the miner stays in the house */
+        // Run the game logic 99 times and make sure the miner stays in the house
         for (int i = 0; i < 99; i++) {
             assertTrue(miner.isInsideBuilding());
             assertNull(miner.getCargo());
@@ -401,42 +401,42 @@ public class TestGoldMine {
     @Test
     public void testMinerMinesGold() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
-        /* Place a headquarter */
+        // Place a headquarter
         Point point1 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place a gold mine */
+        // Place a gold mine
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
 
-        /* Construct the gold mine */
+        // Construct the gold mine
         constructHouse(mine);
 
-        /* Deliver food to the miner */
+        // Deliver food to the miner
         Cargo food = new Cargo(BREAD, map);
         mine.putCargo(food);
 
-        /* Manually place miner */
+        // Manually place miner
         Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
         assertTrue(miner.isInsideBuilding());
 
-        /* Wait for the miner to rest */
+        // Wait for the miner to rest
         Utils.fastForward(100, map);
 
-        /* Verify that the miner mines for gold */
+        // Verify that the miner mines for gold
         int amountGold = map.getAmountOfMineralAtPoint(GOLD, point0);
 
         for (int i = 0; i < 50; i++) {
@@ -444,7 +444,7 @@ public class TestGoldMine {
             map.stepTime();
         }
 
-        /* Verify that the miner finishes mining on time and has gold */
+        // Verify that the miner finishes mining on time and has gold
         assertFalse(miner.isMining());
         assertFalse(miner.isInsideBuilding());
         assertNotNull(miner.getCargo());
@@ -455,48 +455,48 @@ public class TestGoldMine {
     @Test
     public void testGoldmineGoesToFlagWithCargoAndBack() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
-        /* Place a headquarter */
+        // Place a headquarter
         Point point1 = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place a gold mine */
+        // Place a gold mine
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
 
-        /* Place a road from headquarter to mine */
+        // Place a road from headquarter to mine
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
 
-        /* Construct the gold mine */
+        // Construct the gold mine
         constructHouse(mine);
 
-        /* Deliver food to the miner */
+        // Deliver food to the miner
         Cargo food = new Cargo(BREAD, map);
         mine.putCargo(food);
 
-        /* Manually place miner */
+        // Manually place miner
         Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
         assertTrue(miner.isInsideBuilding());
 
-        /* Wait for the miner to rest */
+        // Wait for the miner to rest
         Utils.fastForward(100, map);
 
-        /* Wait for the miner to mine gold */
+        // Wait for the miner to mine gold
         Utils.fastForward(50, map);
 
-        /* Verify that the miner leaves the gold at the flag */
+        // Verify that the miner leaves the gold at the flag
         assertFalse(miner.isMining());
         assertFalse(miner.isInsideBuilding());
         assertNotNull(miner.getCargo());
@@ -517,52 +517,52 @@ public class TestGoldMine {
     @Test
     public void testGoldCargoIsDeliveredToMintWhichIsCloserThanHeadquarters() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point3 = new Point(6, 4);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
-        /* Remove all gold from the headquarters */
+        // Remove all gold from the headquarters
         Utils.adjustInventoryTo(headquarter, GOLD, 0);
 
-        /* Place mint */
+        // Place mint
         Point point4 = new Point(10, 4);
         Mint mint = map.placeBuilding(new Mint(player0), point4);
 
-        /* Connect the mint to the headquarters */
+        // Connect the mint to the headquarters
         Road road2 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
 
-        /* Place mountain */
+        // Place mountain
         Point point1 = new Point(14, 4);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place the gold mine */
+        // Place the gold mine
         GoldMine goldMine = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Connect the gold mine with the mint */
+        // Connect the gold mine with the mint
         Road road0 = map.placeAutoSelectedRoad(player0, goldMine.getFlag(), mint.getFlag());
 
-        /* Wait for the gold mine and the mint to get constructed and occupied */
+        // Wait for the gold mine and the mint to get constructed and occupied
         Utils.waitForBuildingsToBeConstructed(goldMine, mint);
 
         Utils.waitForNonMilitaryBuildingsToGetPopulated(goldMine, mint);
 
-        /* Wait for the courier on the road between the mint and the gold mine hut to have a gold cargo */
+        // Wait for the courier on the road between the mint and the gold mine hut to have a gold cargo
         Utils.waitForFlagToGetStackedCargo(map, goldMine.getFlag(), 1);
 
         assertEquals(goldMine.getFlag().getStackedCargo().getFirst().getMaterial(), GOLD);
 
-        /* Wait for the courier to pick up the cargo */
+        // Wait for the courier to pick up the cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
 
-        /* Verify that the courier delivers the gold to the mint (and not the headquarters) */
+        // Verify that the courier delivers the gold to the mint (and not the headquarters)
         assertEquals(goldMine.getAmount(GOLD), 0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), mint.getPosition());
@@ -573,60 +573,60 @@ public class TestGoldMine {
     @Test
     public void testGoldIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point3 = new Point(6, 4);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
-        /* Adjust the inventory */
+        // Adjust the inventory
         Utils.clearInventory(headquarter, GOLD, STONE, MEAT, BREAD, FISH, PLANK);
 
-        /* Place storehouse */
+        // Place storehouse
         Point point4 = new Point(10, 4);
         Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
 
-        /* Connect the storehouse to the headquarters */
+        // Connect the storehouse to the headquarters
         Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
-        /* Add stones to the storehouse doesn't need any more stones */
+        // Add stones to the storehouse doesn't need any more stones
         Utils.deliverMaxCargos(storehouse, STONE);
 
-        /* Place mountain */
+        // Place mountain
         Point point1 = new Point(14, 4);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place the gold mine */
+        // Place the gold mine
         GoldMine goldMine = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Connect the gold mine with the storehouse */
+        // Connect the gold mine with the storehouse
         Road road0 = map.placeAutoSelectedRoad(player0, goldMine.getFlag(), storehouse.getFlag());
 
-        /* Deliver the needed material to construct the gold mine */
+        // Deliver the needed material to construct the gold mine
         Utils.deliverCargos(goldMine, PLANK, 4);
 
-        /* Wait for the gold mine to get constructed and occupied */
+        // Wait for the gold mine to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(goldMine);
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(goldMine);
 
-        /* Wait for the courier on the road between the storehouse and the gold mine to have a gold cargo */
+        // Wait for the courier on the road between the storehouse and the gold mine to have a gold cargo
         Utils.deliverCargo(goldMine, BREAD);
 
         Utils.waitForFlagToGetStackedCargo(map, goldMine.getFlag(), 1);
 
         assertEquals(goldMine.getFlag().getStackedCargo().getFirst().getMaterial(), GOLD);
 
-        /* Wait for the courier to pick up the cargo */
+        // Wait for the courier to pick up the cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
 
-        /* Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters */
+        // Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters
         assertEquals(headquarter.getAmount(GOLD), 0);
         assertEquals(goldMine.getAmount(GOLD), 0);
         assertFalse(storehouse.needsMaterial(GOLD));
@@ -642,69 +642,69 @@ public class TestGoldMine {
     @Test
     public void testGoldIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point3 = new Point(6, 4);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
-        /* Adjust the inventory */
+        // Adjust the inventory
         Utils.clearInventory(headquarter, BREAD, FISH, MEAT, GOLD, COAL);
 
-        /* Place mint */
+        // Place mint
         Point point4 = new Point(10, 4);
         Mint mint = map.placeBuilding(new Mint(player0), point4);
 
-        /* Connect the mint to the headquarters */
+        // Connect the mint to the headquarters
         Road road2 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
 
-        /* Wait for the mint to get constructed */
+        // Wait for the mint to get constructed
         Utils.waitForBuildingToBeConstructed(mint);
 
-        /* Stop production */
+        // Stop production
         mint.stopProduction();
 
-        /* Fill up the gold so there is only space for one more gold */
+        // Fill up the gold so there is only space for one more gold
         Utils.deliverCargos(mint, GOLD, 5);
 
-        /* Ensure that the mint only needs one more gold */
+        // Ensure that the mint only needs one more gold
         assertEquals(mint.getCanHoldAmount(GOLD) - mint.getAmount(GOLD), 1);
 
-        /* Place mountain */
+        // Place mountain
         Point point1 = new Point(14, 4);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place the gold mine */
+        // Place the gold mine
         GoldMine goldMine = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Connect the gold mine with the mint */
+        // Connect the gold mine with the mint
         Road road0 = map.placeAutoSelectedRoad(player0, goldMine.getFlag(), mint.getFlag());
 
-        /* Deliver the needed material to construct the gold mine */
+        // Deliver the needed material to construct the gold mine
         Utils.deliverCargos(goldMine, PLANK, 4);
 
-        /* Wait for the gold mine to get constructed and occupied */
+        // Wait for the gold mine to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(goldMine);
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(goldMine);
 
-        /* Wait for the flag on the road between the mint and the gold mine to have a gold cargo */
+        // Wait for the flag on the road between the mint and the gold mine to have a gold cargo
         Utils.deliverCargo(goldMine, BREAD);
 
         Utils.waitForFlagToGetStackedCargo(map, goldMine.getFlag(), 1);
 
         assertEquals(goldMine.getFlag().getStackedCargo().getFirst().getMaterial(), GOLD);
 
-        /* Wait for the courier to pick up the cargo */
+        // Wait for the courier to pick up the cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
 
-        /* Verify that no stone is delivered from the headquarters */
+        // Verify that no stone is delivered from the headquarters
         Utils.adjustInventoryTo(headquarter, GOLD, 1);
 
         assertEquals(mint.getCanHoldAmount(GOLD) - mint.getAmount(GOLD), 1);
@@ -722,17 +722,17 @@ public class TestGoldMine {
     @Test
     public void testCanNotPlaceMineOnGrass() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Verify that it's not possible to place a gold mine on grass */
+        // Verify that it's not possible to place a gold mine on grass
         Point point1 = new Point(2, 2);
         try {
             map.placeBuilding(new GoldMine(player0), point1);
@@ -745,58 +745,58 @@ public class TestGoldMine {
     @Test
     public void testGoldmineRunsOutOfGold() throws Exception {
 
-        /* Create a new game map with one player */
+        // Create a new game map with one player
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, SMALL, map);
 
-        /* Remove all gold but one */
+        // Remove all gold but one
         for (int i = 0; i < 1000; i++) {
             if (map.getAmountOfMineralAtPoint(GOLD, point0) > 1) {
                 map.mineMineralAtPoint(GOLD, point0);
             }
         }
 
-        /* Place a headquarter */
+        // Place a headquarter
         Point point1 = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place a gold mine */
+        // Place a gold mine
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
 
-        /* Place a road from headquarter to mine */
+        // Place a road from headquarter to mine
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
 
-        /* Construct the gold mine */
+        // Construct the gold mine
         constructHouse(mine);
 
-        /* Deliver food to the miner */
+        // Deliver food to the miner
         Utils.deliverCargo(mine, BREAD);
         Utils.deliverCargo(mine, FISH);
         Utils.deliverCargo(mine, MEAT);
 
-        /* Manually place miner */
+        // Manually place miner
         Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
         assertTrue(miner.isInsideBuilding());
 
-        /* Wait for the miner to rest */
+        // Wait for the miner to rest
         Utils.fastForward(100, map);
 
-        /* Wait for the miner to mine gold */
+        // Wait for the miner to mine gold
         assertFalse(mine.isOutOfNaturalResources());
 
         Utils.fastForward(50, map);
 
-        /* Wait for the miner to leave the gold at the flag */
+        // Wait for the miner to leave the gold at the flag
         assertEquals(miner.getTarget(), mine.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getFlag().getPosition());
@@ -807,7 +807,7 @@ public class TestGoldMine {
 
         assertTrue(miner.isInsideBuilding());
 
-        /* Verify that the gold is gone and that the miner gets no gold */
+        // Verify that the gold is gone and that the miner gets no gold
         assertEquals(map.getAmountOfMineralAtPoint(GOLD, point0), 0);
 
         for (int i = 0; i < 200; i++) {
@@ -817,51 +817,51 @@ public class TestGoldMine {
             map.stepTime();
         }
 
-        /* Verify that the mine is out of natural resources */
+        // Verify that the mine is out of natural resources
         assertTrue(mine.isOutOfNaturalResources());
     }
 
     @Test
     public void testGoldmineWithoutGoldProducesNothing() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
 
-        /* Place a headquarter */
+        // Place a headquarter
         Point point1 = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place a gold mine */
+        // Place a gold mine
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
 
-        /* Place a road from headquarter to mine */
+        // Place a road from headquarter to mine
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
 
-        /* Construct the gold mine */
+        // Construct the gold mine
         constructHouse(mine);
 
-        /* Deliver food to the miner */
+        // Deliver food to the miner
         Cargo food = new Cargo(BREAD, map);
         mine.putCargo(food);
 
-        /* Manually place miner */
+        // Manually place miner
         Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
         assertTrue(miner.isInsideBuilding());
 
-        /* Wait for the miner to rest */
+        // Wait for the miner to rest
         Utils.fastForward(100, map);
 
-        /* Verify that there is no gold and that the miner gets no gold */
+        // Verify that there is no gold and that the miner gets no gold
         assertEquals(map.getAmountOfMineralAtPoint(GOLD, point0), 0);
 
         for (int i = 0; i < 200; i++) {
@@ -875,38 +875,38 @@ public class TestGoldMine {
     @Test
     public void testGoldmineWithoutFoodProducesNothing() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
-        /* Place a headquarter */
+        // Place a headquarter
         Point point1 = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place a gold mine */
+        // Place a gold mine
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
 
-        /* Construct the gold mine */
+        // Construct the gold mine
         constructHouse(mine);
 
-        /* Manually place miner */
+        // Manually place miner
         Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
         assertTrue(miner.isInsideBuilding());
 
-        /* Wait for the miner to rest */
+        // Wait for the miner to rest
         Utils.fastForward(100, map);
 
-        /* Verify that the miner gets no gold */
+        // Verify that the miner gets no gold
 
         for (int i = 0; i < 200; i++) {
             assertTrue(miner.isInsideBuilding());
@@ -919,75 +919,75 @@ public class TestGoldMine {
     @Test
     public void testMiningConsumesFood() throws Exception {
 
-        /* Start new game with one player */
+        // Start new game with one player
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
-        /* Place a headquarter */
+        // Place a headquarter
         Point point1 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place a gold mine */
+        // Place a gold mine
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
 
-        /* Construct the gold mine */
+        // Construct the gold mine
         constructHouse(mine);
 
-        /* Deliver food to the miner */
+        // Deliver food to the miner
         Cargo food = new Cargo(BREAD, map);
         mine.putCargo(food);
 
-        /* Manually place miner */
+        // Manually place miner
         Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
         assertTrue(miner.isInsideBuilding());
 
-        /* Wait for the miner to rest */
+        // Wait for the miner to rest
         Utils.fastForward(100, map);
 
-        /* Verify that the miner mines for gold */
+        // Verify that the miner mines for gold
         assertEquals(mine.getAmount(BREAD), 1);
 
         Utils.fastForward(50, map);
 
-        /* Verify that the miner consumed the bread */
+        // Verify that the miner consumed the bread
         assertEquals(mine.getAmount(BREAD), 0);
     }
 
     @Test
     public void testGoldmineCanConsumeAllTypesOfFood() throws Exception {
 
-        /* Start new game with one player */
+        // Start new game with one player
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
-        /* Place a headquarter */
+        // Place a headquarter
         Point point1 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place a gold mine */
+        // Place a gold mine
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
 
-        /* Construct the gold mine */
+        // Construct the gold mine
         constructHouse(mine);
 
-        /* Deliver food of all types to the miner */
+        // Deliver food of all types to the miner
         assertTrue(mine.needsMaterial(FISH));
         assertTrue(mine.needsMaterial(MEAT));
         assertTrue(mine.needsMaterial(BREAD));
@@ -996,20 +996,20 @@ public class TestGoldMine {
         mine.putCargo(new Cargo(MEAT, map));
         mine.putCargo(new Cargo(BREAD, map));
 
-        /* Manually place miner */
+        // Manually place miner
         Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine);
 
         assertTrue(miner.isInsideBuilding());
 
-        /* Mine three times and verify that the miner consumed all food */
+        // Mine three times and verify that the miner consumed all food
         for (int i = 0; i < 3; i++) {
 
-            /* Wait for the miner to produce ore */
+            // Wait for the miner to produce ore
             Utils.fastForwardUntilWorkerCarriesCargo(map, miner, GOLD);
 
-            /* Wait for the miner to leave the ore at the flag */
+            // Wait for the miner to leave the ore at the flag
             assertEquals(miner.getTarget(), mine.getFlag().getPosition());
 
             Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getFlag().getPosition());
@@ -1025,47 +1025,47 @@ public class TestGoldMine {
     @Test
     public void testGoldMineWithoutConnectedStorageKeepsProducing() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
-        /* Finish construction of the gold mine */
+        // Finish construction of the gold mine
         constructHouse(goldMine0);
 
-        /* Occupy the gold mine */
+        // Occupy the gold mine
         Utils.occupyBuilding(new Miner(player0, map), goldMine0);
 
-        /* Deliver material to the gold mine */
+        // Deliver material to the gold mine
         Cargo fishCargo = new Cargo(FISH, map);
 
         goldMine0.putCargo(fishCargo);
         goldMine0.putCargo(fishCargo);
 
-        /* Let the miner rest */
+        // Let the miner rest
         Utils.fastForward(100, map);
 
-        /* Wait for the miner to produce a new gold cargo */
+        // Wait for the miner to produce a new gold cargo
         Utils.fastForward(50, map);
 
         Worker miner = goldMine0.getWorker();
 
         assertNotNull(miner.getCargo());
 
-        /* Verify that the miner puts the gold cargo at the flag */
+        // Verify that the miner puts the gold cargo at the flag
         assertEquals(miner.getTarget(), goldMine0.getFlag().getPosition());
         assertTrue(goldMine0.getFlag().getStackedCargo().isEmpty());
 
@@ -1074,17 +1074,17 @@ public class TestGoldMine {
         assertNull(miner.getCargo());
         assertFalse(goldMine0.getFlag().getStackedCargo().isEmpty());
 
-        /* Wait for the worker to go back to the gold mine */
+        // Wait for the worker to go back to the gold mine
         assertEquals(miner.getTarget(), goldMine0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, goldMine0.getPosition());
 
-        /* Wait for the worker to rest and produce another cargo */
+        // Wait for the worker to rest and produce another cargo
         Utils.fastForward(150, map);
 
         assertNotNull(miner.getCargo());
 
-        /* Verify that the second cargo is put at the flag */
+        // Verify that the second cargo is put at the flag
         assertEquals(miner.getTarget(), goldMine0.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, goldMine0.getFlag().getPosition());
@@ -1096,47 +1096,47 @@ public class TestGoldMine {
     @Test
     public void testCargoProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
-        /* Finish construction of the gold mine */
+        // Finish construction of the gold mine
         constructHouse(goldMine0);
 
-        /* Deliver material to the gold mine */
+        // Deliver material to the gold mine
         Cargo fishCargo = new Cargo(FISH, map);
 
         goldMine0.putCargo(fishCargo);
         goldMine0.putCargo(fishCargo);
 
-        /* Occupy the gold mine */
+        // Occupy the gold mine
         Utils.occupyBuilding(new Miner(player0, map), goldMine0);
 
-        /* Let the miner rest */
+        // Let the miner rest
         Utils.fastForward(100, map);
 
-        /* Wait for the miner to produce a new gold cargo */
+        // Wait for the miner to produce a new gold cargo
         Utils.fastForward(50, map);
 
         Worker miner = goldMine0.getWorker();
 
         assertNotNull(miner.getCargo());
 
-        /* Verify that the miner puts the gold cargo at the flag */
+        // Verify that the miner puts the gold cargo at the flag
         assertEquals(miner.getTarget(), goldMine0.getFlag().getPosition());
         assertTrue(goldMine0.getFlag().getStackedCargo().isEmpty());
 
@@ -1145,52 +1145,52 @@ public class TestGoldMine {
         assertNull(miner.getCargo());
         assertFalse(goldMine0.getFlag().getStackedCargo().isEmpty());
 
-        /* Wait to let the cargo remain at the flag without any connection to the storage */
+        // Wait to let the cargo remain at the flag without any connection to the storage
         Cargo cargo = goldMine0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
         assertEquals(cargo.getPosition(), goldMine0.getFlag().getPosition());
 
-        /* Remove the resources the iron mine needs from the headquarter */
+        // Remove the resources the iron mine needs from the headquarter
         Utils.adjustInventoryTo(headquarter0, MEAT, 0);
         Utils.adjustInventoryTo(headquarter0, BREAD, 0);
         Utils.adjustInventoryTo(headquarter0, FISH, 0);
 
-        /* Connect the gold mine with the headquarter */
+        // Connect the gold mine with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), goldMine0.getFlag());
 
-        /* Assign a courier to the road */
+        // Assign a courier to the road
         Courier courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
 
-        /* Wait for the courier to reach the idle point of the road */
+        // Wait for the courier to reach the idle point of the road
         assertNotEquals(courier.getTarget(), headquarter0.getFlag().getPosition());
         assertNotEquals(courier.getTarget(), goldMine0.getFlag().getPosition());
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
 
-        /* Verify that the courier walks to pick up the cargo */
+        // Verify that the courier walks to pick up the cargo
         map.stepTime();
 
         assertEquals(courier.getTarget(), goldMine0.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
 
-        /* Verify that the courier has picked up the cargo */
+        // Verify that the courier has picked up the cargo
         assertNotNull(courier.getCargo());
         assertEquals(courier.getCargo(), cargo);
 
-        /* Verify that the courier delivers the cargo to the headquarter */
+        // Verify that the courier delivers the cargo to the headquarter
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(GOLD);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
-        /* Verify that the courier has delivered the cargo to the headquarter */
+        // Verify that the courier has delivered the cargo to the headquarter
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(GOLD), amount + 1);
     }
@@ -1198,31 +1198,31 @@ public class TestGoldMine {
     @Test
     public void testMinerGoesBackToStorageWhenGoldMineIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
-        /* Finish construction of the gold mine */
+        // Finish construction of the gold mine
         constructHouse(goldMine0);
 
-        /* Occupy the gold mine */
+        // Occupy the gold mine
         Utils.occupyBuilding(new Miner(player0, map), goldMine0);
 
-        /* Destroy the gold mine */
+        // Destroy the gold mine
         Worker miner = goldMine0.getWorker();
 
         assertTrue(miner.isInsideBuilding());
@@ -1230,7 +1230,7 @@ public class TestGoldMine {
 
         goldMine0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(miner.isInsideBuilding());
         assertEquals(miner.getTarget(), headquarter0.getPosition());
 
@@ -1238,41 +1238,41 @@ public class TestGoldMine {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
 
-        /* Verify that the miner is stored correctly in the headquarter */
+        // Verify that the miner is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(MINER), amount + 1);
     }
 
     @Test
     public void testMinerGoesBackOnToStorageOnRoadsIfPossibleWhenGoldMineIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
-        /* Connect the gold mine with the headquarter */
+        // Connect the gold mine with the headquarter
         map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
 
-        /* Finish construction of the gold mine */
+        // Finish construction of the gold mine
         constructHouse(goldMine0);
 
-        /* Occupy the gold mine */
+        // Occupy the gold mine
         Utils.occupyBuilding(new Miner(player0, map), goldMine0);
 
-        /* Destroy the gold mine */
+        // Destroy the gold mine
         Worker miner = goldMine0.getWorker();
 
         assertTrue(miner.isInsideBuilding());
@@ -1280,11 +1280,11 @@ public class TestGoldMine {
 
         goldMine0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(miner.isInsideBuilding());
         assertEquals(miner.getTarget(), headquarter0.getPosition());
 
-        /* Verify that the worker plans to use the roads */
+        // Verify that the worker plans to use the roads
         boolean firstStep = true;
         for (Point point : miner.getPlannedPath()) {
             if (firstStep) {
@@ -1299,57 +1299,57 @@ public class TestGoldMine {
     @Test
     public void testProductionInGoldMineCanBeStopped() throws Exception {
 
-        /* Create game map */
+        // Create game map
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point1 = new Point(10, 6);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Connect the gold mine and the headquarter */
+        // Connect the gold mine and the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter.getFlag());
 
-        /* Finish the gold mine */
+        // Finish the gold mine
         constructHouse(goldMine0);
 
-        /* Assign a worker to the gold mine */
+        // Assign a worker to the gold mine
         Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, goldMine0);
 
         assertTrue(miner.isInsideBuilding());
 
-        /* Deliver material to the gold mine */
+        // Deliver material to the gold mine
         Cargo fishCargo = new Cargo(FISH, map);
 
         goldMine0.putCargo(fishCargo);
         goldMine0.putCargo(fishCargo);
 
-        /* Let the worker rest */
+        // Let the worker rest
         Utils.fastForward(100, map);
 
-        /* Wait for the miner to produce cargo */
+        // Wait for the miner to produce cargo
         Utils.fastForwardUntilWorkerProducesCargo(map, miner);
 
         assertEquals(miner.getCargo().getMaterial(), GOLD);
 
-        /* Wait for the worker to deliver the cargo */
+        // Wait for the worker to deliver the cargo
         assertEquals(miner.getTarget(), goldMine0.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, goldMine0.getFlag().getPosition());
 
-        /* Stop production and verify that no gold is produced */
+        // Stop production and verify that no gold is produced
         goldMine0.stopProduction();
 
         assertFalse(goldMine0.isProductionEnabled());
@@ -1364,57 +1364,57 @@ public class TestGoldMine {
     @Test
     public void testProductionInGoldMineCanBeResumed() throws Exception {
 
-        /* Create game map */
+        // Create game map
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point1 = new Point(10, 6);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Connect the gold mine and the headquarter */
+        // Connect the gold mine and the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter.getFlag());
 
-        /* Finish the gold mine */
+        // Finish the gold mine
         constructHouse(goldMine0);
 
-        /* Assign a worker to the gold mine */
+        // Assign a worker to the gold mine
         Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, goldMine0);
 
         assertTrue(miner.isInsideBuilding());
 
-        /* Deliver material to the gold mine */
+        // Deliver material to the gold mine
         Cargo fishCargo = new Cargo(FISH, map);
 
         goldMine0.putCargo(fishCargo);
         goldMine0.putCargo(fishCargo);
 
-        /* Let the worker rest */
+        // Let the worker rest
         Utils.fastForward(100, map);
 
-        /* Wait for the miner to produce gold */
+        // Wait for the miner to produce gold
         Utils.fastForwardUntilWorkerProducesCargo(map, miner);
 
         assertEquals(miner.getCargo().getMaterial(), GOLD);
 
-        /* Wait for the worker to deliver the cargo */
+        // Wait for the worker to deliver the cargo
         assertEquals(miner.getTarget(), goldMine0.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, goldMine0.getFlag().getPosition());
 
-        /* Stop production */
+        // Stop production
         goldMine0.stopProduction();
 
         for (int i = 0; i < 300; i++) {
@@ -1423,7 +1423,7 @@ public class TestGoldMine {
             map.stepTime();
         }
 
-        /* Resume production and verify that the gold mine produces gold again */
+        // Resume production and verify that the gold mine produces gold again
         goldMine0.resumeProduction();
 
         assertTrue(goldMine0.isProductionEnabled());
@@ -1436,39 +1436,39 @@ public class TestGoldMine {
     @Test
     public void testAssignedMinerHasCorrectlySetPlayer() throws Exception {
 
-        /* Create players */
+        // Create players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        /* Create game map */
+        // Create game map
         GameMap map = new GameMap(players, 50, 50);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point0 = new Point(10, 6);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point1 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
-        /* Finish construction of the gold mine */
+        // Finish construction of the gold mine
         constructHouse(goldMine0);
 
-        /* Connect the gold mine with the headquarter */
+        // Connect the gold mine with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), goldMine0.getFlag());
 
-        /* Wait for miner to get assigned and leave the headquarter */
+        // Wait for miner to get assigned and leave the headquarter
         List<Miner> workers = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
 
-        /* Verify that the player is set correctly in the worker */
+        // Verify that the player is set correctly in the worker
         Miner worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
@@ -1477,7 +1477,7 @@ public class TestGoldMine {
     @Test
     public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
 
-        /* Create player list with two players */
+        // Create player list with two players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         Player player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
@@ -1488,46 +1488,46 @@ public class TestGoldMine {
         players.add(player1);
         players.add(player2);
 
-        /* Create game map choosing two players */
+        // Create game map choosing two players
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point4 = new Point(28, 6);
         Utils.surroundPointWithMinableMountain(point4, map);
         Utils.putGoldAtSurroundingTiles(point4, LARGE, map);
 
-        /* Place player 2's headquarter */
+        // Place player 2's headquarter
         Point point10 = new Point(70, 70);
         Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
-        /* Place player 0's headquarter */
+        // Place player 0's headquarter
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        // Place player 1's headquarter
         Point point3 = new Point(45, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point3);
 
-        /* Place fortress for player 0 */
+        // Place fortress for player 0
         Point point2 = new Point(21, 5);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
-        /* Finish construction of the fortress */
+        // Finish construction of the fortress
         constructHouse(fortress0);
 
-        /* Occupy the fortress */
+        // Occupy the fortress
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
-        /* Place gold mine close to the new border */
+        // Place gold mine close to the new border
         GoldMine goldMine0 = map.placeBuilding(new GoldMine(player0), point4);
 
-        /* Finish construction of the gold mine */
+        // Finish construction of the gold mine
         constructHouse(goldMine0);
 
-        /* Occupy the gold mine */
+        // Occupy the gold mine
         Miner worker = Utils.occupyBuilding(new Miner(player0, map), goldMine0);
 
-        /* Verify that the worker goes back to its own storage when the fortress is torn down */
+        // Verify that the worker goes back to its own storage when the fortress is torn down
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
@@ -1536,35 +1536,35 @@ public class TestGoldMine {
     @Test
     public void testMinerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place first flag */
+        // Place first flag
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point2 = new Point(13, 5);
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGoldAtSurroundingTiles(point2, LARGE, map);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point2);
 
-        /* Connect headquarter and first flag */
+        // Connect headquarter and first flag
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Connect the first flag with the second flag */
+        // Connect the first flag with the second flag
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, goldMine0.getFlag());
 
-        /* Wait for the miner to be on the second road on its way to the flag */
+        // Wait for the miner to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
 
         Miner miner = null;
@@ -1582,18 +1582,18 @@ public class TestGoldMine {
 
         map.stepTime();
 
-        /* See that the miner has started walking */
+        // See that the miner has started walking
         assertFalse(miner.isExactlyAtPoint());
 
-        /* Remove the next road */
+        // Remove the next road
         map.removeRoad(road1);
 
-        /* Verify that the miner continues walking to the flag */
+        // Verify that the miner continues walking to the flag
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, flag0.getPosition());
 
         assertEquals(miner.getPosition(), flag0.getPosition());
 
-        /* Verify that the miner returns to the headquarter when it reaches the flag */
+        // Verify that the miner returns to the headquarter when it reaches the flag
         assertEquals(miner.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
@@ -1602,35 +1602,35 @@ public class TestGoldMine {
     @Test
     public void testMinerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place first flag */
+        // Place first flag
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point2 = new Point(13, 5);
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGoldAtSurroundingTiles(point2, LARGE, map);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point2);
 
-        /* Connect headquarter and first flag */
+        // Connect headquarter and first flag
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Connect the first flag with the second flag */
+        // Connect the first flag with the second flag
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, goldMine0.getFlag());
 
-        /* Wait for the miner to be on the second road on its way to the flag */
+        // Wait for the miner to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
 
         Miner miner = null;
@@ -1648,58 +1648,58 @@ public class TestGoldMine {
 
         map.stepTime();
 
-        /* See that the miner has started walking */
+        // See that the miner has started walking
         assertFalse(miner.isExactlyAtPoint());
 
-        /* Remove the current road */
+        // Remove the current road
         map.removeRoad(road0);
 
-        /* Verify that the miner continues walking to the flag */
+        // Verify that the miner continues walking to the flag
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, flag0.getPosition());
 
         assertEquals(miner.getPosition(), flag0.getPosition());
 
-        /* Verify that the miner continues to the final flag */
+        // Verify that the miner continues to the final flag
         assertEquals(miner.getTarget(), goldMine0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, goldMine0.getFlag().getPosition());
 
-        /* Verify that the miner goes out to miner instead of going directly back */
+        // Verify that the miner goes out to miner instead of going directly back
         assertNotEquals(miner.getTarget(), headquarter0.getPosition());
     }
 
     @Test
     public void testMinerReturnsToStorageIfGoldMineIsDestroyed() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place first flag */
+        // Place first flag
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point2 = new Point(13, 5);
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGoldAtSurroundingTiles(point2, LARGE, map);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point2);
 
-        /* Connect headquarter and first flag */
+        // Connect headquarter and first flag
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Connect the first flag with the second flag */
+        // Connect the first flag with the second flag
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, goldMine0.getFlag());
 
-        /* Wait for the miner to be on the second road on its way to the flag */
+        // Wait for the miner to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
 
         Miner miner = null;
@@ -1713,61 +1713,61 @@ public class TestGoldMine {
         assertNotNull(miner);
         assertEquals(miner.getTarget(), goldMine0.getPosition());
 
-        /* Wait for the miner to reach the first flag */
+        // Wait for the miner to reach the first flag
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, flag0.getPosition());
 
         map.stepTime();
 
-        /* See that the miner has started walking */
+        // See that the miner has started walking
         assertFalse(miner.isExactlyAtPoint());
 
-        /* Tear down the gold mine */
+        // Tear down the gold mine
         goldMine0.tearDown();
 
-        /* Verify that the miner continues walking to the next flag */
+        // Verify that the miner continues walking to the next flag
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, goldMine0.getFlag().getPosition());
 
         assertEquals(miner.getPosition(), goldMine0.getFlag().getPosition());
 
-        /* Verify that the miner goes back to storage */
+        // Verify that the miner goes back to storage
         assertEquals(miner.getTarget(), headquarter0.getPosition());
     }
 
     @Test
     public void testMinerGoesOffroadBackToClosestStorageWhenGoldMineIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point1 = new Point(17, 17);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Finish construction of the gold mine */
+        // Finish construction of the gold mine
         constructHouse(goldMine0);
 
-        /* Occupy the gold mine */
+        // Occupy the gold mine
         Utils.occupyBuilding(new Miner(player0, map), goldMine0);
 
-        /* Place a second storage closer to the gold mine */
+        // Place a second storage closer to the gold mine
         Point point2 = new Point(13, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Finish construction of the storage */
+        // Finish construction of the storage
         constructHouse(storehouse0);
 
-        /* Destroy the gold mine */
+        // Destroy the gold mine
         Worker miner = goldMine0.getWorker();
 
         assertTrue(miner.isInsideBuilding());
@@ -1775,7 +1775,7 @@ public class TestGoldMine {
 
         goldMine0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(miner.isInsideBuilding());
         assertEquals(miner.getTarget(), storehouse0.getPosition());
 
@@ -1783,48 +1783,48 @@ public class TestGoldMine {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, storehouse0.getPosition());
 
-        /* Verify that the miner is stored correctly in the headquarter */
+        // Verify that the miner is stored correctly in the headquarter
         assertEquals(storehouse0.getAmount(MINER), amount + 1);
     }
 
     @Test
     public void testMinerReturnsOffroadAndAvoidsBurningStorageWhenGoldMineIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point1 = new Point(17, 17);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Finish construction of the gold mine */
+        // Finish construction of the gold mine
         constructHouse(goldMine0);
 
-        /* Occupy the gold mine */
+        // Occupy the gold mine
         Utils.occupyBuilding(new Miner(player0, map), goldMine0);
 
-        /* Place a second storage closer to the gold mine */
+        // Place a second storage closer to the gold mine
         Point point2 = new Point(13, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Finish construction of the storage */
+        // Finish construction of the storage
         constructHouse(storehouse0);
 
-        /* Destroy the storage */
+        // Destroy the storage
         storehouse0.tearDown();
 
-        /* Destroy the gold mine */
+        // Destroy the gold mine
         Worker miner = goldMine0.getWorker();
 
         assertTrue(miner.isInsideBuilding());
@@ -1832,7 +1832,7 @@ public class TestGoldMine {
 
         goldMine0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(miner.isInsideBuilding());
         assertEquals(miner.getTarget(), headquarter0.getPosition());
 
@@ -1840,51 +1840,51 @@ public class TestGoldMine {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
 
-        /* Verify that the miner is stored correctly in the headquarter */
+        // Verify that the miner is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(MINER), amount + 1);
     }
 
     @Test
     public void testMinerReturnsOffroadAndAvoidsDestroyedStorageWhenGoldMineIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point1 = new Point(17, 17);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Finish construction of the gold mine */
+        // Finish construction of the gold mine
         constructHouse(goldMine0);
 
-        /* Occupy the gold mine */
+        // Occupy the gold mine
         Utils.occupyBuilding(new Miner(player0, map), goldMine0);
 
-        /* Place a second storage closer to the gold mine */
+        // Place a second storage closer to the gold mine
         Point point2 = new Point(13, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Finish construction of the storage */
+        // Finish construction of the storage
         constructHouse(storehouse0);
 
-        /* Destroy the storage */
+        // Destroy the storage
         storehouse0.tearDown();
 
-        /* Wait for the storage to burn down */
+        // Wait for the storage to burn down
         Utils.waitForBuildingToBurnDown(storehouse0);
 
-        /* Destroy the gold mine */
+        // Destroy the gold mine
         Worker miner = goldMine0.getWorker();
 
         assertTrue(miner.isInsideBuilding());
@@ -1892,7 +1892,7 @@ public class TestGoldMine {
 
         goldMine0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(miner.isInsideBuilding());
         assertEquals(miner.getTarget(), headquarter0.getPosition());
 
@@ -1900,42 +1900,42 @@ public class TestGoldMine {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
 
-        /* Verify that the miner is stored correctly in the headquarter */
+        // Verify that the miner is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(MINER), amount + 1);
     }
 
     @Test
     public void testMinerReturnsOffroadAndAvoidsUnfinishedStorageWhenGoldMineIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point1 = new Point(17, 17);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Finish construction of the gold mine */
+        // Finish construction of the gold mine
         constructHouse(goldMine0);
 
-        /* Occupy the gold mine */
+        // Occupy the gold mine
         Utils.occupyBuilding(new Miner(player0, map), goldMine0);
 
-        /* Place a second storage closer to the gold mine */
+        // Place a second storage closer to the gold mine
         Point point2 = new Point(13, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Destroy the gold mine */
+        // Destroy the gold mine
         Worker miner = goldMine0.getWorker();
 
         assertTrue(miner.isInsideBuilding());
@@ -1943,7 +1943,7 @@ public class TestGoldMine {
 
         goldMine0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(miner.isInsideBuilding());
         assertEquals(miner.getTarget(), headquarter0.getPosition());
 
@@ -1951,47 +1951,47 @@ public class TestGoldMine {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
 
-        /* Verify that the miner is stored correctly in the headquarter */
+        // Verify that the miner is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(MINER), amount + 1);
     }
 
     @Test
     public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point1 = new Point(17, 17);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Place road to connect the headquarter and the gold mine */
+        // Place road to connect the headquarter and the gold mine
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), goldMine0.getFlag());
 
-        /* Finish construction of the gold mine */
+        // Finish construction of the gold mine
         constructHouse(goldMine0);
 
-        /* Wait for a worker to start walking to the building */
+        // Wait for a worker to start walking to the building
         Worker worker = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0).getFirst();
 
-        /* Wait for the worker to get to the building's flag */
+        // Wait for the worker to get to the building's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, goldMine0.getFlag().getPosition());
 
-        /* Tear down the building */
+        // Tear down the building
         goldMine0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
+        // Verify that the worker goes to the building and then returns to the headquarter instead of entering
         assertEquals(worker.getTarget(), goldMine0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, goldMine0.getPosition());
@@ -2004,35 +2004,35 @@ public class TestGoldMine {
     @Test
     public void testGoldMineWithoutResourcesHasZeroProductivity() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Finish construction of the gold mine */
+        // Finish construction of the gold mine
         constructHouse(goldMine);
 
-        /* Populate the gold mine */
+        // Populate the gold mine
         Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), goldMine);
 
         assertTrue(miner0.isInsideBuilding());
         assertEquals(miner0.getHome(), goldMine);
         assertEquals(goldMine.getWorker(), miner0);
 
-        /* Verify that the productivity is 0% when the gold mine doesn't produce anything */
+        // Verify that the productivity is 0% when the gold mine doesn't produce anything
         for (int i = 0; i < 500; i++) {
             assertTrue(goldMine.getFlag().getStackedCargo().isEmpty());
             assertNull(miner0.getCargo());
@@ -2044,38 +2044,38 @@ public class TestGoldMine {
     @Test
     public void testGoldMineWithAbundantResourcesHasFullProductivity() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Finish construction of the gold mine */
+        // Finish construction of the gold mine
         constructHouse(goldMine);
 
-        /* Populate the gold mine */
+        // Populate the gold mine
         Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), goldMine);
 
         assertTrue(miner0.isInsideBuilding());
         assertEquals(miner0.getHome(), goldMine);
         assertEquals(goldMine.getWorker(), miner0);
 
-        /* Connect the gold mine with the headquarter */
+        // Connect the gold mine with the headquarter
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), goldMine.getFlag());
 
-        /* Make the gold mine create some gold with full resources available */
+        // Make the gold mine create some gold with full resources available
         for (int i = 0; i < 1000; i++) {
 
             map.stepTime();
@@ -2085,7 +2085,7 @@ public class TestGoldMine {
             }
         }
 
-        /* Verify that the productivity is 100% and stays there */
+        // Verify that the productivity is 100% and stays there
         assertEquals(goldMine.getProductivity(), 100);
 
         for (int i = 0; i < 1000; i++) {
@@ -2103,38 +2103,38 @@ public class TestGoldMine {
     @Test
     public void testGoldMineLosesProductivityWhenResourcesRunOut() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Finish construction of the gold mine */
+        // Finish construction of the gold mine
         constructHouse(goldMine);
 
-        /* Populate the gold mine */
+        // Populate the gold mine
         Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), goldMine);
 
         assertTrue(miner0.isInsideBuilding());
         assertEquals(miner0.getHome(), goldMine);
         assertEquals(goldMine.getWorker(), miner0);
 
-        /* Connect the gold mine with the headquarter */
+        // Connect the gold mine with the headquarter
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), goldMine.getFlag());
 
-        /* Make the gold mine create some gold with full resources available */
+        // Make the gold mine create some gold with full resources available
         for (int i = 0; i < 1000; i++) {
 
             map.stepTime();
@@ -2144,7 +2144,7 @@ public class TestGoldMine {
             }
         }
 
-        /* Verify that the productivity goes down when resources run out */
+        // Verify that the productivity goes down when resources run out
         assertEquals(goldMine.getProductivity(), 100);
 
         for (int i = 0; i < 5000; i++) {
@@ -2157,28 +2157,28 @@ public class TestGoldMine {
     @Test
     public void testUnoccupiedGoldMineHasNoProductivity() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Finish construction of the gold mine */
+        // Finish construction of the gold mine
         constructHouse(goldMine);
 
-        /* Verify that the unoccupied gold mine is unproductive */
+        // Verify that the unoccupied gold mine is unproductive
         for (int i = 0; i < 1000; i++) {
             assertEquals(goldMine.getProductivity(), 0);
 
@@ -2189,57 +2189,57 @@ public class TestGoldMine {
     @Test
     public void testGoldMineCanProduce() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place a small mountain on the map */
+        // Place a small mountain on the map
         Point point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Finish construction of the gold mine */
+        // Finish construction of the gold mine
         constructHouse(goldMine);
 
-        /* Populate the gold mine */
+        // Populate the gold mine
         Worker miner = Utils.occupyBuilding(new Miner(player0, map), goldMine);
 
-        /* Verify that the gold mine can produce */
+        // Verify that the gold mine can produce
         assertTrue(goldMine.canProduce());
     }
 
     @Test
     public void testGoldMineReportsCorrectOutput() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place a small mountain */
+        // Place a small mountain
         Point point1 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point1, map);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Construct the gold mine */
+        // Construct the gold mine
         constructHouse(goldMine0);
 
-        /* Verify that the reported output is correct */
+        // Verify that the reported output is correct
         assertEquals(goldMine0.getProducedMaterial().length, 1);
         assertEquals(goldMine0.getProducedMaterial()[0], GOLD);
     }
@@ -2247,24 +2247,24 @@ public class TestGoldMine {
     @Test
     public void testGoldMineReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place a small mountain */
+        // Place a small mountain
         Point point1 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point1, map);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Verify that the reported needed construction material is correct */
+        // Verify that the reported needed construction material is correct
         assertEquals(goldMine0.getTypesOfMaterialNeeded().size(), 1);
         assertTrue(goldMine0.getTypesOfMaterialNeeded().contains(PLANK));
         assertEquals(goldMine0.getCanHoldAmount(PLANK), 4);
@@ -2281,27 +2281,27 @@ public class TestGoldMine {
     @Test
     public void testGoldMineReportsCorrectMaterialsNeededForProduction() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place a small mountain */
+        // Place a small mountain
         Point point1 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point1, map);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Construct the gold mine */
+        // Construct the gold mine
         constructHouse(goldMine0);
 
-        /* Verify that the reported needed construction material is correct */
+        // Verify that the reported needed construction material is correct
         assertEquals(goldMine0.getTypesOfMaterialNeeded().size(), 3);
         assertTrue(goldMine0.getTypesOfMaterialNeeded().contains(BREAD));
         assertTrue(goldMine0.getTypesOfMaterialNeeded().contains(MEAT));
@@ -2322,45 +2322,45 @@ public class TestGoldMine {
     @Test
     public void testGoldMineWaitsWhenFlagIsFull() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place a small mountain */
+        // Place a small mountain
         Point point1 = new Point(16, 6);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place gold mine */
+        // Place gold mine
         Building goldMine = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Connect the gold mine with the headquarter */
+        // Connect the gold mine with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, goldMine.getFlag(), headquarter.getFlag());
 
-        /* Wait for the gold mine to get constructed and assigned a worker */
+        // Wait for the gold mine to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(goldMine);
         Utils.waitForNonMilitaryBuildingToGetPopulated(goldMine);
 
-        /* Give material to the gold mine */
+        // Give material to the gold mine
         Utils.deliverCargo(goldMine, BREAD);
         Utils.deliverCargo(goldMine, BREAD);
         Utils.deliverCargo(goldMine, FISH);
         Utils.deliverCargo(goldMine, FISH);
 
-        /* Fill the flag with flour cargos */
+        // Fill the flag with flour cargos
         Utils.placeCargos(map, FLOUR, 8, goldMine.getFlag(), headquarter);
 
-        /* Remove the road */
+        // Remove the road
         map.removeRoad(road0);
 
-        /* Verify that the gold mine waits for the flag to get empty and produces nothing */
+        // Verify that the gold mine waits for the flag to get empty and produces nothing
         for (int i = 0; i < 300; i++) {
             assertEquals(goldMine.getFlag().getStackedCargo().size(), 8);
             assertNull(goldMine.getWorker().getCargo());
@@ -2368,10 +2368,10 @@ public class TestGoldMine {
             map.stepTime();
         }
 
-        /* Reconnect the gold mine with the headquarter */
+        // Reconnect the gold mine with the headquarter
         Road road1 = map.placeAutoSelectedRoad(player0, goldMine.getFlag(), headquarter.getFlag());
 
-        /* Wait for the courier to pick up one of the cargos */
+        // Wait for the courier to pick up one of the cargos
         Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
@@ -2388,52 +2388,52 @@ public class TestGoldMine {
 
         assertEquals(goldMine.getFlag().getStackedCargo().size(), 7);
 
-        /* Verify that the worker produces a cargo of flour and puts it on the flag */
+        // Verify that the worker produces a cargo of flour and puts it on the flag
         Utils.fastForwardUntilWorkerCarriesCargo(map, goldMine.getWorker(), GOLD);
     }
 
     @Test
     public void testGoldMineDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place a small mountain */
+        // Place a small mountain
         Point point1 = new Point(16, 6);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place gold mine */
+        // Place gold mine
         GoldMine goldMine = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Connect the gold mine with the headquarter */
+        // Connect the gold mine with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, goldMine.getFlag(), headquarter.getFlag());
 
-        /* Wait for the gold mine to get constructed and assigned a worker */
+        // Wait for the gold mine to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(goldMine);
         Utils.waitForNonMilitaryBuildingToGetPopulated(goldMine);
 
-        /* Give material to the gold mine */
+        // Give material to the gold mine
         Utils.deliverCargo(goldMine, BREAD);
         Utils.deliverCargo(goldMine, BREAD);
         Utils.deliverCargo(goldMine, FISH);
         Utils.deliverCargo(goldMine, FISH);
 
-        /* Fill the flag with cargos */
+        // Fill the flag with cargos
         Utils.placeCargos(map, FLOUR, 8, goldMine.getFlag(), headquarter);
 
-        /* Remove the road */
+        // Remove the road
         map.removeRoad(road0);
 
-        /* The gold mine waits for the flag to get empty and produces nothing */
+        // The gold mine waits for the flag to get empty and produces nothing
         for (int i = 0; i < 300; i++) {
             assertEquals(goldMine.getFlag().getStackedCargo().size(), 8);
             assertNull(goldMine.getWorker().getCargo());
@@ -2441,10 +2441,10 @@ public class TestGoldMine {
             map.stepTime();
         }
 
-        /* Reconnect the gold mine with the headquarter */
+        // Reconnect the gold mine with the headquarter
         Road road1 = map.placeAutoSelectedRoad(player0, goldMine.getFlag(), headquarter.getFlag());
 
-        /* Wait for the courier to pick up one of the cargos */
+        // Wait for the courier to pick up one of the cargos
         Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
@@ -2461,20 +2461,20 @@ public class TestGoldMine {
 
         assertEquals(goldMine.getFlag().getStackedCargo().size(), 7);
 
-        /* Remove the road */
+        // Remove the road
         map.removeRoad(road1);
 
-        /* The worker produces a cargo and puts it on the flag */
+        // The worker produces a cargo and puts it on the flag
         Utils.fastForwardUntilWorkerCarriesCargo(map, goldMine.getWorker(), GOLD);
 
-        /* Wait for the worker to put the cargo on the flag */
+        // Wait for the worker to put the cargo on the flag
         assertEquals(goldMine.getWorker().getTarget(), goldMine.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, goldMine.getWorker(), goldMine.getFlag().getPosition());
 
         assertEquals(goldMine.getFlag().getStackedCargo().size(), 8);
 
-        /* Verify that the gold mine doesn't produce anything because the flag is full */
+        // Verify that the gold mine doesn't produce anything because the flag is full
         for (int i = 0; i < 400; i++) {
             assertEquals(goldMine.getFlag().getStackedCargo().size(), 8);
             assertNull(goldMine.getWorker().getCargo());
@@ -2486,28 +2486,28 @@ public class TestGoldMine {
     @Test
     public void testWhenGoldDeliveryAreBlockedGoldMineFillsUpFlagAndThenStops() throws Exception {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place Gold mine */
+        // Place Gold mine
         GoldMine goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Place road to connect the gold mine with the headquarter */
+        // Place road to connect the gold mine with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the gold mine to get constructed and occupied */
+        // Wait for the gold mine to get constructed and occupied
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
@@ -2519,14 +2519,14 @@ public class TestGoldMine {
         assertEquals(miner0.getHome(), goldMine0);
         assertEquals(goldMine0.getWorker(), miner0);
 
-        /* Add a lot of material to the headquarter for the gold mine to consume */
+        // Add a lot of material to the headquarter for the gold mine to consume
         Utils.adjustInventoryTo(headquarter0, MEAT, 40);
         Utils.adjustInventoryTo(headquarter0, BREAD, 40);
 
-        /* Block storage of gold */
+        // Block storage of gold
         headquarter0.blockDeliveryOfMaterial(GOLD);
 
-        /* Verify that the gold mine puts eight gold pieces on the flag and then stops */
+        // Verify that the gold mine puts eight gold pieces on the flag and then stops
         Utils.waitForFlagToGetStackedCargo(map, goldMine0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner0, goldMine0.getPosition());
@@ -2546,46 +2546,46 @@ public class TestGoldMine {
     @Test
     public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndGoldMineIsTornDown() throws Exception {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place storehouse */
+        // Place storehouse
         Point point1 = new Point(5, 5);
         Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point2 = new Point(18, 6);
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGoldAtSurroundingTiles(point2, LARGE, map);
 
-        /* Place gold mine */
+        // Place gold mine
         GoldMine goldMine0 = map.placeBuilding(new GoldMine(player0), point2);
 
-        /* Place road to connect the storehouse with the headquarter */
+        // Place road to connect the storehouse with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        /* Place road to connect the headquarter with the gold mine */
+        // Place road to connect the headquarter with the gold mine
         Road road1 = map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
 
-        /* Add a lot of planks and stones to the headquarter */
+        // Add a lot of planks and stones to the headquarter
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        /* Wait for the gold mine and the storehouse to get constructed */
+        // Wait for the gold mine and the storehouse to get constructed
         Utils.waitForBuildingsToBeConstructed(storehouse, goldMine0);
 
-        /* Add a lot of material to the headquarter for the gold mine to consume */
+        // Add a lot of material to the headquarter for the gold mine to consume
         Utils.adjustInventoryTo(headquarter0, MEAT, 40);
         Utils.adjustInventoryTo(headquarter0, BREAD, 40);
 
-        /* Wait for the gold mine and the storage to get occupied */
+        // Wait for the gold mine and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, goldMine0);
 
         Worker miner0 = goldMine0.getWorker();
@@ -2594,7 +2594,7 @@ public class TestGoldMine {
         assertEquals(miner0.getHome(), goldMine0);
         assertEquals(goldMine0.getWorker(), miner0);
 
-        /* Verify that the worker goes to the storage when the gold mine is torn down */
+        // Verify that the worker goes to the storage when the gold mine is torn down
         headquarter0.blockDeliveryOfMaterial(MINER);
 
         goldMine0.tearDown();
@@ -2615,46 +2615,46 @@ public class TestGoldMine {
     @Test
     public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndGoldMineIsTornDown() throws Exception {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place storehouse */
+        // Place storehouse
         Point point1 = new Point(5, 5);
         Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point2 = new Point(18, 6);
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGoldAtSurroundingTiles(point2, LARGE, map);
 
-        /* Place gold mine */
+        // Place gold mine
         GoldMine goldMine0 = map.placeBuilding(new GoldMine(player0), point2);
 
-        /* Place road to connect the storehouse with the headquarter */
+        // Place road to connect the storehouse with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        /* Place road to connect the headquarter with the gold mine */
+        // Place road to connect the headquarter with the gold mine
         Road road1 = map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
 
-        /* Add a lot of planks and stones to the headquarter */
+        // Add a lot of planks and stones to the headquarter
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        /* Wait for the gold mine and the storehouse to get constructed */
+        // Wait for the gold mine and the storehouse to get constructed
         Utils.waitForBuildingsToBeConstructed(storehouse, goldMine0);
 
-        /* Add a lot of material to the headquarter for the gold mine to consume */
+        // Add a lot of material to the headquarter for the gold mine to consume
         Utils.adjustInventoryTo(headquarter0, MEAT, 40);
         Utils.adjustInventoryTo(headquarter0, BREAD, 40);
 
-        /* Wait for the gold mine and the storage to get occupied */
+        // Wait for the gold mine and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, goldMine0);
 
         Worker miner0 = goldMine0.getWorker();
@@ -2663,7 +2663,7 @@ public class TestGoldMine {
         assertEquals(miner0.getHome(), goldMine0);
         assertEquals(goldMine0.getWorker(), miner0);
 
-        /* Verify that the worker goes to the storage off-road when the gold mine is torn down */
+        // Verify that the worker goes to the storage off-road when the gold mine is torn down
         headquarter0.blockDeliveryOfMaterial(MINER);
 
         goldMine0.tearDown();
@@ -2686,17 +2686,17 @@ public class TestGoldMine {
     @Test
     public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, MINER, 1);
 
         assertEquals(headquarter0.getAmount(MINER), 1);
@@ -2724,17 +2724,17 @@ public class TestGoldMine {
     @Test
     public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, MINER, 1);
 
         headquarter0.blockDeliveryOfMaterial(MINER);
@@ -2769,31 +2769,31 @@ public class TestGoldMine {
     @Test
     public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place gold mine */
+        // Place gold mine
         GoldMine goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Place road to connect the gold mine with the headquarter */
+        // Place road to connect the gold mine with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        /* Wait for the gold mine to get constructed and occupied */
+        // Wait for the gold mine to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(goldMine0);
         Utils.waitForNonMilitaryBuildingToGetPopulated(goldMine0);
 
@@ -2833,42 +2833,42 @@ public class TestGoldMine {
     @Test
     public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Put a small mountain on the map */
+        // Put a small mountain on the map
         Point point1 = new Point(7, 9);
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place gold mine */
+        // Place gold mine
         GoldMine goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Place road to connect the gold mine with the headquarter */
+        // Place road to connect the gold mine with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        /* Wait for the gold mine to get constructed */
+        // Wait for the gold mine to get constructed
         Utils.waitForBuildingToBeConstructed(goldMine0);
 
-        /* Wait for a miner to start walking to the gold mine */
+        // Wait for a miner to start walking to the gold mine
         Miner miner = Utils.waitForWorkerOutsideBuilding(Miner.class, player0);
 
-        /* Wait for the miner to go past the headquarter's flag */
+        // Wait for the miner to go past the headquarter's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
-        /* Verify that the miner goes away and dies when the house has been torn down and storage is not possible */
+        // Verify that the miner goes away and dies when the house has been torn down and storage is not possible
         assertEquals(miner.getTarget(), goldMine0.getPosition());
 
         headquarter0.blockDeliveryOfMaterial(MINER);
