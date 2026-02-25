@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.appland.settlers.computer;
 
 import org.appland.settlers.model.AttackStrength;
@@ -70,7 +65,7 @@ public class AttackPlayer implements ComputerPlayer {
                     // Attack and transition to waiting for attack to start
                     state = State.WAITING_FOR_ATTACK_TO_START;
                     buildingUnderAttack = buildingToAttack;
-                    player.attack(buildingToAttack, player.getAvailableAttackersForBuilding(buildingToAttack), AttackStrength.STRONG);
+                    player.attack(buildingToAttack, player.getNumberOfAvailableAttackers(buildingToAttack), AttackStrength.STRONG);
                     System.out.printf(" - Attacking %s, owned by %s%n", buildingToAttack, buildingToAttack.getPlayer().getName());
                 }
             }
@@ -129,7 +124,7 @@ public class AttackPlayer implements ComputerPlayer {
                 .filter(Building::isReady)
                 .filter(building -> {
                     try {
-                        return player.getAvailableAttackersForBuilding(building) > 0;
+                        return player.getNumberOfAvailableAttackers(building) > 0;
                     } catch (InvalidUserActionException e) {
                         throw new RuntimeException(e);
                     }

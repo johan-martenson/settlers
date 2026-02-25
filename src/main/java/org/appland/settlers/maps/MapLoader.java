@@ -3,7 +3,6 @@ package org.appland.settlers.maps;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
@@ -21,7 +20,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,7 +38,7 @@ public class MapLoader {
     String filename;
 
     @Option(name = "--debug", usage = "Print debug information")
-    boolean debug = false;
+    boolean debugFlag = false;
 
     @Option(name = "--info", usage = "Print information about the map")
     boolean printInfo = false;
@@ -127,6 +125,13 @@ public class MapLoader {
         System.out.printf(" - File header: %s%n", mapFile.getHeaderType().name().toLowerCase());
     }
 
+
+    void debug(Object object) {
+        if (debugFlag) {
+            System.out.println(object);
+        }
+    }
+
     /**
      * Loads a map file from the specified filename.
      *
@@ -137,28 +142,10 @@ public class MapLoader {
      * @throws InvalidMapException         if the map is invalid
      */
     public MapFile loadMapFromFile(String mapFilename) throws SettlersMapLoadingException, IOException, InvalidMapException {
-        printlnIfDebug(String.format("Loading: %s", mapFilename));
+        debug(String.format("Loading: %s", mapFilename));
 
-        try (InputStream fileInputStream = Files.newInputStream(Paths.get(mapFilename))) {
+        try (var fileInputStream = Files.newInputStream(Paths.get(mapFilename))) {
             return loadMapFromStream(fileInputStream);
-        }
-    }
-
-    private void printlnIfDebug() {
-        if (debug) {
-            System.out.println();
-        }
-    }
-
-    private void printlnIfDebug(Object message) {
-        if (debug) {
-            System.out.println(message);
-        }
-    }
-
-    private void printIfDebug(String message) {
-        if (debug) {
-            System.out.print(message);
         }
     }
 
@@ -177,7 +164,7 @@ public class MapLoader {
 
         // Read file header
         var fileHeader = streamReader.getUint8ArrayAsString(10);
-        printlnIfDebug(String.format(" -- File header: %s", fileHeader));
+        debug(String.format(" -- File header: %s", fileHeader));
         mapFile.setHeader(fileHeader);
 
         // Read title and dimensions.
@@ -185,15 +172,15 @@ public class MapLoader {
         var titleAndMaybeWidthAndHeight = streamReader.getUint8ArrayAsByteArray(24);
         int maybeWidth = titleAndMaybeWidthAndHeight.getUint16(20);
         int maybeHeight = titleAndMaybeWidthAndHeight.getUint16(22);
-        printlnIfDebug(String.format(" -- Maybe width x height: %d x %d", maybeWidth, maybeHeight));
+        debug(String.format(" -- Maybe width x height: %d x %d", maybeWidth, maybeHeight));
 
         // Read terrain type
         mapFile.setTerrainType(TerrainType.fromUint8(streamReader.getUint8()));
-        printlnIfDebug(String.format(" -- Terrain type: %s", mapFile.getTerrainType()));
+        debug(String.format(" -- Terrain type: %s", mapFile.getTerrainType()));
 
         // Read number of players
         mapFile.setMaxNumberOfPlayers(streamReader.getUint8());
-        printlnIfDebug(String.format(" -- Number of players: %d", mapFile.getMaxNumberOfPlayers()));
+        debug(String.format(" -- Number of players: %d", mapFile.getMaxNumberOfPlayers()));
 
         if (mapFile.getMaxNumberOfPlayers() < 1) {
             throw new InvalidMapException("The map must contain at least one player");
@@ -201,7 +188,7 @@ public class MapLoader {
 
         // Read author
         mapFile.setAuthor(streamReader.getUint8ArrayAsNullTerminatedString(20));
-        printlnIfDebug(String.format(" -- Author: %s", mapFile.getAuthor()));
+        debug(String.format(" -- Author: %s", mapFile.getAuthor()));
 
         // Read starting positions
         var tmpStartingPositions = new ArrayList<Point>();
@@ -223,7 +210,7 @@ public class MapLoader {
             }
         }
 
-        printlnIfDebug(String.format(" -- Starting positions: %s", tmpStartingPositions));
+        debug(String.format(" -- Starting positions: %s", tmpStartingPositions));
 
         // Determine if the map is intended for unlimited play
         if (streamReader.getUint8() == 0) {
@@ -231,7 +218,7 @@ public class MapLoader {
         } else {
             mapFile.disableUnlimitedPlay();
         }
-        printlnIfDebug(String.format(" -- Unlimited play: %b", mapFile.isUnlimitedPlayEnabled()));
+        debug(String.format(" -- Unlimited play: %b", mapFile.isUnlimitedPlayEnabled()));
 
         // Read player faces
         var playerFaces = new ArrayList<PlayerFace>();
@@ -242,7 +229,7 @@ public class MapLoader {
             }
         }
         mapFile.setPlayerFaces(playerFaces);
-        playerFaces.forEach(face -> printlnIfDebug(String.format(" -- Player: %s", face.name())));
+        playerFaces.forEach(face -> debug(String.format(" -- Player: %s", face.name())));
 
         // Read starting points for unique water and land masses
         var masses = new ArrayList<UniqueMass>();
@@ -259,7 +246,7 @@ public class MapLoader {
                 mapFile.addMassStartingPoint(position);
             }
         }
-        printlnIfDebug(" -- Loaded starting points for water and land masses");
+        debug(" -- Loaded starting points for water and land masses");
 
 
         // Read map file identification
@@ -293,13 +280,13 @@ public class MapLoader {
         mapFile.setWidth(newWidth);
         mapFile.setHeight(newHeight);
         mapFile.setTitle(title);
-        printlnIfDebug(String.format(" -- Title type is: %s", mapFile.getTitleType()));
-        printlnIfDebug(String.format(" -- Title is: %s", title));
-        printlnIfDebug(String.format(" -- Width x height: %d x %d", newWidth, newHeight));
+        debug(String.format(" -- Title type is: %s", mapFile.getTitleType()));
+        debug(String.format(" -- Title is: %s", title));
+        debug(String.format(" -- Width x height: %d x %d", newWidth, newHeight));
 
         // Read height block header and data
         var heightBlockHeader = readBlockHeaderFromStream(streamReader);
-        printlnIfDebug(String.format(" -- Height block header: %s", heightBlockHeader));
+        debug(String.format(" -- Height block header: %s", heightBlockHeader));
 
         if (!heightBlockHeader.isValid()) {
             System.out.printf("Height block header is invalid: %s", heightBlockHeader);
@@ -325,7 +312,7 @@ public class MapLoader {
         // TODO: Handle fixed 01 00 if they appear
 
         long subBlockSize = heightBlockHeader.getMultiplier() * heightBlockHeader.getBlockLength();
-        printlnIfDebug(String.format(" -- Data size: %d", (int) subBlockSize));
+        debug(String.format(" -- Data size: %d", (int) subBlockSize));
 
         // Read heights block
         for (int i = 0; i < subBlockSize; i++) {
@@ -333,7 +320,7 @@ public class MapLoader {
             spot.setHeight(streamReader.getUint8());
             mapFile.addMapFilePoint(spot);
         }
-        printlnIfDebug(" -- Loaded heights");
+        debug(" -- Loaded heights");
 
         // Now that the MapFilePoints are added, set the native position for each one, as used in the original game
         int x = 0;
@@ -350,8 +337,7 @@ public class MapLoader {
         }
 
         // Read textures below
-        printlnIfDebug();
-        printIfDebug("Texture block 1: ");
+        debug("Texture block 1: ");
 
         // Read the header and verify that it matches the first header
         var texturesBelowBlockHeader = readBlockHeaderFromStream(streamReader);
@@ -359,7 +345,7 @@ public class MapLoader {
         if (!texturesBelowBlockHeader.equals(heightBlockHeader)) {
             throw new SettlersMapLoadingException("Header of block for upward triangles doesn't match. Exiting.");
         } else {
-            printlnIfDebug("Header for textures below matches");
+            debug("Header for textures below matches");
         }
 
         // Read the below texture for each point on the map
@@ -376,7 +362,7 @@ public class MapLoader {
         }
 
         // Read textures for down-pointing triangles
-        printIfDebug("Texture block 2: ");
+        debug("Texture block 2: ");
 
         // Read down-right textures header
         var texturesDownRightBlockHeader = readBlockHeaderFromStream(streamReader);
@@ -385,7 +371,7 @@ public class MapLoader {
         if (!texturesDownRightBlockHeader.equals(heightBlockHeader)) {
             throw new SettlersMapLoadingException("Header of block for downward triangles doesn't match. Exiting.");
         } else {
-            printlnIfDebug("Header for textures down right matches");
+            debug("Header for textures down right matches");
         }
 
         // Read textures
@@ -395,7 +381,7 @@ public class MapLoader {
         }
 
         // Read the fourth sub block fileHeader with roads
-        printIfDebug("Road block: ");
+        debug("Road block: ");
 
         // Read road block -- ignore for now
         var roadBlockHeader = readBlockHeaderFromStream(streamReader);
@@ -404,14 +390,14 @@ public class MapLoader {
         if (!roadBlockHeader.equals(heightBlockHeader)) {
             throw new SettlersMapLoadingException("Header of block for roads doesn't match. Exiting.");
         } else {
-            printlnIfDebug("Header for road block matches");
+            debug("Header for road block matches");
         }
 
         // Read roads -- ignore this block for now
         streamReader.skip((int) subBlockSize);
 
         // Read block with object properties
-        printIfDebug("Object property block: ");
+        debug("Object property block: ");
 
         // Read the block header
         var objectPropertiesBlockHeader = readBlockHeaderFromStream(streamReader);
@@ -427,7 +413,7 @@ public class MapLoader {
         }
 
         // Read object types
-        printIfDebug("Object type block: ");
+        debug("Object type block: ");
 
         // Read object types
         var objectTypesBlockHeader = readBlockHeaderFromStream(streamReader);
@@ -436,7 +422,7 @@ public class MapLoader {
         if (!objectTypesBlockHeader.equals(heightBlockHeader)) {
             throw new SettlersMapLoadingException("Header of block for object types doesn't match. Exiting.");
         } else {
-            printlnIfDebug("Header for object types matches");
+            debug("Header for object types matches");
         }
 
         // Read object types
@@ -445,7 +431,7 @@ public class MapLoader {
         }
 
         // Read animals
-        printIfDebug("Animals block: ");
+        debug("Animals block: ");
 
         // Read block header
         var wildAnimalsBlockHeader = readBlockHeaderFromStream(streamReader);
@@ -454,7 +440,7 @@ public class MapLoader {
         if (!wildAnimalsBlockHeader.equals(heightBlockHeader)) {
             throw new SettlersMapLoadingException("Header of block for wild animals doesn't match. Exiting.");
         } else {
-            printlnIfDebug("Header for wild animals matches");
+            debug("Header for wild animals matches");
         }
 
         // Read animals
@@ -466,7 +452,7 @@ public class MapLoader {
         }
 
         // Skip block with unknown data
-        printIfDebug("Unknown block: ");
+        debug("Unknown block: ");
 
         // Read block header
         var ignoredBlockHeader = readBlockHeaderFromStream(streamReader);
@@ -475,14 +461,14 @@ public class MapLoader {
         if (!ignoredBlockHeader.equals(heightBlockHeader)) {
             throw new SettlersMapLoadingException("Header of block for ignored block doesn't match. Exiting.");
         } else {
-            printlnIfDebug("Header for ignored block matches");
+            debug("Header for ignored block matches");
         }
 
         // Skip the block
         streamReader.skip((int) subBlockSize);
 
         // Read buildable sites
-        printIfDebug("Buildable sites block: ");
+        debug("Buildable sites block: ");
 
         // Read block header
         var buildableSitesBlockHeader = readBlockHeaderFromStream(streamReader);
@@ -491,7 +477,7 @@ public class MapLoader {
         if (!buildableSitesBlockHeader.equals(heightBlockHeader)) {
             throw new SettlersMapLoadingException("Header of block for buildable sites doesn't match. Exiting.");
         } else {
-            printlnIfDebug("Header for buildable sites matches");
+            debug("Header for buildable sites matches");
         }
 
         // Read the buildable sites
@@ -501,7 +487,7 @@ public class MapLoader {
         }
 
         // Skip tenth block with unknown data
-        printIfDebug("Second unknown block: ");
+        debug("Second unknown block: ");
 
         // Read block header
         var unknownBlockHeader = readBlockHeaderFromStream(streamReader);
@@ -510,14 +496,14 @@ public class MapLoader {
         if (!unknownBlockHeader.equals(heightBlockHeader)) {
             throw new SettlersMapLoadingException("Header of unknown block doesn't match. Exiting.");
         } else {
-            printlnIfDebug("Header for unknown block matches");
+            debug("Header for unknown block matches");
         }
 
         // Skip the block
         streamReader.skip((int) subBlockSize);
 
         // Skip the next block with map editor cursor position
-        printIfDebug("Map editor cursor position: ");
+        debug("Map editor cursor position: ");
 
         // Get block header
         var cursorPositionsBlockHeader = readBlockHeaderFromStream(streamReader);
@@ -526,14 +512,14 @@ public class MapLoader {
         if (!cursorPositionsBlockHeader.equals(heightBlockHeader)) {
             throw new SettlersMapLoadingException("Header of block for cursor positions doesn't match. Exiting.");
         } else {
-            printlnIfDebug("Header for cursor positions matches");
+            debug("Header for cursor positions matches");
         }
 
         // Skip the block
         streamReader.skip((int) subBlockSize);
 
         // Read the resources block
-        printIfDebug("Resource block: ");
+        debug("Resource block: ");
 
         // Get block header
         var resourcesBlockHeader = readBlockHeaderFromStream(streamReader);
@@ -542,7 +528,7 @@ public class MapLoader {
         if (!resourcesBlockHeader.equals(heightBlockHeader)) {
             throw new SettlersMapLoadingException("Header of resources block doesn't match. Exiting.");
         } else {
-            printlnIfDebug("Header for resources block matches");
+            debug("Header for resources block matches");
         }
 
         // Read the resources block
@@ -558,7 +544,7 @@ public class MapLoader {
         if (!gouraudBlockHeader.equals(heightBlockHeader)) {
             throw new SettlersMapLoadingException("Header of gouraud block doesn't match. Exiting.");
         } else {
-            printlnIfDebug("Header for gouraud block matches");
+            debug("Header for gouraud block matches");
         }
 
         // Skip gouraud block
@@ -571,7 +557,7 @@ public class MapLoader {
         if (!passableAreasBlockHeader.equals(heightBlockHeader)) {
             throw new SettlersMapLoadingException("Header of passable areas block doesn't match. Exiting.");
         } else {
-            printlnIfDebug("Header for passable areas block matches");
+            debug("Header for passable areas block matches");
         }
 
         // Skip passable areas block
@@ -615,7 +601,7 @@ public class MapLoader {
         var gamePointDimension = toGamePointDimension(mapFile.getDimension());
         var gameMap = new GameMap(players, gamePointDimension.width + 2, gamePointDimension.height + 2);
 
-        for (MapFilePoint mapFilePoint : mapFile.getMapFilePoints()) {
+        for (var mapFilePoint : mapFile.getMapFilePoints()) {
             var mapFilePosition = mapFilePoint.getPosition();
             org.appland.settlers.model.Point point = mapFilePositionToGamePoint(mapFilePosition, mapFile.getDimension());
 
@@ -649,6 +635,8 @@ public class MapLoader {
 
                 if (SUPPORTED_DECORATIONS.contains(decorationType)) {
                     gameMap.placeDecoration(point, decorationType);
+                } else {
+                    System.out.println("UNSUPPORTED DECORATION: " + decorationType);
                 }
             }
 
@@ -663,16 +651,16 @@ public class MapLoader {
             gameMap.setHeightAtPoint(point, mapFilePoint.getHeight());
         }
 
-        List<org.appland.settlers.model.Point> gamePointStartingPoints = mapFile.getStartingPoints().stream()
+        var gamePointStartingPoints = mapFile.getStartingPoints().stream()
                 .map(point -> mapFilePositionToGamePoint(point, mapFile.getDimension()))
                 .collect(Collectors.toList());
 
         gameMap.setStartingPoints(gamePointStartingPoints);
 
-        if (debug) {
+        if (debugFlag) {
             System.out.println(" -- Starting positions: ");
             mapFile.getGamePointStartingPoints().forEach(point ->
-                    printIfDebug(String.format("(%d, %d) ", point.x, point.y))
+                    debug(String.format("(%d, %d) ", point.x, point.y))
             );
         }
 

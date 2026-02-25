@@ -1337,7 +1337,7 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.waitForBuildingToBeConstructed(watchTower);
 
-        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 0);
+        assertEquals(player0.getNumberOfAvailableAttackers(headquarter1), 0);
 
         // Start monitoring, and add detailed monitoring for player 0 of player 1's headquarters
         var monitor = new Utils.GameViewMonitor();
@@ -1352,7 +1352,7 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.waitForMilitaryBuildingToGetPopulated(watchTower, 2);
 
-        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 1);
+        assertEquals(player0.getNumberOfAvailableAttackers(headquarter1), 1);
 
         var found = 0;
         for (var gameChangesList : monitor.getEvents()) {
@@ -1375,7 +1375,7 @@ public class TestGameMonitoringOfBuilding {
 
         map.stepTime();
 
-        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 2);
+        assertEquals(player0.getNumberOfAvailableAttackers(headquarter1), 2);
 
         for (var gameChangesList : monitor.getEvents()) {
             assertFalse(gameChangesList.changedBuildings().contains(headquarter1));
@@ -1412,7 +1412,7 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.waitForBuildingToBeConstructed(watchTower);
 
-        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 0);
+        assertEquals(player0.getNumberOfAvailableAttackers(headquarter1), 0);
 
         // Start monitoring
         var monitor = new Utils.GameViewMonitor();
@@ -1423,7 +1423,7 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.waitForMilitaryBuildingToGetPopulated(watchTower, 2);
 
-        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 1);
+        assertEquals(player0.getNumberOfAvailableAttackers(headquarter1), 1);
 
         // Add detailed monitoring for player 0 of player 1's headquarters
         player0.addDetailedMonitoring(headquarter1);
@@ -1482,7 +1482,7 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.waitForBuildingToBeConstructed(watchTower);
 
-        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 0);
+        assertEquals(player0.getNumberOfAvailableAttackers(headquarter1), 0);
 
         // Start monitoring
         var monitor = new Utils.GameViewMonitor();
@@ -1493,7 +1493,7 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.waitForMilitaryBuildingToGetPopulated(watchTower, 2);
 
-        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 1);
+        assertEquals(player0.getNumberOfAvailableAttackers(headquarter1), 1);
 
         // Add detailed monitoring for player 0 of player 1's headquarters
         player0.addDetailedMonitoring(headquarter1);
@@ -1547,7 +1547,7 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.waitForBuildingToBeConstructed(watchTower);
 
-        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 0);
+        assertEquals(player0.getNumberOfAvailableAttackers(headquarter1), 0);
 
         // Start monitoring
         var monitor = new Utils.GameViewMonitor();
@@ -1558,7 +1558,7 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.waitForMilitaryBuildingToGetPopulated(watchTower, 2);
 
-        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 1);
+        assertEquals(player0.getNumberOfAvailableAttackers(headquarter1), 1);
 
         // Add detailed monitoring for player 0 of player 1's headquarters
         player0.addDetailedMonitoring(headquarter1);
@@ -1570,7 +1570,7 @@ public class TestGameMonitoringOfBuilding {
 
         map.stepTime();
 
-        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 0);
+        assertEquals(player0.getNumberOfAvailableAttackers(headquarter1), 0);
         assertTrue(monitor.getLastEvent().changedBuildings().contains(headquarter1));
     }
 

@@ -8,17 +8,14 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.*;
@@ -2046,7 +2043,7 @@ public class TestMilitarySettings {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 9, fortress);
 
         // Order an attack
-        assertEquals(player1.getAvailableAttackersForBuilding(barracks0), 0);
+        assertEquals(player1.getNumberOfAvailableAttackers(barracks0), 0);
         assertFalse(player1.canAttack(barracks0));
 
         try {
@@ -2110,7 +2107,7 @@ public class TestMilitarySettings {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 9, fortress);
 
         // Order an attack
-        assertEquals(player1.getAvailableAttackersForBuilding(barracks0), 4);
+        assertEquals(player1.getNumberOfAvailableAttackers(barracks0), 4);
         assertTrue(player1.canAttack(barracks0));
 
         player1.attack(barracks0, 4, AttackStrength.STRONG);
@@ -2170,7 +2167,7 @@ public class TestMilitarySettings {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 9, fortress);
 
         // Order an attack
-        assertEquals(player1.getAvailableAttackersForBuilding(barracks0), 8);
+        assertEquals(player1.getNumberOfAvailableAttackers(barracks0), 8);
         assertTrue(player1.canAttack(barracks0));
 
         player1.attack(barracks0, 8, AttackStrength.STRONG);

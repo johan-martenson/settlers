@@ -6,20 +6,22 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.model.*;
-import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.InvalidUserActionException;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerChangeListener;
+import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.PlayerType;
+import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.appland.settlers.model.PlayerColor.BLUE;
 import static org.appland.settlers.model.PlayerColor.RED;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -54,7 +56,7 @@ public class TestPlayer {
     @Test
     public void testCreatePlayer() {
 
-        // Create player 'player one'
+        // Create game
         var player = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         assertEquals(player.getName(), "Player one");
@@ -64,7 +66,7 @@ public class TestPlayer {
     @Test
     public void testCreateHouseWithPlayer() {
 
-        // Create player 'player one'
+        // Create game
         var player = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         // Create house belonging to player one
@@ -76,7 +78,7 @@ public class TestPlayer {
     @Test
     public void testPlayerIsAlsoSetInBuildingsFlag() {
 
-        // Create player 'player one'
+        // Create game
         var player = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         // Create house belonging to player one
@@ -89,12 +91,9 @@ public class TestPlayer {
     @Test
     public void testPlayerCanOnlyCreateOneHeadquarter() throws Exception {
 
-        // Create player 'player one'
+        // Create game
         var player = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
-
-        // Create game map with one player
-        var players = new ArrayList<Player>();        players.add(player);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player), 50, 50);
 
         // Place first headquarter
         var point0 = new Point(5, 5);
@@ -116,12 +115,9 @@ public class TestPlayer {
     @Test
     public void testPlayerIsAlsoSetInRoad() throws Exception {
 
-        // Create player 'player one'
+        // Create game
         var player0 = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
-
-        // Create game map with one player
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 50);
 
         // Place first headquarter
         var point0 = new Point(5, 5);
@@ -140,12 +136,9 @@ public class TestPlayer {
     @Test
     public void testPlayerIsSetInDriveWay() throws Exception {
 
-        // Create player 'player one'
+        // Create game
         var player0 = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
-
-        // Create game map with one player
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 50);
 
         // Place first headquarter
         var point0 = new Point(5, 5);
@@ -164,12 +157,9 @@ public class TestPlayer {
     @Test
     public void testCannotPlaceBuildingWithInvalidPlayer() throws Exception {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -189,12 +179,9 @@ public class TestPlayer {
     @Test
     public void testCannotPlaceRoadWithInvalidPlayer() throws Exception {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -220,12 +207,9 @@ public class TestPlayer {
     @Test
     public void testCannotPlaceFlagWithInvalidPlayer() throws Exception {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -281,15 +265,13 @@ public class TestPlayer {
     @Test
     public void testCannotHaveTwoPlayersWithSameColor() {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
 
         // Verify that it's not possible to have two players with the same color
         try {
-            var map = new GameMap(players, 20, 20);
+            var map = new GameMap(List.of(player0, player1), 20, 20);
 
             fail();
         } catch (Exception e) {}
@@ -298,17 +280,13 @@ public class TestPlayer {
     @Test
     public void testPlayerDefaultNationIsRoman() throws InvalidUserActionException {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         assertEquals(player0.getNation(), Nation.ROMANS);
 
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        assertEquals(player0.getNation(), Nation.ROMANS);
-
         // Verify that it's not possible to have two players with the same color
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         assertEquals(player0.getNation(), Nation.ROMANS);
     }
@@ -316,19 +294,44 @@ public class TestPlayer {
     @Test
     public void testSetNationForPlayer() throws InvalidUserActionException {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         assertEquals(player0.getNation(), Nation.ROMANS);
 
         player0.setNation(Nation.VIKINGS);
 
-        var players = new ArrayList<Player>();        players.add(player0);
-
         assertEquals(player0.getNation(), Nation.VIKINGS);
 
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         assertEquals(player0.getNation(), Nation.VIKINGS);
+    }
+
+    @Test
+    public void testUpdatePlayer() {
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+
+        var listener = new PlayerChangeListener() {
+            boolean playerChanged = false;
+
+            @Override
+            public void onPlayerChanged() {
+                playerChanged = true;
+            }
+        };
+
+        // Listen to changes in the player
+        player0.addPlayerChangeListener(listener);
+
+        // Verify that updating the player sets the name, color, and nation
+        player0.update("Other name", Nation.JAPANESE, PlayerColor.RED);
+
+        assertEquals(player0.getName(), "Other name");
+        assertEquals(player0.getColor(), PlayerColor.RED);
+        assertEquals(player0.getNation(), Nation.JAPANESE);
+
+        // Verify that the listener was called
+        assertTrue(listener.playerChanged);
     }
 }

@@ -39,6 +39,7 @@ import org.appland.settlers.model.messages.StoreHouseIsReadyMessage;
 import org.appland.settlers.model.messages.TreeConservationProgramActivatedMessage;
 import org.appland.settlers.model.messages.TreeConservationProgramDeactivatedMessage;
 import org.appland.settlers.model.messages.UnderAttackMessage;
+import org.appland.settlers.model.utils.MilitaryUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,6 +55,7 @@ import java.util.stream.Stream;
 
 import static java.util.Map.entry;
 import static org.appland.settlers.model.Material.*;
+import static org.appland.settlers.model.utils.MilitaryUtils.*;
 
 /**
  * @author johan
@@ -232,6 +234,10 @@ public class Player {
         return buildings;
     }
 
+    public boolean isWithinBorder(Collection<Point> points) {
+        return ownedLand.containsAll(points);
+    }
+
     public boolean isWithinBorder(Point point) {
         return ownedLand.contains(point);
     }
@@ -254,7 +260,7 @@ public class Player {
         }
     }
 
-    public int getAvailableAttackersForBuilding(Building buildingToAttack) throws InvalidUserActionException {
+    public int getNumberOfAvailableAttackers(Building buildingToAttack) throws InvalidUserActionException {
         if (!buildingToAttack.isMilitaryBuilding()) {
             throw new InvalidUserActionException("Cannot get available attackers for non-military building");
         }
@@ -263,15 +269,14 @@ public class Player {
             throw new InvalidUserActionException("Cannot get available attackers for own building");
         }
 
-        // Count soldiers in military buildings that can reach the building
+        // Count soldiers in military buildings that can reach the building.
+        // Reserve one soldier in each building and apply attack availability setting.
         return (int) (getBuildings().stream()
                 .filter(Building::isMilitaryBuilding)
                 .filter(building -> building.canAttack(buildingToAttack))
-                .mapToInt(building -> building instanceof Headquarter headquarter
-                        ? headquarter.getAmount(PRIVATE) + headquarter.getAmount(PRIVATE_FIRST_CLASS)
-                        + headquarter.getAmount(SERGEANT) + headquarter.getAmount(OFFICER) + headquarter.getAmount(GENERAL)
-                        : Math.max(building.getNumberOfHostedSoldiers() - 1, 0))
+                .mapToInt(building -> Math.max(building.getNumberOfSoldiersAvailableForNewAttack(), 0))
                 .sum() * (amountSoldiersAvailableForAttack / 10.0));
+
     }
 
     public void attack(Building buildingToAttack, int nrAttackers, AttackStrength strength) throws InvalidUserActionException {
@@ -289,21 +294,24 @@ public class Player {
             throw new InvalidUserActionException("Cannot attack unoccupied building");
         }
 
+        var numberOfAvailableAttackers = getNumberOfAvailableAttackers(buildingToAttack);
+
+        // It's not possible to attack if there are no available attackers
+        if (numberOfAvailableAttackers == 0) {
+            throw new InvalidUserActionException("Player '%s' can't attack building '%s'".formatted(this, buildingToAttack));
+        }
+
         // Find buildings that can support the attack
         var eligibleBuildings = getBuildings().stream()
                 .filter(building -> building.isMilitaryBuilding()
                         && building.canAttack(buildingToAttack)
-                        && building.getNumberOfHostedSoldiers() >= 2)
+                        && building.getNumberOfSoldiersAvailableForNewAttack() > 0)
                 .toList();
 
         // Find soldiers that can do the attack
         var availableAttackers = new ArrayList<Soldier>();
 
         for (var building : eligibleBuildings) {
-            if (building.getNumberOfHostedSoldiers() < 2) {
-                continue;
-            }
-
             var availableAttackersFromBuilding = new ArrayList<Soldier>();
 
             if (building instanceof Headquarter headquarter) {
@@ -312,7 +320,7 @@ public class Player {
                     case WEAK -> 0;
                 };
 
-                GameUtils.strengthToRank(attackStrengthInt).forEach(rank -> {
+                strengthToRank(attackStrengthInt).forEach(rank -> {
                     for (int i = 0; i < headquarter.getAmount(rank.toMaterial()); i++) {
                         var attacker = new Soldier(this, rank, map);
 
@@ -324,7 +332,7 @@ public class Player {
                 });
             } else {
                 availableAttackersFromBuilding.addAll(building.getHostedSoldiers());
-                availableAttackersFromBuilding.sort(GameUtils.strengthSorter);
+                availableAttackersFromBuilding.sort(strengthSorter);
             }
 
             if (availableAttackersFromBuilding.isEmpty()) {
@@ -341,25 +349,20 @@ public class Player {
             availableAttackers.addAll(availableAttackersFromBuilding);
         }
 
-        var limitedAttackers = availableAttackers.subList(0, (int)((amountSoldiersAvailableForAttack / 10.0) * availableAttackers.size()));
-
-        // It's not possible to attack if there are no available attackers
-        if (limitedAttackers.isEmpty()) {
-            throw new InvalidUserActionException("Player '%s' can't attack building '%s'".formatted(this, buildingToAttack));
-        }
+        var limitedAttackers = availableAttackers.subList(0, Math.min(numberOfAvailableAttackers, availableAttackers.size()));
 
         // Sort primarily by strength and secondarily by distance
         var availableAttackersWithDistance = new ArrayList<>(limitedAttackers
                 .stream()
-                .map(soldier -> new GameUtils.SoldierAndDistance(
+                .map(soldier -> new MilitaryUtils.SoldierAndDistance(
                         soldier,
                         GameUtils.distanceInGameSteps(soldier.getPosition(), buildingToAttack.getPosition())))
                 .toList());
 
         if (strength == AttackStrength.STRONG) {
-            availableAttackersWithDistance.sort(GameUtils.strongerAndShorterDistanceSorter);
+            availableAttackersWithDistance.sort(strongerAndShorterDistanceSorter);
         } else {
-            availableAttackersWithDistance.sort(GameUtils.weakerAndShorterDistanceSorter);
+            availableAttackersWithDistance.sort(weakerAndShorterDistanceSorter);
         }
 
         // Run the attack with the most suitable soldiers
@@ -619,6 +622,14 @@ public class Player {
 
     public void setColor(PlayerColor color) {
         this.color = color;
+    }
+
+    public void update(String name, Nation nation, PlayerColor color) {
+        this.name = name;
+        this.color = color;
+        this.nation = nation;
+
+        playerChangeListeners.forEach(PlayerChangeListener::onPlayerChanged);
     }
 
     public void setName(String name) {
@@ -1320,7 +1331,7 @@ public class Player {
         }
 
         // Check that there are available attackers
-        if (getAvailableAttackersForBuilding(building) == 0) {
+        if (getNumberOfAvailableAttackers(building) == 0) {
             return false;
         }
 
@@ -1712,8 +1723,6 @@ public class Player {
     }
 
     public void reportNewFallingTree(Tree tree) {
-        System.out.println("Got new falling tree reported for " + name);
-
         newFallingTrees.add(tree);
     }
 

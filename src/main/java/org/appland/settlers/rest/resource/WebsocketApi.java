@@ -55,7 +55,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 
 import static org.appland.settlers.rest.resource.GameResources.GAME_RESOURCES;
@@ -81,7 +80,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
     public WebsocketApi() {
         System.out.println("CREATED NEW WEBSOCKET MONITOR");
 
-        GAME_RESOURCES.addAddedAndRemovedGamesListener(this);
+        //GAME_RESOURCES.addAddedAndRemovedGamesListener(this);
     }
 
     @Override
@@ -348,6 +347,11 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                                 "gameInformation", jsonUtils.gameToJson(gameToSet)
                         )));
             }
+
+            case CLEAR_GAME -> session.getUserProperties().remove("GAME");
+
+            case SET_CHEATING_ON_OFF -> game.setCheatingEnabled((Boolean) jsonBody.get("cheatingEnabled"));
+
             case SET_SELF_PLAYER -> {
                 var playerToSet = (Player) idManager.getObject((String) jsonBody.get("playerId"));
 
@@ -473,9 +477,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 var nation = Nation.valueOf((String) jsonBody.get("nation"));
 
                 synchronized (playerToUpdate) {
-                    playerToUpdate.setName(name);
-                    playerToUpdate.setPlayerColor(playerColor);
-                    playerToUpdate.setNation(nation);
+                    playerToUpdate.update(name, nation, playerColor);
 
                     sendToSession(session,
                             new JSONObject(Map.of(

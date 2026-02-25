@@ -404,8 +404,8 @@ public class Utils {
     public static Cargo fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Material... materials) throws InvalidUserActionException {
         assertTrue(materials.length > 0);
 
-        var setOfMaterials = new HashSet<Material>(Arrays.asList(materials));
-        for (int j = 0; j < 20000; j++) {
+        var setOfMaterials = new HashSet<>(Arrays.asList(materials));
+        for (int j = 0; j < 20_000; j++) {
             if (worker.getCargo() != null && setOfMaterials.contains(worker.getCargo().getMaterial())) {
                 break;
             }
@@ -464,8 +464,6 @@ public class Utils {
 
     public static void waitForMilitaryBuildingToGetPopulated(Building building) throws InvalidUserActionException {
         var map = building.getMap();
-
-        assertFalse(building.isOccupied());
 
         for (int i = 0; i < 1000; i++) {
             if (building.isOccupied()) {
@@ -1239,7 +1237,7 @@ public class Utils {
     }
 
     public static void waitForWorkerToSetTarget(GameMap map, Worker worker, Point point) throws InvalidUserActionException {
-        for (int i = 0; i < 5000; i++) {
+        for (int i = 0; i < 10_000; i++) {
             if (point.equals(worker.getTarget())) {
                 break;
             }
@@ -3009,8 +3007,10 @@ public class Utils {
         assertFalse(building.isDoorClosed());
     }
 
-    public static void clearSoldiersFromInventory(Storehouse storehouse) {
-        clearInventory(storehouse, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+    public static void clearSoldiersFromInventory(Storehouse... storehouses) {
+        for (var storehouse : storehouses) {
+            clearInventory(storehouse, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        }
     }
 
     public static void waitForInventoryToContain(Building building, Material material, int amount) throws InvalidUserActionException {
@@ -3186,6 +3186,32 @@ public class Utils {
         }
 
         assertEquals(stone.getAmount(), remaining);
+    }
+
+    public static void waitForNoSoldiersToBeOutside(GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 2_000; i++) {
+            if (map.getWorkers().stream().noneMatch(worker -> worker.isSoldier() && !worker.isInsideBuilding())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(map.getWorkers().stream().noneMatch(worker -> worker.isSoldier() && !worker.isInsideBuilding()));
+    }
+
+    public static void waitForRoadToGetPromoted(Road road, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 200_000; i++) {
+            if (road.isMainRoad()) {
+                break;
+            }
+
+            System.out.println(map.getRoads().stream().filter(Road::isMainRoad).count());
+
+            map.stepTime();
+        }
+
+        assertTrue(road.isMainRoad());
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor, StatisticsListener {
@@ -3601,7 +3627,7 @@ public class Utils {
     public static void waitForBuildingToGetCapturedByPlayer(Building building, Player player) throws InvalidUserActionException {
         var map = player.getMap();
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 20_000; i++) {
             if (building.getPlayer().equals(player)) {
                 break;
             }

@@ -326,7 +326,7 @@ public class Inspector {
     }
 
     public Inspector() throws IOException {
-        mapLoader.debug = debug;
+        mapLoader.debugFlag = debug;
 
         consoleWidth = TerminalBuilder.terminal().getWidth();
         consoleHeight = TerminalBuilder.terminal().getHeight();

@@ -12,14 +12,11 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.actors.Soldier;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.junit.Test;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
@@ -94,7 +91,7 @@ public class TestWinning {
         Utils.adjustInventoryTo(headquarter1, GENERAL, 0);
 
         // Order an attack
-        assertTrue(player0.getAvailableAttackersForBuilding(headquarter1) > 0);
+        assertTrue(player0.getNumberOfAvailableAttackers(headquarter1) > 0);
 
         player0.attack(headquarter1, 1, AttackStrength.STRONG);
 

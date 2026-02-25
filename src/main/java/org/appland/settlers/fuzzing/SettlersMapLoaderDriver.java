@@ -1,17 +1,8 @@
 package org.appland.settlers.fuzzing;
 
-import org.appland.settlers.assets.Nation;
 import org.appland.settlers.maps.InvalidMapException;
-import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.maps.MapLoader;
 import org.appland.settlers.maps.SettlersMapLoadingException;
-import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.PlayerColor;
-import org.appland.settlers.model.PlayerType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SettlersMapLoaderDriver {
 
@@ -19,14 +10,8 @@ public class SettlersMapLoaderDriver {
 
         try {
             var mapLoader = new MapLoader();
-
             var mapFile = mapLoader.loadMapFromFile(args[0]);
-
             var map = mapLoader.convertMapFileToGameMap(mapFile);
-
-            var players = new ArrayList<Player>();
-
-            players.add(new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN));
 
             map.stepTime();
         } catch (SettlersMapLoadingException | InvalidMapException e) {

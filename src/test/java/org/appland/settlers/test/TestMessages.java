@@ -3,28 +3,22 @@ package org.appland.settlers.test;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Projectile;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.actors.CatapultWorker;
 import org.appland.settlers.model.actors.Fisherman;
 import org.appland.settlers.model.actors.Geologist;
 import org.appland.settlers.model.actors.Miner;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.Stonemason;
-import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Bakery;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Brewery;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Catapult;
 import org.appland.settlers.model.buildings.CoalMine;
 import org.appland.settlers.model.buildings.Fishery;
@@ -51,7 +45,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import static org.appland.settlers.model.Vegetation.WATER;
 import static org.appland.settlers.model.Material.*;
@@ -585,7 +578,7 @@ public class TestMessages {
         // Verify that a message is sent to player 1 when it's attacked
         var amountMessagesBefore = player1.getMessages().size();
 
-        assertNotEquals(player0.getAvailableAttackersForBuilding(barracks1), 0);
+        assertNotEquals(player0.getNumberOfAvailableAttackers(barracks1), 0);
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
@@ -1290,7 +1283,7 @@ public class TestMessages {
         Utils.adjustInventoryTo(headquarter1, GENERAL, 0);
 
         // Order an attack
-        assertTrue(player0.getAvailableAttackersForBuilding(headquarter1) > 0);
+        assertTrue(player0.getNumberOfAvailableAttackers(headquarter1) > 0);
 
         player0.attack(headquarter1, 1, AttackStrength.STRONG);
 
@@ -1372,7 +1365,7 @@ public class TestMessages {
         Utils.adjustInventoryTo(headquarter1, GENERAL, 0);
 
         // Order an attack
-        assertTrue(player0.getAvailableAttackersForBuilding(headquarter1) > 0);
+        assertTrue(player0.getNumberOfAvailableAttackers(headquarter1) > 0);
 
         player0.attack(headquarter1, 1, AttackStrength.STRONG);
 
@@ -1466,7 +1459,7 @@ public class TestMessages {
         Utils.adjustInventoryTo(headquarter1, GENERAL, 0);
 
         // Order an attack
-        assertTrue(player0.getAvailableAttackersForBuilding(headquarter1) > 0);
+        assertTrue(player0.getNumberOfAvailableAttackers(headquarter1) > 0);
 
         player0.attack(headquarter1, 1, AttackStrength.STRONG);
 

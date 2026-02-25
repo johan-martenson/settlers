@@ -11,6 +11,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
+import org.appland.settlers.model.utils.InventoryUtils;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -41,7 +42,7 @@ public class Farmer extends Worker {
     private final Countdown countdown = new Countdown();
     private final ProductivityMeasurer productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_HARVEST + TIME_TO_PLANT, null);
 
-    private Optional<GameUtils.AllocationTracker> wheatAllocationTracker = Optional.empty();
+    private Optional<InventoryUtils.AllocationTracker> wheatAllocationTracker = Optional.empty();
     private State state = WALKING_TO_TARGET;
 
     protected enum State {
@@ -80,7 +81,7 @@ public class Farmer extends Worker {
         countdown.countFrom(TIME_TO_REST);
         productivityMeasurer.setBuilding(building);
 
-        wheatAllocationTracker = wheatAllocationTracker.or(() -> Optional.of(new GameUtils.AllocationTracker(GameUtils.AllocationType.WHEAT_ALLOCATION, player, building.getPosition())));
+        wheatAllocationTracker = wheatAllocationTracker.or(() -> Optional.of(new InventoryUtils.AllocationTracker(InventoryUtils.AllocationType.WHEAT_ALLOCATION, player, building.getPosition())));
     }
 
     @Override
@@ -198,7 +199,7 @@ public class Farmer extends Worker {
         switch (state) {
             case GOING_OUT_TO_PUT_CARGO -> {
                 carriedCargo.setPosition(position);
-                var receivingBuilding = GameUtils.getClosestBuildingConnectedByRoads(position, null, map, this::isWheatReceiverAndAllocationAllowed);
+                var receivingBuilding = GameUtils.findClosestBuildingViaRoads(position, map, null, this::isWheatReceiverAndAllocationAllowed);
 
                 if (receivingBuilding != null) {
                     carriedCargo.setTarget(receivingBuilding);

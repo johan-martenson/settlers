@@ -1,25 +1,20 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class TestCourierWalksOnItsOwnRoad {
 
@@ -62,10 +57,13 @@ public class TestCourierWalksOnItsOwnRoad {
         // Wait for the courier to carry cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
 
+        assertEquals(courier.getCargo().getMaterial(), PLANK);
         assertEquals(courier.getCargo().getTarget(), woodcutter);
 
         // Fill up the flag to make it impossible to deliver cargo the fast way
         Utils.placeCargos(map, STONE, 8, flag0, headquarter);
+
+        headquarter.blockDeliveryOfMaterial(STONE);
 
         // Wait for the courier to get blocked
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition().left());
@@ -80,22 +78,26 @@ public class TestCourierWalksOnItsOwnRoad {
         var courier1 = Utils.waitForRoadToGetAssignedCourier(map, road3);
 
         // Wait for the new courier to carry a cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier1);
+        Utils.waitForFlagToHaveCargoWaiting(map, headquarter.getFlag(), PLANK);
 
-        // Verify that the courier walks to the woodcutter following its own road
-        assertEquals(courier1.getPosition(), headquarter.getFlag().getPosition());
+        assertTrue(headquarter.getFlag().getStackedCargo().stream().anyMatch(c -> c.getMaterial().equals(PLANK)));
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier1, STONE);
+
+        // Verify that the courier walks following its own road
+        assertEquals(courier1.getPosition(), flag1.getPosition());
         assertNotNull(courier1.getCargo());
-        assertEquals(courier1.getCargo().getTarget(), woodcutter);
-        assertEquals(courier1.getTarget(), flag1.getPosition());
-        assertEquals(courier.getPosition(), flag0.getPosition().left());
+        assertEquals(courier1.getCargo().getMaterial(), STONE);
+        assertEquals(courier1.getCargo().getTarget(), headquarter);
+        assertEquals(courier1.getTarget(), headquarter.getPosition());
 
         Utils.verifyWorkerWalksOnPath(map, courier1,
-                headquarter.getFlag().getPosition(),
-                headquarter.getFlag().getPosition().downRight(),
-                headquarter.getFlag().getPosition().downRight().right(),
-                flag1.getPosition().downLeft().left(),
+                flag1.getPosition(),
                 flag1.getPosition().downLeft(),
-                flag1.getPosition());
+                flag1.getPosition().downLeft().left(),
+                headquarter.getFlag().getPosition().downRight().right(),
+                headquarter.getFlag().getPosition().downRight(),
+                headquarter.getFlag().getPosition());
     }
 
     @Test

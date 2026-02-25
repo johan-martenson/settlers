@@ -6,6 +6,7 @@ import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
@@ -18,6 +19,7 @@ import org.appland.settlers.model.actors.WellWorker;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.buildings.Well;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
@@ -2540,5 +2542,71 @@ public class TestRoads {
         assertTrue(map.getRoad(flag0.getPosition(), flag2.getPosition()).isMainRoad());
         assertTrue(map.getRoad(flag2.getPosition(), flag1.getPosition()).isMainRoad());
         assertEquals(flag2.getType(), Flag.FlagType.MAIN);
+    }
+
+    @Test
+    public void testCorrectRoadIsPromoted() throws InvalidUserActionException {
+
+        // Create game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 100);
+
+        // Place headquarters
+        var point0 = new Point(8, 10);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place flags
+        var point1 = new Point(8, 4);
+        var point2 = new Point(13, 11);
+        var flag0 = map.placeFlag(player0, point1);
+        var flag1 = map.placeFlag(player0, point2);
+
+        // Place three roads. First a long one, and then a short one
+        var road0 = map.placeRoad(player0,
+                headquarter.getFlag().getPosition(),
+                headquarter.getFlag().getPosition().upRight(),
+                headquarter.getFlag().getPosition().upRight().upLeft(),
+                headquarter.getFlag().getPosition().upRight().upLeft().upRight(),
+                headquarter.getFlag().getPosition().upRight().upLeft().upRight().upLeft(),
+                headquarter.getFlag().getPosition().upRight().upLeft().upRight().upLeft().upRight(),
+                headquarter.getFlag().getPosition().upRight().upLeft().upRight().upLeft().upRight().right(),
+                flag1.getPosition().upRight().upRight().upLeft().upRight().left(),
+                flag1.getPosition().upRight().upRight().upLeft().upRight(),
+                flag1.getPosition().upRight().upRight().upLeft(),
+                flag1.getPosition().upRight().upRight(),
+                flag1.getPosition().upRight(),
+                flag1.getPosition());
+        var road1 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag1);
+        var road2 = map.placeRoad(player0, headquarter.getFlag().getPosition(),
+                headquarter.getFlag().getPosition().downLeft(),
+                headquarter.getFlag().getPosition().downLeft().downRight(),
+                headquarter.getFlag().getPosition().downLeft().downRight().downRight(),
+                headquarter.getFlag().getPosition().downLeft().downRight().downRight().downLeft(),
+                headquarter.getFlag().getPosition().downLeft().downRight().downRight().downLeft().downRight(),
+                headquarter.getFlag().getPosition().downLeft().downRight().downRight().downLeft().downRight().right(),
+                flag1.getPosition().downRight().downRight().downLeft().downRight().left().downLeft().downRight(),
+                flag1.getPosition().downRight().downRight().downLeft().downRight().left().downLeft(),
+                flag1.getPosition().downRight().downRight().downLeft().downRight().left(),
+                flag1.getPosition().downRight().downRight().downLeft().downRight(),
+                flag1.getPosition().downRight().downRight().downLeft(),
+                flag1.getPosition().downRight().downRight(),
+                flag1.getPosition().downRight(),
+                flag1.getPosition());
+
+        // Place sawmill by flag 1
+        var sawmill = map.placeBuilding(new Sawmill(player0), flag1.getPosition().upLeft());
+
+        // Put a lot of wood into the headquarters
+        Utils.adjustInventoryTo(headquarter, WOOD, 200);
+
+        // Verify that the short road gets promoted and not the long ones
+        assertTrue(road1.getLength() < road0.getLength());
+        assertTrue(road1.getLength() < road2.getLength());
+
+        Utils.waitForRoadToGetPromoted(road1, map);
+
+        assertFalse(road0.isMainRoad());
+        assertTrue(road1.isMainRoad());
+        assertFalse(road2.isMainRoad());
     }
 }

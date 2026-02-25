@@ -13,7 +13,6 @@ import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.WoodcutterWorker;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.GuardHouse;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -26,7 +25,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -47,6 +45,46 @@ public class TestAttack {
      *  - Test attackers waiting can't stand on buildings
      *  - Test close soldiers that can't reach the enemy building
      *  - Test soldiers that are close but have to walk further to attack
+     *  - Tests for attack/defense state cleanup:
+     *    -
+     *  - Test that attack/defense state for houses is cleaned up after an attack is done / cancelled
+     *    - Ended with capture:
+     *      - waiting attackers and attackers:
+     *          - cleaned up by soldier?
+     *          - in next attack, defenders should try to fight soldiers who may not be involved in the attack
+     *          - house should still think it's under attack
+     *      - remote defenders:
+     *          - cleaned up by ??
+     *          - in next attack, house should fail to call for remote defenders
+     *          - in next attack, attackers should fail to take over empty building if remoteDefenders or ownDefender is not cleared properly
+     *      - waiting defenders: no effect for next attack
+     *      - own defender:
+     *          - cleaned up by ??
+     *          - in next attack, attackers should fail to take over empty building
+     *          - in next attack, attackers should assume there is already a primary attacker and thus no one should go and try to fight the own defender
+     *      - primary attacker:
+     *          - cleaned up by soldier?
+     *          - in next attack, defender will go out to meet no one
+     *    - Ended by defenders winning:
+     *      - waiting attackers and attackers:
+     *          - cleaned up by soldier?
+     *          - in next attack, defenders should try to fight soldiers who may not be involved in the attack
+     *          - house should still think it's under attack
+     *      - remote defenders:
+     *          - cleaned up by ??
+     *          - in next attack, house should fail to call for remote defenders
+     *          - in next attack, attackers should fail to take over empty building if remoteDefenders or ownDefender is not cleared properly
+     *      - waiting defenders: no effect for next attack
+     *      - own defender:
+     *      - primary attacker:
+     *          - cleaned up by soldier?
+     *          - in next attack, defender will go out to meet no one
+     *    - Ended by burning down the house:
+     *      - waiting attackers: ok
+     *      - attackers: ok
+     *      - remote defenders: ok
+     *      - own defender
+     *      - primary attacker: cleaned up by soldier?
      */
 
     @Test
@@ -68,8 +106,44 @@ public class TestAttack {
         // Verify that there are no available attackers for each player to attack the other
         assertFalse(player0.canAttack(headquarter1));
         assertFalse(player1.canAttack(headquarter0));
-        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 0);
-        assertEquals(player1.getAvailableAttackersForBuilding(headquarter0), 0);
+        assertEquals(player0.getNumberOfAvailableAttackers(headquarter1), 0);
+        assertEquals(player1.getNumberOfAvailableAttackers(headquarter0), 0);
+    }
+
+    @Test
+    public void testCanAttackDiffersFromAttackWhenHeadquarterIsOnlySource() throws Exception {
+
+        // Create player list with two players
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
+
+        // Place player 0's headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place player 1's headquarters
+        var point1 = new Point(37, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        // Keep attacker supply only in player 0's headquarters
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 1);
+
+        headquarter0.setReservedSoldiers(PRIVATE_RANK, 0);
+
+        // Place and occupy a military target for player 1
+        var point2 = new Point(21, 15);
+        var barracks1 = map.placeBuilding(new Barracks(player1), point2);
+        Utils.constructHouse(barracks1);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
+
+        // Verify that both canAttack returns true, and it's actually possible to attack
+        assertTrue(player0.canAttack(barracks1));
+        assertEquals(player0.getNumberOfAvailableAttackers(barracks1), 1);
+
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
     }
 
     @Test
@@ -100,7 +174,7 @@ public class TestAttack {
 
         // Verify that there are no available attackers for each player 0 to attack player 1
         assertFalse(player0.canAttack(headquarter1));
-        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 0);
+        assertEquals(player0.getNumberOfAvailableAttackers(headquarter1), 0);
     }
 
     @Test
@@ -127,7 +201,7 @@ public class TestAttack {
         assertFalse(player0.canAttack(woodcutter0));
 
         try {
-            player0.getAvailableAttackersForBuilding(woodcutter0);
+            player0.getNumberOfAvailableAttackers(woodcutter0);
 
             fail();
         } catch (Exception e) {}
@@ -157,7 +231,7 @@ public class TestAttack {
         assertFalse(player0.canAttack(barracks0));
 
         try {
-            player0.getAvailableAttackersForBuilding(barracks0);
+            player0.getNumberOfAvailableAttackers(barracks0);
 
             fail();
         } catch (Exception e) {}
@@ -202,7 +276,7 @@ public class TestAttack {
 
         // Verify that there are available attackers for player 0 to attack player 1's barracks
         assertTrue(player0.canAttack(barracks1));
-        assertEquals(player0.getAvailableAttackersForBuilding(barracks1), 1);
+        assertEquals(player0.getNumberOfAvailableAttackers(barracks1), 1);
     }
 
     @Test
@@ -250,7 +324,7 @@ public class TestAttack {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
 
         assertTrue(player0.canAttack(barracks1));
-        assertEquals(player0.getAvailableAttackersForBuilding(barracks1), 1);
+        assertEquals(player0.getNumberOfAvailableAttackers(barracks1), 1);
     }
 
     @Test
@@ -302,6 +376,490 @@ public class TestAttack {
     }
 
     @Test
+    public void testCaptureClearsPrimaryAttacker() throws Exception {
+
+        // Create player list with three players
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1, player2), 60, 60);
+
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point1 = new Point(21, 13);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point2 = new Point(31, 5);
+        var headquarter2 = map.placeBuilding(new Headquarter(player2), point2);
+
+        // Make player0 stronger
+        Utils.clearSoldiersFromInventory(headquarter0, headquarter1, headquarter2);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 5);
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 5);
+        Utils.adjustInventoryTo(headquarter2, GENERAL, 5);
+
+        // Place barracks
+        var point3 = new Point(13, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point3);
+        var point4 = new Point(21, 7);
+        var barracks1 = map.placeBuilding(new Barracks(player1), point4);
+        var point5 = new Point(27, 9);
+        var barracks2 = map.placeBuilding(new Barracks(player2), point5);
+
+        // Connect military buildings to each player's headquarters
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+        map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), barracks1.getFlag());
+        map.placeAutoSelectedRoad(player2, headquarter2.getFlag(), barracks2.getFlag());
+
+        // Wait for construction and occupancy
+        Utils.waitForBuildingToBeConstructed(barracks0);
+        Utils.waitForBuildingToBeConstructed(barracks1);
+        Utils.waitForBuildingToBeConstructed(barracks2);
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks1);
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks2);
+
+        for (int i = 0; i < 10000; i++) {
+            if (player0.getNumberOfAvailableAttackers(barracks1) >= 1) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(player0.getNumberOfAvailableAttackers(barracks1) >= 1);
+
+        // Let player 0 capture player 1's barracks
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
+        Utils.waitForBuildingToGetCapturedByPlayer(barracks1, player0);
+
+        // Verify that a new primary attack can start for player 2 after the capture
+        assertTrue(player2.canAttack(barracks1));
+        player2.attack(barracks1, 1, AttackStrength.STRONG);
+
+        var attacker = Utils.waitForSoldierOutsideBuilding(player2);
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+        var defender = Utils.waitForSoldierOutsideBuilding(player0);
+        assertNotNull(defender);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.waitForFightToStart(map, attacker, defender);
+    }
+
+    @Test
+    public void testCaptureClearsWaitingAttackers() throws Exception {
+
+        // Create player list with three players
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1, player2), 60, 60);
+
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point1 = new Point(21, 13);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point2 = new Point(31, 5);
+        var headquarter2 = map.placeBuilding(new Headquarter(player2), point2);
+
+        // Make player0 stronger
+        Utils.clearSoldiersFromInventory(headquarter0, headquarter1, headquarter2);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 5);
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 5);
+        Utils.adjustInventoryTo(headquarter2, GENERAL, 5);
+
+        // Place barracks
+        var point3 = new Point(13, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point3);
+        var point4 = new Point(21, 7);
+        var barracks1 = map.placeBuilding(new Barracks(player1), point4);
+        var point5 = new Point(27, 9);
+        var barracks2 = map.placeBuilding(new Barracks(player2), point5);
+
+        // Connect military buildings to each player's headquarters
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+        map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), barracks1.getFlag());
+        map.placeAutoSelectedRoad(player2, headquarter2.getFlag(), barracks2.getFlag());
+
+        // Wait for construction and occupancy
+        Utils.waitForBuildingToBeConstructed(barracks0);
+        Utils.waitForBuildingToBeConstructed(barracks1);
+        Utils.waitForBuildingToBeConstructed(barracks2);
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks1);
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks2);
+
+        for (int i = 0; i < 10000; i++) {
+            if (player0.getNumberOfAvailableAttackers(barracks1) >= 2) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(player0.getNumberOfAvailableAttackers(barracks1) >= 2);
+
+        // Use two attackers so one attacker waits during the first attack cycle
+        player0.attack(barracks1, 2, AttackStrength.STRONG);
+        Utils.waitForBuildingToGetCapturedByPlayer(barracks1, player0);
+
+        // Verify that player 0 has no stale outside attackers left after the capture transition
+        for (int i = 0; i < 200; i++) {
+            map.stepTime();
+        }
+
+        var staleOutsideAttacker = Utils.findSoldierOutsideBuilding(player0);
+        assertNull(staleOutsideAttacker);
+
+        // Verify that a fresh attack cycle by player 2 works
+        player2.attack(barracks1, 1, AttackStrength.STRONG);
+        var attacker = Utils.waitForSoldierOutsideBuilding(player2);
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+        var defender = Utils.waitForSoldierOutsideBuilding(player0);
+        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.waitForFightToStart(map, attacker, defender);
+    }
+
+    @Test
+    public void testCaptureClearsWaitingDefenders() throws Exception {
+
+        // Create player list with three players
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1, player2), 60, 60);
+
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point1 = new Point(21, 13);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point2 = new Point(31, 5);
+        var headquarter2 = map.placeBuilding(new Headquarter(player2), point2);
+
+        // Make player0 stronger
+        Utils.clearSoldiersFromInventory(headquarter0, headquarter1, headquarter2);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 5);
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 5);
+        Utils.adjustInventoryTo(headquarter2, GENERAL, 5);
+
+        // Place barracks
+        var point3 = new Point(13, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point3);
+        var point4 = new Point(21, 7);
+        var barracks1 = map.placeBuilding(new Barracks(player1), point4);
+        var point5 = new Point(27, 9);
+        var barracks2 = map.placeBuilding(new Barracks(player2), point5);
+
+        // Connect military buildings to each player's headquarters
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+        map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), barracks1.getFlag());
+        map.placeAutoSelectedRoad(player2, headquarter2.getFlag(), barracks2.getFlag());
+
+        // Wait for construction and occupancy
+        Utils.waitForBuildingToBeConstructed(barracks0);
+        Utils.waitForBuildingToBeConstructed(barracks1);
+        Utils.waitForBuildingToBeConstructed(barracks2);
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks1);
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks2);
+
+        // Capture target building
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
+        Utils.waitForBuildingToGetCapturedByPlayer(barracks1, player0);
+
+        // Verify that a fresh defense cycle works after capture
+        player2.attack(barracks1, 1, AttackStrength.STRONG);
+        var attacker = Utils.waitForSoldierOutsideBuilding(player2);
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        var defender = Utils.waitForSoldierOutsideBuilding(player0);
+        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.waitForFightToStart(map, attacker, defender);
+    }
+
+    @Test
+    public void testSecondAttackIsPerformedProperly() throws Exception {
+
+        // Create player list with three players
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1, player2), 60, 60);
+
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point1 = new Point(21, 13);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point2 = new Point(31, 5);
+        var headquarter2 = map.placeBuilding(new Headquarter(player2), point2);
+
+        // Make player0 and player2 stronger
+        Utils.clearSoldiersFromInventory(headquarter0, headquarter1, headquarter2);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 5);
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 5);
+        Utils.adjustInventoryTo(headquarter2, GENERAL, 5);
+
+        // Place barracks
+        var point3 = new Point(13, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point3);
+        var point4 = new Point(21, 7);
+        var barracks1 = map.placeBuilding(new Barracks(player1), point4);
+        var point5 = new Point(27, 9);
+        var barracks2 = map.placeBuilding(new Barracks(player2), point5);
+
+        // Connect military buildings to each player's headquarters
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+        map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), barracks1.getFlag());
+        map.placeAutoSelectedRoad(player2, headquarter2.getFlag(), barracks2.getFlag());
+
+        // Wait for construction and occupancy
+        Utils.waitForBuildingToBeConstructed(barracks0);
+        Utils.waitForBuildingToBeConstructed(barracks1);
+        Utils.waitForBuildingToBeConstructed(barracks2);
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks1);
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks2);
+
+        // Let player 0 capture player 1's barracks
+        assertTrue(player0.canAttack(barracks1));
+
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
+
+        Utils.waitForBuildingToGetCapturedByPlayer(barracks1, player0);
+
+        // Launch the second attack
+        assertTrue(player2.canAttack(barracks1));
+
+        player2.attack(barracks1, 1, AttackStrength.STRONG);
+
+        // Verify that the primary attacker is from player 2
+
+        // Verify that player0's soldiers don't get involved
+
+        // Verify that player1's soldiers defend, both from the barracks and the headquarters
+        fail();
+
+        // Verify there are no lingering attackers from the old conflict
+        assertFalse(barracks1.isUnderAttack());
+
+        // Verify a new conflict can start and transitions to under attack again
+        assertTrue(player2.canAttack(barracks1));
+
+        player2.attack(barracks1, 1, AttackStrength.STRONG);
+
+        map.stepTime();
+
+        assertTrue(barracks1.isUnderAttack());
+    }
+
+    @Test
+    public void testCaptureClearsRemoteDefenders() throws Exception {
+
+        // Create player list with three players
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1, player2), 60, 60);
+
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point1 = new Point(21, 13);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point2 = new Point(31, 5);
+        var headquarter2 = map.placeBuilding(new Headquarter(player2), point2);
+
+        // Make player0 stronger
+        Utils.clearSoldiersFromInventory(headquarter0, headquarter1, headquarter2);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 5);
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 5);
+        Utils.adjustInventoryTo(headquarter2, GENERAL, 5);
+
+        // Place barracks
+        var point3 = new Point(13, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point3);
+        var point4 = new Point(21, 7);
+        var barracks1 = map.placeBuilding(new Barracks(player1), point4);
+        var point5 = new Point(27, 9);
+        var barracks2 = map.placeBuilding(new Barracks(player2), point5);
+        var point6 = new Point(27, 23);
+        var barracks1b = map.placeBuilding(new Barracks(player1), point6);
+
+        // Connect military buildings to each player's headquarters
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+        map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), barracks1.getFlag());
+        map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), barracks1b.getFlag());
+        map.placeAutoSelectedRoad(player2, headquarter2.getFlag(), barracks2.getFlag());
+
+        // Wait for construction and occupancy
+        Utils.waitForBuildingToBeConstructed(barracks0);
+        Utils.waitForBuildingToBeConstructed(barracks1);
+        Utils.waitForBuildingToBeConstructed(barracks1b);
+        Utils.waitForBuildingToBeConstructed(barracks2);
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks1);
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks1b);
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks2);
+
+        // Let player 0 capture player 1's barracks
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
+        Utils.waitForBuildingToGetCapturedByPlayer(barracks1, player0);
+
+        // Start a new attack from player 2 and verify old owner does not defend this building anymore
+        player2.attack(barracks1, 1, AttackStrength.STRONG);
+        var attacker = Utils.waitForSoldierOutsideBuilding(player2);
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+        for (int i = 0; i < 200; i++) {
+            var soldierFromOldOwner = Utils.findSoldierOutsideBuilding(player1);
+            if (soldierFromOldOwner != null) {
+                assertNotEquals(soldierFromOldOwner.getTarget(), attacker.getPosition());
+                assertNotEquals(soldierFromOldOwner.getTarget(), barracks1.getFlag().getPosition());
+            }
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testCaptureClearsOwnDefender() throws Exception {
+
+        // Create player list with three players
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1, player2), 60, 60);
+
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point1 = new Point(21, 13);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point2 = new Point(31, 5);
+        var headquarter2 = map.placeBuilding(new Headquarter(player2), point2);
+
+        // Make player0 stronger
+        Utils.clearSoldiersFromInventory(headquarter0, headquarter1, headquarter2);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 5);
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 5);
+        Utils.adjustInventoryTo(headquarter2, GENERAL, 5);
+
+        // Place barracks
+        var point3 = new Point(13, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point3);
+        var point4 = new Point(21, 7);
+        var barracks1 = map.placeBuilding(new Barracks(player1), point4);
+        var point5 = new Point(27, 9);
+        var barracks2 = map.placeBuilding(new Barracks(player2), point5);
+
+        // Connect military buildings to each player's headquarters
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+        map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), barracks1.getFlag());
+        map.placeAutoSelectedRoad(player2, headquarter2.getFlag(), barracks2.getFlag());
+
+        // Wait for construction and occupancy
+        Utils.waitForBuildingToBeConstructed(barracks0);
+        Utils.waitForBuildingToBeConstructed(barracks1);
+        Utils.waitForBuildingToBeConstructed(barracks2);
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks1);
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks2);
+
+        // Capture with player 0
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
+        Utils.waitForBuildingToGetCapturedByPlayer(barracks1, player0);
+
+        // Verify own defender behavior via a fresh attack after capture
+        player2.attack(barracks1, 1, AttackStrength.STRONG);
+        var attacker = Utils.waitForSoldierOutsideBuilding(player2);
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        var defender = Utils.waitForSoldierOutsideBuilding(player0);
+        assertNotNull(defender);
+        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.waitForFightToStart(map, attacker, defender);
+    }
+
+    @Test
+    public void testCaptureLeavesFreshAttackStateForNewConflict() throws Exception {
+
+        // Create player list with three players
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1, player2), 100, 100);
+
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point1 = new Point(35, 13);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point2 = new Point(51, 5);
+        var headquarter2 = map.placeBuilding(new Headquarter(player2), point2);
+
+        // Place barracks
+        var point3 = new Point(19, 5);
+        var guardHouse0 = map.placeBuilding(new GuardHouse(player0), point3);
+        var point4 = new Point(23, 13);
+        var guardHouse1 = map.placeBuilding(new GuardHouse(player1), point4);
+        var point5 = new Point(41, 5);
+        var guardHouse2 = map.placeBuilding(new GuardHouse(player2), point5);
+
+        // Ensure player 0 has 1 private, player 1 has a sergeant, player 2 has a general
+        Utils.clearSoldiersFromInventory(headquarter0, headquarter1, headquarter2);
+        Utils.adjustInventoryTo(headquarter0, SERGEANT, 5);
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 1);
+        Utils.adjustInventoryTo(headquarter2, GENERAL, 5);
+
+        // Connect military buildings to each player's headquarters
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
+        map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), guardHouse1.getFlag());
+        map.placeAutoSelectedRoad(player2, headquarter2.getFlag(), guardHouse2.getFlag());
+
+        // Wait for construction and occupancy
+        Utils.waitForBuildingToBeConstructed(guardHouse0);
+        Utils.waitForBuildingToBeConstructed(guardHouse1);
+        Utils.waitForBuildingToBeConstructed(guardHouse2);
+        Utils.waitForMilitaryBuildingToGetPopulated(guardHouse0);
+        Utils.waitForMilitaryBuildingToGetPopulated(guardHouse1);
+        Utils.waitForMilitaryBuildingToGetPopulated(guardHouse2);
+
+        // First conflict and capture
+        assertTrue(player0.canAttack(guardHouse1));
+
+        player0.attack(guardHouse1, 2, AttackStrength.STRONG);
+
+        Utils.waitForBuildingToGetCapturedByPlayer(guardHouse1, player0);
+
+        // Wait for all soldiers to go back inside
+        Utils.waitForNoSoldiersToBeOutside(map);
+
+        // Second conflict after capture
+        assertTrue(player2.canAttack(guardHouse1));
+
+        player2.attack(guardHouse1, 1, AttackStrength.STRONG);
+
+        var attacker2 = Utils.waitForSoldierOutsideBuilding(player2);
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker2, guardHouse1.getFlag().getPosition());
+
+        var defender2 = Utils.waitForSoldierOutsideBuilding(player0);
+        Utils.fastForwardUntilWorkerReachesPoint(map, defender2, attacker2.getPosition());
+        Utils.waitForFightToStart(map, attacker2, defender2);
+
+        // Verify the game remains stable through a full additional cycle
+        for (int i = 0; i < 300; i++) {
+            map.stepTime();
+        }
+
+        assertTrue(guardHouse1.getPlayer().equals(player0) || guardHouse1.getPlayer().equals(player2));
+    }
+
+    @Test
     public void testTwoAvailableAttackersForGuardHouseCloseToEnemyBarracks() throws Exception {
 
         // Create player list with two players
@@ -339,7 +897,7 @@ public class TestAttack {
 
         // Verify that there are available attackers for player 0 to attack player 1's barracks
         assertTrue(player0.canAttack(barracks1));
-        assertEquals(player0.getAvailableAttackersForBuilding(barracks1), 2);
+        assertEquals(player0.getNumberOfAvailableAttackers(barracks1), 2);
     }
 
     @Test
@@ -3577,7 +4135,7 @@ public class TestAttack {
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress0);
 
         // Verify that it's possible to attack the headquarters
-        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 8);
+        assertEquals(player0.getNumberOfAvailableAttackers(headquarter1), 8);
 
         // Capture the player 1's headquarters
         assertTrue(player0.canAttack(headquarter1));
@@ -3656,7 +4214,7 @@ public class TestAttack {
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress0);
 
         // Verify that it's possible to attack the headquarters
-        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 8);
+        assertEquals(player0.getNumberOfAvailableAttackers(headquarter1), 8);
 
         // Capture the player 1's headquarters
         assertTrue(player0.canAttack(headquarter1));
@@ -3732,7 +4290,7 @@ public class TestAttack {
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress0);
 
         // Verify that it's possible to attack the headquarters
-        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 8);
+        assertEquals(player0.getNumberOfAvailableAttackers(headquarter1), 8);
 
         // Capture the player 1's headquarters
         assertTrue(player0.canAttack(headquarter1));
@@ -4212,7 +4770,7 @@ public class TestAttack {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress1);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress1);
 
-        assertEquals(player0.getAvailableAttackersForBuilding(barracks1), 16);
+        assertEquals(player0.getNumberOfAvailableAttackers(barracks1), 16);
 
         // Order an attack
         assertTrue(player0.canAttack(barracks1));
@@ -4515,7 +5073,7 @@ public class TestAttack {
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress0);
 
         // Verify that it's possible to attack the headquarters
-        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 8);
+        assertEquals(player0.getNumberOfAvailableAttackers(headquarter1), 8);
 
         // Capture the player 1's headquarters
         assertTrue(player0.canAttack(headquarter1));
@@ -6268,5 +6826,38 @@ public class TestAttack {
 
         // Verify that the game didn't crash
         map.stepTime();
+    }
+
+    @Test
+    public void testAvailableAttackersFromHeadquarters() throws Exception {
+
+        // Create player list with three players
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 100);
+
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Ensure player 0 has 1 private, player 1 has a sergeant, player 2 has a general
+        Utils.clearSoldiersFromInventory(headquarter0);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 3);
+
+        // Verify that the number of attackers depends on the reserves in the headquarters
+        headquarter0.setReservedSoldiers(PRIVATE_RANK, 3);
+
+        assertEquals(headquarter0.getNumberOfSoldiersAvailableForNewAttack(), 0);
+
+        headquarter0.setReservedSoldiers(PRIVATE_RANK, 2);
+
+        assertEquals(headquarter0.getNumberOfSoldiersAvailableForNewAttack(), 1);
+
+        headquarter0.setReservedSoldiers(PRIVATE_RANK, 1);
+
+        assertEquals(headquarter0.getNumberOfSoldiersAvailableForNewAttack(), 2);
+
+        headquarter0.setReservedSoldiers(PRIVATE_RANK, 0);
+
+        assertEquals(headquarter0.getNumberOfSoldiersAvailableForNewAttack(), 3);
     }
 }

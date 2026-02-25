@@ -11,6 +11,7 @@ import org.appland.settlers.model.ResourceLevel;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.StorehouseWorker;
+import org.appland.settlers.model.utils.InventoryUtils;
 import org.appland.settlers.policy.InitialState;
 
 import java.util.ArrayList;
@@ -304,11 +305,11 @@ public class Headquarter extends Storehouse {
 
         statisticsManager.getPlayerStatistics(getPlayer())
                 .workers()
-                .report(map.getTime(), GameUtils.countWorkersInInventory(this));
+                .report(map.getTime(), InventoryUtils.countWorkersInInventory(this));
 
         statisticsManager.getPlayerStatistics(getPlayer())
                 .goods()
-                .report(map.getTime(), GameUtils.countGoodsInInventory(this));
+                .report(map.getTime(), InventoryUtils.countGoodsInInventory(this));
     }
 
     private void setHeadquarterDefaultInventory(Map<Material, Integer> inventory) {

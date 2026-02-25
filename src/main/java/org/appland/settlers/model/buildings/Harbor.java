@@ -2,21 +2,19 @@ package org.appland.settlers.model.buildings;
 
 import org.appland.settlers.model.BorderChangeCause;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.actors.Ship;
 import org.appland.settlers.model.actors.StorehouseWorker;
 import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.utils.InventoryUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -69,7 +67,7 @@ public class Harbor extends Storehouse {
 
             int amountToUse = Math.min(getAmount(material), requiredAmount);
 
-            GameUtils.retrieveCargos(this, material, amountToUse);
+            InventoryUtils.retrieveCargos(this, material, amountToUse);
             materialForNextExpedition.put(material, amountToUse);
         }
 

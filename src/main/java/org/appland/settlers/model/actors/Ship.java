@@ -13,6 +13,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Harbor;
+import org.appland.settlers.model.utils.InventoryUtils;
 
 import java.util.Comparator;
 import java.util.HashSet;
@@ -201,8 +202,8 @@ public class Ship extends Worker {
         builder.setTargetBuilding(newHarbor);
         newHarbor.promiseBuilder(builder);
 
-        GameUtils.putCargos(PLANK, 4, newHarbor);
-        GameUtils.putCargos(STONE, 6, newHarbor);
+        InventoryUtils.putCargos(PLANK, 4, newHarbor);
+        InventoryUtils.putCargos(STONE, 6, newHarbor);
 
         cargos.clear();
         newHarbor.setOwnSettlement();

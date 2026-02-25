@@ -16,7 +16,6 @@ import org.appland.settlers.model.buildings.Storehouse;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -513,6 +512,9 @@ public class Courier extends Worker {
     }
 
     private void pickUpCargoAndGoDeliver(Cargo cargoToPickUp) {
+        System.out.println("PICK UP AT: " + position);
+        System.out.println("FLAG: " + map.getFlagAtPoint(position).getStackedCargo());
+
         var point = getPosition();
         var endPoint = map.getFlagAtPoint(point);
 
@@ -532,6 +534,8 @@ public class Courier extends Worker {
             endPoint.retrieveCargo(cargoToPickUp);
             setCargo(cargoToPickUp);
         }
+
+        System.out.println("CARGO: " + carriedCargo);
 
         // Deliver the cargo to the other flag or all the way to the building
         deliverToFlagOrBuilding(getCargo());

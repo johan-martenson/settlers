@@ -22,7 +22,6 @@ import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.TransportCategory;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Ship;
@@ -146,7 +145,8 @@ public class JsonUtils {
                 "players", playersToJson(gameResource.getPlayers(), gameResource),
                 "status", gameResource.status.name().toUpperCase(),
                 "initialResources", gameResource.getResources().name().toUpperCase(),
-                "othersCanJoin", gameResource.getOthersCanJoin()
+                "othersCanJoin", gameResource.getOthersCanJoin(),
+                "cheatingEnabled", gameResource.getCheatingEnabled()
         ));
 
         var mapFile = gameResource.getMapFile();
@@ -414,7 +414,7 @@ public class JsonUtils {
         }
 
         if (!building.getPlayer().equals(player) && building.isMilitaryBuilding() && building.isOccupied()) {
-            int availableAttackers = player.getAvailableAttackersForBuilding(building);
+            int availableAttackers = player.getNumberOfAvailableAttackers(building);
 
             jsonHouse.put("availableAttackers", availableAttackers);
         }
@@ -764,13 +764,13 @@ public class JsonUtils {
     }
 
     JSONObject geologistFindMessageToJson(GeologistFindMessage geologistFindMessage) {
-        var jsonGeologistFindPoint = pointToJson(geologistFindMessage.point());
+        var jsonPoint = pointToJson(geologistFindMessage.point());
 
         return new JSONObject(Map.of(
                 "id", idManager.getId(geologistFindMessage),
                 "type", GEOLOGIST_FIND.toString(),
                 "isRead", geologistFindMessage.isRead(),
-                "point", jsonGeologistFindPoint,
+                "point", jsonPoint,
                 "material", geologistFindMessage.material().toString()
         ));
     }
@@ -1124,14 +1124,14 @@ public class JsonUtils {
         return new JSONObject(Map.of(
                 "type", TREE_CONSERVATION_PROGRAM_DEACTIVATED.toString(),
                 "isRead", message.isRead()
-                ));
+        ));
     }
 
     private JSONObject treeConservationProgramActivatedMessageToJson(TreeConservationProgramActivatedMessage message) {
         return new JSONObject(Map.of(
                 "type", TREE_CONSERVATION_PROGRAM_ACTIVATED.toString(),
                 "isRead", message.isRead()
-                ));
+        ));
     }
 
     private JSONArray availableConstructionChangesToJson(Collection<Point> changedAvailableConstruction, Player player) {
@@ -1352,7 +1352,7 @@ public class JsonUtils {
         synchronized (map) {
             var discoveredLand = player.getDiscoveredLand();
 
-            for (Building building : map.getBuildings()) {
+            for (var building : map.getBuildings()) {
                 if (!discoveredLand.contains(building.getPosition())) {
                     continue;
                 }

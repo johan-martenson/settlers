@@ -1,73 +1,28 @@
 package org.appland.settlers.model;
 
-import org.appland.settlers.model.actors.Armorer;
-import org.appland.settlers.model.actors.Baker;
-import org.appland.settlers.model.actors.Brewer;
-import org.appland.settlers.model.actors.Builder;
-import org.appland.settlers.model.actors.Butcher;
-import org.appland.settlers.model.actors.CatapultWorker;
-import org.appland.settlers.model.actors.Courier;
-import org.appland.settlers.model.actors.Donkey;
-import org.appland.settlers.model.actors.DonkeyBreeder;
-import org.appland.settlers.model.actors.Farmer;
-import org.appland.settlers.model.actors.Fisherman;
-import org.appland.settlers.model.actors.Forester;
-import org.appland.settlers.model.actors.Geologist;
-import org.appland.settlers.model.actors.Hunter;
-import org.appland.settlers.model.actors.IronFounder;
-import org.appland.settlers.model.actors.Metalworker;
-import org.appland.settlers.model.actors.Miller;
-import org.appland.settlers.model.actors.Miner;
-import org.appland.settlers.model.actors.Minter;
-import org.appland.settlers.model.actors.PigBreeder;
-import org.appland.settlers.model.actors.Carpenter;
-import org.appland.settlers.model.actors.Scout;
-import org.appland.settlers.model.actors.Shipwright;
-import org.appland.settlers.model.actors.Soldier;
-import org.appland.settlers.model.actors.Stonemason;
-import org.appland.settlers.model.actors.StorehouseWorker;
-import org.appland.settlers.model.actors.WellWorker;
-import org.appland.settlers.model.actors.WoodcutterWorker;
-import org.appland.settlers.model.actors.Worker;
-import org.appland.settlers.model.buildings.Armory;
-import org.appland.settlers.model.buildings.Bakery;
-import org.appland.settlers.model.buildings.Brewery;
 import org.appland.settlers.model.buildings.Building;
-import org.appland.settlers.model.buildings.CoalMine;
-import org.appland.settlers.model.buildings.DonkeyFarm;
-import org.appland.settlers.model.buildings.GoldMine;
-import org.appland.settlers.model.buildings.GraniteMine;
 import org.appland.settlers.model.buildings.Harbor;
 import org.appland.settlers.model.buildings.Headquarter;
-import org.appland.settlers.model.buildings.IronMine;
-import org.appland.settlers.model.buildings.Metalworks;
-import org.appland.settlers.model.buildings.Mill;
-import org.appland.settlers.model.buildings.Mint;
-import org.appland.settlers.model.buildings.PigFarm;
 import org.appland.settlers.model.buildings.Storehouse;
+import org.appland.settlers.model.utils.Search;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static java.lang.Math.*;
 import static java.lang.String.format;
 import static org.appland.settlers.model.Direction.*;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.*;
+import static org.appland.settlers.model.utils.Search.*;
 
 /**
  *
@@ -75,49 +30,33 @@ import static org.appland.settlers.model.actors.Soldier.Rank.*;
  */
 public class GameUtils {
 
-    /**
-     * Sorts a list of soldiers based on the preferred strength, expressed as a value from 0 to 10.
-     *
-     * @param soldiers List of soldiers to be sorted.
-     * @param strength Preferred strength of soldiers
-     * @return A new list of soldiers sorted by preferred rank.
-     */
-    public static List<Soldier> sortSoldiersByPreferredStrength(List<Soldier> soldiers, int strength) {
-        return soldiers.stream()
-                .sorted((soldier0, soldier1) -> {
-                    var prefRankList = GameUtils.strengthToRank(strength);
+    public static <T extends Building> T findClosestBuildingViaRoads(
+            Point start,
+            GameMap map,
+            Building avoid,
+            Function<Building, Boolean> predicate
+    ) {
+        return dijkstraClosest(
+                start,
+                point -> {
+                    var mapPoint = map.getMapPoint(point);
 
-                    int rankDist0 = prefRankList.indexOf(soldier0.getRank());
-                    int rankDist1 = prefRankList.indexOf(soldier1.getRank());
+                    if (!mapPoint.isBuilding()) {
+                        return null;
+                    }
 
-                    return Integer.compare(rankDist0, rankDist1);
-                })
-                .collect(Collectors.toList());
-    }
+                    var building = mapPoint.getBuilding();
 
-    /**
-     * Sorts a list of soldiers by the preferred strength and distance from a given position.
-     *
-     * @param soldiers List of soldiers to be sorted.
-     * @param strength Strength value determining the preference order of ranks.
-     * @param position Position from which distance is calculated.
-     */
-    public static void sortSoldiersByPreferredStrengthAndDistance(List<Soldier> soldiers, int strength, Point position) {
-        soldiers.sort((soldier0, soldier1) -> {
-            if (soldier0.getRank() == soldier1.getRank()) {
-                var dist0 = GameUtils.distanceInGameSteps(soldier0.getHome().getPosition(), position);
-                var dist1 = GameUtils.distanceInGameSteps(soldier1.getHome().getPosition(), position);
+                    if (!building.equals(avoid) && predicate.apply(building)) {
+                        @SuppressWarnings("unchecked")
+                        var result = (T) building;
+                        return result;
+                    }
 
-                return Integer.compare(dist0, dist1);
-            } else {
-                var prefRankList = GameUtils.strengthToRank(strength);
-
-                var rankDist0 = prefRankList.indexOf(soldier0.getRank());
-                var rankDist1 = prefRankList.indexOf(soldier1.getRank());
-
-                return Integer.compare(rankDist0, rankDist1);
-            }
-        });
+                    return null;
+                },
+                p -> roadEdges(map, p)
+        );
     }
 
     /**
@@ -145,7 +84,7 @@ public class GameUtils {
      *
      */
     public static Headquarter getHeadquarterForPlayer(Player player) {
-        for (Building building : player.getBuildings()) {
+        for (var building : player.getBuildings()) {
             if (building instanceof Headquarter) {
                 return (Headquarter) building;
             }
@@ -160,8 +99,8 @@ public class GameUtils {
      */
     public static int getDistanceToBorder(Point infoPoint, Player player) {
         int distance = Integer.MAX_VALUE;
-        for (Point point : player.getBorderPoints()) {
 
+        for (var point : player.getBorderPoints()) {
             int tmpDistance = distanceInGameSteps(point, infoPoint);
 
             if (tmpDistance < distance) {
@@ -170,10 +109,6 @@ public class GameUtils {
         }
 
         return distance;
-    }
-
-    public static int countGoodsInInventory(Storehouse storage) {
-        return Material.GOODS.stream().mapToInt(storage::getAmount).sum();
     }
 
     public static <T> void setAll(Collection<T> collectionToSet, Collection<T> source) {
@@ -186,172 +121,13 @@ public class GameUtils {
     }
 
     /**
-     * Enum for types of allocation that can be controlled.
-     */
-    public enum AllocationType {
-        WHEAT_ALLOCATION,
-        COAL_ALLOCATION,
-        WATER_ALLOCATION,
-        FOOD_ALLOCATION,
-        PLANK_ALLOCATION,
-        IRON_BAR_ALLOCATION
-    }
-
-    /**
-     * Tracks allocations for resources and materials in the game.
-     * Manages the quota and allocation of these resources.
-     */
-    public static class AllocationTracker {
-        private static final Map<AllocationType, Set<Class<? extends Building>>> AFFECTED_BUILDING_TYPES = new HashMap<>();
-        private static final Map<AllocationType, Set<Material>> TRACKED_MATERIALS = new HashMap<>();
-
-        static {
-            AFFECTED_BUILDING_TYPES.put(
-                    AllocationType.WHEAT_ALLOCATION,
-                    Set.of(Mill.class, Brewery.class, DonkeyFarm.class, PigFarm.class)
-            );
-
-            AFFECTED_BUILDING_TYPES.put(
-                    AllocationType.COAL_ALLOCATION,
-                    Set.of(Mint.class, Metalworks.class)
-            );
-
-            AFFECTED_BUILDING_TYPES.put(
-                    AllocationType.WATER_ALLOCATION,
-                    Set.of(Bakery.class, Brewery.class, DonkeyFarm.class, PigFarm.class)
-            );
-
-            AFFECTED_BUILDING_TYPES.put(
-                    AllocationType.FOOD_ALLOCATION,
-                    Set.of(CoalMine.class, IronMine.class, GoldMine.class, GraniteMine.class)
-            );
-
-            AFFECTED_BUILDING_TYPES.put(
-                    AllocationType.IRON_BAR_ALLOCATION,
-                    Set.of(Armory.class, Metalworks.class)
-            );
-
-            TRACKED_MATERIALS.put(AllocationType.WHEAT_ALLOCATION, Set.of(WHEAT));
-            TRACKED_MATERIALS.put(AllocationType.COAL_ALLOCATION, Set.of(COAL));
-            TRACKED_MATERIALS.put(AllocationType.WATER_ALLOCATION, Set.of(WATER));
-            TRACKED_MATERIALS.put(AllocationType.IRON_BAR_ALLOCATION, Set.of(IRON_BAR));
-            TRACKED_MATERIALS.put(AllocationType.PLANK_ALLOCATION, Set.of(PLANK));
-            TRACKED_MATERIALS.put(AllocationType.FOOD_ALLOCATION, Set.of(BREAD, FISH, MEAT));
-        }
-
-        private final Map<Class<? extends Building>, Integer> consumed = new HashMap<>();
-        private final AllocationType allocationType;
-        private final Player player;
-        private final Point position;
-
-        public AllocationTracker(AllocationType allocationType, Player player, Point position) {
-            this.player = player;
-            this.allocationType = allocationType;
-            this.position = position;
-        }
-
-        /**
-         * Tracks the allocation of resources for a building by incrementing the consumed count.
-         *
-         * @param building The building for which the allocation is tracked.
-         */
-        public void trackAllocation(Building building) {
-            consumed.merge(building.getClass(), 1, Integer::sum);
-        }
-
-        /**
-         * Determines if delivery is allowed for a building based on the allocation type.
-         *
-         * @param building The building to check for delivery allowance.
-         * @return True if delivery is allowed, false otherwise.
-         */
-        public boolean isDeliveryAllowed(Building building) {
-            var material = TRACKED_MATERIALS.get(allocationType).stream().findFirst().get();
-
-            return isDeliveryAllowed(building, material);
-        }
-
-        /**
-         * Determines if delivery is allowed for a building given a specific material.
-         *
-         * @param building The building to check for delivery allowance.
-         * @param material The material to be delivered.
-         * @return True if delivery is allowed, false otherwise.
-         */
-        public boolean isDeliveryAllowed(Building building, Material material) {
-            int quota = quotaForBuilding(building);
-
-            var withinQuota = consumed.getOrDefault(building.getClass(), 0) < quota;
-
-            if (withinQuota) {
-                return true;
-            }
-
-            var didReset = resetAllocationIfNeeded(material);
-
-            return didReset && consumed.getOrDefault(building.getClass(), 0) < quota;
-        }
-
-        private int quotaForBuilding(Building building) {
-            return quotaForBuildingType(building.getClass());
-        }
-
-        private int quotaForBuildingType(Class<? extends Building> buildingType) {
-            return switch (allocationType) {
-                case WHEAT_ALLOCATION -> player.getWheatQuota(buildingType);
-                case COAL_ALLOCATION -> player.getCoalQuota(buildingType);
-                case FOOD_ALLOCATION -> player.getFoodQuota(buildingType);
-                case WATER_ALLOCATION -> player.getWaterQuota(buildingType);
-                case IRON_BAR_ALLOCATION -> player.getIronBarQuota(buildingType);
-                case PLANK_ALLOCATION -> throw new RuntimeException("Plank allocation is not implemented yet.");
-            };
-        }
-
-        /**
-         * Checks if a building type is over its allocation quota.
-         *
-         * @param buildingType The type of building to check.
-         * @return True if the building type is over quota, false otherwise.
-         */
-        public boolean isOverQuota(Class<? extends Building> buildingType) {
-            return consumed.getOrDefault(buildingType, 0) >= quotaForBuildingType(buildingType);
-        }
-
-        /**
-         * Resets allocation if needed based on the material and reachable buildings.
-         *
-         * @param material The material to check for allocation reset.
-         * @return True if the allocation was reset, false otherwise.
-         */
-        public boolean resetAllocationIfNeeded(Material material) {
-            var reachableBuildings = GameUtils.getBuildingsWithinReach(position, player);
-
-            if (AFFECTED_BUILDING_TYPES.get(allocationType).stream().allMatch(buildingType ->
-                    !needyConsumerExists(reachableBuildings, buildingType, material) || isOverQuota(buildingType)
-            )) {
-                AFFECTED_BUILDING_TYPES.get(allocationType).forEach(buildingType -> consumed.put(buildingType, 0));
-
-                return true;
-            }
-
-            return false;
-        }
-
-        private boolean needyConsumerExists(Collection<Building> buildings, Class<? extends Building> buildingType, Material material) {
-            return buildings.stream().anyMatch(building ->
-                    building.getClass().equals(buildingType) &&
-                    building.isReady() &&
-                    building.needsMaterial(material));
-        }
-    }
-
-    /**
      * Checks if any of the points in the specified list exists in the given set.
      *
      * @param set   The set of discovered land points.
      * @param list  The list of waypoints to check for presence in the set.
      * @return True if any of the points are in the set, false otherwise.
-     */public static boolean setContainsAny(Set<Point> set, List<Point> list) {
+     */
+    public static boolean setContainsAny(Set<Point> set, List<Point> list) {
         return list.stream().anyMatch(set::contains);
     }
 
@@ -380,19 +156,6 @@ public class GameUtils {
     }
 
     /**
-     * Represents a point and its associated cost.
-     * Used for priority-based pathfinding algorithms.
-     */
-    record ToSearchItem(Point point, int cost) implements Comparable<ToSearchItem> {
-
-        // TODO: align with implementation of equals to make them consistent!
-        @Override
-        public int compareTo(ToSearchItem otherItem) {
-                return Integer.compare(this.cost, otherItem.cost);
-        }
-    }
-
-    /**
      * Finds the closest house or road from a starting point that matches the given criteria.
      *
      * @param start   The starting point for the search.
@@ -400,65 +163,41 @@ public class GameUtils {
      * @param map     The game map to search within.
      * @return An Optional containing the closest matching HouseOrRoad, or an empty Optional if none found.
      */
-    public static Optional<HouseOrRoad> getClosestHouseOrRoad(Point start, Function<HouseOrRoad, Boolean> isMatch, GameMap map) {
-        var toSearch = new PriorityQueue<ToSearchItem>();
-        var searched = new HashSet<Point>();
+    public static Optional<HouseOrRoad> getClosestHouseOrRoad(
+            Point start,
+            Function<HouseOrRoad, Boolean> isMatch,
+            GameMap map
+    ) {
+        var result = dijkstraClosest(
+                start,
+                point -> {
 
-        toSearch.add(new ToSearchItem(start, 0));
+                    // Check building
+                    if (map.isBuildingAtPoint(point)) {
+                        var building = map.getBuildingAtPoint(point);
+                        var houseOrRoad = new HouseOrRoad(building);
 
-        // Keep searching the closest point
-        while (!toSearch.isEmpty()) {
-            var toSearchItem = toSearch.remove();
+                        if (isMatch.apply(houseOrRoad)) {
+                            return houseOrRoad;
+                        }
+                    }
 
-            var point = toSearchItem.point;
-            int cost = toSearchItem.cost;
+                    // Check connected roads
+                    for (var road : map.getMapPoint(point).getConnectedRoads()) {
+                        var houseOrRoad = new HouseOrRoad(road);
 
-            // Avoid coming back to the same point again
-            searched.add(point);
+                        if (isMatch.apply(houseOrRoad)) {
+                            return houseOrRoad;
+                        }
+                    }
 
-            // Return the building if it fulfills the criteria
-            if (map.isBuildingAtPoint(point)) {
-                var building = map.getBuildingAtPoint(point);
+                    return null;
+                },
+                p -> roadEdges(map, p)
+        );
 
-                var houseOrRoad = new HouseOrRoad(building);
-
-                if (isMatch.apply(houseOrRoad)) {
-                    return Optional.of(houseOrRoad);
-                }
-            }
-
-            // Otherwise check each connected road except for the one we came with. Add each matching endpoint to be searched
-            for (Road road : map.getMapPoint(point).getConnectedRoads()) {
-
-                var otherEnd = road.getOtherPoint(point);
-
-                // Skip the road we used to get to this point
-                if (searched.contains(otherEnd)) {
-                    continue;
-                }
-
-                // Return the road if it matches the criteria
-                var houseOrRoad = new HouseOrRoad(road);
-
-                if (isMatch.apply(houseOrRoad)) {
-                    return Optional.of(houseOrRoad);
-                }
-
-                // Add the other end of the road to be searched
-                toSearch.add(new ToSearchItem(otherEnd, cost + road.getLength()));
-            }
-        }
-
-        return Optional.empty();
+        return Optional.ofNullable(result);
     }
-
-    /**
-     * Represents a combination of building and associated data.
-     *
-     * @param <B> Type of the building.
-     * @param <D> Type of the associated data.
-     */
-    public record BuildingAndData<B extends Building, D>(B building, D data) { }
 
     public static Set<Point> getHexagonAreaAroundPoint(Point position, int radius, GameMap map) {
         var area = new HashSet<Point>();
@@ -602,12 +341,9 @@ public class GameUtils {
         // Move the coins to the new building
         int amountCoins = fromBuilding.getAmount(COIN);
         for (int i = 0; i < amountCoins; i++) {
-
-            // Put one coin in the new building
             var coinCargo = new Cargo(COIN, fromBuilding.getMap());
 
             upgraded.promiseDelivery(COIN);
-
             upgraded.putCargo(coinCargo);
         }
     }
@@ -641,8 +377,7 @@ public class GameUtils {
      * @return True if all points are unique, false otherwise.
      */
     static boolean areAllUnique(Collection<Point> points) {
-        var pointsSet = new HashSet<Point>(points);
-
+        var pointsSet = new HashSet<>(points);
         return points.size() == pointsSet.size();
     }
 
@@ -684,7 +419,6 @@ public class GameUtils {
 
             // Above
             if (deltaY > 0) {
-
                 if (deltaY > abs(deltaX) * 2) {
                     return UP;
                 }
@@ -774,36 +508,6 @@ public class GameUtils {
                 .orElse(null);
     }
 
-    /**
-     * Puts a specified amount of cargos of a material into a building.
-     *
-     * @param material The material to be put into the building.
-     * @param amount   The amount of cargos to put into the building.
-     * @param building The building where the cargos are to be placed.
-     */
-    public static void putCargos(Material material, int amount, Building building) {
-        var map = building.getMap();
-
-        for (int i = 0; i < amount; i++) {
-            var cargo = new Cargo(material, map);
-            building.promiseDelivery(material);
-            building.putCargo(cargo);
-        }
-    }
-
-    /**
-     * Retrieves a specified amount of cargos of a material from a storehouse.
-     *
-     * @param storehouse The storehouse from which to retrieve cargos.
-     * @param material   The material to retrieve from the storehouse.
-     * @param amount     The amount of cargos to retrieve.
-     */
-    public static void retrieveCargos(Storehouse storehouse, Material material, int amount) {
-        for (int i = 0; i < amount; i++) {
-            storehouse.retrieve(material);
-        }
-    }
-
     interface ConnectionsProvider {
         Iterable<Point> getPossibleConnections(Point start, Point goal);
     }
@@ -812,11 +516,11 @@ public class GameUtils {
      * Represents a point and its estimated cost for pathfinding.
      * Used in priority queues for pathfinding algorithms.
      */
-    static class PointAndCost implements Comparable<PointAndCost> {
-        private final Point point;
+    public static class PointAndCost implements Comparable<PointAndCost> {
+        public final Point point;
         private final int cost;
 
-        PointAndCost(Point point, int cost) {
+        public PointAndCost(Point point, int cost) {
             this.point = point;
             this.cost = cost;
         }
@@ -842,82 +546,31 @@ public class GameUtils {
      * @param connectionProvider Provides connections between points.
      * @return The shortest path as a list of points, or null if no path is found.
      */
-    static List<Point> findShortestPath(Point start, Point goal, Set<Point> avoid, ConnectionsProvider connectionProvider) {
-        var costToGetToPoint = new HashMap<Point, Integer>();
-        var cameFrom = new HashMap<Point, Point>();
-        int                 bestCaseCost;
+    static List<Point> findShortestPath(
+            Point start,
+            Point goal,
+            Set<Point> avoid,
+            ConnectionsProvider connectionProvider
+    ) {
+        return aStar(
+                start,
+                goal::equals,
+                point -> {
+                    var connections = connectionProvider.getPossibleConnections(point, goal);
+                    var edges = new ArrayList<Search.Edge>();
 
-        var toEvaluatePriorityQueue = new PriorityQueue<PointAndCost>();
+                    for (var neighbor : connections) {
+                        if (avoid != null && avoid.contains(neighbor)) {
+                            continue;
+                        }
 
-        // Define starting parameters
-        bestCaseCost = distanceInGameSteps(start, goal);
-        costToGetToPoint.put(start, 0);
+                        edges.add(new Search.Edge(neighbor, distanceInGameSteps(point, neighbor)));
+                    }
 
-        var startingPointAndCost = new PointAndCost(start, bestCaseCost);
-
-        toEvaluatePriorityQueue.add(startingPointAndCost);
-
-        // Declare variables outside the loop to keep memory churn down
-        PointAndCost currentPoint;
-        int newCostToGetToPoint;
-
-        // Keep going through points yet to be evaluated until either a perfect match is found or all points have been done
-        while (!toEvaluatePriorityQueue.isEmpty()) {
-
-            // Find the point to evaluate with the lowest estimated full cost
-            currentPoint = toEvaluatePriorityQueue.poll();
-
-            // Handle if the goal is reached
-            if (goal.equals(currentPoint.point)) {
-                var previousPoint = currentPoint.point;
-                var path = new ArrayList<Point>();
-
-                // Re-construct the path taken
-                while (previousPoint != start) {
-                    path.addFirst(previousPoint);
-
-                    previousPoint = cameFrom.get(previousPoint);
-                }
-
-                path.addFirst(start);
-
-                return path;
-            }
-
-            // Evaluate each direct neighbor
-            for (Point neighbor : connectionProvider.getPossibleConnections(currentPoint.point, goal)) {
-
-                // Skip points we should avoid
-                if (avoid != null && avoid.contains(neighbor)) {
-                    continue;
-                }
-
-                // Calculate the real cost to reach the neighbor from the start
-                newCostToGetToPoint = costToGetToPoint.get(currentPoint.point) + GameUtils.distanceInGameSteps(currentPoint.point, neighbor);
-
-                // Check if the neighbor hasn't been evaluated yet or if we have found a cheaper way to reach it
-                int currentCostToGetToPoint = costToGetToPoint.getOrDefault(neighbor, Integer.MAX_VALUE);
-
-                if (newCostToGetToPoint < currentCostToGetToPoint) {
-
-                    // Keep track of how the neighbor was reached
-                    cameFrom.put(neighbor, currentPoint.point);
-
-                    // Remember the cost to reach the neighbor
-                    costToGetToPoint.put(neighbor, newCostToGetToPoint);
-
-                    // Remember the estimated full cost to go via the neighbor
-                    int estimatedFullCostThroughPoint = newCostToGetToPoint + distanceInGameSteps(neighbor, goal);
-
-                    // Add the neighbor to the evaluation list
-                    var neighborPointAndEstimatedCost = new PointAndCost(neighbor, estimatedFullCostThroughPoint);
-
-                    toEvaluatePriorityQueue.add(neighborPointAndEstimatedCost);
-                }
-            }
-        }
-
-        return null;
+                    return edges;
+                },
+                point -> distanceInGameSteps(point, goal)
+        );
     }
 
     /**
@@ -986,98 +639,16 @@ public class GameUtils {
      * @return The list of flag points to pass (including the starting point) required to travel from start to goal.
      */
     static List<Point> findShortestPathViaRoads(Point start, Point goal, GameMap map, Point... avoid) {
-        var evaluated = new HashSet<Point>();
-        var costToGetToPoint = new HashMap<Point, Integer>();
-        var cameFrom = new HashMap<Point, Point>();
-        int                 bestCaseCost;
+        var avoidSet = avoid.length == 0 ? Set.of() : Set.of(avoid);
 
-        var toEvaluatePriorityQueue = new PriorityQueue<PointAndCost>();
-
-        var avoidSet = (Set<Point>) null;
-
-        if (avoid.length != 0) {
-            avoidSet = new HashSet<>(Arrays.asList(avoid));
-        }
-
-        // Define starting parameters
-        bestCaseCost = distanceInGameSteps(start, goal);
-        costToGetToPoint.put(start, 0);
-
-        var startingPointAndCost = new PointAndCost(start, bestCaseCost);
-
-        toEvaluatePriorityQueue.add(startingPointAndCost);
-
-        // Declare variables outside the loop to keep memory churn down
-        PointAndCost currentPoint;
-        int newCostToGetToPoint;
-
-        while (!toEvaluatePriorityQueue.isEmpty()) {
-
-            // Find the point to evaluate with the lowest estimated full cost
-            currentPoint = toEvaluatePriorityQueue.poll();
-
-            // Handle if the goal is reached
-            if (goal.equals(currentPoint.point)) {
-                var previousPoint = currentPoint.point;
-                var path = new ArrayList<Point>();
-
-                // Re-construct the path taken
-                while (previousPoint != start) {
-                    path.addFirst(previousPoint);
-
-                    previousPoint = cameFrom.get(previousPoint);
-                }
-
-                path.addFirst(start);
-
-                return path;
-            }
-
-            // Do not re-evaluate the same point
-            evaluated.add(currentPoint.point);
-
-            // Evaluate each neighbor directly connected by a road
-            var mapPoint = map.getMapPoint(currentPoint.point);
-            for (Road road : mapPoint.getConnectedRoads()) {
-
-                var neighbor = road.getOtherPoint(currentPoint.point);
-
-                // Skip already evaluated points
-                if (evaluated.contains(neighbor)) {
-                    continue;
-                }
-
-                // Skip points to avoid
-                if (avoidSet != null && avoidSet.contains(neighbor)) {
-                    continue;
-                }
-
-                // Calculate the real cost to reach the neighbor from the start
-                newCostToGetToPoint = costToGetToPoint.get(currentPoint.point) + road.getWayPoints().size() - 1;
-
-                // Check if the neighbor hasn't been evaluated yet or if we have found a cheaper way to reach it
-                int currentCostToGetToPoint = costToGetToPoint.getOrDefault(neighbor, Integer.MAX_VALUE);
-
-                if (newCostToGetToPoint < currentCostToGetToPoint) {
-
-                    // Keep track of how the neighbor was reached
-                    cameFrom.put(neighbor, currentPoint.point);
-
-                    // Remember the cost to reach the neighbor
-                    costToGetToPoint.put(neighbor, newCostToGetToPoint);
-
-                    // Remember the estimated full cost to go via the neighbor
-                    int estimatedFullCostThroughPoint = newCostToGetToPoint + distanceInGameSteps(neighbor, goal);
-
-                    // Add the neighbor to the evaluation list
-                    var neighborPointAndCost = new PointAndCost(neighbor, estimatedFullCostThroughPoint);
-
-                    toEvaluatePriorityQueue.add(neighborPointAndCost);
-                }
-            }
-        }
-
-        return null;
+        return aStar(
+                start,
+                goal::equals,
+                p -> roadEdges(map, p).stream()
+                        .filter(e -> !avoidSet.contains(e.point()))
+                        .toList(),
+                p -> distanceInGameSteps(p, goal)
+        );
     }
 
     /**
@@ -1090,64 +661,14 @@ public class GameUtils {
      * @return True if the start and end are connected, false otherwise.
      */
     static boolean arePointsConnectedByRoads(Point start, Point goal, GameMap map) {
-        var costToGetToPoint = new HashMap<Point, Integer>();
-        int                 bestCaseCost;
+        var path = aStar(
+                start,
+                goal::equals,
+                p -> roadEdges(map, p),
+                p -> distanceInGameSteps(p, goal)
+        );
 
-        var toEvaluatePriorityQueue = new PriorityQueue<PointAndCost>();
-
-        // Define starting parameters
-        bestCaseCost = distanceInGameSteps(start, goal);
-        costToGetToPoint.put(start, 0);
-
-        var startingPointAndCost = new PointAndCost(start, bestCaseCost);
-
-        toEvaluatePriorityQueue.add(startingPointAndCost);
-
-        // Declare variables outside the loop to keep memory churn down
-        PointAndCost currentPoint;
-        int newCostToGetToPoint;
-
-        while (!toEvaluatePriorityQueue.isEmpty()) {
-
-            // Find the point with the lowest estimated full cost
-            currentPoint = toEvaluatePriorityQueue.poll();
-
-            // Handle if the goal is reached
-            if (goal.equals(currentPoint.point)) {
-                return true;
-            }
-
-            // Evaluate each direct neighbor
-            var mapPoint = map.getMapPoint(currentPoint.point);
-
-            for (Road road : mapPoint.getConnectedRoads()) {
-
-                var neighbor = road.getOtherPoint(currentPoint.point);
-
-                // Calculate the real cost to reach the neighbor from the start
-                newCostToGetToPoint = costToGetToPoint.get(currentPoint.point) + road.getWayPoints().size() - 1;
-
-                // Check if the neighbor hasn't been evaluated yet or if we have found a cheaper way to reach it
-                int currentCostToGetToPoint = costToGetToPoint.getOrDefault(neighbor, Integer.MAX_VALUE);
-
-                // Check if the neighbor hasn't been evaluated yet or if we have found a cheaper way to reach it
-                if (newCostToGetToPoint < currentCostToGetToPoint) {
-
-                    // Remember the cost to reach the neighbor
-                    costToGetToPoint.put(neighbor, newCostToGetToPoint);
-
-                    // Remember the estimated full cost to go via the neighbor
-                    int estimatedFullCostThroughPoint = newCostToGetToPoint + distanceInGameSteps(neighbor, goal);
-
-                    // Add the neighbor to the evaluation list
-                    var neighborPointAndCost = new PointAndCost(neighbor, estimatedFullCostThroughPoint);
-
-                    toEvaluatePriorityQueue.add(neighborPointAndCost);
-                }
-            }
-        }
-
-        return false;
+        return path != null;
     }
 
     /**
@@ -1159,135 +680,60 @@ public class GameUtils {
      * @param map           The instance of the map.
      * @return A detailed list with the steps required to travel from the start to the goal.
      */
-    static List<Point> findShortestDetailedPathViaRoads(EndPoint startEndPoint, EndPoint goalEndPoint, GameMap map, Point... avoid) {
-        var evaluated = new HashSet<Point>();
-        var toEvaluate = new HashSet<Point>();
-        var realCostToPoint = new HashMap<Point, Double>();
-        var estimatedFullCost = new HashMap<Point, Double>();
-        var cameVia = new HashMap<Point, Road>();
-        double             bestCaseCost;
-
-        var avoidSet = (Set<Point>) null;
-
-        if (avoid.length != 0) {
-            avoidSet = new HashSet<>(Arrays.asList(avoid));
-        }
-
+    static List<Point> findShortestDetailedPathViaRoads(
+            EndPoint startEndPoint,
+            EndPoint goalEndPoint,
+            GameMap map,
+            Point... avoid
+    ) {
         var start = startEndPoint.getPosition();
         var goal = goalEndPoint.getPosition();
 
-        // Define starting parameters
-        bestCaseCost = start.distance(goal);
-        toEvaluate.add(start);
-        realCostToPoint.put(start, (double)0);
-        estimatedFullCost.put(start, realCostToPoint.get(start) + start.distance(goal));
+        var avoidSet = avoid.length == 0
+                ? null
+                : new HashSet<>(Arrays.asList(avoid));
 
-        // Declare variables outside the loop to keep memory churn down
-        Point currentPoint;
-        double currentEstimatedCost;
+        var coarsePath = aStar(
+                start,
+                goal::equals,
+                p -> roadEdges(map, p, avoidSet),
+                p -> distanceInGameSteps(p, goal)
+        );
 
-        double tmpEstimatedCost;
+        if (coarsePath == null) {
+            return null;
+        }
 
-        double tentativeCost;
+        var detailedPath = new LinkedList<Point>();
 
-        while (!toEvaluate.isEmpty()) {
-            currentPoint = null;
-            currentEstimatedCost = Double.MAX_VALUE;
+        for (int i = 0; i < coarsePath.size() - 1; i++) {
+            var from = coarsePath.get(i);
+            var to = coarsePath.get(i + 1);
 
-            // Find the point with the lowest estimated full cost
-            for (Point iteratedPoint : toEvaluate) {
-
-                tmpEstimatedCost = estimatedFullCost.get(iteratedPoint);
-
-                if (currentEstimatedCost > tmpEstimatedCost) {
-                    currentEstimatedCost = tmpEstimatedCost;
-                    currentPoint = iteratedPoint;
-
-                    if (currentEstimatedCost == bestCaseCost) {
-                        break;
-                    }
-                }
-            }
-
-            // Handle if the goal is reached
-            if (Objects.equals(currentPoint, goal)) {
-                var path = new ArrayList<Point>();
-
-                // Re-construct the path taken, backwards from the goal
-                while (!currentPoint.equals(start)) {
-                    var road = cameVia.get(currentPoint);
-
-                    // Follow the road and add up the points
-                    int numberWayPoints = road.getWayPoints().size();
-
-                    var roadPoints = road.getWayPoints();
-
-                    if (roadPoints.getFirst().equals(currentPoint)) {
-
-                        for (int i = 0; i < numberWayPoints - 1; i++) {
-                            path.addFirst(roadPoints.get(i));
-                        }
-
-                        currentPoint = roadPoints.getLast();
-                    } else {
-                        for (int i = numberWayPoints - 1; i > 0; i--) {
-                            path.addFirst(roadPoints.get(i));
-                        }
-
-                        currentPoint = roadPoints.getFirst();
-                    }
-                }
-
-                path.addFirst(currentPoint);
-
-                return path;
-            }
-
-            // Do not re-evaluate the same point
-            toEvaluate.remove(currentPoint);
-            evaluated.add(currentPoint);
-
-            // Evaluate each direct neighbor
-            var mapPoint = map.getMapPoint(currentPoint);
-            for (Road road : mapPoint.getConnectedRoads()) {
-
-                var neighbor = road.getOtherPoint(currentPoint);
-
-                // Skip already evaluated points
-                if (evaluated.contains(neighbor)) {
+            for (var road : map.getMapPoint(from).getConnectedRoads()) {
+                if (!road.getOtherPoint(from).equals(to)) {
                     continue;
                 }
 
-                // Skip points to avoid
-                if (avoidSet != null && avoidSet.contains(neighbor)) {
-                    continue;
+                var wayPoints = road.getWayPoints();
+
+                if (wayPoints.getFirst().equals(from)) {
+                    for (int j = 0; j < wayPoints.size() - 1; j++) {
+                        detailedPath.addLast(wayPoints.get(j));
+                    }
+                } else {
+                    for (int j = wayPoints.size() - 1; j > 0; j--) {
+                        detailedPath.addLast(wayPoints.get(j));
+                    }
                 }
 
-                // Calculate the real cost to reach the neighbor from the start
-                tentativeCost = realCostToPoint.get(currentPoint) +
-                        road.getWayPoints().size() - 1;
-
-                /* Check if the neighbor hasn't been evaluated yet or if we
-                 * have found a cheaper way to reach it
-                */
-                if (!toEvaluate.contains(neighbor) || tentativeCost < realCostToPoint.get(neighbor)) {
-
-                    // Keep track of how the neighbor was reached
-                    cameVia.put(neighbor, road);
-
-                    // Remember the cost to reach the neighbor
-                    realCostToPoint.put(neighbor, tentativeCost);
-
-                    // Remember the estimated full cost to go via the neighbor
-                    estimatedFullCost.put(neighbor, realCostToPoint.get(neighbor) + neighbor.distance(goal));
-
-                    // Add the neighbor to the evaluation list
-                    toEvaluate.add(neighbor);
-                }
+                break;
             }
         }
 
-        return null;
+        detailedPath.addLast(goal);
+
+        return detailedPath;
     }
 
     /**
@@ -1302,34 +748,18 @@ public class GameUtils {
         return areBuildingsOrFlagsConnected(start.getPosition(), end.getPosition(), map);
     }
 
+    /**
+     * Determines if two points where there are buildings or flags are connected.
+     * <p>
+     * Note: this method does not work for points that are not flags or buildings.
+     * @param start
+     * @param end
+     * @param map
+     * @return
+     */
     public static boolean areBuildingsOrFlagsConnected(Point start, Point end, GameMap map) {
-        var search = new PriorityQueue<PointAndCost>();
-        var cost = new HashMap<Point, Integer>();
-
-        search.add(new PointAndCost(start, distanceInGameSteps(start, end)));
-        cost.put(start, 0);
-
-        while (!search.isEmpty()) {
-            var current = search.poll();
-
-            if (current.point == end) {
-                return true;
-            }
-
-            for (var road : map.getMapPoint(current.point).getConnectedRoads()) {
-                var neighbor = road.getOtherPoint(current.point);
-                var tentative_cost = cost.get(current.point);
-
-                if (tentative_cost < cost.getOrDefault(neighbor, Integer.MAX_VALUE)) {
-                    cost.put(neighbor, tentative_cost);
-                    search.add(new PointAndCost(neighbor, tentative_cost));
-                }
-            }
-        }
-
-        return false;
+        return bfsConnected(start, end::equals, p -> roadNeighbors(map, p));
     }
-
 
     /**
      * Finds the closest storehouse off-road for a given player from a specified point.
@@ -1373,26 +803,12 @@ public class GameUtils {
      * @return The closest storehouse connected by roads, or null if none is found.
      */
     public static Storehouse getClosestStorageConnectedByRoads(Point point, Building avoid, Player player) {
-        var map = player.getMap();
-
-        return player.getBuildings().stream()
-                .filter(building -> !building.equals(avoid))
-                .filter(Building::isReady)
-                .filter(Building::isStorehouse)
-                .map(building -> {
-
-                    // If the building's flag is directly at the point, return it immediately
-                    if (building.getFlag().getPosition().equals(point)) {
-                        return new Tuple<>((Storehouse) building, 0);
-                    }
-
-                    var path = map.findWayWithExistingRoads(point, building.getFlag().getPosition());
-                    return new Tuple<>((Storehouse) building, path == null ? Integer.MAX_VALUE : path.size());
-                })
-                .filter(entry -> entry.t2() < Integer.MAX_VALUE)
-                .min(Comparator.comparingInt(Tuple::t2))
-                .map(Tuple::t1)
-                .orElse(null);
+        return findClosestBuildingViaRoads(
+                point,
+                player.getMap(),
+                avoid,
+                building -> building.isReady() && building.isStorehouse()
+        );
     }
 
     /**
@@ -1423,51 +839,12 @@ public class GameUtils {
      * @return The closest storehouse connected by roads, or null if none is found.
      */
     public static Storehouse getClosestStorageConnectedByRoads(Point point, Building avoid, GameMap map) {
-        return map.getBuildings().stream()
-                .filter(building -> !building.equals(avoid))
-                .filter(Building::isReady)
-                .filter(Building::isStorehouse)
-                .map(building -> {
-
-                    // Check if the building's flag is directly at the point
-                    if (building.getFlag().getPosition().equals(point)) {
-                        return new Tuple<>((Storehouse) building, 0);
-                    }
-
-                    // Calculate the path to the building's flag
-                    var path = map.findWayWithExistingRoads(point, building.getFlag().getPosition());
-                    return new Tuple<>((Storehouse) building, path == null ? Integer.MAX_VALUE : path.size());
-                })
-                .filter(tuple -> tuple.t2() < Integer.MAX_VALUE)
-                .min(Comparator.comparingInt(Tuple::t2))
-                .map(Tuple::t1)
-                .orElse(null);
-    }
-
-    /**
-     * Finds the closest building connected by roads for a specified map, point, and condition.
-     *
-     * @param point    The starting point from which to find the closest building.
-     * @param avoid    The building to avoid in the search.
-     * @param map      The game map containing the buildings.
-     * @param func     The function to determine if a building meets the criteria.
-     * @return The closest building connected by roads that meets the criteria, or null if none is found.
-     */
-    public static Building getClosestBuildingConnectedByRoads(Point point, Building avoid, GameMap map, Function <Building, Boolean> func) {
-        return map.getBuildings().stream()
-                .filter(candidate -> !candidate.equals(avoid))
-                .filter(func::apply)
-                .map(candidate -> {
-                    if (candidate.getFlag().getPosition().equals(point)) {
-                        return new AbstractMap.SimpleEntry<>(candidate, List.of(point));
-                    }
-                    var path = map.findWayWithExistingRoads(point, candidate.getFlag().getPosition());
-                    return new AbstractMap.SimpleEntry<>(candidate, path);
-                })
-                .filter(entry -> entry.getValue() != null)
-                .min(Comparator.comparingInt(entry -> entry.getValue().size()))
-                .map(AbstractMap.SimpleEntry::getKey)
-                .orElse(null);
+        return findClosestBuildingViaRoads(
+                point,
+                map,
+                avoid,
+                building -> building.isReady() && building.isStorehouse()
+        );
     }
 
     /**
@@ -1480,23 +857,12 @@ public class GameUtils {
      * @return The closest storehouse connected by roads where delivery is possible, or null if none is found.
      */
     public static Storehouse getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(Point point, Building avoid, GameMap map, Material material) {
-        return (Storehouse) map.getBuildings().stream()
-                .filter(building -> !building.equals(avoid))                       // Avoid specific building
-                .filter(Building::isReady)                                         // Check if building is ready
-                .filter(Building::isStorehouse)                                    // Check if it's a storehouse
-                .filter(building -> !((Storehouse) building).isDeliveryBlocked(material)) // Check delivery is possible
-                .map(building -> {
-                    if (building.getFlag().getPosition().equals(point)) {
-                        return new AbstractMap.SimpleEntry<>(building, 0);
-                    }
-
-                    var path = map.findWayWithExistingRoads(point, building.getFlag().getPosition());
-                    return path == null ? null : new AbstractMap.SimpleEntry<>(building, path.size());
-                })
-                .filter(Objects::nonNull)
-                .min(Comparator.comparingInt(AbstractMap.SimpleEntry::getValue))   // Find min by path size
-                .map(AbstractMap.SimpleEntry::getKey)
-                .orElse(null);
+        return findClosestBuildingViaRoads(
+                point,
+                map,
+                avoid,
+                building -> building.isReady() && building.isStorehouse() && !((Storehouse) building).isDeliveryBlocked(material)
+        );
     }
 
     /**
@@ -1507,46 +873,19 @@ public class GameUtils {
      * @return A set of flags reachable from the starting point.
      */
     public static Set<Flag> findFlagsReachableFromPoint(Player player, Point start) {
-        var toEvaluate = new LinkedList<Point>();
-        var visited = new HashSet<Point>();
-        var reachable = new HashSet<Flag>();
         var map = player.getMap();
+        var reachable = new HashSet<Flag>();
 
-        toEvaluate.add(start);
-
-        // Declare variables outside the loop to keep memory churn down
-        Point point;
-        Point oppositePoint;
-
-        while (!toEvaluate.isEmpty()) {
-
-            point = toEvaluate.getFirst();
-            toEvaluate.remove(point);
-
-            var mapPoint = map.getMapPoint(point);
-
-            // Test if this point is connected to a building
-            if (mapPoint.isFlag()) {
-                reachable.add(mapPoint.getFlag());
-            }
-
-            // Remember that this point has been tested
-            visited.add(point);
-
-            // Go through the neighbors and add the new points to the list to be evaluated
-            for (Road road : mapPoint.getConnectedRoads()) {
-
-                oppositePoint = road.getOtherPoint(point);
-
-                // Filter already visited
-                if (visited.contains(oppositePoint)) {
-                    continue;
+        bfsTraverse(
+                start,
+                p -> roadNeighbors(map, p),
+                point -> {
+                    var mapPoint = map.getMapPoint(point);
+                    if (mapPoint.isFlag()) {
+                        reachable.add(mapPoint.getFlag());
+                    }
                 }
-
-                // Add the point to the list
-                toEvaluate.add(oppositePoint);
-            }
-        }
+        );
 
         return reachable;
     }
@@ -1569,25 +908,28 @@ public class GameUtils {
      * @return A set of buildings reachable from the starting position.
      */
     public static Set<Building> getBuildingsWithinReach(Point startPosition, Player player) {
-        var toEvaluate = new LinkedList<Point>();
-        var visited = new HashSet<Point>();
-        var reachable = new HashSet<Building>();
         var map = player.getMap();
+        var reachable = new HashSet<Building>();
 
-        toEvaluate.add(startPosition);
+        bfsTraverse(
+                startPosition,
+                p -> {
+                    var roads = map.getMapPoint(p).getConnectedRoads();
+                    var neighbors = new ArrayList<Point>(roads.size());
 
-        while (!toEvaluate.isEmpty()) {
-            var point = toEvaluate.removeFirst();
-            var mapPoint = map.getMapPoint(point);
+                    for (var road : roads) {
+                        neighbors.add(road.getOtherPoint(p));
+                    }
 
-            if (mapPoint.isBuilding()) reachable.add(mapPoint.getBuilding());
-            visited.add(point);
-
-            mapPoint.getConnectedRoads().stream()
-                    .map(road -> road.getOtherPoint(point))
-                    .filter(oppositePoint -> !visited.contains(oppositePoint))
-                    .forEach(toEvaluate::add);
-        }
+                    return neighbors;
+                },
+                point -> {
+                    var mapPoint = map.getMapPoint(point);
+                    if (mapPoint.isBuilding()) {
+                        reachable.add(mapPoint.getBuilding());
+                    }
+                }
+        );
 
         return reachable;
     }
@@ -1648,6 +990,9 @@ public class GameUtils {
         return angle;
     }
 
+    /**
+     * Utility class that holds a road or a house.
+     */
     public static class HouseOrRoad {
         public final Building building;
         public final Road road;
@@ -1673,133 +1018,5 @@ public class GameUtils {
         public boolean isStorehouse() {
             return building != null && building.isStorehouse();
         }
-    }
-
-    // Comparator for sorting soldiers by strength
-    public static Comparator<? super Soldier> strengthSorter = Comparator.comparingInt(s -> s.getRank().toInt());
-
-    // Comparator for sorting soldiers by strength and shorter distance
-    public static Comparator<SoldierAndDistance> strongerAndShorterDistanceSorter = Comparator
-            .comparing((SoldierAndDistance sd) -> sd.soldier.getRank().toInt()).reversed()
-            .thenComparingInt(sd -> sd.distance);
-
-    // Comparator for sorting soldiers by weaker and shorter distance
-    public static Comparator<SoldierAndDistance> weakerAndShorterDistanceSorter = Comparator
-            .comparingInt((SoldierAndDistance sd) -> sd.soldier.getRank().toInt())
-            .thenComparingInt(sd -> sd.distance);
-
-    /**
-     * Represents a soldier and its associated distance.
-     * Used for sorting soldiers based on distance and rank.
-     */
-    public record SoldierAndDistance(Soldier soldier, int distance) { }
-
-    /**
-     * Converts a strength value to a list of preferred Soldier ranks.
-     *
-     * @param strength The strength value to convert.
-     * @return A list of Soldier ranks ordered by preference.
-     */
-    public static List<Soldier.Rank> strengthToRank(int strength) {
-        var populationPreferenceOrder = new ArrayList<Integer>();
-
-        populationPreferenceOrder.add(strength);
-
-        for (int i = 1; i < Math.max(10 - strength, strength); i++) {
-            if (strength + i < 11) {
-                populationPreferenceOrder.add(strength + i);
-            }
-
-            if (strength - i > -1) {
-                populationPreferenceOrder.add(strength - i);
-            }
-        }
-
-        // Go through the list in order of preference and add the rank
-        var ranks = new ArrayList<Soldier.Rank>();
-
-        for (int preferred : populationPreferenceOrder) {
-            var rank = Soldier.Rank.intToRank(preferred);
-
-            if (ranks.isEmpty() || ranks.getLast() != rank) {
-                ranks.add(rank);
-            }
-        }
-
-        return ranks;
-    }
-
-    public static Worker createWorker(Material material, Building building, Player player, GameMap map) {
-        if (material == HELPER) {
-            return switch (building) {
-                case Mill mill -> new Miller(player, map);
-                case DonkeyFarm donkeyFarm -> new DonkeyBreeder(player, map);
-                default -> throw new InvalidGameLogicException(format("Can't create helper for %s", building));
-            };
-        }
-
-        return switch (material) {
-            case FORESTER -> new Forester(player, map);
-            case WOODCUTTER_WORKER -> new WoodcutterWorker(player, map);
-            case STONEMASON -> new Stonemason(player, map);
-            case FARMER -> new Farmer(player, map);
-            case CARPENTER -> new Carpenter(player, map);
-            case WELL_WORKER -> new WellWorker(player, map);
-            case MILLER -> new Miller(player, map);
-            case BAKER -> new Baker(player, map);
-            case STOREHOUSE_WORKER -> new StorehouseWorker(player, map);
-            case FISHERMAN -> new Fisherman(player, map);
-            case MINER -> new Miner(player, map);
-            case IRON_FOUNDER -> new IronFounder(player, map);
-            case BREWER -> new Brewer(player, map);
-            case MINTER -> new Minter(player, map);
-            case ARMORER -> new Armorer(player, map);
-            case PIG_BREEDER -> new PigBreeder(player, map);
-            case BUTCHER -> new Butcher(player, map);
-            case GEOLOGIST -> new Geologist(player, map);
-            case DONKEY_BREEDER -> new DonkeyBreeder(player, map);
-            case SCOUT -> new Scout(player, map);
-            case CATAPULT_WORKER -> new CatapultWorker(player, map);
-            case HUNTER -> new Hunter(player, map);
-            case METALWORKER -> new Metalworker(player, map);
-            case DONKEY -> new Donkey(player, map);
-            case COURIER -> new Courier(player, map);
-            case PRIVATE -> new Soldier(player, PRIVATE_RANK, map);
-            case PRIVATE_FIRST_CLASS -> new Soldier(player, PRIVATE_FIRST_CLASS_RANK, map);
-            case SERGEANT -> new Soldier(player, SERGEANT_RANK, map);
-            case OFFICER -> new Soldier(player, OFFICER_RANK, map);
-            case GENERAL -> new Soldier(player, GENERAL_RANK, map);
-            case BUILDER -> new Builder(player, map);
-            case SHIPWRIGHT -> new Shipwright(player, map);
-            default -> throw new InvalidGameLogicException(
-                    format("Can't retrieve worker of type %s", material));
-        };
-    }
-
-    public static int countWorkersInInventory(Storehouse storehouse) {
-        return storehouse.getAmount(BUILDER) +
-                storehouse.getAmount(PLANER) +
-                storehouse.getAmount(WOODCUTTER_WORKER) +
-                storehouse.getAmount(FORESTER) +
-                storehouse.getAmount(STONEMASON) +
-                storehouse.getAmount(FISHERMAN) +
-                storehouse.getAmount(HUNTER) +
-                storehouse.getAmount(CARPENTER) +
-                storehouse.getAmount(FARMER) +
-                storehouse.getAmount(PIG_BREEDER) +
-                storehouse.getAmount(DONKEY_BREEDER) +
-                storehouse.getAmount(MILLER) +
-                storehouse.getAmount(BAKER) +
-                storehouse.getAmount(BUTCHER) +
-                storehouse.getAmount(BREWER) +
-                storehouse.getAmount(MINER) +
-                storehouse.getAmount(IRON_FOUNDER) +
-                storehouse.getAmount(ARMORER) +
-                storehouse.getAmount(MINTER) +
-                storehouse.getAmount(METALWORKER) +
-                storehouse.getAmount(SHIPWRIGHT) +
-                storehouse.getAmount(GEOLOGIST) +
-                storehouse.getAmount(SCOUT) +
-                storehouse.getAmount(DONKEY);
     }
 }

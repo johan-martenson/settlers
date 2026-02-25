@@ -5,7 +5,6 @@
  */
 package org.appland.settlers.computer;
 
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.CoalMine;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.GameMap;
@@ -15,7 +14,6 @@ import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.buildings.IronMine;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.TransportCategory;
-import org.appland.settlers.utils.Duration;
 import org.appland.settlers.utils.Group;
 import org.appland.settlers.utils.Stats;
 
@@ -268,7 +266,7 @@ public class CompositePlayer implements ComputerPlayer {
             }
 
             // Attack if possible
-            if (player.getAvailableAttackersForBuilding(enemyBuilding) > 0) {
+            if (player.getNumberOfAvailableAttackers(enemyBuilding) > 0) {
                 System.out.println("Composite player: Can attack");
                 attackingPlayer.turn();
 

@@ -8,7 +8,6 @@ import org.json.simple.JSONObject;
 import java.awt.Point;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
@@ -219,12 +218,12 @@ public class ImageBoard {
         int width = 0;
         int height = 0;
 
-        for (ImageOnBoard imageOnBoard : images.values()) {
+        for (var imageOnBoard : images.values()) {
             width = Math.max(width, imageOnBoard.x + imageOnBoard.image.getWidth());
             height = Math.max(height, imageOnBoard.y + imageOnBoard.image.getHeight());
         }
 
-        for (ImageSeries oneImageSeries : imageSeries.values()) {
+        for (var oneImageSeries : imageSeries.values()) {
             if (oneImageSeries.layoutDirection == LayoutDirection.ROW) {
                 width = Math.max(width, oneImageSeries.x + oneImageSeries.width * oneImageSeries.images.size());
                 height = Math.max(height, oneImageSeries.y + oneImageSeries.height);
@@ -316,9 +315,7 @@ public class ImageBoard {
      * @return the JSON object representing the image location
      */
     public JSONObject placeImageBottom(Bitmap image, String... metadata) {
-        int currentMaxY = this.getCurrentHeight();
-
-        return placeImage(image, 0, currentMaxY, metadata);
+        return placeImage(image, 0, this.getCurrentHeight(), metadata);
     }
 
     /**
@@ -343,9 +340,7 @@ public class ImageBoard {
      * @return the JSON object representing the image series location
      */
     public JSONObject placeImageSeriesBottom(List<Bitmap> images, String... metadata) {
-        int currentMaxY = this.getCurrentHeight();
-
-        return placeImageSeries(images, new Point(0, currentMaxY), LayoutDirection.ROW, metadata);
+        return placeImageSeries(images, new Point(0, this.getCurrentHeight()), LayoutDirection.ROW, metadata);
     }
 
     private record ImageOnBoard(Bitmap image, int x, int y, String... metadata) { }

@@ -7,9 +7,7 @@ package org.appland.settlers.computer.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.computer.AttackPlayer;
-import org.appland.settlers.computer.ComputerPlayer;
 import org.appland.settlers.model.PlayerType;
-import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.actors.Soldier;
@@ -20,7 +18,6 @@ import org.junit.Test;
 
 import org.appland.settlers.model.PlayerColor;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -95,7 +92,7 @@ public class TestAttackPlayer {
         Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, barracks0);
 
         // Verify that the player attacks the other player
-        assertEquals(player0.getAvailableAttackersForBuilding(barracks1), 1);
+        assertEquals(player0.getNumberOfAvailableAttackers(barracks1), 1);
 
         for (int i = 0; i < 100; i++) {
 

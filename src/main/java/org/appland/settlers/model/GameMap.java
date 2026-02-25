@@ -1,6 +1,5 @@
 package org.appland.settlers.model;
 
-import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Ship;
 import org.appland.settlers.model.actors.WildAnimal;
 import org.appland.settlers.model.actors.Worker;
@@ -8,6 +7,7 @@ import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Harbor;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.statistics.StatisticsManager;
+import org.appland.settlers.model.utils.InventoryUtils;
 import org.appland.settlers.utils.Duration;
 import org.appland.settlers.utils.Group;
 import org.appland.settlers.utils.Stats;
@@ -1040,10 +1040,8 @@ public class GameMap {
         }
 
         // Verify that all points of the road are within the border
-        for (var point : wayPoints) {
-            if (!player.isWithinBorder(point)) {
-                throw new InvalidUserActionException(String.format("Can't place road %s with %s outside the border", wayPoints, point));
-            }
+        if (!player.isWithinBorder(wayPoints)) {
+            throw new InvalidUserActionException(String.format("Can't place road %s with a point outside the border", wayPoints));
         }
 
         var start = wayPoints.getFirst();
@@ -1065,11 +1063,6 @@ public class GameMap {
             throw new InvalidUserActionException("Cannot create a road that overlaps itself");
         }
 
-        // Verify that the road has at least one free point between the endpoints so the courier has somewhere to stand
-        if (wayPoints.size() < 3) {
-            throw new InvalidUserActionException(String.format("Road %s is too short.", wayPoints));
-        }
-
         // Verify that all points are possible as road
         var maybeInvalidPoint = wayPoints.stream()
                 .filter(point -> !Objects.equals(point, start))
@@ -1077,7 +1070,12 @@ public class GameMap {
                 .filter(point -> !isPossibleAsAnyPointInRoad(player, point))
                 .findFirst();
 
+
         if (maybeInvalidPoint.isPresent()) {
+            System.out.println(Objects.equals(maybeInvalidPoint, start));
+            System.out.println(Objects.equals(maybeInvalidPoint, end));
+            System.out.println(isPossibleAsEndPointInRoad(player, maybeInvalidPoint.get()));
+            System.out.println(isPossibleAsAnyPointInRoad(player, maybeInvalidPoint.get()));
             throw new InvalidUserActionException(maybeInvalidPoint.get() + " in road is invalid");
         }
 
@@ -1664,6 +1662,9 @@ public class GameMap {
     }
 
     private boolean isPossibleAsEndPointInRoad(Player player, Point point) {
+        System.out.println();
+        System.out.println(point);
+
         if (!isWithinMap(point)) {
             return false;
         }
@@ -1675,10 +1676,13 @@ public class GameMap {
         var mapPoint = getMapPoint(point);
 
         if (mapPoint.isFlag()) {
+            System.out.println("is flag");
             return true;
         }
 
         if (mapPoint.isRoad() && isAvailableFlagPoint(player, point)) {
+            System.out.println("is road & can be flag");
+
             return true;
         }
 
@@ -1717,10 +1721,6 @@ public class GameMap {
         }
 
         if (mapPoint.isCrop()) {
-            return false;
-        }
-
-        if (!player.isWithinBorder(point)) {
             return false;
         }
 
@@ -2947,7 +2947,7 @@ public class GameMap {
                         headquarter.getAmount(OFFICER) +
                         headquarter.getAmount(GENERAL));
 
-                statisticsManager.getPlayerStatistics(house.getPlayer()).workers().report(time, GameUtils.countWorkersInInventory(headquarter));
+                statisticsManager.getPlayerStatistics(house.getPlayer()).workers().report(time, InventoryUtils.countWorkersInInventory(headquarter));
             }
         }
     }

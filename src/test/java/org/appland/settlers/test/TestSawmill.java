@@ -10,7 +10,6 @@ import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.actors.Carpenter;
 import org.appland.settlers.model.actors.Courier;
-import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.GuardHouse;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -192,7 +191,7 @@ public class TestSawmill {
     }
 
     @Test
-    public void testHeadquarterHasAtLeastOneSawmillWorkerAtStart() {
+    public void testHeadquarterHasAtLeastOneCarpenterAtStart() {
         var headquarter = new Headquarter(null);
 
         assertTrue(headquarter.getAmount(CARPENTER) >= 1);
@@ -267,7 +266,7 @@ public class TestSawmill {
     }
 
     @Test
-    public void testSawmillWorkerGetsCreatedFromSaw() throws Exception {
+    public void testCarpenterGetsCreatedFromSaw() throws Exception {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -425,7 +424,7 @@ public class TestSawmill {
     }
 
     @Test
-    public void testSawmillWorkerLeavesPlanksAtTheFlag() throws Exception {
+    public void testCarpenterLeavesPlanksAtTheFlag() throws Exception {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -913,7 +912,7 @@ public class TestSawmill {
     }
 
     @Test
-    public void testSawmillWorkerGoesBackToStorageWhenSawmillIsDestroyed() throws Exception {
+    public void testCarpenterGoesBackToStorageWhenSawmillIsDestroyed() throws Exception {
 
         // Creating new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -954,7 +953,7 @@ public class TestSawmill {
     }
 
     @Test
-    public void testSawmillWorkerGoesBackOnToStorageOnRoadsIfPossibleWhenSawmillIsDestroyed() throws Exception {
+    public void testCarpenterGoesBackOnToStorageOnRoadsIfPossibleWhenSawmillIsDestroyed() throws Exception {
 
         // Creating new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -1216,7 +1215,7 @@ public class TestSawmill {
     }
 
     @Test
-    public void testAssignedSawmillWorkerHasCorrectlySetPlayer() throws Exception {
+    public void testAssignedCarpenterHasCorrectlySetPlayer() throws Exception {
 
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -1296,7 +1295,7 @@ public class TestSawmill {
     }
 
     @Test
-    public void testSawmillWorkerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
+    public void testCarpenterReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -1356,7 +1355,7 @@ public class TestSawmill {
     }
 
     @Test
-    public void testSawmillWorkerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
+    public void testCarpenterContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -1419,7 +1418,7 @@ public class TestSawmill {
     }
 
     @Test
-    public void testSawmillWorkerReturnsToStorageIfSawmillIsDestroyed() throws Exception {
+    public void testCarpenterReturnsToStorageIfSawmillIsDestroyed() throws Exception {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -1478,7 +1477,7 @@ public class TestSawmill {
     }
 
     @Test
-    public void testSawmillWorkerGoesOffroadBackToClosestStorageWhenSawmillIsDestroyed() throws Exception {
+    public void testCarpenterGoesOffroadBackToClosestStorageWhenSawmillIsDestroyed() throws Exception {
 
         // Creating new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -1526,7 +1525,7 @@ public class TestSawmill {
     }
 
     @Test
-    public void testSawmillWorkerReturnsOffroadAndAvoidsBurningStorageWhenSawmillIsDestroyed() throws Exception {
+    public void testCarpenterReturnsOffroadAndAvoidsBurningStorageWhenSawmillIsDestroyed() throws Exception {
 
         // Creating new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -1580,7 +1579,7 @@ public class TestSawmill {
     }
 
     @Test
-    public void testSawmillWorkerReturnsOffroadAndAvoidsDestroyedStorageWhenSawmillIsDestroyed() throws Exception {
+    public void testCarpenterReturnsOffroadAndAvoidsDestroyedStorageWhenSawmillIsDestroyed() throws Exception {
 
         // Creating new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -1634,7 +1633,7 @@ public class TestSawmill {
     }
 
     @Test
-    public void testSawmillWorkerReturnsOffroadAndAvoidsUnfinishedStorageWhenSawmillIsDestroyed() throws Exception {
+    public void testCarpenterReturnsOffroadAndAvoidsUnfinishedStorageWhenSawmillIsDestroyed() throws Exception {
 
         // Creating new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);

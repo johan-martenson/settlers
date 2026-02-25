@@ -16,8 +16,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import static org.appland.settlers.rest.resource.GameUtils.gamePlaceholderToGame;
 import static org.appland.settlers.model.ResourceLevel.MEDIUM;
+import static org.appland.settlers.rest.resource.GameUtils.gamePlaceholderToGame;
 
 public class GameResource implements PlayerChangeListener {
     public GameStatus status;
@@ -32,6 +32,7 @@ public class GameResource implements PlayerChangeListener {
     private GameMap map;
     private boolean othersCanJoin;
     private GameSpeed gameSpeed;
+    private boolean cheatingEnabled = false;
 
     @Override
     public void onPlayerChanged() {
@@ -61,7 +62,7 @@ public class GameResource implements PlayerChangeListener {
         listeners.remove(listener);
     }
 
-    private void notifyListeners() {
+    private void notifyGameResourceListeners() {
         listeners.forEach(listener -> listener.onGameResourceChanged(this));
     }
 
@@ -70,7 +71,7 @@ public class GameResource implements PlayerChangeListener {
 
         players.forEach(player -> player.addPlayerChangeListener(this));
 
-        notifyListeners();
+        notifyGameResourceListeners();
     }
 
     public List<Player> getPlayers() {
@@ -82,13 +83,23 @@ public class GameResource implements PlayerChangeListener {
 
         player.addPlayerChangeListener(this);
 
-        notifyListeners();
+        notifyGameResourceListeners();
+    }
+
+    public boolean getCheatingEnabled() {
+        return cheatingEnabled;
+    }
+
+    public void setCheatingEnabled(Boolean cheatingEnabled) {
+        this.cheatingEnabled = cheatingEnabled;
+
+        notifyGameResourceListeners();
     }
 
     void setMap(MapFile updatedMapFile) {
         mapFile = updatedMapFile;
 
-        notifyListeners();
+        notifyGameResourceListeners();
     }
 
     public MapFile getMapFile() {
@@ -98,7 +109,7 @@ public class GameResource implements PlayerChangeListener {
     void setName(String name) {
         this.name = name;
 
-        notifyListeners();
+        notifyGameResourceListeners();
     }
 
     public String getName() {
@@ -116,7 +127,7 @@ public class GameResource implements PlayerChangeListener {
     void setResource(ResourceLevel resourceLevel) {
         this.resourceLevel = resourceLevel;
 
-        notifyListeners();
+        notifyGameResourceListeners();
     }
 
     public void removePlayer(Player player) {
@@ -124,7 +135,7 @@ public class GameResource implements PlayerChangeListener {
 
         player.removePlayerChangeListener(this);
 
-        notifyListeners();
+        notifyGameResourceListeners();
     }
 
     public GameMap getGameMap() {
@@ -155,7 +166,7 @@ public class GameResource implements PlayerChangeListener {
 
         player.addPlayerChangeListener(this);
 
-        notifyListeners();
+        notifyGameResourceListeners();
     }
 
     public boolean isStarted() {
@@ -165,7 +176,7 @@ public class GameResource implements PlayerChangeListener {
     public void setStatus(GameStatus gameStatus) {
         status = gameStatus;
 
-        notifyListeners();
+        notifyGameResourceListeners();
     }
 
     public boolean isComputerPlayer(Player player) {
@@ -175,7 +186,7 @@ public class GameResource implements PlayerChangeListener {
     public void setOthersCanJoin(boolean othersCanJoin) {
         this.othersCanJoin = othersCanJoin;
 
-        notifyListeners();
+        notifyGameResourceListeners();
     }
 
     public boolean getOthersCanJoin() {
@@ -189,7 +200,7 @@ public class GameResource implements PlayerChangeListener {
     public void setGameSpeed(GameSpeed gameSpeed) {
         this.gameSpeed = gameSpeed;
 
-        notifyListeners();
+        notifyGameResourceListeners();
     }
 
     public GameSpeed getGameSpeed() {

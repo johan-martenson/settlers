@@ -1,5 +1,6 @@
 package org.appland.settlers.model.buildings;
 
+import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.BorderChangeCause;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
@@ -40,9 +41,9 @@ import static java.lang.String.format;
 import static java.util.stream.Collectors.toCollection;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.utils.MilitaryUtils.*;
 
 public class Building implements EndPoint {
-
     public record PlanksAndStones(int planks, int stones) {
         public boolean contains(Material material) {
             return (material == PLANK && planks > 0) || (material == STONE && stones > 0);
@@ -198,7 +199,7 @@ public class Building implements EndPoint {
     }
 
     public Collection<Point> getDiscoveredLand() {
-        return GameUtils.getHexagonAreaAroundPoint(getPosition(), discoveryRadius, getMap());
+        return GameUtils.getHexagonAreaAroundPoint(position, discoveryRadius, getMap());
     }
 
     public boolean isMine() {
@@ -439,12 +440,12 @@ public class Building implements EndPoint {
                                 || b.getHostedSoldiers().size() > 1)
                         .filter(b -> b.getAttackRadius() >= GameUtils.distanceInGameSteps(position, b.getPosition()))
                         .flatMap(b -> {
-                            var sorted = GameUtils.sortSoldiersByPreferredStrength(b.getHostedSoldiers(), player.getDefenseStrength());
+                            var sorted = sortSoldiersByPreferredStrength(b.getHostedSoldiers(), player.getDefenseStrength());
                             return sorted.subList(0, sorted.size() - 1).stream();
                         })
                         .collect(toCollection(ArrayList::new));
 
-                GameUtils.sortSoldiersByPreferredStrengthAndDistance(potentialDefenders, player.getDefenseStrength(), getPosition());
+                sortSoldiersByPreferredStrengthAndDistance(potentialDefenders, player.getDefenseStrength(), position);
 
                 if (!potentialDefenders.isEmpty()) {
                     int count = (int) Math.round(potentialDefenders.size() * (player.getDefenseFromSurroundingBuildings() / 10.0));
@@ -488,7 +489,7 @@ public class Building implements EndPoint {
 
             case OCCUPIED -> {
                 if (isMilitaryBuilding() && !isHeadquarter() && getHostedSoldiers().size() > getWantedAmountHostedSoldiers()) {
-                    var sorted = GameUtils.sortSoldiersByPreferredStrength(getHostedSoldiers(), player.getStrengthOfSoldiersPopulatingBuildings());
+                    var sorted = sortSoldiersByPreferredStrength(getHostedSoldiers(), player.getStrengthOfSoldiersPopulatingBuildings());
                     var soldier = sorted.getLast();
                     hostedSoldiers.remove(soldier);
                     soldier.returnToStorage();
@@ -578,7 +579,7 @@ public class Building implements EndPoint {
         }
 
         // Remove driveway
-        var driveway = map.getRoad(getPosition(), getFlag().getPosition());
+        var driveway = map.getRoad(position, getFlag().getPosition());
 
         map.doRemoveRoad(driveway);
 
@@ -797,7 +798,7 @@ public class Building implements EndPoint {
 
     public boolean canAttack(Building buildingToAttack) {
         if (isMilitaryBuilding()) {
-            double distance = getPosition().distance(buildingToAttack.getPosition());
+            double distance = position.distance(buildingToAttack.getPosition());
 
             return distance < getAttackRadius();
         }
@@ -817,7 +818,7 @@ public class Building implements EndPoint {
     }
 
     public Soldier retrieveHostedSoldier() {
-        for (var rank : GameUtils.strengthToRank(player.getDefenseStrength())) {
+        for (var rank : strengthToRank(player.getDefenseStrength())) {
             var maybeSoldier = hostedSoldiers.stream().filter(soldier -> soldier.getRank() == rank).findFirst();
 
             if (maybeSoldier.isPresent()) {
@@ -1348,12 +1349,6 @@ public class Building implements EndPoint {
         return ownDefender != null;
     }
 
-    public Soldier pickPrimaryAttacker() {
-        waitingAttackers.remove(primaryAttacker);
-
-        return primaryAttacker;
-    }
-
     public boolean isWorking() {
         return worker != null && worker.isWorking();
     }
@@ -1364,5 +1359,26 @@ public class Building implements EndPoint {
 
     public Map<Material, Integer> getInventory() {
         return inventory;
+    }
+
+    public int getNumberOfSoldiersAvailableForNewAttack() {
+        var amount = 0;
+
+        if (isHeadquarter()) {
+            for (var rank : Rank.values()) {
+                amount += getAmount(rank.toMaterial());
+            };
+        } else {
+            amount += getHostedSoldiers().size() - 1;
+        }
+
+        return amount;
+    }
+
+    public List<Soldier> getAvailableAttackersForNewAttack(AttackStrength strength) {
+        var soldiers = new ArrayList<>(hostedSoldiers);
+        var sortedSoldiers = sortSoldiersByPreferredStrength(soldiers, strength);
+
+        return sortedSoldiers.subList(0, sortedSoldiers.size() - 1);
     }
 }

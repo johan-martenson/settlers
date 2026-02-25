@@ -16,6 +16,7 @@ import org.appland.settlers.model.actors.Geologist;
 import org.appland.settlers.model.actors.Scout;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.utils.InventoryUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,6 +28,7 @@ import java.util.Set;
 import static java.util.Map.entry;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.MEDIUM;
+import static org.appland.settlers.model.utils.MilitaryUtils.strengthToRank;
 
 @HouseSize(size = MEDIUM, material = {PLANK, PLANK, PLANK, PLANK, STONE, STONE, STONE})
 @RequiresWorker(workerType = STOREHOUSE_WORKER)
@@ -346,7 +348,7 @@ public class Storehouse extends Building {
             map.getStatisticsManager().workerCreated(player, map.getTime());
         }
 
-        var worker = GameUtils.createWorker(workerType, building, player, map);
+        var worker = InventoryUtils.createWorker(workerType, building, player, map);
         worker.setPosition(getFlag().getPosition());
         retrieveOneFromInventory(workerType);
 
@@ -383,7 +385,7 @@ public class Storehouse extends Building {
     public Soldier retrieveSoldierToPopulateBuilding() {
 
         // Go through the list in order of preference and try to retrieve a soldier
-        for (var rank : GameUtils.strengthToRank(getPlayer().getStrengthOfSoldiersPopulatingBuildings())) {
+        for (var rank : strengthToRank(getPlayer().getStrengthOfSoldiersPopulatingBuildings())) {
             var preferredSoldierType = rank.toMaterial();
 
             if (hasAtLeastOne(preferredSoldierType)) {

@@ -1,9 +1,7 @@
 package org.appland.settlers.model;
 
 import org.appland.settlers.model.buildings.Building;
-import org.appland.settlers.model.buildings.Storehouse;
 
-import java.util.List;
 import java.util.function.Function;
 
 public class Cargo {
@@ -35,16 +33,17 @@ public class Cargo {
 
     // FIXME: HOTSPOT
     public void setPosition(Point point) {
-
         var mapPoint = map.getMapPoint(point);
 
+        // The cargo has crossed a road. Register usage to track progress to become a main road
         if (mapPoint.isFlag() || mapPoint.isBuilding()) {
             if (position != null && position != point) {
-
                 var mapPointCurrent = map.getMapPoint(position);
 
                 if (mapPointCurrent.isFlag() || mapPointCurrent.isBuilding()) {
                     var road = map.getRoad(point, position);
+
+                    // FIXME: if there are several roads between the same endpoints this can pick the wrong road
 
                     if (road != null) {
                         road.registerUsage();
@@ -64,17 +63,12 @@ public class Cargo {
 
     @Override
     public String toString() {
-
-        var materialName = material.getSimpleName();
-
-        if (target == null) {
-            return "Cargo of " + materialName + " to unknown, at " + position;
-        }
-
-        var housePosition = target.getPosition();
-        var houseName = target.getSimpleName();
-
-        return "Cargo of " + materialName + " to " + houseName + " " + housePosition + ", at " + position;
+        return target == null
+                ? "Cargo of %s to unknown, at %s".formatted(material.getSimpleName(), position)
+                : "Cargo of %s to %s %s, at %s".formatted(
+                        material.getSimpleName(),
+                        target.getSimpleName(),
+                        target.getPosition(), position);
     }
 
     public Point getPosition() {
@@ -94,7 +88,7 @@ public class Cargo {
     }
 
     public void transportToReceivingBuilding(Function<Building, Boolean> func) {
-        var receivingBuilding = GameUtils.getClosestBuildingConnectedByRoads(position, null, map, func);
+        var receivingBuilding = GameUtils.findClosestBuildingViaRoads(position, map, null, func);
 
         setTarget(receivingBuilding);
 
