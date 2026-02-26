@@ -354,6 +354,7 @@ public class MapLoader {
             short belowTextureShort = streamReader.getUint8();
             var texture = Texture.textureFromUint8(belowTextureShort);
             mapFilePoint.setVegetationBelow(texture);
+            mapFile.addTileBelow(texture);
 
             // Set the possible harbors
             if ((belowTextureShort & 0x40) != 0) {
@@ -378,6 +379,7 @@ public class MapLoader {
         for (int i = 0; i < subBlockSize; i++) {
             var texture = Texture.textureFromUint8(streamReader.getUint8());
             mapFile.getMapFilePoint(i).setVegetationDownRight(texture);
+            mapFile.addTileDownRight(texture);
         }
 
         // Read the fourth sub block fileHeader with roads

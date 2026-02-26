@@ -374,21 +374,21 @@ public class Extractor {
         // Extract fire animation
         var fires = new FireImageCollection();
 
-        fires.addImagesForFire(FireSize.MINI, getImagesAt(mapBobsLst, MapBobsLst.MINI_FIRE_ANIMATION, 8));
+        fires.addImagesForFire(FireSize.MINI, getImagesAt(mapBobsLst, MapBobsLst.MINI_FIRE_ANIMATION));
         fires.addImagesForFireWithShadow(
                 FireSize.SMALL,
-                getImagesAt(mapBobsLst, MapBobsLst.SMALL_FIRE_ANIMATION, 8),
-                getImagesAt(mapBobsLst, MapBobsLst.SMALL_FIRE_SHADOW_ANIMATION, 8)
+                getImagesAt(mapBobsLst, MapBobsLst.SMALL_FIRE_ANIMATION),
+                getImagesAt(mapBobsLst, MapBobsLst.SMALL_FIRE_SHADOW_ANIMATION)
         );
         fires.addImagesForFireWithShadow(
                 FireSize.MEDIUM,
-                getImagesAt(mapBobsLst, MapBobsLst.MEDIUM_FIRE_ANIMATION, 8),
-                getImagesAt(mapBobsLst, MapBobsLst.MEDIUM_FIRE_SHADOW_ANIMATION, 8)
+                getImagesAt(mapBobsLst, MapBobsLst.MEDIUM_FIRE_ANIMATION),
+                getImagesAt(mapBobsLst, MapBobsLst.MEDIUM_FIRE_SHADOW_ANIMATION)
         );
         fires.addImagesForFireWithShadow(
                 FireSize.LARGE,
-                getImagesAt(mapBobsLst, MapBobsLst.LARGE_FIRE_ANIMATION, 8),
-                getImagesAt(mapBobsLst, MapBobsLst.LARGE_FIRE_SHADOW_ANIMATION, 8)
+                getImagesAt(mapBobsLst, MapBobsLst.LARGE_FIRE_ANIMATION),
+                getImagesAt(mapBobsLst, MapBobsLst.LARGE_FIRE_SHADOW_ANIMATION)
         );
 
         fires.addBurntDownImage(SMALL, getImageAt(mapBobsLst, MapBobsLst.SMALL_BURNT_DOWN));

@@ -22,6 +22,8 @@ public class MapFile {
 
     private static final String FILE_HEADER_V1 = "WORLD_V1.0";
 
+    private final List<Texture> tilesBelow = new ArrayList<>();
+    private final List<Texture> tilesDownRight = new ArrayList<>();
     private final List<Point> startingPositions = new ArrayList<>();
     private final List<PlayerFace> playerFaces = new ArrayList<>();
     private final List<UniqueMass> masses = new ArrayList<>();
@@ -39,6 +41,22 @@ public class MapFile {
     private String title;
     private MapTitleType mapTitleType;
     private HeaderType headerType;
+
+    void addTileBelow(Texture o) {
+        tilesBelow.add(o);
+    }
+
+    void addTileDownRight(Texture o) {
+        tilesDownRight.add(o);
+    }
+
+    public List<Texture> getTilesBelow() {
+        return tilesBelow;
+    }
+
+    public List<Texture> getTilesDownRight() {
+        return tilesDownRight;
+    }
 
     /**
      * Sets the title of the map.

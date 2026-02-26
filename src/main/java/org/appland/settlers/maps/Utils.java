@@ -12,7 +12,7 @@ import org.appland.settlers.model.Material;
  *
  * @author johan
  */
-class Utils {
+public class Utils {
 
     static String getHex(byte[] blockHeader1) {
         var hex = new StringBuilder();
@@ -24,7 +24,7 @@ class Utils {
         return hex.toString();
     }
 
-    static Vegetation convertTextureToVegetation(Texture texture) {
+    public static Vegetation convertTextureToVegetation(Texture texture) {
         switch (texture) {
             case SAVANNAH:             return Vegetation.SAVANNAH;           // Savannah - can build houses
             case MOUNTAIN_1:           return Vegetation.MOUNTAIN_1;         // Mountain 1 - mining

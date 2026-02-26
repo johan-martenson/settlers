@@ -925,7 +925,6 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             }
             case INFORMATION_ON_POINTS -> {
                 var jsonPointsInformation = new JSONArray();
-
                 var points = jsonUtils.jsonToPoints((JSONArray) jsonBody.get("points"));
 
                 synchronized (map) {
