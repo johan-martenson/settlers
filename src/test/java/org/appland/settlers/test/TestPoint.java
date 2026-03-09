@@ -117,9 +117,4 @@ public class TestPoint {
         assertFalse(point.isAdjacent(up));
         assertFalse(point.isAdjacent(down));
     }
-
-    @Test (expected = RuntimeException.class)
-    public void testInvalidPoint() {
-        var point0 = new Point(0, -1);
-    }
 }

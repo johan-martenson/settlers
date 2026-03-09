@@ -7,14 +7,11 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.buildings.Barracks;
@@ -28,18 +25,13 @@ import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
-import static org.appland.settlers.model.Vegetation.*;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.PlayerColor.RED;
 import static org.appland.settlers.model.Size.*;
+import static org.appland.settlers.model.Vegetation.*;
 import static org.junit.Assert.*;
 
 /**
@@ -1355,11 +1347,12 @@ public class TestPlacement {
         var woodcutter1 = map.placeBuilding(new Woodcutter(player0), point1);
     }
 
-    @Test (expected = RuntimeException.class)
-    public void testCreateInvalidPoint() {
+    @Test
+    public void testCanCreatePointWithEvenAndUnevenXY() {
 
         // Verify that an exception is thrown when an invalid point is created
         new Point(5, 4);
+        new Point(4, 4);
     }
 
     @Test

@@ -1,5 +1,6 @@
 package org.appland.settlers.model;
 
+import org.appland.settlers.maps.utils.GeometryMapping;
 import org.appland.settlers.model.actors.Ship;
 import org.appland.settlers.model.actors.WildAnimal;
 import org.appland.settlers.model.actors.Worker;
@@ -1613,9 +1614,9 @@ public class GameMap {
     /**
      * Creates an array with all Map Point instances. They are indexed like this:
      * <p>
-     * 4     5
-     *    2     3
      * 0     1
+     *    2     3
+     * 4     5
      * <p>
      * To address a Map Point:
      *  - Data row length depends on the width of the game map
@@ -1627,22 +1628,18 @@ public class GameMap {
      * @return Array of map points
      */
     private MapPoint[] populateMapPoints() {
-        int dataRowLength = isEven(width) ? width / 2 : (width + 1) / 2;
+        var mapPoints = new MapPoint[height * width / 2];
+        var fileWidth = GeometryMapping.mapFileWidthFromGameWidth(width);
+        var fileHeight = GeometryMapping.mapFileHeightFromGameHeight(height);
 
-        var mapPoints = new MapPoint[dataRowLength * (height + 1)];
+        for (int fileY = 0; fileY < fileHeight; fileY++) {
+            for (int fileX = 0; fileX < fileWidth; fileX++) {
+                var index = fileY * fileWidth + fileX;
+                var gamePoint = GeometryMapping.mapFilePointToGamePoint(fileX, fileY, fileHeight);
 
-        // Walk row by row. Start at 0 and include the final row at #height
-        for (int y = 0; y < height + 1; y++) {
-            int xOffset = isEven(y) ? 0 : 1;
+                System.out.println(" " + index + ": " + gamePoint);
 
-            for (int x = xOffset; x < width; x += 2) {
-                var point = new Point(x, y);
-
-                if (isEven(point.y)) {
-                    mapPoints[point.y * dataRowLength + point.x / 2] = new MapPoint(point);
-                } else {
-                    mapPoints[point.y * dataRowLength + (point.x - 1) / 2] = new MapPoint(point);
-                }
+                mapPoints[index] = new MapPoint(gamePoint);
             }
         }
 
@@ -2264,22 +2261,23 @@ public class GameMap {
         return getMapPoint(point).getSign();
     }
 
+    /**
+     * Look up the MapPoint instance for the given point.
+     *
+     * Map points are laid out as a one-dimensional array, starting in the upper-left corner.
+     *
+     * @param point The point to map to a MapPoint instance
+     * @return The matching MapPoint or null if there is no match
+     */
     public MapPoint getMapPoint(Point point) {
-        int dataRowLength = isEven(width) ? width / 2 : (width + 1) / 2;
+        var fileWidth = GeometryMapping.mapFileWidthFromGameWidth(width);
+        var fileHeight = GeometryMapping.mapFileHeightFromGameHeight(height);
 
-        int index;
+        var index = GeometryMapping.gamePointToMapFileIndex(point.x, point.y, fileWidth, fileHeight);
 
-        if (isEven(point.y)) {
-            index = point.y * dataRowLength + point.x / 2;
-        } else {
-            index = point.y * dataRowLength + (point.x - 1) / 2;
-        }
-
-        if (index < 0 || index >= this.pointToGameObject.length) {
-            return null;
-        }
-
-        return pointToGameObject[index];
+        return index < pointToGameObject.length
+                ? pointToGameObject[index]
+                : null;
     }
 
     /**
@@ -3367,16 +3365,12 @@ public class GameMap {
     }
 
     public Collection<Point> getPointsInMap() {
-        var result = new ArrayList<Point>();
+        System.out.println(width);
+        System.out.println(height);
 
-        for (int y = 0; y < height; y++) {
-            var xStart = (y % 2 == 0) ? 0 : 1;
-
-            for (int x = xStart; x < width; x += 2) {
-                result.add(new Point(x, y));
-            }
-        }
-
-        return result;
+        return GeometryMapping.gameMapPointsFromFileDimensions(
+                GeometryMapping.mapFileWidthFromGameWidth(width),
+                GeometryMapping.mapFileHeightFromGameHeight(height)
+        );
     }
 }

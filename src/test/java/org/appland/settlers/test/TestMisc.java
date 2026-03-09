@@ -1063,7 +1063,7 @@ public class TestMisc {
 
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 99);
 
         // Place headquarters
         var point0 = new Point(9, 5);
@@ -1084,6 +1084,14 @@ public class TestMisc {
         var road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter.getFlag());
 
         // Wait for courier to get assigned to the first road
+        System.out.println(map.getRoads());
+        assertTrue(map.getPointsInMap().contains(map.getRoads().getFirst().getStart()));
+        for (var r : map.getRoads()) {
+            for (var p : r.getWayPoints()) {
+                assertTrue(map.getPointsInMap().contains(p));
+            }
+        }
+
         var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
         // Wait for the courier to hold a cargo for the woodcutter
@@ -1380,7 +1388,7 @@ public class TestMisc {
 */
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Create the terrain used in the africa map
         var point0 = new Point(68, 68);

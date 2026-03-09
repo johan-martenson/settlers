@@ -19,7 +19,6 @@ import org.appland.settlers.utils.StatsConstants;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -542,12 +541,14 @@ public abstract class Worker {
             state = State.IDLE_OUTSIDE;
             handleArrival();
         } else {
+            System.out.println(via);
+
             path = (via == null)
                     ? map.findWayWithExistingRoads(position, target)
                     : map.findWayWithExistingRoads(position, target, via);
 
             if (path == null) {
-                throw new InvalidGameLogicException("No way on existing roads from " + position + " to " + target);
+                throw new InvalidGameLogicException("No way on existing roads from %s to %s".formatted(position, target));
             }
 
             path.removeFirst();

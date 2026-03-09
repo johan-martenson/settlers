@@ -624,6 +624,8 @@ public class GameUtils {
 
         @Override
         public Iterable<Point> getPossibleConnections(Point start, Point goal) {
+            System.out.println("GET MAP POINT: " + map.getMapPoint(start));
+
             return map.getMapPoint(start).getConnectedNeighbors();
         }
     }

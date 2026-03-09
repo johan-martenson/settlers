@@ -18,6 +18,16 @@ public class AsciiDrawer {
 
         var map = mapLoader.convertMapFileToGameMap(mapFile);
 
+        Vegetation[] tilesBelow = new Vegetation[mapFile.getTilesBelow().size()];
+        Vegetation[] tilesDownRight = new Vegetation[mapFile.getTilesDownRight().size()];
+
+        for (int i = 0; i < mapFile.getTilesBelow().size(); i++) {
+            tilesBelow[i] = Utils.convertTextureToVegetation(mapFile.getTilesBelow().get(i));
+            tilesDownRight[i] = Utils.convertTextureToVegetation(mapFile.getTilesDownRight().get(i));
+        }
+
+        GeometryMapping.layoutTilesInGameMap(mapFile.getWidth(), mapFile.getHeight(), tilesBelow, tilesDownRight, map);
+
         // Draw the legend
         drawLegend();
 
@@ -73,23 +83,17 @@ public class AsciiDrawer {
         System.out.println("=== FILE SPACE (TIGHT) ===");
 
         for (int fileY = 0; fileY < fileHeight; fileY++) {
-
             boolean oddRow = (fileY & 1) == 1;
 
             if (oddRow) System.out.print("  "); // reduced indent
 
             // ---- Upward triangles ----
             for (int fileX = 0; fileX < fileWidth; fileX++) {
-
                 int index = fileY * fileWidth + fileX;
 
                 if (fileX + 1 < fileWidth && fileY + 1 < fileHeight) {
                     String s = terrainSymbol(Utils.convertTextureToVegetation(tilesDownRight.get(index)));
-                    System.out.print(
-                            dim("/") +
-                                    s +
-                                    dim("\\")
-                    );
+                    System.out.print(dim("/") + s + dim("\\"));
                 }
             }
 
@@ -99,22 +103,16 @@ public class AsciiDrawer {
 
             // ---- Downward triangles ----
             for (int fileX = 0; fileX < fileWidth; fileX++) {
-
                 int index = fileY * fileWidth + fileX;
 
                 if (fileY + 1 < fileHeight) {
-
                     boolean valid = ((fileY & 1) == 0)
                             ? fileX + 1 < fileWidth
                             : fileX - 1 >= 0;
 
                     if (valid) {
                         String s = terrainSymbol(Utils.convertTextureToVegetation(tilesBelow.get(index)));
-                        System.out.print(
-                                dim("\\") +
-                                        s +
-                                        dim("/")
-                        );
+                        System.out.print(dim("\\") + s + dim("/"));
                     }
                 }
             }
@@ -133,25 +131,17 @@ public class AsciiDrawer {
         System.out.println("=== ENGINE SPACE (TIGHT) ===");
 
         for (int fileY = 0; fileY < fileHeight; fileY++) {
-
             boolean oddRow = (fileY & 1) == 1;
 
             if (oddRow) System.out.print("  ");
 
             // Upward
             for (int fileX = 0; fileX < fileWidth; fileX++) {
-
                 if (fileX + 1 < fileWidth && fileY + 1 < fileHeight) {
-
-                    var engine =
-                            GeometryMapping.mapFilePointToGamePoint(fileX, fileY, fileHeight);
+                    var engine = GeometryMapping.mapFilePointToGamePoint(fileX, fileY, fileHeight);
 
                     String s = terrainSymbol(map.getVegetationDownRight(engine));
-                    System.out.print(
-                            dim("/") +
-                                    s +
-                                    dim("\\")
-                    );
+                    System.out.print(dim("/") + s + dim("\\"));
                 }
             }
 
@@ -161,24 +151,16 @@ public class AsciiDrawer {
 
             // Downward
             for (int fileX = 0; fileX < fileWidth; fileX++) {
-
                 if (fileY + 1 < fileHeight) {
-
                     boolean valid = ((fileY & 1) == 0)
                             ? fileX + 1 < fileWidth
                             : fileX - 1 >= 0;
 
                     if (valid) {
-
-                        var engine =
-                                GeometryMapping.mapFilePointToGamePoint(fileX, fileY, fileHeight);
+                        var engine = GeometryMapping.mapFilePointToGamePoint(fileX, fileY, fileHeight);
 
                         String s = terrainSymbol(map.getVegetationBelow(engine));
-                        System.out.print(
-                                dim("\\") +
-                                        s +
-                                        dim("/")
-                        );
+                        System.out.print(dim("\\") + s + dim("/"));
                     }
                 }
             }

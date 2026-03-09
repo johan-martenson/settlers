@@ -25,11 +25,6 @@ public class Point extends java.awt.Point {
     public Point(int x, int y) {
         super(x, y);
 
-        // Throw an exception if the sum of x and y is odd which is clearly invalid
-        if ((x + y) % 2 != 0) {
-            throw new RuntimeException("Can't create point " + x + ", " + y);
-        }
-
         // Uncomment below to track allocations of points
         /*StackTraceElement frame1 = Thread.currentThread().getStackTrace()[2];
         var frame2 = Thread.currentThread().getStackTrace()[3];
@@ -50,6 +45,11 @@ public class Point extends java.awt.Point {
                 }
             }
         }*/
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Point p && p.x == this.x && p.y == this.y;
     }
 
     public static Point fitToGamePoint(double x, double y) {
