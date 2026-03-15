@@ -55,7 +55,7 @@ public class TestHarbor {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(10, 10);
@@ -75,7 +75,7 @@ public class TestHarbor {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -102,7 +102,7 @@ public class TestHarbor {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(12, 12);
@@ -141,7 +141,7 @@ public class TestHarbor {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(12, 12);
@@ -180,7 +180,7 @@ public class TestHarbor {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(12, 12);
@@ -219,7 +219,7 @@ public class TestHarbor {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(7, 13);
@@ -260,7 +260,7 @@ public class TestHarbor {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(13, 9);
@@ -286,7 +286,7 @@ public class TestHarbor {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(13, 9);
@@ -320,7 +320,7 @@ public class TestHarbor {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(13, 9);
@@ -360,7 +360,7 @@ public class TestHarbor {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(13, 9);
@@ -400,7 +400,7 @@ public class TestHarbor {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(6, 10);
@@ -445,7 +445,7 @@ public class TestHarbor {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point2 = new Point(18, 10);
@@ -503,7 +503,7 @@ public class TestHarbor {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(10, 14);
@@ -565,7 +565,7 @@ public class TestHarbor {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(10, 14);
@@ -633,7 +633,7 @@ public class TestHarbor {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(12, 8);
@@ -683,7 +683,7 @@ public class TestHarbor {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(21, 17);
@@ -733,7 +733,7 @@ public class TestHarbor {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(21, 17);
@@ -789,7 +789,7 @@ public class TestHarbor {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(21, 17);
@@ -848,7 +848,7 @@ public class TestHarbor {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(21, 17);
@@ -898,7 +898,7 @@ public class TestHarbor {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(21, 17);
@@ -949,7 +949,7 @@ public class TestHarbor {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(21, 17);
@@ -1003,7 +1003,7 @@ public class TestHarbor {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(12, 8);
@@ -1058,7 +1058,7 @@ public class TestHarbor {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(12, 8);
@@ -1108,7 +1108,7 @@ public class TestHarbor {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(9, 9);
@@ -1141,7 +1141,7 @@ public class TestHarbor {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(12, 8);
@@ -1174,7 +1174,7 @@ public class TestHarbor {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place a lake
         var point0 = new Point(11, 7);
@@ -1215,7 +1215,7 @@ public class TestHarbor {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place a lake
         var point0 = new Point(17, 7);
@@ -1256,7 +1256,7 @@ public class TestHarbor {
 
         // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
         // Place a lake
         var point0 = new Point(19, 15);
@@ -1298,7 +1298,7 @@ public class TestHarbor {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1, player2), 100, 100);
+        var map = new GameMap(List.of(player0, player1, player2), 100, 101);
 
         // Place a lake
         var point0 = new Point(32, 18);
@@ -1361,7 +1361,7 @@ public class TestHarbor {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1, player2), 100, 100);
+        var map = new GameMap(List.of(player0, player1, player2), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(13, 5);
@@ -1470,7 +1470,7 @@ public class TestHarbor {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(17, 5);
@@ -1540,7 +1540,7 @@ public class TestHarbor {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(12, 6);
@@ -1614,7 +1614,7 @@ public class TestHarbor {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(17, 5);
@@ -1683,7 +1683,7 @@ public class TestHarbor {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(18, 14);
@@ -1738,7 +1738,7 @@ public class TestHarbor {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(18, 18);
@@ -1796,7 +1796,7 @@ public class TestHarbor {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(21, 13);
@@ -1857,7 +1857,7 @@ public class TestHarbor {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(24, 10);
@@ -1909,7 +1909,7 @@ public class TestHarbor {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(18, 18);
@@ -1958,7 +1958,7 @@ public class TestHarbor {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(11, 11);
@@ -1990,7 +1990,7 @@ public class TestHarbor {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(7, 13);
@@ -2019,7 +2019,7 @@ public class TestHarbor {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(7, 13);
@@ -2057,7 +2057,7 @@ public class TestHarbor {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(10, 12);
@@ -2090,7 +2090,7 @@ public class TestHarbor {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place a lake
         var point0 = new Point(17, 7);
@@ -2161,7 +2161,7 @@ public class TestHarbor {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place a lake
         var point0 = new Point(17, 7);
@@ -2256,7 +2256,7 @@ public class TestHarbor {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place a lake
         var point0 = new Point(17, 7);
@@ -2310,7 +2310,7 @@ public class TestHarbor {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place a lake
         var point0 = new Point(17, 7);
@@ -2374,7 +2374,7 @@ public class TestHarbor {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place a lake
         var point0 = new Point(17, 7);
@@ -2431,7 +2431,7 @@ public class TestHarbor {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(21, 7);
@@ -2531,7 +2531,7 @@ public class TestHarbor {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);

@@ -48,7 +48,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -89,7 +89,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -137,7 +137,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -181,7 +181,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -232,7 +232,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -273,7 +273,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -321,7 +321,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -371,7 +371,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -428,7 +428,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -469,7 +469,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -517,7 +517,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -563,7 +563,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -616,7 +616,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -664,7 +664,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -719,7 +719,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -765,7 +765,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -818,7 +818,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -859,7 +859,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -907,7 +907,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -951,7 +951,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1002,7 +1002,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1047,7 +1047,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1101,7 +1101,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1148,7 +1148,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1202,7 +1202,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1243,7 +1243,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1291,7 +1291,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1341,7 +1341,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1398,7 +1398,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1448,7 +1448,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1505,7 +1505,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(22, 10);
@@ -1551,7 +1551,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(22, 10);
@@ -1604,7 +1604,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(22, 10);
@@ -1653,7 +1653,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(22, 10);
@@ -1709,7 +1709,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(20, 12);
@@ -1755,7 +1755,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(20, 12);
@@ -1808,7 +1808,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(20, 12);
@@ -1854,7 +1854,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(20, 12);
@@ -1907,7 +1907,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(16, 12);
@@ -1956,7 +1956,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(22, 12);
@@ -2012,7 +2012,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -2056,7 +2056,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -2105,7 +2105,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(10, 16);
@@ -2154,7 +2154,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(10, 16);
@@ -2210,7 +2210,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(10, 16);
@@ -2263,7 +2263,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(10, 16);
@@ -2325,7 +2325,7 @@ public class TestMonitoringOfAvailableConstruction {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point21 = new Point(5, 15);
@@ -2395,7 +2395,7 @@ public class TestMonitoringOfAvailableConstruction {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point21 = new Point(5, 15);
@@ -2469,7 +2469,7 @@ public class TestMonitoringOfAvailableConstruction {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point21 = new Point(5, 15);
@@ -2540,7 +2540,7 @@ public class TestMonitoringOfAvailableConstruction {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point21 = new Point(5, 15);
@@ -2757,7 +2757,7 @@ public class TestMonitoringOfAvailableConstruction {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(10, 10);

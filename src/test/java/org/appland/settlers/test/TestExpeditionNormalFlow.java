@@ -1,20 +1,15 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.PlayerType;
-import org.appland.settlers.model.Vegetation;
-import org.appland.settlers.model.Direction;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.actors.Builder;
-import org.appland.settlers.model.actors.Ship;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.actors.Shipwright;
 import org.appland.settlers.model.buildings.Harbor;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -28,9 +23,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import static org.appland.settlers.model.Direction.RIGHT;
 import static org.appland.settlers.model.Material.*;
@@ -85,7 +77,7 @@ public class TestExpeditionNormalFlow {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place a lake
         for (int i = 5; i < 53; i += 2) {
@@ -194,7 +186,7 @@ public class TestExpeditionNormalFlow {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place a lake
         for (int i = 7; i < 57; i += 2) {
@@ -271,7 +263,7 @@ public class TestExpeditionNormalFlow {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 60, 21);
 
         // Place a lake
         for (int i = 3; i < 53; i += 2) {
@@ -425,7 +417,7 @@ public class TestExpeditionNormalFlow {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 60, 21);
 
         // Place a lake
         for (int i = 3; i < 53; i += 2) {
@@ -589,7 +581,7 @@ public class TestExpeditionNormalFlow {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 60, 21);
 
         // Place a lake
         for (int i = 3; i < 53; i += 2) {
@@ -759,7 +751,7 @@ public class TestExpeditionNormalFlow {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
@@ -934,7 +926,7 @@ public class TestExpeditionNormalFlow {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
@@ -1121,7 +1113,7 @@ public class TestExpeditionNormalFlow {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
@@ -1319,7 +1311,7 @@ public class TestExpeditionNormalFlow {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
@@ -1519,7 +1511,7 @@ public class TestExpeditionNormalFlow {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
@@ -1741,7 +1733,7 @@ public class TestExpeditionNormalFlow {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
@@ -1937,7 +1929,7 @@ public class TestExpeditionNormalFlow {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
@@ -2144,7 +2136,7 @@ public class TestExpeditionNormalFlow {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
@@ -2376,7 +2368,7 @@ public class TestExpeditionNormalFlow {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {

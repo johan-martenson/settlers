@@ -1,18 +1,17 @@
 package org.appland.settlers.fuzzing;
 
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.buildings.Building;
 
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 public class ArgumentsHandler {
 
@@ -23,7 +22,6 @@ public class ArgumentsHandler {
     }
 
     int getIntFor3Chars() throws SettlersModelDriverException, IOException {
-
         byte[] bytes = new byte[3];
 
         int result = inputStream.read(bytes, 0, 3);
@@ -42,7 +40,6 @@ public class ArgumentsHandler {
     }
 
     int getIntFor2Chars() throws SettlersModelDriverException, IOException {
-
         byte[] bytes = new byte[3];
 
         int result = inputStream.read(bytes, 0, 2);
@@ -139,7 +136,7 @@ public class ArgumentsHandler {
         int y = (int) Math.round((double)index / (double)pointsPerRow);
         int x = largeNumber % pointsPerRow;
 
-        if (y % 2 == 0) {
+        if (y % 2 == 0) { // TODO: needs fixing!!!
             return new Point(x * 2, y);
         }
 

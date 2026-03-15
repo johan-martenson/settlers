@@ -39,7 +39,7 @@ public class TestPlankProductionPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 10, 10);
+        var map = new GameMap(players, 10, 11);
 
         // Create the computer player
         var computerPlayer = new PlankProductionPlayer(player0, map);
@@ -53,7 +53,7 @@ public class TestPlankProductionPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new PlankProductionPlayer(player0, map);
@@ -86,7 +86,7 @@ public class TestPlankProductionPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new PlankProductionPlayer(player0, map);
@@ -124,7 +124,7 @@ public class TestPlankProductionPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new PlankProductionPlayer(player0, map);
@@ -151,7 +151,7 @@ public class TestPlankProductionPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new PlankProductionPlayer(player0, map);
@@ -184,7 +184,7 @@ public class TestPlankProductionPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new PlankProductionPlayer(player0, map);

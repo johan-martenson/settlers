@@ -3,11 +3,13 @@ package org.appland.settlers.test;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Farm;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -34,7 +36,7 @@ public class TestGameMap {
 
         // Create single player game
         var players = new ArrayList<Player>();        players.add(new Player("Some name", PlayerColor.YELLOW, Nation.ROMANS, PlayerType.HUMAN));
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Verify that the player list can be set
         var player0 = new Player("Player 0", GREEN, Nation.ROMANS, PlayerType.HUMAN);
@@ -56,7 +58,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Verify that starting points can be set
         var points = new ArrayList<Point>();
@@ -76,7 +78,7 @@ public class TestGameMap {
 
         // Create single player game
         var players = new ArrayList<Player>();        players.add(new Player("Some player", PlayerColor.YELLOW, Nation.ROMANS, PlayerType.HUMAN));
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Verify that the player list can be set
         var player0 = new Player("Player 0", GREEN, Nation.ROMANS, PlayerType.HUMAN);
@@ -99,7 +101,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Verify that a headquarter can be placed
         var point0 = new Point(8, 8);
@@ -113,7 +115,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(12, 6);
@@ -138,7 +140,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(12, 4);
@@ -163,7 +165,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(8, 8);
@@ -186,7 +188,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(12, 6);
@@ -211,7 +213,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(8, 8);
@@ -248,7 +250,7 @@ public class TestGameMap {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         try {
-            new GameMap(List.of(player0), 4, 4);
+            new GameMap(List.of(player0), 4, 5);
 
             fail();
         } catch (Exception e) {}
@@ -261,7 +263,7 @@ public class TestGameMap {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         try {
-            new GameMap(List.of(player0), 10, -10);
+            new GameMap(List.of(player0), 10, -11);
 
             fail();
         } catch (Exception e) {}
@@ -274,7 +276,7 @@ public class TestGameMap {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         try {
-            new GameMap(List.of(player0), -30, 10);
+            new GameMap(List.of(player0), -30, 11);
 
             fail();
         } catch (Exception e) {}
@@ -285,7 +287,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(8, 8);
@@ -312,7 +314,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(8, 8);
@@ -336,7 +338,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(8, 8);
@@ -359,7 +361,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(8, 8);
@@ -381,7 +383,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(8, 8);
@@ -411,7 +413,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(8, 8);
@@ -433,7 +435,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(50, 50);
@@ -454,7 +456,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(50, 50);
@@ -478,7 +480,7 @@ public class TestGameMap {
 
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(50, 50);
@@ -507,7 +509,7 @@ public class TestGameMap {
 
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(50, 50);
@@ -536,7 +538,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(50, 50);
@@ -558,7 +560,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(50, 50);
@@ -587,7 +589,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(50, 50);
@@ -614,7 +616,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(50, 50);
@@ -641,7 +643,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(50, 50);
@@ -691,7 +693,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(50, 50);
@@ -738,7 +740,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(50, 50);
@@ -777,7 +779,7 @@ public class TestGameMap {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(50, 50);
@@ -823,7 +825,7 @@ public class TestGameMap {
 
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 15);
@@ -875,7 +877,7 @@ public class TestGameMap {
 
         // Create new single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -893,7 +895,7 @@ public class TestGameMap {
 
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 15);
@@ -922,7 +924,7 @@ public class TestGameMap {
 
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 15);
@@ -954,11 +956,11 @@ public class TestGameMap {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 30);
+        var map = new GameMap(List.of(player0), 20, 31);
 
         // Verify that the width and height are correct
         assertEquals(map.getWidth(), 20);
-        assertEquals(map.getHeight(), 30);
+        assertEquals(map.getHeight(), 31);
     }
 
     @Test
@@ -966,7 +968,7 @@ public class TestGameMap {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -984,7 +986,7 @@ public class TestGameMap {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1003,7 +1005,7 @@ public class TestGameMap {
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place headquarter
         var point38 = new Point(5, 15);
@@ -1095,7 +1097,7 @@ public class TestGameMap {
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place headquarter
         var point38 = new Point(5, 5);
@@ -1113,7 +1115,7 @@ public class TestGameMap {
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place headquarter
         var point38 = new Point(5, 5);
@@ -1139,7 +1141,7 @@ public class TestGameMap {
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place headquarter
         var point38 = new Point(5, 5);
@@ -1164,7 +1166,7 @@ public class TestGameMap {
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place headquarter
         var point38 = new Point(5, 5);
@@ -1182,7 +1184,7 @@ public class TestGameMap {
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place headquarter
         var point38 = new Point(5, 5);
@@ -1202,7 +1204,7 @@ public class TestGameMap {
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place headquarter
         var point38 = new Point(5, 5);
@@ -1222,7 +1224,7 @@ public class TestGameMap {
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place headquarter
         var point38 = new Point(5, 5);
@@ -1244,7 +1246,7 @@ public class TestGameMap {
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place headquarter
         var point38 = new Point(5, 5);
@@ -1263,5 +1265,303 @@ public class TestGameMap {
         assertEquals(trees.size(), 2);
         assertTrue(trees.contains(tree0));
         assertTrue(trees.contains(tree1));
+    }
+
+    @Test
+    public void testSurroundingTilesInUpperLeftCornerWithOddHeight() throws InvalidUserActionException {
+
+        // Create new game map
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 101);
+
+        // Set vegetation
+        var point0 = new Point(0, 100);
+
+        map.setVegetationDownRight(point0, Vegetation.DESERT_1);
+
+        // Verify that the surrounding tiles is correct for the upper left corner
+        var tiles = map.getSurroundingTiles(point0);
+
+        assertEquals(tiles.size(), 1);
+        assertTrue(tiles.contains(Vegetation.DESERT_1));
+    }
+
+    @Test
+    public void testSurroundingTilesInUpperLeftCornerWithEvenHeight() throws InvalidUserActionException {
+
+        // Create new game map
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 100);
+
+        // Set vegetation
+        var point0 = new Point(0, 99);
+
+        map.setVegetationDownRight(point0, Vegetation.DESERT_1);
+
+        // Verify that the surrounding tiles is correct for the upper left corner
+        var tiles = map.getSurroundingTiles(point0);
+
+        assertEquals(tiles.size(), 1);
+        assertTrue(tiles.contains(Vegetation.DESERT_1));
+    }
+
+    @Test
+    public void testSurroundingTilesInUpperRightCornerForOddHeight() throws InvalidUserActionException {
+
+        // Create new game map
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 101);
+
+        // Set vegetation
+        var point0 = new Point(98, 100);
+
+        map.setVegetationDownLeft(point0, Vegetation.DESERT_1);
+        map.setVegetationBelow(point0, Vegetation.DESERT_2);
+
+        // Verify that the surrounding tiles is correct for the upper left corner
+        var tiles = map.getSurroundingTiles(point0);
+
+        assertEquals(2, tiles.size());
+        assertTrue(tiles.contains(Vegetation.DESERT_1));
+        assertTrue(tiles.contains(Vegetation.DESERT_2));
+    }
+
+    @Test
+    public void testSurroundingTilesInUpperRightCornerForEvenHeight() throws InvalidUserActionException {
+
+        // Create new game map
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 100);
+
+        // Set vegetation
+        var point0 = new Point(98, 99);
+
+        map.setVegetationDownLeft(point0, Vegetation.DESERT_1);
+        map.setVegetationBelow(point0, Vegetation.DESERT_2);
+
+        // Verify that the surrounding tiles is correct for the upper left corner
+        var tiles = map.getSurroundingTiles(point0);
+
+        assertEquals(tiles.size(), 2);
+        assertTrue(tiles.contains(Vegetation.DESERT_1));
+        assertTrue(tiles.contains(Vegetation.DESERT_2));
+    }
+
+    @Test
+    public void testSurroundingTilesInLowerRightCornerForOddHeight() throws InvalidUserActionException {
+
+        // Create new game map
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 101);
+
+        // Set vegetation
+        var point0 = new Point(98, 0);
+
+        map.setVegetationUpLeft(point0, Vegetation.DESERT_1);
+        map.setVegetationAbove(point0, Vegetation.DESERT_2);
+
+        // Verify that the surrounding tiles is correct for the upper left corner
+        var tiles = map.getSurroundingTiles(point0);
+
+        assertEquals(2, tiles.size());
+        assertTrue(tiles.contains(Vegetation.DESERT_1));
+        assertTrue(tiles.contains(Vegetation.DESERT_2));
+    }
+
+    @Test
+    public void testSurroundingTilesInLowerRightCornerForEvenHeight() throws InvalidUserActionException {
+
+        // Create new game map
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 100);
+
+        // Set vegetation
+        var point0 = new Point(99, 0);
+
+        map.setVegetationUpLeft(point0, Vegetation.DESERT_1);
+
+        // Verify that the surrounding tiles is correct for the upper left corner
+        var tiles = map.getSurroundingTiles(point0);
+
+        assertEquals(tiles.size(), 1);
+        assertTrue(tiles.contains(Vegetation.DESERT_1));
+    }
+
+    @Test
+    public void testSurroundingTilesInLowerLeftCornerForOddHeight() throws InvalidUserActionException {
+
+        // Create new game map
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 101);
+
+        // Set vegetation
+        var point0 = new Point(0, 0);
+
+        map.setVegetationUpRight(point0, Vegetation.WATER);
+
+        // Verify that the surrounding tiles is correct for the upper left corner
+        var tiles = map.getSurroundingTiles(point0);
+
+        assertEquals(1, tiles.size());
+        assertTrue(tiles.contains(Vegetation.WATER));
+    }
+
+    @Test
+    public void testSurroundingTilesInLowerLeftCornerForEvenHeight() throws InvalidUserActionException {
+
+        // Create new game map
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 100);
+
+        // Set vegetation
+        var point0 = new Point(1, 0);
+
+        map.setVegetationUpRight(point0, Vegetation.DESERT_2);
+        map.setVegetationAbove(point0, Vegetation.WATER);
+
+        // Verify that the surrounding tiles is correct for the upper left corner
+        var tiles = map.getSurroundingTiles(point0);
+
+        assertEquals(tiles.size(), 2);
+        assertTrue(tiles.contains(Vegetation.DESERT_2));
+        assertTrue(tiles.contains(Vegetation.WATER));
+    }
+
+    @Test
+    public void testSurroundingTilesLeftEdgeForShiftedRow() throws InvalidUserActionException {
+
+        // Create new game map
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 100);
+
+        // Set vegetation
+        var point0 = new Point(1, 50);
+
+        map.setVegetationAbove(point0, Vegetation.DESERT_1);
+        map.setVegetationUpRight(point0, Vegetation.DESERT_2);
+        map.setVegetationDownRight(point0, Vegetation.WATER);
+        map.setVegetationBelow(point0, Vegetation.WATER_2);
+
+        // Verify that the surrounding tiles is correct for the upper left corner
+        var tiles = map.getSurroundingTiles(point0);
+
+        assertEquals(tiles.size(), 4);
+        assertTrue(tiles.contains(Vegetation.DESERT_1));
+        assertTrue(tiles.contains(Vegetation.DESERT_2));
+        assertTrue(tiles.contains(Vegetation.WATER));
+        assertTrue(tiles.contains(Vegetation.WATER_2));
+    }
+
+    @Test
+    public void testSurroundingTilesLeftEdgeForUnshiftedRow() throws InvalidUserActionException {
+
+        // Create new game map
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 100);
+
+        // Set vegetation
+        var point0 = new Point(0, 51);
+
+        map.setVegetationUpRight(point0, Vegetation.DESERT_2);
+        map.setVegetationDownRight(point0, Vegetation.WATER);
+
+        // Verify that the surrounding tiles is correct for the upper left corner
+        var tiles = map.getSurroundingTiles(point0);
+
+        assertEquals(2, tiles.size());
+        assertTrue(tiles.contains(Vegetation.DESERT_2));
+        assertTrue(tiles.contains(Vegetation.WATER));
+    }
+
+    @Test
+    public void testSurroundingTilesRightEdgeForShiftedRow() throws InvalidUserActionException {
+
+        // Create new game map
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 100);
+
+        // Set vegetation
+        var point0 = new Point(99, 50);
+
+        map.setVegetationUpLeft(point0, Vegetation.DESERT_2);
+        map.setVegetationDownLeft(point0, Vegetation.WATER);
+
+        // Verify that the surrounding tiles is correct for the upper left corner
+        var tiles = map.getSurroundingTiles(point0);
+
+        assertEquals(tiles.size(), 2);
+        assertTrue(tiles.contains(Vegetation.DESERT_2));
+        assertTrue(tiles.contains(Vegetation.WATER));
+    }
+
+    @Test
+    public void testSurroundingTilesRightEdgeForUnshiftedRow() throws InvalidUserActionException {
+
+        // Create new game map
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 100);
+
+        // Set vegetation
+        var point0 = new Point(98, 51);
+
+        map.setVegetationAbove(point0, Vegetation.DESERT_1);
+        map.setVegetationUpLeft(point0, Vegetation.DESERT_2);
+        map.setVegetationDownLeft(point0, Vegetation.WATER);
+        map.setVegetationBelow(point0, Vegetation.WATER_2);
+
+        // Verify that the surrounding tiles is correct for the upper left corner
+        var tiles = map.getSurroundingTiles(point0);
+
+        assertEquals(4, tiles.size());
+        assertTrue(tiles.contains(Vegetation.DESERT_1));
+        assertTrue(tiles.contains(Vegetation.DESERT_2));
+        assertTrue(tiles.contains(Vegetation.WATER));
+        assertTrue(tiles.contains(Vegetation.WATER_2));
+    }
+
+    @Test
+    public void testSurroundingTilesTopEdge() throws InvalidUserActionException {
+
+        // Create new game map
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 100);
+
+        // Set vegetation
+        var point0 = new Point(50, 99);
+
+        map.setVegetationDownRight(point0, Vegetation.DESERT_1);
+        map.setVegetationBelow(point0, Vegetation.DESERT_2);
+        map.setVegetationDownLeft(point0, Vegetation.WATER);
+
+        // Verify that the surrounding tiles is correct for the upper left corner
+        var tiles = map.getSurroundingTiles(point0);
+
+        assertEquals(3, tiles.size());
+        assertTrue(tiles.contains(Vegetation.DESERT_1));
+        assertTrue(tiles.contains(Vegetation.DESERT_2));
+        assertTrue(tiles.contains(Vegetation.WATER));
+    }
+
+    @Test
+    public void testSurroundingTilesBottomEdge() throws InvalidUserActionException {
+
+        // Create new game map
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 101);
+
+        // Set vegetation
+        var point0 = new Point(50, 0);
+
+        map.setVegetationAbove(point0, Vegetation.DESERT_1);
+        map.setVegetationUpLeft(point0, Vegetation.DESERT_2);
+        map.setVegetationUpRight(point0, Vegetation.WATER);
+
+        // Verify that the surrounding tiles is correct for the upper left corner
+        var tiles = map.getSurroundingTiles(point0);
+
+        assertEquals(3, tiles.size());
+        assertTrue(tiles.contains(Vegetation.DESERT_1));
+        assertTrue(tiles.contains(Vegetation.DESERT_2));
+        assertTrue(tiles.contains(Vegetation.WATER));
     }
 }

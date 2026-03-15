@@ -36,7 +36,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -58,7 +58,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -92,7 +92,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -126,7 +126,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -171,7 +171,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -227,7 +227,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -278,7 +278,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -329,7 +329,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -477,7 +477,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -534,7 +534,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 15);
@@ -595,7 +595,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 15);
@@ -656,7 +656,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 15);
@@ -717,7 +717,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 15);
@@ -779,7 +779,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -856,7 +856,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -907,7 +907,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -968,7 +968,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1032,7 +1032,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1085,7 +1085,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(9, 15);
@@ -1159,7 +1159,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1178,7 +1178,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1220,7 +1220,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(6, 8);
@@ -1307,7 +1307,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(10, 8);
@@ -1375,7 +1375,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(10, 8);
@@ -1412,7 +1412,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1438,7 +1438,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1512,7 +1512,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1588,7 +1588,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1653,7 +1653,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1718,7 +1718,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1781,7 +1781,7 @@ public class TestGeologist {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarters
         var point0 = new Point(9, 23);

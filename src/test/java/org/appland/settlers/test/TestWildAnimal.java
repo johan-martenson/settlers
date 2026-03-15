@@ -1,6 +1,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
+import org.appland.settlers.maps.utils.GeometryMapping;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
@@ -14,7 +15,6 @@ import org.junit.Test;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.appland.settlers.model.Vegetation.*;
 import static org.appland.settlers.model.actors.WildAnimal.Type.*;
@@ -31,7 +31,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Verify that wild animals appear spontaneously
         var animalsAtStart = map.getWildAnimals().size();
@@ -52,7 +52,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Wait for an animal to appear
         var animal = Utils.waitForAnimalToAppear(map);
@@ -78,7 +78,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Wait for an animal to appear
         var animal = Utils.waitForAnimalToAppear(map);
@@ -108,7 +108,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Verify that animals are created across the map
         var minX = Integer.MAX_VALUE;
@@ -164,7 +164,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Wait for a wild animal to appear
         var animal = Utils.waitForAnimalToAppear(map);
@@ -185,7 +185,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Fill the map with stones except for one single point
         var point0 = new Point(20, 20);
@@ -239,7 +239,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Set the whole map to water
         Utils.fillMapWithVegetation(map, WATER);
@@ -257,7 +257,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Set the whole map to grass
         Utils.fillMapWithVegetation(map, MEADOW_1);
@@ -280,7 +280,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Set the whole map to swamp
         Utils.fillMapWithVegetation(map, SWAMP);
@@ -303,7 +303,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Set the whole map to mountain
         Utils.fillMapWithVegetation(map, MOUNTAIN_1);
@@ -326,7 +326,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Set the whole map to savannah
         Utils.fillMapWithVegetation(map, SAVANNAH);
@@ -349,7 +349,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Set the whole map to snow
         Utils.fillMapWithVegetation(map, SNOW);
@@ -372,7 +372,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Set the whole map to desert
         Utils.fillMapWithVegetation(map, DESERT_1);
@@ -395,7 +395,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Set the whole map to steppe
         Utils.fillMapWithVegetation(map, STEPPE);
@@ -418,7 +418,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Set the whole map to mountain meadow
         Utils.fillMapWithVegetation(map, MOUNTAIN_MEADOW);
@@ -441,7 +441,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Set the whole map to buildable mountain
         Utils.fillMapWithVegetation(map, BUILDABLE_MOUNTAIN);
@@ -464,7 +464,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Set the whole map to deep water
         Utils.fillMapWithVegetation(map, WATER_2);
@@ -482,7 +482,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Set the whole map to lava
         Utils.fillMapWithVegetation(map, LAVA_1);
@@ -499,25 +499,23 @@ public class TestWildAnimal {
      * This tests that wild animals are not placed on any points that are so close to the edge of the map that one of
      * the tiles next to the point they are placed on is missing
      */
-    
+
     @Test
     public void testWildAnimalsDoesNotAppearTooCloseToTheEdge() throws Exception {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Fill all points that are on the map and surrounded by valid tiles with stones
-        for (int x = 1; x < 20; x++) {
-            for (int y = 1; y < 20; y++) {
+        for (int x = 0; x < 20; x++) {
+            for (int y = 0; y < 20; y++) {
+                var point = new Point(x, y);
 
                 // Filter invalid points
-                if ((x + y) % 2 != 0) {
-
+                if (!GeometryMapping.isValidGamePoint(point, map.getHeight())) {
                     continue;
                 }
-
-                var point = new Point(x, y);
 
                 // Filter points that are next to at least one invalid/undefined tile
                 if (map.getSurroundingTiles(point).size() != 6) {
@@ -531,8 +529,11 @@ public class TestWildAnimal {
 
         // Verify that no wild animals appear because there are no suitable points
         for (int i = 0; i < 1000; i++) {
+            if (map.getWildAnimals().size() > 0) {
+                System.out.println(map.getWildAnimals());
+            }
 
-            assertEquals(map.getWildAnimals().size(), 0);
+            assertEquals(0, map.getWildAnimals().size());
 
             map.stepTime();
         }
@@ -543,13 +544,13 @@ public class TestWildAnimal {
         assertEquals(WildAnimal.Type.values().length, 8);
 
         assertEquals(RABBIT.name(), "RABBIT");
-        assertEquals(WildAnimal.Type.FOX.name(), "FOX");
+        assertEquals(FOX.name(), "FOX");
         assertEquals(STAG.name(), "STAG");
         assertEquals(DEER.name(), "DEER");
         assertEquals(DUCK.name(), "DUCK");
         assertEquals(SHEEP.name(), "SHEEP");
-        assertEquals(WildAnimal.Type.DEER_2.name(), "DEER_2");
-        assertEquals(WildAnimal.Type.DUCK_2.name(), "DUCK_2");
+        assertEquals(DEER_2.name(), "DEER_2");
+        assertEquals(DUCK_2.name(), "DUCK_2");
     }
 
     @Test
@@ -557,7 +558,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Wait for an animal to appear
         var animal = Utils.waitForAnimalToAppear(map);
@@ -573,7 +574,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Verify that it's possible to place a rabbit on the map
         var point0 = new Point(20, 20);
@@ -588,7 +589,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Verify that it's possible to place a fox on the map
         var point0 = new Point(20, 20);
@@ -603,7 +604,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Verify that it's possible to place a stag on the map
         var point0 = new Point(20, 20);
@@ -618,7 +619,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Verify that it's possible to place a deer on the map
         var point0 = new Point(20, 20);
@@ -633,7 +634,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Verify that it's possible to place a duck on the map
         var point0 = new Point(20, 20);
@@ -648,7 +649,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Verify that it's possible to place a sheep on the map
         var point0 = new Point(20, 20);
@@ -663,7 +664,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Verify that it's possible to place a deer_2 on the map
         var point0 = new Point(20, 20);
@@ -678,7 +679,7 @@ public class TestWildAnimal {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Verify that it's possible to place a duck_2 on the map
         var point0 = new Point(20, 20);

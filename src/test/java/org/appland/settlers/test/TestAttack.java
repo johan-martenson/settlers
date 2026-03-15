@@ -93,7 +93,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(5, 5);
@@ -116,7 +116,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -152,7 +152,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(5, 5);
@@ -183,7 +183,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(5, 15);
@@ -213,7 +213,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(5, 15);
@@ -243,7 +243,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -285,7 +285,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -333,7 +333,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -382,7 +382,7 @@ public class TestAttack {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1, player2), 60, 60);
+        var map = new GameMap(List.of(player0, player1, player2), 60, 61);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -456,7 +456,7 @@ public class TestAttack {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1, player2), 60, 60);
+        var map = new GameMap(List.of(player0, player1, player2), 60, 61);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -532,7 +532,7 @@ public class TestAttack {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1, player2), 60, 60);
+        var map = new GameMap(List.of(player0, player1, player2), 60, 61);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -589,7 +589,7 @@ public class TestAttack {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1, player2), 60, 60);
+        var map = new GameMap(List.of(player0, player1, player2), 60, 61);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -665,7 +665,7 @@ public class TestAttack {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1, player2), 60, 60);
+        var map = new GameMap(List.of(player0, player1, player2), 60, 61);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -734,7 +734,7 @@ public class TestAttack {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1, player2), 60, 60);
+        var map = new GameMap(List.of(player0, player1, player2), 60, 61);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -792,7 +792,7 @@ public class TestAttack {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1, player2), 100, 100);
+        var map = new GameMap(List.of(player0, player1, player2), 100, 101);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -865,7 +865,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -906,7 +906,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -946,7 +946,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(5, 5);
@@ -987,7 +987,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(15, 5);
@@ -1032,7 +1032,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1096,7 +1096,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1151,7 +1151,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1205,7 +1205,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1286,7 +1286,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1360,7 +1360,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1451,7 +1451,7 @@ public class TestAttack {
         // Create game with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1544,7 +1544,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1644,7 +1644,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1751,7 +1751,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1844,7 +1844,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1940,7 +1940,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -2044,7 +2044,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -2161,7 +2161,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -2262,7 +2262,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -2370,7 +2370,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -2478,7 +2478,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -2585,7 +2585,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -2644,7 +2644,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -2714,7 +2714,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -2852,7 +2852,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -2945,7 +2945,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -3086,7 +3086,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -3223,7 +3223,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -3314,7 +3314,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -3436,7 +3436,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -3554,7 +3554,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -3665,7 +3665,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -3785,7 +3785,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -3904,7 +3904,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -4036,7 +4036,7 @@ public class TestAttack {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1, player2), 100, 100);
+        var map = new GameMap(List.of(player0, player1, player2), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -4106,7 +4106,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -4185,7 +4185,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -4261,7 +4261,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -4346,7 +4346,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -4457,7 +4457,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -4605,7 +4605,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -4703,7 +4703,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(13, 5);
@@ -4828,7 +4828,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -4929,7 +4929,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -5044,7 +5044,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -5106,7 +5106,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -5162,7 +5162,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -5217,7 +5217,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -5279,7 +5279,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -5396,7 +5396,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -5520,7 +5520,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -5641,7 +5641,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -5790,7 +5790,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -5869,7 +5869,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -5949,7 +5949,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -6055,7 +6055,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -6163,7 +6163,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -6275,7 +6275,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -6380,7 +6380,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -6591,7 +6591,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -6667,7 +6667,7 @@ public class TestAttack {
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -6738,14 +6738,13 @@ public class TestAttack {
         assertEquals(headquarter1.getWorker().getTarget(), headquarter1.getFlag().getPosition());
     }
 
-
     @Test
     public void testAttackAndDefeatHeadquarters() throws Exception {
 
         // Create game with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -6833,7 +6832,7 @@ public class TestAttack {
 
         // Create player list with three players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarters
         var point0 = new Point(5, 5);

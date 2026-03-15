@@ -28,7 +28,7 @@ public class TestMultipleStorehouses {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 51);
 
         // Place headquarter
         var point0 = new Point(15, 5);
@@ -87,7 +87,7 @@ public class TestMultipleStorehouses {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 51);
 
         // Place headquarter
         var point0 = new Point(15, 5);
@@ -145,7 +145,7 @@ public class TestMultipleStorehouses {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 51);
 
         // Place headquarter
         var point0 = new Point(15, 5);

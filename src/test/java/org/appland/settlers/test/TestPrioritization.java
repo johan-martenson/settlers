@@ -7,24 +7,22 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.TransportCategory;
 import org.appland.settlers.model.actors.Armorer;
 import org.appland.settlers.model.actors.Baker;
+import org.appland.settlers.model.actors.Carpenter;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.IronFounder;
 import org.appland.settlers.model.actors.Miller;
 import org.appland.settlers.model.actors.Miner;
 import org.appland.settlers.model.actors.Minter;
-import org.appland.settlers.model.actors.Carpenter;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Bakery;
@@ -41,10 +39,8 @@ import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.buildings.Well;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.appland.settlers.model.Material.*;
 import static org.junit.Assert.*;
@@ -60,8 +56,7 @@ public class TestPrioritization {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Put small mountains with ore on the map
         var point0 = new Point(6, 10);
@@ -183,8 +178,7 @@ public class TestPrioritization {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Put small mountains with ore on the map
         var point0 = new Point(6, 10);
@@ -309,8 +303,7 @@ public class TestPrioritization {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Put small mountains with ore on the map
         var point0 = new Point(6, 10);
@@ -435,8 +428,7 @@ public class TestPrioritization {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Put small mountains with ore on the map
         var point0 = new Point(6, 10);
@@ -561,8 +553,7 @@ public class TestPrioritization {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Put small mountains with ore on the map
         var point0 = new Point(5, 9);
@@ -687,8 +678,7 @@ public class TestPrioritization {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Put small mountains with ore on the map
         var point0 = new Point(6, 10);
@@ -798,8 +788,7 @@ public class TestPrioritization {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Put small mountains with ore on the map
         var point0 = new Point(6, 10);
@@ -927,8 +916,7 @@ public class TestPrioritization {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Put small mountains with ore on the map
         var point0 = new Point(6, 10);
@@ -1071,8 +1059,7 @@ public class TestPrioritization {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Put small mountains with ore on the map
         var point0 = new Point(6, 10);
@@ -1156,8 +1143,7 @@ public class TestPrioritization {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(15, 9);
@@ -1265,8 +1251,7 @@ public class TestPrioritization {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(15, 9);
@@ -1382,8 +1367,7 @@ public class TestPrioritization {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(15, 9);
@@ -1433,7 +1417,8 @@ public class TestPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that only the iron smelter gets any coal
-        var coalAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
+        var coalAllocation = new HashMap<Building, Integer>();
+        var carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -1499,8 +1484,7 @@ public class TestPrioritization {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(15, 9);
@@ -1616,8 +1600,7 @@ public class TestPrioritization {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(15, 9);
@@ -1718,8 +1701,7 @@ public class TestPrioritization {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(15, 9);
@@ -1832,8 +1814,7 @@ public class TestPrioritization {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(15, 9);
@@ -1977,8 +1958,7 @@ public class TestPrioritization {
 
         // Create new game map with one player
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 30, 30);
+        var map = new GameMap(List.of(player0), 30, 31);
 
         // Place headquarter
         var point0 = new Point(15, 15);
@@ -2084,8 +2064,7 @@ public class TestPrioritization {
 
         // Create new game map with one player
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
         // Place headquarter
         var point0 = new Point(15, 15);
@@ -2245,8 +2224,7 @@ public class TestPrioritization {
 
         // Create new game map with one player
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
         // Place headquarter
         var point0 = new Point(15, 15);
@@ -2275,8 +2253,7 @@ public class TestPrioritization {
 
         // Create new game map with one player
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
         // Place headquarter
         var point0 = new Point(15, 15);
@@ -2287,9 +2264,7 @@ public class TestPrioritization {
             player0.setTransportPriority(-1, TransportCategory.WOOD);
 
             fail();
-        } catch (InvalidUserActionException e) {
-
-        }
+        } catch (InvalidUserActionException e) { }
     }
 
     @Test
@@ -2297,8 +2272,7 @@ public class TestPrioritization {
 
         // Create new game map with one player
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
         // Place headquarter
         var point0 = new Point(15, 15);
@@ -2309,9 +2283,7 @@ public class TestPrioritization {
             player0.setTransportPriority(17, TransportCategory.WOOD); // There are 16 items, and indexing starts at 0
 
             fail();
-        } catch (InvalidUserActionException e) {
-
-        }
+        } catch (InvalidUserActionException e) { }
     }
 
     @Test
@@ -2319,8 +2291,7 @@ public class TestPrioritization {
 
         // Create new game map with one player
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
         // Place headquarter
         var point0 = new Point(15, 15);

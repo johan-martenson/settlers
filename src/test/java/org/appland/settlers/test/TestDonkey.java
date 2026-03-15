@@ -50,7 +50,7 @@ public class TestDonkey {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point38 = new Point(5, 5);
@@ -134,7 +134,7 @@ public class TestDonkey {
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point0 = new Point(15, 5);
@@ -178,7 +178,7 @@ public class TestDonkey {
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point0 = new Point(15, 5);
@@ -219,7 +219,7 @@ public class TestDonkey {
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point0 = new Point(15, 5);
@@ -261,7 +261,7 @@ public class TestDonkey {
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point0 = new Point(15, 5);
@@ -304,7 +304,7 @@ public class TestDonkey {
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point0 = new Point(15, 5);
@@ -352,7 +352,7 @@ public class TestDonkey {
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 30, 30);
+        var map = new GameMap(players, 30, 31);
 
         // Place headquarter
         var point0 = new Point(19, 5);
@@ -409,7 +409,7 @@ public class TestDonkey {
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 30, 30);
+        var map = new GameMap(players, 30, 31);
 
         // Place headquarter
         var point0 = new Point(19, 5);
@@ -480,7 +480,7 @@ public class TestDonkey {
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 30, 30);
+        var map = new GameMap(players, 30, 31);
 
         // Place headquarter
         var point0 = new Point(19, 5);
@@ -568,7 +568,7 @@ public class TestDonkey {
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 30, 30);
+        var map = new GameMap(players, 30, 31);
 
         // Place headquarter
         var point0 = new Point(19, 5);
@@ -658,7 +658,7 @@ public class TestDonkey {
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 30, 30);
+        var map = new GameMap(players, 30, 31);
 
         // Place headquarter
         var point0 = new Point(19, 5);
@@ -744,7 +744,7 @@ public class TestDonkey {
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point0 = new Point(15, 5);
@@ -827,7 +827,7 @@ public class TestDonkey {
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point0 = new Point(15, 5);
@@ -918,7 +918,7 @@ public class TestDonkey {
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 30, 30);
+        var map = new GameMap(players, 30, 31);
 
         // Place headquarter
         var point0 = new Point(19, 5);
@@ -1012,7 +1012,7 @@ public class TestDonkey {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point21 = new Point(7, 5);
@@ -1105,7 +1105,7 @@ public class TestDonkey {
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1139,7 +1139,7 @@ public class TestDonkey {
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1175,7 +1175,7 @@ public class TestDonkey {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point38 = new Point(5, 5);
@@ -1241,7 +1241,7 @@ public class TestDonkey {
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
         players.add(player1);
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place headquarter
         var point38 = new Point(21, 13);
@@ -1334,7 +1334,7 @@ public class TestDonkey {
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point38 = new Point(5, 5);

@@ -1,6 +1,8 @@
 package org.appland.settlers.maps;
 
 import org.appland.settlers.assets.Nation;
+import org.appland.settlers.maps.utils.GeometryMapping;
+import org.appland.settlers.maps.utils.MapFileUtils;
 import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
@@ -10,7 +12,6 @@ import org.appland.settlers.utils.StreamReader;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
-import java.awt.Dimension;
 import java.awt.Point;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,12 +21,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static org.appland.settlers.maps.Utils.isEven;
+import static java.lang.String.format;
 import static org.appland.settlers.model.DecorationType.*;
 
 /**
@@ -33,6 +35,12 @@ import static org.appland.settlers.model.DecorationType.*;
  *
  */
 public class MapLoader {
+    private static final int NUMBER_OF_STARTING_POSITIONS = 7;
+    private static final short UNLIMITED_PLAY_ENABLED = 0;
+    private static final int NUMBER_OF_PLAYER_FACES = 7;
+    private static final int NUMBER_OF_UNIQUE_MASSES = 250;
+    private static final int LONG_TITLE = 24;
+    private static final int SHORT_TITLE = 20;
 
     @Option(name = "--file", usage = "Map file to load")
     String filename;
@@ -109,9 +117,10 @@ public class MapLoader {
         System.out.printf(" - Max number of players: %d%n", mapFile.getMaxNumberOfPlayers());
 
         System.out.println(" - Starting points:");
-        mapFile.getGamePointStartingPoints().forEach(point ->
-                System.out.printf("    - %d, %d%n", point.x, point.y)
-        );
+        System.out.println("   -- As map files points: ");
+        mapFile.getStartingPoints().forEach(point -> System.out.printf("    - %d, %d%n", point.x, point.y));
+        System.out.println("   -- As game points: ");
+        mapFile.getStartingPoints().forEach(point -> System.out.printf("    - %s%n", GeometryMapping.mapFilePointToGamePoint(point, mapFile.getHeight())));
 
         System.out.println(" - Player types:");
         mapFile.getPlayerFaces().forEach(face ->
@@ -142,7 +151,7 @@ public class MapLoader {
      * @throws InvalidMapException         if the map is invalid
      */
     public MapFile loadMapFromFile(String mapFilename) throws SettlersMapLoadingException, IOException, InvalidMapException {
-        debug(String.format("Loading: %s", mapFilename));
+        debug(format("Loading: %s", mapFilename));
 
         try (var fileInputStream = Files.newInputStream(Paths.get(mapFilename))) {
             return loadMapFromStream(fileInputStream);
@@ -164,7 +173,7 @@ public class MapLoader {
 
         // Read file header
         var fileHeader = streamReader.getUint8ArrayAsString(10);
-        debug(String.format(" -- File header: %s", fileHeader));
+        debug(format(" -- File header: %s", fileHeader));
         mapFile.setHeader(fileHeader);
 
         // Read title and dimensions.
@@ -172,15 +181,15 @@ public class MapLoader {
         var titleAndMaybeWidthAndHeight = streamReader.getUint8ArrayAsByteArray(24);
         int maybeWidth = titleAndMaybeWidthAndHeight.getUint16(20);
         int maybeHeight = titleAndMaybeWidthAndHeight.getUint16(22);
-        debug(String.format(" -- Maybe width x height: %d x %d", maybeWidth, maybeHeight));
+        debug(format(" -- Maybe width x height: %d x %d", maybeWidth, maybeHeight));
 
         // Read terrain type
         mapFile.setTerrainType(TerrainType.fromUint8(streamReader.getUint8()));
-        debug(String.format(" -- Terrain type: %s", mapFile.getTerrainType()));
+        debug(format(" -- Terrain type: %s", mapFile.getTerrainType()));
 
         // Read number of players
         mapFile.setMaxNumberOfPlayers(streamReader.getUint8());
-        debug(String.format(" -- Number of players: %d", mapFile.getMaxNumberOfPlayers()));
+        debug(format(" -- Number of players: %d", mapFile.getMaxNumberOfPlayers()));
 
         if (mapFile.getMaxNumberOfPlayers() < 1) {
             throw new InvalidMapException("The map must contain at least one player");
@@ -188,52 +197,52 @@ public class MapLoader {
 
         // Read author
         mapFile.setAuthor(streamReader.getUint8ArrayAsNullTerminatedString(20));
-        debug(String.format(" -- Author: %s", mapFile.getAuthor()));
+        debug(format(" -- Author: %s", mapFile.getAuthor()));
 
         // Read starting positions
-        var tmpStartingPositions = new ArrayList<Point>();
+        var startingPositions = new ArrayList<Point>();
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < NUMBER_OF_STARTING_POSITIONS; i++) {
             int x = streamReader.getUint16();
 
             if (i < mapFile.getMaxNumberOfPlayers()) {
-                tmpStartingPositions.add(new Point(x, 0));
+                startingPositions.add(new Point(x, 0));
             }
         }
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < NUMBER_OF_STARTING_POSITIONS; i++) {
             int y = streamReader.getUint16();
 
             if (i < mapFile.getMaxNumberOfPlayers()) {
-                tmpStartingPositions.get(i).y = y;
-                mapFile.addStartingPosition(tmpStartingPositions.get(i));
+                startingPositions.get(i).y = y;
+                mapFile.addStartingPoint(startingPositions.get(i));
             }
         }
 
-        debug(String.format(" -- Starting positions: %s", tmpStartingPositions));
+        debug(format(" -- Starting positions: %s", startingPositions));
 
         // Determine if the map is intended for unlimited play
-        if (streamReader.getUint8() == 0) {
+        if (streamReader.getUint8() == UNLIMITED_PLAY_ENABLED) {
             mapFile.enableUnlimitedPlay();
         } else {
             mapFile.disableUnlimitedPlay();
         }
-        debug(String.format(" -- Unlimited play: %b", mapFile.isUnlimitedPlayEnabled()));
+        debug(format(" -- Unlimited play: %b", mapFile.isUnlimitedPlayEnabled()));
 
         // Read player faces
         var playerFaces = new ArrayList<PlayerFace>();
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < NUMBER_OF_PLAYER_FACES; i++) {
             short faceType = streamReader.getUint8();
             if (i < mapFile.getMaxNumberOfPlayers()) {
                 playerFaces.add(PlayerFace.playerFaceFromShort(faceType));
             }
         }
         mapFile.setPlayerFaces(playerFaces);
-        playerFaces.forEach(face -> debug(String.format(" -- Player: %s", face.name())));
+        playerFaces.forEach(face -> debug(format(" -- Player: %s", face.name())));
 
         // Read starting points for unique water and land masses
         var masses = new ArrayList<UniqueMass>();
-        for (int i = 0; i < 250; i++) {
+        for (int i = 0; i < NUMBER_OF_UNIQUE_MASSES; i++) {
             var type = MassType.massTypeFromInt(streamReader.getUint8());
             int x = streamReader.getUint16();
             int y = streamReader.getUint16();
@@ -270,23 +279,23 @@ public class MapLoader {
         String title;
 
         if (newWidth != maybeWidth || newHeight != maybeHeight) {
-            title = titleAndMaybeWidthAndHeight.getNullTerminatedString(24);
+            title = titleAndMaybeWidthAndHeight.getNullTerminatedString(LONG_TITLE);
             mapFile.setTitleType(MapTitleType.LONG);
         } else {
-            title = titleAndMaybeWidthAndHeight.getNullTerminatedString(20);
+            title = titleAndMaybeWidthAndHeight.getNullTerminatedString(SHORT_TITLE);
             mapFile.setTitleType(MapTitleType.SHORT);
         }
 
         mapFile.setWidth(newWidth);
         mapFile.setHeight(newHeight);
         mapFile.setTitle(title);
-        debug(String.format(" -- Title type is: %s", mapFile.getTitleType()));
-        debug(String.format(" -- Title is: %s", title));
-        debug(String.format(" -- Width x height: %d x %d", newWidth, newHeight));
+        debug(format(" -- Title type is: %s", mapFile.getTitleType()));
+        debug(format(" -- Title is: %s", title));
+        debug(format(" -- Width x height: %d x %d", newWidth, newHeight));
 
         // Read height block header and data
         var heightBlockHeader = readBlockHeaderFromStream(streamReader);
-        debug(String.format(" -- Height block header: %s", heightBlockHeader));
+        debug(format(" -- Height block header: %s", heightBlockHeader));
 
         if (!heightBlockHeader.isValid()) {
             System.out.printf("Height block header is invalid: %s", heightBlockHeader);
@@ -302,7 +311,7 @@ public class MapLoader {
                     heightBlockHeader.getWidth(),
                     heightBlockHeader.getHeight());
 
-            throw new SettlersMapLoadingException(String.format("Mismatch in dimensions. Was %s, %s but saw %s, %s",
+            throw new SettlersMapLoadingException(format("Mismatch in dimensions. Was %s, %s but saw %s, %s",
                     mapFile.getWidth(),
                     mapFile.getHeight(),
                     heightBlockHeader.getWidth(),
@@ -312,12 +321,15 @@ public class MapLoader {
         // TODO: Handle fixed 01 00 if they appear
 
         long subBlockSize = heightBlockHeader.getMultiplier() * heightBlockHeader.getBlockLength();
-        debug(String.format(" -- Data size: %d", (int) subBlockSize));
+        debug(format(" -- Data size: %d", (int) subBlockSize));
 
         // Read heights block
         for (int i = 0; i < subBlockSize; i++) {
+            var heightAtPoint = streamReader.getUint8();
+
             var spot = new MapFilePoint();
-            spot.setHeight(streamReader.getUint8());
+            spot.setHeight(heightAtPoint);
+            mapFile.addHeight(heightAtPoint);
             mapFile.addMapFilePoint(spot);
         }
         debug(" -- Loaded heights");
@@ -328,6 +340,7 @@ public class MapLoader {
         for (int i = 0; i < subBlockSize; i++) {
             var mapFilePoint = mapFile.getMapFilePoints().get(i);
             mapFilePoint.setPosition(new Point(x, y));
+
             x += 1;
 
             if (x == mapFile.getWidth()) {
@@ -338,6 +351,8 @@ public class MapLoader {
 
         // Read textures below
         debug("Texture block 1: ");
+
+        System.out.println("  Size: " + newWidth * newHeight + " ? == " + subBlockSize);
 
         // Read the header and verify that it matches the first header
         var texturesBelowBlockHeader = readBlockHeaderFromStream(streamReader);
@@ -351,13 +366,13 @@ public class MapLoader {
         // Read the below texture for each point on the map
         for (int i = 0; i < subBlockSize; i++) {
             var mapFilePoint = mapFile.getMapFilePoint(i);
-            short belowTextureShort = streamReader.getUint8();
-            var texture = Texture.textureFromUint8(belowTextureShort);
-            mapFilePoint.setVegetationBelow(texture);
-            mapFile.addTileBelow(texture);
+            short vegetationBelowUint8 = streamReader.getUint8();
+            var vegetationBelow = MapFileUtils.vegetationFromUint8(vegetationBelowUint8);
+            mapFilePoint.setVegetationBelow(vegetationBelow);
+            mapFile.addTileBelow(vegetationBelow);
 
             // Set the possible harbors
-            if ((belowTextureShort & 0x40) != 0) {
+            if ((vegetationBelowUint8 & 0x40) != 0) {
                 mapFilePoint.setPossibleHarbor();
             }
         }
@@ -377,9 +392,9 @@ public class MapLoader {
 
         // Read textures
         for (int i = 0; i < subBlockSize; i++) {
-            var texture = Texture.textureFromUint8(streamReader.getUint8());
-            mapFile.getMapFilePoint(i).setVegetationDownRight(texture);
-            mapFile.addTileDownRight(texture);
+            var vegetation = MapFileUtils.vegetationFromUint8(streamReader.getUint8());
+            mapFile.getMapFilePoint(i).setVegetationDownRight(vegetation);
+            mapFile.addTileDownRight(vegetation);
         }
 
         // Read the fourth sub block fileHeader with roads
@@ -597,22 +612,22 @@ public class MapLoader {
         var colors = Arrays.stream(PlayerColor.values()).toList();
 
         for (int i = 0; i < mapFile.getMaxNumberOfPlayers(); i++) {
-            players.add(new Player(String.format("Player %d", i), colors.get(i), Nation.ROMANS, PlayerType.HUMAN));
+            players.add(new Player(format("Player %d", i), colors.get(i), Nation.ROMANS, PlayerType.HUMAN));
         }
 
-        var gamePointDimension = toGamePointDimension(mapFile.getDimension());
-        var gameMap = new GameMap(players, gamePointDimension.width + 2, gamePointDimension.height + 2);
+        var gameDimension = GeometryMapping.mapFileDimensionsToGameDimensions(mapFile.getDimension());
+        var gameMap = new GameMap(players, gameDimension.width, gameDimension.height);
 
+        var unsupportedDecorations = new HashSet<DecorationType>();
         for (var mapFilePoint : mapFile.getMapFilePoints()) {
-            var mapFilePosition = mapFilePoint.getPosition();
-            org.appland.settlers.model.Point point = mapFilePositionToGamePoint(mapFilePosition, mapFile.getDimension());
+            var point = GeometryMapping.mapFilePointToGamePoint(mapFilePoint.getPosition(), mapFile.getDimension().height);
 
             if (mapFilePoint.getVegetationBelow() != null) {
-                gameMap.setVegetationBelow(point, Utils.convertTextureToVegetation(mapFilePoint.getVegetationBelow()));
+                gameMap.setVegetationBelow(point, mapFilePoint.getVegetationBelow());
             }
 
             if (mapFilePoint.getVegetationDownRight() != null) {
-                gameMap.setVegetationDownRight(point, Utils.convertTextureToVegetation(mapFilePoint.getVegetationDownRight()));
+                gameMap.setVegetationDownRight(point, mapFilePoint.getVegetationDownRight());
             }
 
             if (mapFilePoint.hasMineral()) {
@@ -638,7 +653,7 @@ public class MapLoader {
                 if (SUPPORTED_DECORATIONS.contains(decorationType)) {
                     gameMap.placeDecoration(point, decorationType);
                 } else {
-                    System.out.println("UNSUPPORTED DECORATION: " + decorationType);
+                    unsupportedDecorations.add(decorationType);
                 }
             }
 
@@ -653,34 +668,24 @@ public class MapLoader {
             gameMap.setHeightAtPoint(point, mapFilePoint.getHeight());
         }
 
+        System.out.println("UNSUPPORTED DECORATIONS: " + unsupportedDecorations);
+
         var gamePointStartingPoints = mapFile.getStartingPoints().stream()
-                .map(point -> mapFilePositionToGamePoint(point, mapFile.getDimension()))
+                .map(mapFilePoint -> GeometryMapping.mapFilePointToGamePoint(mapFilePoint, mapFile.getHeight()))
                 .collect(Collectors.toList());
+
+        System.out.println("Map file height: " + mapFile.getHeight());
+        System.out.println("Map file starting points: " + mapFile.getStartingPoints());
+        System.out.println("Game map starting points: " + gamePointStartingPoints);
 
         gameMap.setStartingPoints(gamePointStartingPoints);
 
         if (debugFlag) {
             System.out.println(" -- Starting positions: ");
-            mapFile.getGamePointStartingPoints().forEach(point ->
-                    debug(String.format("(%d, %d) ", point.x, point.y))
-            );
+            System.out.println("     - As map file points: " + mapFile.getStartingPoints());
+            System.out.println("     - As game points: " + gamePointStartingPoints);
         }
 
         return gameMap;
-    }
-
-    private Dimension toGamePointDimension(Dimension dimension) {
-        return isEven(dimension.height) ?
-                new Dimension(2 * dimension.width - 2, dimension.height - 1) :
-                new Dimension(2 * dimension.width - 2, dimension.height);
-    }
-
-    public org.appland.settlers.model.Point mapFilePositionToGamePoint(Point mapFilePosition, Dimension dimension) {
-        int xMultiplier = 2 * mapFilePosition.x;
-        int yAdjusted = dimension.height - mapFilePosition.y;
-
-        return isEven(dimension.height) ?
-                new org.appland.settlers.model.Point(isEven(mapFilePosition.y) ? xMultiplier - 1 : xMultiplier, yAdjusted - 1) :
-                new org.appland.settlers.model.Point(isEven(mapFilePosition.y) ? xMultiplier - 1 : xMultiplier, yAdjusted);
     }
 }

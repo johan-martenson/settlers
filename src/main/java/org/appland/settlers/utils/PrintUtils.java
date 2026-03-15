@@ -2,7 +2,7 @@ package org.appland.settlers.utils;
 
 import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.maps.MapFilePoint;
-import org.appland.settlers.maps.Texture;
+import org.appland.settlers.maps.utils.GeometryMapping;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Size;
@@ -41,13 +41,13 @@ public class PrintUtils {
             }
 
             // Draw water
-            if (Texture.isWater(mapFilePoint.getVegetationBelow()) && y > 0) {
+            if (mapFilePoint.getVegetationBelow().isWater() && y > 0) {
                 bfr[y - 1][x] = " ";
             } else if (y > 0 && bfr[y - 1][x] == null) {
                 bfr[y - 1][x] = ".";
             }
 
-            if (y > 0 && x < maxWidth - 2 && Texture.isWater(mapFilePoint.getVegetationDownRight())) {
+            if (y > 0 && x < maxWidth - 2 && mapFilePoint.getVegetationDownRight().isWater()) {
                 bfr[y - 1][x + 1] = " ";
             } else if (y > 0 && x < maxWidth - 2 && bfr[y - 1][x + 1] == null) {
                 bfr[y - 1][x + 1] = ".";
@@ -130,7 +130,12 @@ public class PrintUtils {
      * @param debug        whether to print debug information
      */
     public void printMapFile(MapFile mapFile, int consoleWidth, boolean debug) {
-        String[][] mapFileRender = renderMapFileToStringArray(mapFile, mapFile.getGamePointStartingPoints(), debug);
+        String[][] mapFileRender = renderMapFileToStringArray(
+                mapFile,
+                mapFile.getStartingPoints().stream()
+                        .map(mapFilePoint -> GeometryMapping.mapFilePointToGamePoint(mapFilePoint, mapFile.getHeight()))
+                        .toList(),
+                debug);
 
         // Print the render of the map file
         var sb = new StringBuilder();

@@ -29,7 +29,7 @@ public class TestKilledEnemiesStatistics {
 
         // Create a single player game.
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter.
         var headquarterPoint = new Point(5, 5);
@@ -50,7 +50,7 @@ public class TestKilledEnemiesStatistics {
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         // Create game map choosing two players.
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters.
         var point0 = new Point(9, 5);

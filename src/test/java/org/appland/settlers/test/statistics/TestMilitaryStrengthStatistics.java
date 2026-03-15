@@ -16,7 +16,6 @@ import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Catapult;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Storehouse;
-import org.appland.settlers.model.statistics.StatisticsManager;
 import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
@@ -144,7 +143,7 @@ public class TestMilitaryStrengthStatistics {
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         // Create game map choosing two players.
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters.
         var point0 = new Point(9, 5);
@@ -249,7 +248,7 @@ public class TestMilitaryStrengthStatistics {
         // Create new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place headquarter
         var point0 = new Point(9, 5);
@@ -324,7 +323,7 @@ public class TestMilitaryStrengthStatistics {
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         // Create game map choosing two players.
-        var map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters.
         var point0 = new Point(9, 5);

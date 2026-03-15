@@ -32,7 +32,7 @@ public class TestIronBarPrioritization {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(15, 9);
@@ -131,7 +131,7 @@ public class TestIronBarPrioritization {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(15, 9);
@@ -230,7 +230,7 @@ public class TestIronBarPrioritization {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(15, 9);
@@ -330,7 +330,7 @@ public class TestIronBarPrioritization {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(15, 9);
@@ -430,7 +430,7 @@ public class TestIronBarPrioritization {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarters
         var point0 = new Point(15, 9);

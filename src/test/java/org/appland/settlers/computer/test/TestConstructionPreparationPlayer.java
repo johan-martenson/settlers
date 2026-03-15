@@ -6,14 +6,12 @@
 package org.appland.settlers.computer.test;
 
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.computer.ComputerPlayer;
 import org.appland.settlers.computer.ConstructionPreparationPlayer;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Quarry;
@@ -24,8 +22,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -43,7 +39,7 @@ public class TestConstructionPreparationPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 10, 10);
+        var map = new GameMap(players, 10, 11);
 
         // Create the computer player
         var computerPlayer = new ConstructionPreparationPlayer(player0, map);
@@ -57,7 +53,7 @@ public class TestConstructionPreparationPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new ConstructionPreparationPlayer(player0, map);
@@ -90,7 +86,7 @@ public class TestConstructionPreparationPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new ConstructionPreparationPlayer(player0, map);
@@ -111,7 +107,7 @@ public class TestConstructionPreparationPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new ConstructionPreparationPlayer(player0, map);
@@ -152,7 +148,7 @@ public class TestConstructionPreparationPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new ConstructionPreparationPlayer(player0, map);
@@ -179,7 +175,7 @@ public class TestConstructionPreparationPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place stone
         var point1 = new Point(15, 17);
@@ -213,7 +209,7 @@ public class TestConstructionPreparationPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place stone
         var point1 = new Point(15, 17);
@@ -250,7 +246,7 @@ public class TestConstructionPreparationPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place stone
         var point1 = new Point(16, 10);
@@ -329,7 +325,7 @@ public class TestConstructionPreparationPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place stone
         var point1 = new Point(15, 17);

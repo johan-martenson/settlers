@@ -3,31 +3,31 @@ package org.appland.settlers.model;
 import java.util.EnumSet;
 import java.util.Set;
 
-public enum Vegetation {
-    SAVANNAH,
-    MOUNTAIN_1,
-    SNOW,
-    SWAMP,
-    DESERT_1,
-    WATER,
-    BUILDABLE_WATER,
-    DESERT_2,
-    MEADOW_1,
-    MEADOW_2,
-    MEADOW_3,
-    MOUNTAIN_2,
-    MOUNTAIN_3,
-    MOUNTAIN_4,
-    STEPPE,
-    FLOWER_MEADOW,
-    LAVA_1,
-    MAGENTA,
-    MOUNTAIN_MEADOW,
-    WATER_2,
-    LAVA_2,
-    LAVA_3,
-    LAVA_4,
-    BUILDABLE_MOUNTAIN;
+public enum Vegetation {       // Build road   Build    Crops     Mine     Ship sail
+    SAVANNAH,                  //    X           X         X        -           -
+    MOUNTAIN_1,                //    X           -         -        X           -
+    SNOW,                      //    -           -         -        -           -
+    SWAMP,                     //    -           -         -        -           -
+    DESERT_1,                  //    X           -         -        -           -
+    WATER,                     //    -           -         -        -           X
+    BUILDABLE_WATER,           //    X           X         -        -           -
+    DESERT_2,                  //    X           -         -        -           -
+    MEADOW_1,                  //    X           X         X        -           -
+    MEADOW_2,                  //    X           X         X        -           -
+    MEADOW_3,                  //    X           X         X        -           -
+    MOUNTAIN_2,                //    X           -         -        X           -
+    MOUNTAIN_3,                //    X           -         -        X           -
+    MOUNTAIN_4,                //    X           -         -        X           -
+    STEPPE,                    //    X           X         X        -           -
+    FLOWER_MEADOW,             //    X           X         X        -           -
+    LAVA_1,                    //    -           -         -        -           -
+    MAGENTA,                   //    X           -         -        -           -
+    MOUNTAIN_MEADOW,           //    X           X         -        -           -
+    WATER_2,                   //    -           -         -        -           -
+    LAVA_2,                    //    -           -         -        -           -
+    LAVA_3,                    //    -           -         -        -           -
+    LAVA_4,                    //    -           -         -        -           -
+    BUILDABLE_MOUNTAIN;        //    X           X         -        -           -
 
     public static final Set<Vegetation> CAN_BUILD_ON = EnumSet.of(
             SAVANNAH,
@@ -131,5 +131,9 @@ public enum Vegetation {
             case LAVA_4 -> 22;
             case BUILDABLE_MOUNTAIN -> 23;
         };
+    }
+
+    public boolean isWater() {
+        return this == WATER || this == WATER_2 || this == BUILDABLE_WATER;
     }
 }

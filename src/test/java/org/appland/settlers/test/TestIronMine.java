@@ -8,7 +8,6 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -16,11 +15,8 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Miner;
-import org.appland.settlers.model.actors.Worker;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.IronMine;
@@ -28,8 +24,6 @@ import org.appland.settlers.model.buildings.IronSmelter;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
@@ -50,8 +44,7 @@ public class TestIronMine {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -109,8 +102,7 @@ public class TestIronMine {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Put a small mountain on the map
         var point0 = new Point(6, 12);
@@ -149,8 +141,7 @@ public class TestIronMine {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Put a small mountain on the map
         var point22 = new Point(6, 12);
@@ -188,8 +179,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Put a small mountain on the map
         var point0 = new Point(8, 14);
@@ -214,8 +204,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Put a small mountain on the map
         var point0 = new Point(8, 14);
@@ -241,8 +230,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Put a small mountain on the map
         var point0 = new Point(8, 14);
@@ -264,8 +252,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Put a small mountain on the map
         var point0 = new Point(8, 14);
@@ -289,8 +276,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place a headquarter
         var point0 = new Point(5, 5);
@@ -329,8 +315,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place a headquarter
         var point0 = new Point(5, 5);
@@ -351,8 +336,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Put a small mountain on the map
         var point0 = new Point(10, 8);
@@ -393,8 +377,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Put a small mountain on the map
         var point0 = new Point(10, 8);
@@ -446,8 +429,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Put a small mountain on the map
         var point0 = new Point(10, 8);
@@ -507,8 +489,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarter
         var point3 = new Point(6, 4);
@@ -563,8 +544,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarter
         var point3 = new Point(6, 4);
@@ -627,8 +607,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarter
         var point3 = new Point(6, 4);
@@ -701,8 +680,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 12, 12);
+        var map = new GameMap(List.of(player0), 12, 13);
 
         // Place headquarter
         var point0 = new Point(7, 7);
@@ -712,6 +690,7 @@ public class TestIronMine {
         var point1 = new Point(2, 2);
         try {
             map.placeBuilding(new IronMine(player0), point1);
+
             fail();
         } catch (Exception e) {}
 
@@ -723,8 +702,7 @@ public class TestIronMine {
 
         // Create new game map with one player
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Put a small mountain on the map
         var point0 = new Point(10, 8);
@@ -801,8 +779,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Put a small mountain on the map
         var point0 = new Point(10, 8);
@@ -851,8 +828,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Put a small mountain on the map
         var point0 = new Point(10, 8);
@@ -894,8 +870,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Put a small mountain on the map
         var point0 = new Point(10, 8);
@@ -940,8 +915,7 @@ public class TestIronMine {
 
         // Start new game with one player
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Put a small mountain on the map
         var point0 = new Point(10, 8);
@@ -997,8 +971,7 @@ public class TestIronMine {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Put a small mountain on the map
         var point0 = new Point(10, 8);
@@ -1067,8 +1040,7 @@ public class TestIronMine {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Put a small mountain on the map
         var point0 = new Point(10, 8);
@@ -1168,8 +1140,7 @@ public class TestIronMine {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point25 = new Point(5, 5);
@@ -1214,8 +1185,7 @@ public class TestIronMine {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point25 = new Point(5, 5);
@@ -1267,8 +1237,7 @@ public class TestIronMine {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Put a small mountain on the map
         var point1 = new Point(10, 6);
@@ -1335,8 +1304,7 @@ public class TestIronMine {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Put a small mountain on the map
         var point1 = new Point(10, 6);
@@ -1410,10 +1378,7 @@ public class TestIronMine {
 
         // Create players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
         // Put a small mountain on the map
         var point0 = new Point(10, 10);
@@ -1452,14 +1417,7 @@ public class TestIronMine {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-
-        var players = new LinkedList<Player>();
-        players.add(player0);
-        players.add(player1);
-        players.add(player2);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0, player1, player2), 100, 101);
 
         // Put a small mountain on the map
         var point4 = new Point(28, 12);
@@ -1508,8 +1466,7 @@ public class TestIronMine {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1573,8 +1530,7 @@ public class TestIronMine {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1641,8 +1597,7 @@ public class TestIronMine {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1705,8 +1660,7 @@ public class TestIronMine {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point25 = new Point(9, 9);
@@ -1758,8 +1712,7 @@ public class TestIronMine {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point25 = new Point(9, 9);
@@ -1814,8 +1767,7 @@ public class TestIronMine {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point25 = new Point(9, 9);
@@ -1873,8 +1825,7 @@ public class TestIronMine {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point25 = new Point(9, 9);
@@ -1923,8 +1874,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point25 = new Point(9, 9);
@@ -1968,8 +1918,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1998,6 +1947,7 @@ public class TestIronMine {
             assertTrue(ironMine.getFlag().getStackedCargo().isEmpty());
             assertNull(miner0.getCargo());
             assertEquals(ironMine.getProductivity(), 0);
+
             map.stepTime();
         }
     }
@@ -2007,8 +1957,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2037,7 +1986,6 @@ public class TestIronMine {
 
         // Make the iron mine create some iron with full resources available
         for (int i = 0; i < 1000; i++) {
-
             map.stepTime();
 
             if (ironMine.needsMaterial(FISH)) {
@@ -2049,7 +1997,6 @@ public class TestIronMine {
         assertEquals(ironMine.getProductivity(), 100);
 
         for (int i = 0; i < 1000; i++) {
-
             map.stepTime();
 
             if (ironMine.needsMaterial(FISH)) {
@@ -2065,8 +2012,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2095,7 +2041,6 @@ public class TestIronMine {
 
         // Make the iron mine create some iron with full resources available
         for (int i = 0; i < 1000; i++) {
-
             map.stepTime();
 
             if (ironMine.needsMaterial(FISH) && ironMine.getAmount(FISH) < 2) {
@@ -2118,8 +2063,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2149,8 +2093,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2178,8 +2121,7 @@ public class TestIronMine {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2205,8 +2147,7 @@ public class TestIronMine {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2238,8 +2179,7 @@ public class TestIronMine {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2278,8 +2218,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2349,8 +2288,7 @@ public class TestIronMine {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2438,8 +2376,7 @@ public class TestIronMine {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2497,8 +2434,7 @@ public class TestIronMine {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(12, 6);
@@ -2565,8 +2501,7 @@ public class TestIronMine {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(12, 6);
@@ -2635,8 +2570,7 @@ public class TestIronMine {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(12, 6);
@@ -2672,8 +2606,7 @@ public class TestIronMine {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(12, 6);
@@ -2716,8 +2649,7 @@ public class TestIronMine {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(12, 6);
@@ -2779,8 +2711,7 @@ public class TestIronMine {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(12, 6);

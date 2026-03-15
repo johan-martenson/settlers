@@ -205,9 +205,10 @@ public class GameUtils {
         int xStart = position.x - radius;
         int xEnd = position.x + radius;
 
+        // Collect the bottom part of the hexagon
         for (int y = position.y - radius; y < position.y; y++) {
             for (int x = xStart; x <= xEnd; x += 2) {
-                if (x < 0 || y < 0 || x > map.getWidth() || y > map.getHeight()) {
+                if (x < 0 || y < 0 || x >= map.getWidth() || y >= map.getHeight()) {
                     continue;
                 }
 
@@ -221,9 +222,10 @@ public class GameUtils {
         xStart = position.x - radius;
         xEnd = position.x + radius;
 
+        // Collect the upper part of the hexagon, including the middle line
         for (int y = position.y + radius; y >= position.y; y--) {
             for (int x = xStart; x <= xEnd; x += 2) {
-                if (x < 0 || y < 0 || x > map.getWidth() || y > map.getHeight()) {
+                if (x < 0 || y < 0 || x >= map.getWidth() || y >= map.getHeight()) {
                     continue;
                 }
 
@@ -346,16 +348,6 @@ public class GameUtils {
             upgraded.promiseDelivery(COIN);
             upgraded.putCargo(coinCargo);
         }
-    }
-
-    /**
-     * Checks if an integer is even.
-     *
-     * @param i The integer to check.
-     * @return True if the integer is even, false otherwise.
-     */
-    public static boolean isEven(int i) {
-        return i % 2 == 0;
     }
 
     /**
@@ -574,45 +566,6 @@ public class GameUtils {
     }
 
     /**
-     * Finds the closest point to the given coordinates.
-     *
-     * @param px The x-coordinate.
-     * @param py The y-coordinate.
-     * @return The closest point as a Point object.
-     */
-    public static Point getClosestPoint(double px, double py) {
-
-        // Round to integers
-        int roundedX = (int) round(px);
-        int roundedY = (int) round(py);
-
-        // Calculate the error
-        double errorX = abs(px - roundedX);
-        double errorY = abs(py - roundedY);
-
-        // Adjust the values if needed to avoid invalid points
-        if ((roundedX + roundedY) % 2 != 0) {
-            if (errorX < errorY) {
-                if (roundedY > py) {
-                    roundedY = (int) floor(py);
-                } else {
-                    roundedY = (int) ceil(py);
-                }
-            } else if (errorX > errorY) {
-                if (roundedX > px) {
-                    roundedX = (int) floor(px);
-                } else {
-                    roundedX = (int) ceil(px);
-                }
-            } else {
-                roundedX++;
-            }
-        }
-
-        return new Point(roundedX, roundedY);
-    }
-
-    /**
      * Provides possible connections between points using existing roads on the map.
      */
     public static class PathOnExistingRoadsProvider implements ConnectionsProvider {
@@ -624,8 +577,6 @@ public class GameUtils {
 
         @Override
         public Iterable<Point> getPossibleConnections(Point start, Point goal) {
-            System.out.println("GET MAP POINT: " + map.getMapPoint(start));
-
             return map.getMapPoint(start).getConnectedNeighbors();
         }
     }

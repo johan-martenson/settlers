@@ -93,7 +93,7 @@ public class TestPlayer {
 
         // Create game
         var player = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player), 50, 50);
+        var map = new GameMap(List.of(player), 50, 51);
 
         // Place first headquarter
         var point0 = new Point(5, 5);
@@ -117,7 +117,7 @@ public class TestPlayer {
 
         // Create game
         var player0 = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
         // Place first headquarter
         var point0 = new Point(5, 5);
@@ -138,7 +138,7 @@ public class TestPlayer {
 
         // Create game
         var player0 = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
         // Place first headquarter
         var point0 = new Point(5, 5);
@@ -159,7 +159,7 @@ public class TestPlayer {
 
         // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -181,7 +181,7 @@ public class TestPlayer {
 
         // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -209,7 +209,7 @@ public class TestPlayer {
 
         // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -271,7 +271,7 @@ public class TestPlayer {
 
         // Verify that it's not possible to have two players with the same color
         try {
-            var map = new GameMap(List.of(player0, player1), 20, 20);
+            var map = new GameMap(List.of(player0, player1), 20, 21);
 
             fail();
         } catch (Exception e) {}
@@ -286,7 +286,7 @@ public class TestPlayer {
         assertEquals(player0.getNation(), Nation.ROMANS);
 
         // Verify that it's not possible to have two players with the same color
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         assertEquals(player0.getNation(), Nation.ROMANS);
     }
@@ -303,7 +303,7 @@ public class TestPlayer {
 
         assertEquals(player0.getNation(), Nation.VIKINGS);
 
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         assertEquals(player0.getNation(), Nation.VIKINGS);
     }

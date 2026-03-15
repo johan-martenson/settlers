@@ -1,6 +1,7 @@
 package org.appland.settlers.test.maps;
 
 import org.appland.settlers.maps.MapLoader;
+import org.appland.settlers.maps.utils.GeometryMapping;
 import org.appland.settlers.model.Point;
 import org.junit.Test;
 
@@ -17,9 +18,9 @@ public class MapLoaderTest {
         var dimension = new Dimension(100, 50); // Even height
         java.awt.Point mapFilePosition = new java.awt.Point(10, 20); // Even y-coordinate
 
-        var result = mapLoader.mapFilePositionToGamePoint(mapFilePosition, dimension);
+        var result = GeometryMapping.mapFilePointToGamePoint(mapFilePosition, dimension.height);
 
-        assertEquals(new Point(19, 29), result);
+        assertEquals(new Point(20, 30), result);
     }
 
     @Test
@@ -27,9 +28,9 @@ public class MapLoaderTest {
         var dimension = new Dimension(100, 50); // Even height
         java.awt.Point mapFilePosition = new java.awt.Point(10, 21); // Odd y-coordinate
 
-        var result = mapLoader.mapFilePositionToGamePoint(mapFilePosition, dimension);
+        var result = GeometryMapping.mapFilePointToGamePoint(mapFilePosition, dimension.height);
 
-        assertEquals(new Point(20, 28), result);
+        assertEquals(new Point(21, 29), result);
     }
 
     @Test
@@ -37,9 +38,9 @@ public class MapLoaderTest {
         var dimension = new Dimension(100, 51); // Odd height
         java.awt.Point mapFilePosition = new java.awt.Point(10, 20); // Even y-coordinate
 
-        var result = mapLoader.mapFilePositionToGamePoint(mapFilePosition, dimension);
+        var result = GeometryMapping.mapFilePointToGamePoint(mapFilePosition, dimension.height);
 
-        assertEquals(new Point(19, 31), result);
+        assertEquals(new Point(20, 31), result);
     }
 
     @Test
@@ -47,9 +48,9 @@ public class MapLoaderTest {
         var dimension = new Dimension(100, 51); // Odd height
         java.awt.Point mapFilePosition = new java.awt.Point(10, 21); // Odd y-coordinate
 
-        var result = mapLoader.mapFilePositionToGamePoint(mapFilePosition, dimension);
+        var result = GeometryMapping.mapFilePointToGamePoint(mapFilePosition, dimension.height);
 
-        assertEquals(new Point(20, 30), result);
+        assertEquals(new Point(21, 30), result);
     }
 
     @Test
@@ -57,9 +58,9 @@ public class MapLoaderTest {
         var dimension = new Dimension(100, 50); // Even height
         java.awt.Point mapFilePosition = new java.awt.Point(0, 0);
 
-        var result = mapLoader.mapFilePositionToGamePoint(mapFilePosition, dimension);
+        var result = GeometryMapping.mapFilePointToGamePoint(mapFilePosition, dimension.height);
 
-        assertEquals(new Point(-1, 49), result);
+        assertEquals(new Point(0, 50), result);
     }
 
     @Test
@@ -67,7 +68,7 @@ public class MapLoaderTest {
         var dimension = new Dimension(100, 50); // Even height
         java.awt.Point mapFilePosition = new java.awt.Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
-        var result = mapLoader.mapFilePositionToGamePoint(mapFilePosition, dimension);
+        var result = GeometryMapping.mapFilePointToGamePoint(mapFilePosition, dimension.height);
 
         // The expected result would depend on the actual calculations,
         // but here we are ensuring the method handles large input values without crashing.
@@ -80,9 +81,9 @@ public class MapLoaderTest {
         var dimension = new Dimension(100, 50); // Even height
         java.awt.Point mapFilePosition = new java.awt.Point(-10, -10);
 
-        var result = mapLoader.mapFilePositionToGamePoint(mapFilePosition, dimension);
+        var result = GeometryMapping.mapFilePointToGamePoint(mapFilePosition, dimension.height);
 
         // Ensure the method handles negative inputs appropriately
-        assertEquals(new Point(-21, 59), result);
+        assertEquals(new Point(-20, 60), result);
     }
 }

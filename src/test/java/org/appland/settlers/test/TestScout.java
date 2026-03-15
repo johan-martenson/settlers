@@ -48,7 +48,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -71,7 +71,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -106,7 +106,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -140,7 +140,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -179,7 +179,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -226,7 +226,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 9);
@@ -273,7 +273,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 17);
@@ -328,7 +328,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(10, 18);
@@ -391,7 +391,7 @@ public class TestScout {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -445,7 +445,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(13, 13);
@@ -502,7 +502,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(10, 18);
@@ -559,7 +559,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -579,7 +579,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -622,7 +622,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(13, 5);
@@ -710,7 +710,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(14, 8);
@@ -781,7 +781,7 @@ public class TestScout {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(13, 5);
@@ -821,7 +821,7 @@ public class TestScout {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -853,7 +853,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -919,7 +919,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -986,7 +986,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1051,7 +1051,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(9, 5);
@@ -1102,7 +1102,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(15, 15);
@@ -1152,7 +1152,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place headquarter
         var point0 = new Point(9, 23);
@@ -1227,7 +1227,7 @@ public class TestScout {
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place headquarter
         var point0 = new Point(9, 23);

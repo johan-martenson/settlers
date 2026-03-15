@@ -576,12 +576,18 @@ public class Soldier extends Worker {
                 .map(soldier -> soldier.isTraveling() ? soldier.getTarget() : soldier.getPosition())
                 .collect(Collectors.toSet());
 
+        System.out.println();
+        System.out.println("Soldier ordered to attack.");
+        System.out.println("Candidate positions to go to: " + GameUtils.getHexagonAreaAroundPoint(buildingToAttack.getFlag().getPosition(), 6, map));
+
         var candidates = GameUtils.getHexagonAreaAroundPoint(buildingToAttack.getFlag().getPosition(), 6, map).stream()
                 .filter(point -> !taken.contains(point))
                 .filter(point -> !map.isBuildingAtPoint(point))
                 .filter(point -> !map.isStoneAtPoint(point))
-                .filter(point -> map.getVegetationUpLeft(point).canWalkOn() || map.getVegetationDownLeft(point).canWalkOn())
-                .filter(point -> map.getVegetationUpRight(point).canWalkOn() || map.getVegetationDownRight(point).canWalkOn())
+                .filter(point -> (map.isWithinMap(point.upLeft()) && map.getVegetationUpLeft(point).canWalkOn()) ||
+                                        (map.isWithinMap(point.left()) && map.getVegetationDownLeft(point).canWalkOn()))
+                .filter(point -> (map.isWithinMap(point.upRight()) && map.getVegetationUpRight(point).canWalkOn()) ||
+                                        (map.isWithinMap(point.downRight()) && map.getVegetationDownRight(point).canWalkOn()))
                 .filter(point -> map.findWayOffroad(getPosition(), point, null) != null)
                 .sorted((point0, point1) -> {
                             var dist0 = GameUtils.distanceInGameSteps(point0, buildingToAttack.getFlag().getPosition());

@@ -15,8 +15,7 @@ import static org.appland.settlers.assets.Nation.ROMANS;
 import static org.appland.settlers.model.PlayerColor.BLUE;
 import static org.appland.settlers.model.PlayerType.HUMAN;
 import static org.appland.settlers.model.Vegetation.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Tests GeometryMapping without globalOffset.
@@ -48,22 +47,100 @@ public class TestGeometryMapping {
     // ============================================================
 
     @Test
+    public void testIsValidPointWithEvenHeight() {
+        var gameHeight = 3;
+        var point0 = new Point(0, 0);
+        var point1 = new Point(1, 0);
+
+        assertTrue(GeometryMapping.isValidGamePoint(point0, gameHeight));
+        assertFalse(GeometryMapping.isValidGamePoint(point1, gameHeight));
+    }
+
+    @Test
+    public void testGameMapPointsAreCorrect() throws InvalidUserActionException {
+        var map = new GameMap(List.of(new Player("Player 0", BLUE, ROMANS, HUMAN)), 6, 6);
+
+        // Verify that the points are correct by setting the height
+        assertEquals(map.getPointsInMap().size(), 18);
+        assertTrue(map.getPointsInMap().contains(new Point(1, 0)));
+        assertTrue(map.getPointsInMap().contains(new Point(3, 0)));
+        assertTrue(map.getPointsInMap().contains(new Point(0, 1)));
+        assertTrue(map.getPointsInMap().contains(new Point(2, 1)));
+
+        map.setHeightAtPoint(new Point(1, 0), 1);
+        map.setHeightAtPoint(new Point(3, 0), 2);
+        map.setHeightAtPoint(new Point(0, 1), 3);
+        map.setHeightAtPoint(new Point(2, 1), 4);
+
+        assertEquals(map.getHeightAtPoint(new Point(1, 0)), 1);
+        assertEquals(map.getHeightAtPoint(new Point(3, 0)), 2);
+        assertEquals(map.getHeightAtPoint(new Point(0, 1)), 3);
+        assertEquals(map.getHeightAtPoint(new Point(2, 1)), 4);
+    }
+
+    @Test
+    public void testGameMapPointsFromFileDimensionsEvenHeight() {
+        var fileWidth = 2;
+        var fileHeight = 2;
+
+        var gamePoints = GeometryMapping.gameMapPointsFromFileDimensions(fileWidth, fileHeight);
+
+        // Verify that the right game points are set
+        assertEquals(gamePoints.size(), 6);
+
+        assertTrue(gamePoints.contains(new Point(0, 0)));
+        assertTrue(gamePoints.contains(new Point(2, 0)));
+        assertTrue(gamePoints.contains(new Point(1, 1)));
+        assertTrue(gamePoints.contains(new Point(3, 1)));
+        assertTrue(gamePoints.contains(new Point(0, 2)));
+        assertTrue(gamePoints.contains(new Point(2, 2)));
+    }
+
+    @Test
+    public void testGameMapPointsFromFileDimensionsOddHeight() {
+        var fileWidth = 2;
+        var fileHeight = 1;
+
+        var gamePoints = GeometryMapping.gameMapPointsFromFileDimensions(fileWidth, fileHeight);
+
+        // Verify that the right game points are set
+        assertEquals(gamePoints.size(), 4);
+
+        assertTrue(gamePoints.contains(new Point(1, 0)));
+        assertTrue(gamePoints.contains(new Point(3, 0)));
+        assertTrue(gamePoints.contains(new Point(0, 1)));
+        assertTrue(gamePoints.contains(new Point(2, 1)));
+    }
+
+    @Test
+    public void testHeightRoundTrip() {
+        assertEquals(2, GeometryMapping.gameHeightToMapFileHeight(3));
+        assertEquals(3, GeometryMapping.mapFileHeightToGameHeight(2));
+    }
+
+    @Test
+    public void testWidthRoundTrip() {
+        assertEquals(3, GeometryMapping.gameWidthToMapFileWidth(6));
+        assertEquals(6, GeometryMapping.mapFileWidthToGameWidth(3));
+    }
+
+    @Test
     public void testMapFilePointToGamePointIsWithinMapForEvenHeightFile() {
         int fileWidth = 4;
         int fileHeight = 6;
 
-        int engineWidth = GeometryMapping.gameWidthFromFileWidth(fileWidth);
-        int engineHeight = GeometryMapping.gameHeightFromFileHeight(fileHeight);
+        int gameWidth = GeometryMapping.mapFileWidthToGameWidth(fileWidth);
+        int gameHeight = GeometryMapping.mapFileHeightToGameHeight(fileHeight);
 
         for (int fileY = 0; fileY < fileHeight; fileY++) {
             for (int fileX = 0; fileX < fileWidth; fileX++) {
-                var engine = GeometryMapping.mapFilePointToGamePoint(fileX, fileY, fileHeight);
+                var gamePoint = GeometryMapping.mapFilePointToGamePoint(fileX, fileY, fileHeight);
 
-                assertTrue(engine.x >= 0);
-                assertTrue(engine.x < engineWidth);
+                assertTrue(gamePoint.x >= 0);
+                assertTrue(gamePoint.x < gameWidth);
 
-                assertTrue(engine.y >= 0);
-                assertTrue(engine.y < engineHeight);
+                assertTrue(gamePoint.y >= 0);
+                assertTrue(gamePoint.y < gameHeight);
             }
         }
     }
@@ -86,12 +163,12 @@ public class TestGeometryMapping {
 
         var map = new GameMap(
                 List.of(new Player("P0", BLUE, ROMANS, HUMAN)),
-                GeometryMapping.gameWidthFromFileWidth(fileWidth),
-                GeometryMapping.gameHeightFromFileHeight(fileHeight));
+                GeometryMapping.mapFileWidthToGameWidth(fileWidth),
+                GeometryMapping.mapFileHeightToGameHeight(fileHeight));
 
         GeometryMapping.layoutTilesInGameMap(fileWidth, fileHeight, tilesBelow, tilesDownRight, map);
 
-        assertEquals(map.getPointsInMap().size(), 30);
+        assertEquals(30, map.getPointsInMap().size());
 
         assertTrue(map.getPointsInMap().contains(new Point(0, 5)));
         assertTrue(map.getPointsInMap().contains(new Point(2, 5)));
@@ -150,12 +227,12 @@ public class TestGeometryMapping {
 
         var map = new GameMap(
                 List.of(new Player("P0", BLUE, ROMANS, HUMAN)),
-                GeometryMapping.gameWidthFromFileWidth(fileWidth),
-                GeometryMapping.gameHeightFromFileHeight(fileHeight));
+                GeometryMapping.mapFileWidthToGameWidth(fileWidth),
+                GeometryMapping.mapFileHeightToGameHeight(fileHeight));
 
         GeometryMapping.layoutTilesInGameMap(fileWidth, fileHeight, tilesBelow, tilesDownRight, map);
 
-        assertEquals(map.getPointsInMap().size(), 35);
+        assertEquals(35, map.getPointsInMap().size());
 
         assertTrue(map.getPointsInMap().contains(new Point(0, 6)));
         assertTrue(map.getPointsInMap().contains(new Point(2, 6)));
@@ -205,16 +282,16 @@ public class TestGeometryMapping {
         int fileWidth = 4;
         int fileHeight = 5;
 
-        int engineWidth = GeometryMapping.gameWidthFromFileWidth(fileWidth);
+        int gameWidth = GeometryMapping.mapFileWidthToGameWidth(fileWidth);
 
         for (int fileY = 0; fileY < fileHeight; fileY++) {
             for (int fileX = 0; fileX < fileWidth; fileX++) {
                 var engine = GeometryMapping.mapFilePointToGamePoint(fileX, fileY, fileHeight);
 
                 assertTrue(engine.x >= 0);
-                assertTrue(engine.x < engineWidth);
+                assertTrue(engine.x < gameWidth);
                 assertTrue(engine.y >= 0);
-                assertTrue(engine.y < fileHeight);
+                assertTrue(engine.y <= fileHeight);
             }
         }
     }
@@ -224,14 +301,79 @@ public class TestGeometryMapping {
     // ============================================================
 
     @Test
+    public void testMapGamePointToMapFilePointEvenHeight() {
+        int fileWidth = 3;
+        int fileHeight = 2;
+
+        // Verify first column
+        var mapFilePoint = GeometryMapping.gamePointToMapFilePoint(0, 0, fileHeight);
+
+        assertEquals(mapFilePoint.x, 0);
+        assertEquals(mapFilePoint.y, 2);
+
+        var mapFilePoint1 = GeometryMapping.gamePointToMapFilePoint(1, 1, fileHeight);
+
+        assertEquals(mapFilePoint1.x, 0);
+        assertEquals(mapFilePoint1.y, 1);
+
+        var mapFilePoint2 = GeometryMapping.gamePointToMapFilePoint(0, 2, fileHeight);
+
+        assertEquals(mapFilePoint2.x, 0);
+        assertEquals(mapFilePoint2.y, 0);
+
+        // Verify second column
+        var mapFilePoint3 = GeometryMapping.gamePointToMapFilePoint(2, 0, fileHeight);
+
+        assertEquals(mapFilePoint3.x, 1);
+        assertEquals(mapFilePoint3.y, 2);
+
+        var mapFilePoint4 = GeometryMapping.gamePointToMapFilePoint(3, 1, fileHeight);
+
+        assertEquals(mapFilePoint4.x, 1);
+        assertEquals(mapFilePoint4.y, 1);
+
+        var mapFilePoint5 = GeometryMapping.gamePointToMapFilePoint(2, 2, fileHeight);
+
+        assertEquals(mapFilePoint5.x, 1);
+        assertEquals(mapFilePoint5.y, 0);
+    }
+
+    @Test
+    public void testMapGamePointToMapFilePointOddHeight() {
+        int fileHeight = 1;
+
+        // Verify first column
+        var mapFilePoint = GeometryMapping.gamePointToMapFilePoint(1, 0, fileHeight);
+
+        assertEquals(mapFilePoint.x, 0);
+        assertEquals(mapFilePoint.y, 1);
+
+        var mapFilePoint1 = GeometryMapping.gamePointToMapFilePoint(0, 1, fileHeight);
+
+        assertEquals(mapFilePoint1.x, 0);
+        assertEquals(mapFilePoint1.y, 0);
+
+        // Verify second column
+        var mapFilePoint3 = GeometryMapping.gamePointToMapFilePoint(3, 0, fileHeight);
+
+        assertEquals(mapFilePoint3.x, 1);
+        assertEquals(mapFilePoint3.y, 1);
+
+        var mapFilePoint4 = GeometryMapping.gamePointToMapFilePoint(2, 1, fileHeight);
+
+        assertEquals(mapFilePoint4.x, 1);
+        assertEquals(mapFilePoint4.y, 0);
+    }
+
+    @Test
     public void testMappingRoundTripForEvenHeightFile() {
         int fileWidth = 6;
         int fileHeight = 8;
 
         for (int fileY = 0; fileY < fileHeight; fileY++) {
             for (int fileX = 0; fileX < fileWidth; fileX++) {
-                var engine = GeometryMapping.mapFilePointToGamePoint(fileX, fileY, fileHeight);
-                var file = GeometryMapping.gamePointToMapFilePoint(engine.x, engine.y, fileWidth, fileHeight);
+                var gamePoint = GeometryMapping.mapFilePointToGamePoint(fileX, fileY, fileHeight);
+                var file = GeometryMapping.gamePointToMapFilePoint(gamePoint.x, gamePoint.y, fileHeight);
 
                 assertEquals(fileX, file.x);
                 assertEquals(fileY, file.y);
@@ -246,11 +388,11 @@ public class TestGeometryMapping {
 
         for (int fileY = 0; fileY < fileHeight; fileY++) {
             for (int fileX = 0; fileX < fileWidth; fileX++) {
-                var engine = GeometryMapping.mapFilePointToGamePoint(fileX, fileY, fileHeight);
-                var file = GeometryMapping.gamePointToMapFilePoint(engine.x, engine.y, fileWidth, fileHeight);
+                var gamePoint = GeometryMapping.mapFilePointToGamePoint(fileX, fileY, fileHeight);
+                var filePoint = GeometryMapping.gamePointToMapFilePoint(gamePoint.x, gamePoint.y, fileHeight);
 
-                assertEquals(fileX, file.x);
-                assertEquals(fileY, file.y);
+                assertEquals(fileX, filePoint.x);
+                assertEquals(fileY, filePoint.y);
             }
         }
     }
@@ -267,10 +409,10 @@ public class TestGeometryMapping {
         int total = fileWidth * fileHeight;
 
         for (int index = 0; index < total; index++) {
-            var engine = GeometryMapping.mapFileIndexToGamePoint(index, fileWidth, fileHeight);
-            int recovered = GeometryMapping.gamePointToMapFileIndex(engine.x, engine.y, fileWidth, fileHeight);
+            var gamePoint = GeometryMapping.mapFileIndexToGamePoint(index, fileWidth, fileHeight);
+            int recoveredFileIndex = GeometryMapping.gamePointToMapFileIndex(gamePoint.x, gamePoint.y, fileWidth, fileHeight);
 
-            assertEquals(index, recovered);
+            assertEquals(index, recoveredFileIndex);
         }
     }
 
@@ -287,8 +429,8 @@ public class TestGeometryMapping {
 
         for (int fileY = 0; fileY < fileHeight; fileY++) {
             for (int fileX = 0; fileX < fileWidth; fileX++) {
-                var engine = GeometryMapping.mapFilePointToGamePoint(fileX, fileY, fileHeight);
-                assertTrue(seen.add(engine));
+                var gamePoint = GeometryMapping.mapFilePointToGamePoint(fileX, fileY, fileHeight);
+                assertTrue(seen.add(gamePoint));
             }
         }
     }
@@ -305,12 +447,12 @@ public class TestGeometryMapping {
         var tilesBelow = createTestArray(fileWidth, fileHeight);
         var tilesDownRight = createTestArray(fileWidth, fileHeight);
 
-        int engineWidth = GeometryMapping.gameWidthFromFileWidth(fileWidth);
+        int gameWidth = GeometryMapping.mapFileWidthToGameWidth(fileWidth);
 
         var map = new GameMap(
                 List.of(new Player("Player 0", BLUE, ROMANS, HUMAN)),
-                engineWidth,
-                fileHeight
+                gameWidth,
+                fileHeight + 1
         );
 
         GeometryMapping.layoutTilesInGameMap(
@@ -324,21 +466,10 @@ public class TestGeometryMapping {
         for (int fileY = 0; fileY < fileHeight; fileY++) {
             for (int fileX = 0; fileX < fileWidth; fileX++) {
                 int index = fileY * fileWidth + fileX;
-                var engine = GeometryMapping.mapFilePointToGamePoint(fileX, fileY, fileHeight);
+                var gamePoint = GeometryMapping.mapFilePointToGamePoint(fileX, fileY, fileHeight);
 
-                if (fileX + 1 < fileWidth && fileY + 1 < fileHeight) {
-                    assertEquals(tilesDownRight[index], map.getVegetationDownRight(engine));
-                }
-
-                if (fileY + 1 < fileHeight) {
-                    boolean valid = ((fileY & 1) == 0)
-                                    ? fileX + 1 < fileWidth
-                                    : fileX - 1 >= 0;
-
-                    if (valid) {
-                        assertEquals(tilesBelow[index], map.getVegetationBelow(engine));
-                    }
-                }
+                assertEquals(tilesDownRight[index], map.getVegetationDownRight(gamePoint));
+                assertEquals(tilesBelow[index], map.getVegetationBelow(gamePoint));
             }
         }
     }
@@ -352,9 +483,9 @@ public class TestGeometryMapping {
         int fileHeight = 6;
 
         var bottom = GeometryMapping.mapFilePointToGamePoint(0, 0, fileHeight);
-        var top = GeometryMapping.mapFilePointToGamePoint(0, fileHeight - 1, fileHeight);
+        var top = GeometryMapping.mapFilePointToGamePoint(0, fileHeight, fileHeight);
 
-        assertEquals(fileHeight - 1, bottom.y);
+        assertEquals(fileHeight, bottom.y);
         assertEquals(0, top.y);
     }
 
@@ -363,9 +494,9 @@ public class TestGeometryMapping {
         int fileHeight = 7;
 
         var bottom = GeometryMapping.mapFilePointToGamePoint(0, 0, fileHeight);
-        var top = GeometryMapping.mapFilePointToGamePoint(0, fileHeight - 1, fileHeight);
+        var top = GeometryMapping.mapFilePointToGamePoint(0, fileHeight, fileHeight);
 
-        assertEquals(fileHeight - 1, bottom.y);
+        assertEquals(fileHeight, bottom.y);
         assertEquals(0, top.y);
     }
 
@@ -375,17 +506,17 @@ public class TestGeometryMapping {
 
     @Test
     public void gameWidthFromFileWidth_basicCases() {
-        assertEquals(2, GeometryMapping.gameWidthFromFileWidth(1));
-        assertEquals(4, GeometryMapping.gameWidthFromFileWidth(2));
-        assertEquals(6, GeometryMapping.gameWidthFromFileWidth(3));
-        assertEquals(10, GeometryMapping.gameWidthFromFileWidth(5));
+        assertEquals(2, GeometryMapping.mapFileWidthToGameWidth(1));
+        assertEquals(4, GeometryMapping.mapFileWidthToGameWidth(2));
+        assertEquals(6, GeometryMapping.mapFileWidthToGameWidth(3));
+        assertEquals(10, GeometryMapping.mapFileWidthToGameWidth(5));
     }
 
     @Test
     public void gameHeightFromFileHeight_basicCases() {
-        assertEquals(2, GeometryMapping.gameHeightFromFileHeight(1));
-        assertEquals(6, GeometryMapping.gameHeightFromFileHeight(5));
-        assertEquals(9, GeometryMapping.gameHeightFromFileHeight(8));
+        assertEquals(2, GeometryMapping.mapFileHeightToGameHeight(1));
+        assertEquals(6, GeometryMapping.mapFileHeightToGameHeight(5));
+        assertEquals(9, GeometryMapping.mapFileHeightToGameHeight(8));
     }
 
     @Test
@@ -393,17 +524,17 @@ public class TestGeometryMapping {
         int fileWidth = 7;
         int fileHeight = 9;
 
-        int engineWidth = GeometryMapping.gameWidthFromFileWidth(fileWidth);
-        int engineHeight = GeometryMapping.gameHeightFromFileHeight(fileHeight);
+        int gameWidth = GeometryMapping.mapFileWidthToGameWidth(fileWidth);
+        int gameHeight = GeometryMapping.mapFileHeightToGameHeight(fileHeight);
 
         for (int fileY = 0; fileY < fileHeight; fileY++) {
             for (int fileX = 0; fileX < fileWidth; fileX++) {
-                var engine = GeometryMapping.mapFilePointToGamePoint(fileX, fileY, fileHeight);
+                var gamePoint = GeometryMapping.mapFilePointToGamePoint(fileX, fileY, fileHeight);
 
-                assertTrue(engine.x >= 0);
-                assertTrue(engine.x < engineWidth);
-                assertTrue(engine.y >= 0);
-                assertTrue(engine.y < engineHeight);
+                assertTrue(gamePoint.x >= 0);
+                assertTrue(gamePoint.x < gameWidth);
+                assertTrue(gamePoint.y >= 0);
+                assertTrue(gamePoint.y < gameHeight);
             }
         }
     }

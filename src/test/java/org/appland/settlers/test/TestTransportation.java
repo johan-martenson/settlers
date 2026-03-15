@@ -64,7 +64,7 @@ public class TestTransportation {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 30, 30);
+        var map = new GameMap(players, 30, 31);
 
         // Place headquarter
         var point0 = new Point(10, 10);
@@ -101,7 +101,7 @@ public class TestTransportation {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point0 = new Point(10, 10);
@@ -130,7 +130,7 @@ public class TestTransportation {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point0 = new Point(10, 10);
@@ -156,7 +156,7 @@ public class TestTransportation {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point0 = new Point(15, 15);
@@ -181,7 +181,7 @@ public class TestTransportation {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 11);
@@ -215,7 +215,7 @@ public class TestTransportation {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point0 = new Point(10, 10);
@@ -238,7 +238,7 @@ public class TestTransportation {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 10, 10);
+        var map = new GameMap(players, 10, 11);
 
         // Verify that there is no road with the same start and end points
         try {
@@ -254,7 +254,7 @@ public class TestTransportation {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         /*
          * F--F1--F2--F3--F4
@@ -371,7 +371,7 @@ public class TestTransportation {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point0 = new Point(14, 4);
@@ -414,7 +414,7 @@ public class TestTransportation {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point0 = new Point(10, 10);
@@ -489,7 +489,7 @@ public class TestTransportation {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
 
         // Place headquarter
         var point0 = new Point(10, 6);
@@ -582,7 +582,7 @@ public class TestTransportation {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 30, 30);
+        var map = new GameMap(players, 30, 31);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -626,7 +626,7 @@ public class TestTransportation {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point0 = new Point(10, 10);
@@ -655,7 +655,7 @@ public class TestTransportation {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point0 = new Point(7, 7);
@@ -713,7 +713,7 @@ public class TestTransportation {
         // Create new game map with one player
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point0 = new Point(10, 10);
@@ -773,7 +773,7 @@ public class TestTransportation {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create the game map
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
         var point1 = new Point(6, 6);
         var point4 = new Point(11, 7);
 
@@ -857,7 +857,7 @@ public class TestTransportation {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point0 = new Point(11, 11);
@@ -928,7 +928,7 @@ public class TestTransportation {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 51);
 
         // Place headquarter
         var point0 = new Point(20, 10);
@@ -1006,7 +1006,7 @@ public class TestTransportation {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 51);
 
         // Place headquarter
         var point0 = new Point(14, 16);
@@ -1083,7 +1083,7 @@ public class TestTransportation {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 51);
 
         // Place headquarter
         var point0 = new Point(14, 16);
@@ -1175,7 +1175,7 @@ public class TestTransportation {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 51);
 
         // Place headquarter
         var point0 = new Point(14, 16);
@@ -1255,7 +1255,7 @@ public class TestTransportation {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 51);
 
         // Place headquarter
         var point0 = new Point(14, 16);
@@ -1284,7 +1284,7 @@ public class TestTransportation {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 51);
 
         // Place headquarter
         var point0 = new Point(14, 16);
@@ -1307,7 +1307,7 @@ public class TestTransportation {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 51);
 
         // Place headquarter
         var point0 = new Point(14, 16);
@@ -1349,7 +1349,7 @@ public class TestTransportation {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 51);
 
         // Place headquarter
         var point0 = new Point(14, 16);
@@ -1378,7 +1378,7 @@ public class TestTransportation {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 51);
 
         // Place headquarter
         var point0 = new Point(14, 16);
@@ -1404,7 +1404,7 @@ public class TestTransportation {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 51);
 
         // Place headquarter
         var point0 = new Point(14, 16);
@@ -1430,7 +1430,7 @@ public class TestTransportation {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 51);
 
         // Place headquarter
         var point0 = new Point(14, 16);
@@ -1461,7 +1461,7 @@ public class TestTransportation {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create the game map
-        var map = new GameMap(players, 40, 40);
+        var map = new GameMap(players, 40, 41);
         var point0 = new Point(17, 5);
         var point1 = new Point(15, 7);
         var point2 = new Point(13, 9);

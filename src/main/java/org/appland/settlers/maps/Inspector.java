@@ -9,6 +9,7 @@ import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Size;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.rest.resource.IdManager;
 import org.appland.settlers.utils.JsonUtils;
@@ -229,12 +230,12 @@ public class Inspector {
         var availableConstructionDownRight = new EnumMap<BuildableSite, Integer>(BuildableSite.class);
         var availableConstructionDownLeft = new EnumMap<BuildableSite, Integer>(BuildableSite.class);
 
-        var vegetationUpLeft = new EnumMap<Texture, Integer>(Texture.class);
-        var vegetationAbove = new EnumMap<Texture, Integer>(Texture.class);
-        var vegetationUpRight = new EnumMap<Texture, Integer>(Texture.class);
-        var vegetationDownRight = new EnumMap<Texture, Integer>(Texture.class);
-        var vegetationBelow = new EnumMap<Texture, Integer>(Texture.class);
-        var vegetationDownLeft = new EnumMap<Texture, Integer>(Texture.class);
+        var vegetationUpLeft = new EnumMap<Vegetation, Integer>(Vegetation.class);
+        var vegetationAbove = new EnumMap<Vegetation, Integer>(Vegetation.class);
+        var vegetationUpRight = new EnumMap<Vegetation, Integer>(Vegetation.class);
+        var vegetationDownRight = new EnumMap<Vegetation, Integer>(Vegetation.class);
+        var vegetationBelow = new EnumMap<Vegetation, Integer>(Vegetation.class);
+        var vegetationDownLeft = new EnumMap<Vegetation, Integer>(Vegetation.class);
 
         int measuredPoints = 0;
 
@@ -362,7 +363,7 @@ public class Inspector {
         map = mapLoader.convertMapFileToGameMap(mapFile);
 
         System.out.printf("Max players: %d%n", mapFile.getMaxNumberOfPlayers());
-        System.out.printf("Starting positions: %s%n", mapFile.getGamePointStartingPoints());
+        System.out.printf("Starting positions: %s%n", mapFile.getStartingPoints());
 
         var startingPoints = map.getStartingPoints();
         var players = new ArrayList<Player>();
@@ -373,7 +374,7 @@ public class Inspector {
         map.setPlayers(players);
 
         if (placePlayers) {
-            if (mapFile.getGamePointStartingPoints().isEmpty()) {
+            if (mapFile.getStartingPoints().isEmpty()) {
                 System.out.println("No starting points found in map file");
             } else {
                 for (int i = 0; i < startingPoints.size(); i++) {
@@ -444,7 +445,7 @@ public class Inspector {
         var player = map.getPlayers().getFirst();
 
         if (debug) {
-            System.out.printf("Starting point for player from MapFile: %s%n", new Point(mapFile.getGamePointStartingPoints().getFirst()));
+            System.out.printf("Starting point for player from MapFile: %s%n", new Point(mapFile.getStartingPoints().getFirst()));
             System.out.printf("Starting point for player from GameMap: %s%n", map.getStartingPoints().getFirst());
         }
 

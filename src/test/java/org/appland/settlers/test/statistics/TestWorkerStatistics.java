@@ -28,7 +28,7 @@ public class TestWorkerStatistics {
 
         // Create new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(9, 5);
@@ -51,7 +51,7 @@ public class TestWorkerStatistics {
 
         // Create new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(50, 50);
@@ -123,7 +123,7 @@ public class TestWorkerStatistics {
 
         // Create new game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarter
         var point0 = new Point(50, 50);

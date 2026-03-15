@@ -37,7 +37,7 @@ public class TestSeveralPlayers {
         var players = new LinkedList<Player>();
         // Create game map choosing no players
         try {
-            var map = new GameMap(players, 20, 20);
+            var map = new GameMap(players, 20, 21);
 
             fail();
         } catch (Exception e) {}
@@ -50,7 +50,7 @@ public class TestSeveralPlayers {
         var players = new LinkedList<Player>();        players.add(new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN));
 
         // Create game map choosing one players
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Verify that there is one player in the game map
         assertEquals(map.getPlayers().size(), 1);
@@ -67,7 +67,7 @@ public class TestSeveralPlayers {
         players.add(new Player("Player 1", GREEN, Nation.ROMANS, PlayerType.HUMAN));
 
         // Create game map choosing two players
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Verify that there is one player in the game map
         assertEquals(map.getPlayers().size(), 2);
@@ -88,7 +88,7 @@ public class TestSeveralPlayers {
         players.add(player1);
 
         // Create game map choosing two players
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter for first player
         var point0 = new Point(5, 5);
@@ -115,7 +115,7 @@ public class TestSeveralPlayers {
         players.add(player1);
 
         // Create game map choosing two players
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(players, 50, 51);
 
         // Place headquarter for first player
         var point0 = new Point(5, 5);
@@ -142,7 +142,7 @@ public class TestSeveralPlayers {
         players.add(player1);
 
         // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place player 0's headquarter
         var point0 = new Point(5, 5);
@@ -173,7 +173,7 @@ public class TestSeveralPlayers {
         players.add(player1);
 
         // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Verify that the correct players can be retrieved from the game map
         var retrievedPlayers = map.getPlayers();

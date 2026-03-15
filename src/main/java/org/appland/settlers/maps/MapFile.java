@@ -6,6 +6,7 @@
 package org.appland.settlers.maps;
 
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Vegetation;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -22,13 +23,13 @@ public class MapFile {
 
     private static final String FILE_HEADER_V1 = "WORLD_V1.0";
 
-    private final List<Texture> tilesBelow = new ArrayList<>();
-    private final List<Texture> tilesDownRight = new ArrayList<>();
+    private final List<Vegetation> tilesBelow = new ArrayList<>();
+    private final List<Vegetation> tilesDownRight = new ArrayList<>();
     private final List<Point> startingPositions = new ArrayList<>();
     private final List<PlayerFace> playerFaces = new ArrayList<>();
     private final List<UniqueMass> masses = new ArrayList<>();
     private final List<MapFilePoint> mapFilePoints = new ArrayList<>();
-    private final List<java.awt.Point> fileStartingPoints = new ArrayList<>();
+    private final List<java.awt.Point> mapFileStartingPoints = new ArrayList<>();
     private final Map<Point, MapFilePoint> gamePointToMapFilePointMap = new HashMap<>();
     private final Map<java.awt.Point, MapFilePoint> mapFilePointToGamePointMap = new HashMap<>();
 
@@ -41,20 +42,35 @@ public class MapFile {
     private String title;
     private MapTitleType mapTitleType;
     private HeaderType headerType;
+    private final List<Integer> heights = new ArrayList<>();
 
-    void addTileBelow(Texture o) {
+    /**
+     * Add a below-tile.
+     * @param o
+     */
+    void addTileBelow(Vegetation o) {
         tilesBelow.add(o);
     }
 
-    void addTileDownRight(Texture o) {
+    public void setTilesDownRight(List<Vegetation> tilesDownRight) {
+        this.tilesDownRight.clear();
+        this.tilesDownRight.addAll(tilesDownRight);
+    }
+
+    public void setTilesBelow(List<Vegetation> tilesBelow) {
+        this.tilesBelow.clear();
+        this.tilesBelow.addAll(tilesBelow);
+    }
+
+    void addTileDownRight(Vegetation o) {
         tilesDownRight.add(o);
     }
 
-    public List<Texture> getTilesBelow() {
+    public List<Vegetation> getTilesBelow() {
         return tilesBelow;
     }
 
-    public List<Texture> getTilesDownRight() {
+    public List<Vegetation> getTilesDownRight() {
         return tilesDownRight;
     }
 
@@ -90,7 +106,7 @@ public class MapFile {
      *
      * @param numberOfPlayers the maximum number of players
      */
-    void setMaxNumberOfPlayers(int numberOfPlayers) {
+    public void setMaxNumberOfPlayers(int numberOfPlayers) {
         this.maxNumberOfPlayers = numberOfPlayers;
     }
 
@@ -108,8 +124,8 @@ public class MapFile {
      *
      * @param startingPoint the starting position
      */
-    void addStartingPosition(java.awt.Point startingPoint) {
-        fileStartingPoints.add(startingPoint);
+    void addStartingPoint(java.awt.Point startingPoint) {
+        mapFileStartingPoints.add(startingPoint);
     }
 
     /**
@@ -141,7 +157,7 @@ public class MapFile {
      *
      * @param width the width of the map
      */
-    void setWidth(int width) {
+    public void setWidth(int width) {
         this.width = width;
     }
 
@@ -159,7 +175,7 @@ public class MapFile {
      *
      * @param height the height of the map
      */
-    void setHeight(int height) {
+    public void setHeight(int height) {
         this.height = height;
     }
 
@@ -192,15 +208,6 @@ public class MapFile {
      */
     public List<MapFilePoint> getMapFilePoints() {
         return mapFilePoints;
-    }
-
-    /**
-     * Returns the list of game starting points after converting from map file points.
-     *
-     * @return the list of game starting points
-     */
-    public List<Point> getGamePointStartingPoints() {
-        return startingPositions;
     }
 
     /**
@@ -311,7 +318,7 @@ public class MapFile {
      * @throws InvalidMapException if a starting point is outside the map
      */
     void translateFileStartingPointsToGamePoints() throws InvalidMapException {
-        for (var point : fileStartingPoints) {
+        for (var point : mapFileStartingPoints) {
             if (!mapFilePointToGamePointMap.containsKey(point)) {
                 continue;
             }
@@ -397,7 +404,7 @@ public class MapFile {
      * @return list of file starting points
      */
     public List<java.awt.Point> getStartingPoints() {
-        return fileStartingPoints;
+        return mapFileStartingPoints;
     }
 
     /**
@@ -407,5 +414,18 @@ public class MapFile {
      */
     public Dimension getDimension() {
         return new Dimension(width, height);
+    }
+
+    public List<Integer> getHeights() {
+        return heights;
+    }
+
+    public void addHeight(int height) {
+        this.heights.add(height);
+    }
+
+    public void setHeights(List<Integer> heights) {
+        this.heights.clear();
+        this.heights.addAll(heights);
     }
 }

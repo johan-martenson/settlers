@@ -5,7 +5,6 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
 import org.appland.settlers.model.ResourceLevel;
 import org.appland.settlers.model.actors.WildAnimal;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -23,7 +22,7 @@ public class GameUtils {
 
         // Limit the amount of wild animals to make performance bearable -- temporary!
         var wildAnimals = map.getWildAnimals();
-        var reducedWildAnimals = (List<WildAnimal>) new ArrayList<WildAnimal>(wildAnimals);
+        var reducedWildAnimals = (List<WildAnimal>) new ArrayList<>(wildAnimals);
 
         if (reducedWildAnimals.size() > 10) {
             reducedWildAnimals = reducedWildAnimals.subList(0, 10);

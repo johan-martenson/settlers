@@ -4,6 +4,7 @@ import org.appland.settlers.assets.Nation;
 import org.appland.settlers.chat.ChatManager;
 import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.maps.MapLoader;
+import org.appland.settlers.maps.utils.GeometryMapping;
 import org.appland.settlers.model.BorderChange;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Crop;
@@ -229,37 +230,6 @@ public class JsonUtils {
 
     private PlayerColor jsonToPlayerColor(String colorName) {
         return PlayerColor.valueOf(colorName);
-    }
-
-    JSONObject terrainToJson(GameMap map) {
-        var jsonTrianglesBelow = new JSONArray();
-        var jsonTrianglesBelowRight = new JSONArray();
-        var jsonHeights = new JSONArray();
-
-        int start = 1;
-
-        for (int y = 1; y < map.getHeight(); y++) {
-            for (int x = start; x + 1 < map.getWidth(); x += 2) {
-                var point = new Point(x, y);
-
-                var below = map.getVegetationBelow(point);
-                var downRight = map.getVegetationDownRight(point);
-
-                jsonTrianglesBelow.add(below.toInt());
-                jsonTrianglesBelowRight.add(downRight.toInt());
-                jsonHeights.add(map.getHeightAtPoint(point));
-            }
-
-            start = (start == 1) ? 2 : 1;
-        }
-
-        return new JSONObject(Map.of(
-                "straightBelow", jsonTrianglesBelow,
-                "belowToTheRight", jsonTrianglesBelowRight,
-                "heights", jsonHeights,
-                "width", map.getWidth(),
-                "height", map.getHeight()
-        ));
     }
 
     public JSONObject pointToDetailedJson(Point point, Player player, GameMap map) throws InvalidUserActionException {
@@ -527,7 +497,7 @@ public class JsonUtils {
                 "nation", worker.getPlayer().getNation().name().toUpperCase()
         ));
 
-        if (!worker.isExactlyAtPoint() || (worker.getPosition().x + worker.getPosition().y) % 2 != 0 ) {
+        if (!worker.isExactlyAtPoint() || (worker.getPosition().x + worker.getPosition().y) % 2 != 0 ) { // TODO: needs fixing!!!
             jsonWorker.put("previous", pointToJson(worker.getLastPoint()));
             jsonWorker.put("next", pointToJson(worker.getNextPoint()));
             jsonWorker.put("percentageTraveled", worker.getPercentageOfDistanceTraveled());
@@ -652,7 +622,10 @@ public class JsonUtils {
                 "width", mapFile.getWidth(),
                 "height", mapFile.getHeight(),
                 "maxPlayers", mapFile.getMaxNumberOfPlayers(),
-                "startingPoints", pointsToJson(mapFile.getGamePointStartingPoints())
+                "startingPoints", pointsToJson(
+                        mapFile.getStartingPoints().stream()
+                        .map(mapFilePoint -> GeometryMapping.mapFilePointToGamePoint(mapFilePoint, mapFile.getHeight()))
+                        .toList())
         ));
     }
 
@@ -666,10 +639,60 @@ public class JsonUtils {
         return jsonHouses;
     }
 
-    public JSONObject mapFileTerrainToJson(MapFile mapFile) throws Exception {
-        var map = mapLoader.convertMapFileToGameMap(mapFile);
+    /**
+     * Converts the terrain of the given MapFile to a JSON representation
+     *
+     * The returned data is laid out in rows, starting from the bottom-left corner. Tiles are tied to their top/top-right
+     * corner. Thus, the first row only contains heights. The map file doesn't specify heights for the bottom-row so
+     * re-use the heights of the second-to-bottom row.
+     *
+     * Map file coordinate system:
+     * (0,0)               (1,0)               ... (fileWidth - 1, 0)
+     *      ...
+     * (0, fileHeight - 1) (1, fileHeight - 1) ... (fileWidth - 1, fileHeight - 1)
+     *
+     * Game engine coordinate system:
+     * (0, gameHeight - 1) ... (gameWidth - 1, gameHeight - 1)
+     *     ...
+     * (0, 0)              ... (gameWidth - 1, gameHeight - 1)
+     *
+     * Tiles below:      [Map-file-row-0, ..., Map-file-row-n]
+     * Tiles down-right: [Map-file-row-0, ..., Map-file-row-n]
+     * Heights:          [Map-file-row-0, ..., Map-file-row-n, game-engine-bottom-row]
+     *
+     * @param mapFile The MapFile whose terrain should be converted to JSON
+     * @return JSON representation of the terrain of the MapFile
+     */
+    public JSONObject mapFileTerrainToJson(MapFile mapFile) {
+        var jsonHeights = new JSONArray();
+        var jsonTilesBelow = new JSONArray();
+        var jsonTilesDownRight = new JSONArray();
 
-        return terrainToJson(map);
+        // Fill in the other rows of heights and the tiles
+        for (int fileY = 0; fileY < mapFile.getHeight(); fileY++) {
+            for (int fileX = 0; fileX < mapFile.getWidth(); fileX++) {
+                var index = fileY * mapFile.getWidth() + fileX;
+
+                jsonHeights.add(mapFile.getHeights().get(index));
+                jsonTilesBelow.add(mapFile.getTilesBelow().get(index).toInt());
+                jsonTilesDownRight.add(mapFile.getTilesDownRight().get(index).toInt());
+            }
+        }
+
+        // Fill in the bottom row of heights, re-using the values of the second-to-bottom-row
+        for (int i = 0; i < mapFile.getWidth(); i++) {
+            jsonHeights.add(mapFile.getHeights().get(mapFile.getWidth() * (mapFile.getHeight() - 1) + i));
+        }
+
+        return new JSONObject(Map.of(
+                "tilesBelow", jsonTilesBelow,
+                "tilesDownRight", jsonTilesDownRight,
+                "heights", jsonHeights,
+                "width", GeometryMapping.mapFileWidthToGameWidth(mapFile.getWidth()),
+                "height", GeometryMapping.mapFileHeightToGameHeight(mapFile.getHeight()),
+                "fileWidth", mapFile.getWidth(),
+                "fileHeight", mapFile.getHeight()
+        ));
     }
 
     public JSONObject buildingLostMessageToJson(BuildingLostMessage buildingLostMessage) {
@@ -1460,29 +1483,25 @@ public class JsonUtils {
             }
 
             // Add terrain information
-            var jsonTrianglesBelow = new JSONArray();
-            var jsonTrianglesBelowRight = new JSONArray();
+            var jsonTilesBelow = new JSONArray();
+            var jsonTilesDownRight = new JSONArray();
             var jsonHeights = new JSONArray();
 
-            int start = 1;
+            for (int y = map.getHeight() - 1; y > 0; y--) {
+                var shift = GeometryMapping.rowShiftFromGameY(y, map.getHeight());
 
-            for (int y = 1; y < map.getHeight(); y++) {
-                for (int x = start; x + 1 < map.getWidth(); x += 2) {
+                for (int x = shift; x < map.getWidth(); x += 2) {
                     var point = new Point(x, y);
 
-                    var below = map.getVegetationBelow(point);
-                    var downRight = map.getVegetationDownRight(point);
-
-                    jsonTrianglesBelow.add(below.toInt());
-                    jsonTrianglesBelowRight.add(downRight.toInt());
+                    jsonTilesBelow.add(map.getVegetationBelow(point).toInt());
+                    jsonTilesDownRight.add(map.getVegetationDownRight(point).toInt());
                     jsonHeights.add(map.getHeightAtPoint(point));
                 }
+            }
 
-                if (start == 1) {
-                    start = 2;
-                } else {
-                    start = 1;
-                }
+            var shift = GeometryMapping.rowShiftFromGameY(0, map.getHeight());
+            for (int x = shift; x < map.getWidth(); x += 2) {
+                jsonHeights.add(map.getHeightAtPoint(new Point(x, 0)));
             }
 
             return new JSONObject(Map.ofEntries(
@@ -1503,8 +1522,8 @@ public class JsonUtils {
                     entry("players", playersToJson(map.getPlayers(), gameResource)),
                     entry("gameState", gameResource.status.name().toUpperCase()),
                     entry("messages", messagesToJson(player.getMessages())),
-                    entry("straightBelow", jsonTrianglesBelow),
-                    entry("belowToTheRight", jsonTrianglesBelowRight),
+                    entry("tilesBelow", jsonTilesBelow),
+                    entry("tilesDownRight", jsonTilesDownRight),
                     entry("heights", jsonHeights),
                     entry("width", map.getWidth()),
                     entry("height", map.getHeight()),
@@ -1571,7 +1590,9 @@ public class JsonUtils {
                 "width", mapFile.getWidth(),
                 "maxNumberPlayers", mapFile.getMaxNumberOfPlayers(),
                 "terrain", mapFile.getTerrainType().name().toUpperCase(),
-                "startingPoints", toJsonArray(mapFile.getGamePointStartingPoints(), this::pointToJson),
+                "startingPoints", toJsonArray(mapFile.getStartingPoints().stream()
+                        .map(mapFilePoint -> GeometryMapping.mapFilePointToGamePoint(mapFilePoint, mapFile.getHeight()))
+                        .toList(), this::pointToJson),
                 "points", jsonMapPoints
         ));
 

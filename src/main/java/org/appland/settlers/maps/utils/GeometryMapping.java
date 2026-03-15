@@ -4,6 +4,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Vegetation;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,8 +111,8 @@ public class GeometryMapping {
     public static List<Point> gameMapPointsFromFileDimensions(int fileWidth, int fileHeight) {
         var result = new ArrayList<Point>();
 
-        for (int fileY = 0; fileY < fileHeight; fileY++) {
-            for (int fileX = 0; fileX < fileWidth; fileX += 1) {
+        for (int fileY = 0; fileY < fileHeight + 1; fileY++) {
+            for (int fileX = 0; fileX < fileWidth; fileX++) {
                 result.add(mapFilePointToGamePoint(fileX, fileY, fileHeight));
             }
         }
@@ -127,30 +128,17 @@ public class GeometryMapping {
             GameMap map
     ) {
         for (int fileY = 0; fileY < fileHeight; fileY++) {
-            int engineY = fileHeight - 1 - fileY;
-            int rowShift = fileY & 1;
+            int gameY = fileHeight - fileY;
+            int rowShift = ((fileHeight % 2 == 0) == (fileY % 2 == 0)) ? 1 : 0;
 
             for (int fileX = 0; fileX < fileWidth; fileX++) {
                 int fileIndex = fileY * fileWidth + fileX;
-                int engineX = 2 * fileX + rowShift;
+                int gameX = 2 * fileX + rowShift;
 
-                var enginePoint = new Point(engineX, engineY);
+                var gamePoint = new Point(gameX, gameY);
 
-                /* ---- Below triangle ---- */
-                if (fileY + 1 < fileHeight) {
-                    boolean valid = ((fileY & 1) == 0)
-                                    ? fileX + 1 < fileWidth
-                                    : fileX - 1 >= 0;
-
-                    if (valid) {
-                        map.setVegetationBelow(enginePoint, tilesBelow[fileIndex]);
-                    }
-                }
-
-                /* ---- Down-right triangle ---- */
-                if (fileX + 1 < fileWidth && fileY + 1 < fileHeight) {
-                    map.setVegetationDownRight(enginePoint, tilesDownRight[fileIndex]);
-                }
+                map.setVegetationBelow(gamePoint, tilesBelow[fileIndex]);
+                map.setVegetationDownRight(gamePoint, tilesDownRight[fileIndex]);
             }
         }
     }
@@ -159,69 +147,54 @@ public class GeometryMapping {
        Forward Mapping
        ============================================================ */
 
-    public static Point mapFilePointToGamePoint(
-            int fileX,
-            int fileY,
-            int fileHeight
-    ) {
-        int engineY = fileHeight - 1 - fileY;
-        int engineX = 2 * fileX + (fileY & 1);
-
-        return new Point(engineX, engineY);
+    public static Point mapFilePointToGamePoint(java.awt.Point point, int fileHeight) {
+        return mapFilePointToGamePoint(point.x, point.y, fileHeight);
     }
 
-    public static java.awt.Point mapFileIndexToGamePoint(
-            int fileIndex,
-            int fileWidth,
-            int fileHeight
-    ) {
+    public static Point mapFilePointToGamePoint(int fileX, int fileY, int fileHeight) {
+        int gameX = 2 * fileX + (fileY & 1);
+        int gameY = fileHeight - fileY;
+
+        return new Point(gameX, gameY);
+    }
+
+    public static java.awt.Point mapFileIndexToGamePoint(int fileIndex, int fileWidth, int fileHeight) {
         int fileY = fileIndex / fileWidth;
         int fileX = fileIndex % fileWidth;
 
-        int engineY = fileHeight - 1 - fileY;
-        int engineX = 2 * fileX + (fileY & 1);
+        int gameX = 2 * fileX + (fileY & 1);
+        int gameY = fileHeight - fileY;
 
-        return new java.awt.Point(engineX, engineY);
+        return new java.awt.Point(gameX, gameY);
     }
 
     /* ============================================================
        Inverse Mapping
        ============================================================ */
 
+    public static java.awt.Point gamePointToMapFilePoint(Point point, int fileHeight) {
+        return gamePointToMapFilePoint(point.x, point.y, fileHeight);
+    }
+
     public static java.awt.Point gamePointToMapFilePoint(
-            int engineX,
-            int engineY,
-            int fileWidth,
+            int gameX,
+            int gameY,
             int fileHeight
     ) {
-        int fileY = fileHeight - 1 - engineY;
-        int numerator = engineX - (fileY & 1);
+        int fileY = fileHeight - gameY;
+        int shift = (fileY & 1);
 
-        if ((numerator & 1) != 0) {
+        if (shift == 1 && (gameX % 2 == 0)) {
             throw new IllegalArgumentException("Not a valid vertex coordinate");
         }
 
-        int fileX = numerator / 2;
-
-        if (fileX < 0 || fileX >= fileWidth || fileY < 0 || fileY >= fileHeight) {
-            throw new IllegalArgumentException("Out of bounds");
-        }
+        int fileX = (gameX - shift) / 2;
 
         return new java.awt.Point(fileX, fileY);
     }
 
-    public static int gamePointToMapFileIndex(
-            int engineX,
-            int engineY,
-            int fileWidth,
-            int fileHeight
-    ) {
-        var filePoint = gamePointToMapFilePoint(
-                engineX,
-                engineY,
-                fileWidth,
-                fileHeight
-        );
+    public static int gamePointToMapFileIndex(int gameX, int gameY, int fileWidth, int fileHeight) {
+        var filePoint = gamePointToMapFilePoint(gameX, gameY, fileHeight);
 
         return filePoint.y * fileWidth + filePoint.x;
     }
@@ -230,7 +203,7 @@ public class GeometryMapping {
        Dimension Conversion
        ============================================================ */
 
-    public static int gameWidthFromFileWidth(int fileWidth) {
+    public static int mapFileWidthToGameWidth(int fileWidth) {
         if (fileWidth <= 0) {
             throw new IllegalArgumentException("fileWidth must be > 0");
         }
@@ -238,7 +211,7 @@ public class GeometryMapping {
         return 2 * fileWidth;
     }
 
-    public static int gameHeightFromFileHeight(int fileHeight) {
+    public static int mapFileHeightToGameHeight(int fileHeight) {
         if (fileHeight <= 0) {
             throw new IllegalArgumentException("fileHeight must be > 0");
         }
@@ -246,11 +219,25 @@ public class GeometryMapping {
         return fileHeight + 1;
     }
 
-    public static int mapFileWidthFromGameWidth(int gameWidth) {
+    public static int gameWidthToMapFileWidth(int gameWidth) {
         return gameWidth / 2;
     }
 
-    public static int mapFileHeightFromGameHeight(int gameHeight) {
-        return gameHeight;
+    public static int gameHeightToMapFileHeight(int gameHeight) {
+        return gameHeight - 1;
+    }
+
+    public static Dimension mapFileDimensionsToGameDimensions(Dimension mapFileDimension) {
+        return new Dimension(mapFileWidthToGameWidth(mapFileDimension.width), mapFileHeightToGameHeight(mapFileDimension.height));
+    }
+
+    public static boolean isValidGamePoint(Point point, int gameHeight) {
+        var indent = ((gameHeight % 2 == 0) == (point.y % 2 == 0));
+
+        return indent == (point.x % 2 != 0);
+    }
+
+    public static int rowShiftFromGameY(int gameY, int gameHeight) {
+        return ((gameHeight % 2) == (gameY % 2)) ? 1 : 0;
     }
 }

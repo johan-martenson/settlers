@@ -1,23 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.actors.Hunter;
-import org.appland.settlers.model.actors.WildAnimal;
 import org.appland.settlers.model.actors.WoodcutterWorker;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Fishery;
 import org.appland.settlers.model.buildings.GoldMine;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -25,7 +16,6 @@ import org.appland.settlers.model.buildings.HunterHut;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.appland.settlers.model.Vegetation.*;
@@ -44,8 +34,7 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         /* Place lake with this form:
 
@@ -66,7 +55,7 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point3, WATER, map);
         Utils.surroundPointWithVegetation(point4, WATER, map);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(16, 6);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -133,10 +122,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -153,10 +141,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -176,10 +163,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -196,10 +182,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -212,7 +197,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new Woodcutter(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -220,10 +205,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -240,10 +224,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -256,7 +239,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new GoldMine(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -264,10 +247,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -292,10 +274,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -315,10 +296,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -334,7 +314,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new Woodcutter(player0), point3);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -342,10 +322,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -376,7 +355,7 @@ public class TestPlacementInTerrain {
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
 
-        // Verify that the woodcutter worker can go back to the headquarter
+        // Verify that the woodcutter worker can go back to the headquarters
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
@@ -387,10 +366,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -433,10 +411,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -463,10 +440,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -490,8 +466,7 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place a desert on the map
         var point2 = new Point(4, 6);
@@ -501,13 +476,12 @@ public class TestPlacementInTerrain {
             Utils.surroundPointWithVegetation(point, DESERT_1, map);
         }
 
-        // Verify that a headquarter cannot be placed in the desert
+        // Verify that a headquarters cannot be placed in the desert
         try {
             map.placeBuilding(new Headquarter(player0), point2);
 
             fail();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 
 
@@ -519,10 +493,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -539,10 +512,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -555,7 +527,7 @@ public class TestPlacementInTerrain {
             map.placeFlag(player0, point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -563,10 +535,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -583,10 +554,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -599,7 +569,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new Woodcutter(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -607,10 +577,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -627,10 +596,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -643,7 +611,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new GoldMine(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -651,10 +619,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -673,7 +640,7 @@ public class TestPlacementInTerrain {
             var road0 = map.placeRoad(player0, point2, point1, point3);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -681,10 +648,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -704,10 +670,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -723,7 +688,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new Woodcutter(player0), point3);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -731,10 +696,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -765,7 +729,7 @@ public class TestPlacementInTerrain {
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
 
-        // Verify that the woodcutter worker can't go back to the headquarter
+        // Verify that the woodcutter worker can't go back to the headquarters
         assertEquals(map.getVegetationAbove(point6), SNOW);
         assertEquals(map.getVegetationBelow(point7), SNOW);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
@@ -782,10 +746,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -819,10 +782,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -843,7 +805,7 @@ public class TestPlacementInTerrain {
             map.placeFlag(player0, point5);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -851,10 +813,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -870,6 +831,7 @@ public class TestPlacementInTerrain {
 
         // Verify that it's not possible to place a flag on the border of water and snow
         var point5 = new Point(5, 7);
+
         assertFalse(map.isAvailableFlagPoint(player0, point5));
     }
 
@@ -878,8 +840,7 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place snow on the map
         var point2 = new Point(4, 6);
@@ -889,7 +850,7 @@ public class TestPlacementInTerrain {
             Utils.surroundPointWithVegetation(point, SNOW, map);
         }
 
-        // Verify that a headquarter cannot be placed on the snow
+        // Verify that a headquarters cannot be placed on the snow
         try {
             map.placeBuilding(new Headquarter(player0), point2);
 
@@ -906,10 +867,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -926,10 +886,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -949,10 +908,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -969,10 +927,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -993,10 +950,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1013,10 +969,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1029,7 +984,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new GoldMine(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -1037,10 +992,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1065,10 +1019,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1099,7 +1052,7 @@ public class TestPlacementInTerrain {
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
 
-        // Verify that the woodcutter worker can go back to the headquarter
+        // Verify that the woodcutter worker can go back to the headquarters
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
@@ -1110,10 +1063,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1156,10 +1108,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1186,10 +1137,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1216,10 +1166,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1236,10 +1185,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1260,10 +1208,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1280,10 +1227,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1304,10 +1250,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1324,10 +1269,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1340,7 +1284,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new GoldMine(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -1348,10 +1292,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1376,10 +1319,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1410,7 +1352,7 @@ public class TestPlacementInTerrain {
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
 
-        // Verify that the woodcutter worker can go back to the headquarter
+        // Verify that the woodcutter worker can go back to the headquarters
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
@@ -1421,10 +1363,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1465,10 +1406,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1496,10 +1436,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1523,8 +1462,7 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place savannah on the map
         var point2 = new Point(8, 8);
@@ -1534,7 +1472,7 @@ public class TestPlacementInTerrain {
             Utils.surroundPointWithVegetation(point, SAVANNAH, map);
         }
 
-        // Verify that a headquarter can be placed on the savannah
+        // Verify that a headquarters can be placed on the savannah
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         assertTrue(map.getBuildings().contains(headquarter));
@@ -1550,10 +1488,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1570,10 +1507,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1594,10 +1530,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1614,10 +1549,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1638,10 +1572,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1658,10 +1591,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1674,7 +1606,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new GoldMine(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -1682,10 +1614,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1710,10 +1641,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1744,7 +1674,7 @@ public class TestPlacementInTerrain {
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
 
-        // Verify that the woodcutter worker can go back to the headquarter
+        // Verify that the woodcutter worker can go back to the headquarters
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
@@ -1755,10 +1685,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1801,10 +1730,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1832,10 +1760,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1859,8 +1786,7 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place buildable water on the map
         var point2 = new Point(4, 6);
@@ -1870,7 +1796,7 @@ public class TestPlacementInTerrain {
             Utils.surroundPointWithVegetation(point, BUILDABLE_WATER, map);
         }
 
-        // Verify that a headquarter can be placed on the buildable water
+        // Verify that a headquarters can be placed on the buildable water
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         assertTrue(map.getBuildings().contains(headquarter));
@@ -1886,10 +1812,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1906,10 +1831,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1930,10 +1854,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1950,10 +1873,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1974,10 +1896,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1994,10 +1915,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2010,7 +1930,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new GoldMine(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -2018,10 +1938,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2046,10 +1965,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2080,7 +1998,7 @@ public class TestPlacementInTerrain {
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
 
-        // Verify that the woodcutter worker can go back to the headquarter
+        // Verify that the woodcutter worker can go back to the headquarters
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
@@ -2091,10 +2009,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2135,10 +2052,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2166,10 +2082,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2193,8 +2108,7 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place steppe on the map
         var point2 = new Point(4, 6);
@@ -2220,10 +2134,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2240,10 +2153,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2264,10 +2176,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2284,10 +2195,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2308,10 +2218,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2328,10 +2237,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2344,7 +2252,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new GoldMine(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -2352,10 +2260,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2380,10 +2287,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2414,7 +2320,7 @@ public class TestPlacementInTerrain {
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
 
-        // Verify that the woodcutter worker can go back to the headquarter
+        // Verify that the woodcutter worker can go back to the headquarters
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
@@ -2425,10 +2331,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2471,10 +2376,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2502,10 +2406,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2529,8 +2432,7 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place mountain meadow on the map
         var point2 = new Point(4, 6);
@@ -2540,7 +2442,7 @@ public class TestPlacementInTerrain {
             Utils.surroundPointWithVegetation(point, MOUNTAIN_MEADOW, map);
         }
 
-        // Verify that a headquarter can be placed on the mountain meadow
+        // Verify that a headquarters can be placed on the mountain meadow
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         assertTrue(map.getBuildings().contains(headquarter));
@@ -2555,10 +2457,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2575,10 +2476,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2599,10 +2499,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2619,10 +2518,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2643,10 +2541,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2663,10 +2560,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2679,7 +2575,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new GoldMine(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -2687,10 +2583,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2715,10 +2610,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2749,7 +2643,7 @@ public class TestPlacementInTerrain {
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
 
-        // Verify that the woodcutter worker can go back to the headquarter
+        // Verify that the woodcutter worker can go back to the headquarters
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
@@ -2760,10 +2654,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2804,10 +2697,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2835,10 +2727,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2862,8 +2753,7 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place buildable mountain on the map
         var point2 = new Point(4, 6);
@@ -2873,7 +2763,7 @@ public class TestPlacementInTerrain {
             Utils.surroundPointWithVegetation(point, BUILDABLE_MOUNTAIN, map);
         }
 
-        // Verify that a headquarter can be placed on the buildable mountain
+        // Verify that a headquarters can be placed on the buildable mountain
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         assertTrue(map.getBuildings().contains(headquarter));
@@ -2886,10 +2776,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point1 = new Point(13, 13);
         map.placeBuilding(new Headquarter(player0), point1);
 
@@ -2904,8 +2793,7 @@ public class TestPlacementInTerrain {
         // Verify that there is an available point for a large house on the buildable mountain
         try {
             assertEquals(map.isAvailableHousePoint(player0, point2), Size.LARGE);
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 
 
@@ -2916,10 +2804,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2936,10 +2823,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2952,7 +2838,7 @@ public class TestPlacementInTerrain {
             map.placeFlag(player0, point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -2960,10 +2846,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2980,10 +2865,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2996,7 +2880,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new Woodcutter(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -3004,10 +2888,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3024,10 +2907,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3040,7 +2922,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new GoldMine(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -3048,10 +2930,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3070,7 +2951,7 @@ public class TestPlacementInTerrain {
             var road0 = map.placeRoad(player0, point2, point1, point3);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -3078,10 +2959,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3101,10 +2981,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3120,7 +2999,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new Woodcutter(player0), point3);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -3128,10 +3007,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3162,7 +3040,7 @@ public class TestPlacementInTerrain {
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
 
-        // Verify that the woodcutter worker can't go back to the headquarter
+        // Verify that the woodcutter worker can't go back to the headquarters
         assertEquals(map.getVegetationAbove(point6), LAVA_1);
         assertEquals(map.getVegetationBelow(point7), LAVA_1);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
@@ -3179,10 +3057,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3203,7 +3080,7 @@ public class TestPlacementInTerrain {
             map.placeFlag(player0, point5);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -3211,10 +3088,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3238,8 +3114,7 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place lava on the map
         var point2 = new Point(4, 6);
@@ -3249,7 +3124,7 @@ public class TestPlacementInTerrain {
             Utils.surroundPointWithVegetation(point, LAVA_1, map);
         }
 
-        // Verify that a headquarter can be placed on the lava
+        // Verify that a headquarters can be placed on the lava
         try {
             map.placeBuilding(new Headquarter(player0), point2);
 
@@ -3263,10 +3138,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point1 = new Point(13, 13);
         map.placeBuilding(new Headquarter(player0), point1);
 
@@ -3293,10 +3167,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3313,10 +3186,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3329,7 +3201,7 @@ public class TestPlacementInTerrain {
             map.placeFlag(player0, point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -3337,10 +3209,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3357,10 +3228,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3373,7 +3243,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new Woodcutter(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -3381,10 +3251,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3401,10 +3270,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3417,7 +3285,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new GoldMine(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -3425,10 +3293,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3447,7 +3314,7 @@ public class TestPlacementInTerrain {
             var road0 = map.placeRoad(player0, point2, point1, point3);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -3455,10 +3322,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3470,6 +3336,7 @@ public class TestPlacementInTerrain {
 
         // Verify that there is no available house point on the border of the deep water
         var point3 = new Point(11, 11);
+
         assertNull(map.isAvailableHousePoint(player0, point3));
     }
 
@@ -3478,10 +3345,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3497,7 +3363,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new Woodcutter(player0), point3);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -3505,10 +3371,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3539,7 +3404,7 @@ public class TestPlacementInTerrain {
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
 
-        // Verify that the woodcutter worker can't go back to the headquarter
+        // Verify that the woodcutter worker can't go back to the headquarters
         assertEquals(map.getVegetationAbove(point6), WATER_2);
         assertEquals(map.getVegetationBelow(point7), WATER_2);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
@@ -3557,10 +3422,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3581,7 +3445,7 @@ public class TestPlacementInTerrain {
             map.placeFlag(player0, point5);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -3589,10 +3453,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3616,8 +3479,7 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place deep water on the map
         var point2 = new Point(4, 6);
@@ -3627,13 +3489,12 @@ public class TestPlacementInTerrain {
             Utils.surroundPointWithVegetation(point2, WATER_2, map);
         }
 
-        // Verify that a headquarter cannot be placed on the deep water
+        // Verify that a headquarters cannot be placed on the deep water
         try {
             map.placeBuilding(new Headquarter(player0), point2);
 
             fail();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 
     @Test
@@ -3641,10 +3502,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point1 = new Point(13, 13);
         map.placeBuilding(new Headquarter(player0), point1);
 
@@ -3659,8 +3519,7 @@ public class TestPlacementInTerrain {
         // Verify that there is no available point for a large house on the deep water
         try {
             assertNull(map.isAvailableHousePoint(player0, point2));
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 
 
@@ -3671,10 +3530,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3691,10 +3549,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3707,7 +3564,7 @@ public class TestPlacementInTerrain {
             map.placeFlag(player0, point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -3715,10 +3572,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3735,10 +3591,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3751,7 +3606,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new Woodcutter(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -3759,10 +3614,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3779,10 +3633,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3795,7 +3648,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new GoldMine(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -3803,10 +3656,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3825,7 +3677,7 @@ public class TestPlacementInTerrain {
             var road0 = map.placeRoad(player0, point2, point1, point3);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -3833,10 +3685,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3848,6 +3699,7 @@ public class TestPlacementInTerrain {
 
         // Verify that there is no available house point on the border of the water
         var point3 = new Point(11, 11);
+
         assertNull(map.isAvailableHousePoint(player0, point3));
     }
 
@@ -3856,10 +3708,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3875,7 +3726,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new Woodcutter(player0), point3);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -3883,10 +3734,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3917,13 +3767,12 @@ public class TestPlacementInTerrain {
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
 
-        // Verify that the woodcutter worker can't go back to the headquarter
+        // Verify that the woodcutter worker can't go back to the headquarters
         assertEquals(map.getVegetationAbove(point6), WATER);
         assertEquals(map.getVegetationBelow(point7), WATER);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         for (int i = 0; i < 1000; i++) {
-
             assertNotEquals(woodcutterWorker.getPosition(), headquarter0.getPosition());
 
             map.stepTime();
@@ -3935,10 +3784,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3959,7 +3807,7 @@ public class TestPlacementInTerrain {
             map.placeFlag(player0, point5);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -3967,10 +3815,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3986,6 +3833,7 @@ public class TestPlacementInTerrain {
 
         // Verify that it's not possible to place a flag on the border of water and snow
         var point5 = new Point(5, 7);
+
         assertFalse(map.isAvailableFlagPoint(player0, point5));
     }
 
@@ -3994,8 +3842,7 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place water on the map
         var point2 = new Point(4, 6);
@@ -4005,7 +3852,7 @@ public class TestPlacementInTerrain {
             Utils.surroundPointWithVegetation(point, WATER, map);
         }
 
-        // Verify that a headquarter cannot be placed on the water
+        // Verify that a headquarters cannot be placed on the water
         try {
             map.placeBuilding(new Headquarter(player0), point2);
 
@@ -4019,10 +3866,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point1 = new Point(13, 13);
         map.placeBuilding(new Headquarter(player0), point1);
 
@@ -4037,8 +3883,7 @@ public class TestPlacementInTerrain {
         // Verify that there is no available point for a large house on the water
         try {
             assertNull(map.isAvailableHousePoint(player0, point2));
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 
 
@@ -4049,10 +3894,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4069,10 +3913,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4085,7 +3928,7 @@ public class TestPlacementInTerrain {
             map.placeFlag(player0, point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -4093,10 +3936,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4113,10 +3955,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4129,7 +3970,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new Woodcutter(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -4137,10 +3978,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4157,10 +3997,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4173,7 +4012,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new GoldMine(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -4181,10 +4020,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4203,7 +4041,7 @@ public class TestPlacementInTerrain {
             var road0 = map.placeRoad(player0, point2, point1, point3);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -4211,10 +4049,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4226,6 +4063,7 @@ public class TestPlacementInTerrain {
 
         // Verify that there is no available house point on the border of the swamp
         var point3 = new Point(11, 11);
+
         assertNull(map.isAvailableHousePoint(player0, point3));
     }
 
@@ -4234,10 +4072,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4253,7 +4090,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new Woodcutter(player0), point3);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -4261,10 +4098,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4295,7 +4131,7 @@ public class TestPlacementInTerrain {
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
 
-        // Verify that the woodcutter worker can't go back to the headquarter
+        // Verify that the woodcutter worker can't go back to the headquarters
         assertEquals(map.getVegetationAbove(point6), SWAMP);
         assertEquals(map.getVegetationBelow(point7), SWAMP);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
@@ -4312,10 +4148,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4349,10 +4184,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4373,7 +4207,7 @@ public class TestPlacementInTerrain {
             map.placeFlag(player0, point5);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -4381,10 +4215,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4400,6 +4233,7 @@ public class TestPlacementInTerrain {
 
         // Verify that it's not possible to place a flag on the border of swamp and snow
         var point5 = new Point(5, 7);
+
         assertFalse(map.isAvailableFlagPoint(player0, point5));
     }
 
@@ -4408,8 +4242,7 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place swamp on the map
         var point2 = new Point(4, 6);
@@ -4419,7 +4252,7 @@ public class TestPlacementInTerrain {
             Utils.surroundPointWithVegetation(point, SWAMP, map);
         }
 
-        // Verify that a headquarter can be placed on the swamp
+        // Verify that a headquarters can be placed on the swamp
         try {
             map.placeBuilding(new Headquarter(player0), point2);
 
@@ -4434,10 +4267,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point1 = new Point(13, 13);
         map.placeBuilding(new Headquarter(player0), point1);
 
@@ -4452,8 +4284,7 @@ public class TestPlacementInTerrain {
         // Verify that there is no available point for a large house on the swamp
         try {
             assertNull(map.isAvailableHousePoint(player0, point2));
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 
 
@@ -4463,10 +4294,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4483,10 +4313,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4507,10 +4336,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4527,10 +4355,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4543,7 +4370,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new Woodcutter(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -4551,10 +4378,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4571,10 +4397,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4587,7 +4412,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new GoldMine(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -4595,10 +4420,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4623,10 +4447,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4646,10 +4469,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4665,7 +4487,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new Woodcutter(player0), point3);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -4673,10 +4495,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4707,7 +4528,7 @@ public class TestPlacementInTerrain {
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
 
-        // Verify that the woodcutter worker can go back to the headquarter
+        // Verify that the woodcutter worker can go back to the headquarters
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
@@ -4718,10 +4539,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4764,10 +4584,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4795,10 +4614,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4814,6 +4632,7 @@ public class TestPlacementInTerrain {
 
         // Verify that it's possible to place a flag on the border of magenta and snow
         var point5 = new Point(5, 7);
+
         assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
 
@@ -4822,8 +4641,7 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place magenta on the map
         var point2 = new Point(4, 6);
@@ -4833,13 +4651,12 @@ public class TestPlacementInTerrain {
             Utils.surroundPointWithVegetation(point, MAGENTA, map);
         }
 
-        // Verify that a headquarter cannot be placed on the magenta
+        // Verify that a headquarters cannot be placed on the magenta
         try {
             map.placeBuilding(new Headquarter(player0), point2);
 
             fail();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 
     @Test
@@ -4847,10 +4664,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point1 = new Point(13, 13);
         map.placeBuilding(new Headquarter(player0), point1);
 
@@ -4865,8 +4681,7 @@ public class TestPlacementInTerrain {
         // Verify that there is no available point for a large house on the magenta
         try {
             assertNull(map.isAvailableHousePoint(player0, point2));
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 
 
@@ -4876,10 +4691,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4896,10 +4710,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4920,10 +4733,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4940,10 +4752,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4956,7 +4767,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new Woodcutter(player0), point1);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -4964,10 +4775,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4984,10 +4794,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -5008,10 +4817,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -5036,10 +4844,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -5051,6 +4858,7 @@ public class TestPlacementInTerrain {
 
         // Verify that there is no available house point on the border of the mountain
         var point3 = new Point(11, 11);
+
         assertNull(map.isAvailableHousePoint(player0, point3));
     }
 
@@ -5059,10 +4867,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -5078,7 +4885,7 @@ public class TestPlacementInTerrain {
             map.placeBuilding(new Woodcutter(player0), point3);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -5086,10 +4893,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -5120,7 +4926,7 @@ public class TestPlacementInTerrain {
         // Tear down the woodcutter hut
         woodcutter0.tearDown();
 
-        // Verify that the woodcutter worker can go back to the headquarter
+        // Verify that the woodcutter worker can go back to the headquarters
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
@@ -5131,10 +4937,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -5177,10 +4982,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -5208,10 +5012,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -5227,6 +5030,7 @@ public class TestPlacementInTerrain {
 
         // Verify that it's possible to place a flag on the border of mountain and snow
         var point5 = new Point(5, 7);
+
         assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
 
@@ -5235,8 +5039,7 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place mountain on the map
         var point2 = new Point(4, 6);
@@ -5246,13 +5049,12 @@ public class TestPlacementInTerrain {
             Utils.surroundPointWithVegetation(point, MOUNTAIN_1, map);
         }
 
-        // Verify that a headquarter cannot be placed on the mountain
+        // Verify that a headquarters cannot be placed on the mountain
         try {
             map.placeBuilding(new Headquarter(player0), point2);
 
             fail();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 
     @Test
@@ -5260,10 +5062,9 @@ public class TestPlacementInTerrain {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point1 = new Point(13, 13);
         map.placeBuilding(new Headquarter(player0), point1);
 
@@ -5278,7 +5079,6 @@ public class TestPlacementInTerrain {
         // Verify that there is no available point for a large house on the mountain
         try {
             assertNull(map.isAvailableHousePoint(player0, point2));
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 }

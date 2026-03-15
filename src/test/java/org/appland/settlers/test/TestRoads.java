@@ -42,7 +42,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 10, 10);
+        var map = new GameMap(List.of(player0), 10, 11);
 
         // Verify that trying to get a non-existing road returns null
         var point1 = new Point(2, 2);
@@ -84,7 +84,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(10, 10);
@@ -125,7 +125,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
         // Place headquarters
         var point0 = new Point(18, 18);
@@ -250,7 +250,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 16, 16);
+        var map = new GameMap(List.of(player0), 16, 17);
 
         // Place headquarters
         var point0 = new Point(12, 4);
@@ -323,7 +323,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(12, 4);
@@ -355,7 +355,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(10, 6);
@@ -449,7 +449,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 50, 50);
+        var map = new GameMap(List.of(player0), 50, 51);
 
         // Place headquarters
         var point0 = new Point(14, 14);
@@ -479,7 +479,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 10, 10);
+        var map = new GameMap(List.of(player0), 10, 11);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -517,27 +517,35 @@ public class TestRoads {
 
         points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, upRight);
 
-        assertEquals(points.size(), 2);
+        System.out.println(points);
+
+        assertEquals(3, points.size());
         assertTrue(points.contains(upRight.left()));
         assertTrue(points.contains(upRight.downLeft()));
         assertFalse(points.contains(upRight.down()));
         assertFalse(points.contains(upRight.downRight()));
+        assertTrue(player0.getBorderPoints().contains(downRight));
         assertFalse(points.contains(upRight.right()));
+        assertFalse(map.getPointsInMap().contains(upRight.right()));
         assertFalse(points.contains(upRight.upRight()));
+        assertTrue(player0.getBorderPoints().contains(upRight.upRight()));
         assertFalse(points.contains(upRight.up()));
-        assertFalse(points.contains(upRight.upLeft()));
+        assertTrue(points.contains(upRight.upLeft()));
+
 
         points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, upLeft);
 
-        assertEquals(points.size(), 2);
+        assertEquals(3, points.size());
         assertTrue(points.contains(upLeft.right()));
         assertTrue(points.contains(upLeft.downRight()));
         assertFalse(points.contains(upLeft.down()));
         assertFalse(points.contains(upLeft.downLeft()));
+        assertTrue(player0.getBorderPoints().contains(upLeft.downLeft()));
         assertFalse(points.contains(upLeft.left()));
         assertFalse(points.contains(upLeft.upLeft()));
+        assertTrue(player0.getBorderPoints().contains(upLeft.upLeft()));
         assertFalse(points.contains(upLeft.up()));
-        assertFalse(points.contains(upLeft.upRight()));
+        assertTrue(points.contains(upLeft.upRight()));
     }
 
     @Test
@@ -545,7 +553,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -576,7 +584,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 12, 10);
+        var map = new GameMap(List.of(player0), 12, 11);
 
         // Place headquarters
         var point0 = new Point(6, 6);
@@ -616,16 +624,16 @@ public class TestRoads {
 
         points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, up);
 
-        assertEquals(points.size(), 4);
+        assertEquals(points.size(), 6);
 
         assertFalse(points.contains(up.up()));
-        assertFalse(points.contains(up.upLeft()));
+        assertTrue(points.contains(up.upLeft()));
         assertTrue(points.contains(up.left()));
         assertTrue(points.contains(up.downLeft()));
         assertFalse(points.contains(up.down()));
         assertTrue(points.contains(up.downRight()));
         assertTrue(points.contains(up.right()));
-        assertFalse(points.contains(up.upRight()));
+        assertTrue(points.contains(up.upRight()));
 
         points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, down);
 
@@ -646,7 +654,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 30, 30);
+        var map = new GameMap(List.of(player0), 30, 31);
 
         // Place headquarters
         var point0 = new Point(16, 10);
@@ -686,7 +694,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(15, 15);
@@ -710,7 +718,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(15, 15);
@@ -733,7 +741,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(15, 15);
@@ -756,7 +764,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarters
         var point0 = new Point(50, 64);
@@ -785,7 +793,7 @@ public class TestRoads {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(15, 15);
@@ -832,7 +840,7 @@ public class TestRoads {
 
         // Create game map
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(15, 15);
@@ -863,7 +871,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -901,7 +909,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(12, 10);
@@ -948,7 +956,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(14, 12);
@@ -996,7 +1004,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1041,7 +1049,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1110,7 +1118,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1179,7 +1187,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1220,7 +1228,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1259,7 +1267,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1325,7 +1333,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1402,7 +1410,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1491,7 +1499,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1539,7 +1547,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1625,7 +1633,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1693,7 +1701,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1730,7 +1738,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1777,7 +1785,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1812,7 +1820,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1871,7 +1879,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 30, 30);
+        var map = new GameMap(List.of(player0), 30, 31);
 
         // Place headquarters
         var point0 = new Point(6, 10);
@@ -1899,7 +1907,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1927,7 +1935,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1944,7 +1952,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1961,7 +1969,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(10, 10);
@@ -1988,7 +1996,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(10, 10);
@@ -2029,7 +2037,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 20);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(10, 10);
@@ -2065,7 +2073,7 @@ public class TestRoads {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point25 = new Point(5, 5);
@@ -2100,7 +2108,7 @@ public class TestRoads {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point25 = new Point(5, 5);
@@ -2140,7 +2148,7 @@ public class TestRoads {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point38 = new Point(5, 5);
@@ -2171,7 +2179,7 @@ public class TestRoads {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point38 = new Point(5, 5);
@@ -2231,7 +2239,7 @@ public class TestRoads {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point38 = new Point(5, 5);
@@ -2299,7 +2307,7 @@ public class TestRoads {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point38 = new Point(5, 5);
@@ -2356,7 +2364,7 @@ public class TestRoads {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point38 = new Point(5, 11);
@@ -2417,7 +2425,7 @@ public class TestRoads {
 
         // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarters for player0
         var point17 = new Point(8, 10);
@@ -2444,7 +2452,7 @@ public class TestRoads {
 
         // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarters for player0
         var point17 = new Point(8, 10);
@@ -2473,7 +2481,7 @@ public class TestRoads {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point38 = new Point(5, 5);
@@ -2549,7 +2557,7 @@ public class TestRoads {
 
         // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place headquarters
         var point0 = new Point(8, 10);

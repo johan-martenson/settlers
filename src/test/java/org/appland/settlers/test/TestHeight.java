@@ -11,7 +11,6 @@ import org.appland.settlers.model.buildings.Headquarter;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.appland.settlers.model.Size.LARGE;
@@ -25,10 +24,7 @@ public class TestHeight {
 
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new LinkedList<Player>();        players.add(player0);
-
-        // Creating game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Verify that the default height is 10
         var startX = 1;
@@ -52,10 +48,7 @@ public class TestHeight {
 
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new LinkedList<Player>();        players.add(player0);
-
-        // Creating game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Verify that the height can be set
         var point0 = new Point(10, 10);
@@ -70,10 +63,7 @@ public class TestHeight {
 
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new LinkedList<Player>();        players.add(player0);
-
-        // Creating game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
         var point0 = new Point(10, 10);
@@ -87,8 +77,7 @@ public class TestHeight {
         try {
             var fortress0 = map.placeBuilding(new Fortress(player0), point0.right());
             Assert.fail();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 
     @Test
@@ -96,10 +85,7 @@ public class TestHeight {
 
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new LinkedList<Player>();        players.add(player0);
-
-        // Creating game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
         var point0 = new Point(10, 10);
@@ -113,8 +99,7 @@ public class TestHeight {
         try {
             var fortress0 = map.placeBuilding(new Fortress(player0), point0.downRight());
             Assert.fail();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 
     @Test
@@ -122,10 +107,7 @@ public class TestHeight {
 
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new LinkedList<Player>();        players.add(player0);
-
-        // Creating game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
         var point0 = new Point(10, 10);
@@ -139,8 +121,7 @@ public class TestHeight {
         try {
             var fortress0 = map.placeBuilding(new Fortress(player0), point0.downLeft());
             Assert.fail();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 
     @Test
@@ -148,10 +129,7 @@ public class TestHeight {
 
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new LinkedList<Player>();        players.add(player0);
-
-        // Creating game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
         var point0 = new Point(10, 10);
@@ -165,8 +143,7 @@ public class TestHeight {
         try {
             var fortress0 = map.placeBuilding(new Fortress(player0), point0.left());
             Assert.fail();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 
     @Test
@@ -174,10 +151,7 @@ public class TestHeight {
 
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new LinkedList<Player>();        players.add(player0);
-
-        // Creating game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
         var point0 = new Point(10, 10);
@@ -192,8 +166,7 @@ public class TestHeight {
             var fortress0 = map.placeBuilding(new Fortress(player0), point0.upLeft());
 
             Assert.fail();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 
     @Test
@@ -201,10 +174,7 @@ public class TestHeight {
 
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new LinkedList<Player>();        players.add(player0);
-
-        // Creating game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
         var point0 = new Point(10, 10);
@@ -218,8 +188,7 @@ public class TestHeight {
         try {
             var fortress0 = map.placeBuilding(new Fortress(player0), point0.upRight());
             Assert.fail();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 
     @Test
@@ -227,10 +196,7 @@ public class TestHeight {
 
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new LinkedList<Player>();        players.add(player0);
-
-        // Creating game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
         var point0 = new Point(10, 10);
@@ -249,10 +215,7 @@ public class TestHeight {
 
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new LinkedList<Player>();        players.add(player0);
-
-        // Creating game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
         var point0 = new Point(10, 10);
@@ -271,10 +234,7 @@ public class TestHeight {
 
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new LinkedList<Player>();        players.add(player0);
-
-        // Creating game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
         var point0 = new Point(10, 10);
@@ -293,10 +253,7 @@ public class TestHeight {
 
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new LinkedList<Player>();        players.add(player0);
-
-        // Creating game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
         var point0 = new Point(10, 10);
@@ -315,10 +272,7 @@ public class TestHeight {
 
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new LinkedList<Player>();        players.add(player0);
-
-        // Creating game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
         var point0 = new Point(10, 10);
@@ -337,10 +291,7 @@ public class TestHeight {
 
         // Creating new game map with size 100x100
         var player0 = new Player("Player 0", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new LinkedList<Player>();        players.add(player0);
-
-        // Creating game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Raise one point too high for a fortress to be placed, i.e. the difference is more than three
         var point0 = new Point(10, 10);

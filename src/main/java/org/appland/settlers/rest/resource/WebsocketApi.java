@@ -406,6 +406,8 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 playerToSession.put(player, session);
 
                 if (map != null) {
+
+
                     sendToSession(session,
                             new JSONObject(Map.of(
                                     "requestId", jsonBody.get("requestId"),

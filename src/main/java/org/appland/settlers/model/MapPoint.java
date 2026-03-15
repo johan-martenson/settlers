@@ -79,12 +79,7 @@ public class MapPoint {
         for (int i = 0; i < road.getWayPoints().size(); i++) {
             var roadPoint = road.getWayPoints().get(i);
 
-            System.out.println("RP: " + roadPoint);
-            System.out.println("MP: " + point);
-
             if (roadPoint.x == point.x && roadPoint.y == point.y) {
-                System.out.println("EQUALS!");
-
                 if (i > 0) {
                     connectedNeighbors.add(road.getWayPoints().get(i - 1));
                 }
@@ -97,8 +92,6 @@ public class MapPoint {
                 break;
             }
         }
-
-        System.out.println(" Connected neighbors: " + connectedNeighbors);
 
         connectedRoads.add(road);
 

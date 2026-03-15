@@ -7,15 +7,15 @@ package org.appland.settlers.model.actors;
 
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
-import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.MapPoint;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Vegetation;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import static java.lang.String.format;
 import static org.appland.settlers.model.Material.MEAT;
@@ -29,6 +29,24 @@ public class WildAnimal extends Worker {
 
     private static final int TIME_TO_STAND = 39;
     private static final Random RANDOM = new Random(1);
+    private static final Set<Vegetation> WILD_ANIMAL_CAN_WALK_ON = Set.of(
+            Vegetation.MOUNTAIN_1,
+            Vegetation.MOUNTAIN_2,
+            Vegetation.MOUNTAIN_3,
+            Vegetation.MOUNTAIN_MEADOW,
+            Vegetation.MEADOW_1,
+            Vegetation.MEADOW_2,
+            Vegetation.MEADOW_3,
+            Vegetation.STEPPE,
+            Vegetation.SNOW,
+            Vegetation.DESERT_1,
+            Vegetation.DESERT_2,
+            Vegetation.SAVANNAH,
+            Vegetation.BUILDABLE_MOUNTAIN,
+            Vegetation.SWAMP,
+            Vegetation.FLOWER_MEADOW,
+            Vegetation.MAGENTA
+    );
 
     private final Type type;
     private final Countdown countdown;
@@ -57,6 +75,17 @@ public class WildAnimal extends Worker {
 
     public WildAnimal(GameMap map) {
         this(map, WildAnimal.Type.FOX);
+    }
+
+    public static boolean canWalkOnAny(Collection<Vegetation> tiles) {
+        for (var vegetation : tiles) {
+            System.out.println(" TILE: " + vegetation);
+            if (WILD_ANIMAL_CAN_WALK_ON.contains(vegetation)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static boolean cannotWalkOnAny(Collection<Vegetation> surroundingTiles) {
@@ -152,6 +181,6 @@ public class WildAnimal extends Worker {
 
     @Override
     public String toString() {
-        return format("%s", type.name());
+        return format("%s at %s", type.name(), position);
     }
 }

@@ -10,9 +10,7 @@ import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Random;
 
 import static org.appland.settlers.model.GameUtils.calculateAngle;
@@ -74,7 +72,7 @@ public class Scout extends Worker {
         var stats = map.getStats();
         var duration = stats.measureCumulativeDuration("Scout.onArrival", AGGREGATED_EACH_STEP_TIME_GROUP);
 
-        map.discoverPointsWithinRadius(getPlayer(), position, DISCOVERY_RADIUS);
+        player.discover(map.getPointsWithinRadius(position, DISCOVERY_RADIUS));
 
         switch (state) {
             case WALKING_TO_ASSIGNED_LOOKOUT_TOWER -> {
@@ -212,16 +210,14 @@ public class Scout extends Worker {
     protected void onEnterBuilding(Building building) {
 
         // Discover the area around the tower
-        for (var point : GameUtils.getHexagonAreaAroundPoint(building.getPosition(), LOOKOUT_TOWER_DISCOVER_RADIUS, getMap())) {
-            player.discover(point);
-        }
+        player.discover(GameUtils.getHexagonAreaAroundPoint(building.getPosition(), LOOKOUT_TOWER_DISCOVER_RADIUS, map));
 
         state = WORKING_IN_LOOKOUT_TOWER;
     }
 
     @Override
     protected void onWalkingAndAtFixedPoint() {
-        map.discoverPointsWithinRadius(getPlayer(), position, DISCOVERY_RADIUS);
+        player.discover(map.getPointsWithinRadius(position, DISCOVERY_RADIUS));
 
         if (state == RETURNING_TO_STORAGE ||
             state == WALKING_TO_TARGET ||

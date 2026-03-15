@@ -166,16 +166,10 @@ public class GameMap {
 
     // FIXME: HOTSPOT FOR ALLOCATION
     private void constructDefaultTiles() {
-        for (int y = 0; y <= height; y++) {
-            int xStart = 0;
-            int xEnd = width;
+        for (int y = 1; y <= height; y++) {
+            var indent = (height % 2 == 0) == (y % 2 == 0);
 
-            if (y % 2 != 0) {
-                xStart = -1;
-                xEnd   = width + 1;
-            }
-
-            for (int x = xStart; x <= xEnd + 1; x++) {
+            for (int x = indent ? 1 : 0; x < width; x += 2) {
                 tileBelowMap.put(y * width + x, DEFAULT_VEGETATION);
                 tileDownRightMap.put(y * width + x, DEFAULT_VEGETATION);
             }
@@ -806,7 +800,7 @@ public class GameMap {
         buildingsToRemove.forEach(allBuildings::remove);
 
         // Calculate claims for all military buildings
-        for (Building building : allBuildings) {
+        for (var building : allBuildings) {
 
             // Filter non-military buildings
             if (!building.isMilitaryBuilding()) {
@@ -1561,12 +1555,12 @@ public class GameMap {
         // Find out which adjacent points are possible off-road connections
         var adjacentPoints = from.getAdjacentPointsExceptAboveAndBelow();
 
-        var vegetationUpLeft = getVegetationUpLeft(from);
-        var vegetationAbove = getVegetationAbove(from);
-        var vegetationUpRight = getVegetationUpRight(from);
-        var vegetationDownRight = getVegetationDownRight(from);
-        var vegetationBelow = getVegetationBelow(from);
-        var vegetationDownLeft = getVegetationDownLeft(from);
+        var vegetationUpLeft = (from.x > 0 && from.y < height - 1) ? getVegetationUpLeft(from) : null;
+        var vegetationAbove = (from.y < height - 1) ? getVegetationAbove(from) : null;
+        var vegetationUpRight = (from.x < width - 1 && from.y < height - 1) ? getVegetationUpRight(from) : null;
+        var vegetationDownRight = (from.x < width - 1 && from.y > 0) ? getVegetationDownRight(from) : null;
+        var vegetationBelow = (from.y > 0) ? getVegetationBelow(from) : null;
+        var vegetationDownLeft = (from.x > 0 && from.y > 0) ? getVegetationDownLeft(from) : null;
 
         boolean canWalkOnTileUpLeft    = CAN_WALK_ON.contains(vegetationUpLeft);
         boolean canWalkOnTileDownLeft  = CAN_WALK_ON.contains(vegetationDownLeft);
@@ -1628,16 +1622,14 @@ public class GameMap {
      * @return Array of map points
      */
     private MapPoint[] populateMapPoints() {
-        var mapPoints = new MapPoint[height * width / 2];
-        var fileWidth = GeometryMapping.mapFileWidthFromGameWidth(width);
-        var fileHeight = GeometryMapping.mapFileHeightFromGameHeight(height);
+        var mapPoints = new MapPoint[(height + 1) * width / 2];
+        var fileWidth = GeometryMapping.gameWidthToMapFileWidth(width);
+        var fileHeight = GeometryMapping.gameHeightToMapFileHeight(height);
 
-        for (int fileY = 0; fileY < fileHeight; fileY++) {
+        for (int fileY = 0; fileY < fileHeight + 1; fileY++) {
             for (int fileX = 0; fileX < fileWidth; fileX++) {
                 var index = fileY * fileWidth + fileX;
                 var gamePoint = GeometryMapping.mapFilePointToGamePoint(fileX, fileY, fileHeight);
-
-                System.out.println(" " + index + ": " + gamePoint);
 
                 mapPoints[index] = new MapPoint(gamePoint);
             }
@@ -1687,46 +1679,59 @@ public class GameMap {
     }
 
     private boolean isPossibleAsAnyPointInRoad(Player player, Point point) {
+        System.out.println("Is possible as any point in road: " + point);
+
         if (!isWithinMap(point)) {
+            System.out.println("Not within map");
             return false;
         }
 
         if (!player.isWithinBorder(point)) {
+            System.out.println("Not within border");
+
             return false;
         }
 
         var mapPoint = getMapPoint(point);
 
         if (mapPoint.isRoad()) {
+            System.out.println("Is road");
             return false;
         }
 
         if (mapPoint.isFlag()) {
+            System.out.println("Is flag");
             return false;
         }
 
         if (mapPoint.isStone()) {
+            System.out.println("Is stone");
             return false;
         }
 
         if (mapPoint.isBuilding()) {
+            System.out.println("Is building");
             return false;
         }
 
         if (mapPoint.isTree()) {
+            System.out.println("Is tree");
             return false;
         }
 
         if (mapPoint.isCrop()) {
+            System.out.println("Is crop");
             return false;
         }
 
         if (mapPoint.isDecoration() && !mapPoint.getDecoration().canBuildRoadOn()) {
+            System.out.println("Is decoration");
             return false;
         }
 
         var surroundingVegetation = getSurroundingTiles(point);
 
+        System.out.println(containsAny(CAN_BUILD_ROAD_ON, surroundingVegetation));
         return containsAny(CAN_BUILD_ROAD_ON, surroundingVegetation);
     }
 
@@ -2270,10 +2275,21 @@ public class GameMap {
      * @return The matching MapPoint or null if there is no match
      */
     public MapPoint getMapPoint(Point point) {
-        var fileWidth = GeometryMapping.mapFileWidthFromGameWidth(width);
-        var fileHeight = GeometryMapping.mapFileHeightFromGameHeight(height);
+        var fileWidth = GeometryMapping.gameWidthToMapFileWidth(width);
+        var fileHeight = GeometryMapping.gameHeightToMapFileHeight(height);
+
+        if (point.x < 0 || point.x >= width || point.y < 0 || point.y >= height) {
+            return null;
+        }
 
         var index = GeometryMapping.gamePointToMapFileIndex(point.x, point.y, fileWidth, fileHeight);
+
+        if (index >= pointToGameObject.length) {
+            System.out.println("FAILED TO GET MAP POINT FOR: %d, %s".formatted(index, point));
+        } else if (pointToGameObject[index] == null) {
+            System.out.println("VALID INDEX BUT MAPPOINT IS NULL: %d, %s".formatted(index, point));
+            System.out.println(Arrays.asList(Thread.currentThread().getStackTrace()));
+        }
 
         return index < pointToGameObject.length
                 ? pointToGameObject[index]
@@ -2383,10 +2399,6 @@ public class GameMap {
     public void placeWorkerFromStepTime(Worker worker, Building home) {
         worker.setPosition(home.getPosition());
         workersToAdd.add(worker);
-    }
-
-    public void discoverPointsWithinRadius(Player player, Point center, int radius) {
-        getPointsWithinRadius(center, radius).forEach(player::discover);
     }
 
     /**
@@ -2783,14 +2795,15 @@ public class GameMap {
     }
 
     private Point findRandomPossiblePointToPlaceFreeMovingActor() {
-        double x = random.nextDouble() * getWidth();
-        double y = random.nextDouble() * getHeight();
+        var point = new Point(random.nextInt(getWidth()), random.nextInt(getHeight()));
 
-        var point = getClosestPoint(x, y);
+        if (GeometryMapping.rowShiftFromGameY(point.y, height) != point.x % 2) {
+            point.x += point.x < width - 1 ? 1 : -1;
+        }
 
-        // Go through the full map and look for a suitable point
+        // Go through the surrounding points and look for a suitable point
         return getPointsWithinRadius(point, LOOKUP_RANGE_FOR_FREE_ACTOR).stream()
-                .filter(p -> !WildAnimal.cannotWalkOnAny(getSurroundingTiles(p)))
+                .filter(p -> WildAnimal.canWalkOnAny(getSurroundingTiles(p)))
                 .map(this::getMapPoint)
                 .filter(mapPoint -> !mapPoint.isBuilding())
                 .filter(mapPoint -> !mapPoint.isStone())
@@ -3062,35 +3075,28 @@ public class GameMap {
     public List<Vegetation> getSurroundingTiles(Point point) {
         var result = new LinkedList<Vegetation>();
 
-        var vegetationUpLeft = getVegetationUpLeft(point);
-        var vegetationAbove = getVegetationAbove(point);
-        var vegetationUpRight = getVegetationUpRight(point);
-        var vegetationDownRight = getVegetationDownRight(point);
-        var vegetationBelow = getVegetationBelow(point);
-        var vegetationDownLeft = getVegetationDownLeft(point);
-
-        if (vegetationUpLeft != null) {
-            result.add(vegetationUpLeft);
+        if (point.x > 1 && point.y < height - 1) {
+            result.add(getVegetationUpLeft(point));
         }
 
-        if (vegetationAbove != null) {
-            result.add(vegetationAbove);
+        if (point.x > 0 && point.x < width - 1 && point.y < height - 1) {
+            result.add(getVegetationAbove(point));
         }
 
-        if (vegetationUpRight != null) {
-            result.add(vegetationUpRight);
+        if (point.x < width - 2 && point.y < height - 1) {
+            result.add(getVegetationUpRight(point));
         }
 
-        if (vegetationDownRight != null) {
-            result.add(vegetationDownRight);
+        if (point.x < width - 2 && point.y > 0) {
+            result.add(getVegetationDownRight(point));
         }
 
-        if (vegetationBelow != null) {
-            result.add(vegetationBelow);
+        if (point.x > 0 && point.x < width - 1 && point.y > 0) {
+            result.add(getVegetationBelow(point));
         }
 
-        if (vegetationDownLeft != null) {
-            result.add(vegetationDownLeft);
+        if (point.x > 1 && point.y > 0) {
+            result.add(getVegetationDownLeft(point));
         }
 
         return result;
@@ -3195,22 +3201,62 @@ public class GameMap {
     }
 
     public Vegetation getVegetationUpLeft(Point point) {
+        if (point.x < 0 || point.x >= width || point.y < 0 || point.y >= height) {
+            System.out.println("GET VEGETATION UP LEFT _FROM_ POINT OUT OF BOUNDS: " + point);
+            System.out.println("WIDTH: " + width + ", HEIGHT: " + height);
+        } else if (point.x - 1 < 0 || point.x - 1 >= width || point.y + 1 < 0 || point.y + 1 >= height) {
+            System.out.println("GET VEGETATION UP LEFT _FOR_ POINT OUT OF BOUNDS: " + point.upLeft());
+            System.out.println(Arrays.asList(Thread.currentThread().getStackTrace()));
+        }
+
         return tileBelowMap.get((point.y + 1) * width + point.x - 1);
     }
 
     public Vegetation getVegetationAbove(Point point) {
+        if (point.x < 0 || point.x >= width || point.y < 0 || point.y >= height) {
+            System.out.println("GET VEGETATION UP _FROM_ POINT OUT OF BOUNDS: " + point);
+            System.out.println("WIDTH: " + width + ", HEIGHT: " + height);
+        } else if (point.x <= 0 || point.x >= width - 1 || point.y >= height - 1) {
+            System.out.println("GET VEGETATION UP _FOR_ POINT OUT OF BOUNDS: " + point.up());
+            System.out.println(Arrays.asList(Thread.currentThread().getStackTrace()));
+        }
+
         return tileDownRightMap.get((point.y + 1) * width + point.x - 1);
     }
 
     public Vegetation getVegetationUpRight(Point point) {
+        if (point.x < 0 || point.x >= width || point.y < 0 || point.y >= height) {
+            System.out.println("GET VEGETATION UP-RIGHT _FROM_ POINT OUT OF BOUNDS: " + point);
+            System.out.println("WIDTH: " + width + ", HEIGHT: " + height);
+        } else if (point.x + 2 >= width || point.y + 1 >= height) {
+            System.out.println("GET VEGETATION UP-RIGHT _FOR_ POINT OUT OF BOUNDS: " + point.upRight());
+            System.out.println(Arrays.asList(Thread.currentThread().getStackTrace()));
+        }
+
         return tileBelowMap.get((point.y + 1) * width + point.x + 1);
     }
 
     public Vegetation getVegetationDownRight(Point point) {
+        if (point.x < 0 || point.x >= width || point.y < 0 || point.y >= height) {
+            System.out.println("GET VEGETATION DOWN-RIGHT _FROM_ POINT OUT OF BOUNDS: " + point);
+            System.out.println("WIDTH: " + width + ", HEIGHT: " + height);
+        } else if (point.x + 2 >= width || point.y <= 0) {
+            System.out.println("GET VEGETATION DOWN-RIGHT _FOR_ POINT OUT OF BOUNDS: " + point.downRight());
+            System.out.println(Arrays.asList(Thread.currentThread().getStackTrace()));
+        }
+
         return tileDownRightMap.get(point.y * width + point.x);
     }
 
     public Vegetation getVegetationBelow(Point point) {
+        if (point.x < 0 || point.x >= width || point.y < 0 || point.y >= height) {
+            System.out.println("GET VEGETATION BELOW _FROM_ POINT OUT OF BOUNDS: " + point);
+            System.out.println("WIDTH: " + width + ", HEIGHT: " + height);
+        } else if (point.x <= 0 || point.x >= width - 1 || point.y <= 0) {
+            System.out.println("GET VEGETATION BELOW _FOR_ POINT OUT OF BOUNDS: " + point.down());
+            System.out.println(Arrays.asList(Thread.currentThread().getStackTrace()));
+        }
+
         return tileBelowMap.get(point.y * width + point.x);
     }
 
@@ -3365,12 +3411,9 @@ public class GameMap {
     }
 
     public Collection<Point> getPointsInMap() {
-        System.out.println(width);
-        System.out.println(height);
-
         return GeometryMapping.gameMapPointsFromFileDimensions(
-                GeometryMapping.mapFileWidthFromGameWidth(width),
-                GeometryMapping.mapFileHeightFromGameHeight(height)
+                GeometryMapping.gameWidthToMapFileWidth(width),
+                GeometryMapping.gameHeightToMapFileHeight(height)
         );
     }
 }

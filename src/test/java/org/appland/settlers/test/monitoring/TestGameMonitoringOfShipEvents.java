@@ -34,7 +34,7 @@ public class TestGameMonitoringOfShipEvents {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place lake
         var point2 = new Point(15, 9);
@@ -116,7 +116,7 @@ public class TestGameMonitoringOfShipEvents {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place lake
         var point2 = new Point(15, 9);
@@ -207,7 +207,7 @@ public class TestGameMonitoringOfShipEvents {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point1 = new Point(5, 5);
@@ -301,7 +301,7 @@ public class TestGameMonitoringOfShipEvents {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 20);
+        var map = new GameMap(players, 20, 21);
 
         // Place headquarter
         var point1 = new Point(5, 5);
@@ -404,7 +404,7 @@ public class TestGameMonitoringOfShipEvents {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 80, 80);
+        var map = new GameMap(players, 80, 81);
 
         // Place a long, thin lake
         for (int i = 3; i < 53; i += 2) {
@@ -566,7 +566,7 @@ public class TestGameMonitoringOfShipEvents {
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 80, 80);
+        var map = new GameMap(players, 80, 81);
 
         // Place a long, thin lake
         for (int i = 3; i < 53; i += 2) {

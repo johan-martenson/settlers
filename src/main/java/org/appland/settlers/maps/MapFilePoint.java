@@ -11,6 +11,7 @@ import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Tree.TreeType;
+import org.appland.settlers.model.Vegetation;
 
 /**
  *
@@ -29,8 +30,8 @@ public class MapFilePoint {
     private static final short DECORATION_MASK = 64;
 
     private int height;
-    private Texture textureDown;
-    private Texture textureDownRight;
+    private Vegetation vegetationBelow;
+    private Vegetation vegetationDownRight;
     private short objectProperties;
     private short objectType;
     private Animal animal;
@@ -55,20 +56,20 @@ public class MapFilePoint {
         height = heightAtPoint;
     }
 
-    void setVegetationBelow(Texture texture) {
-        textureDown = texture;
+    void setVegetationBelow(Vegetation texture) {
+        vegetationBelow = texture;
     }
 
-    public Texture getVegetationBelow() {
-        return textureDown;
+    public Vegetation getVegetationBelow() {
+        return vegetationBelow;
     }
 
-    void setVegetationDownRight(Texture texture) {
-        textureDownRight = texture;
+    void setVegetationDownRight(Vegetation vegetation) {
+        vegetationDownRight = vegetation;
     }
 
-    public Texture getVegetationDownRight() {
-        return textureDownRight;
+    public Vegetation getVegetationDownRight() {
+        return vegetationDownRight;
     }
 
     void setObjectProperties(short objectProperties) {

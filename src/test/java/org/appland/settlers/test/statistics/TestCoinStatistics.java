@@ -28,7 +28,7 @@ public class TestCoinStatistics {
 
         // Create a single player game.
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter.
         var headquarterPoint = new Point(5, 5);
@@ -46,7 +46,7 @@ public class TestCoinStatistics {
 
         // Create a single player game.
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter.
         var headquarterPoint = new Point(5, 5);
@@ -102,7 +102,7 @@ public class TestCoinStatistics {
 
         // Create a single player game.
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters.
         var point0 = new Point(5, 5);
@@ -191,7 +191,7 @@ public class TestCoinStatistics {
 
         // Create a single player game.
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter.
         var headquarterPoint = new Point(5, 5);

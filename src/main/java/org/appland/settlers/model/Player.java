@@ -250,14 +250,20 @@ public class Player {
         return discoveredLand;
     }
 
-    public void discover(Point point) {
-        if (!discoveredLand.contains(point)) {
-            discoveredLand.add(point);
-
-            if (hasMonitor()) {
-                newDiscoveredLand.add(point);
-            }
+    public void discover(Collection<Point> points) {
+        if (hasMonitor()) {
+            points.forEach(point -> {
+                if (discoveredLand.add(point)) {
+                    newDiscoveredLand.add(point);
+                }
+            });
+        } else {
+            discoveredLand.addAll(points);
         }
+    }
+
+    public void discover(Point... points) {
+        discover(Arrays.asList(points));
     }
 
     public int getNumberOfAvailableAttackers(Building buildingToAttack) throws InvalidUserActionException {
@@ -427,6 +433,7 @@ public class Player {
 
             // Notify monitors of new discoveries
             if (hasMonitor()) {
+                System.out.println("SET NEW LANDS - DISCOVERED: " + discoveredLand);
                 newDiscoveredLand.addAll(discoveredLand);
                 newDiscoveredLand.removeAll(previousDiscoveredLand);
             }
@@ -842,27 +849,36 @@ public class Player {
                 if (mapPoint.isDeadTree()) {
                     discoveredDeadTrees.add(point);
                 }
+
                 if (mapPoint.isTree()) {
                     newTrees.add(mapPoint.getTree());
                 }
+
                 if (mapPoint.isStone()) {
                     newStones.add(mapPoint.getStone());
                 }
+
                 if (mapPoint.isFlag()) {
                     newFlags.add(mapPoint.getFlag());
                 }
+
                 if (mapPoint.isBuilding()) {
+                    System.out.println("NEW BUILDING DISCOVERED: " + mapPoint.getBuilding());
                     newBuildings.add(mapPoint.getBuilding());
                 }
+
                 if (mapPoint.isRoad()) {
                     newRoads.addAll(mapPoint.getConnectedRoads());
                 }
+
                 if (mapPoint.isSign()) {
                     newSigns.add(mapPoint.getSign());
                 }
+
                 if (mapPoint.isCrop()) {
                     newCrops.add(mapPoint.getCrop());
                 }
+
                 if (mapPoint.isDecoration()) {
                     newDecorations.put(point, mapPoint.getDecoration());
                 }
@@ -1170,6 +1186,8 @@ public class Player {
     }
 
     public void reportNewBuilding(Building building) {
+        System.out.println("GOT NEW BUILDING REPORTED: " + building);
+
         newBuildings.add(building);
     }
 

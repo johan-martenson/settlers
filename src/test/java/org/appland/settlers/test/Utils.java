@@ -3214,6 +3214,54 @@ public class Utils {
         assertTrue(road.isMainRoad());
     }
 
+    public static <T extends Worker> void waitForWorkersToStopWalking(List<T> workers, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 2_000; i++) {
+            if (workers.stream().noneMatch(Worker::isTraveling)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        verifyWorkersAreNotTraveling(workers);
+    }
+
+    private static <T extends Worker> void verifyWorkersAreNotTraveling(List<T> workers) {
+        for (var worker : workers) {
+            assertFalse(worker.isTraveling());
+        }
+    }
+
+    public static <T extends Worker> void printWorkers(List<T> workers) {
+        var minX = Integer.MAX_VALUE;
+        var maxX = Integer.MIN_VALUE;
+        var minY = Integer.MAX_VALUE;
+        var maxY = Integer.MIN_VALUE;
+
+        for (var worker : workers) {
+            minX = Math.min(minX, worker.getPosition().x);
+            maxX = Math.max(maxX, worker.getPosition().x);
+            minY = Math.min(minY, worker.getPosition().y);
+            maxY = Math.max(maxY, worker.getPosition().y);
+        }
+
+        var locations = workers.stream().map(Worker::getPosition).collect(Collectors.toSet());
+
+        System.out.println("%d   <--->   %d".formatted(minX, maxX));
+
+        for (int y = minY; y < maxY; y++) {
+            for (int x = minX; x < maxX; x++) {
+                if (locations.contains(new Point(x, y))) {
+                    System.out.print("o");
+                } else {
+                    System.out.print(".");
+                }
+            }
+
+            System.out.println("  (%d)".formatted(y));
+        }
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor, StatisticsListener {
         private final List<GameChangesList> gameChanges;
         private final HashMap<Point, AvailableConstruction> availableConstruction;

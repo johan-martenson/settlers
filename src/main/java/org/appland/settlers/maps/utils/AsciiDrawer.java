@@ -1,8 +1,6 @@
 package org.appland.settlers.maps.utils;
 
 import org.appland.settlers.maps.MapLoader;
-import org.appland.settlers.maps.Texture;
-import org.appland.settlers.maps.Utils;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Vegetation;
 
@@ -22,8 +20,8 @@ public class AsciiDrawer {
         Vegetation[] tilesDownRight = new Vegetation[mapFile.getTilesDownRight().size()];
 
         for (int i = 0; i < mapFile.getTilesBelow().size(); i++) {
-            tilesBelow[i] = Utils.convertTextureToVegetation(mapFile.getTilesBelow().get(i));
-            tilesDownRight[i] = Utils.convertTextureToVegetation(mapFile.getTilesDownRight().get(i));
+            tilesBelow[i] = mapFile.getTilesBelow().get(i);
+            tilesDownRight[i] = mapFile.getTilesDownRight().get(i);
         }
 
         GeometryMapping.layoutTilesInGameMap(mapFile.getWidth(), mapFile.getHeight(), tilesBelow, tilesDownRight, map);
@@ -77,8 +75,8 @@ public class AsciiDrawer {
     public static void drawAsciiFromTileArrays(
             int fileWidth,
             int fileHeight,
-            List<Texture> tilesBelow,
-            List<Texture> tilesDownRight
+            List<Vegetation> tilesBelow,
+            List<Vegetation> tilesDownRight
     ) {
         System.out.println("=== FILE SPACE (TIGHT) ===");
 
@@ -92,7 +90,7 @@ public class AsciiDrawer {
                 int index = fileY * fileWidth + fileX;
 
                 if (fileX + 1 < fileWidth && fileY + 1 < fileHeight) {
-                    String s = terrainSymbol(Utils.convertTextureToVegetation(tilesDownRight.get(index)));
+                    String s = terrainSymbol(tilesDownRight.get(index));
                     System.out.print(dim("/") + s + dim("\\"));
                 }
             }
@@ -111,7 +109,7 @@ public class AsciiDrawer {
                             : fileX - 1 >= 0;
 
                     if (valid) {
-                        String s = terrainSymbol(Utils.convertTextureToVegetation(tilesBelow.get(index)));
+                        String s = terrainSymbol(tilesBelow.get(index));
                         System.out.print(dim("\\") + s + dim("/"));
                     }
                 }

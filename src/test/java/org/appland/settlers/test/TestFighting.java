@@ -58,7 +58,7 @@ public class TestFighting {
         players.add(player1);
 
         // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -246,7 +246,7 @@ public class TestFighting {
         players.add(player1);
 
         // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -410,7 +410,7 @@ public class TestFighting {
         players.add(player1);
 
         // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 15);
@@ -487,7 +487,7 @@ public class TestFighting {
         players.add(player1);
 
         // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 15);
@@ -564,7 +564,7 @@ public class TestFighting {
         players.add(player1);
 
         // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 15);
@@ -641,7 +641,7 @@ public class TestFighting {
         players.add(player1);
 
         // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 15);
@@ -718,7 +718,7 @@ public class TestFighting {
         players.add(player1);
 
         // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 15);
@@ -795,7 +795,7 @@ public class TestFighting {
         players.add(player1);
 
         // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 15);
@@ -922,7 +922,7 @@ public class TestFighting {
         players.add(player1);
 
         // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 15);
@@ -1046,7 +1046,7 @@ public class TestFighting {
         players.add(player1);
 
         // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 15);
@@ -1168,7 +1168,7 @@ public class TestFighting {
         players.add(player1);
 
         // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 15);
@@ -1290,7 +1290,7 @@ public class TestFighting {
         players.add(player1);
 
         // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 15);

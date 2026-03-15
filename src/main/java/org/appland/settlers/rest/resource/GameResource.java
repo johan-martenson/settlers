@@ -146,12 +146,12 @@ public class GameResource implements PlayerChangeListener {
         this.map = gamePlaceholderToGame(this);
 
         // Assign the map to each player
-        for (Player player : players) {
+        for (var player : players) {
             player.setMap(map);
         }
 
         // Assign the map to each computer player
-        for (ComputerPlayer computerPlayer : computerPlayers.values()) {
+        for (var computerPlayer : computerPlayers.values()) {
             computerPlayer.setMap(map);
         }
     }

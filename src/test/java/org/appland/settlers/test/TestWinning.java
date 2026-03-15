@@ -38,7 +38,7 @@ public class TestWinning {
         players.add(player0);
 
         // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place player 0's headquarter
         var point0 = new Point(5, 5);
@@ -65,7 +65,7 @@ public class TestWinning {
         players.add(player1);
 
         // Create game map choosing two players
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Place player 0's headquarter
         var point0 = new Point(5, 5);

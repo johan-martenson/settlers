@@ -36,7 +36,7 @@ public class TestAttackPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new AttackPlayer(player0, map);
@@ -67,7 +67,7 @@ public class TestAttackPlayer {
         players.add(player1);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new AttackPlayer(player0, map);

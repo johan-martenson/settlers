@@ -46,7 +46,7 @@ public class TestScenarios {
         // Create starting position
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 30, 30);
+        var map = new GameMap(players, 30, 31);
 
         // Place headquarter
         var point0 = new Point(6, 6);
@@ -287,7 +287,7 @@ public class TestScenarios {
         // Create initial game setup
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 30, 30);
+        var map = new GameMap(players, 30, 31);
 
         // Place headquarter
         var point0 = new Point(6, 6);
@@ -333,7 +333,7 @@ public class TestScenarios {
         // Create initial game setup
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 30, 30);
+        var map = new GameMap(players, 30, 31);
 
         // Place headquarter
         var point0 = new Point(15, 15);

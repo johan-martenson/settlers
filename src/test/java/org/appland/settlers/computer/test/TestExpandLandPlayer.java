@@ -49,7 +49,7 @@ public class TestExpandLandPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 10, 10);
+        var map = new GameMap(players, 10, 11);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -63,7 +63,7 @@ public class TestExpandLandPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -93,7 +93,7 @@ public class TestExpandLandPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -124,7 +124,7 @@ public class TestExpandLandPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -173,7 +173,7 @@ public class TestExpandLandPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -202,7 +202,7 @@ public class TestExpandLandPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -237,7 +237,7 @@ public class TestExpandLandPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -277,7 +277,7 @@ public class TestExpandLandPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -339,7 +339,7 @@ public class TestExpandLandPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -378,7 +378,7 @@ public class TestExpandLandPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -417,7 +417,7 @@ public class TestExpandLandPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -463,7 +463,7 @@ public class TestExpandLandPlayer {
         players.add(player1);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -576,7 +576,7 @@ public class TestExpandLandPlayer {
         var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -616,7 +616,7 @@ public class TestExpandLandPlayer {
         players.add(player1);
 
         // Create game map
-        var map = new GameMap(players, 100, 30);
+        var map = new GameMap(players, 100, 31);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -681,7 +681,7 @@ public class TestExpandLandPlayer {
         players.add(player1);
 
         // Create game map
-        var map = new GameMap(players, 100, 100);
+        var map = new GameMap(players, 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
