@@ -78,17 +78,6 @@ public class Courier extends Worker {
                 var start = map.getFlagAtPoint(assignedRoad.getStart());
                 var end = map.getFlagAtPoint(assignedRoad.getEnd());
 
-                // TODO: REMOVE!
-                if (start == null || end == null) {
-                    System.out.println(this);
-                    System.out.println(assignedRoad);
-                    System.out.println(assignedRoad.getStart());
-                    System.out.println(assignedRoad.getEnd());
-                    System.out.println(getCargo());
-                    System.out.println(start);
-                    System.out.println(end);
-                }
-
                 // Find cargo to carry
                 var cargoAtStart = findCargoToCarry(start);
                 var cargoAtEnd = findCargoToCarry(end);
@@ -512,9 +501,6 @@ public class Courier extends Worker {
     }
 
     private void pickUpCargoAndGoDeliver(Cargo cargoToPickUp) {
-        System.out.println("PICK UP AT: " + position);
-        System.out.println("FLAG: " + map.getFlagAtPoint(position).getStackedCargo());
-
         var point = getPosition();
         var endPoint = map.getFlagAtPoint(point);
 
@@ -534,8 +520,6 @@ public class Courier extends Worker {
             endPoint.retrieveCargo(cargoToPickUp);
             setCargo(cargoToPickUp);
         }
-
-        System.out.println("CARGO: " + carriedCargo);
 
         // Deliver the cargo to the other flag or all the way to the building
         deliverToFlagOrBuilding(getCargo());

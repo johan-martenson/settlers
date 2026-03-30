@@ -433,7 +433,6 @@ public class Player {
 
             // Notify monitors of new discoveries
             if (hasMonitor()) {
-                System.out.println("SET NEW LANDS - DISCOVERED: " + discoveredLand);
                 newDiscoveredLand.addAll(discoveredLand);
                 newDiscoveredLand.removeAll(previousDiscoveredLand);
             }
@@ -863,7 +862,6 @@ public class Player {
                 }
 
                 if (mapPoint.isBuilding()) {
-                    System.out.println("NEW BUILDING DISCOVERED: " + mapPoint.getBuilding());
                     newBuildings.add(mapPoint.getBuilding());
                 }
 
@@ -1186,8 +1184,6 @@ public class Player {
     }
 
     public void reportNewBuilding(Building building) {
-        System.out.println("GOT NEW BUILDING REPORTED: " + building);
-
         newBuildings.add(building);
     }
 

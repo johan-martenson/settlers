@@ -5,7 +5,6 @@ import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
 
@@ -76,7 +75,6 @@ public class Carpenter extends Worker {
             case CUTTING_WOOD -> {
                 if (home.getAmount(WOOD) > 0 && home.isProductionEnabled()) {
                     if (countdown.hasReachedZero()) {
-                        System.out.println("DONE SAWING. GOING INSIDE");
                         home.consumeOne(WOOD);
                         goInside();
 

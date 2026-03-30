@@ -186,7 +186,6 @@ public class Storehouse extends Building {
     private boolean assignScouts() {
         if (!hasAtLeastOne(SCOUT)) {
             if (hasAtLeastOne(BOW)) {
-                System.out.println("Created scout");
                 inventory.merge(BOW, -1, Integer::sum);
                 inventory.merge(SCOUT, 1, Integer::sum);
 

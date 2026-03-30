@@ -79,7 +79,6 @@ public class WildAnimal extends Worker {
 
     public static boolean canWalkOnAny(Collection<Vegetation> tiles) {
         for (var vegetation : tiles) {
-            System.out.println(" TILE: " + vegetation);
             if (WILD_ANIMAL_CAN_WALK_ON.contains(vegetation)) {
                 return true;
             }

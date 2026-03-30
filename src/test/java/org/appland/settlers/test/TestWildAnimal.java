@@ -509,7 +509,7 @@ public class TestWildAnimal {
 
         // Fill all points that are on the map and surrounded by valid tiles with stones
         for (int x = 0; x < 20; x++) {
-            for (int y = 0; y < 20; y++) {
+            for (int y = 0; y < 21; y++) {
                 var point = new Point(x, y);
 
                 // Filter invalid points
@@ -528,11 +528,10 @@ public class TestWildAnimal {
         }
 
         // Verify that no wild animals appear because there are no suitable points
-        for (int i = 0; i < 1000; i++) {
-            if (map.getWildAnimals().size() > 0) {
-                System.out.println(map.getWildAnimals());
-            }
+        assertTrue(GeometryMapping.isValidGamePoint(new Point(0, 0), 21));
+        assertTrue(GeometryMapping.isValidGamePoint(new Point(1, 1), 21));
 
+        for (int i = 0; i < 1000; i++) {
             assertEquals(0, map.getWildAnimals().size());
 
             map.stepTime();

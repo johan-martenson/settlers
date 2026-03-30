@@ -394,9 +394,6 @@ public class Headquarter extends Storehouse {
 
     @Override
     public void capture(Player player) throws InvalidUserActionException {
-        System.out.println("Headquarters captured");
-        System.out.println(map.getBuildings().contains(this));
-
         super.tearDown();
     }
 

@@ -416,10 +416,6 @@ public abstract class Worker {
             home.openDoor(10);
         }
 
-        System.out.println(wasInside);
-        System.out.println(offroadOptionsSet);
-        System.out.println(target);
-
         if (position.equals(point)) {
             state = State.IDLE_OUTSIDE;
 
@@ -427,19 +423,14 @@ public abstract class Worker {
         } else {
             if (wasInside && !target.equals(home.getFlag().getPosition()) &&
                 !offroadOptionsSet.contains(OffroadOption.DONT_WALK_VIA_FLAG)) {
-                System.out.println("Find way via flag");
+
                 // Get from the flag to the target
                 path = map.findWayOffroad(home.getFlag().getPosition(), via, point, null, offroadOptions);
 
                 // Add the initial step of going from the home to the flag
                 path.addFirst(home.getPosition());
             } else {
-                System.out.println("Find way without flag");
-                System.out.println("I'm at: " + position);
-                System.out.println(via);
-                System.out.println(point);
                 path = map.findWayOffroad(position, via, point, null, offroadOptions);
-                System.out.println(path);
             }
 
             // Remove the current position so the path only contains the steps to take
@@ -515,7 +506,7 @@ public abstract class Worker {
 
     void setTarget(Point point, Point via) {
         this.target = point;
-        System.out.printf("Set target %s%n", point);
+
         if (state == State.IDLE_INSIDE) {
             if (!map.isBuildingAtPoint(position)) {
                 System.out.println("No building at point!");
@@ -541,8 +532,6 @@ public abstract class Worker {
             state = State.IDLE_OUTSIDE;
             handleArrival();
         } else {
-            System.out.println(via);
-
             path = (via == null)
                     ? map.findWayWithExistingRoads(position, target)
                     : map.findWayWithExistingRoads(position, target, via);
@@ -639,13 +628,6 @@ public abstract class Worker {
         var previousTarget = target;
         var previousLastPoint = getLastPoint();
 
-        System.out.println();
-        System.out.println("Return to fixed point.");
-        System.out.println("Previous target: " + previousTarget);
-        System.out.println("Previous last point: " + previousLastPoint);
-        System.out.println("Progress: " + getPercentageOfDistanceTraveled());
-        System.out.println("Direction: " + getDirection());
-
         // Change the previous position to make the worker leave the previous target
         position = previousTarget;
 
@@ -659,12 +641,6 @@ public abstract class Worker {
         // Set the state to be walking between two fixed points
         state = State.WALKING_BETWEEN_POINTS;
         direction = GameUtils.getDirectionBetweenPoints(position, path.getFirst());
-
-        System.out.println("New target: " + target);
-        System.out.println("New position: " + position);
-        System.out.println("New next point: " + getNextPoint());
-        System.out.println(path);
-        System.out.println("New direction: " + getDirection());
     }
 
     GameMap getMap() {

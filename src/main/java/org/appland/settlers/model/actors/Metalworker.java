@@ -2,7 +2,6 @@ package org.appland.settlers.model.actors;
 
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Material;
@@ -100,10 +99,6 @@ public class Metalworker extends Worker {
 
     @Override
     protected void onIdle() {
-        System.out.println();
-        System.out.println(state);
-        System.out.println(countdown.getCount());
-
         switch (state) {
             case RESTING_IN_HOUSE -> {
                 if (countdown.hasReachedZero()) {
@@ -193,7 +188,6 @@ public class Metalworker extends Worker {
 
                         // Go place the tool at the flag
                         state = GOING_TO_FLAG_WITH_CARGO;
-                        System.out.println("Metalworker at %s, going to %s");
                         setTarget(home.getFlag().getPosition());
 
                         home.getFlag().promiseCargo(getCargo());

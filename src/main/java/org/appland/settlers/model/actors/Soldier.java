@@ -428,9 +428,6 @@ public class Soldier extends Worker {
 
             case WALKING_TO_TAKE_OVER_BUILDING -> {
                 if (buildingToAttack.isReady()) {
-                    System.out.println("Soldier taking over building: " + this + ", " + buildingToAttack);
-                    System.out.println(map.getBuildings().contains(buildingToAttack));
-
                     var previousOwner = buildingToAttack.getPlayer();
 
                     // Capture the building
@@ -575,10 +572,6 @@ public class Soldier extends Worker {
                 .filter(soldier -> !soldier.isInsideBuilding())
                 .map(soldier -> soldier.isTraveling() ? soldier.getTarget() : soldier.getPosition())
                 .collect(Collectors.toSet());
-
-        System.out.println();
-        System.out.println("Soldier ordered to attack.");
-        System.out.println("Candidate positions to go to: " + GameUtils.getHexagonAreaAroundPoint(buildingToAttack.getFlag().getPosition(), 6, map));
 
         var candidates = GameUtils.getHexagonAreaAroundPoint(buildingToAttack.getFlag().getPosition(), 6, map).stream()
                 .filter(point -> !taken.contains(point))
