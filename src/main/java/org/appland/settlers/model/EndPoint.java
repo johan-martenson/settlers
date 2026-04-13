@@ -11,8 +11,6 @@ package org.appland.settlers.model;
  * @author johan
  */
 public interface EndPoint {
-
     void putCargo(Cargo cargo);
-
     Point getPosition();
 }

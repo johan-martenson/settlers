@@ -552,7 +552,7 @@ public class TestMessages {
         var barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         // Place barracks for player 1
-        var point3 = new Point(25, 13);
+        var point3 = new Point(27, 13);
         var barracks1 = map.placeBuilding(new Barracks(player1), point3);
 
         // Finish construction

@@ -30,6 +30,12 @@ import static org.junit.Assert.*;
 
 public class TestHunterHut {
 
+    /*
+    TODO:
+     - Test wait for space on flag 1) inside house, 2) before putting caught prey on flag
+     - Production goes down while waiting for space on flag
+     */
+
     @Test
     public void testHunterHutOnlyNeedsTwoPlanksForConstruction() throws Exception {
 
@@ -668,23 +674,23 @@ public class TestHunterHut {
 
         // Place headquarter
         var point0 = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), point0);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place var hut
         var point1 = new Point(10, 4);
         var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        // Construct the var hut
-        constructHouse(hunterHut);
+        // Connect the hut with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
 
-        // Manually place hunter
-        var hunter = new Hunter(player0, map);
+        // Wait for the hunter hut to get constructed and occupied
+        Utils.waitForBuildingToBeConstructed(hunterHut);
 
-        Utils.occupyBuilding(hunter, hunterHut);
-
-        assertTrue(hunter.isInsideBuilding());
+        var hunter = (Hunter) Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut);
 
         // Let the hunter rest
+        assertTrue(hunter.isInsideBuilding());
+
         Utils.fastForward(99, map);
 
         assertTrue(hunter.isInsideBuilding());
@@ -710,14 +716,9 @@ public class TestHunterHut {
 
         assertNotNull(hunter.getCargo());
 
-        // Verify that the var walks home with the meat and puts it at the flag
-        assertEquals(hunter.getTarget(), hunterHut.getPosition());
-        assertTrue(hunterHut.isWorking());
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunterHut.getPosition());
-
-        // Verify that the hunter goes out and puts the meat at the flag
+        // Verify that the hunter walks home with the meat and puts it at the flag
         assertEquals(hunter.getTarget(), hunterHut.getFlag().getPosition());
+        assertTrue(hunterHut.isWorking());
         assertNotNull(hunter.getCargo());
 
         var cargo = hunter.getCargo();
@@ -727,7 +728,7 @@ public class TestHunterHut {
         assertNull(hunter.getCargo());
         assertTrue(hunterHut.getFlag().getStackedCargo().contains(cargo));
 
-        // Verify that the hunter returns to the hut
+        // Verify that the hunter goes to the hut
         assertEquals(hunter.getTarget(), hunterHut.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunterHut.getPosition());
@@ -735,6 +736,231 @@ public class TestHunterHut {
         assertEquals(hunter.getPosition(), hunterHut.getPosition());
         assertTrue(hunter.isInsideBuilding());
         assertFalse(hunterHut.isWorking());
+    }
+
+    @Test
+    public void testHunterWithMeatWaitsForSpaceOnFlag() throws Exception {
+
+        // Start new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 21);
+
+        // Place headquarter
+        var point0 = new Point(15, 9);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place var hut
+        var point1 = new Point(10, 4);
+        var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
+
+        // Connect the hut with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
+
+        // Wait for the hunter hut to get constructed and occupied
+        Utils.waitForBuildingToBeConstructed(hunterHut);
+
+        var hunter = (Hunter) Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut);
+
+        // Let the hunter rest
+        assertTrue(hunter.isInsideBuilding());
+
+        Utils.fastForward(99, map);
+
+        assertTrue(hunter.isInsideBuilding());
+
+        // Wait for a wild animal to come close to the hut
+        var animal = Utils.waitForWildAnimalCloseToPoint(hunterHut.getPosition(), map);
+
+        // Wait for the hunter to reach the wild animal
+        Utils.waitForActorsToGetClose(hunter, animal, 2, map);
+
+        // Wait for the hunter to kill the wild animal
+        Utils.fastForward(6, map);
+
+        assertFalse(hunter.isShooting());
+        assertFalse(animal.isAlive());
+
+        // Wait for the hunter to reach the dead animal
+        assertTrue(hunter.getTarget().equals(animal.getPosition()) || hunter.getPosition().equals(animal.getPosition()));
+
+        if (hunter.getTarget().equals(animal.getPosition())) {
+            Utils.fastForwardUntilWorkerReachesPoint(map, hunter, animal.getPosition());
+        }
+
+        assertNotNull(hunter.getCargo());
+
+        // Fill the flag with cargos and block delivery to the headquarters
+        Utils.deliverCargos(hunterHut.getFlag(), FLOUR, 8);
+
+        map.removeRoad(road0);
+
+        // Verify that the hunter walks close to the flag and then waits because it's full
+        assertEquals(hunter.getTarget(), hunterHut.getFlag().getPosition());
+        assertTrue(hunterHut.isWorking());
+        assertNotNull(hunter.getCargo());
+
+        Utils.waitForWorkerToStopWalking(hunter, map);
+
+        var point = hunter.getPosition();
+
+        for (int i = 0; i < 200; i++) {
+            assertEquals(hunter.getPosition(), point);
+            assertFalse(hunter.isTraveling());
+
+            map.stepTime();
+        }
+
+        // Verify that the hunter goes to the flag and leaves the meat when there is space
+        var road1 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
+
+        Utils.waitForFlagToHaveAmountStackedCargo(map, hunterHut.getFlag(), 7);
+
+        map.stepTime();
+
+        assertEquals(hunter.getTarget(), hunterHut.getFlag().getPosition());
+
+        var cargo = hunter.getCargo();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunterHut.getFlag().getPosition());
+
+        assertNull(hunter.getCargo());
+        assertTrue(hunterHut.getFlag().getStackedCargo().contains(cargo));
+
+        // Verify that the hunter goes to the hut
+        assertEquals(hunter.getTarget(), hunterHut.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunterHut.getPosition());
+
+        assertEquals(hunter.getPosition(), hunterHut.getPosition());
+        assertTrue(hunter.isInsideBuilding());
+        assertFalse(hunterHut.isWorking());
+    }
+
+    @Test
+    public void testHunterProductivityGoesDownWhenWaitingOutsideForSpaceOnFlag() throws Exception {
+
+        // Start new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 21);
+
+        // Place headquarter
+        var point0 = new Point(15, 9);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place var hut
+        var point1 = new Point(10, 4);
+        var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
+
+        // Connect the hut with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
+
+        // Wait for the hunter hut to get constructed and occupied
+        Utils.waitForBuildingToBeConstructed(hunterHut);
+
+        var hunter = (Hunter) Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut);
+
+        // Surround the hunter hut with wild animals
+        for (var point : Utils.getAreaInsideHexagon(5, hunterHut.getPosition())) {
+            if (map.isWithinMap(point) && !map.isBuildingAtPoint(point) && !map.isFlagAtPoint(point) && !map.isRoadAtPoint(point)) {
+                map.placeWildAnimal(point);
+            }
+        }
+
+        // Wait for the hunter to reach full productivity
+        Utils.waitForBuildingToHaveProductivity(hunterHut, 100);
+
+        // Wait for the hunter to have meat and be walking to put it on the flag
+        for (int i = 0; i < 20_000; i++) {
+            if (hunter.getCargo() != null &&
+                    hunter.getTarget().equals(hunterHut.getFlag().getPosition()) &&
+                    (Math.abs(hunter.getPosition().x - hunterHut.getFlag().getPosition().x) > 2 ||
+                    Math.abs(hunter.getPosition().y - hunterHut.getFlag().getPosition().y) > 1)) {
+                break;
+            }
+        }
+
+        assertNotNull(hunter.getCargo());
+        assertEquals(hunter.getTarget(), hunterHut.getFlag().getPosition());
+        assertTrue(Math.abs(hunter.getPosition().x - hunterHut.getFlag().getPosition().x) > 2 ||
+                Math.abs(hunter.getPosition().y - hunterHut.getFlag().getPosition().y) > 1);
+
+        // Fill the flag with cargos and block delivery to the headquarters
+        Utils.deliverCargos(hunterHut.getFlag(), FLOUR, 8);
+
+        map.removeRoad(road0);
+
+        // Wait for the hunter to walk close to the flag and then wait because it's full
+        assertEquals(hunter.getTarget(), hunterHut.getFlag().getPosition());
+        assertTrue(hunterHut.isWorking());
+        assertNotNull(hunter.getCargo());
+
+        Utils.waitForWorkerToStopWalking(hunter, map);
+
+        var point = hunter.getPosition();
+
+        for (int i = 0; i < 200; i++) {
+            assertEquals(hunter.getPosition(), point);
+            assertFalse(hunter.isTraveling());
+
+            map.stepTime();
+        }
+
+        // Verify that the productivity goes down
+        for (int i = 0; i < 1_000; i++) {
+            if (hunterHut.getProductivity() < 100) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(hunterHut.getProductivity() < 100);
+    }
+
+
+    @Test
+    public void testHunterProductivityGoesDownWhenWaitingInsideForSpaceOnFlag() throws Exception {
+
+        // Start new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 21);
+
+        // Place headquarter
+        var point0 = new Point(15, 9);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place var hut
+        var point1 = new Point(10, 4);
+        var hunterHut = map.placeBuilding(new HunterHut(player0), point1);
+
+        // Connect the hut with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
+
+        // Wait for the hunter hut to get constructed and occupied
+        Utils.waitForBuildingToBeConstructed(hunterHut);
+
+        var hunter = (Hunter) Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut);
+
+        // Surround the hunter hut with wild animals
+        for (var point : Utils.getAreaInsideHexagon(5, hunterHut.getPosition())) {
+            if (map.isWithinMap(point) && !map.isBuildingAtPoint(point) && !map.isFlagAtPoint(point) && !map.isRoadAtPoint(point)) {
+                map.placeWildAnimal(point);
+            }
+        }
+
+        // Wait for the hunter to reach full productivity
+        Utils.waitForBuildingToHaveProductivity(hunterHut, 100);
+
+        // Wait for the hunter to be inside the hunter hut
+        Utils.waitForWorkerToBeInside(hunter, map);
+
+        // Fill the flag with cargos and make sure they don't get removed
+        Utils.deliverCargos(hunterHut.getFlag(), FLOUR, 8);
+
+        map.removeRoad(road0);
+
+        // Verify that the hunter stays inside and that the productivity goes down
+        Utils.waitForBuildingToChangeProductivity(hunterHut);
     }
 
     @Test

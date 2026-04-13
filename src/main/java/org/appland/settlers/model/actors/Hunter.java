@@ -31,7 +31,6 @@ public class Hunter extends Worker {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
         TRACKING,
-        GOING_BACK_TO_HOUSE_WITH_CARGO,
         RETURNING_TO_STORAGE,
         SHOOTING,
         GOING_TO_PICK_UP_MEAT,
@@ -98,7 +97,7 @@ public class Hunter extends Worker {
                                 productivityMeasurer.reportUnproductivity();
                             }
                         } else {
-                            // TODO: report unproductivity properly (and test!)
+                            productivityMeasurer.reportUnproductivity();
                         }
                     } else {
                         countdown.step();
@@ -130,8 +129,10 @@ public class Hunter extends Worker {
             case WAITING_FOR_SPACE_ON_FLAG -> {
                 if (home.getFlag().hasPlaceForMoreCargo()) {
                     state = State.GOING_TO_FLAG_TO_LEAVE_CARGO;
-                    setTarget(home.getFlag().getPosition());
+                    setOffroadTarget(home.getFlag().getPosition());
                     home.getFlag().promiseCargo(getCargo());
+                } else {
+                    productivityMeasurer.reportUnproductivity();
                 }
             }
 
@@ -170,16 +171,6 @@ public class Hunter extends Worker {
                 }
             }
 
-            case GOING_BACK_TO_HOUSE_WITH_CARGO -> {
-                if (home.getFlag().hasPlaceForMoreCargo()) {
-                    state = State.GOING_TO_FLAG_TO_LEAVE_CARGO;
-                    setTarget(home.getFlag().getPosition());
-                    home.getFlag().promiseCargo(getCargo());
-                } else {
-                    state = State.WAITING_FOR_SPACE_ON_FLAG;
-                }
-            }
-
             case RETURNING_TO_STORAGE -> {
                 var storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
                 storehouse.depositWorker(this);
@@ -189,8 +180,8 @@ public class Hunter extends Worker {
                 var cargo = prey.pickUpCargo();
                 setCargo(cargo);
 
-                state = State.GOING_BACK_TO_HOUSE_WITH_CARGO;
-                setOffroadTarget(home.getPosition(), home.getFlag().getPosition());
+                state = State.GOING_TO_FLAG_TO_LEAVE_CARGO;
+                setOffroadTarget(home.getFlag().getPosition());
 
                 productivityMeasurer.reportProductivity();
                 productivityMeasurer.nextProductivityCycle();
@@ -272,17 +263,29 @@ public class Hunter extends Worker {
 
     @Override
     protected void onWalkingAndAtFixedPoint() {
+        switch (state) {
+            case GOING_TO_FLAG_TO_LEAVE_CARGO -> {
+                var plannedPath = getPlannedPath();
 
-        // Return to storage if the planned path no longer exists
-        if (state == State.WALKING_TO_TARGET &&
-            map.isFlagAtPoint(getPosition()) &&
-            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+                if (!plannedPath.isEmpty() &&
+                        plannedPath.getFirst().equals(home.getFlag().getPosition()) &&
+                        !home.getFlag().hasPlaceForMoreCargo()) {
+                    state = State.WAITING_FOR_SPACE_ON_FLAG;
+                    stopWalkingToTarget();
+                }
+            }
 
-            // Don't try to enter the hunter hut upon arrival
-            clearTargetBuilding();
+            case WALKING_TO_TARGET -> {
+                if (map.isFlagAtPoint(getPosition()) &&
+                        !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
 
-            // Go back to the storage
-            returnToStorage();
+                    // Don't try to enter the hunter hut upon arrival
+                    clearTargetBuilding();
+
+                    // Go back to the storage
+                    returnToStorage();
+                }
+            }
         }
     }
 
@@ -307,6 +310,6 @@ public class Hunter extends Worker {
         return state == State.TRACKING ||
                 state == State.SHOOTING ||
                 state == State.GOING_TO_PICK_UP_MEAT ||
-                state == State.GOING_BACK_TO_HOUSE_WITH_CARGO;
+                state == State.GOING_TO_FLAG_TO_LEAVE_CARGO;
     }
 }

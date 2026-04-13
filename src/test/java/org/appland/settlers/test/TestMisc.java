@@ -2263,4 +2263,102 @@ public class TestMisc {
         assertFalse(map.isBuildingAtPoint(point2));
         assertNotEquals(map.getBuildingAtPoint(point2), woodcutter);
     }
+
+    @Test
+    public void testHouseIsTornDownWhenBarracksIsRemovedAndOnlyFlagIsWithinPlayersBorder() throws InvalidUserActionException {
+
+        // Create game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 101);
+
+        // Place headquarters
+        var point0 = new Point(68, 68);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place barracks, connect it to the headquarters, and wait for it to get constructed and occupied
+        var point1 = new Point(68, 72);
+        var barracks = map.placeBuilding(new Barracks(player0), point1);
+
+        var road = map.placeAutoSelectedRoad(player0, barracks.getFlag(), headquarter.getFlag());
+
+        Utils.waitForBuildingToBeConstructed(barracks);
+
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks);
+
+        // Place woodcutter
+        var point2 = new Point(69, 77);
+        var woodcutterHut = map.placeBuilding(new Woodcutter(player0), point2);
+
+        // Connect the woodcutter to the headquarters and wait for it to get constructed and occupied
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutterHut.getFlag(), headquarter.getFlag());
+
+        Utils.waitForBuildingToBeConstructed(woodcutterHut);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutterHut);
+
+        // Tear down the barracks
+        var driveWay = map.getRoad(woodcutterHut.getPosition(), woodcutterHut.getFlag().getPosition());
+
+        assertTrue(map.getRoads().contains(driveWay));
+
+        barracks.tearDown();
+
+        // Verify that the woodcutter is torn down even though its flag is still within the player's land
+        // but the flag remains
+        assertFalse(player0.getOwnedLand().contains(woodcutterHut.getPosition()));
+        assertTrue(player0.getOwnedLand().contains(woodcutterHut.getFlag().getPosition()));
+        assertFalse(player0.getBorderPoints().contains(woodcutterHut.getFlag().getPosition()));
+        assertTrue(woodcutterHut.isBurningDown());
+        assertTrue(map.isFlagAtPoint(woodcutterHut.getFlag().getPosition()));
+        assertFalse(map.getRoads().contains(driveWay));
+    }
+
+    @Test
+    public void testHouseIsTornDownWhenBarracksIsRemovedAndOnlyHouseIsWithinPlayersBorder() throws InvalidUserActionException {
+
+        // Create game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 101);
+
+        // Place headquarters
+        var point0 = new Point(68, 68);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place barracks, connect it to the headquarters, and wait for it to get constructed and occupied
+        var point1 = new Point(68, 64);
+        var barracks = map.placeBuilding(new Barracks(player0), point1);
+
+        var road = map.placeAutoSelectedRoad(player0, barracks.getFlag(), headquarter.getFlag());
+
+        Utils.waitForBuildingToBeConstructed(barracks);
+
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks);
+
+        // Place woodcutter
+        var point2 = new Point(70, 60);
+        var woodcutterHut = map.placeBuilding(new Woodcutter(player0), point2);
+
+        // Connect the woodcutter to the headquarters and wait for it to get constructed and occupied
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutterHut.getFlag(), headquarter.getFlag());
+
+        Utils.waitForBuildingToBeConstructed(woodcutterHut);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutterHut);
+
+        // Tear down the barracks
+        var driveWay = map.getRoad(woodcutterHut.getPosition(), woodcutterHut.getFlag().getPosition());
+
+        assertTrue(map.getRoads().contains(driveWay));
+
+        barracks.tearDown();
+
+        // Verify that the woodcutter is torn down even though its flag is still within the player's land
+        // but the flag remains
+        assertTrue(player0.getOwnedLand().contains(woodcutterHut.getPosition()));
+        assertFalse(player0.getOwnedLand().contains(woodcutterHut.getFlag().getPosition()));
+        assertTrue(player0.getBorderPoints().contains(woodcutterHut.getFlag().getPosition()));
+        assertTrue(woodcutterHut.isBurningDown());
+        assertFalse(map.isFlagAtPoint(woodcutterHut.getFlag().getPosition()));
+        assertFalse(map.getRoads().contains(driveWay));
+    }
 }

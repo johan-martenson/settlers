@@ -302,7 +302,7 @@ public class Building implements EndPoint {
 
     public void deploySoldier(Soldier soldier) {
         if (!isReady()) {
-            throw new InvalidGameLogicException("Cannot assign military when the building is not ready");
+            throw new InvalidGameLogicException("Cannot assign military to building in state %s".formatted(state));
         }
 
         if (!isSpaceAvailableToHostSoldier(soldier)) {

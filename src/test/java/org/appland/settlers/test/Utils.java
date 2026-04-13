@@ -74,7 +74,6 @@ import static org.junit.Assert.*;
 public class Utils {
 
     public static void fastForward(int time, GameMap map) throws InvalidUserActionException {
-
         for (int i = 0; i < time; i++) {
             map.stepTime();
         }
@@ -445,7 +444,6 @@ public class Utils {
 
     public static void waitForMilitaryBuildingToGetPopulated(Building building, int nr) throws InvalidUserActionException {
         var map = building.getMap();
-
         var populated = false;
 
         for (int i = 0; i < 1000; i++) {
@@ -486,7 +484,6 @@ public class Utils {
 
     public static void verifyDeliveryOfMaterial(GameMap map, Road road) throws InvalidUserActionException {
         var courier = road.getCourier();
-
         var delivery = false;
 
         for (int i = 0; i < 500; i++) {
@@ -525,22 +522,19 @@ public class Utils {
     public static Soldier occupyMilitaryBuilding(Soldier.Rank rank, Building building) {
         var map = building.getMap();
         var player = building.getPlayer();
+        var soldier = new Soldier(player, rank, map);
 
-        var military = new Soldier(player, rank, map);
+        map.placeWorker(soldier, building);
+        building.promiseSoldier(soldier);
+        soldier.enterBuilding(building);
 
-        map.placeWorker(military, building);
-
-        building.promiseSoldier(military);
-
-        military.enterBuilding(building);
-
-        return military;
+        return soldier;
     }
 
     public static Soldier findSoldierOutsideBuilding(Player player) {
         var map = player.getMap();
-
         var soldier = (Soldier) null;
+
         for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier soldier1 && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
                 soldier = soldier1;
@@ -555,6 +549,7 @@ public class Utils {
     public static List<Soldier> findSoldiersOutsideBuilding(Player player) {
         var map = player.getMap();
         var result = new LinkedList<Soldier>();
+
         for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
                 result.add((Soldier)worker);
@@ -599,6 +594,7 @@ public class Utils {
     public static <T extends Worker> List<T> findWorkersOfTypeOutsideForPlayer(Class<T> aClass, Player player) {
         var map = player.getMap();
         var workersFound = new LinkedList<T>();
+
         for (var worker : map.getWorkers()) {
             if (worker.getClass().equals(aClass) && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
                 workersFound.add(aClass.cast(worker));
@@ -611,6 +607,7 @@ public class Utils {
     public static <T extends Worker> List<T> waitForWorkersOutsideBuilding(Class<T> type, int nr, Player player) throws InvalidUserActionException {
         var map = player.getMap();
         var workers = new LinkedList<T>();
+
         for (int i = 0; i < 5000; i++) {
             workers.clear();
 
@@ -724,7 +721,6 @@ public class Utils {
 
     public static void waitForProjectileToReachTarget(Projectile projectile, GameMap map) throws InvalidUserActionException {
         for (int i = 0; i < 1000; i++) {
-
             if (projectile.isArrived()) {
                 break;
             }
@@ -737,7 +733,6 @@ public class Utils {
 
     static WildAnimal waitForAnimalToAppear(GameMap map) throws InvalidUserActionException {
         for (int i = 0; i < 2000; i++) {
-
             if (!map.getWildAnimals().isEmpty()) {
                 break;
             }
@@ -832,6 +827,10 @@ public class Utils {
         assertEquals(building.getAmount(material), amount);
     }
 
+    public static void deliverCargo(Flag flag, Material material) {
+        flag.putCargo(new Cargo(material, flag.getPlayer().getMap()));
+    }
+
     public static void deliverCargo(Building building, Material material) {
         building.promiseDelivery(material);
         building.putCargo(new Cargo(material, building.getMap()));
@@ -914,9 +913,11 @@ public class Utils {
     }
 
     static int getAmountMilitary(Headquarter headquarter0) {
-        return headquarter0.getAmount(PRIVATE)  +
-               headquarter0.getAmount(SERGEANT) +
-               headquarter0.getAmount(GENERAL);
+        return headquarter0.getAmount(PRIVATE) +
+                headquarter0.getAmount(PRIVATE_FIRST_CLASS) +
+                headquarter0.getAmount(SERGEANT) +
+                headquarter0.getAmount(OFFICER) +
+                headquarter0.getAmount(GENERAL);
     }
 
     static <T> int countNumberElementAppearsInList(List<T> transportPriorityList, T element) {
@@ -1137,7 +1138,6 @@ public class Utils {
 
     public static void waitForNewMessage(Player player0) throws InvalidUserActionException {
         var map = player0.getMap();
-
         var amountMessages = player0.getMessages().size();
 
         for (int i = 0; i < 1000; i++) {
@@ -1957,6 +1957,12 @@ public class Utils {
             assertNotNull(courier.getCargo());
             assertNull(courier.getTarget());
             assertFalse(map.isFlagAtPoint(courier.getPosition()));
+        }
+    }
+
+    public static void deliverCargos(Flag flag, Material material, int amount) {
+        for (int i = 0; i < amount; i++) {
+            deliverCargo(flag, material);
         }
     }
 
@@ -3296,6 +3302,32 @@ public class Utils {
         }
 
         assertEquals(flag.getStackedCargo().size(), amount);
+    }
+
+    public static void waitForBuildingToHaveProductivity(Building building, int productivity) throws InvalidUserActionException {
+        for (int i = 0; i < 10_000; i++) {
+            if (building.getProductivity() == productivity) {
+                break;
+            }
+
+            building.getMap().stepTime();
+        }
+
+        assertEquals(building.getProductivity(), productivity);
+    }
+
+    public static void waitForBuildingToChangeProductivity(Building building) throws InvalidUserActionException {
+        int previousProductivity = building.getProductivity();
+
+        for (int i = 0; i < 10_000; i++) {
+            if (building.getProductivity() != previousProductivity) {
+                break;
+            }
+
+            building.getPlayer().getMap().stepTime();
+        }
+
+        assertNotEquals(building.getProductivity(), previousProductivity);
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor, StatisticsListener {

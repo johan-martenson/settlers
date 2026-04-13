@@ -512,7 +512,7 @@ public class Player {
         var result = new EnumMap<Material, Integer>(Material.class);
 
         buildings.stream()
-                .filter(building -> !building.isStorehouse())
+                .filter(Building::isStorehouse)
                 .forEach(building -> Arrays.stream(values())
                         .forEach(material -> result.put(
                                 material,
