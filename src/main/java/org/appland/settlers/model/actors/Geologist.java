@@ -10,12 +10,10 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
-import org.appland.settlers.model.MapPoint;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.WorkerAction;
-import org.appland.settlers.model.buildings.Building;
 
 import java.util.Random;
 
@@ -120,7 +118,7 @@ public class Geologist extends Worker {
             }
             case RETURNING_TO_FLAG -> {
                 state = RETURNING_TO_STORAGE;
-                var storage = GameUtils.getClosestStorageConnectedByRoads(flagPoint, getPlayer());
+                var storage = GameUtils.getClosestStorageConnectedByRoads(flagPoint, player);
 
                 if (storage != null) {
                     setTarget(storage.getPosition());

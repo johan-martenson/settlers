@@ -285,7 +285,7 @@ public class Player {
 
     }
 
-    public void attack(Building buildingToAttack, int nrAttackers, AttackStrength strength) throws InvalidUserActionException {
+    public void attack(Building buildingToAttack, int requestedNumberAttackers, AttackStrength strength) throws InvalidUserActionException {
 
         // Check that the attack is allowed
         if (!buildingToAttack.isMilitaryBuilding()) {
@@ -300,10 +300,22 @@ public class Player {
             throw new InvalidUserActionException("Cannot attack unoccupied building");
         }
 
-        var numberOfAvailableAttackers = getNumberOfAvailableAttackers(buildingToAttack);
+        var availableNumberAttackers = getNumberOfAvailableAttackers(buildingToAttack);
+
+        // Validate the requested number of attackers
+        if (requestedNumberAttackers <= 0) {
+            throw new InvalidUserActionException("Number of attackers must be greater than 0. %d is invalid.".formatted(requestedNumberAttackers));
+        }
+
+        // Are the number of available attackers less than requested?
+        if (availableNumberAttackers < requestedNumberAttackers) {
+            throw new InvalidUserActionException(
+                    "Can't attack with %d attackers, maximum %d."
+                            .formatted(requestedNumberAttackers, availableNumberAttackers));
+        }
 
         // It's not possible to attack if there are no available attackers
-        if (numberOfAvailableAttackers == 0) {
+        if (availableNumberAttackers == 0) {
             throw new InvalidUserActionException("Player '%s' can't attack building '%s'".formatted(this, buildingToAttack));
         }
 
@@ -355,7 +367,7 @@ public class Player {
             availableAttackers.addAll(availableAttackersFromBuilding);
         }
 
-        var limitedAttackers = availableAttackers.subList(0, Math.min(numberOfAvailableAttackers, availableAttackers.size()));
+        var limitedAttackers = availableAttackers.subList(0, Math.min(availableNumberAttackers, availableAttackers.size()));
 
         // Sort primarily by strength and secondarily by distance
         var availableAttackersWithDistance = new ArrayList<>(limitedAttackers
@@ -372,7 +384,7 @@ public class Player {
         }
 
         // Run the attack with the most suitable soldiers
-        availableAttackersWithDistance.stream().limit(nrAttackers).forEach(soldierAndDistance -> {
+        availableAttackersWithDistance.stream().limit(requestedNumberAttackers).forEach(soldierAndDistance -> {
             var soldier = soldierAndDistance.soldier();
             soldier.getHome().retrieveHostedSoldier(soldier);
             soldier.attack(buildingToAttack);
@@ -608,6 +620,10 @@ public class Player {
 
             // Filter non-storage buildings
             if (!building.isStorehouse()) {
+                continue;
+            }
+
+            if (!building.isReady()) {
                 continue;
             }
 

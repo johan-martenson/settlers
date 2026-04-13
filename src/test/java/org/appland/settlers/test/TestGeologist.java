@@ -13,6 +13,7 @@ import org.appland.settlers.model.actors.Geologist;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.Storehouse;
 import org.junit.Test;
 
 import java.util.List;
@@ -28,8 +29,60 @@ import static org.junit.Assert.*;
 public class TestGeologist {
 
     /*
-    * TODO: test geologist is created if there is a need and there is a hammer available
+    * TODO:
+    *  - test geologist is created if there is a need and there is a hammer available
+    *  - test geologist returns to closest storage offroad, even if it's not ready yet
     * */
+
+    @Test
+    public void testGeologistDoesNotGoBackToUnderConstructionStorehouseEvenIfItIsClosest() throws InvalidUserActionException {
+
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 41);
+
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Adjust the inventory of the headquarters so it can't finish construction of a storehouse
+        Utils.adjustInventoryTo(headquarter0, STONE, 1);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 2);
+
+        // Place flag
+        var point1 = new Point(14, 4);
+        var flag = map.placeFlag(player0, point1);
+
+        // Connect headquarters and flag
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        // Place storehouse
+        var point2 = new Point(9, 5);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+
+        // Call geologist from the flag
+        flag.callGeologist();
+
+        // Find the geologist
+        var geologist = Utils.waitForWorkerOutsideBuilding(Geologist.class, player0);
+
+        // Wait for the geologist to reach the flag
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag.getPosition());
+
+        // Remove the road to the flag
+        var road1 = map.getRoad(flag.getPosition(), storehouse0.getFlag().getPosition());
+        map.removeRoad(road1);
+
+        // Verify that the geologist goes back to the headquarters when it's done
+        Utils.waitForWorkerToHaveTarget(map, geologist, headquarter0.getPosition());
+
+        assertEquals(geologist.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, headquarter0.getPosition());
+
+        assertTrue(geologist.isInsideBuilding());
+        assertEquals(geologist.getPosition(), headquarter0.getPosition());
+    }
 
     @Test
     public void testGeologistCanBeCalledFromAFlag() throws Exception {
