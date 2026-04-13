@@ -47,4 +47,12 @@ public class AvailableConstruction {
         building = possibleBuilding;
     }
 
+    @Override
+    public String toString() {
+        return "AvailableConstruction{" +
+                "building=" + building +
+                ", flag=" + flag +
+                ", position=" + position +
+                '}';
+    }
 }

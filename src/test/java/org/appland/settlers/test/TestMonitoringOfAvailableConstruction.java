@@ -2,21 +2,17 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Crop;
-import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.actors.Farmer;
 import org.appland.settlers.model.actors.Stonemason;
-import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Farm;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Quarry;
@@ -24,7 +20,7 @@ import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.PRIVATE;
@@ -45,10 +41,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceFlag() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -86,10 +81,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceFlagIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -134,10 +128,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenRemovingFlag() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -178,10 +171,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenRemovingFlagIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -229,10 +221,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceTree() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -270,10 +261,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceTreeIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -318,10 +308,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenRemovingTree() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -368,10 +357,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenRemovingTreeIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -425,10 +413,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceSmallBuilding() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -466,10 +453,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceSmallBuildingIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -514,10 +500,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenTearingDownSmallBuilding() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -560,10 +545,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenTearingDownSmallBuildingIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -613,10 +597,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenSmallBuildingIsDestroyed() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -661,10 +644,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenSmallBuildingIsDestroyedIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -716,10 +698,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenSmallBuildingDisappears() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -762,10 +743,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenSmallBuildingDisappearsIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -815,10 +795,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceMediumBuilding() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -856,10 +835,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceMediumBuildingIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -904,10 +882,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenTearingDownMediumBuilding() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -948,10 +925,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenTearingDownMediumBuildingIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -999,10 +975,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenMediumBuildingIsDestroyed() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1044,10 +1019,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenMediumBuildingIsDestroyedIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1098,10 +1072,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenMediumBuildingDisappears() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1145,10 +1118,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenMediumBuildingDisappearsIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1199,10 +1171,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceLargeBuilding() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1240,10 +1211,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceLargeBuildingIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1288,10 +1258,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenLargeBuildingIsTornDown() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1338,10 +1307,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenLargeBuildingIsTornDownIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1395,10 +1363,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenLargeBuildingIsDestroyed() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1445,10 +1412,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenLargeBuildingIsDestroyedIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -1502,10 +1468,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceHorizontalRoad() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(22, 10);
@@ -1548,10 +1513,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceHorizontalRoadIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(22, 10);
@@ -1601,10 +1565,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenRemovingHorizontalRoad() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(22, 10);
@@ -1650,10 +1613,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenRemovingHorizontalRoadIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(22, 10);
@@ -1706,10 +1668,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceLeftToRightDiagonalRoad() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(20, 12);
@@ -1752,10 +1713,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceLeftToRightDiagonalRoadIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(20, 12);
@@ -1805,10 +1765,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenRemovingLeftToRightDiagonalRoad() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(20, 12);
@@ -1851,10 +1810,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenRemovingLeftToRightDiagonalRoadIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(20, 12);
@@ -1904,10 +1862,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenRemovingRightToLeftDiagonalRoad() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(16, 12);
@@ -1953,10 +1910,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenRemovingRightToLeftDiagonalRoadIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(22, 12);
@@ -2009,10 +1965,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceCrop() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -2053,10 +2008,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenPlaceCropIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -2102,16 +2056,15 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenHarvestedCrop() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(10, 16);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place farm near the crop
+        // Place farm
         var point2 = new Point(16, 16);
         var farm0 = map.placeBuilding(new Farm(player0), point2);
 
@@ -2123,8 +2076,28 @@ public class TestMonitoringOfAvailableConstruction {
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(farm0);
 
-        // Wait for the farmer to plant a crop
-        var crop = Utils.waitForFarmerToPlantCrop(map, (Farmer)farm0.getWorker());
+        // Remember available construction before crops are planted
+        var availableHousesBeforeCrops = new HashMap<Point, Size>();
+
+        map.getPointsInMap()
+                .forEach(point -> availableHousesBeforeCrops.put(point, map.isAvailableHousePoint(player0, point)));;
+
+        // Wait for the farmer to plant a crop at a point where a house can be placed up-left from it
+        var farmer = (Farmer) farm0.getWorker();
+
+        for (int i = 0; i < 10_000; i++) {
+            var crop = Utils.waitForFarmerToPlantCrop(map, farmer);
+
+            if (availableHousesBeforeCrops.get(crop.getPosition().upLeft()) != null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        var crop = map.getCropAtPoint(farmer.getPosition());
+
+        assertNotNull(availableHousesBeforeCrops.get(crop.getPosition().upLeft()));
 
         // Set up monitoring subscription for the player
         var monitor = new Utils.GameViewMonitor();
@@ -2138,6 +2111,8 @@ public class TestMonitoringOfAvailableConstruction {
 
         // Verify that the event for the changed available construction when the farmer harvests the crop
         assertEquals(monitor.getEvents().size(), 0);
+        assertNull(map.isAvailableHousePoint(player0, crop.getPosition().upLeft()));
+        assertNotNull(availableHousesBeforeCrops.get(crop.getPosition().upLeft()));
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -2145,16 +2120,22 @@ public class TestMonitoringOfAvailableConstruction {
 
         var gameChanges = monitor.getLastEvent();
 
+        assertNotNull(map.isAvailableHousePoint(player0, crop.getPosition().upLeft()));
+        assertNotNull(gameChanges);
+        assertNotEquals(gameChanges.changedAvailableConstruction().size(), 0);
+        assertTrue(gameChanges.changedAvailableConstruction().contains(crop.getPosition().upLeft()));
+        assertTrue(gameChanges.changedAvailableConstruction().contains(crop.getPosition()));
+        assertNotNull(map.isAvailableHousePoint(player0, crop.getPosition().upLeft()));
+
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
 
     @Test
     public void testMonitoringAvailableConstructionWhenHarvestedCropIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(10, 16);
@@ -2207,16 +2188,15 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenHarvestedCropDisappears() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(10, 16);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place farm near the crop
+        // Place farm
         var point2 = new Point(16, 16);
         var farm0 = map.placeBuilding(new Farm(player0), point2);
 
@@ -2252,6 +2232,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         var gameChanges = monitor.getLastEvent();
 
+        Utils.printPlayerLand(player0, List.of(crop.getPosition(), new Point(13, 19)));
         assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -2260,10 +2241,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenHarvestedCropDisappearsIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(10, 16);
@@ -2310,9 +2290,11 @@ public class TestMonitoringOfAvailableConstruction {
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
         // Verify that the event is only sent once
+        monitor.clearEvents();
+
         Utils.fastForward(10, map);
 
-        for (var newChanges : monitor.getEventsAfterEvent(gameChanges)) {
+        for (var newChanges : monitor.getEvents()) {
             assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
@@ -2320,12 +2302,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenBorderIsExtended() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point21 = new Point(5, 15);
@@ -2390,12 +2369,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenBorderIsExtendedIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point21 = new Point(5, 15);
@@ -2464,12 +2440,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenBorderIsLost() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point21 = new Point(5, 15);
@@ -2535,12 +2508,9 @@ public class TestMonitoringOfAvailableConstruction {
     @Test
     public void testMonitoringAvailableConstructionWhenBorderIsLostIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point21 = new Point(5, 15);
@@ -2615,8 +2585,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 15, 15);
+        var map = new GameMap(List.of(player0), 15, 15);
 
         // Place headquarters
         var point0 = new Point(10, 10);
@@ -2683,8 +2652,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 15, 15);
+        var map = new GameMap(List.of(player0), 15, 15);
 
         // Place headquarters
         var point0 = new Point(10, 10);
@@ -2756,8 +2724,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(10, 10);

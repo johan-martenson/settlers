@@ -12,16 +12,13 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.actors.CatapultWorker;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Forester;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.Stonemason;
-import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Catapult;
 import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -32,8 +29,6 @@ import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
@@ -463,12 +458,6 @@ public class TestTransportation {
         assertTrue(mason.isGettingStone());
 
         Utils.fastForward(50, map);
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, mason, quarry0.getPosition());
-
-        assertTrue(mason.isInsideBuilding());
-
-        map.stepTime();
 
         assertEquals(mason.getTarget(), quarry0.getFlag().getPosition());
 

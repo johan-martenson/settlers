@@ -6,6 +6,8 @@
 
 package org.appland.settlers.model;
 
+import java.util.Random;
+
 import static org.appland.settlers.model.Crop.GrowthState.*;
 import static org.appland.settlers.model.Material.WHEAT;
 
@@ -91,6 +93,19 @@ public class Crop {
     }
 
     public enum CropType {
-        TYPE_2, TYPE_1
+        TYPE_2, TYPE_1;
+
+        private final static Random RANDOM = new Random(1);
+
+        public static CropType getRandom() {
+            return RANDOM.nextInt(10) % 2 == 0
+                    ? Crop.CropType.TYPE_2
+                    : Crop.CropType.TYPE_1;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Crop at %s (%s)".formatted(position, state);
     }
 }

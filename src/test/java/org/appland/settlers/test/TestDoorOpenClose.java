@@ -14,7 +14,6 @@ import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import static org.appland.settlers.model.Material.COIN;
@@ -195,7 +194,7 @@ public class TestDoorOpenClose {
             map.stepTime();
         }
 
-        // Verify that the door opens again when the woodcutter worker returns with cargo and is at the flag
+        // Verify that the door opens again when the woodcutter worker returns and is at the flag
         for (int i = 0; i < 5000; i++) {
             if (woodcutterHut.getWorker().getPosition().equals(woodcutterHut.getFlag().getPosition())) {
                 break;
@@ -221,32 +220,6 @@ public class TestDoorOpenClose {
         }
 
         assertTrue(woodcutterHut.getWorker().isInsideBuilding());
-        assertTrue(woodcutterHut.isDoorClosed());
-
-        // Verify that the door opens when the worker goes out to leave the cargo
-        for (int i = 0; i < 200; i++) {
-            if (!woodcutterHut.getWorker().isInsideBuilding()) {
-                break;
-            }
-
-            assertTrue(woodcutterHut.isDoorClosed());
-
-            map.stepTime();
-        }
-
-        assertFalse(woodcutterHut.getWorker().isInsideBuilding());
-        assertFalse(woodcutterHut.isDoorClosed());
-
-        for (int i = 0; i < 200; i++) {
-            if (woodcutterHut.getWorker().isInsideBuilding()) {
-                break;
-            }
-
-            assertFalse(woodcutterHut.isDoorClosed());
-
-            map.stepTime();
-        }
-
         assertTrue(woodcutterHut.isDoorClosed());
     }
 

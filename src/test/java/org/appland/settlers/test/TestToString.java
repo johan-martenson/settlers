@@ -18,6 +18,7 @@ import org.appland.settlers.model.actors.Butcher;
 import org.appland.settlers.model.actors.Carpenter;
 import org.appland.settlers.model.actors.CatapultWorker;
 import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.actors.Farmer;
 import org.appland.settlers.model.actors.IronFounder;
 import org.appland.settlers.model.actors.Minter;
 import org.appland.settlers.model.actors.Shipwright;
@@ -26,6 +27,7 @@ import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Bakery;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Catapult;
+import org.appland.settlers.model.buildings.Farm;
 import org.appland.settlers.model.buildings.Fishery;
 import org.appland.settlers.model.buildings.Harbor;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -936,5 +938,38 @@ public class TestToString {
 
         // Verify toString for the ship when it's ready
         assertEquals(ship.toString(), "Ship (" + ship.getPosition().x + ", " + ship.getPosition().y + ")");
+    }
+
+    @Test
+    public void testCropToString() throws InvalidUserActionException {
+
+        // Create new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 41);
+
+        // Place headquarters
+        var point0 = new Point(10, 16);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place farm near the crop
+        var point2 = new Point(16, 16);
+        var farm0 = map.placeBuilding(new Farm(player0), point2);
+
+        // Connect the farm with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
+
+        // Wait for the farm to get constructed and occupied
+        Utils.waitForBuildingToBeConstructed(farm0);
+
+        var farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm0);
+
+        // Wait for the farmer to plant a crop
+        var crop = Utils.waitForFarmerToPlantCrop(map, farmer);
+
+        // Verify toString of the crop
+        assertEquals(
+                crop.toString(),
+                "Crop at (" + crop.getPosition().x + ", " + crop.getPosition().y + ") (JUST_PLANTED)"
+        );
     }
 }

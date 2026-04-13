@@ -36,9 +36,7 @@ public class Stonemason extends Worker {
         RESTING_IN_HOUSE,
         GOING_OUT_TO_GET_STONE,
         GETTING_STONE,
-        GOING_BACK_TO_HOUSE_WITH_CARGO,
-        IN_HOUSE_WITH_CARGO,
-        GOING_OUT_TO_PUT_CARGO,
+        GOING_TO_PUT_STONE_AT_FLAG,
         GOING_BACK_TO_HOUSE,
         WAITING_FOR_SPACE_ON_FLAG,
         GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
@@ -67,8 +65,8 @@ public class Stonemason extends Worker {
     protected void onIdle() {
         switch (state) {
             case RESTING_IN_HOUSE -> {
-                if (home.isProductionEnabled()) {
-                    if (countdown.hasReachedZero()) {
+                if (countdown.hasReachedZero()) {
+                    if (home.isProductionEnabled() && home.getFlag().hasPlaceForMoreCargo()) {
                         var distance = Double.MAX_VALUE;
                         var homePoint = home.getPosition();
 
@@ -111,9 +109,9 @@ public class Stonemason extends Worker {
 
                         state = State.GOING_OUT_TO_GET_STONE;
                         setOffroadTarget(stoneTarget, OffroadOption.CAN_END_ON_STONE);
-                    } else {
-                        countdown.step();
                     }
+                } else {
+                    countdown.step();
                 }
             }
 
@@ -123,47 +121,33 @@ public class Stonemason extends Worker {
                     // Remove a piece of the stone if it still exists
                     if (map.isStoneAtPoint(stoneTarget)) {
                         map.removePartOfStone(stoneTarget);
-
                         setCargo(new Cargo(STONE, map));
-                        state = State.GOING_BACK_TO_HOUSE_WITH_CARGO;
 
+                        if (home.getFlag().getPosition().isAdjacent(position) && !home.getFlag().hasPlaceForMoreCargo()) {
+                            state = State.WAITING_FOR_SPACE_ON_FLAG;
+                        } else {
+                            state = State.GOING_TO_PUT_STONE_AT_FLAG;
+                            setOffroadTarget(home.getFlag().getPosition());
+                        }
+
+                        productivityMeasurer.reportProductivity();
+                        productivityMeasurer.nextProductivityCycle();
                         map.getStatisticsManager().stoneProduced(player, map.getTime());
                     } else {
                         state = State.GOING_BACK_TO_HOUSE;
+                        returnHomeOffroad();
                     }
 
                     stoneTarget = null;
-
-                    returnHomeOffroad();
                 } else {
                     countdown.step();
-                }
-            }
-            case IN_HOUSE_WITH_CARGO -> {
-
-                // Report that the stonemason produced a stone
-                productivityMeasurer.reportProductivity();
-                productivityMeasurer.nextProductivityCycle();
-
-                // Handle transportation
-                if (home.getFlag().hasPlaceForMoreCargo()) {
-
-                    // Go out to the flag to deliver the stone
-                    state = State.GOING_OUT_TO_PUT_CARGO;
-                    setTarget(home.getFlag().getPosition());
-
-                    home.getFlag().promiseCargo(getCargo());
-                } else {
-                    state = Stonemason.State.WAITING_FOR_SPACE_ON_FLAG;
                 }
             }
 
             case WAITING_FOR_SPACE_ON_FLAG -> {
                 if (home.getFlag().hasPlaceForMoreCargo()) {
-
-                    // Go out to the flag to deliver the stone
-                    state = State.GOING_OUT_TO_PUT_CARGO;
-                    setTarget(home.getFlag().getPosition());
+                    state = State.GOING_TO_PUT_STONE_AT_FLAG;
+                    setOffroadTarget(home.getFlag().getPosition());
 
                     home.getFlag().promiseCargo(getCargo());
                 }
@@ -198,16 +182,6 @@ public class Stonemason extends Worker {
     @Override
     public void onArrival() {
         switch (state) {
-            case GOING_OUT_TO_PUT_CARGO -> {
-                carriedCargo.setPosition(position);
-                carriedCargo.transportToReceivingBuilding(this::isReceiverForStone);
-                home.getFlag().putCargo(carriedCargo);
-                carriedCargo = null;
-
-                state = State.GOING_BACK_TO_HOUSE;
-                setTarget(home.getPosition());
-            }
-
             case GOING_BACK_TO_HOUSE -> {
                 state = State.RESTING_IN_HOUSE;
                 enterBuilding(home);
@@ -220,9 +194,14 @@ public class Stonemason extends Worker {
                 countdown.countFrom(TIME_TO_GET_STONE);
             }
 
-            case GOING_BACK_TO_HOUSE_WITH_CARGO -> {
-                enterBuilding(home);
-                state = State.IN_HOUSE_WITH_CARGO;
+            case GOING_TO_PUT_STONE_AT_FLAG -> {
+                carriedCargo.setPosition(position);
+                carriedCargo.transportToReceivingBuilding(this::isReceiverForStone);
+                home.getFlag().putCargo(carriedCargo);
+                carriedCargo = null;
+
+                state = State.GOING_BACK_TO_HOUSE;
+                setTarget(home.getPosition());
             }
 
             case RETURNING_TO_STORAGE -> {
@@ -274,17 +253,25 @@ public class Stonemason extends Worker {
 
     @Override
     protected void onWalkingAndAtFixedPoint() {
+        switch (state) {
+            case GOING_TO_PUT_STONE_AT_FLAG ->  {
+                var plannedPath = getPlannedPath();
 
-        // Return to storage if the planned path no longer exists
-        if (state == State.WALKING_TO_TARGET &&
-            map.isFlagAtPoint(position) &&
-            !map.arePointsConnectedByRoads(position, getTarget())) {
+                if (!plannedPath.isEmpty() &&
+                        plannedPath.getFirst().equals(home.getFlag().getPosition()) &&
+                        !home.getFlag().hasPlaceForMoreCargo()) {
+                     state = State.WAITING_FOR_SPACE_ON_FLAG;
+                     stopWalkingToTarget();
+                }
+            }
+            case WALKING_TO_TARGET ->  {
 
-            // Don't try to enter the quarry upon arrival
-            clearTargetBuilding();
-
-            // Go back to the storage
-            returnToStorage();
+                // Return to storage if the planned path doesn't exist
+                if (map.isFlagAtPoint(position) && !map.arePointsConnectedByRoads(position, getTarget())) {
+                    clearTargetBuilding();
+                    returnToStorage();
+                }
+            }
         }
     }
 
@@ -300,7 +287,6 @@ public class Stonemason extends Worker {
     @Override
     public void goToOtherStorage(Building building) {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
-
         setTarget(building.getFlag().getPosition());
     }
 
@@ -308,7 +294,15 @@ public class Stonemason extends Worker {
     public boolean isWorking() {
         return state == State.GOING_OUT_TO_GET_STONE ||
                 state == State.GETTING_STONE ||
-                state == State.GOING_BACK_TO_HOUSE_WITH_CARGO ||
-                state == State.IN_HOUSE_WITH_CARGO;
+                state == State.GOING_TO_PUT_STONE_AT_FLAG ||
+                state == State.GOING_BACK_TO_HOUSE;
+    }
+
+    @Override
+    public String toString() {
+        return isExactlyAtPoint()
+                ? "Stonemason at %s, target: %s (%s)".formatted(position, target, state)
+                : "Stonemason at %s - %s, target: %s (%s)".formatted(position, getNextPoint(), target, state);
+
     }
 }

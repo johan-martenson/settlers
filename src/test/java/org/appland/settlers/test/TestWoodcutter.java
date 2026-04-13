@@ -34,6 +34,9 @@ import static org.junit.Assert.*;
  */
 public class TestWoodcutter {
 
+    // TODO: also test when woodcutter cuts down tree and flag gets full while the woodcutter is walking to put the
+    //       wood at the flag
+
     @Test
     public void testWoodcutterOnlyNeedsTwoPlanksForConstruction() throws Exception {
 
@@ -519,7 +522,7 @@ public class TestWoodcutter {
             map.stepTime();
         }
 
-        // Wait for the var to fall
+        // Wait for the tree to fall
         for (int i = 0; i < 10; i++) {
             assertTrue(map.isTreeAtPoint(point));
             assertEquals(tree, map.getTreeAtPoint(point));
@@ -542,7 +545,7 @@ public class TestWoodcutter {
 
         map.stepTime();
 
-        assertEquals(woodcutterWorker.getTarget(), woodcutter.getPosition());
+        assertEquals(woodcutterWorker.getTarget(), woodcutter.getFlag().getPosition());
         assertNotNull(woodcutterWorker.getCargo());
         assertEquals(woodcutterWorker.getCargo().getMaterial(), WOOD);
 
@@ -579,13 +582,10 @@ public class TestWoodcutter {
         // Connect the var with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
-        // Construct the forester hut
-        constructHouse(woodcutter);
+        // Wait for the woodcutter to get constructed and occupied
+        Utils.waitForBuildingToBeConstructed(woodcutter);
 
-        // Manually place forester
-        var woodcutterWorker = new WoodcutterWorker(player0, map);
-
-        Utils.occupyBuilding(woodcutterWorker, woodcutter);
+        var woodcutterWorker = (WoodcutterWorker) Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter);
 
         // Wait for the woodcutter to rest
         Utils.fastForward(99, map);
@@ -617,48 +617,42 @@ public class TestWoodcutter {
 
         map.stepTime();
 
-        // The woodcutter has cut down the tree and goes back via the flag
+        // Verify that the woodcutter goes directly to the flag and leaves the wood there
         assertFalse(woodcutterWorker.isCuttingTree());
         assertNotNull(woodcutterWorker.getCargo());
-
-        assertEquals(woodcutterWorker.getTarget(), woodcutter.getPosition());
+        assertEquals(woodcutterWorker.getTarget(), woodcutter.getFlag().getPosition());
         assertTrue(woodcutterWorker.getPlannedPath().contains(woodcutter.getFlag().getPosition()));
+        assertEquals(woodcutter.getFlag().getStackedCargo().size(), 0);
+        assertNotNull(woodcutterWorker.getCargo());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter.getFlag().getPosition());
+
+        assertEquals(woodcutter.getFlag().getStackedCargo().size(), 1);
+        assertEquals(woodcutter.getFlag().getStackedCargo().getFirst().getMaterial(), WOOD);
+        assertFalse(woodcutterWorker.isInsideBuilding());
+        assertNull(woodcutterWorker.getCargo());
+
+        // Verify that the woodcutter worker goes to woodcutter hut
+        assertEquals(woodcutterWorker.getTarget(), woodcutter.getPosition());
+
+        map.stepTime();
+
+        assertFalse(woodcutter.isDoorClosed());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter.getPosition());
 
         assertTrue(woodcutterWorker.isInsideBuilding());
-        assertNotNull(woodcutterWorker.getCargo());
-        assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
-
-        // Woodcutter leaves the building and puts the cargo on the building's flag
-        map.stepTime();
-
-        assertFalse(woodcutterWorker.isInsideBuilding());
-        assertEquals(woodcutterWorker.getTarget(), woodcutter.getFlag().getPosition());
-        assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
-
-        // Let the woodcutter reach the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter.getFlag().getPosition());
-
-        assertFalse(woodcutter.getFlag().getStackedCargo().isEmpty());
         assertNull(woodcutterWorker.getCargo());
-        assertEquals(woodcutterWorker.getTarget(), woodcutter.getPosition());
+        assertEquals(woodcutterWorker.getPosition(), woodcutter.getPosition());
 
-        var cargo = woodcutter.getFlag().getStackedCargo().getFirst();
+        // Verify that the woodcutter worker stays in the house
+        for (int i = 0; i < 10; i++) {
+            assertTrue(woodcutterWorker.isInsideBuilding());
+            assertNull(woodcutterWorker.getCargo());
+            assertEquals(woodcutterWorker.getPosition(), woodcutter.getPosition());
 
-        assertEquals(cargo.getTarget(), headquarter);
-
-        // Let the woodcutter go back to the hut
-        Utils.fastForwardUntilWorkersReachTarget(map, woodcutterWorker);
-
-        map.stepTime();
-
-        // Verify that the woodcutter remains in the hut
-        assertTrue(woodcutterWorker.isInsideBuilding());
-
-        Utils.fastForward(99, map);
-
-        assertTrue(woodcutterWorker.isInsideBuilding());
+            map.stepTime();
+        }
     }
 
     @Test
@@ -704,7 +698,7 @@ public class TestWoodcutter {
         // Wait for the woodcutter to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(woodcutter);
 
-        var wcWorker = (WoodcutterWorker) Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter);
 
         // Wait for the courier on the road between the sawmill and the woodcutter hut to have a wood cargo
         Utils.waitForFlagToGetStackedCargo(map, woodcutter.getFlag(), 1);
@@ -716,6 +710,7 @@ public class TestWoodcutter {
 
         // Verify that the courier delivers the cargo to the sawmill (and not the headquarters)
         assertEquals(sawmill.getAmount(WOOD), 0);
+        assertTrue(sawmill.needsMaterial(WOOD));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), sawmill.getPosition());
 
@@ -941,20 +936,7 @@ public class TestWoodcutter {
 
         map.stepTime();
 
-        // The woodcutter has cut down the tree and goes back via the flag
-        assertEquals(woodcutterWorker.getTarget(), woodcutter.getPosition());
-        assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
-        assertTrue(woodcutterWorker.getPlannedPath().contains(woodcutter.getFlag().getPosition()));
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter.getPosition());
-
-        assertTrue(woodcutterWorker.isInsideBuilding());
-        assertNotNull(woodcutterWorker.getCargo());
-        assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
-
-        // Woodcutter leaves the building and puts the cargo on the building's flag
-        map.stepTime();
-
+        // The woodcutter has cut down the tree and goes to deliver at the flag
         assertFalse(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getTarget(), woodcutter.getFlag().getPosition());
         assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
@@ -1200,22 +1182,8 @@ public class TestWoodcutter {
 
         map.stepTime();
 
-        // The woodcutter has cut down the tree and goes back to the hut
+        // The woodcutter has cut down the tree and goes to deliver wood at the flag
         assertFalse(woodcutterWorker.isCuttingTree());
-        assertEquals(woodcutterWorker.getTarget(), woodcutter.getPosition());
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter.getPosition());
-
-        // Woodcutter enters building but does not store the cargo yet
-        assertTrue(woodcutterWorker.isInsideBuilding());
-        assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
-        assertEquals(woodcutter.getPosition(), woodcutterWorker.getPosition());
-        assertNotNull(woodcutterWorker.getCargo());
-
-        // Woodcutter leaves the building and puts the cargo on the building's flag
-        map.stepTime();
-
-        assertFalse(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getTarget(), woodcutter.getFlag().getPosition());
         assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
 
@@ -1310,92 +1278,49 @@ public class TestWoodcutter {
         // Place woodcutter
         var point26 = new Point(8, 8);
         var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
-        // Finish construction of the woodcutter
-        constructHouse(woodcutter0);
+        // Wait for the woodcutter to get constructed and occupied
+        Utils.waitForBuildingToBeConstructed(woodcutter0);
 
-        // Occupy the woodcutter
-        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        var woodcutterWorker = (WoodcutterWorker) Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter0);
 
-        // Let the var worker rest
-        Utils.fastForward(100, map);
+        // Remove the road connecting the woodcutter to the headquarters
+        map.removeRoad(road0);
 
-        // Wait for the var worker to go to the tree
-        var woodcutterWorker = (WoodcutterWorker) woodcutter0.getWorker();
+        // Verify that the woodcutter worker cuts down trees even though the woodcutter is not connected to any storehouse
+        Utils.fastForwardUntilWorkerCarriesCargo(map, woodcutterWorker);
 
-        assertTrue(woodcutterWorker.getTarget().equals(tree0.getPosition()) || woodcutterWorker.getTarget().equals(tree1.getPosition()));
-        assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutterWorker.getTarget());
-
-        // Wait for the woodcutter to cut the tree
-        assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
-
-        map.stepTime();
-
-        assertTrue(woodcutterWorker.isCuttingTree());
-        assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
-        assertTrue(map.isTreeAtPoint(tree0.getPosition()));
-        assertTrue(map.isTreeAtPoint(tree1.getPosition()));
-        assertFalse(tree0.isFalling());
-        assertFalse(tree1.isFalling());
-
-        Utils.waitForTreeToDisappearFromMap(map.getTreeAtPoint(woodcutterWorker.getPosition()), map);
-
-        assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
-
-        map.stepTime();
-
-        assertNotNull(woodcutterWorker.getCargo());
-        assertEquals(woodcutterWorker.getTarget(), woodcutter0.getPosition());
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter0.getPosition());
-
-        // Verify that the var worker puts the wood cargo at the flag
-        map.stepTime();
-
+        // Verify that the woodcutter worker leaves the wood at the flag
         assertEquals(woodcutterWorker.getTarget(), woodcutter0.getFlag().getPosition());
-        assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter0.getFlag().getPosition());
 
         assertNull(woodcutterWorker.getCargo());
         assertFalse(woodcutter0.getFlag().getStackedCargo().isEmpty());
 
-        // Wait for the worker to go back to the woodcutter
+        // Verify that the woodcutter worker goes back inside the house
         assertEquals(woodcutterWorker.getTarget(), woodcutter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter0.getPosition());
 
-        // Let the var worker rest
-        Utils.fastForward(100, map);
+        // Verify that the woodcutter worker cuts down a second tree
+        Utils.fastForwardUntilWorkerCarriesCargo(map, woodcutterWorker);
 
-        // Wait for the var worker to go to the next tree
-        assertTrue(woodcutterWorker.getTarget().equals(tree0.getPosition()) || woodcutterWorker.getTarget().equals(tree1.getPosition()));
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutterWorker.getTarget());
-
-        // Wait for the woodcutter to cut the tree
-        Utils.waitForTreeToDisappearFromMap(map.getTreeAtPoint(woodcutterWorker.getPosition()), map);
-
-        map.stepTime();
-
-        assertNotNull(woodcutterWorker.getCargo());
-
-        // Wait for the var worker to go back to the woodcutter
-        assertEquals(woodcutterWorker.getTarget(), woodcutter0.getPosition());
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter0.getPosition());
-
-        // Verify that the second cargo is put at the flag
-        map.stepTime();
-
+        // Verify that the woodcutter places it at the flag
         assertEquals(woodcutterWorker.getTarget(), woodcutter0.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter0.getFlag().getPosition());
 
         assertNull(woodcutterWorker.getCargo());
         assertEquals(woodcutter0.getFlag().getStackedCargo().size(), 2);
+
+        // Verify that the woodcutter worker goes back to the house
+        assertEquals(woodcutterWorker.getTarget(), woodcutter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter0.getPosition());
+
+        assertTrue(woodcutterWorker.isInsideBuilding());
     }
 
     @Test
@@ -1442,14 +1367,7 @@ public class TestWoodcutter {
 
         assertNotNull(woodcutterWorker.getCargo());
 
-        // Wait for the var worker to go back to the woodcutter
-        assertEquals(woodcutterWorker.getTarget(), woodcutter0.getPosition());
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter0.getPosition());
-
         // Verify that the var worker puts the wood cargo at the flag
-        map.stepTime();
-
         assertEquals(woodcutterWorker.getTarget(), woodcutter0.getFlag().getPosition());
         assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
 
@@ -1715,32 +1633,17 @@ public class TestWoodcutter {
         var point4 = new Point(9, 5);
         var road0 = map.placeRoad(player0, point2, point3, point4);
 
-        // Finish the woodcutter
-        constructHouse(woodcutter);
+        // Wait for the woodcutter to get constructed and occupied
+        Utils.waitForBuildingToBeConstructed(woodcutter);
 
-        // Assign a worker to the woodcutter
-        var woodcutterWorker = new WoodcutterWorker(player0, map);
-
-        Utils.occupyBuilding(woodcutterWorker, woodcutter);
-
-        assertTrue(woodcutterWorker.isInsideBuilding());
-
-        // Let the worker rest
-        Utils.fastForward(100, map);
+        var woodcutterWorker = (WoodcutterWorker) Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter);
 
         // Wait for the worker to produce wood
         Utils.fastForwardUntilWorkerProducesCargo(map, woodcutterWorker);
 
         assertEquals(woodcutterWorker.getCargo().getMaterial(), WOOD);
 
-        // Wait for the worker to return to the woodcutter hut
-        assertEquals(woodcutterWorker.getTarget(), woodcutter.getPosition());
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter.getPosition());
-
         // Wait for the worker to deliver the cargo
-        map.stepTime();
-
         assertEquals(woodcutterWorker.getTarget(), woodcutter.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter.getFlag().getPosition());
@@ -1805,17 +1708,14 @@ public class TestWoodcutter {
 
         assertEquals(woodcutterWorker.getCargo().getMaterial(), WOOD);
 
-        // Wait for the worker to return to the woodcutter hut
-        assertEquals(woodcutterWorker.getTarget(), woodcutter.getPosition());
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter.getPosition());
-
-        // Wait for the worker to deliver the cargo
-        map.stepTime();
-
+        // Wait for the worker to to deliver the cargo and return to the woodcutter hut
         assertEquals(woodcutterWorker.getTarget(), woodcutter.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter.getFlag().getPosition());
+
+        assertEquals(woodcutterWorker.getTarget(), woodcutter.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter.getPosition());
 
         // Stop production
         woodcutter.stopProduction();
@@ -1968,11 +1868,15 @@ public class TestWoodcutter {
         map.stepTime();
 
         // Verify that the woodcutter chooses a path back that goes via the flag
-        assertEquals(woodcutterWorker.getTarget(), woodcutter.getPosition());
         assertTrue(woodcutterWorker.getPlannedPath().contains(woodcutter.getFlag().getPosition()));
-        assertTrue(woodcutterWorker.getPlannedPath().contains(woodcutter.getPosition()));
-        assertTrue(woodcutterWorker.getPlannedPath().indexOf(woodcutter.getFlag().getPosition()) <
-                   woodcutterWorker.getPlannedPath().indexOf(woodcutter.getPosition()));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter.getFlag().getPosition());
+
+        assertEquals(woodcutterWorker.getTarget(), woodcutter.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter.getPosition());
+
+        assertTrue(woodcutterWorker.isInsideBuilding());
     }
 
     @Test
@@ -2474,17 +2378,13 @@ public class TestWoodcutter {
                    (woodcutterWorker1.getCargo() != null && woodcutterWorker1.getCargo().getMaterial().equals(WOOD)));
 
         // Verify that both woodcutters go back home
-        assertEquals(woodcutterWorker0.getTarget(), woodcutter0.getPosition());
-        assertEquals(woodcutterWorker1.getTarget(), woodcutter1.getPosition());
+        assertTrue(
+                (woodcutterWorker0.getTarget().equals(woodcutter0.getFlag().getPosition()) && woodcutterWorker1.getTarget().equals(woodcutter1.getPosition())) ||
+                        (woodcutterWorker0.getTarget().equals(woodcutter0.getPosition()) && woodcutterWorker1.getTarget().equals(woodcutter1.getFlag().getPosition())));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker0, woodcutter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker0, woodcutter0.getFlag().getPosition());
 
-        if (!woodcutterWorker1.getPosition().equals(woodcutter1.getPosition())) {
-            Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker1, woodcutter1.getPosition());
-        }
-
-        assertTrue(woodcutterWorker0.isInsideBuilding());
-        assertTrue(woodcutterWorker1.isInsideBuilding());
+        Utils.waitForWorkersToBeInside(map, woodcutterWorker0, woodcutterWorker1);
     }
 
     @Test
@@ -2759,7 +2659,7 @@ public class TestWoodcutter {
     }
 
     @Test
-    public void testWoodcutterWaitsWhenFlagIsFull() throws Exception {
+    public void testWoodcutterWaitsInsideWhenFlagIsFull() throws Exception {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -2786,7 +2686,7 @@ public class TestWoodcutter {
 
         // Wait for the woodcutter to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(woodcutter);
-        Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter);
+        var woodcutterWorker = (WoodcutterWorker) Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter);
 
         // Fill the flag with flour cargos
         Utils.placeCargos(map, FLOUR, 8, woodcutter.getFlag(), headquarter);
@@ -2794,9 +2694,10 @@ public class TestWoodcutter {
         // Remove the road
         map.removeRoad(road0);
 
-        // Verify that the var waits for the flag to get empty and produces nothing
+        // Verify that the woodcutter worker waits for the flag to get empty and produces nothing
         for (int i = 0; i < 600; i++) {
             assertEquals(woodcutter.getFlag().getStackedCargo().size(), 8);
+            assertTrue(woodcutterWorker.isInsideBuilding());
 
             map.stepTime();
         }
@@ -2820,8 +2721,82 @@ public class TestWoodcutter {
 
         assertEquals(woodcutter.getFlag().getStackedCargo().size(), 7);
 
-        // Verify that the worker produces a cargo of flour and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, woodcutter.getWorker(), WOOD);
+        // Verify that the worker produces a cargo of wood and puts it on the flag
+        Utils.fastForwardUntilWorkerCarriesCargo(map, woodcutterWorker, WOOD);
+    }
+
+    @Test
+    public void testWoodcutterCarryingWoodWaitsOutsideIfFlagIsFull() throws Exception {
+
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 30, 31);
+
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place woodcutter
+        var point1 = new Point(16, 6);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        // Place trees
+        var point2 = new Point(21, 5);
+        var tree0 = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+
+        // Connect the var with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
+
+        // Wait for the woodcutter to get constructed and assigned a worker
+        Utils.waitForBuildingToBeConstructed(woodcutter);
+        var woodcutterWorker = (WoodcutterWorker) Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter);
+
+        // Wait for the woodcutter worker to start cutting down the tree
+        Utils.fastForwardUntilWorkerCarriesCargo(map, woodcutterWorker, WOOD);
+
+        // Fill the flag with flour cargos
+        Utils.placeCargos(map, FLOUR, 8, woodcutter.getFlag(), headquarter);
+
+        // Remove the road
+        map.removeRoad(road0);
+
+        // Verify that the woodcutter stops close to the flag and waits for space
+        for (int i = 0; i < 2_000; i++) {
+            if (woodcutterWorker.getPosition().left().equals(woodcutter.getFlag().getPosition())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(woodcutterWorker.getPosition(), woodcutter.getFlag().getPosition().right());
+
+        for (int i = 0; i < 20; i++) {
+            assertEquals(woodcutterWorker.getPosition(), woodcutter.getFlag().getPosition().right());
+
+            map.stepTime();
+        }
+
+        // Verify that the woodcutter worker puts the wood on the flag when space opens up
+        var road1 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
+
+        Utils.waitForFlagToHaveAmountStackedCargo(map, woodcutter.getFlag(), 7);
+
+        map.stepTime();
+
+        assertEquals(woodcutterWorker.getTarget(), woodcutter.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter.getFlag().getPosition());
+
+        assertNull(woodcutterWorker.getCargo());
+        assertEquals(woodcutter.getFlag().getStackedCargo().size(), 8);
+
+        // Verify that the woodcutter worker goes into the house
+        assertEquals(woodcutterWorker.getTarget(), woodcutter.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter.getPosition());
+
+        assertTrue(woodcutterWorker.isInsideBuilding());
     }
 
     @Test

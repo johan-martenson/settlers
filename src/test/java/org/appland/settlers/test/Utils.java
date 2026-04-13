@@ -164,7 +164,7 @@ public class Utils {
         assertNotNull(worker);
         assertNotNull(map);
 
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < 100_000; i++) {
             if (Objects.equals(worker.getPosition(), target)) {
                 break;
             }
@@ -1650,6 +1650,18 @@ public class Utils {
 
         assertTrue(worker.isExactlyAtPoint());
         assertEquals(worker.getPosition(), point);
+    }
+
+    public static void waitForWorkersToBeInside(GameMap map, Worker... workers) throws InvalidUserActionException {
+        for (int i = 0; i < 10_000; i++) {
+            if (Arrays.asList(workers).stream().allMatch(Worker::isInsideBuilding)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(Arrays.asList(workers).stream().allMatch(Worker::isInsideBuilding));
     }
 
     public static void waitForWorkerToBeInside(Worker worker, GameMap map) throws InvalidUserActionException {
@@ -3214,6 +3226,18 @@ public class Utils {
         assertTrue(road.isMainRoad());
     }
 
+    public static <T extends Worker> void waitForWorkerToStopWalking(T worker, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 2_000; i++) {
+            if (!worker.isTraveling()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(worker.isTraveling());
+    }
+
     public static <T extends Worker> void waitForWorkersToStopWalking(List<T> workers, GameMap map) throws InvalidUserActionException {
         for (int i = 0; i < 2_000; i++) {
             if (workers.stream().noneMatch(Worker::isTraveling)) {
@@ -3262,14 +3286,26 @@ public class Utils {
         }
     }
 
+    public static void waitForFlagToHaveAmountStackedCargo(GameMap map, Flag flag, int amount) throws InvalidUserActionException {
+        for (int i = 0; i < 20_000; i++) {
+            if (flag.getStackedCargo().size() == amount) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(flag.getStackedCargo().size(), amount);
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor, StatisticsListener {
         private final List<GameChangesList> gameChanges;
-        private final HashMap<Point, AvailableConstruction> availableConstruction;
+        private final HashMap<Point, AvailableConstruction> mirroredAvailableConstruction;
         private final List<StatisticsUpdatedEvent> statisticsEvents = new ArrayList<>();
 
         public GameViewMonitor() {
             gameChanges = new ArrayList<>();
-            availableConstruction = new HashMap<>();
+            mirroredAvailableConstruction = new HashMap<>();
         }
 
         @Override
@@ -3288,8 +3324,8 @@ public class Utils {
                 var possibleBuilding = NO_BUILDING_POSSIBLE;
                 var possibleFlag = NO_FLAG_POSSIBLE;
 
-                if (!availableConstruction.containsKey(point)) {
-                    availableConstruction.put(point, new AvailableConstruction(NO_BUILDING_POSSIBLE, NO_FLAG_POSSIBLE, point));
+                if (!mirroredAvailableConstruction.containsKey(point)) {
+                    mirroredAvailableConstruction.put(point, new AvailableConstruction(NO_BUILDING_POSSIBLE, NO_FLAG_POSSIBLE, point));
                 }
 
                 if (availableBuildingsOnMap.containsKey(point)) {
@@ -3312,12 +3348,12 @@ public class Utils {
                     possibleBuilding = MINE_POSSIBLE;
                 }
 
-                availableConstruction.get(point).setAvailableBuilding(possibleBuilding);
+                mirroredAvailableConstruction.get(point).setAvailableBuilding(possibleBuilding);
 
                 if (possibleFlag == FLAG_POSSIBLE) {
-                    availableConstruction.get(point).setFlagPossible();
+                    mirroredAvailableConstruction.get(point).setFlagPossible();
                 } else {
-                    availableConstruction.get(point).setFlagNotPossible();
+                    mirroredAvailableConstruction.get(point).setFlagNotPossible();
                 }
             }
         }
@@ -3349,35 +3385,35 @@ public class Utils {
         }
 
         public void setAvailableConstruction(Map<Point, Size> availableHousePoints, Collection<Point> availableFlagPoints, List<Point> availableMinePoints) {
-            availableConstruction.clear();
+            mirroredAvailableConstruction.clear();
 
             for (Map.Entry<Point, Size> entry : availableHousePoints.entrySet()) {
                 if (entry.getValue() == LARGE) {
-                    availableConstruction.put(entry.getKey(), new AvailableConstruction(LARGE_POSSIBLE, NO_FLAG_POSSIBLE, entry.getKey()));
+                    mirroredAvailableConstruction.put(entry.getKey(), new AvailableConstruction(LARGE_POSSIBLE, NO_FLAG_POSSIBLE, entry.getKey()));
                 } else if (entry.getValue() == MEDIUM) {
-                    availableConstruction.put(entry.getKey(), new AvailableConstruction(MEDIUM_POSSIBLE, NO_FLAG_POSSIBLE, entry.getKey()));
+                    mirroredAvailableConstruction.put(entry.getKey(), new AvailableConstruction(MEDIUM_POSSIBLE, NO_FLAG_POSSIBLE, entry.getKey()));
                 } else if (entry.getValue() == SMALL) {
-                    availableConstruction.put(entry.getKey(), new AvailableConstruction(SMALL_POSSIBLE, NO_FLAG_POSSIBLE, entry.getKey()));
+                    mirroredAvailableConstruction.put(entry.getKey(), new AvailableConstruction(SMALL_POSSIBLE, NO_FLAG_POSSIBLE, entry.getKey()));
                 }
             }
 
             for (var flagPoint : availableFlagPoints) {
-                var availableConstructionAtPoint = availableConstruction.get(flagPoint);
+                var availableConstructionAtPoint = mirroredAvailableConstruction.get(flagPoint);
 
                 if (availableConstructionAtPoint == null) {
-                    availableConstruction.put(flagPoint, new AvailableConstruction(NO_BUILDING_POSSIBLE, FLAG_POSSIBLE, flagPoint));
+                    mirroredAvailableConstruction.put(flagPoint, new AvailableConstruction(NO_BUILDING_POSSIBLE, FLAG_POSSIBLE, flagPoint));
                 } else {
-                    availableConstruction.get(flagPoint).setFlagPossible();
+                    mirroredAvailableConstruction.get(flagPoint).setFlagPossible();
                 }
             }
 
             for (var minePoint : availableMinePoints) {
-                var availableConstructionAtPoint = availableConstruction.get(minePoint);
+                var availableConstructionAtPoint = mirroredAvailableConstruction.get(minePoint);
 
                 if (availableConstructionAtPoint == null) {
-                    availableConstruction.put(minePoint, new AvailableConstruction(MINE_POSSIBLE, NO_FLAG_POSSIBLE, minePoint));
+                    mirroredAvailableConstruction.put(minePoint, new AvailableConstruction(MINE_POSSIBLE, NO_FLAG_POSSIBLE, minePoint));
                 } else {
-                    availableConstruction.get(minePoint).setAvailableBuilding(MINE_POSSIBLE);
+                    mirroredAvailableConstruction.get(minePoint).setAvailableBuilding(MINE_POSSIBLE);
                 }
             }
         }
@@ -3388,10 +3424,18 @@ public class Utils {
             var availableMinesOnMap = map.getAvailableMinePoints(player0);
 
             // Run monitored against real
-            for (Map.Entry<Point, AvailableConstruction> entry : availableConstruction.entrySet()) {
+            for (Map.Entry<Point, AvailableConstruction> entry : mirroredAvailableConstruction.entrySet()) {
                 var point = entry.getKey();
 
                 if (entry.getValue().getAvailableBuilding() == NO_BUILDING_POSSIBLE) {
+                    if (availableBuildingsOnMap.containsKey(point)) {
+                        System.out.println("Monitor - SHOULD BE NO AVAILABLE BUILDING: " + point);
+                        System.out.println("Monitor - " + availableBuildingsOnMap.get(point));
+                        System.out.println("Monitor - " + map.isAvailableHousePoint(player0, point));
+                        System.out.println("Monitor - " + map.isAvailableFlagPoint(player0, point.downRight()));
+                        System.out.println("Monitor - " + map.getCropAtPoint(point.downRight()));
+                    }
+
                     assertFalse(availableBuildingsOnMap.containsKey(point));
                     assertNull(map.isAvailableHousePoint(player0, point));
                 }
@@ -3435,39 +3479,39 @@ public class Utils {
                 var availableFlag = map.isAvailableFlagPoint(player0, point);
 
                 if (availableHouse == LARGE) {
-                    assertEquals(availableConstruction.get(point).getAvailableBuilding(), LARGE_POSSIBLE);
+                    assertEquals(mirroredAvailableConstruction.get(point).getAvailableBuilding(), LARGE_POSSIBLE);
                 }
 
                 if (availableHouse == MEDIUM) {
-                    assertEquals(availableConstruction.get(point).getAvailableBuilding(), MEDIUM_POSSIBLE);
+                    assertEquals(mirroredAvailableConstruction.get(point).getAvailableBuilding(), MEDIUM_POSSIBLE);
                 }
 
                 if (availableHouse == SMALL) {
-                    assertEquals(availableConstruction.get(point).getAvailableBuilding(), SMALL_POSSIBLE);
+                    assertEquals(mirroredAvailableConstruction.get(point).getAvailableBuilding(), SMALL_POSSIBLE);
                 }
 
                 if (availableHouse == null) {
                     assertTrue(
-                            !availableConstruction.containsKey(point) ||
-                                    availableConstruction.get(point).getAvailableBuilding() == NO_BUILDING_POSSIBLE
+                            !mirroredAvailableConstruction.containsKey(point) ||
+                                    mirroredAvailableConstruction.get(point).getAvailableBuilding() == NO_BUILDING_POSSIBLE
                     );
                 }
 
                 if (availableMine) {
-                    assertEquals(availableConstruction.get(point).getAvailableBuilding(), MINE_POSSIBLE);
+                    assertEquals(mirroredAvailableConstruction.get(point).getAvailableBuilding(), MINE_POSSIBLE);
                 } else {
                     assertTrue(
-                            !availableConstruction.containsKey(point) ||
-                                    availableConstruction.get(point).getAvailableBuilding() != MINE_POSSIBLE
+                            !mirroredAvailableConstruction.containsKey(point) ||
+                                    mirroredAvailableConstruction.get(point).getAvailableBuilding() != MINE_POSSIBLE
                     );
                 }
 
                 if (availableFlag) {
-                    assertEquals(availableConstruction.get(point).getAvailableFlag(), FLAG_POSSIBLE);
+                    assertEquals(mirroredAvailableConstruction.get(point).getAvailableFlag(), FLAG_POSSIBLE);
                 } else {
                     assertTrue(
-                            !availableConstruction.containsKey(point) ||
-                                    availableConstruction.get(point).getAvailableFlag() == NO_FLAG_POSSIBLE
+                            !mirroredAvailableConstruction.containsKey(point) ||
+                                    mirroredAvailableConstruction.get(point).getAvailableFlag() == NO_FLAG_POSSIBLE
                     );
                 }
             }
@@ -3495,6 +3539,10 @@ public class Utils {
         @Override
         public void generalStatisticsChanged(Player player) {
             statisticsEvents.add(new StatisticsUpdatedEvent(StatisticsChangeType.GENERAL_STATISTICS_CHANGED));
+        }
+
+        public Map<Point, AvailableConstruction> getMirroredAvailableConstruction() {
+            return this.mirroredAvailableConstruction;
         }
     }
 

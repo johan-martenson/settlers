@@ -1354,14 +1354,10 @@ public class TestGameMonitoringOfBuilding {
 
         assertEquals(player0.getNumberOfAvailableAttackers(headquarter1), 1);
 
-        var found = 0;
-        for (var gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.changedBuildings().contains(headquarter1)) {
-                found++;
-            }
-        }
-
-        assertEquals(found, 1);
+        assertEquals(monitor.getEvents().stream()
+                        .filter(gameChangesList -> gameChangesList.changedBuildings().contains(headquarter1))
+                        .count(),
+                1);
 
         // Stop detailed monitoring
         player0.removeDetailedMonitoring(headquarter1);

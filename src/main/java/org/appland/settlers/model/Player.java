@@ -910,6 +910,17 @@ public class Player {
 
         // Handle changes in available construction
 
+        // Harvested crops can make it possible to place flags and houses again
+        harvestedCrops.forEach(harvestedCrop -> {
+            if (map.isAvailableFlagPoint(this, harvestedCrop.getPosition())) {
+                changedAvailableConstruction.add(harvestedCrop.getPosition());
+
+                if (map.isAvailableHousePoint(this, harvestedCrop.getPosition().upLeft()) != null) {
+                    changedAvailableConstruction.add(harvestedCrop.getPosition().upLeft());
+                }
+            }
+        });
+
         // New and removed flags change what construction is possible
         Stream.of(newFlags, removedFlags)
                 .flatMap(Collection::stream)

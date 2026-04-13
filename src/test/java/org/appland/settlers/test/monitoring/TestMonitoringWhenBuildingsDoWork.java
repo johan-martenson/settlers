@@ -26,7 +26,6 @@ import org.appland.settlers.model.actors.Minter;
 import org.appland.settlers.model.actors.PigBreeder;
 import org.appland.settlers.model.actors.Stonemason;
 import org.appland.settlers.model.actors.WoodcutterWorker;
-import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Bakery;
 import org.appland.settlers.model.buildings.Brewery;
@@ -1317,19 +1316,16 @@ public class TestMonitoringWhenBuildingsDoWork {
 
         assertTrue(monitor.getEvents().size() == 0 || !monitor.getLastEvent().changedBuildings().contains(woodcutter));
 
-        // Verify that an event is sent when the woodcutter goes out to leave the tree at the flag
-        for (int i = 0; i < 2_000; i++) {
-            if (Objects.equals(woodcutterWorker.getTarget(), woodcutter.getFlag().getPosition()) && woodcutterWorker.getCargo() != null) {
-                break;
-            }
+        // Wait for the woodcutter to start going to put wood on the flag
+        Utils.waitForWorkerToSetTarget(map, woodcutterWorker, woodcutter.getFlag().getPosition());
 
-            monitor.clearEvents();
+        // Verify that an event is sent when the woodcutter goes back home and the door opens
+        assertTrue(woodcutter.isDoorClosed());
 
-            map.stepTime();
-        }
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter.getFlag().getPosition());
 
-        assertEquals(woodcutterWorker.getTarget(), woodcutter.getFlag().getPosition());
-        assertNotNull(woodcutterWorker.getCargo());
+        assertFalse(woodcutter.isDoorClosed());
+        assertEquals(woodcutterWorker.getTarget(), woodcutter.getPosition());
         assertTrue(monitor.getEvents().size() > 0);
         assertTrue(monitor.getEvents().getLast().changedBuildings().size() > 0);
         assertTrue(monitor.getEvents().getLast().changedBuildings().contains(woodcutter));

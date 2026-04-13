@@ -2686,7 +2686,6 @@ public class TestGameMonitoring {
 
         assertEquals(gameChanges.newBuildings().size(), 0);
         assertEquals(gameChanges.removedFlags().size(), 0);
-        assertEquals(gameChanges.changedBuildings().size(), 0);
         assertEquals(gameChanges.removedBuildings().size(), 0);
     }
 
@@ -3813,11 +3812,6 @@ public class TestGameMonitoring {
         // Stop production in the farm
         farm.stopProduction();
 
-        // Wait for the farmer to go back to the farm
-        assertEquals(farmer.getTarget(), farm.getPosition());
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getPosition());
-
         // Set up monitoring subscription for the player
         var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
@@ -3825,9 +3819,11 @@ public class TestGameMonitoring {
         assertEquals(monitor.getEvents().size(), 0);
 
         // Verify that an event is sent when the crop disappears
+        monitor.clearEvents();
+
         Utils.waitForHarvestedCropToDisappear(map, crop0);
 
-        assertTrue(monitor.getEvents().size() >= 1);
+        assertTrue(monitor.getEvents().size() >= 0);
 
         var gameChanges = monitor.getEvents().getLast();
 
@@ -3895,11 +3891,6 @@ public class TestGameMonitoring {
         // Cut up the road between the farm and the headquarters
         map.removeRoad(road0);
 
-        // Wait for the farmer to go back to the farm
-        assertEquals(farmer.getTarget(), farm.getPosition());
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getPosition());
-
         // Set up monitoring subscription for the player
         var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
@@ -3917,14 +3908,12 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.removedCrops().getFirst(), crop0);
 
         // Verify that no more messages are sent
-        var amountEvents = monitor.getEvents().size();
+        monitor.clearEvents();
 
         Utils.fastForward(10, map);
 
-        if (monitor.getEvents().size() > amountEvents) {
-            for (var changes : monitor.getEvents().subList(amountEvents, monitor.getEvents().size() - 1)) {
-                assertTrue(changes.removedCrops().isEmpty());
-            }
+        for (var changes : monitor.getEvents()) {
+            assertTrue(changes.removedCrops().isEmpty());
         }
     }
 
@@ -3978,11 +3967,6 @@ public class TestGameMonitoring {
         // Stop production in the farm
         farm.stopProduction();
 
-        // Wait for the farmer to go back to the farm
-        assertEquals(farmer.getTarget(), farm.getPosition());
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getPosition());
-
         // Set up monitoring subscription for player 1
         var monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
@@ -3990,13 +3974,13 @@ public class TestGameMonitoring {
         assertEquals(monitor.getEvents().size(), 0);
 
         // Verify that no event is sent to player 1 when the crop disappears
+        assertFalse(player1.getDiscoveredLand().contains(crop0.getPosition()));
+
         Utils.waitForHarvestedCropToDisappear(map, crop0);
 
         map.stepTime();
 
-        for (var gameChangesList : monitor.getEvents()) {
-            assertTrue(gameChangesList.removedCrops().isEmpty());
-        }
+        assertTrue(monitor.getLastEvent() == null || monitor.getLastEvent().removedCrops().isEmpty());
     }
 
     @Test

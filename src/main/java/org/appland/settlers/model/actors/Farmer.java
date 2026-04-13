@@ -54,7 +54,7 @@ public class Farmer extends Worker {
         GOING_OUT_TO_HARVEST,
         HARVESTING,
         GOING_BACK_TO_HOUSE_WITH_CARGO,
-        GOING_OUT_TO_PUT_CARGO,
+        GOING_TO_FLAG_TO_PUT_CARGO,
         IN_HOUSE_WITH_CARGO,
         WAITING_FOR_SPACE_ON_FLAG,
         GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
@@ -92,6 +92,7 @@ public class Farmer extends Worker {
                     var cropToHarvest = findCropToHarvest();
 
                     if (cropToHarvest != null &&
+                            home.getFlag().hasPlaceForMoreCargo() &&
                             map.getWorkers().stream()
                                     .noneMatch(worker -> worker instanceof Farmer farmer &&
                                             (farmer.position.equals(cropToHarvest.getPosition()) && farmer.isHarvesting()))) {
@@ -120,12 +121,8 @@ public class Farmer extends Worker {
                 if (countdown.hasReachedZero()) {
                     var mapPoint = map.getMapPoint(position);
 
-                    if (!mapPoint.isFlag() &&
-                        !mapPoint.isRoad()) {
-                        var cropType = RANDOM.nextInt(10) % 2 == 0
-                                ? Crop.CropType.TYPE_2
-                                : Crop.CropType.TYPE_1;
-                        map.placeCrop(position, cropType);
+                    if (!mapPoint.isFlag() && !mapPoint.isRoad()) {
+                        map.placeCrop(position, Crop.CropType.getRandom());
                     }
 
                     state = GOING_BACK_TO_HOUSE;
@@ -146,17 +143,17 @@ public class Farmer extends Worker {
                     productivityMeasurer.nextProductivityCycle();
                     map.getStatisticsManager().wheatHarvested(player, map.getTime());
 
-                    state = GOING_BACK_TO_HOUSE_WITH_CARGO;
-                    returnHomeOffroad();
+                    state = GOING_TO_FLAG_TO_PUT_CARGO;
+                    setOffroadTarget(home.getFlag().getPosition());
                 } else {
                     countdown.step();
                 }
             }
 
-            case IN_HOUSE_WITH_CARGO, WAITING_FOR_SPACE_ON_FLAG -> {
+            case WAITING_FOR_SPACE_ON_FLAG -> {
                 if (home.getFlag().hasPlaceForMoreCargo()) {
                     setTarget(home.getFlag().getPosition());
-                    state = GOING_OUT_TO_PUT_CARGO;
+                    state = GOING_TO_FLAG_TO_PUT_CARGO;
                     home.getFlag().promiseCargo(getCargo());
                 }
             }
@@ -197,7 +194,7 @@ public class Farmer extends Worker {
     @Override
     public void onArrival() {
         switch (state) {
-            case GOING_OUT_TO_PUT_CARGO -> {
+            case GOING_TO_FLAG_TO_PUT_CARGO -> {
                 carriedCargo.setPosition(position);
                 var receivingBuilding = GameUtils.findClosestBuildingViaRoads(position, map, null, this::isWheatReceiverAndAllocationAllowed);
 

@@ -1,7 +1,6 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
@@ -10,6 +9,7 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.actors.Courier;
@@ -27,10 +27,10 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import static org.appland.settlers.model.Crop.GrowthState.*;
 import static org.appland.settlers.model.Material.*;
@@ -42,6 +42,16 @@ import static org.junit.Assert.*;
  * @author johan
  */
 public class TestFarm {
+
+    /**
+     * TODO:
+     *  - Test flag gets full while harvesting is ongoing
+     *  - Test production measurement while farmer is waiting/planting
+     *  - Test production measurement while farmer is waiting after having harvested
+     *  - Test wait when crop was up/down left/right from flag
+     *  - Test wait when crop was directly up/down of flag
+     *  - Test what farmer does when flag is blocked. How much does it keep planting?
+     */
 
     @Test
     public void testFarmOnlyNeedsThreePlanksAndThreeStonesForConstruction() throws Exception {
@@ -59,15 +69,8 @@ public class TestFarm {
         var farm0 = map.placeBuilding(new Farm(player0), point22);
 
         // Deliver three plank and three stone
-        var plankCargo = new Cargo(PLANK, map);
-        var stoneCargo = new Cargo(STONE, map);
-
-        farm0.putCargo(plankCargo);
-        farm0.putCargo(plankCargo);
-        farm0.putCargo(plankCargo);
-        farm0.putCargo(stoneCargo);
-        farm0.putCargo(stoneCargo);
-        farm0.putCargo(stoneCargo);
+        Utils.deliverCargos(farm0, PLANK, 3);
+        Utils.deliverCargos(farm0, STONE, 3);
 
         // Assign builder
         Utils.assignBuilder(farm0);
@@ -98,14 +101,8 @@ public class TestFarm {
         var farm0 = map.placeBuilding(new Farm(player0), point22);
 
         // Deliver two plank and three stone
-        var plankCargo = new Cargo(PLANK, map);
-        var stoneCargo = new Cargo(STONE, map);
-
-        farm0.putCargo(plankCargo);
-        farm0.putCargo(plankCargo);
-        farm0.putCargo(stoneCargo);
-        farm0.putCargo(stoneCargo);
-        farm0.putCargo(stoneCargo);
+        Utils.deliverCargos(farm0, PLANK, 2);
+        Utils.deliverCargos(farm0, STONE, 3);
 
         // Assign builder
         Utils.assignBuilder(farm0);
@@ -136,14 +133,8 @@ public class TestFarm {
         var farm0 = map.placeBuilding(new Farm(player0), point22);
 
         // Deliver three planks and two stones
-        var plankCargo = new Cargo(PLANK, map);
-        var stoneCargo = new Cargo(STONE, map);
-
-        farm0.putCargo(plankCargo);
-        farm0.putCargo(plankCargo);
-        farm0.putCargo(plankCargo);
-        farm0.putCargo(stoneCargo);
-        farm0.putCargo(stoneCargo);
+        Utils.deliverCargos(farm0, PLANK, 3);
+        Utils.deliverCargos(farm0, STONE, 2);
 
         // Assign builder
         Utils.assignBuilder(farm0);
@@ -486,6 +477,7 @@ public class TestFarm {
 
         for (int i = 0; i < 19; i++) {
             assertTrue(farmer.isPlanting());
+
             map.stepTime();
         }
 
@@ -573,7 +565,7 @@ public class TestFarm {
     }
 
     @Test
-    public void testFarmerHarvestsWhenPossible() throws Exception {
+    public void testFarmerHarvestsAndDeliversCropToFlag() throws Exception {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -631,6 +623,7 @@ public class TestFarm {
         for (int i = 0; i < 19; i++) {
             assertFalse(farmer.isPlanting());
             assertTrue(farmer.isHarvesting());
+
             map.stepTime();
         }
 
@@ -645,6 +638,23 @@ public class TestFarm {
         assertEquals(crop.getGrowthState(), HARVESTED);
         assertNotNull(farmer.getCargo());
         assertEquals(farmer.getCargo().getMaterial(), WHEAT);
+
+        // Verify that the farmer delivers the wheat cargo to the flag
+        assertEquals(farmer.getTarget(), farm.getFlag().getPosition());
+        assertNotNull(farmer.getCargo());
+        assertEquals(farm.getFlag().getStackedCargo().size(), 0);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getFlag().getPosition());
+
+        assertNull(farmer.getCargo());
+        assertEquals(farm.getFlag().getStackedCargo().size(), 1);
+
+        // Verify that the farmer goes back to the farm from the flag
+        assertEquals(farmer.getTarget(), farm.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getPosition());
+
+        assertTrue(farmer.isInsideBuilding());
     }
 
     @Test
@@ -699,102 +709,6 @@ public class TestFarm {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), mill.getPosition());
 
         assertEquals(mill.getAmount(WHEAT), 1);
-    }
-
-    @Test
-    public void testFarmerReturnsViaFlagAfterHarvesting() throws Exception {
-
-        // Create single player game
-        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 20, 21);
-
-        // Place headquarters
-        var point0 = new Point(5, 5);
-        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
-
-        // Place farm
-        var point3 = new Point(10, 6);
-        var farm = map.placeBuilding(new Farm(player0), point3);
-
-        // Construct the farm
-        Utils.constructHouse(farm);
-
-        // Wait for the crop to grow
-        var crop = map.placeCrop(point3.upRight().upRight(), Crop.CropType.TYPE_1);
-        Utils.fastForwardUntilCropIsGrown(crop, map);
-
-        // Assign a farmer to the farm
-        var farmer = new Farmer(player0, map);
-
-        Utils.occupyBuilding(farmer, farm);
-
-        assertTrue(farmer.isInsideBuilding());
-
-        // Let the farmer rest
-        Utils.fastForward(99, map);
-
-        assertTrue(farmer.isInsideBuilding());
-
-        // Step once and to let the farmer go out to plant
-        map.stepTime();
-
-        assertFalse(farmer.isInsideBuilding());
-
-        var point = farmer.getTarget();
-
-        assertTrue(farmer.isTraveling());
-        assertEquals(point, crop.getPosition());
-
-        // Let the farmer reach the intended spot
-        Utils.fastForwardUntilWorkersReachTarget(map, farmer);
-
-        assertTrue(farmer.isArrived());
-        assertTrue(farmer.isAt(point));
-        assertTrue(farmer.isHarvesting());
-        assertFalse(farmer.isPlanting());
-        assertTrue(farm.isWorking());
-
-        // Wait for the farmer to plant a new crop
-        Utils.fastForward(19, map);
-
-        assertTrue(farmer.isHarvesting());
-
-        map.stepTime();
-
-        // Farmer is walking back to farm with cargo of wheat
-        assertFalse(farmer.isHarvesting());
-        assertEquals(farmer.getTarget(), farm.getPosition());
-        assertTrue(farm.isWorking());
-
-        // Let the farmer reach the farm
-        Utils.fastForwardUntilWorkersReachTarget(map, farmer);
-
-        assertTrue(farmer.isArrived());
-        assertTrue(farmer.isInsideBuilding());
-        assertTrue(farm.getFlag().getStackedCargo().isEmpty());
-        assertNotNull(farmer.getCargo());
-
-        // Farmer leaves the building to place the cargo at the flag
-        map.stepTime();
-
-        assertFalse(farmer.isInsideBuilding());
-        assertTrue(farm.getFlag().getStackedCargo().isEmpty());
-        assertNotNull(farmer.getCargo());
-        assertEquals(farmer.getTarget(), farm.getFlag().getPosition());
-        assertFalse(farm.isWorking());
-
-        // Let the farmer reach the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getFlag().getPosition());
-
-        assertFalse(farm.getFlag().getStackedCargo().isEmpty());
-        assertNull(farmer.getCargo());
-
-        // The farmer goes back to the building
-        assertEquals(farmer.getTarget(), farm.getPosition());
-
-        Utils.fastForwardUntilWorkersReachTarget(map, farmer);
-
-        assertTrue(farmer.isInsideBuilding());
     }
 
     @Test
@@ -912,6 +826,7 @@ public class TestFarm {
         // Verify that the farmer plants
         for (int i = 0; i < 19; i++) {
             assertTrue(farmer.isPlanting());
+
             map.stepTime();
         }
 
@@ -963,8 +878,6 @@ public class TestFarm {
 
         // Verify that the harvested crop disappears after a specific time
         for (int i = 0; i < 200; i++) {
-
-            // Verify that the crop is still there
             assertTrue(map.isCropAtPoint(point0));
 
             map.stepTime();
@@ -990,8 +903,7 @@ public class TestFarm {
             map.placeCrop(point0, Crop.CropType.TYPE_1);
 
             fail();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 
     @Test
@@ -1022,7 +934,7 @@ public class TestFarm {
         var farmer = farm0.getWorker();
 
         for (int i = 0; i < 1000; i++) {
-            if (farmer.getCargo() != null && farmer.getPosition().equals(farm0.getPosition())) {
+            if (farmer.getCargo() != null) {
                 break;
             }
 
@@ -1052,7 +964,7 @@ public class TestFarm {
 
         // Wait for the worker to rest and produce another cargo
         for (int i = 0; i < 1000; i++) {
-            if (farmer.getCargo() != null && farmer.getPosition().equals(farm0.getPosition())) {
+            if (farmer.getCargo() != null) {
                 break;
             }
 
@@ -1099,19 +1011,11 @@ public class TestFarm {
         // Wait for the farmer to produce a new wheat cargo
         var farmer = farm0.getWorker();
 
-        for (int i = 0; i < 1000; i++) {
-            if (farmer.getCargo() != null && farmer.getPosition().equals(farm0.getPosition())) {
-                break;
-            }
-
-            map.stepTime();
-        }
+        Utils.fastForwardUntilWorkerCarriesCargo(map, farmer, WHEAT);
 
         assertNotNull(farmer.getCargo());
 
         // Verify that the farmer puts the wheat cargo at the flag
-        map.stepTime();
-
         assertEquals(farmer.getTarget(), farm0.getFlag().getPosition());
         assertTrue(farm0.getFlag().getStackedCargo().isEmpty());
 
@@ -1498,9 +1402,7 @@ public class TestFarm {
             var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
             fail();
-        } catch (Exception e) {
-
-        }
+        } catch (Exception e) { }
     }
 
     @Test
@@ -1557,8 +1459,7 @@ public class TestFarm {
             var woodcutter0 = map.placeBuilding(new Woodcutter(player0), crop.getPosition());
 
             fail();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 
     @Test
@@ -1696,8 +1597,7 @@ public class TestFarm {
             var flag0 = map.placeFlag(player0, crop.getPosition());
 
             fail();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 
     @Test
@@ -1791,13 +1691,83 @@ public class TestFarm {
         assertNotNull(crop);
 
         // Let the crop grow fully
+        assertFalse(map.isAvailableFlagPoint(player0, crop.getPosition()));
+
         Utils.waitForCropToGetReady(map, crop);
 
         // Wait for the crop to get harvested
+        assertFalse(map.isAvailableFlagPoint(player0, crop.getPosition()));
+
         Utils.waitForCropToGetHarvested(map, crop);
 
         // Verify that there is available building space on the growing crop
         assertTrue(map.isAvailableFlagPoint(player0, crop.getPosition()));
+    }
+
+    @Test
+    public void testAvailableHouseUpLeftFromNewlyHarvestedCrop() throws Exception {
+
+        // Create new game map with one player
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 21);
+
+        // Place headquarters
+        var point0 = new Point(5, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place a farm
+        var point1 = new Point(5, 13);
+        var farm0 = map.placeBuilding(new Farm(player0), point1);
+
+        // Construct the farm
+        Utils.constructHouse(farm0);
+
+        // Occupy the farm
+        var farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
+
+        // Store available houses before planting crop
+        var availableHousesBeforeCrop = new HashMap<Point, Size>();
+
+        for (var point : player0.getOwnedLand()) {
+            availableHousesBeforeCrop.put(point, map.isAvailableHousePoint(player0, point));
+        }
+
+        // Wait for the farmer to plant a crop
+        var crop = (Crop) null;
+
+        for (int i = 0; i < 1000; i++) {
+            crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
+
+            // Look for a point where there is no flag too close
+            var noCloseFlag = true;
+            for (var point : crop.getPosition().getAdjacentPoints()) {
+                if (map.isFlagAtPoint(point)) {
+                    noCloseFlag = false;
+                }
+            }
+
+            if (noCloseFlag) {
+                break;
+            }
+        }
+
+        assertNotNull(crop);
+
+        // Let the crop grow fully
+        assertNull(map.isAvailableHousePoint(player0, crop.getPosition().upLeft()));
+        assertFalse(map.getAvailableHousePoints(player0).containsKey(crop.getPosition().upLeft()));
+
+        Utils.waitForCropToGetReady(map, crop);
+
+        // Wait for the crop to get harvested
+        assertNull(map.isAvailableHousePoint(player0, crop.getPosition().upLeft()));
+        assertFalse(map.getAvailableHousePoints(player0).containsKey(crop.getPosition().upLeft()));
+
+        Utils.waitForCropToGetHarvested(map, crop);
+
+        // Verify that there is available building space on the growing crop
+        assertEquals(map.isAvailableHousePoint(player0, crop.getPosition().upLeft()), Size.LARGE);
+        assertEquals(map.getAvailableHousePoints(player0).get(crop.getPosition().upLeft()), Size.LARGE);
     }
 
     /*
@@ -2515,7 +2485,7 @@ public class TestFarm {
     }
 
     @Test
-    public void testFarmDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
+    public void testFarmDeliversThenDoesNoMoreHarvestWhenFlagIsFullAgain() throws Exception {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -2586,9 +2556,17 @@ public class TestFarm {
 
         assertEquals(farm.getFlag().getStackedCargo().size(), 8);
 
-        // Verify that the farm doesn't produce anything because the flag is full
+        // Wait for the farmer to go inside the farm
+        var farmer = (Farmer) farm.getWorker();
+
+        assertEquals(farmer.getTarget(), farm.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getPosition());
+
+        // Verify that the farmer stays inside because the flag is full
         for (int i = 0; i < 800; i++) {
             assertEquals(farm.getFlag().getStackedCargo().size(), 8);
+            assertFalse(farmer.isHarvesting());
 
             map.stepTime();
         }

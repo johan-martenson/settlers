@@ -56,16 +56,14 @@ public class WoodcutterWorker extends Worker {
         RESTING_IN_HOUSE,
         GOING_OUT_TO_CUT_TREE,
         CUTTING_TREE,
-        GOING_BACK_TO_HOUSE_WITH_CARGO,
-        IN_HOUSE_WITH_CARGO,
-        GOING_OUT_TO_PUT_CARGO,
+        GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
         WAITING_FOR_PLACE_ON_FLAG,
         GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
         GOING_TO_DIE,
         DEAD,
         WAITING_FOR_TREE_TO_FALL,
-        RETURNING_TO_STORAGE
+        WAITING_OUTSIDE_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
     }
 
     public WoodcutterWorker(Player player, GameMap map) {
@@ -87,7 +85,7 @@ public class WoodcutterWorker extends Worker {
     protected void onIdle() {
         switch (state) {
             case RESTING_IN_HOUSE -> {
-                if (home.isProductionEnabled()) {
+                if (home.isProductionEnabled() && home.getFlag().hasPlaceForMoreCargo()) {
                     if (countdown.hasReachedZero()) {
                         var point = getTreeToCutDown();
 
@@ -111,8 +109,8 @@ public class WoodcutterWorker extends Worker {
                     carriedCargo = new Cargo(WOOD, map);
                     map.getStatisticsManager().treeCutDown(player, map.getTime());
 
-                    state = State.GOING_BACK_TO_HOUSE_WITH_CARGO;
-                    returnHomeOffroad();
+                    state = State.GOING_TO_FLAG_WITH_CARGO;
+                    setOffroadTarget(home.getFlag().getPosition());
                 }
             }
 
@@ -137,25 +135,12 @@ public class WoodcutterWorker extends Worker {
                 }
             }
 
-            case IN_HOUSE_WITH_CARGO -> {
+            case WAITING_OUTSIDE_FOR_SPACE_ON_FLAG -> {
                 if (home.getFlag().hasPlaceForMoreCargo()) {
-                    state = State.GOING_OUT_TO_PUT_CARGO;
-                    setTarget(home.getFlag().getPosition());
+                    state = State.GOING_TO_FLAG_WITH_CARGO;
+                    setOffroadTarget(home.getFlag().getPosition());
 
-                    home.getFlag().promiseCargo(carriedCargo);
-
-                    home.openDoor();
-                } else {
-                    state = State.WAITING_FOR_PLACE_ON_FLAG;
-                }
-            }
-
-            case WAITING_FOR_PLACE_ON_FLAG -> {
-                if (home.getFlag().hasPlaceForMoreCargo()) {
-                    state = State.GOING_OUT_TO_PUT_CARGO;
-                    setTarget(home.getFlag().getPosition());
-
-                    home.getFlag().promiseCargo(carriedCargo);
+                    // FIXME: should also promise delivery!
                 }
             }
 
@@ -184,7 +169,7 @@ public class WoodcutterWorker extends Worker {
     @Override
     public void onArrival() {
         switch (state) {
-            case GOING_OUT_TO_PUT_CARGO -> {
+            case GOING_TO_FLAG_WITH_CARGO -> {
                 carriedCargo.setPosition(position);
                 carriedCargo.transportToReceivingBuilding(this::isReceiverForWood);
                 home.getFlag().putCargo(carriedCargo);
@@ -214,11 +199,6 @@ public class WoodcutterWorker extends Worker {
 
                     // TODO: handle productivity reporting
                 }
-            }
-
-            case GOING_BACK_TO_HOUSE_WITH_CARGO -> {
-                enterBuilding(home);
-                state = State.IN_HOUSE_WITH_CARGO;
             }
 
             case RETURNING_TO_STORAGE -> {
@@ -280,6 +260,17 @@ public class WoodcutterWorker extends Worker {
     @Override
     protected void onWalkingAndAtFixedPoint() {
         switch (state) {
+            case GOING_TO_FLAG_WITH_CARGO -> {
+                var plannedPath = getPlannedPath();
+
+                if (!plannedPath.isEmpty() &&
+                    plannedPath.getFirst().equals(home.getFlag().getPosition()) &&
+                    !home.getFlag().hasPlaceForMoreCargo()) {
+                    state = State.WAITING_OUTSIDE_FOR_SPACE_ON_FLAG;
+                    stopWalkingToTarget();
+                }
+            }
+
             case WALKING_TO_TARGET -> {
                 var upLeft = position.upLeft();
 
@@ -298,13 +289,6 @@ public class WoodcutterWorker extends Worker {
 
                         house.openDoor();
                     }
-                }
-            }
-            case GOING_BACK_TO_HOUSE_WITH_CARGO -> {
-                var upLeft = position.upLeft();
-
-                if (map.isFlagAtPoint(position) && upLeft.equals(getTarget())) {
-                    home.openDoor();
                 }
             }
         }
@@ -329,7 +313,6 @@ public class WoodcutterWorker extends Worker {
         return state == State.GOING_OUT_TO_CUT_TREE ||
                 state == State.CUTTING_TREE ||
                 state == State.WAITING_FOR_TREE_TO_FALL ||
-                state == State.GOING_BACK_TO_HOUSE_WITH_CARGO ||
-                state == State.IN_HOUSE_WITH_CARGO;
+                state == State.GOING_TO_FLAG_WITH_CARGO;
     }
 }

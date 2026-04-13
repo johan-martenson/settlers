@@ -352,8 +352,6 @@ public class MapLoader {
         // Read textures below
         debug("Texture block 1: ");
 
-        System.out.println("  Size: " + newWidth * newHeight + " ? == " + subBlockSize);
-
         // Read the header and verify that it matches the first header
         var texturesBelowBlockHeader = readBlockHeaderFromStream(streamReader);
 
