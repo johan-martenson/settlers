@@ -963,6 +963,7 @@ public class TestBarracks {
 
         assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
+        assertEquals(barracks0.getNumberOfHostedSoldiers(), 0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, headquarter0.getPosition());
 

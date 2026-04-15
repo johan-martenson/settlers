@@ -6,28 +6,27 @@
 
 package org.appland.settlers.model.actors;
 
+import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Countdown;
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GameUtils;
+import org.appland.settlers.model.Material;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Bakery;
 import org.appland.settlers.model.buildings.Brewery;
 import org.appland.settlers.model.buildings.Building;
-import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.buildings.CoalMine;
-import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.buildings.DonkeyFarm;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.buildings.ForesterHut;
-import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.buildings.GoldMine;
 import org.appland.settlers.model.buildings.GraniteMine;
 import org.appland.settlers.model.buildings.IronMine;
 import org.appland.settlers.model.buildings.IronSmelter;
-import org.appland.settlers.model.Material;
 import org.appland.settlers.model.buildings.Metalworks;
 import org.appland.settlers.model.buildings.Mill;
 import org.appland.settlers.model.buildings.Mint;
 import org.appland.settlers.model.buildings.PigFarm;
-import org.appland.settlers.model.Player;
 import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.buildings.Woodcutter;
@@ -36,7 +35,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 import static org.appland.settlers.model.Material.*;
 
@@ -48,14 +46,14 @@ import static org.appland.settlers.model.Material.*;
 public class StorehouseWorker extends Worker {
     private static final int RESTING_TIME = 19;
 
-    private final Countdown countdown;
-    private final Map<Class<? extends Building>, Integer> assignedFood;
-    private final Map<Class<? extends Building>, Integer> assignedCoal;
-    private final Map<Class<? extends Building>, Integer> assignedWheat;
-    private final Map<Class<? extends Building>, Integer> assignedWater;
-    private final Map<Class<? extends Building>, Integer> assignedIronBars;
+    private final Countdown countdown = new Countdown();
+    private final Map<Class<? extends Building>, Integer> assignedFood = new HashMap<>();
+    private final Map<Class<? extends Building>, Integer> assignedCoal = new HashMap<>();
+    private final Map<Class<? extends Building>, Integer> assignedWheat = new HashMap<>();
+    private final Map<Class<? extends Building>, Integer> assignedWater = new HashMap<>();
+    private final Map<Class<? extends Building>, Integer> assignedIronBars = new HashMap<>();
 
-    private State state;
+    private State state = State.WALKING_TO_TARGET;
     private Storehouse ownStorehouse;
     private Cargo cargoToReturn;
 
@@ -72,54 +70,39 @@ public class StorehouseWorker extends Worker {
     public StorehouseWorker(Player player, GameMap map) {
         super(player, map);
 
-        state = State.WALKING_TO_TARGET;
-
-        countdown = new Countdown();
-
         countdown.countFrom(RESTING_TIME);
 
         // Set the initial assignments of food to zero
-        assignedFood = new HashMap<>();
-
         assignedFood.put(GoldMine.class, 0);
         assignedFood.put(IronMine.class, 0);
         assignedFood.put(CoalMine.class, 0);
         assignedFood.put(GraniteMine.class, 0);
 
         // Set the initial assignments of coal to zero
-        assignedCoal = new HashMap<>();
-
         assignedCoal.put(IronSmelter.class, 0);
         assignedCoal.put(Mint.class, 0);
         assignedCoal.put(Armory.class, 0);
 
         // Set the initial assignments of wheat to zero
-        assignedWheat = new HashMap<>();
-
         assignedWheat.put(Mill.class, 0);
         assignedWheat.put(DonkeyFarm.class, 0);
         assignedWheat.put(PigFarm.class, 0);
         assignedWheat.put(Brewery.class, 0);
 
         // Set the initial assignments of water to zero
-        assignedWater = new HashMap<>();
-
         assignedWater.put(Bakery.class, 0);
         assignedWater.put(DonkeyFarm.class, 0);
         assignedWater.put(PigFarm.class, 0);
         assignedWater.put(Brewery.class, 0);
 
         // Set the initial assignments of iron bars to zero
-        assignedIronBars = new HashMap<>();
-
         assignedIronBars.put(Armory.class, 0);
         assignedIronBars.put(Metalworks.class, 0);
     }
 
     // FIXME: HOTSPOT
     private Cargo tryToStartDelivery() {
-
-        for (Material material : getPlayer().getTransportPrioritiesForEachMaterial()) {
+        for (var material : player.getTransportPrioritiesForEachMaterial()) {
 
             // Don't try to deliver materials that are not in stock
             if (!ownStorehouse.isInStock(material)) {
@@ -130,13 +113,12 @@ public class StorehouseWorker extends Worker {
             if (ownStorehouse.isPushedOut(material)) {
 
                 // Find receiving storehouse
-                var receivingStorehouse = getPlayer().getClosestStorage(getHome().getPosition(), getHome());
+                var receivingStorehouse = player.getClosestStorage(home.getPosition(), home);
 
                 var cargo = ownStorehouse.retrieve(material);
 
                 // Deliver to the building if it exists, otherwise just put the cargo on the flag
                 if (receivingStorehouse != null) {
-
                     receivingStorehouse.promiseDelivery(material);
 
                     cargo.setTarget(receivingStorehouse);
@@ -149,7 +131,7 @@ public class StorehouseWorker extends Worker {
 
                This will perform the fast tests first and only perform the expensive test if the quick ones pass
             */
-            for (Building building : player.getBuildings()) {
+            for (var building : player.getBuildings()) {
 
                 // Don't deliver to itself
                 if (ownStorehouse.equals(building)) {
@@ -163,8 +145,7 @@ public class StorehouseWorker extends Worker {
 
                 // Make sure planks are only used for plank production if the amount is critically low
                 if (material == PLANK) {
-
-                    if (getPlayer().isTreeConservationProgramActive() &&
+                    if (player.isTreeConservationProgramActive() &&
                         !(building instanceof Sawmill)     &&
                         !(building instanceof ForesterHut) &&
                         !(building instanceof Woodcutter)) {
@@ -184,7 +165,7 @@ public class StorehouseWorker extends Worker {
                 }
 
                 // Filter out buildings that cannot be reached from the storage
-                if (!map.arePointsConnectedByRoads(getHome().getPosition(), building.getPosition())) {
+                if (!map.arePointsConnectedByRoads(home.getPosition(), building.getPosition())) {
                     continue;
                 }
 
@@ -207,7 +188,6 @@ public class StorehouseWorker extends Worker {
     @Override
     protected void onEnterBuilding(Building building) {
         ownStorehouse = (Storehouse)building;
-
         state = State.RESTING_IN_HOUSE;
     }
 
@@ -215,17 +195,15 @@ public class StorehouseWorker extends Worker {
     protected void onIdle() {
         if (state == State.RESTING_IN_HOUSE) {
             if (countdown.hasReachedZero()) {
-                if (getHome().getFlag().hasPlaceForMoreCargo() && !getHome().getFlag().isFightingAtFlag()) {
+                if (home.getFlag().hasPlaceForMoreCargo() && !home.getFlag().isFightingAtFlag()) {
                     var cargo = tryToStartDelivery();
 
                     if (cargo != null) {
                         setCargo(cargo);
+                        home.getFlag().promiseCargo(getCargo());
 
-                        setTarget(getHome().getFlag().getPosition());
-
+                        setTarget(home.getFlag().getPosition());
                         state = State.DELIVERING_CARGO_TO_FLAG;
-
-                        getHome().getFlag().promiseCargo(getCargo());
                     }
                 }
 
@@ -233,19 +211,18 @@ public class StorehouseWorker extends Worker {
                 if (state != State.DELIVERING_CARGO_TO_FLAG) {
 
                     // See if there is any cargo on the flag that has been rerouted and should go back to the storage
-                    for (Cargo cargo : getHome().getFlag().getStackedCargo()) {
+                    for (var cargo : home.getFlag().getStackedCargo()) {
 
                         // Filter materials that are blocked
                         if (ownStorehouse.isDeliveryBlocked(cargo.getMaterial())) {
                             continue;
                         }
 
-                        if (Objects.equals(cargo.getTarget(), getHome())) {
+                        if (Objects.equals(cargo.getTarget(), home)) {
                             cargoToReturn = cargo;
 
                             state = State.WALKING_TO_FLAG_TO_PICK_UP_RETURNED_CARGO;
-
-                            setTarget(getHome().getFlag().getPosition());
+                            setTarget(home.getFlag().getPosition());
 
                             break;
                         }
@@ -260,38 +237,33 @@ public class StorehouseWorker extends Worker {
     @Override
     protected void onArrival() {
         if (state == State.DELIVERING_CARGO_TO_FLAG) {
-            var flag = getHome().getFlag();
+            var flag = home.getFlag();
 
             flag.putCargo(getCargo());
-
             setCargo(null);
 
-            returnHome();
-
             state = State.GOING_BACK_TO_HOUSE;
+            returnHome();
         } else if (state == State.GOING_BACK_TO_HOUSE) {
-            enterBuilding(getHome());
+            enterBuilding(home);
 
             state = State.RESTING_IN_HOUSE;
-
             countdown.countFrom(RESTING_TIME);
         } else if (state == State.RETURNING_TO_STORAGE) {
-            var storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
+            var storehouse = (Storehouse)map.getBuildingAtPoint(position);
 
             storehouse.depositWorker(this);
         } else if (state == State.WALKING_TO_FLAG_TO_PICK_UP_RETURNED_CARGO) {
-            getHome().getFlag().retrieveCargo(cargoToReturn);
+            home.getFlag().retrieveCargo(cargoToReturn);
 
             // TODO: can the cargo be gone when the storage worker gets to the flag?
 
             setCargo(cargoToReturn);
 
             state = State.WALKING_TO_HOME_TO_DELIVER_CARGO;
-
-            setTarget(getHome().getPosition());
+            setTarget(home.getPosition());
         } else if (state == State.WALKING_TO_HOME_TO_DELIVER_CARGO) {
-            getHome().putCargo(getCargo());
-
+            home.putCargo(getCargo());
             setCargo(null);
 
             state = State.RESTING_IN_HOUSE;
@@ -300,19 +272,16 @@ public class StorehouseWorker extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        var storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
+        var storage = GameUtils.getClosestStorageConnectedByRoads(position, player);
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
-
             setTarget(storage.getPosition());
         } else {
-
-            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
+            storage = GameUtils.getClosestStorageOffroad(player, position);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
-
                 setOffroadTarget(storage.getPosition());
             }
         }
@@ -323,7 +292,7 @@ public class StorehouseWorker extends Worker {
         if (material.isFood()) {
 
         // Reset count if all building types have reached their quota
-            var reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
+            var reachableBuildings = GameUtils.getBuildingsWithinReach(home.getFlag());
 
             if ((!needyConsumerExists(reachableBuildings, GoldMine.class, material) || overQuota(GoldMine.class, material)) &&
                 (!needyConsumerExists(reachableBuildings, IronMine.class, material) || overQuota(IronMine.class, material)) &&
@@ -339,7 +308,7 @@ public class StorehouseWorker extends Worker {
         } else if (material == COAL) {
 
             // Reset count if all building types have reached their quota
-            var reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
+            var reachableBuildings = GameUtils.getBuildingsWithinReach(home.getFlag());
 
             if ((!needyConsumerExists(reachableBuildings, IronSmelter.class, COAL) || overQuota(IronSmelter.class, material)) &&
                 (!needyConsumerExists(reachableBuildings, Mint.class, COAL) || overQuota(Mint.class, material)) &&
@@ -353,7 +322,7 @@ public class StorehouseWorker extends Worker {
         } else if (material == WHEAT) {
 
             // Reset count if all type of buildings have reached their quota
-            var reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
+            var reachableBuildings = GameUtils.getBuildingsWithinReach(home.getFlag());
 
             if ((!needyConsumerExists(reachableBuildings, Mill.class, WHEAT) || overQuota(Mill.class, WHEAT)) &&
                 (!needyConsumerExists(reachableBuildings, DonkeyFarm.class, WHEAT) || overQuota(DonkeyFarm.class, WHEAT)) &&
@@ -369,7 +338,7 @@ public class StorehouseWorker extends Worker {
         } else if (material == WATER) {
 
             // Reset count if all type of buildings have reached their quota
-            var reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
+            var reachableBuildings = GameUtils.getBuildingsWithinReach(home.getFlag());
 
             if ((!needyConsumerExists(reachableBuildings, Bakery.class, WATER) || overQuota(Bakery.class, WATER)) &&
                 (!needyConsumerExists(reachableBuildings, DonkeyFarm.class, WATER) || overQuota(DonkeyFarm.class, WATER)) &&
@@ -385,7 +354,7 @@ public class StorehouseWorker extends Worker {
         } else if (material == IRON_BAR) {
 
             // Reset count if all type of buildings have reached their quota
-            var reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
+            var reachableBuildings = GameUtils.getBuildingsWithinReach(home.getFlag());
 
             if ((!needyConsumerExists(reachableBuildings, Armory.class, IRON_BAR) || overQuota(Armory.class, IRON_BAR)) &&
                 (!needyConsumerExists(reachableBuildings, Metalworks.class, IRON_BAR) || overQuota(Metalworks.class, IRON_BAR))) {
@@ -415,32 +384,27 @@ public class StorehouseWorker extends Worker {
 
     private boolean isWithinQuota(Building building, Material material) {
         if (material.isFood()) {
-            int quota = getPlayer().getFoodQuota(building.getClass());
-
+            int quota = player.getFoodQuota(building.getClass());
             return assignedFood.get(building.getClass()) < quota;
         }
 
         if (material == COAL) {
-            int quota = getPlayer().getCoalQuota(building.getClass());
-
+            int quota = player.getCoalQuota(building.getClass());
             return assignedCoal.get(building.getClass()) < quota;
         }
 
         if (material == WHEAT) {
             int quota = player.getWheatQuota(building.getClass());
-
             return assignedWheat.get(building.getClass()) < quota;
         }
 
         if (material == WATER) {
             int quota = player.getWaterQuota(building.getClass());
-
             return assignedWater.get(building.getClass()) < quota;
         }
 
         if (material == IRON_BAR) {
             int quota = player.getIronBarQuota(building.getClass());
-
             return assignedIronBars.get(building.getClass()) < quota;
         }
 
@@ -497,8 +461,7 @@ public class StorehouseWorker extends Worker {
     }
 
     private boolean needyConsumerExists(Collection<Building> buildings, Class<? extends Building> aClass, Material material) {
-
-        for (Building building : buildings) {
+        for (var building : buildings) {
             if (building.getClass().equals(aClass) &&
                 building.isReady()                   &&
                 building.needsMaterial(material)) {
@@ -514,8 +477,8 @@ public class StorehouseWorker extends Worker {
 
         // Return to storage if the planned path no longer exists
         if (state == State.WALKING_TO_TARGET &&
-            map.isFlagAtPoint(getPosition()) &&
-            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+            map.isFlagAtPoint(position) &&
+            !map.arePointsConnectedByRoads(position, target)) {
 
             // Don't try to enter the storage upon arrival
             clearTargetBuilding();

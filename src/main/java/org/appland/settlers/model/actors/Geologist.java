@@ -61,19 +61,18 @@ public class Geologist extends Worker {
     protected void onIdle() {
         if (state == INVESTIGATING) {
             if (countdown.hasReachedZero()) {
-                var foundMaterial = placeSignWithResult(getPosition());
+                var foundMaterial = placeSignWithResult(position);
 
                 nrSitesInvestigated++;
 
                 // Report the find
                 if (foundMaterial != null) {
-                    getPlayer().reportGeologicalFinding(getPosition(), foundMaterial);
+                    getPlayer().reportGeologicalFinding(position, foundMaterial);
                 }
 
                 // Return after investigating five sites
                 if (nrSitesInvestigated == 10) {
                     state = RETURNING_TO_FLAG;
-
                     setOffroadTarget(flagPoint);
 
                     return;
@@ -83,11 +82,9 @@ public class Geologist extends Worker {
 
                 if (nextSite == null) {
                     state = RETURNING_TO_FLAG;
-
                     setOffroadTarget(flagPoint);
                 } else {
                     state = GOING_TO_NEXT_SITE;
-
                     setOffroadTarget(nextSite);
                 }
             } else {
@@ -111,11 +108,13 @@ public class Geologist extends Worker {
                     setOffroadTarget(point);
                 }
             }
+
             case GOING_TO_NEXT_SITE -> {
                 state = INVESTIGATING;
                 doAction(WorkerAction.INVESTIGATING);
                 countdown.countFrom(TIME_TO_INVESTIGATE);
             }
+
             case RETURNING_TO_FLAG -> {
                 state = RETURNING_TO_STORAGE;
                 var storage = GameUtils.getClosestStorageConnectedByRoads(flagPoint, player);
@@ -127,6 +126,7 @@ public class Geologist extends Worker {
                     setOffroadTarget(storage.getPosition());
                 }
             }
+
             case RETURNING_TO_STORAGE -> {
                 var storage = map.getBuildingAtPoint(getPosition());
                 storage.putCargo(new Cargo(GEOLOGIST, map));
@@ -138,7 +138,6 @@ public class Geologist extends Worker {
     private Material placeSignWithResult(Point point) {
         boolean placedSign = false;
         var foundMaterial = (Material) null;
-
         var surroundingVegetation = map.getSurroundingTiles(point);
 
         if (CAN_USE_WELL.containsAll(surroundingVegetation)) {
@@ -146,7 +145,7 @@ public class Geologist extends Worker {
             placedSign = true;
             foundMaterial = WATER;
         } else if (MINABLE_MOUNTAIN.containsAll(surroundingVegetation)) {
-            for (Material mineral: Material.getMinerals()) {
+            for (var mineral: Material.getMinerals()) {
                 int amount = map.getAmountOfMineralAtPoint(mineral, point);
 
                 if (amount > 0) {

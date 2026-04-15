@@ -43,7 +43,6 @@ public class Builder extends Worker {
         if ((state == State.HAMMERING || state == State.GOING_TO_HAMMER) && building.isReady()) {
             if (map.findWayOffroad(getPosition(), building.getFlag().getPosition(), null) != null) {
                 setOffroadTarget(building.getFlag().getPosition());
-
                 state = State.WALKING_TO_FLAG_TO_GO_BACK_TO_STORAGE;
             } else {
                 setDead();

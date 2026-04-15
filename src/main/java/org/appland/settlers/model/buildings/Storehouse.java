@@ -225,7 +225,7 @@ public class Storehouse extends Building {
                             return false;
                         }
 
-                        if (map.findWayWithExistingRoads(getPosition(), building.getPosition()) == null) {
+                        if (map.findWayWithExistingRoads(position, building.getPosition()) == null) {
                             return false;
                         }
 

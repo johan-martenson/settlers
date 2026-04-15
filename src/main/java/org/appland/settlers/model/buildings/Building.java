@@ -97,6 +97,7 @@ public class Building implements EndPoint {
     protected final Map<Material, Integer> inventory = new EnumMap<>(Material.class);
     protected GameMap map = null;
     protected Player player;
+    protected Point position = null;
 
     private Flag flag = new Flag(null);
     private Set<Point> defendedLand = null;
@@ -104,7 +105,6 @@ public class Building implements EndPoint {
     public State state = State.PLANNED; // TODO: make private again
     private Worker worker = null;
     private Worker promisedWorker = null;
-    private Point position = null;
     private boolean enablePromotions = true;
     private boolean evacuated = false;
     private boolean productionEnabled = true;
@@ -467,6 +467,9 @@ public class Building implements EndPoint {
                         }
 
                         onConstructionFinished();
+
+                        builder = null;
+
                         map.reportBuildingConstructed(this);
                     }
                 } else {
@@ -574,8 +577,8 @@ public class Building implements EndPoint {
         }
 
         // Send home deployed soldiers
-        for (var military : hostedSoldiers) {
-            military.returnToStorage();
+        for (var soldier : hostedSoldiers) {
+            soldier.returnToStorage();
         }
 
         // Remove driveway
@@ -593,6 +596,10 @@ public class Building implements EndPoint {
         }
 
         player.reportBuildingTornDown(this);
+
+        hostedSoldiers.clear();
+        builder = null;
+        worker = null;
     }
 
     public Size getSize() {

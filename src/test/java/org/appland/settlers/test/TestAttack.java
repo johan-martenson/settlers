@@ -41,6 +41,7 @@ public class TestAttack {
 
     /**
      * Todo:
+     *  - Test soldier walks home after attacking / defending another home. Door should open when entering
      *  - Test attack using only soldiers from the headquarters
      *  - Test attackers waiting can't stand on buildings
      *  - Test close soldiers that can't reach the enemy building
@@ -328,7 +329,7 @@ public class TestAttack {
     }
 
     @Test
-    public void testAttackThrowsForUnoccupiedBarracks() throws Exception {
+    public void testCannotAttackThrowsForUnoccupiedBarracks() throws Exception {
 
         // Create player list with two players
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -594,13 +595,18 @@ public class TestAttack {
         // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
-        var point1 = new Point(21, 13);
+        var point1 = new Point(23, 13);
         var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
-        var point2 = new Point(31, 5);
+        var point2 = new Point(35, 5);
         var headquarter2 = map.placeBuilding(new Headquarter(player2), point2);
 
         // Make player0 and player2 stronger
         Utils.clearSoldiersFromInventory(headquarter0, headquarter1, headquarter2);
+
+        headquarter0.setReservedSoldiers(GENERAL_RANK, 0);
+        headquarter1.setReservedSoldiers(PRIVATE_RANK, 0);
+        headquarter0.setReservedSoldiers(GENERAL_RANK, 0);
+
         Utils.adjustInventoryTo(headquarter0, GENERAL, 5);
         Utils.adjustInventoryTo(headquarter1, PRIVATE, 5);
         Utils.adjustInventoryTo(headquarter2, GENERAL, 5);
@@ -608,9 +614,9 @@ public class TestAttack {
         // Place barracks
         var point3 = new Point(13, 5);
         var barracks0 = map.placeBuilding(new Barracks(player0), point3);
-        var point4 = new Point(21, 7);
+        var point4 = new Point(23, 7);
         var barracks1 = map.placeBuilding(new Barracks(player1), point4);
-        var point5 = new Point(27, 9);
+        var point5 = new Point(33, 9);
         var barracks2 = map.placeBuilding(new Barracks(player2), point5);
 
         // Connect military buildings to each player's headquarters
@@ -622,6 +628,12 @@ public class TestAttack {
         Utils.waitForBuildingToBeConstructed(barracks0);
         Utils.waitForBuildingToBeConstructed(barracks1);
         Utils.waitForBuildingToBeConstructed(barracks2);
+
+        System.out.println(barracks1);
+        System.out.println(barracks1.needsMilitaryManning());
+        System.out.println(headquarter1.getAmount(PRIVATE));
+        System.out.println(map.getRoad(headquarter1.getFlag().getPosition(), barracks1.getFlag().getPosition()));
+
         Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
         Utils.waitForMilitaryBuildingToGetPopulated(barracks1);
         Utils.waitForMilitaryBuildingToGetPopulated(barracks2);
@@ -1518,7 +1530,7 @@ public class TestAttack {
 
         assertEquals(defender.getPosition(), attacker.getPosition());
 
-        // Wait for the general to beat the private
+        // Wait for the attacking general to beat the defending private
         Utils.waitForSoldierToBeDying(defender, map);
 
         Utils.waitForSoldierToWinFight(attacker, map);
@@ -1527,15 +1539,18 @@ public class TestAttack {
 
         // Wait for the attacker to go back to the fixed point
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+        assertTrue(barracks1.isDoorClosed());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, attacker.getTarget());
 
         // Verify that the attacker takes over the building
         assertEquals(attacker.getTarget(), barracks1.getPosition());
+        assertFalse(barracks1.isDoorClosed());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
 
         assertEquals(barracks1.getPlayer(), player0);
+        assertTrue(barracks1.isDoorClosed());
     }
 
     @Test
@@ -1790,7 +1805,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -1824,6 +1839,7 @@ public class TestAttack {
 
         // Wait for the defender to return to the fixed point
         assertEquals(defender.getTarget(), barracks1.getFlag().getPosition());
+        assertTrue(barracks1.isDoorClosed());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, defender, defender.getTarget());
 
@@ -1831,11 +1847,16 @@ public class TestAttack {
         assertEquals(defender.getTarget(), barracks1.getPosition());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
+        map.stepTime();
+
+        assertFalse(barracks1.isDoorClosed());
+
         Utils.fastForwardUntilWorkerReachesPoint(map, defender, barracks1.getPosition());
 
         assertTrue(defender.isInsideBuilding());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(player1, barracks1.getPlayer());
+        assertTrue(barracks1.isDoorClosed());
     }
 
     @Test

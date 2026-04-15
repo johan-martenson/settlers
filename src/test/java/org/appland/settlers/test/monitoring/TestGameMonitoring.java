@@ -909,11 +909,9 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.changedBuildings().iterator().next(), woodcutter0);
         assertEquals(gameChanges.removedRoads().size(), 1);
         assertEquals(gameChanges.removedRoads().getFirst(), road0);
-
         assertEquals(gameChanges.newFlags().size(), 0);
         assertEquals(gameChanges.removedFlags().size(), 0);
-        assertEquals(gameChanges.workersWithNewTargets().size(), 1);
-        assertTrue(gameChanges.workersWithNewTargets().contains(woodcutter0.getBuilder()));
+        assertEquals(gameChanges.workersWithNewTargets().size(), 0);
         assertEquals(gameChanges.newBuildings().size(), 0);
         assertEquals(gameChanges.removedBuildings().size(), 0);
         assertEquals(gameChanges.newRoads().size(), 0);

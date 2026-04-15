@@ -1454,6 +1454,8 @@ public class TestWoodcutter {
         // Verify that the worker leaves the building and goes back to the headquarters
         assertFalse(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
+        assertNull(woodcutter0.getWorker());
+        assertFalse(woodcutter0.needsWorker());
 
         var amount = headquarter0.getAmount(WOODCUTTER_WORKER);
 

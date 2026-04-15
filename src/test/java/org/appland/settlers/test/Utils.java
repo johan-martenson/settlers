@@ -28,6 +28,7 @@ import org.appland.settlers.model.actors.Donkey;
 import org.appland.settlers.model.actors.Farmer;
 import org.appland.settlers.model.actors.Fisherman;
 import org.appland.settlers.model.actors.Forester;
+import org.appland.settlers.model.actors.Geologist;
 import org.appland.settlers.model.actors.Hunter;
 import org.appland.settlers.model.actors.Miller;
 import org.appland.settlers.model.actors.PigBreeder;
@@ -471,6 +472,7 @@ public class Utils {
             map.stepTime();
         }
 
+        System.out.println(map.getBuildings());
         assertTrue(building.isOccupied());
     }
 
@@ -3328,6 +3330,18 @@ public class Utils {
         }
 
         assertNotEquals(building.getProductivity(), previousProductivity);
+    }
+
+    public static void waitForGeologistToStopInvestigating(Geologist geologist) throws InvalidUserActionException {
+        for (int i = 0; i < 2_000; i++) {
+            if (!geologist.isInvestigating()) {
+                break;
+            }
+
+            geologist.getPlayer().getMap().stepTime();
+        }
+
+        assertFalse(geologist.isInvestigating());
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor, StatisticsListener {

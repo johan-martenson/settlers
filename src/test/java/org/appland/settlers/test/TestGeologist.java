@@ -20,6 +20,7 @@ import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.LARGE;
+import static org.appland.settlers.model.Vegetation.MINABLE_MOUNTAIN;
 import static org.junit.Assert.*;
 
 /**
@@ -658,7 +659,7 @@ public class TestGeologist {
         var point1 = new Point(15, 15);
         var flag = map.placeFlag(player0, point1);
 
-        // Create a mountain with gold
+        // Create a mountain with coal
         Utils.createMinableMountainWithinRadius(point1, 7, map);
         Utils.putMineralWithinRadius(COAL, point1, 7, map);
 
@@ -674,13 +675,7 @@ public class TestGeologist {
         // Wait for the geologist to go to the flag
         map.stepTime();
 
-        var geologist = (Geologist) null;
-
-        for (var worker : map.getWorkers()) {
-            if (worker instanceof Geologist) {
-                geologist = (Geologist)worker;
-            }
-        }
+        var geologist = Utils.waitForWorkerOutsideBuilding(Geologist.class, player0);
 
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
@@ -690,11 +685,24 @@ public class TestGeologist {
         // Wait for the geologist to reach the first site to investigate
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
 
-        // Wait for the geologist to investigate the first site
+        // Wait for the geologist to investigate a site on the mountain
+        for (int i = 0; i < 2_000; i++) {
+            if (geologist.isInvestigating() &&
+                    map.getAmountOfMineralAtPoint(COAL, geologist.getPosition()) > 0 &&
+                    MINABLE_MOUNTAIN.containsAll(map.getSurroundingTiles(geologist.getPosition()))) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
         assertTrue(geologist.isInvestigating());
+        assertTrue(map.getAmountOfMineralAtPoint(COAL, geologist.getPosition()) > 0);
 
-        Utils.fastForward(20, map);
+        Utils.waitForGeologistToStopInvestigating(geologist);
 
+        assertFalse(geologist.isInvestigating());
+        assertTrue(map.getAmountOfMineralAtPoint(COAL, geologist.getPosition()) > 0);
         assertTrue(map.isSignAtPoint(geologist.getPosition()));
         assertNotNull(map.getSignAtPoint(geologist.getPosition()));
 
