@@ -230,16 +230,16 @@ public class Soldier extends Worker {
                 case DYING -> {
                     if (countdown == 0) {
 
-                        // Remove the military from the map (i.e. "die")
+                        // Remove the soldier from the map (i.e. "die")
                         map.removeWorker(this);
 
-                        // Remove this military from the list of the building's defenders
+                        // Remove this soldier from the list of the building's defenders
                         switch (state) {
                             case DEFENDING -> buildingToDefend.removeDefender(this);
                             case ATTACKING -> buildingToAttack.removeAttacker(this);
                         }
 
-                        // Remember that this military is dead
+                        // Remember that this soldier is dead
                         state = State.DEAD;
 
                         map.getStatisticsManager().soldierDied(player, opponent.getPlayer(), map.getTime());
@@ -259,7 +259,7 @@ public class Soldier extends Worker {
     protected void onIdle() {
         switch (state) {
             case WAITING_FOR_DEFENDING_OPPONENT -> {
-                if (buildingToAttack.getPlayer().equals(getPlayer())) {
+                if (buildingToAttack.getPlayer().equals(player)) {
                     if (buildingToAttack.needsMilitaryManning()) {
 
                         // Enter the building if it has already been taken over and needs additional manning
@@ -846,11 +846,7 @@ public class Soldier extends Worker {
     }
 
     private void returnAfterAttackIsOver() {
-        System.out.println("Return after attack is over");
-
         if (home.needsMilitaryManning() && home.getPlayer().equals(player)) {
-            System.out.println("Going back home");
-
             home.promiseSoldier(this);
 
             state = WALKING_HOME_AFTER_FIGHT;
@@ -858,8 +854,6 @@ public class Soldier extends Worker {
 
             var planned = getPlannedPath();
             if (planned.getFirst().equals(home.getPosition())) {
-                System.out.println("Opening door");
-
                 home.openDoor();
             }
         } else {

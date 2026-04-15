@@ -102,7 +102,7 @@ public class Building implements EndPoint {
     private Flag flag = new Flag(null);
     private Set<Point> defendedLand = null;
     private long generation;
-    public State state = State.PLANNED; // TODO: make private again
+    private State state = State.PLANNED; // TODO: make private again
     private Worker worker = null;
     private Worker promisedWorker = null;
     private boolean enablePromotions = true;
@@ -880,6 +880,12 @@ public class Building implements EndPoint {
 
         if (attacker.equals(primaryAttacker)) {
             primaryAttacker = null;
+        }
+
+        // Clean up after the attack
+        if (attackers.isEmpty()) {
+            ownDefender = null;
+            remoteDefenders.clear();
         }
     }
 

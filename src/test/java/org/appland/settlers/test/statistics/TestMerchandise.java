@@ -39,7 +39,6 @@ import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -341,8 +340,7 @@ public class TestMerchandise {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(10, 10);
@@ -382,12 +380,11 @@ public class TestMerchandise {
     @Test
     public void testMerchandiseStatisticsWhenPlankIsProduced() throws InvalidUserActionException {
 
-        // Create a single player game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -422,10 +419,9 @@ public class TestMerchandise {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -461,10 +457,9 @@ public class TestMerchandise {
     @Test
     public void testMerchandiseStatisticsWhenFishIsProduced() throws InvalidUserActionException {
 
-        // Create a single player game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place fish on one tile
         var point2 = new Point(5, 5);
@@ -511,10 +506,9 @@ public class TestMerchandise {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -553,10 +547,9 @@ public class TestMerchandise {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(15, 9);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -596,7 +589,7 @@ public class TestMerchandise {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 41);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -637,12 +630,11 @@ public class TestMerchandise {
     @Test
     public void testMerchandiseStatisticsWhenWaterIsProduced() throws InvalidUserActionException {
 
-        // Create gamemap
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -679,10 +671,9 @@ public class TestMerchandise {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -723,15 +714,14 @@ public class TestMerchandise {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Put a small mountain on the map
         var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
-        // Place a headquarter
+        // Place a headquarters
         var point1 = new Point(15, 15);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
@@ -765,15 +755,14 @@ public class TestMerchandise {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Put a small mountain on the map
         var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
-        // Place a headquarter
+        // Place a headquarters
         var point1 = new Point(15, 15);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
@@ -807,15 +796,14 @@ public class TestMerchandise {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Put a small mountain on the map
         var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
-        // Place a headquarter
+        // Place a headquarters
         var point1 = new Point(15, 15);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
@@ -849,10 +837,9 @@ public class TestMerchandise {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -889,12 +876,11 @@ public class TestMerchandise {
     @Test
     public void testMerchaniseStaticsWhenCoinIsProduced() throws InvalidUserActionException {
 
-        // Create a single player game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -938,10 +924,9 @@ public class TestMerchandise {
 
             // Create single player game
             var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-            var players = new ArrayList<Player>();            players.add(player0);
-            var map = new GameMap(players, 40, 41);
+            var map = new GameMap(List.of(player0), 40, 41);
 
-            // Place headquarter
+            // Place headquarters
             var point0 = new Point(5, 5);
             var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -990,10 +975,9 @@ public class TestMerchandise {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1001,7 +985,7 @@ public class TestMerchandise {
         var point1 = new Point(7, 9);
         var armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        // Place road to connect the armory with the headquarter
+        // Place road to connect the armory with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         // Wait for the armory to get constructed and occupied
@@ -1041,10 +1025,9 @@ public class TestMerchandise {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point1 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
@@ -1052,7 +1035,7 @@ public class TestMerchandise {
         var point0 = new Point(14, 6);
         var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
-        // Connect the shipyard with the headquarter
+        // Connect the shipyard with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and assigned a worker
@@ -1086,8 +1069,7 @@ public class TestMerchandise {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarters
         var point0 = new Point(10, 10);
@@ -1134,12 +1116,11 @@ public class TestMerchandise {
     @Test
     public void testListeningToMerchandiseStatisticsWhenPlankIsProduced() throws InvalidUserActionException {
 
-        // Create a single player game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1181,10 +1162,9 @@ public class TestMerchandise {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(10, 10);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1227,10 +1207,9 @@ public class TestMerchandise {
     @Test
     public void testListeningToMerchandiseStatisticsWhenFishIsProduced() throws InvalidUserActionException {
 
-        // Create a single player game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place fish on one tile
         var point2 = new Point(5, 5);
@@ -1286,7 +1265,7 @@ public class TestMerchandise {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 41);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1342,10 +1321,9 @@ public class TestMerchandise {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1391,10 +1369,9 @@ public class TestMerchandise {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(15, 9);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1437,12 +1414,11 @@ public class TestMerchandise {
     @Test
     public void testListeningToMerchandiseStatisticsWhenWaterIsProduced() throws InvalidUserActionException {
 
-        // Create gamemap
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1486,10 +1462,9 @@ public class TestMerchandise {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1537,15 +1512,14 @@ public class TestMerchandise {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Put a small mountain on the map
         var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
-        // Place a headquarter
+        // Place a headquarters
         var point1 = new Point(15, 15);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
@@ -1586,15 +1560,14 @@ public class TestMerchandise {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Put a small mountain on the map
         var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
-        // Place a headquarter
+        // Place a headquarters
         var point1 = new Point(15, 15);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
@@ -1635,15 +1608,14 @@ public class TestMerchandise {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Put a small mountain on the map
         var point0 = new Point(10, 8);
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
-        // Place a headquarter
+        // Place a headquarters
         var point1 = new Point(15, 15);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
@@ -1684,10 +1656,9 @@ public class TestMerchandise {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1731,12 +1702,11 @@ public class TestMerchandise {
     @Test
     public void testListeningToMerchandiseStaticsWhenCoinIsProduced() throws InvalidUserActionException {
 
-        // Create a single player game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1787,10 +1757,9 @@ public class TestMerchandise {
 
             // Create single player game
             var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-            var players = new ArrayList<Player>();            players.add(player0);
-            var map = new GameMap(players, 40, 41);
+            var map = new GameMap(List.of(player0), 40, 41);
 
-            // Place headquarter
+            // Place headquarters
             var point0 = new Point(5, 5);
             var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1846,10 +1815,9 @@ public class TestMerchandise {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
-        // Place headquarter
+        // Place headquarters
         var point0 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1857,7 +1825,7 @@ public class TestMerchandise {
         var point1 = new Point(7, 9);
         var armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        // Place road to connect the armory with the headquarter
+        // Place road to connect the armory with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         // Wait for the armory to get constructed and occupied
@@ -1903,10 +1871,9 @@ public class TestMerchandise {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
-        // Place headquarter
+        // Place headquarters
         var point1 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
@@ -1914,7 +1881,7 @@ public class TestMerchandise {
         var point0 = new Point(14, 6);
         var shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
-        // Connect the shipyard with the headquarter
+        // Connect the shipyard with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and assigned a worker

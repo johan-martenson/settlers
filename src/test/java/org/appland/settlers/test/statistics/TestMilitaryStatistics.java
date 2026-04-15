@@ -14,7 +14,6 @@ import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
@@ -28,8 +27,7 @@ public class TestMilitaryStatistics {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarter
         var point0 = new Point(15, 15);
@@ -54,8 +52,7 @@ public class TestMilitaryStatistics {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarter
         var point0 = new Point(15, 15);
@@ -100,8 +97,7 @@ public class TestMilitaryStatistics {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarter
         var point0 = new Point(15, 15);

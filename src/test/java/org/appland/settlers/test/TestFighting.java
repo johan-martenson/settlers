@@ -11,12 +11,10 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.junit.Test;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -49,16 +47,10 @@ public class TestFighting {
     @Test
     public void testFightStartsAndOneSoldierHitsWhileTheOtherGetsHitOrAvoids() throws Exception {
 
-        // Create player list with two players
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        var players = new LinkedList<Player>();
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -135,7 +127,6 @@ public class TestFighting {
         var defendersDistance = -1;
 
         for (int i = 0; i < 20; i++) {
-
             if (attacker.isExactlyAtPoint() || defender.isExactlyAtPoint()) {
                 map.stepTime();
 
@@ -237,16 +228,10 @@ public class TestFighting {
     @Test
     public void testBothAttackerAndDefenderCanMakeFirstHitInFight() throws Exception {
 
-        // Create player list with two players
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        var players = new LinkedList<Player>();
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -401,16 +386,10 @@ public class TestFighting {
     @Test
     public void testGeneralHealth() throws Exception {
 
-        // Create player list with two players
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        var players = new LinkedList<Player>();
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 15);
@@ -478,16 +457,10 @@ public class TestFighting {
     @Test
     public void testOfficerHealth() throws Exception {
 
-        // Create player list with two players
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        var players = new LinkedList<Player>();
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 15);
@@ -555,16 +528,10 @@ public class TestFighting {
     @Test
     public void testSergeantHealth() throws Exception {
 
-        // Create player list with two players
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        var players = new LinkedList<Player>();
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 15);
@@ -632,16 +599,10 @@ public class TestFighting {
     @Test
     public void testPrivateFirstRankHealth() throws Exception {
 
-        // Create player list with two players
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        var players = new LinkedList<Player>();
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 15);
@@ -709,16 +670,10 @@ public class TestFighting {
     @Test
     public void testPrivateHealth() throws Exception {
 
-        // Create player list with two players
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        var players = new LinkedList<Player>();
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 15);
@@ -786,16 +741,10 @@ public class TestFighting {
     @Test
     public void testGeneralHitProbability() throws Exception {
 
-        // Create player list with two players
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        var players = new LinkedList<Player>();
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 15);
@@ -830,7 +779,6 @@ public class TestFighting {
         var hits = 0;
 
         for (int i = 0; i < 200; i++) {
-
             assertEquals(fortress.getHostedSoldiers().size(), 9);
 
             // Order an attack on player 1's fortress
@@ -913,16 +861,10 @@ public class TestFighting {
     @Test
     public void testOfficerHitProbability() throws Exception {
 
-        // Create player list with two players
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        var players = new LinkedList<Player>();
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 15);
@@ -957,7 +899,6 @@ public class TestFighting {
         var hits = 0;
 
         for (int i = 0; i < 20; i++) {
-
             assertEquals(fortress.getHostedSoldiers().size(), 9);
 
             // Order an attack on player 1's fortress
@@ -1037,16 +978,10 @@ public class TestFighting {
     @Test
     public void testSergeantHitProbability() throws Exception {
 
-        // Create player list with two players
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        var players = new LinkedList<Player>();
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 15);
@@ -1081,7 +1016,6 @@ public class TestFighting {
         var hits = 0;
 
         for (int i = 0; i < 20; i++) {
-
             assertEquals(fortress.getHostedSoldiers().size(), 9);
 
             // Order an attack on player 1's fortress
@@ -1159,16 +1093,10 @@ public class TestFighting {
     @Test
     public void testPrivateFirstClassHitProbability() throws Exception {
 
-        // Create player list with two players
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        var players = new LinkedList<Player>();
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 15);
@@ -1203,7 +1131,6 @@ public class TestFighting {
         var hits = 0;
 
         for (int i = 0; i < 200; i++) {
-
             assertEquals(fortress.getHostedSoldiers().size(), 9);
 
             // Order an attack on player 1's fortress
@@ -1281,16 +1208,10 @@ public class TestFighting {
     @Test
     public void testPrivateHitProbability() throws Exception {
 
-        // Create player list with two players
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        var players = new LinkedList<Player>();
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 15);
@@ -1325,7 +1246,6 @@ public class TestFighting {
         var hits = 0;
 
         for (int i = 0; i < 20; i++) {
-
             assertEquals(fortress.getHostedSoldiers().size(), 9);
 
             // Order an attack on player 1's fortress

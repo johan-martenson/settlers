@@ -17,9 +17,9 @@ import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 import static org.appland.settlers.model.Vegetation.WATER;
 import static org.appland.settlers.test.Utils.constructHouse;
@@ -37,8 +37,7 @@ public class TestWorkerHasDirections {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -63,8 +62,7 @@ public class TestWorkerHasDirections {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -95,8 +93,7 @@ public class TestWorkerHasDirections {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -127,8 +124,7 @@ public class TestWorkerHasDirections {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -159,8 +155,7 @@ public class TestWorkerHasDirections {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(7, 5);
@@ -191,8 +186,7 @@ public class TestWorkerHasDirections {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(7, 5);
@@ -223,8 +217,7 @@ public class TestWorkerHasDirections {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(7, 5);
@@ -292,8 +285,7 @@ public class TestWorkerHasDirections {
 
         // Starting new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -330,8 +322,7 @@ public class TestWorkerHasDirections {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 20, 21);
+        var map = new GameMap(List.of(player0), 20, 21);
 
         // Place headquarter
         var point0 = new Point(15, 9);
@@ -404,8 +395,7 @@ public class TestWorkerHasDirections {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(15, 9);
@@ -441,8 +431,7 @@ public class TestWorkerHasDirections {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
         var point0 = new Point(4, 4);
@@ -473,7 +462,6 @@ public class TestWorkerHasDirections {
         // Wait for the fisherman to fish at all points around the lake
         var fishingDirection = new HashMap<Point, Direction>();
         for (int i = 0; i < 20000; i++) {
-
             if (fishingDirection.size() == 6) {
                 break;
             }
@@ -529,8 +517,7 @@ public class TestWorkerHasDirections {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a long horizontal shore
         for (int i = 0; i < 40; i++) {

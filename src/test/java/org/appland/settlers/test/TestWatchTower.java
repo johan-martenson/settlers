@@ -15,23 +15,16 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Soldier;
-import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.WatchTower;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.*;
@@ -46,10 +39,9 @@ public class TestWatchTower {
     @Test
     public void testWatchTowerNeedsThreePlanksAndFiveStonesForConstruction() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -90,10 +82,9 @@ public class TestWatchTower {
     @Test
     public void testWatchTowerCannotBeConstructedWithOnePlankTooLittle() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -136,10 +127,9 @@ public class TestWatchTower {
     @Test
     public void testWatchTowerCannotBeConstructedWithOneStoneTooLittle() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -182,10 +172,9 @@ public class TestWatchTower {
     @Test
     public void testWatchTowerGetPopulatedWhenFinished() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -226,12 +215,9 @@ public class TestWatchTower {
     @Test
     public void testBorderIsNotExtendedWhenWatchTowerIsFinished() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -256,10 +242,9 @@ public class TestWatchTower {
     @Test
     public void testBorderIsExtendedWhenWatchTowerIsPopulated() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -307,10 +292,9 @@ public class TestWatchTower {
     @Test
     public void testWatchTowerOnlyNeedsSixSoldiers() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -337,10 +321,9 @@ public class TestWatchTower {
     @Test
     public void testWatchTowerCannotHoldSoldiersBeforeFinished() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -361,16 +344,15 @@ public class TestWatchTower {
             military.enterBuilding(watchTower0);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
     public void testWatchTowerCannotHoldMoreThanSixSoldiers() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -399,16 +381,15 @@ public class TestWatchTower {
             military.enterBuilding(watchTower0);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
     public void testWatchTowerNeedsCoin() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -426,10 +407,9 @@ public class TestWatchTower {
     @Test
     public void testUnfinishedWatchTowerNotNeedsCoin() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -445,10 +425,9 @@ public class TestWatchTower {
     @Test
     public void testWatchTowerCanHoldThreeCoins() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -479,8 +458,9 @@ public class TestWatchTower {
 
         try {
             watchTower0.putCargo(cargo);
+
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
 
         assertEquals(watchTower0.getAmount(COIN), 3);
     }
@@ -488,10 +468,9 @@ public class TestWatchTower {
     @Test
     public void testPrivateIsPromotedWhenCoinIsAvailable() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -514,6 +493,7 @@ public class TestWatchTower {
         // Verify that the private is promoted at the right time
         for (int i = 0; i < 100; i++) {
             assertEquals(military.getRank(), PRIVATE_RANK);
+
             map.stepTime();
         }
 
@@ -523,10 +503,9 @@ public class TestWatchTower {
     @Test
     public void testOnlyOnePrivateIsPromoted() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -557,10 +536,9 @@ public class TestWatchTower {
     @Test
     public void testTimeSpentWithCoinButNoMilitaryDoesNotSpeedUpPromotion() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -596,10 +574,9 @@ public class TestWatchTower {
     @Test
     public void testPromotionConsumesCoin() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -630,10 +607,9 @@ public class TestWatchTower {
     @Test
     public void testOnePromotionOnlyConsumesOneCoin() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -666,10 +642,9 @@ public class TestWatchTower {
     @Test
     public void testWatchTowerWithNoPromotionPossibleDoesNotConsumeCoin() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -701,10 +676,9 @@ public class TestWatchTower {
     @Test
     public void testCanDisableCoinsToWatchTower() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -728,10 +702,9 @@ public class TestWatchTower {
     @Test
     public void testOccupiedWatchTowerCanBeEvacuated() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -764,10 +737,9 @@ public class TestWatchTower {
     @Test
     public void testEvacuatedMilitaryReturnsToStorage() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -808,10 +780,9 @@ public class TestWatchTower {
     @Test
     public void testEvacuatedSoldierReturnsOffroadWhenNotConnected() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -849,10 +820,9 @@ public class TestWatchTower {
     @Test
     public void testNoMilitaryIsDispatchedToEvacuatedWatchTower() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -874,6 +844,7 @@ public class TestWatchTower {
         // Verify that no soldiers are assigned to the watch tower
         for (int i = 0; i < 200; i++) {
             assertEquals(watchTower0.getNumberOfHostedSoldiers(), 0);
+
             map.stepTime();
         }
     }
@@ -881,10 +852,9 @@ public class TestWatchTower {
     @Test
     public void testEvacuationCanBeCanceled() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -931,8 +901,7 @@ public class TestWatchTower {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point25 = new Point(5, 5);
@@ -972,8 +941,7 @@ public class TestWatchTower {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point25 = new Point(5, 5);
@@ -991,7 +959,7 @@ public class TestWatchTower {
             watchTower0.resumeProduction();
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -999,8 +967,7 @@ public class TestWatchTower {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point25 = new Point(5, 5);
@@ -1045,12 +1012,9 @@ public class TestWatchTower {
     @Test
     public void testCannotStopProductionInBarracks() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -1072,8 +1036,9 @@ public class TestWatchTower {
         // Verify that it's not possible to stop production
         try {
             watchTower0.stopProduction();
+
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -1081,8 +1046,7 @@ public class TestWatchTower {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1105,10 +1069,9 @@ public class TestWatchTower {
     @Test
     public void testWatchTowerReportsCorrectOutput() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1128,10 +1091,9 @@ public class TestWatchTower {
     @Test
     public void testWatchTowerReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1160,10 +1122,9 @@ public class TestWatchTower {
     @Test
     public void testWatchTowerReportsCorrectMaterialsNeededForProduction() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1192,10 +1153,9 @@ public class TestWatchTower {
     @Test
     public void testHostedMilitaryListIsEmptyForWatchTowerUnderConstruction() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -1212,10 +1172,9 @@ public class TestWatchTower {
     @Test
     public void testHostedMilitaryListIsEmptyForEmptyWatchTower() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -1235,10 +1194,9 @@ public class TestWatchTower {
     @Test
     public void testAddingMilitaryUpsHostedMilitaryList() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -1262,10 +1220,9 @@ public class TestWatchTower {
     @Test
     public void testRankIsCorrectInHostedMilitaryList() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -1288,10 +1245,9 @@ public class TestWatchTower {
     @Test
     public void testBorderForWatchTowerIsCorrect() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 80, 81);
+        var map = new GameMap(List.of(player0), 80, 81);
 
         // Place headquarter
         var point0 = new Point(30, 30);
@@ -1345,10 +1301,9 @@ public class TestWatchTower {
     @Test
     public void testLandForWatchTowerIsCorrect() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 80, 81);
+        var map = new GameMap(List.of(player0), 80, 81);
 
         // Place headquarter
         var point0 = new Point(30, 30);
@@ -1395,10 +1350,9 @@ public class TestWatchTower {
     @Test
     public void testDiscoveredLandForWatchTowerIsCorrect() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 80, 81);
+        var map = new GameMap(List.of(player0), 80, 81);
 
         // Place headquarter
         var point0 = new Point(30, 30);
@@ -1454,10 +1408,9 @@ public class TestWatchTower {
     @Test
     public void testDiscoveredLandForPlayerCannotBeOutsideTheMap() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 80, 81);
+        var map = new GameMap(List.of(player0), 80, 81);
 
         // Place headquarter
         var point0 = new Point(10, 10);
@@ -1481,10 +1434,9 @@ public class TestWatchTower {
     @Test
     public void testOwnedLandForPlayerCannotBeOutsideTheMap() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 80, 81);
+        var map = new GameMap(List.of(player0), 80, 81);
 
         // Place headquarter
         var point0 = new Point(10, 10);
@@ -1508,12 +1460,9 @@ public class TestWatchTower {
     @Test
     public void testWatchTowerCanBeUpgraded() throws Exception {
 
-        // Creating new player
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(9, 5);
@@ -1543,7 +1492,6 @@ public class TestWatchTower {
 
         // Verify that the upgrade isn't too quick
         for (int i = 0; i < 100; i++) {
-
             assertTrue(watchTower0.isUpgrading());
             assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
 
@@ -1564,12 +1512,9 @@ public class TestWatchTower {
     @Test
     public void testUnfinishedWatchTowerCannotBeUpgraded() throws Exception {
 
-        // Creating new player
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1587,18 +1532,15 @@ public class TestWatchTower {
             watchTower0.upgrade();
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
     public void testBurningWatchTowerCannotBeUpgraded() throws Exception {
 
-        // Creating new player
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1622,18 +1564,15 @@ public class TestWatchTower {
             watchTower0.upgrade();
 
             fail();
-        } catch (InvalidUserActionException e) {}
+        } catch (InvalidUserActionException e) { }
     }
 
     @Test
     public void testCannotUpgradeWatchTowerWithoutMaterial() throws Exception {
 
-        // Creating new player
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(9, 5);
@@ -1658,7 +1597,6 @@ public class TestWatchTower {
 
         // Verify that the upgrade cannot happen without the required material
         for (int i = 0; i < 1000; i++) {
-
             assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
 
             map.stepTime();
@@ -1677,12 +1615,9 @@ public class TestWatchTower {
     @Test
     public void testCannotUpgradeWatchTowerBeingUpgraded() throws Exception {
 
-        // Creating new player
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1709,18 +1644,15 @@ public class TestWatchTower {
             watchTower0.upgrade();
 
             fail();
-        } catch (InvalidUserActionException e) {}
+        } catch (InvalidUserActionException e) { }
     }
 
     @Test
     public void testUpgradingCausesMaterialToGetDelivered() throws Exception {
 
-        // Creating new player
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(9, 5);
@@ -1777,12 +1709,9 @@ public class TestWatchTower {
     @Test
     public void testOccupiedWatchTowerIsOccupiedAfterUpgrade() throws Exception {
 
-        // Creating new player
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(9, 5);
@@ -1816,7 +1745,6 @@ public class TestWatchTower {
 
         // Verify that the upgrade isn't too quick
         for (int i = 0; i < 100; i++) {
-
             assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
 
             map.stepTime();
@@ -1832,12 +1760,9 @@ public class TestWatchTower {
     @Test
     public void testCoinRemainsAfterUpgrade() throws Exception {
 
-        // Creating new player
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(9, 5);
@@ -1875,7 +1800,6 @@ public class TestWatchTower {
 
         // Wait for the upgrade
         for (int i = 0; i < 100; i++) {
-
             assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
 
             map.stepTime();
@@ -1890,12 +1814,9 @@ public class TestWatchTower {
     @Test
     public void testBuildingDuringUpgradeCanBeDestroyed() throws Exception {
 
-        // Creating new player
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(9, 5);
@@ -1929,7 +1850,6 @@ public class TestWatchTower {
 
         // Upgrade for a while
         for (int i = 0; i < 10; i++) {
-
             assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
 
             map.stepTime();
@@ -1944,16 +1864,11 @@ public class TestWatchTower {
     @Test
     public void testPlayerIsCorrectAfterUpgrade() throws Exception {
 
-        // Creating new player
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         var player2 = new Player("Player 2", PlayerColor.GRAY, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player2);
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0, player1, player2), 40, 41);
 
         // Place headquarter
         var point0 = new Point(9, 5);
@@ -2010,12 +1925,9 @@ public class TestWatchTower {
     @Test
     public void testCanHostRightNumberOfSoldiersAfterUpgraded() throws Exception {
 
-        // Creating new player
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(9, 5);
@@ -2049,7 +1961,6 @@ public class TestWatchTower {
 
         // Wait for the upgrade
         for (int i = 0; i < 100; i++) {
-
             assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
 
             map.stepTime();
@@ -2065,12 +1976,9 @@ public class TestWatchTower {
     @Test
     public void testBorderIsExpandedAfterUpgrade() throws Exception {
 
-        // Creating new player
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(7, 5);
@@ -2105,7 +2013,6 @@ public class TestWatchTower {
 
         // Wait for the upgrade
         for (int i = 0; i < 100; i++) {
-
             assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
 
             map.stepTime();
@@ -2120,12 +2027,9 @@ public class TestWatchTower {
     @Test
     public void testFlagIsCorrectAfterUpgrade() throws Exception {
 
-        // Creating new player
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(9, 5);
@@ -2159,7 +2063,6 @@ public class TestWatchTower {
 
         // Wait for the upgrade
         for (int i = 0; i < 100; i++) {
-
             assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
 
             map.stepTime();
@@ -2176,12 +2079,9 @@ public class TestWatchTower {
     @Test
     public void testOccupiedBuildingRemainsOccupiedDuringUpgrade() throws Exception {
 
-        // Creating new player
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(9, 5);
@@ -2218,8 +2118,6 @@ public class TestWatchTower {
 
         // Verify that the watch tower is occupied during the upgrade
         for (int i = 0; i < 100; i++) {
-
-            // Verify that the watch tower is still occupied
             assertTrue(watchTower0.isOccupied());
 
             map.stepTime();
@@ -2229,10 +2127,9 @@ public class TestWatchTower {
     @Test
     public void testEvacuatedBuildingKeepsSendingHomeMilitary() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2268,12 +2165,9 @@ public class TestWatchTower {
     @Test
     public void testCanUpgradeAfterDisablingPromotions() throws Exception {
 
-        // Creating new player
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(9, 5);
@@ -2307,7 +2201,6 @@ public class TestWatchTower {
 
         // Wait for the upgrade
         for (int i = 0; i < 100; i++) {
-
             assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
 
             map.stepTime();
@@ -2326,12 +2219,9 @@ public class TestWatchTower {
     @Test
     public void testUpgradeDoesNotDestroyNearbyHouses() throws Exception {
 
-        // Creating new player
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(9, 5);
@@ -2368,7 +2258,6 @@ public class TestWatchTower {
         watchTower0.evacuate();
 
         for (int i = 0; i < 1000; i++) {
-
             if (watchTower0.getNumberOfHostedSoldiers() == 0) {
                 break;
             }
@@ -2394,7 +2283,6 @@ public class TestWatchTower {
 
         // Wait for the upgrade
         for (int i = 0; i < 100; i++) {
-
             assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
 
             map.stepTime();
@@ -2410,12 +2298,9 @@ public class TestWatchTower {
     @Test
     public void testUnoccupiedBuildingRemainsUnoccupiedDuringAndAfterUpgrade() throws Exception {
 
-        // Creating new player
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(7, 5);
@@ -2452,8 +2337,6 @@ public class TestWatchTower {
         var point3 = new Point(27, 5);
 
         for (int i = 0; i < 100; i++) {
-
-            // Verify that the watch tower is still occupied
             assertFalse(watchTower0.isOccupied());
             assertTrue(player0.getBorderPoints().contains(point2));
             assertFalse(player0.isWithinBorder(point3));
@@ -2470,12 +2353,9 @@ public class TestWatchTower {
     @Test
     public void testUpgradeOfBuildingWithMilitaryDoesNotCauseOverAllocation() throws Exception {
 
-        // Creating new player
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(9, 5);
@@ -2525,7 +2405,6 @@ public class TestWatchTower {
         assertEquals(fortress0.getNumberOfHostedSoldiers(), 9);
 
         for (int i = 0; i < 2000; i++) {
-
             assertNull(Utils.findSoldierOutsideBuilding(player0));
 
             map.stepTime();
@@ -2535,10 +2414,9 @@ public class TestWatchTower {
     @Test
     public void testUpgradedWatchTowerGetsPopulatedFully() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2558,7 +2436,6 @@ public class TestWatchTower {
 
         // Wait for the watch tower to get occupied
         for (int i = 0; i < 1000; i++) {
-
             if (watchTower0.getNumberOfHostedSoldiers() == 2) {
                 break;
             }
@@ -2590,7 +2467,6 @@ public class TestWatchTower {
 
         // Verify that the building gets fully occupied
         for (int i = 0; i < 500; i++) {
-
             if (fortress0.getNumberOfHostedSoldiers() == 9) {
                 break;
             }

@@ -27,7 +27,6 @@ import org.appland.settlers.model.actors.PigBreeder;
 import org.appland.settlers.model.actors.Stonemason;
 import org.appland.settlers.model.actors.WellWorker;
 import org.appland.settlers.model.actors.WoodcutterWorker;
-import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Bakery;
 import org.appland.settlers.model.buildings.Brewery;
@@ -52,7 +51,6 @@ import org.appland.settlers.model.buildings.Well;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
@@ -67,8 +65,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -99,7 +96,6 @@ public class TestMonitoringProductivity {
         assertEquals(armory.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (armory.getProductivity() != 0) {
                 break;
             }
@@ -127,8 +123,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -201,8 +196,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -258,8 +252,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -322,8 +315,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -380,8 +372,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -452,8 +443,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -510,8 +500,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -583,8 +572,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -641,8 +629,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -714,8 +701,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -764,8 +750,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -829,8 +814,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -883,8 +867,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -952,8 +935,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1010,8 +992,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1083,8 +1064,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1141,8 +1121,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1214,8 +1193,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1249,7 +1227,6 @@ public class TestMonitoringProductivity {
         assertEquals(hunterHut0.getProductivity(), 0);
 
         for (int i = 0; i < 2000; i++) {
-
             if (hunterHut0.getProductivity() != 0) {
                 break;
             }
@@ -1278,8 +1255,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1313,7 +1289,6 @@ public class TestMonitoringProductivity {
         assertEquals(hunterHut0.getProductivity(), 0);
 
         for (int i = 0; i < 2000; i++) {
-
             if (hunterHut0.getProductivity() != 0) {
                 break;
             }
@@ -1356,8 +1331,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1392,7 +1366,6 @@ public class TestMonitoringProductivity {
         assertEquals(ironMine.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (ironMine.getProductivity() != 0) {
                 break;
             }
@@ -1415,8 +1388,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1451,7 +1423,6 @@ public class TestMonitoringProductivity {
         assertEquals(ironMine.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (ironMine.getProductivity() != 0) {
                 break;
             }
@@ -1489,8 +1460,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1522,7 +1492,6 @@ public class TestMonitoringProductivity {
         assertEquals(ironSmelter.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (ironSmelter.getProductivity() != 0) {
                 break;
             }
@@ -1550,8 +1519,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1583,7 +1551,6 @@ public class TestMonitoringProductivity {
         assertEquals(ironSmelter.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (ironSmelter.getProductivity() != 0) {
                 break;
             }
@@ -1610,8 +1577,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1642,7 +1608,6 @@ public class TestMonitoringProductivity {
         assertEquals(metalworks.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (metalworks.getProductivity() != 0) {
                 break;
             }
@@ -1669,8 +1634,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1701,7 +1665,6 @@ public class TestMonitoringProductivity {
         assertEquals(metalworks.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (metalworks.getProductivity() != 0) {
                 break;
             }
@@ -1743,8 +1706,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1775,7 +1737,6 @@ public class TestMonitoringProductivity {
         assertEquals(mill.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (mill.getProductivity() != 0) {
                 break;
             }
@@ -1798,8 +1759,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1830,7 +1790,6 @@ public class TestMonitoringProductivity {
         assertEquals(mill.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (mill.getProductivity() != 0) {
                 break;
             }
@@ -1853,8 +1812,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1885,7 +1843,6 @@ public class TestMonitoringProductivity {
         assertEquals(mint.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (mint.getProductivity() != 0) {
                 break;
             }
@@ -1912,8 +1869,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1944,7 +1900,6 @@ public class TestMonitoringProductivity {
         assertEquals(mint.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (mint.getProductivity() != 0) {
                 break;
             }
@@ -1971,8 +1926,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2003,7 +1957,6 @@ public class TestMonitoringProductivity {
         assertEquals(pigFarm.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (pigFarm.getProductivity() != 0) {
                 break;
             }
@@ -2030,8 +1983,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2062,7 +2014,6 @@ public class TestMonitoringProductivity {
         assertEquals(pigFarm.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (pigFarm.getProductivity() != 0) {
                 break;
             }
@@ -2089,8 +2040,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2124,7 +2074,6 @@ public class TestMonitoringProductivity {
         assertEquals(quarry0.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (quarry0.getProductivity() != 0) {
                 break;
             }
@@ -2148,8 +2097,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2183,7 +2131,6 @@ public class TestMonitoringProductivity {
         assertEquals(quarry0.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (quarry0.getProductivity() != 0) {
                 break;
             }
@@ -2207,8 +2154,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2239,7 +2185,6 @@ public class TestMonitoringProductivity {
         assertEquals(sawmill.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (sawmill.getProductivity() != 0) {
                 break;
             }
@@ -2262,8 +2207,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2294,7 +2238,6 @@ public class TestMonitoringProductivity {
         assertEquals(sawmill.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (sawmill.getProductivity() != 0) {
                 break;
             }
@@ -2332,8 +2275,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2364,7 +2306,6 @@ public class TestMonitoringProductivity {
         assertEquals(slaughterHouse.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (slaughterHouse.getProductivity() != 0) {
                 break;
             }
@@ -2387,8 +2328,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2419,7 +2359,6 @@ public class TestMonitoringProductivity {
         assertEquals(slaughterHouse.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (slaughterHouse.getProductivity() != 0) {
                 break;
             }
@@ -2442,8 +2381,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2474,7 +2412,6 @@ public class TestMonitoringProductivity {
         assertEquals(well.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (well.getProductivity() != 0) {
                 break;
             }
@@ -2493,8 +2430,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2525,7 +2461,6 @@ public class TestMonitoringProductivity {
         assertEquals(well.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (well.getProductivity() != 0) {
                 break;
             }
@@ -2544,8 +2479,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -2601,8 +2535,7 @@ public class TestMonitoringProductivity {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);

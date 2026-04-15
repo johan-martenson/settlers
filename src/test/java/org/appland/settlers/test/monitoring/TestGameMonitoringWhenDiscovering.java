@@ -19,8 +19,7 @@ import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.LARGE;
@@ -42,10 +41,9 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringTree() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -89,10 +87,9 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringTreeIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -141,10 +138,9 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringStone() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -188,10 +184,9 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringStoneIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -242,12 +237,10 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringFlag() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
-        var map = new GameMap(players, 80, 41);
+        var map = new GameMap(List.of(player0, player1), 80, 41);
 
         // Place headquarter for player 0
         var point0 = new Point(5, 5);
@@ -295,12 +288,10 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringFlagIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
-        var map = new GameMap(players, 80, 41);
+        var map = new GameMap(List.of(player0, player1), 80, 41);
 
         // Place headquarter for player 0
         var point0 = new Point(5, 5);
@@ -355,12 +346,10 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringHouse() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
-        var map = new GameMap(players, 80, 41);
+        var map = new GameMap(List.of(player0, player1), 80, 41);
 
         // Place headquarter for player 0
         var point0 = new Point(5, 5);
@@ -401,8 +390,6 @@ public class TestGameMonitoringWhenDiscovering {
 
         var gameChangesList = monitor.getLastEvent();
 
-        System.out.println(gameChangesList);
-
         assertEquals(1, gameChangesList.newBuildings().size());
         assertEquals(gameChangesList.newBuildings().getFirst(), woodcutter0);
     }
@@ -410,12 +397,10 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringHouseIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
-        var map = new GameMap(players, 80, 41);
+        var map = new GameMap(List.of(player0, player1), 80, 41);
 
         // Place headquarter for player 0
         var point0 = new Point(5, 5);
@@ -470,12 +455,10 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringRoad() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
-        var map = new GameMap(players, 80, 41);
+        var map = new GameMap(List.of(player0, player1), 80, 41);
 
         // Place headquarter for player 0
         var point0 = new Point(5, 5);
@@ -529,12 +512,10 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringRoadIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
-        var map = new GameMap(players, 80, 41);
+        var map = new GameMap(List.of(player0, player1), 80, 41);
 
         // Place headquarter for player 0
         var point0 = new Point(5, 5);
@@ -595,12 +576,10 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringFlagWithRoads() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
-        var map = new GameMap(players, 80, 41);
+        var map = new GameMap(List.of(player0, player1), 80, 41);
 
         // Place headquarter for player 0
         var point0 = new Point(5, 5);
@@ -657,12 +636,10 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringBorder() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
-        var map = new GameMap(players, 80, 41);
+        var map = new GameMap(List.of(player0, player1), 80, 41);
 
         // Place headquarter for player 0
         var point0 = new Point(5, 5);
@@ -728,12 +705,10 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringBorderIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
-        var map = new GameMap(players, 80, 41);
+        var map = new GameMap(List.of(player0, player1), 80, 41);
 
         // Place headquarter for player 0
         var point0 = new Point(5, 5);
@@ -803,10 +778,9 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringSign() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -850,10 +824,9 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringSignIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(5, 5);
@@ -902,12 +875,10 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringCrop() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
-        var map = new GameMap(players, 80, 41);
+        var map = new GameMap(List.of(player0, player1), 80, 41);
 
         // Place headquarter for player 0
         var point0 = new Point(5, 5);
@@ -955,12 +926,10 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringCropIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
-        var map = new GameMap(players, 80, 41);
+        var map = new GameMap(List.of(player0, player1), 80, 41);
 
         // Place headquarter for player 0
         var point0 = new Point(5, 5);
@@ -1015,12 +984,10 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringWorker() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
-        var map = new GameMap(players, 80, 41);
+        var map = new GameMap(List.of(player0, player1), 80, 41);
 
         // Place headquarter for player 0
         var point0 = new Point(5, 5);
@@ -1083,12 +1050,10 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringWorkerIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
-        var map = new GameMap(players, 80, 41);
+        var map = new GameMap(List.of(player0, player1), 80, 41);
 
         // Place headquarter for player 0
         var point0 = new Point(5, 5);
@@ -1139,7 +1104,6 @@ public class TestGameMonitoringWhenDiscovering {
 
         // Verify that an event was sent for the new worker
         assertTrue(player0.getDiscoveredLand().contains(point5));
-        System.out.println(monitor.getEvents());
         assertTrue(monitor.getEvents().size() >= 1);
 
         var gameChangesList = monitor.getLastEvent();
@@ -1160,12 +1124,10 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringBorderThroughEnemyExpansion() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
-        var map = new GameMap(players, 80, 41);
+        var map = new GameMap(List.of(player0, player1), 80, 41);
 
         // Place headquarter for player 0
         var point0 = new Point(5, 5);
@@ -1226,12 +1188,10 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringBorderThroughEnemyExpansionIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
-        var map = new GameMap(players, 80, 41);
+        var map = new GameMap(List.of(player0, player1), 80, 41);
 
         // Place headquarter for player 0
         var point0 = new Point(5, 5);
@@ -1301,16 +1261,10 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringWhenSoldierDies() throws Exception {
 
-        // Create player list with two players
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-
-        var players = new LinkedList<Player>();
-        players.add(player0);
-        players.add(player1);
-
-        // Create game map choosing two players
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Place player 0's headquarters
         var point0 = new Point(9, 5);
@@ -1401,11 +1355,9 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringDeadTree() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();
-        players.add(player0);
-        var map = new GameMap(players, 80, 41);
+        var map = new GameMap(List.of(player0), 80, 41);
 
         // Place headquarter for player 0
         var point0 = new Point(5, 5);
@@ -1445,11 +1397,9 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringDeadTreeIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();
-        players.add(player0);
-        var map = new GameMap(players, 80, 41);
+        var map = new GameMap(List.of(player0), 80, 41);
 
         // Place headquarter for player 0
         var point0 = new Point(5, 5);
@@ -1518,12 +1468,10 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringDecoration() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
-        var map = new GameMap(players, 80, 41);
+        var map = new GameMap(List.of(player0, player1), 80, 41);
 
         // Place headquarter for player 0
         var point0 = new Point(5, 5);
@@ -1571,12 +1519,10 @@ public class TestGameMonitoringWhenDiscovering {
     @Test
     public void testMonitoringEventWhenDiscoveringDecorationIsOnlySentOnce() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
-        var map = new GameMap(players, 80, 41);
+        var map = new GameMap(List.of(player0, player1), 80, 41);
 
         // Place headquarter for player 0
         var point0 = new Point(5, 5);

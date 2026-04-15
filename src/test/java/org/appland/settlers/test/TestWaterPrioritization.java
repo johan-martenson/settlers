@@ -11,7 +11,6 @@ import org.appland.settlers.model.actors.Baker;
 import org.appland.settlers.model.actors.Brewer;
 import org.appland.settlers.model.actors.DonkeyBreeder;
 import org.appland.settlers.model.actors.PigBreeder;
-import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Bakery;
 import org.appland.settlers.model.buildings.Brewery;
 import org.appland.settlers.model.buildings.Building;
@@ -20,10 +19,8 @@ import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.PigFarm;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.appland.settlers.model.Material.*;
 import static org.junit.Assert.*;
@@ -33,10 +30,9 @@ public class TestWaterPrioritization {
     @Test
     public void testOnlyBakeryGetsWater() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(15, 9);
@@ -89,7 +85,8 @@ public class TestWaterPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that only the bakery gets any water
-        var waterAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
+        var waterAllocation = new HashMap<Building, Integer>();
+        var carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -156,10 +153,9 @@ public class TestWaterPrioritization {
     @Test
     public void testOnlyDonkeyFarmGetsWheat() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(15, 9);
@@ -212,7 +208,8 @@ public class TestWaterPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that only the bakery gets any wheat
-        var wheatAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
+        var wheatAllocation = new HashMap<Building, Integer>();
+        var carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -275,10 +272,9 @@ public class TestWaterPrioritization {
     @Test
     public void testOnlyPigFarmGetsWheat() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(15, 9);
@@ -331,7 +327,8 @@ public class TestWaterPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that only the bakery gets any wheat
-        var wheatAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
+        var wheatAllocation = new HashMap<Building, Integer>();
+        var carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -394,10 +391,9 @@ public class TestWaterPrioritization {
     @Test
     public void testOnlyBreweryGetsWheat() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(15, 9);
@@ -450,7 +446,8 @@ public class TestWaterPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that only the bakery gets any wheat
-        var wheatAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
+        var wheatAllocation = new HashMap<Building, Integer>();
+        var carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -513,10 +510,9 @@ public class TestWaterPrioritization {
     @Test
     public void testOtherConsumersGetWheatWithBakeryMissing() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(15, 9);
@@ -562,7 +558,8 @@ public class TestWaterPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that the pig farm and the donkey farm get half of the delivered wheat each
-        var wheatAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
+        var wheatAllocation = new HashMap<Building, Integer>();
+        var carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -627,10 +624,9 @@ public class TestWaterPrioritization {
     @Test
     public void testOtherConsumersGetWheatWithBakeryNotReady() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(15, 9);
@@ -678,7 +674,8 @@ public class TestWaterPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that the other consumers get wheat when the bakery is not yet constructed
-        var waterAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
+        var waterAllocation = new HashMap<Building, Integer>();
+        var carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
@@ -734,10 +731,9 @@ public class TestWaterPrioritization {
     @Test
     public void testOtherConsumersGetWaterWithFullyStockedBakery() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarters
         var point0 = new Point(15, 9);
@@ -794,7 +790,8 @@ public class TestWaterPrioritization {
         assertNull(headquarter0.getWorker().getCargo());
 
         // Verify that the other consumers get wheat when the bakery is already fully stocked and does not consume its resources
-        var waterAllocation = new HashMap<Building, Integer>();        Worker carrier = headquarter0.getWorker();
+        var waterAllocation = new HashMap<Building, Integer>();
+        var carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 

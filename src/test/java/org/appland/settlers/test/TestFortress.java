@@ -14,18 +14,12 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Soldier;
-import org.appland.settlers.model.actors.Worker;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.*;
@@ -40,10 +34,9 @@ public class TestFortress {
     @Test
     public void testFortressNeedsFourPlanksAndSevenStonesForConstruction() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -87,10 +80,9 @@ public class TestFortress {
     @Test
     public void testFortressCannotBeConstructedWithOnePlankTooLittle() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -136,10 +128,9 @@ public class TestFortress {
     @Test
     public void testFortressCannotBeConstructedWithOneStoneTooLittle() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -185,10 +176,9 @@ public class TestFortress {
     @Test
     public void testFortressGetPopulatedWhenFinished() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -229,12 +219,9 @@ public class TestFortress {
     @Test
     public void testBorderIsNotExtendedWhenFortressIsFinished() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 15);
@@ -259,12 +246,9 @@ public class TestFortress {
     @Test
     public void testBorderIsExtendedWhenFortressIsPopulated() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 50, 51);
+        var map = new GameMap(List.of(player0), 50, 51);
 
         // Place headquarter
         var point21 = new Point(5, 17);
@@ -312,10 +296,9 @@ public class TestFortress {
     @Test
     public void testFortressOnlyNeedsNineSoldiers() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -345,10 +328,9 @@ public class TestFortress {
     @Test
     public void testFortressCannotHoldSoldiersBeforeFinished() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -375,10 +357,9 @@ public class TestFortress {
     @Test
     public void testFortressCannotHoldMoreThanNineSoldiers() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -410,16 +391,15 @@ public class TestFortress {
             military.enterBuilding(fortress0);
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
     public void testFortressNeedsCoin() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -437,10 +417,9 @@ public class TestFortress {
     @Test
     public void testUnfinishedFortressNotNeedsCoin() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -456,10 +435,9 @@ public class TestFortress {
     @Test
     public void testFortressCanHoldFourCoins() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -492,6 +470,7 @@ public class TestFortress {
 
         try {
             fortress0.putCargo(cargo);
+
             fail();
         } catch (Exception e) {}
 
@@ -501,10 +480,9 @@ public class TestFortress {
     @Test
     public void testPrivateIsPromotedWhenCoinIsAvailable() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -527,6 +505,7 @@ public class TestFortress {
         // Verify that the private is promoted at the right time
         for (int i = 0; i < 100; i++) {
             assertEquals(military.getRank(), PRIVATE_RANK);
+
             map.stepTime();
         }
 
@@ -536,10 +515,9 @@ public class TestFortress {
     @Test
     public void testOnlyOnePrivateIsPromoted() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -570,10 +548,9 @@ public class TestFortress {
     @Test
     public void testTimeSpentWithCoinButNoMilitaryDoesNotSpeedUpPromotion() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -609,10 +586,9 @@ public class TestFortress {
     @Test
     public void testPromotionConsumesCoin() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -643,10 +619,9 @@ public class TestFortress {
     @Test
     public void testOnePromotionOnlyConsumesOneCoin() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -679,10 +654,9 @@ public class TestFortress {
     @Test
     public void testFortressWithNoPromotionPossibleDoesNotConsumeCoin() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -714,10 +688,9 @@ public class TestFortress {
     @Test
     public void testCanDisableCoinsToFortress() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -741,10 +714,9 @@ public class TestFortress {
     @Test
     public void testOccupiedFortressCanBeEvacuated() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -777,10 +749,9 @@ public class TestFortress {
     @Test
     public void testEvacuatedMilitaryReturnsToStorage() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -821,10 +792,9 @@ public class TestFortress {
     @Test
     public void testEvacuatedSoldierReturnsOffroadWhenNotConnected() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -862,10 +832,9 @@ public class TestFortress {
     @Test
     public void testNoMilitaryIsDispatchedToEvacuatedFortress() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -887,6 +856,7 @@ public class TestFortress {
         // Verify that no soldiers are assigned to the fortress
         for (int i = 0; i < 200; i++) {
             assertEquals(fortress0.getNumberOfHostedSoldiers(), 0);
+
             map.stepTime();
         }
     }
@@ -894,10 +864,9 @@ public class TestFortress {
     @Test
     public void testEvacuationCanBeCanceled() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -944,8 +913,7 @@ public class TestFortress {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point25 = new Point(5, 5);
@@ -985,8 +953,7 @@ public class TestFortress {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point25 = new Point(5, 5);
@@ -1033,8 +1000,7 @@ public class TestFortress {
 
         // Creating new game map with size 40x40
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point25 = new Point(5, 5);
@@ -1052,18 +1018,15 @@ public class TestFortress {
             fortress0.resumeProduction();
 
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
     public void testCannotStopProductionInFortress() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -1085,8 +1048,9 @@ public class TestFortress {
         // Verify that it's not possible to stop production
         try {
             fortress0.stopProduction();
+
             fail();
-        } catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     @Test
@@ -1094,8 +1058,7 @@ public class TestFortress {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1118,10 +1081,9 @@ public class TestFortress {
     @Test
     public void testFortressReportsCorrectOutput() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1141,10 +1103,9 @@ public class TestFortress {
     @Test
     public void testFortressReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1173,10 +1134,9 @@ public class TestFortress {
     @Test
     public void testFortressReportsCorrectMaterialsNeededForProduction() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point0 = new Point(5, 5);
@@ -1205,10 +1165,9 @@ public class TestFortress {
     @Test
     public void testHostedMilitaryListIsEmptyForFortressUnderConstruction() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -1225,10 +1184,9 @@ public class TestFortress {
     @Test
     public void testHostedMilitaryListIsEmptyForEmptyFortress() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -1248,10 +1206,9 @@ public class TestFortress {
     @Test
     public void testAddingMilitaryUpsHostedMilitaryList() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -1275,10 +1232,9 @@ public class TestFortress {
     @Test
     public void testRankIsCorrectInHostedMilitaryList() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 40, 41);
+        var map = new GameMap(List.of(player0), 40, 41);
 
         // Place headquarter
         var point21 = new Point(5, 5);
@@ -1301,10 +1257,9 @@ public class TestFortress {
     @Test
     public void testBorderForFortressIsCorrect() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 80, 81);
+        var map = new GameMap(List.of(player0), 80, 81);
 
         // Place headquarter
         var point0 = new Point(30, 30);
@@ -1358,10 +1313,9 @@ public class TestFortress {
     @Test
     public void testLandForFortressIsCorrect() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 80, 81);
+        var map = new GameMap(List.of(player0), 80, 81);
 
         // Place headquarter
         var point0 = new Point(30, 30);
@@ -1408,10 +1362,9 @@ public class TestFortress {
     @Test
     public void testDiscoveredLandForFortressIsCorrect() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 80, 81);
+        var map = new GameMap(List.of(player0), 80, 81);
 
         // Place headquarter
         var point0 = new Point(30, 30);
@@ -1467,10 +1420,9 @@ public class TestFortress {
     @Test
     public void testDiscoveredLandForPlayerCannotBeOutsideTheMap() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 80, 81);
+        var map = new GameMap(List.of(player0), 80, 81);
 
         // Place headquarter
         var point0 = new Point(10, 10);
@@ -1494,10 +1446,9 @@ public class TestFortress {
     @Test
     public void testOwnedLandForPlayerCannotBeOutsideTheMap() throws Exception {
 
-        // Starting new game
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 80, 81);
+        var map = new GameMap(List.of(player0), 80, 81);
 
         // Place headquarter
         var point0 = new Point(10, 10);

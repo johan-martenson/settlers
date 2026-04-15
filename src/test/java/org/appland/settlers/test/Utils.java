@@ -472,7 +472,6 @@ public class Utils {
             map.stepTime();
         }
 
-        System.out.println(map.getBuildings());
         assertTrue(building.isOccupied());
     }
 
@@ -3342,6 +3341,73 @@ public class Utils {
         }
 
         assertFalse(geologist.isInvestigating());
+    }
+
+    public static <T extends Worker> T waitForOneOfWorkersToReachPoint(List<T> workers, Point point, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 2_000; i++) {
+            if (workers.stream().anyMatch(worker -> Objects.equals(worker.getPosition(), point))) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(workers.stream().anyMatch(worker -> Objects.equals(worker.getPosition(), point)));
+
+        return workers.stream().filter(worker -> Objects.equals(worker.getPosition(), point)).findFirst().get();
+    }
+
+    public static Soldier waitForSoldierToBeFightingOpponent(Soldier soldier, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 2_000; i++) {
+            if (soldier.isFighting() && soldier.getOpponent() != null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        var opponent = soldier.getOpponent();
+
+        assertTrue(soldier.isFighting());
+        assertTrue(opponent.isFighting());
+        assertEquals(soldier.getPosition(), opponent.getPosition());
+
+        return opponent;
+    }
+
+    public static <T extends Worker> void waitForWorkersToDie(List<T> workers, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 2_000; i++) {
+            if (workers.stream().allMatch(Worker::isDead)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(workers.stream().allMatch(Worker::isDead));
+    }
+
+    public static int countAliveSoldiersOutsideForPlayer(Player player) {
+        return (int) player.getMap().getWorkers().stream()
+                .filter(Worker::isSoldier)
+                .filter(worker -> !worker.isDead())
+                .filter(worker -> worker.getPlayer().equals(player))
+                .filter(worker -> !worker.isInsideBuilding())
+                .count();
+    }
+
+    public static void waitForBuildingToHaveHostedSoldiers(Building building, int amount) throws InvalidUserActionException {
+        assertTrue(building.isMilitaryBuilding());
+
+        for (int i = 0; i < 2_000; i++) {
+            if (building.getHostedSoldiers().size() == amount) {
+                break;
+            }
+
+            building.getMap().stepTime();
+        }
+
+        assertEquals(building.getHostedSoldiers().size(), amount);
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor, StatisticsListener {

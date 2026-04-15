@@ -6,27 +6,25 @@
 package org.appland.settlers.computer.test;
 
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.computer.ComputerPlayer;
 import org.appland.settlers.computer.ExpandLandPlayer;
 import org.appland.settlers.model.AttackStrength;
-import org.appland.settlers.model.PlayerType;
-import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.Material;
-import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.buildings.WatchTower;
+import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.buildings.Barracks;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.WatchTower;
 import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
-import org.appland.settlers.model.PlayerColor;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -44,12 +42,9 @@ public class TestExpandLandPlayer {
     @Test
     public void testCreateExpandLandPlayer() throws Exception {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 10, 11);
+        var map = new GameMap(List.of(player0), 10, 11);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -58,12 +53,9 @@ public class TestExpandLandPlayer {
     @Test
     public void testPlayerPlacesFirstBarracks() throws Exception {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -88,12 +80,9 @@ public class TestExpandLandPlayer {
     @Test
     public void testPlayerPlacesFirstBarracksCloseToBorder() throws Exception {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -119,12 +108,9 @@ public class TestExpandLandPlayer {
     @Test
     public void testPlayerPlacesDoesNotPlaceUnnecessaryBarracksCloseToEdgeOfMap() throws Exception {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -168,12 +154,9 @@ public class TestExpandLandPlayer {
     @Test
     public void testPlayerPlacesPlacesSecondBarracks() throws Exception {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -197,12 +180,9 @@ public class TestExpandLandPlayer {
     @Test
     public void testPlayerPlacesPlacesSecondBarracksAtCorrectDistanceFromFirstBarracks() throws Exception {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -232,12 +212,9 @@ public class TestExpandLandPlayer {
     @Test
     public void testPlayerKeepsPlacingBarracksWhenEdgeIsReached() throws Exception {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -272,12 +249,9 @@ public class TestExpandLandPlayer {
     @Test
     public void testPlayerEvacuatesBarracksWhenItIsFarFromBorder() throws Exception {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -297,7 +271,6 @@ public class TestExpandLandPlayer {
         /* Wait for the border to get extended so that the first barracks is far
            from the border */
         for (int i = 0; i < 20000; i++) {
-
             computerPlayer.turn();
 
             // Check if the barracks is still close to the border
@@ -334,12 +307,9 @@ public class TestExpandLandPlayer {
     @Test
     public void testPlayerPlacesDoesNotPlaceBarracksTooCloseToEdgeOfMap() throws Exception {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -373,12 +343,9 @@ public class TestExpandLandPlayer {
     @Test
     public void testPlayerBuildsNewBarracksIfCurrentBarracksIsDestroyed() throws Exception {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -412,12 +379,9 @@ public class TestExpandLandPlayer {
     @Test
     public void testPlayerRestoresRoadIfNeeded() throws Exception {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -456,14 +420,10 @@ public class TestExpandLandPlayer {
     @Test
     public void testPlayerDoesNotRestoreRoadToCapturedBarracks() throws Exception {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
-
-        // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -499,7 +459,6 @@ public class TestExpandLandPlayer {
         var barracksToAttack = (Building) null;
 
         for (int i = 0; i < 10000; i++) {
-
             var optionalBarracksToAttack = map.getPointsWithinRadius(watchTower.getPosition(), 16).stream()
                     .filter(map::isBuildingAtPoint)
                     .map(map::getBuildingAtPoint)
@@ -571,12 +530,9 @@ public class TestExpandLandPlayer {
     @Test
     public void testPlayerStopsPromotionsInBarracksNotCloseToAnEnemy() throws Exception {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-
-        // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -609,14 +565,10 @@ public class TestExpandLandPlayer {
     @Test
     public void testPlayerEnablesPromotionsForBarracksCloseToEnemy() throws Exception {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", org.appland.settlers.model.PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
-
-        // Create game map
-        var map = new GameMap(players, 100, 31);
+        var map = new GameMap(List.of(player0, player1), 100, 31);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
@@ -674,14 +626,10 @@ public class TestExpandLandPlayer {
     @Test
     public void testPlayerUpgradesBarracksCloseToEnemy() throws Exception {
 
-        // Create players
+        // Create game
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var player1 = new Player("Player 1", org.appland.settlers.model.PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        players.add(player1);
-
-        // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
 
         // Create the computer player
         var computerPlayer = new ExpandLandPlayer(player0, map);
