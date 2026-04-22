@@ -806,7 +806,6 @@ public class Building implements EndPoint {
     public boolean canAttack(Building buildingToAttack) {
         if (isMilitaryBuilding()) {
             double distance = position.distance(buildingToAttack.getPosition());
-
             return distance < getAttackRadius();
         }
 
@@ -1389,9 +1388,13 @@ public class Building implements EndPoint {
     }
 
     public List<Soldier> getAvailableAttackersForNewAttack(AttackStrength strength) {
-        var soldiers = new ArrayList<>(hostedSoldiers);
+        var soldiers = new ArrayList<>(getHostedSoldiers());
         var sortedSoldiers = sortSoldiersByPreferredStrength(soldiers, strength);
 
-        return sortedSoldiers.subList(0, sortedSoldiers.size() - 1);
+        var fullAmount = isHeadquarter() ? sortedSoldiers.size() : sortedSoldiers.size() - 1;
+
+        var amount = (int) Math.ceil(fullAmount * player.getAmountOfSoldiersAvailableForAttack() / 10.0);
+
+        return sortedSoldiers.stream().limit(amount).collect(Collectors.toList());
     }
 }

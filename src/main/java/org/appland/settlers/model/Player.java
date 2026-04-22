@@ -14,7 +14,6 @@ import org.appland.settlers.model.buildings.DonkeyFarm;
 import org.appland.settlers.model.buildings.GoldMine;
 import org.appland.settlers.model.buildings.GraniteMine;
 import org.appland.settlers.model.buildings.Harbor;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.IronMine;
 import org.appland.settlers.model.buildings.IronSmelter;
 import org.appland.settlers.model.buildings.Metalworks;
@@ -55,7 +54,8 @@ import java.util.stream.Stream;
 
 import static java.util.Map.entry;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.utils.MilitaryUtils.*;
+import static org.appland.settlers.model.utils.MilitaryUtils.strongerAndShorterDistanceSorter;
+import static org.appland.settlers.model.utils.MilitaryUtils.weakerAndShorterDistanceSorter;
 
 /**
  * @author johan
@@ -276,7 +276,7 @@ public class Player {
         }
 
         // Count soldiers in military buildings that can reach the building.
-        // Reserve one soldier in each building and apply attack availability setting.
+        // Reserve one soldier in each non-headquarters building and apply attack availability setting.
         return (int) (getBuildings().stream()
                 .filter(Building::isMilitaryBuilding)
                 .filter(building -> building.canAttack(buildingToAttack))
@@ -314,11 +314,6 @@ public class Player {
                             .formatted(requestedNumberAttackers, availableNumberAttackers));
         }
 
-        // It's not possible to attack if there are no available attackers
-        if (availableNumberAttackers == 0) {
-            throw new InvalidUserActionException("Player '%s' can't attack building '%s'".formatted(this, buildingToAttack));
-        }
-
         // Find buildings that can support the attack
         var eligibleBuildings = getBuildings().stream()
                 .filter(building -> building.isMilitaryBuilding()
@@ -330,39 +325,7 @@ public class Player {
         var availableAttackers = new ArrayList<Soldier>();
 
         for (var building : eligibleBuildings) {
-            var availableAttackersFromBuilding = new ArrayList<Soldier>();
-
-            if (building instanceof Headquarter headquarter) {
-                var attackStrengthInt = switch (strength) {
-                    case STRONG -> 10;
-                    case WEAK -> 0;
-                };
-
-                strengthToRank(attackStrengthInt).forEach(rank -> {
-                    for (int i = 0; i < headquarter.getAmount(rank.toMaterial()); i++) {
-                        var attacker = new Soldier(this, rank, map);
-
-                        attacker.setHome(headquarter);
-                        attacker.setPosition(headquarter.getPosition());
-
-                        availableAttackersFromBuilding.add(attacker);
-                    }
-                });
-            } else {
-                availableAttackersFromBuilding.addAll(building.getHostedSoldiers());
-                availableAttackersFromBuilding.sort(strengthSorter);
-            }
-
-            if (availableAttackersFromBuilding.isEmpty()) {
-                continue;
-            }
-
-            // Leave one soldier so it can guard the military building
-            if (strength == AttackStrength.STRONG) {
-                availableAttackersFromBuilding.removeFirst();
-            } else {
-                availableAttackersFromBuilding.removeLast();
-            }
+            var availableAttackersFromBuilding = building.getAvailableAttackersForNewAttack(strength);
 
             availableAttackers.addAll(availableAttackersFromBuilding);
         }

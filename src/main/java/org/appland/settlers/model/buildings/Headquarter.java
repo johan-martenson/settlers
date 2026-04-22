@@ -288,7 +288,7 @@ public class Headquarter extends Storehouse {
     public void setMap(GameMap map) {
         super.setMap(map);
 
-        var storageWorker = new StorehouseWorker(getPlayer(), map);
+        var storageWorker = new StorehouseWorker(player, map);
         map.placeWorker(storageWorker, this);
         storageWorker.enterBuilding(this);
         assignWorker(storageWorker);
@@ -303,11 +303,11 @@ public class Headquarter extends Storehouse {
 
         var statisticsManager = map.getStatisticsManager();
 
-        statisticsManager.getPlayerStatistics(getPlayer())
+        statisticsManager.getPlayerStatistics(player)
                 .workers()
                 .report(map.getTime(), InventoryUtils.countWorkersInInventory(this));
 
-        statisticsManager.getPlayerStatistics(getPlayer())
+        statisticsManager.getPlayerStatistics(player)
                 .goods()
                 .report(map.getTime(), InventoryUtils.countGoodsInInventory(this));
     }
@@ -420,16 +420,16 @@ public class Headquarter extends Storehouse {
             actualReservedSoldiers.merge(rank, addToReserve, Integer::sum);
             retrieve(rank.toMaterial(), addToReserve);
 
-            getPlayer().reportChangedInventory(this);
+            player.reportChangedInventory(this);
         } else if (amountInReserve > reservedAmount) {
             var excessSoldiers = amountInReserve - reservedAmount;
             actualReservedSoldiers.put(rank, reservedAmount);
 
             putCargos(rank.toMaterial(), excessSoldiers);
 
-            getPlayer().reportChangedInventory(this);
+            player.reportChangedInventory(this);
         } else {
-            getPlayer().reportChangedReserveAmount(this);
+            player.reportChangedReserveAmount(this);
         }
     }
 
@@ -451,7 +451,7 @@ public class Headquarter extends Storehouse {
 
         for (var rank : Soldier.Rank.values()) {
             for (int i = 0; i < inventory.getOrDefault(rank.toMaterial(), 0); i++) {
-                var soldier = new Soldier(getPlayer(), rank, map);
+                var soldier = new Soldier(player, rank, map);
 
                 soldier.setPosition(getPosition());
                 soldier.setHome(this);
@@ -466,7 +466,7 @@ public class Headquarter extends Storehouse {
     @Override
     public Soldier retrieveHostedSoldier(Soldier soldier) {
         inventory.merge(soldier.getRank().toMaterial(), -1, Integer::sum);
-        getPlayer().reportSoldierLeftBuilding(this);
+        player.reportSoldierLeftBuilding(this);
         soldier.setHome(this);
         map.placeWorkerFromStepTime(soldier, this);
 
@@ -483,7 +483,7 @@ public class Headquarter extends Storehouse {
 
             if (isInStock(material)) {
                 var defender = (Soldier) retrieveWorker(material, null);
-                getPlayer().reportSoldierLeftBuilding(this);
+                player.reportSoldierLeftBuilding(this);
                 map.placeWorker(defender, this);
                 defender.setHome(this);
                 defender.setPosition(getPosition());
@@ -517,7 +517,7 @@ public class Headquarter extends Storehouse {
         inventory.merge(SHIELD, -privatesToDraft, Integer::sum);
         inventory.merge(SWORD, -privatesToDraft, Integer::sum);
 
-        map.getStatisticsManager().soldiersDrafted(getPlayer(), map.getTime(), privatesToDraft);
+        map.getStatisticsManager().soldiersDrafted(player, map.getTime(), privatesToDraft);
     }
 
     public boolean hasAny(Material... materials) {

@@ -418,11 +418,9 @@ public abstract class Worker {
 
         if (position.equals(point)) {
             state = State.IDLE_OUTSIDE;
-
             handleArrival();
         } else {
-            if (wasInside && !target.equals(home.getFlag().getPosition()) &&
-                !offroadOptionsSet.contains(OffroadOption.DONT_WALK_VIA_FLAG)) {
+            if (wasInside && !target.equals(home.getFlag().getPosition()) && !offroadOptionsSet.contains(OffroadOption.DONT_WALK_VIA_FLAG)) {
 
                 // Get from the flag to the target
                 path = map.findWayOffroad(home.getFlag().getPosition(), via, point, null, offroadOptions);
@@ -616,7 +614,6 @@ public abstract class Worker {
 
         // Walk halfway to the given target
         setOffroadTarget(point, offroadOptions);
-
         state = State.WALKING_HALFWAY_AND_EXACTLY_AT_POINT;
     }
 

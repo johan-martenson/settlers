@@ -48,6 +48,7 @@ import org.appland.settlers.model.statistics.StatisticsListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -576,12 +577,12 @@ public class Utils {
         var map = player.getMap();
 
         for (int i = 0; i < 1000; i++) {
-            var military = findSoldierOutsideBuilding(player);
+            var soldier = findSoldierOutsideBuilding(player);
 
-            if (military != null) {
-                assertEquals(military.getPlayer(), player);
+            if (soldier != null) {
+                assertEquals(soldier.getPlayer(), player);
 
-                return military;
+                return soldier;
             }
 
             map.stepTime();
@@ -3368,9 +3369,15 @@ public class Utils {
 
         var opponent = soldier.getOpponent();
 
+        if (!opponent.isFighting()) {
+            map.stepTime();
+        }
+
+        System.out.println(opponent);
+
         assertTrue(soldier.isFighting());
-        assertTrue(opponent.isFighting());
         assertEquals(soldier.getPosition(), opponent.getPosition());
+        assertTrue(opponent.isFighting());
 
         return opponent;
     }
@@ -3408,6 +3415,63 @@ public class Utils {
         }
 
         assertEquals(building.getHostedSoldiers().size(), amount);
+    }
+
+    public static void setReserves(Headquarter headquarter, int privates, int privatesFirstClass, int sergeants, int officers, int generals) {
+        headquarter.setReservedSoldiers(PRIVATE_RANK, privates);
+        headquarter.setReservedSoldiers(PRIVATE_FIRST_CLASS_RANK, privatesFirstClass);
+        headquarter.setReservedSoldiers(SERGEANT_RANK, sergeants);
+        headquarter.setReservedSoldiers(OFFICER_RANK, officers);
+        headquarter.setReservedSoldiers(GENERAL_RANK, generals);
+    }
+
+    public static List<Soldier> waitForRemoteDefender(Building building) throws InvalidUserActionException {
+        for (int i = 0; i < 20_000; i++) {
+            var remoteDefenders = building.getMap().getWorkers().stream()
+                    .filter(Worker::isSoldier)
+                    .filter(worker -> !worker.isDead())
+                    .filter(worker -> worker.getPlayer().equals(building.getPlayer()))
+                    .filter(worker -> !worker.isInsideBuilding())
+                    .filter(worker -> !Objects.equals(worker.getHome(), building))
+                    .filter(worker -> !Objects.equals(worker.getTarget(), building.getPosition()))
+                    .filter(worker -> Math.abs(worker.getPosition().x - building.getPosition().x) <= 4 &&
+                            Math.abs(worker.getPosition().y - building.getPosition().y) < 4)
+                    .map(worker -> (Soldier) worker)
+                    .toList();
+
+            if (!remoteDefenders.isEmpty()) {
+                return remoteDefenders;
+            }
+
+            building.getMap().stepTime();
+        }
+
+        return Collections.emptyList();
+    }
+
+    public static void waitForSoldierToWalkToFixedPoint(Soldier soldier, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 2_000; i++) {
+            if (!soldier.isTraveling()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(soldier.isTraveling());
+    }
+
+    public static void waitForSoldierToStopWalkingApart(Soldier soldier, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 2_000; i++) {
+            System.out.println(soldier.getPercentageOfDistanceTraveled());
+
+            if (soldier.getPercentageOfDistanceTraveled() == 50) {
+                break;
+            }
+
+
+            map.stepTime();
+        }
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor, StatisticsListener {

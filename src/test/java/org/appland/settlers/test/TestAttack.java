@@ -415,7 +415,7 @@ public class TestAttack {
         headquarter1.setReservedSoldiers(PRIVATE_RANK, 0);
         headquarter0.setReservedSoldiers(GENERAL_RANK, 0);
 
-        Utils.adjustInventoryTo(headquarter0, PRIVATE, 5);
+        Utils.adjustInventoryTo(headquarter0, SERGEANT, 5);
         Utils.adjustInventoryTo(headquarter1, GENERAL, 4);
         Utils.adjustInventoryTo(headquarter2, PRIVATE, 5);
 
@@ -490,7 +490,8 @@ public class TestAttack {
         player2.attack(barracks1, 1, AttackStrength.STRONG);
 
         // Find the attacker
-        var attackers1 = Utils.findSoldiersOutsideBuilding(player2);
+
+        var attackers1 = Utils.waitForAliveSoldiersOutsideBuilding(player2, 1);
 
         assertEquals(attackers1.size(), 1);
 
@@ -542,6 +543,72 @@ public class TestAttack {
 
         // Wait for the defenders to go back inside
         Utils.waitForNoWorkerOutsideBuilding(Soldier.class, player1);
+
+
+        /// Third attack - secondary attacker and no remote defenders
+
+        // Ensure all soldiers have returned inside after the previous attack
+        Utils.waitForNoSoldiersToBeOutside(map);
+
+        // Make player 1 stop using remote defenders
+        player1.setDefenseFromSurroundingBuildings(0);
+
+        // Wait for player 0's barracks to get two soldiers again
+        Utils.waitForBuildingToHaveHostedSoldiers(barracks0, 2);
+
+        // Launch the second attack
+        assertTrue(player0.canAttack(barracks1));
+        assertEquals(headquarter1.getAmount(GENERAL), 0);
+        assertEquals(barracks0.getHostedSoldiers().size(), 2);
+        assertEquals(barracks1.getHostedSoldiers().size(), 2);
+        assertEquals(barracks3.getHostedSoldiers().size(), 2);
+        assertEquals(player0.getNumberOfAvailableAttackers(barracks1), 2);
+
+        player0.attack(barracks1, 2, AttackStrength.STRONG);
+
+        // Find the attackers
+        var attackers2 = Utils.waitForAliveSoldiersOutsideBuilding(player0, 2);
+
+        assertEquals(attackers2.size(), 2);
+
+        // Wait for one of the attackers to reach the flag of the barracks
+        var primaryAttacker2 = Utils.waitForOneOfWorkersToReachPoint(attackers2, barracks1.getFlag().getPosition(), map);
+
+        assertEquals(primaryAttacker2.getPosition(), barracks1.getFlag().getPosition());
+        assertFalse(primaryAttacker2.isDead());
+
+        var secondaryAttacker2 = attackers2.stream().filter(att -> !att.equals(primaryAttacker2)).findFirst().get();
+
+        assertNotNull(secondaryAttacker2);
+
+        // Wait for the secondary attacker to stop close to the flag and wait
+        assertTrue(Math.abs(secondaryAttacker2.getTarget().x - barracks1.getFlag().getPosition().x) < 3);
+        assertTrue(Math.abs(secondaryAttacker2.getTarget().y - barracks1.getFlag().getPosition().y) < 2);
+        assertFalse(primaryAttacker2.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, secondaryAttacker2, secondaryAttacker2.getTarget());
+
+        // Verify that the secondary attacker keeps waiting until the fight is over and then goes to fight the defender
+        assertFalse(primaryAttacker2.isDead());
+
+        for (int i = 0; i < 2_000; i++) {
+            if (primaryAttacker2.isDead()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(primaryAttacker2.isDead());
+
+        // Verify that the secondary attacker fights the defender
+        assertEquals(secondaryAttacker2.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, secondaryAttacker2, barracks1.getFlag().getPosition());
+
+        Utils.fastForward(5, map);
+
+        assertTrue(secondaryAttacker2.isFighting());
     }
 
     @Test
@@ -815,7 +882,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -872,7 +939,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -936,7 +1003,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -1011,7 +1078,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -1085,7 +1152,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -1176,7 +1243,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -1272,7 +1339,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -1372,7 +1439,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -1578,7 +1645,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -1674,7 +1741,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -1780,7 +1847,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -1894,7 +1961,7 @@ public class TestAttack {
 
         player0.attack(fortress0, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -2004,7 +2071,7 @@ public class TestAttack {
 
         player0.attack(fortress0, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -2112,7 +2179,7 @@ public class TestAttack {
 
         player0.attack(fortress0, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -2220,7 +2287,7 @@ public class TestAttack {
 
         player0.attack(fortress0, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -3058,7 +3125,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -3186,7 +3253,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -3299,7 +3366,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 2, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
@@ -3405,7 +3472,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 8, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 8, player0);
@@ -3530,7 +3597,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.waitForSoldierOutsideBuilding(player0);
@@ -4084,7 +4151,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -4205,7 +4272,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -4338,7 +4405,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -4564,7 +4631,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -4662,7 +4729,7 @@ public class TestAttack {
 
         player0.attack(guardHouse0, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -5025,7 +5092,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -5149,7 +5216,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -5270,7 +5337,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -5390,7 +5457,7 @@ public class TestAttack {
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -5529,7 +5596,7 @@ public class TestAttack {
 
         player1.attack(barracks0, 8, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         Utils.fastForward(20, map);
 
         var attackers = Utils.findSoldiersOutsideBuilding(player1);
@@ -5608,7 +5675,7 @@ public class TestAttack {
 
         player1.attack(barracks0, 8, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         Utils.fastForward(20, map);
 
         var attackers = Utils.waitForAliveSoldiersOutsideBuilding(player1, 8);
@@ -6471,7 +6538,7 @@ public class TestAttack {
 
         player0.attack(headquarter1, 1, AttackStrength.STRONG);
 
-        // Find the military that was chosen to attack
+        // Find the soldier that was chosen to attack
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
@@ -6552,5 +6619,110 @@ public class TestAttack {
         headquarter0.setReservedSoldiers(PRIVATE_RANK, 0);
 
         assertEquals(headquarter0.getNumberOfSoldiersAvailableForNewAttack(), 3);
+    }
+
+    @Test
+    public void testSecondAttackStallsDueToStaleWaitingDefenders() throws Exception {
+
+        // Create players
+        var attacker = new Player("Attacker", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var defender = new Player("Defender", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(attacker, defender), 40, 41);
+
+        // Place headquarters
+        var hqA = map.placeBuilding(new Headquarter(attacker), new Point(5, 5));
+        var hqD = map.placeBuilding(new Headquarter(defender), new Point(20, 20));
+
+        // Clear and control inventories
+        Utils.clearSoldiersFromInventory(hqA, hqD);
+
+        Utils.adjustInventoryTo(hqA, PRIVATE, 5);
+        Utils.adjustInventoryTo(hqD, GENERAL, 5);
+
+        // Place two defender barracks (one main, one for remote defenders)
+        var target = map.placeBuilding(new Barracks(defender), new Point(19, 15));
+        var support = map.placeBuilding(new Barracks(defender), new Point(25, 15));
+
+        // Connect roads
+        map.placeAutoSelectedRoad(defender, hqD.getFlag(), target.getFlag());
+        map.placeAutoSelectedRoad(defender, hqD.getFlag(), support.getFlag());
+
+        // Wait for construction and population
+        Utils.waitForBuildingsToBeConstructed(target, support);
+        Utils.waitForMilitaryBuildingsToGetPopulated(target, support);
+
+        Utils.waitForBuildingToHaveHostedSoldiers(target, 2);
+        Utils.waitForBuildingToHaveHostedSoldiers(support, 2);
+
+        /// FIRST ATTACK (leave stale waiting defenders)
+
+        assertTrue(attacker.canAttack(target));
+
+        attacker.attack(target, 2, AttackStrength.STRONG);
+
+        var attackers0 = Utils.waitForAliveSoldiersOutsideBuilding(attacker, 2);
+
+        // Wait for attacker to reach flag
+        var primaryAttacker0 = Utils.waitForOneOfWorkersToReachPoint(
+                attackers0,
+                target.getFlag().getPosition(),
+                map
+        );
+
+        // Wait for first fight to start
+        Utils.waitForSoldierToBeFightingOpponent(primaryAttacker0, map);
+
+        // Wait for at least one additional defender (remote or idle)
+        var defenders0 = Utils.waitForAliveSoldiersOutsideBuilding(defender, 2);
+
+        assertTrue(defenders0.size() > 1);
+
+        // Kill attackers quickly so not all defenders get matched
+        Utils.waitForWorkersToDie(attackers0, map);
+
+        // IMPORTANT: do NOT wait too long here — leave defenders mid-state
+        //Utils.fastForward(5, map);
+
+        // Ensure battlefield is clear
+        Utils.waitForNoWorkerOutsideBuilding(Soldier.class, defender);
+
+        // 🔍 This is the bug condition we want to provoke
+        // (we can't directly access waitingDefenders, so we rely on behavior later)
+
+
+        /// SECOND ATTACK (should expose bug)
+
+        assertTrue(attacker.canAttack(target));
+
+        attacker.attack(target, 1, AttackStrength.STRONG);
+
+        var attackers1 = Utils.waitForAliveSoldiersOutsideBuilding(attacker, 1);
+        System.out.println(attackers1);
+        assertEquals(attackers1.size(), 1);
+
+        var primaryAttacker1 = Utils.waitForOneOfWorkersToReachPoint(
+                attackers1,
+                target.getFlag().getPosition(),
+                map
+        );
+
+        assertEquals(target.getFlag().getPosition(), primaryAttacker1.getPosition());
+
+        // Now we expect a defender to engage...
+        // BUT due to stale waitingDefenders, this may stall
+
+        boolean fightStarted = false;
+
+        for (int i = 0; i < 1000; i++) {
+            if (primaryAttacker1.isFighting()) {
+                fightStarted = true;
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        // ❌ This assertion should FAIL with the bug present
+        assertTrue("Attacker never got a defender due to stale waitingDefenders", fightStarted);
     }
 }

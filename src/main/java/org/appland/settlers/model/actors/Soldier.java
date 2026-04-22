@@ -332,8 +332,6 @@ public class Soldier extends Worker {
 
                     // Walk apart from the attacker before starting the fight
                     state = State.WALKING_APART_TO_DEFEND;
-
-                    // Walk half a point away
                     walkHalfWayOffroadTo(getPosition().right(), OffroadOption.CAN_END_ON_STONE);
 
                     // Fight the next attacker if this is a remote defender and there are attackers waiting
@@ -358,15 +356,14 @@ public class Soldier extends Worker {
                     opponent.reserveForFight(this);
 
                     state = WALKING_TO_FIGHT_TO_DEFEND;
-
                     setOffroadTarget(buildingToDefend.getFlag().getPosition());
                 }
             }
             case WALKING_TO_FIGHT_TO_DEFEND -> {
                 if (!opponent.isTraveling()) {
                     opponent.prepareForFight(this);
-                    state = State.WALKING_APART_TO_DEFEND;
 
+                    state = State.WALKING_APART_TO_DEFEND;
                     walkHalfWayOffroadTo(getPosition().right(), OffroadOption.CAN_END_ON_STONE);
                 }
             }
