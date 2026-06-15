@@ -16,7 +16,7 @@ public class Utils {
     static String getHex(byte[] blockHeader1) {
         var hex = new StringBuilder();
 
-        for (byte b : blockHeader1) {
+        for (var b : blockHeader1) {
             hex.append(String.format("%02X", b & 0xff));
         }
 

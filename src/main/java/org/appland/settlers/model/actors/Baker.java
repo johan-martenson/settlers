@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.appland.settlers.model.actors;
 
 import org.appland.settlers.model.Cargo;
@@ -96,7 +90,7 @@ public class Baker extends Worker {
                     if (home.getFlag().hasPlaceForMoreCargo()) {
                         var cargo = new Cargo(BREAD, map);
                         setCargo(cargo);
-                        home.getFlag().promiseCargo(getCargo());
+                        home.getFlag().promiseCargo(carriedCargo);
 
                         state = State.GOING_TO_FLAG_WITH_BREAD;
                         setTarget(home.getFlag().getPosition());
@@ -132,7 +126,6 @@ public class Baker extends Worker {
 
                         state = GOING_TO_FLAG_WITH_BREAD;
                         setTarget(home.getFlag().getPosition());
-
                     }
                 }
 
@@ -225,7 +218,7 @@ public class Baker extends Worker {
             state = RETURNING_TO_STORAGE;
             setTarget(storage.getPosition());
         } else {
-            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), BAKER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, BAKER);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;
@@ -246,7 +239,7 @@ public class Baker extends Worker {
 
     @Override
     protected void onWalkingAndAtFixedPoint() {
-        if (state == WALKING_TO_TARGET && map.isFlagAtPoint(position) && !map.arePointsConnectedByRoads(position, getTarget())) {
+        if (state == WALKING_TO_TARGET && map.isFlagAtPoint(position) && !map.arePointsConnectedByRoads(position, target)) {
             clearTargetBuilding();
             returnToStorage();
         }

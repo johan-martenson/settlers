@@ -5,7 +5,6 @@
  */
 package org.appland.settlers.computer;
 
-import org.appland.settlers.model.EndPoint;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
@@ -86,7 +85,7 @@ public class GamePlayUtils {
         if (road != null) {
             var player = road.getPlayer();
 
-            for (Point point : road.getWayPoints()) {
+            for (var point : road.getWayPoints()) {
                 if (map.isAvailableFlagPoint(player, point)) {
                     map.placeFlag(player, point);
                 }
@@ -235,8 +234,8 @@ public class GamePlayUtils {
         var flag1 = (Flag) null;
         var flag2 = (Flag) null;
 
-        for (Flag fromFlag : fromFlags) {
-            for (Flag toFlag : toFlags) {
+        for (var fromFlag : fromFlags) {
+            for (var toFlag : toFlags) {
                 int totalDistance = 0;
 
                 if (!fromFlag.equals(from)) {
@@ -278,7 +277,7 @@ public class GamePlayUtils {
             var flag = flagsToSearch.removeFirst();
             fromFlags.add(flag);
 
-            for (Road road : map.getRoadsFromFlag(flag)) {
+            for (var road : map.getRoadsFromFlag(flag)) {
                 if (searchedRoads.contains(road)) {
                     continue;
                 }
@@ -461,7 +460,7 @@ public class GamePlayUtils {
         double distanceToBorder = Double.MAX_VALUE;
         var closeEnemyBuilding = (Building) null;
 
-        for (Point p : player.getDiscoveredLand()) {
+        for (var p : player.getDiscoveredLand()) {
             var owner = player.getPlayerAtPoint(p);
 
             if (owner == null || owner.equals(player) || !map.isBuildingAtPoint(p)) {

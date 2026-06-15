@@ -6,15 +6,13 @@
 
 package org.appland.settlers.model.actors;
 
-import org.appland.settlers.model.buildings.Building;
-import org.appland.settlers.model.buildings.Catapult;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
-import org.appland.settlers.model.MapPoint;
 import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Projectile;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Catapult;
 import org.appland.settlers.model.buildings.Storehouse;
 
 import static org.appland.settlers.model.Material.STONE;
@@ -25,12 +23,12 @@ import static org.appland.settlers.model.Material.STONE;
  */
 @Walker(speed = 10)
 public class CatapultWorker extends Worker {
-    private final Countdown countdown;
+    private final Countdown countdown = new Countdown();
 
     private static final int RESTING_TIME = 99;
     private static final int MAX_RANGE = 15;
 
-    private State state;
+    private State state = State.WALKING_TO_TARGET;
 
     private enum State {
         WALKING_TO_TARGET,
@@ -40,9 +38,6 @@ public class CatapultWorker extends Worker {
 
     public CatapultWorker(Player player, GameMap map) {
         super(player, map);
-
-        countdown = new Countdown();
-        state = State.WALKING_TO_TARGET;
     }
 
     @Override
@@ -56,21 +51,21 @@ public class CatapultWorker extends Worker {
         if (state == State.RESTING_IN_HOUSE) {
 
             // Countdown if there are stones available
-            if (getHome().getAmount(STONE) > 0) {
+            if (home.getAmount(STONE) > 0) {
 
                 if (countdown.hasReachedZero()) {
                     var target = findReachableTarget();
 
                     // Fire a projectile if there was a suitable target
                     if (target != null) {
-                        var projectile = new Projectile((Catapult)getHome(), target, map);
+                        var projectile = new Projectile((Catapult)home, target, map);
 
                         map.placeProjectile(projectile);
 
                         // Consume the stone
-                        getHome().consumeOne(STONE);
+                        home.consumeOne(STONE);
 
-                        map.getStatisticsManager().stoneThrown((Catapult) getHome(), map.getTime());
+                        map.getStatisticsManager().stoneThrown((Catapult) home, map.getTime());
 
                         // Rest again
                         countdown.countFrom(RESTING_TIME);
@@ -85,8 +80,7 @@ public class CatapultWorker extends Worker {
     @Override
     protected void onArrival() {
         if (state == State.RETURNING_TO_STORAGE) {
-            var storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
-
+            var storehouse = (Storehouse)map.getBuildingAtPoint(position);
             storehouse.depositWorker(this);
         }
     }
@@ -94,36 +88,31 @@ public class CatapultWorker extends Worker {
     @Override
     public String toString() {
         if (isExactlyAtPoint()) {
-            return "Catapult worker " + getPosition();
+            return "Catapult worker %s".formatted(position);
         } else {
-            return "Catapult worker " + getPosition() + " - " + getNextPoint();
+            return "Catapult worker %s - %s".formatted(position, getNextPoint());
         }
     }
 
     @Override
     protected void onReturnToStorage() {
-        var storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
+        var storage = GameUtils.getClosestStorageConnectedByRoads(position, player);
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
-
             setTarget(storage.getPosition());
         } else {
-
-            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
+            storage = GameUtils.getClosestStorageOffroad(player, position);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
-
                 setOffroadTarget(storage.getPosition());
             }
         }
     }
 
     private Building findReachableTarget() {
-
-        for (Point point : map.getPointsWithinRadius(getPosition(), MAX_RANGE)) {
-
+        for (var point : map.getPointsWithinRadius(position, MAX_RANGE)) {
             var mapPoint = map.getMapPoint(point);
 
             // Filter points without a building
@@ -134,7 +123,7 @@ public class CatapultWorker extends Worker {
             var building = mapPoint.getBuilding();
 
             // Filter buildings belonging to the same player
-            if (building.getPlayer().equals(getPlayer())) {
+            if (building.getPlayer().equals(player)) {
                 continue;
             }
 
@@ -159,8 +148,8 @@ public class CatapultWorker extends Worker {
 
         // Return to storage if the planned path no longer exists
         if (state == State.WALKING_TO_TARGET &&
-            map.isFlagAtPoint(getPosition()) &&
-            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+            map.isFlagAtPoint(position) &&
+            !map.arePointsConnectedByRoads(position, target)) {
 
             // Don't try to enter the catapult upon arrival
             clearTargetBuilding();

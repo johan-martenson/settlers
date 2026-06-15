@@ -199,7 +199,7 @@ public class DonkeyBreeder extends Worker {
     protected void onWalkingAndAtFixedPoint() {
         if (state == WALKING_TO_TARGET &&
             map.isFlagAtPoint(position) &&
-            !map.arePointsConnectedByRoads(position, getTarget())) {
+            !map.arePointsConnectedByRoads(position, target)) {
             clearTargetBuilding();
             returnToStorage();
         }

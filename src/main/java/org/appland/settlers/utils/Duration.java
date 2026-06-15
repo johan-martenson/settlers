@@ -15,10 +15,9 @@ public class Duration {
     public void reportStatsAndContinueToAggregate(Stats stats) {
         var previous = (Stamp) null;
 
-        for (Stamp stamp : timestamps) {
+        for (var stamp : timestamps) {
             if (previous != null) {
                 var variableName = name + "." + stamp.name;
-
                 var variable = stats.addPeriodicCounterVariableIfAbsent(variableName);
 
                 variable.reportValue(stamp.timestamp - previous.timestamp);
@@ -36,10 +35,9 @@ public class Duration {
 
     public Collection<String> getVariables() {
         var variables = new ArrayList<String>();
-
         var previous = (Stamp) null;
 
-        for (Stamp stamp : timestamps) {
+        for (var stamp : timestamps) {
             if (previous != null) {
                 var variableName = name + "." + stamp.name;
 
@@ -96,10 +94,9 @@ public class Duration {
 
         var previous = (Stamp) null;
 
-        for (Stamp stamp : timestamps) {
+        for (var stamp : timestamps) {
             if (previous != null) {
                 var variableName = name + "." + stamp.name;
-
                 var variable = stats.addVariableIfMissing(variableName);
 
                 variable.reportValue(stamp.timestamp - previous.timestamp);

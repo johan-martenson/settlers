@@ -146,10 +146,10 @@ public class Stonemason extends Worker {
 
             case WAITING_FOR_SPACE_ON_FLAG -> {
                 if (home.getFlag().hasPlaceForMoreCargo()) {
+                    home.getFlag().promiseCargo(carriedCargo);
+
                     state = State.GOING_TO_PUT_STONE_AT_FLAG;
                     setOffroadTarget(home.getFlag().getPosition());
-
-                    home.getFlag().promiseCargo(getCargo());
                 }
             }
 
@@ -245,8 +245,8 @@ public class Stonemason extends Worker {
                 state = State.RETURNING_TO_STORAGE;
                 setOffroadTarget(storage.getPosition());
             } else {
-                setOffroadTarget(findPlaceToDie(), position.downRight());
                 state = State.GOING_TO_DIE;
+                setOffroadTarget(findPlaceToDie(), position.downRight());
             }
         }
     }
@@ -267,7 +267,7 @@ public class Stonemason extends Worker {
             case WALKING_TO_TARGET ->  {
 
                 // Return to storage if the planned path doesn't exist
-                if (map.isFlagAtPoint(position) && !map.arePointsConnectedByRoads(position, getTarget())) {
+                if (map.isFlagAtPoint(position) && !map.arePointsConnectedByRoads(position, target)) {
                     clearTargetBuilding();
                     returnToStorage();
                 }

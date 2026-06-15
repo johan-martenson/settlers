@@ -102,7 +102,7 @@ public class Road {
     private boolean areRoadStepsTooLong(List<Point> wayPoints) {
         var previous = (Point) null;
 
-        for (Point current : wayPoints) {
+        for (var current : wayPoints) {
             if (previous == null) {
                 previous = current;
                 continue;

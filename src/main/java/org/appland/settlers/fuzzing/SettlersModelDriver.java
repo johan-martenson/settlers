@@ -4,17 +4,17 @@ import org.appland.settlers.assets.Nation;
 import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.maps.MapLoader;
 import org.appland.settlers.model.AttackStrength;
-import org.appland.settlers.model.PlayerType;
-import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.TransportCategory;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Bakery;
 import org.appland.settlers.model.buildings.Barracks;
@@ -48,11 +48,9 @@ import org.appland.settlers.utils.TestCaseGenerator;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -134,7 +132,7 @@ public class SettlersModelDriver {
         map.setPlayers(players);
 
         // Start monitoring for each player
-        for (Player player : players) {
+        for (var player : players) {
             player.monitorGameView((player1, gameChangesList) -> {
 
             });
@@ -1095,7 +1093,6 @@ public class SettlersModelDriver {
         testCaseGenerator.recordFastForward(iterations, map);
 
         for (int i = 0; i < iterations; i++) {
-
             map.stepTime();
         }
     }

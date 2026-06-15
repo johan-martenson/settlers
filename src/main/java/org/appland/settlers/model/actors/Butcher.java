@@ -61,6 +61,7 @@ public class Butcher extends Worker {
                     if (home.getAmount(PIG) > 0 && home.isProductionEnabled()) {
                         state = State.SLAUGHTERING_PIG;
                         countdown.countFrom(PRODUCTION_TIME);
+
                         player.reportChangedBuilding(home);
                         map.reportWorkerStartedAction(this, WorkerAction.SLAUGHTERING);
                         goOutside();
@@ -88,11 +89,11 @@ public class Butcher extends Worker {
                     // Handle transportation
                     if (home.getFlag().hasPlaceForMoreCargo()) {
                         setCargo(new Cargo(MEAT, map));
+                        home.getFlag().promiseCargo(carriedCargo);
 
                         // Go out to the flag to deliver the meat
                         state = State.GOING_TO_FLAG_WITH_CARGO;
                         setTarget(home.getFlag().getPosition());
-                        home.getFlag().promiseCargo(carriedCargo);
                     } else {
                         state = WAITING_FOR_SPACE_ON_FLAG;
                         goInside();
@@ -105,11 +106,11 @@ public class Butcher extends Worker {
             case WAITING_FOR_SPACE_ON_FLAG -> {
                 if (home.getFlag().hasPlaceForMoreCargo()) {
                     setCargo(new Cargo(MEAT, map));
+                    home.getFlag().promiseCargo(carriedCargo);
 
                     // Go out to the flag to deliver the meat
                     state = GOING_TO_FLAG_WITH_CARGO;
                     setTarget(home.getFlag().getPosition());
-                    home.getFlag().promiseCargo(getCargo());
                 }
             }
 
@@ -139,9 +140,9 @@ public class Butcher extends Worker {
     protected void onArrival() {
         switch (state) {
             case GOING_TO_FLAG_WITH_CARGO -> {
-                var flag = map.getFlagAtPoint(getPosition());
+                var flag = map.getFlagAtPoint(position);
 
-                carriedCargo.setPosition(getPosition());
+                carriedCargo.setPosition(position);
                 carriedCargo.transportToReceivingBuilding(this::isMeatReceiver);
 
                 flag.putCargo(carriedCargo);
@@ -154,33 +155,33 @@ public class Butcher extends Worker {
 
             case GOING_BACK_TO_HOUSE -> {
                 enterBuilding(home);
+
                 state = RESTING_IN_HOUSE;
                 countdown.countFrom(RESTING_TIME);
             }
 
             case RETURNING_TO_STORAGE -> {
-                var storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
+                var storehouse = (Storehouse) map.getBuildingAtPoint(position);
                 storehouse.depositWorker(this);
             }
 
             case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
 
                 // Go to the closest storage
-                var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BUTCHER);
+                var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, BUTCHER);
 
                 if (storehouse != null) {
                     state = RETURNING_TO_STORAGE;
-
                     setTarget(storehouse.getPosition());
                 } else {
                     state = State.GOING_TO_DIE;
-
                     setOffroadTarget(findPlaceToDie());
                 }
             }
 
             case GOING_TO_DIE -> {
                 setDead();
+
                 state = State.DEAD;
                 countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
             }
@@ -200,7 +201,6 @@ public class Butcher extends Worker {
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
-
             setTarget(storage.getPosition());
         } else {
             storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, BUTCHER);
@@ -209,8 +209,8 @@ public class Butcher extends Worker {
                 state = RETURNING_TO_STORAGE;
                 setOffroadTarget(storage.getPosition());
             } else {
-                setOffroadTarget(findPlaceToDie(), position.downRight());
                 state = State.GOING_TO_DIE;
+                setOffroadTarget(findPlaceToDie(), position.downRight());
             }
         }
     }

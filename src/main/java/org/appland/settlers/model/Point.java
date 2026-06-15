@@ -39,7 +39,7 @@ public class Point extends java.awt.Point {
         if (printCount % 20000 == 0) {
             System.out.println("\n\nAllocated points at");
 
-            for (String key : allocators.keySet()) {
+            for (var key : allocators.keySet()) {
                 if (allocators.get(key) > 1000) {
                     System.out.println("  " + key + " - " + allocators.get(key));
                 }

@@ -1,20 +1,16 @@
 package org.appland.settlers.computer;
 
-import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.utils.CumulativeDuration;
-import org.appland.settlers.utils.Duration;
+import org.appland.settlers.model.buildings.Barracks;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.utils.Group;
 import org.appland.settlers.utils.Stats;
-import org.appland.settlers.utils.Variable;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -263,7 +259,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
         var bestPoint = (Point) null;
 
         // First collect all possible points to build on
-        for (Point borderPoint : player.getBorderPoints()) {
+        for (var borderPoint : player.getBorderPoints()) {
 
             // Filter border points that are too close to the edge of the map
             if (borderPoint.x < 3 || borderPoint.x > map.getWidth() - 3 &&
@@ -272,8 +268,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
             }
 
             // Go through points for construction close to the border point
-            for (Point point : map.getPointsWithinRadius(borderPoint, MAX_DISTANCE_FROM_BORDER)) {
-
+            for (var point : map.getPointsWithinRadius(borderPoint, MAX_DISTANCE_FROM_BORDER)) {
                 var innerDuration = stats.measureCumulativeDuration("ExpandLandPlayer.findSpotForNextBarracks.innerFor", collectEachTurnGroup);
 
                 // Filter out border too close to the edge of the map
@@ -349,9 +344,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
 
                 // Determine if this point is close to an enemy
                 if (preferEnemyDirection) {
-
-                    for (Building enemyMilitaryBuilding : enemyMilitaryBuildings) {
-
+                    for (var enemyMilitaryBuilding : enemyMilitaryBuildings) {
                         double distanceToEnemyBuilding = point.distance(enemyMilitaryBuilding.getPosition());
 
                         if (distanceToEnemyBuilding < ENEMY_CLOSE) {
@@ -367,8 +360,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
                 // Reward points that are far from own military buildings
                 double distanceToClosestMilitaryBuilding = Double.MAX_VALUE;
 
-                for (Building militaryBuilding : ownMilitaryBuildings) {
-
+                for (var militaryBuilding : ownMilitaryBuildings) {
                     double tempDistance = point.distance(militaryBuilding.getPosition());
 
                     if (tempDistance < distanceToClosestMilitaryBuilding) {
@@ -396,7 +388,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
                     var closestFlag = (Flag) null;
                     int distanceToClosestFlag = Integer.MAX_VALUE;
 
-                    for (Flag flag : flagsReachableFromHeadquarter) {
+                    for (var flag : flagsReachableFromHeadquarter) {
                         int candidateDistanceToClosestFlag = GameUtils.distanceInGameSteps(pointDownRight, flag.getPosition());
 
                         if (candidateDistanceToClosestFlag < distanceToClosestFlag) {
@@ -464,7 +456,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
     private void evacuateWherePossible(Player player) {
 
         // Go through the buildings and evacuate where possible
-        for (Building storedBuilding : placedBarracks) {
+        for (var storedBuilding : placedBarracks) {
 
             // Cater for upgrades
             var building = map.getBuildingAtPoint(storedBuilding.getPosition());
@@ -482,7 +474,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
             // Check if the building is far enough from the border
             boolean borderClose = false;
 
-            for (Point borderPoint : player.getBorderPoints()) {
+            for (var borderPoint : player.getBorderPoints()) {
 
                 // Filter points beyond the evacuation threshold
                 if (borderPoint.distance(building.getPosition()) >= THRESHOLD_FOR_EVACUATION) {
@@ -519,7 +511,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
 
     void registerBuildings(List<Building> wonBuildings) throws InvalidUserActionException {
 
-        for (Building building : wonBuildings) {
+        for (var building : wonBuildings) {
 
             // Connect the building to the headquarters if it's not already done
             try {
@@ -564,7 +556,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
     }
 
     private boolean militaryBuildingsFullyOccupied(Player player) {
-        for (Building building : player.getBuildings()) {
+        for (var building : player.getBuildings()) {
 
             // Filter non-military buildings
             if (!building.isMilitaryBuilding()) {

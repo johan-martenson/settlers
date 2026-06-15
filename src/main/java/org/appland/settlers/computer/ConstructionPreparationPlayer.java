@@ -5,17 +5,14 @@
  */
 package org.appland.settlers.computer;
 
-import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.buildings.ForesterHut;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Quarry;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.buildings.Woodcutter;
-
-import java.util.List;
 
 import static org.appland.settlers.model.Size.SMALL;
 
@@ -145,7 +142,7 @@ public class ConstructionPreparationPlayer implements ComputerPlayer {
     }
 
     private Point findStoneWithinBorder() {
-        for (Point point : player.getOwnedLand()) {
+        for (var point : player.getOwnedLand()) {
             if (map.isStoneAtPoint(point)) {
                 return point;
             }

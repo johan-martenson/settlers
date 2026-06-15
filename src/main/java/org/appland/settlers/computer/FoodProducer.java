@@ -1,16 +1,14 @@
 package org.appland.settlers.computer;
 
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Bakery;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Farm;
 import org.appland.settlers.model.buildings.Fishery;
-import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.HunterHut;
 import org.appland.settlers.model.buildings.Mill;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.buildings.Well;
 
 import java.util.ArrayList;
@@ -65,10 +63,8 @@ public class FoodProducer implements ComputerPlayer {
 
     @Override
     public void turn() throws Exception {
-
         if (state == State.INITIALIZING) {
-
-            for (Building building : controlledPlayer.getBuildings()) {
+            for (var building : controlledPlayer.getBuildings()) {
                 if (building instanceof Headquarter) {
                     headquarter = (Headquarter) building;
 
@@ -135,10 +131,9 @@ public class FoodProducer implements ComputerPlayer {
 
             state = State.WAITING_FOR_HUNTER_HUT;
         } else if (state == State.WAITING_FOR_FISHERY) {
-
             boolean buildingsDone = true;
 
-            for (Fishery fishery : fisheries) {
+            for (var fishery : fisheries) {
                 if (!fishery.isReady()) {
                     buildingsDone = false;
                 }
@@ -148,10 +143,9 @@ public class FoodProducer implements ComputerPlayer {
                 state = State.NEEDS_FOOD;
             }
         } else if (state == State.WAITING_FOR_HUNTER_HUT) {
-
             boolean buildingsDone = true;
 
-            for (HunterHut hunterHut : hunterHuts) {
+            for (var hunterHut : hunterHuts) {
                 if (!hunterHut.isReady()) {
                     buildingsDone = false;
                 }
@@ -194,7 +188,7 @@ public class FoodProducer implements ComputerPlayer {
     private Point findPointForFishery() {
 
         // Look for water
-        for (Point point : controlledPlayer.getOwnedLand()) {
+        for (var point : controlledPlayer.getOwnedLand()) {
 
             // Filter non-water points
             if (!map.isInWater(point)) {
@@ -202,7 +196,7 @@ public class FoodProducer implements ComputerPlayer {
             }
 
             // Find point close by to build a fishery
-            for (Point p : map.getPointsWithinRadius(point, RANGE_FISHERY_TO_WATER)) {
+            for (var p : map.getPointsWithinRadius(point, RANGE_FISHERY_TO_WATER)) {
 
                 // Filter points where it's not possible to build
                 if (map.isAvailableHousePoint(controlledPlayer, p) == null) {
@@ -222,7 +216,7 @@ public class FoodProducer implements ComputerPlayer {
         var site = (Point) null;
         double distance = Double.MAX_VALUE;
 
-        for (Point point : controlledPlayer.getOwnedLand()) {
+        for (var point : controlledPlayer.getOwnedLand()) {
 
             // Filter out points where it's not possible to build
             if (map.isAvailableHousePoint(controlledPlayer, point) == null) {

@@ -192,7 +192,7 @@ public class IronFounder extends Worker {
 
             setTarget(storage.getPosition());
         } else {
-            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), IRON_FOUNDER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, IRON_FOUNDER);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;
@@ -211,7 +211,7 @@ public class IronFounder extends Worker {
         // Return to storage if the planned path no longer exists
         if (state == WALKING_TO_TARGET &&
             map.isFlagAtPoint(position) &&
-            !map.arePointsConnectedByRoads(position, getTarget())) {
+            !map.arePointsConnectedByRoads(position, target)) {
 
             // Don't try to enter the iron foundry upon arrival
             clearTargetBuilding();

@@ -61,7 +61,7 @@ public class Harbor extends Storehouse {
     public void prepareForExpedition() {
         expeditionState = State.COLLECTING_MATERIAL_FOR_NEXT_EXPEDITION;
 
-        for (Entry<Material, Integer> entry : REQUIRED_FOR_EXPEDITION.entrySet()) {
+        for (var entry : REQUIRED_FOR_EXPEDITION.entrySet()) {
             var material = entry.getKey();
             int requiredAmount = entry.getValue();
 
@@ -170,7 +170,7 @@ public class Harbor extends Storehouse {
             ship.setReadyForExpedition();
             expeditionState = State.NO_EXPEDITION_PLANNED;
 
-            getPlayer().reportShipReadyForExpedition(ship);
+        player.reportShipReadyForExpedition(ship);
         } else if (needToShipMaterialToOtherHarbor) {
 
             // What does each settlement need?
@@ -193,13 +193,10 @@ public class Harbor extends Storehouse {
 
     @Override
     public void onConstructionFinished() {
-        getPlayer().reportHarborReady(this);
+        player.reportHarborReady(this);
 
         // Add a storage worker manually if this is a separate settlement
         if (isOwnSettlement) {
-            var player = getPlayer();
-            var map = getMap();
-
             var storehouseWorker = new StorehouseWorker(player, map);
 
             map.placeWorker(storehouseWorker, getFlag());
@@ -233,7 +230,7 @@ public class Harbor extends Storehouse {
     @Override
     public void onStepTime() {
         if (isOccupied()) {
-            needToShipMaterialToOtherHarbor = getPlayer().getBuildings().stream()
+            needToShipMaterialToOtherHarbor = player.getBuildings().stream()
 
                     // Find all harbors that aren't this one
                     .filter(building -> !Objects.equals(building, this))
@@ -248,8 +245,7 @@ public class Harbor extends Storehouse {
     }
 
     private Stream<Material> getMaterialNeedingShippingAsStream() {
-        var buildings = getPlayer().getBuildings();
-        var map = getMap();
+        var buildings = player.getBuildings();
 
         return Arrays.stream(Material.values())
 
@@ -275,7 +271,7 @@ public class Harbor extends Storehouse {
      * @return Returns a nested map with information about how many resources each harbor needs
      */
     public Map<Harbor, Map<Material, Integer>> getNeededShipmentsFromThisHarbor() {
-        return getPlayer().getBuildings().stream()
+        return player.getBuildings().stream()
                 .filter(Building::isReady)
                 .filter(building -> building instanceof Harbor)
                 .filter(building -> !this.equals(building))

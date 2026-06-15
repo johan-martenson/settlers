@@ -453,7 +453,7 @@ public class Headquarter extends Storehouse {
             for (int i = 0; i < inventory.getOrDefault(rank.toMaterial(), 0); i++) {
                 var soldier = new Soldier(player, rank, map);
 
-                soldier.setPosition(getPosition());
+                soldier.setPosition(position);
                 soldier.setHome(this);
 
                 hostedSoldiers.add(soldier);
@@ -486,7 +486,7 @@ public class Headquarter extends Storehouse {
                 player.reportSoldierLeftBuilding(this);
                 map.placeWorker(defender, this);
                 defender.setHome(this);
-                defender.setPosition(getPosition());
+                defender.setPosition(position);
 
                 return defender;
             }

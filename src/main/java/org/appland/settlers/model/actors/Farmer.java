@@ -154,7 +154,7 @@ public class Farmer extends Worker {
                 if (home.getFlag().hasPlaceForMoreCargo()) {
                     setTarget(home.getFlag().getPosition());
                     state = GOING_TO_FLAG_TO_PUT_CARGO;
-                    home.getFlag().promiseCargo(getCargo());
+                    home.getFlag().promiseCargo(carriedCargo);
                 }
             }
 
@@ -298,7 +298,7 @@ public class Farmer extends Worker {
         // Return to storage if the planned path no longer exists
         if (state == WALKING_TO_TARGET &&
             map.isFlagAtPoint(position) &&
-            !map.arePointsConnectedByRoads(position, getTarget())) {
+            !map.arePointsConnectedByRoads(position, target)) {
 
             // Don't try to enter the farm upon arrival
             clearTargetBuilding();

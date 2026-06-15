@@ -96,10 +96,11 @@ PigBreeder extends Worker {
                     if (home.getFlag().hasPlaceForMoreCargo()) {
                         var cargo = new Cargo(PIG, map);
                         setCargo(cargo);
-                        home.getFlag().promiseCargo(getCargo());
+                        home.getFlag().promiseCargo(carriedCargo);
 
                         state = GOING_OUT_TO_PUT_CARGO;
                         setTarget(home.getFlag().getPosition());
+
                         player.reportChangedBuilding(home);
                     } else {
                         state = WAITING_FOR_SPACE_ON_FLAG;
@@ -113,7 +114,7 @@ PigBreeder extends Worker {
                 if (home.getFlag().hasPlaceForMoreCargo()) {
                     var cargo = new Cargo(PIG, map);
                     setCargo(cargo);
-                    home.getFlag().promiseCargo(getCargo());
+                    home.getFlag().promiseCargo(carriedCargo);
 
                     state = GOING_OUT_TO_PUT_CARGO;
                     setTarget(home.getFlag().getPosition());
@@ -135,6 +136,7 @@ PigBreeder extends Worker {
             if (building instanceof Storehouse storehouse) {
                 return !storehouse.isDeliveryBlocked(PIG);
             }
+
             return building.needsMaterial(PIG);
         }
 
@@ -145,11 +147,10 @@ PigBreeder extends Worker {
     public void onArrival() {
         switch (state) {
             case GOING_OUT_TO_PUT_CARGO -> {
-                var cargo = getCargo();
-                cargo.setPosition(position);
-                cargo.transportToReceivingBuilding(this::isPigReceiver);
-                home.getFlag().putCargo(cargo);
-                setCargo(null);
+                carriedCargo.setPosition(position);
+                carriedCargo.transportToReceivingBuilding(this::isPigReceiver);
+                home.getFlag().putCargo(carriedCargo);
+                carriedCargo = null;
 
                 state = GOING_BACK_TO_HOUSE;
                 setTarget(home.getPosition());
@@ -206,7 +207,7 @@ PigBreeder extends Worker {
             state = RETURNING_TO_STORAGE;
             setTarget(storage.getPosition());
         } else {
-            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), PIG_BREEDER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, PIG_BREEDER);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;
@@ -222,7 +223,7 @@ PigBreeder extends Worker {
     protected void onWalkingAndAtFixedPoint() {
         if (state == WALKING_TO_TARGET &&
                 map.isFlagAtPoint(position) &&
-                !map.arePointsConnectedByRoads(position, getTarget())) {
+                !map.arePointsConnectedByRoads(position, target)) {
             clearTargetBuilding();
             returnToStorage();
         }

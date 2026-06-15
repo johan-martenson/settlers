@@ -5,35 +5,28 @@
  */
 package org.appland.settlers.computer;
 
-import org.appland.settlers.model.buildings.Building;
-import org.appland.settlers.model.buildings.CoalMine;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Material;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.Point;
 import org.appland.settlers.model.actors.Geologist;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.CoalMine;
 import org.appland.settlers.model.buildings.GoldMine;
 import org.appland.settlers.model.buildings.GraniteMine;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.IronMine;
-import org.appland.settlers.model.Material;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Sign;
-import org.appland.settlers.model.actors.Worker;
 
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.GOLD;
-import static org.appland.settlers.model.Material.IRON;
-import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.*;
 
 /**
  *
@@ -88,10 +81,8 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
 
     @Override
     public void turn() throws Exception {
-
         if (state == State.INITIALIZING) {
-
-            for (Building building : controlledPlayer.getBuildings()) {
+            for (var building : controlledPlayer.getBuildings()) {
                 if (building instanceof Headquarter) {
                     headquarter = building;
 
@@ -103,13 +94,12 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
                 state = State.LOOKING_FOR_MINERALS;
             }
         } else if (state == State.LOOKING_FOR_MINERALS) {
-
             lookForNewPointsToHandle();
 
             // Update points to investigate
             var noLongerValid = new LinkedList<Point>();
 
-            for (Point p : pointsToInvestigate) {
+            for (var p : pointsToInvestigate) {
                 if (!isAvailableForSign(p)) {
                     noLongerValid.add(p);
                 }
@@ -124,7 +114,7 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
             } else {
 
                 // Send out geologists if needed and possible
-                for (Point p : pointsToInvestigate) {
+                for (var p : pointsToInvestigate) {
 
                     // Skip un-reachable points
                     if (unreachablePoints.contains(p)) {
@@ -181,8 +171,7 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
                 }
             }
         } else if (state == State.LOOKING_FOR_GEOLOGIST) {
-
-            for (Worker w : map.getWorkers()) {
+            for (var w : map.getWorkers()) {
 
                 if (! (w instanceof Geologist)) {
                     continue;
@@ -205,11 +194,10 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
                 countdown.step();
             }
         } else if (state == State.WAITING_FOR_GEOLOGY_RESULTS) {
-
             var newlyInvestigatedPoints = new LinkedList<Point>();
 
             // Find any new results
-            for (Point p : pointsToInvestigate) {
+            for (var p : pointsToInvestigate) {
 
                 if (!map.isSignAtPoint(p)) {
                     continue;
@@ -249,7 +237,7 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
 
     private void lookForNewPointsToHandle() {
         // Look for any new points to handle
-        for (Point point : controlledPlayer.getOwnedLand()) {
+        for (var point : controlledPlayer.getOwnedLand()) {
 
             if (concludedPoints.contains(point)) {
                 continue;
@@ -271,8 +259,7 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
     }
 
     private Point findPointForFlagCloseBy(Point point) {
-
-        for (Point p : map.getPointsWithinRadius(point, RANGE_BETWEEN_FLAG_AND_POINT)) {
+        for (var p : map.getPointsWithinRadius(point, RANGE_BETWEEN_FLAG_AND_POINT)) {
 
             if (!map.isAvailableFlagPoint(controlledPlayer, p)) {
                 continue;
@@ -290,8 +277,7 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
     }
 
     private Flag findFlagCloseBy(Point point) {
-
-        for (Point p : map.getPointsWithinRadius(point, RANGE_BETWEEN_FLAG_AND_POINT)) {
+        for (var p : map.getPointsWithinRadius(point, RANGE_BETWEEN_FLAG_AND_POINT)) {
 
             if (!map.isFlagAtPoint(p)) {
                 continue;

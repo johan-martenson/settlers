@@ -1,23 +1,19 @@
 package org.appland.settlers.computer;
 
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Brewery;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Farm;
-import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.IronSmelter;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.buildings.Well;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.appland.settlers.model.Size.LARGE;
-import static org.appland.settlers.model.Size.MEDIUM;
-import static org.appland.settlers.model.Size.SMALL;
+import static org.appland.settlers.model.Size.*;
 
 /**
  *
@@ -66,10 +62,8 @@ public class MilitaryProducer implements ComputerPlayer {
 
     @Override
     public void turn() throws Exception {
-
         if (state == State.INITIALIZING) {
-
-            for (Building building : controlledPlayer.getBuildings()) {
+            for (var building : controlledPlayer.getBuildings()) {
                 if (building instanceof Headquarter) {
                     headquarter = building;
 

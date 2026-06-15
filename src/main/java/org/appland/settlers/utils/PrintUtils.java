@@ -31,7 +31,7 @@ public class PrintUtils {
 
         String[][] bfr = new String[maxHeight][maxWidth * 2];
 
-        for (MapFilePoint mapFilePoint : mapFile.getMapFilePoints()) {
+        for (var mapFilePoint : mapFile.getMapFilePoints()) {
             int x = mapFilePoint.getGamePointPosition().x;
             int y = mapFilePoint.getGamePointPosition().y;
 
@@ -66,7 +66,7 @@ public class PrintUtils {
 
         // Add highlights
         if (highlights != null) {
-            for (java.awt.Point highlight : highlights) {
+            for (var highlight : highlights) {
                 bfr[highlight.y - 1][highlight.x - 1] = "*";
                 bfr[highlight.y - 1][highlight.x + 1] = "*";
                 bfr[highlight.y + 1][highlight.x - 1] = "*";
@@ -139,7 +139,7 @@ public class PrintUtils {
 
         // Print the render of the map file
         var sb = new StringBuilder();
-        for (String[] row : mapFileRender) {
+        for (var row : mapFileRender) {
             for (int index = 0; index < consoleWidth && index < row.length; index++) {
                 sb.append(Objects.requireNonNullElse(row[index], " "));
             }
@@ -174,7 +174,7 @@ public class PrintUtils {
         System.out.println();
         System.out.println("All spots in the map file");
 
-        for (MapFilePoint mapFilePoint : mapFile.getMapFilePoints()) {
+        for (var mapFilePoint : mapFile.getMapFilePoints()) {
             var point = mapFilePoint.getGamePointPosition();
 
             var spotLeft = mapFile.getMapFilePoint(point.left());

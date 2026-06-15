@@ -35,7 +35,7 @@ public class GameResource implements PlayerChangeListener {
     private boolean cheatingEnabled = false;
 
     @Override
-    public void onPlayerChanged() {
+    public void onPlayerChanged(Player player) {
         listeners.forEach(listener -> listener.onGameResourceChanged(this));
     }
 

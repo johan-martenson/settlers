@@ -84,14 +84,12 @@ public class Carpenter extends Worker {
 
                         // Handle transportation
                         if (home.getFlag().hasPlaceForMoreCargo()) {
-                            var cargo = new Cargo(PLANK, map);
+                            setCargo(new Cargo(PLANK, map));
+                            home.getFlag().promiseCargo(carriedCargo);
 
-                            setCargo(cargo);
                             // Go out to delivery the plank to the flag
                             state = GOING_TO_FLAG_WITH_CARGO;
                             setTarget(home.getFlag().getPosition());
-
-                            home.getFlag().promiseCargo(getCargo());
                         } else {
                             state = WAITING_FOR_SPACE_ON_FLAG;
                         }
@@ -107,13 +105,12 @@ public class Carpenter extends Worker {
 
             case WAITING_FOR_SPACE_ON_FLAG -> {
                 if (home.getFlag().hasPlaceForMoreCargo()) {
+                    setCargo(new Cargo(PLANK, map));
+                    home.getFlag().promiseCargo(carriedCargo);
 
                     // Go out to delivery the plank to the flag
                     state = GOING_TO_FLAG_WITH_CARGO;
                     setTarget(home.getFlag().getPosition());
-
-                    setCargo(new Cargo(PLANK, map));
-                    home.getFlag().promiseCargo(getCargo());
                 }
             }
 
@@ -143,14 +140,10 @@ public class Carpenter extends Worker {
             case GOING_TO_FLAG_WITH_CARGO -> {
                 var flag = map.getFlagAtPoint(position);
 
-                var cargo = getCargo();
-
-                cargo.setPosition(position);
-                cargo.transportToReceivingBuilding(this::isPlankReceiver);
-
-                flag.putCargo(getCargo());
-
-                setCargo(null);
+                carriedCargo.setPosition(position);
+                carriedCargo.transportToReceivingBuilding(this::isPlankReceiver);
+                flag.putCargo(carriedCargo);
+                carriedCargo = null;
 
                 state = GOING_BACK_TO_HOUSE;
                 returnHome();
@@ -203,17 +196,14 @@ public class Carpenter extends Worker {
             state = RETURNING_TO_STORAGE;
             setTarget(storage.getPosition());
         } else {
-            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), CARPENTER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, CARPENTER);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;
                 setOffroadTarget(storage.getPosition());
             } else {
-                var point = findPlaceToDie();
-
-                setOffroadTarget(findPlaceToDie(), position.downRight());
-
                 state = State.GOING_TO_DIE;
+                setOffroadTarget(findPlaceToDie(), position.downRight());
             }
         }
     }
@@ -224,7 +214,7 @@ public class Carpenter extends Worker {
         // Return to storage if the planned path no longer exists
         if (state == WALKING_TO_TARGET &&
             map.isFlagAtPoint(position) &&
-            !map.arePointsConnectedByRoads(position, getTarget())) {
+            !map.arePointsConnectedByRoads(position, target)) {
 
             // Don't try to enter the sawmill upon arrival
             clearTargetBuilding();
@@ -246,7 +236,6 @@ public class Carpenter extends Worker {
     @Override
     public void goToOtherStorage(Building building) {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
-
         setTarget(building.getFlag().getPosition());
     }
 

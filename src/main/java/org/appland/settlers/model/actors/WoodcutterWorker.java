@@ -78,6 +78,7 @@ public class WoodcutterWorker extends Worker {
     protected void onEnterBuilding(Building building) {
         state = State.RESTING_IN_HOUSE;
         countdown.countFrom(TIME_TO_REST);
+
         productivityMeasurer.setBuilding(building);
     }
 
@@ -97,6 +98,7 @@ public class WoodcutterWorker extends Worker {
 
                         state = State.GOING_OUT_TO_CUT_TREE;
                         setOffroadTarget(point);
+
                         player.reportChangedBuilding(home);
                     } else {
                         countdown.step();
@@ -127,7 +129,6 @@ public class WoodcutterWorker extends Worker {
                         state = State.WAITING_FOR_TREE_TO_FALL;
                     } else {
                         state = State.GOING_BACK_TO_HOUSE;
-
                         returnHomeOffroad();
                     }
                 } else {
@@ -222,6 +223,7 @@ public class WoodcutterWorker extends Worker {
 
             case GOING_TO_DIE -> {
                 setDead();
+
                 state = State.DEAD;
                 countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
             }
@@ -231,7 +233,7 @@ public class WoodcutterWorker extends Worker {
     @Override
     public String toString() {
         return isTraveling()
-                ? format("Woodcutter worker at %s walking to , state: %s", position, getNextPoint(), state)
+                ? format("Woodcutter worker at %s walking to %s, state: %s", position, getNextPoint(), state)
                 : format("Woodcutter worker at %s, state: %s", position, state);
     }
 
@@ -241,7 +243,6 @@ public class WoodcutterWorker extends Worker {
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
-
             setTarget(storage.getPosition());
         } else {
             storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, WOODCUTTER_WORKER);
@@ -250,8 +251,7 @@ public class WoodcutterWorker extends Worker {
                 state = State.RETURNING_TO_STORAGE;
                 setOffroadTarget(storage.getPosition());
             } else {
-                var point = findPlaceToDie();
-                setOffroadTarget(point, position.downRight());
+                setOffroadTarget(findPlaceToDie(), position.downRight());
                 state = State.GOING_TO_DIE;
             }
         }
@@ -277,14 +277,14 @@ public class WoodcutterWorker extends Worker {
                 if (map.isFlagAtPoint(position)) {
 
                     // Return to storage if the planned path no longer exists
-                    if (!map.arePointsConnectedByRoads(position, getTarget())) {
+                    if (!map.arePointsConnectedByRoads(position, target)) {
 
                         // Don't try to enter the woodcutter upon arrival
                         clearTargetBuilding();
 
                         // Go back to the storage
                         returnToStorage();
-                    } else if (getTarget().equals(upLeft)) {
+                    } else if (target.equals(upLeft)) {
                         var house = map.getBuildingAtPoint(upLeft);
 
                         house.openDoor();
@@ -304,7 +304,6 @@ public class WoodcutterWorker extends Worker {
     @Override
     public void goToOtherStorage(Building building) {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
-
         setTarget(building.getFlag().getPosition());
     }
 

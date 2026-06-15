@@ -1,19 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
-import org.appland.settlers.model.PlayerChangeListener;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.Mint;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
@@ -312,14 +307,7 @@ public class TestPlayer {
     public void testUpdatePlayer() {
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
-        var listener = new PlayerChangeListener() {
-            boolean playerChanged = false;
-
-            @Override
-            public void onPlayerChanged() {
-                playerChanged = true;
-            }
-        };
+        var listener = new Utils.PlayerMonitor();
 
         // Listen to changes in the player
         player0.addPlayerChangeListener(listener);
@@ -332,6 +320,291 @@ public class TestPlayer {
         assertEquals(player0.getNation(), Nation.JAPANESE);
 
         // Verify that the listener was called
-        assertTrue(listener.playerChanged);
+        assertTrue(listener.getEventsForPlayer(player0).size() > 0);
+    }
+
+    @Test
+    public void testNotificationWhenSettingMilitaryPolicies() throws InvalidUserActionException {
+
+        // Create a player object to update
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+
+        // Subscribe to player changes
+        var playerListener = new Utils.PlayerMonitor();
+        player0.addPlayerChangeListener(playerListener);
+
+        // Verify that no notification is sent if a military setting is unchanged
+        assertEquals(player0.getDefenseFromSurroundingBuildings(), 5);
+        assertEquals(playerListener.getEventsForPlayer(player0).size(), 0);
+
+        player0.setDefenseFromSurroundingBuildings(5);
+
+        assertEquals(playerListener.getEventsForPlayer(player0).size(), 0);
+        assertEquals(player0.getAmountOfSoldiersWhenPopulatingCloseToBorder(), 10);
+
+        player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(10);
+
+        assertEquals(playerListener.getEventsForPlayer(player0).size(), 0);
+        assertEquals(player0.getAmountOfSoldiersWhenPopulatingAwayFromBorder(), 10);
+
+        player0.setAmountOfSoldiersWhenPopulatingAwayFromBorder(10);
+
+        assertEquals(playerListener.getEventsForPlayer(player0).size(), 0);
+        assertEquals(player0.getAmountOfSoldiersWhenPopulatingFarFromBorder(), 10);
+
+        player0.setAmountOfSoldiersWhenPopulatingFarFromBorder(10);
+
+        assertEquals(playerListener.getEventsForPlayer(player0).size(), 0);
+        assertEquals(player0.getStrengthOfSoldiersPopulatingBuildings(), 5);
+
+        player0.setStrengthOfSoldiersPopulatingBuildings(5);
+
+        assertEquals(playerListener.getEventsForPlayer(player0).size(), 0);
+        assertEquals(player0.getDefenseStrength(), 5);
+
+        player0.setDefenseStrength(5);
+
+        assertEquals(playerListener.getEventsForPlayer(player0).size(), 0);
+        assertEquals(player0.getAmountOfSoldiersAvailableForAttack(), 10);
+
+        player0.setAmountOfSoldiersAvailableForAttack(10);
+
+        assertEquals(playerListener.getEventsForPlayer(player0).size(), 0);
+
+        // Verify that a notification is sent each time a military setting is changed
+        player0.setDefenseFromSurroundingBuildings(2);
+
+        assertEquals(playerListener.getEventsForPlayer(player0).size(), 1);
+
+        player0.setDefenseStrength(3);
+
+        assertEquals(playerListener.getEventsForPlayer(player0).size(), 2);
+
+        player0.setStrengthOfSoldiersPopulatingBuildings(4);
+
+        assertEquals(playerListener.getEventsForPlayer(player0).size(), 3);
+
+        player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(2);
+
+        assertEquals(playerListener.getEventsForPlayer(player0).size(), 4);
+
+        player0.setAmountOfSoldiersWhenPopulatingAwayFromBorder(2);
+
+        assertEquals(playerListener.getEventsForPlayer(player0).size(), 5);
+
+        player0.setAmountOfSoldiersWhenPopulatingFarFromBorder(2);
+
+        assertEquals(playerListener.getEventsForPlayer(player0).size(), 6);
+    }
+
+    @Test
+    public void testMilitaryPoliciesUpdatedBeforeNotification() throws InvalidUserActionException {
+
+        var player = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+
+        var monitor = new Utils.PlayerMonitor();
+        player.addPlayerChangeListener(monitor);
+
+        // Defense from surrounding buildings
+        var eventsBefore = monitor.getEventsForPlayer(player).size();
+        player.setDefenseFromSurroundingBuildings(2);
+
+        var events = monitor.getEventsForPlayer(player);
+        assertEquals(eventsBefore + 1, events.size());
+        assertEquals(2, events.getLast().defenseFromSurroundingBuildings());
+
+        // Defense strength
+        eventsBefore = events.size();
+        player.setDefenseStrength(3);
+
+        events = monitor.getEventsForPlayer(player);
+        assertEquals(eventsBefore + 1, events.size());
+        assertEquals(3, events.getLast().defenseStrength());
+
+        // Soldiers available for attack
+        eventsBefore  = events.size();
+        player.setAmountOfSoldiersAvailableForAttack(2);
+
+        events = monitor.getEventsForPlayer(player);
+        assertEquals(eventsBefore + 1, events.size());
+        assertEquals(2, events.getLast().soldiersAvailableForAttack());
+
+        // Strength of soldiers populating buildings
+        eventsBefore = events.size();
+        player.setStrengthOfSoldiersPopulatingBuildings(4);
+
+        events = monitor.getEventsForPlayer(player);
+        assertEquals(eventsBefore + 1, events.size());
+        assertEquals(4, events.getLast().strengthOfSoldiersPopulatingBuildings());
+
+        // Close to border
+        eventsBefore = events.size();
+        player.setAmountOfSoldiersWhenPopulatingCloseToBorder(2);
+
+        events = monitor.getEventsForPlayer(player);
+        assertEquals(eventsBefore + 1, events.size());
+        assertEquals(2, events.getLast().closeToBorder());
+
+        // Away from border
+        eventsBefore = events.size();
+        player.setAmountOfSoldiersWhenPopulatingAwayFromBorder(2);
+
+        events = monitor.getEventsForPlayer(player);
+        assertEquals(eventsBefore + 1, events.size());
+        assertEquals(2, events.getLast().awayFromBorder());
+
+        // Far from border
+        eventsBefore = events.size();
+
+        assertNotEquals(player.getAmountOfSoldiersWhenPopulatingFarFromBorder(), 2);
+
+        player.setAmountOfSoldiersWhenPopulatingFarFromBorder(2);
+
+        events = monitor.getEventsForPlayer(player);
+
+        assertEquals(eventsBefore + 1, events.size());
+        assertEquals(2, events.getLast().farFromBorder());
+    }
+
+    @Test
+    public void testSetCoalQuotaTriggersNotification() {
+
+        var player = new Player("Player", BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var monitor = new Utils.PlayerMonitor();
+        player.addPlayerChangeListener(monitor);
+
+        var eventsBefore = monitor.getEventsForPlayer(player).size();
+
+        player.setCoalQuota(org.appland.settlers.model.buildings.IronSmelter.class, 3);
+
+        var events = monitor.getEventsForPlayer(player);
+
+        assertEquals(eventsBefore + 1, events.size());
+        assertEquals(3, events.getLast().coalQuota().ironSmelter());
+    }
+
+    @Test
+    public void testSetIronQuotaTriggersNotification() {
+
+        var player = new Player("Player", BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var monitor = new Utils.PlayerMonitor();
+        player.addPlayerChangeListener(monitor);
+
+        var eventsBefore = monitor.getEventsForPlayer(player).size();
+
+        player.setIronBarQuota(org.appland.settlers.model.buildings.Armory.class, 2);
+
+        var events = monitor.getEventsForPlayer(player);
+
+        assertEquals(eventsBefore + 1, events.size());
+        assertEquals(2, events.getLast().ironQuota().armory());
+    }
+
+    @Test
+    public void testSetFoodQuotaTriggersNotification() {
+
+        var player = new Player("Player", BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var monitor = new Utils.PlayerMonitor();
+        player.addPlayerChangeListener(monitor);
+
+        var eventsBefore = monitor.getEventsForPlayer(player).size();
+
+        player.setFoodQuota(org.appland.settlers.model.buildings.IronMine.class, 4);
+
+        var events = monitor.getEventsForPlayer(player);
+
+        assertEquals(eventsBefore + 1, events.size());
+        assertEquals(4, events.getLast().foodQuota().ironMine());
+    }
+
+    @Test
+    public void testSetWaterQuotaTriggersNotification() {
+
+        var player = new Player("Player", BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var monitor = new Utils.PlayerMonitor();
+        player.addPlayerChangeListener(monitor);
+
+        var eventsBefore = monitor.getEventsForPlayer(player).size();
+
+        player.setWaterQuota(org.appland.settlers.model.buildings.Bakery.class, 5);
+
+        var events = monitor.getEventsForPlayer(player);
+
+        assertEquals(eventsBefore + 1, events.size());
+        assertEquals(5, events.getLast().waterQuota().bakery());
+    }
+
+    @Test
+    public void testSetWheatQuotaTriggersNotification() {
+
+        var player = new Player("Player", BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var monitor = new Utils.PlayerMonitor();
+        player.addPlayerChangeListener(monitor);
+
+        var eventsBefore = monitor.getEventsForPlayer(player).size();
+
+        player.setWheatQuota(org.appland.settlers.model.buildings.Mill.class, 6);
+
+        var events = monitor.getEventsForPlayer(player);
+
+        assertEquals(eventsBefore + 1, events.size());
+        assertEquals(6, events.getLast().wheatQuota().mill());
+    }
+
+    @Test
+    public void testSetCoalQuotaNoNotificationWhenUnchanged() {
+
+        var player = new Player("Player", BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var monitor = new Utils.PlayerMonitor();
+        player.addPlayerChangeListener(monitor);
+
+        assertEquals(player.getCoalQuota(Mint.class), 1);
+
+        player.setCoalQuota(org.appland.settlers.model.buildings.Mint.class, 1);
+
+        assertEquals(0, monitor.getEventsForPlayer(player).size());
+    }
+
+    @Test
+    public void testSetFoodQuotaNoNotificationWhenUnchanged() {
+
+        var player = new Player("Player", BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var monitor = new Utils.PlayerMonitor();
+        player.addPlayerChangeListener(monitor);
+
+        assertEquals(1, player.getFoodQuota(org.appland.settlers.model.buildings.IronMine.class));
+
+        player.setFoodQuota(org.appland.settlers.model.buildings.IronMine.class, 1);
+
+        assertEquals(0, monitor.getEventsForPlayer(player).size());
+    }
+
+    @Test
+    public void testSetWaterQuotaNoNotificationWhenUnchanged() {
+
+        var player = new Player("Player", BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var monitor = new Utils.PlayerMonitor();
+        player.addPlayerChangeListener(monitor);
+
+        assertEquals(1, player.getWaterQuota(org.appland.settlers.model.buildings.Bakery.class));
+
+        player.setWaterQuota(org.appland.settlers.model.buildings.Bakery.class, 1);
+
+        assertEquals(0, monitor.getEventsForPlayer(player).size());
+    }
+
+    @Test
+    public void testSetWheatQuotaNoNotificationWhenUnchanged() {
+
+        var player = new Player("Player", BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var monitor = new Utils.PlayerMonitor();
+        player.addPlayerChangeListener(monitor);
+
+        assertEquals(1, player.getWheatQuota(org.appland.settlers.model.buildings.Mill.class));
+
+        player.setWheatQuota(org.appland.settlers.model.buildings.Mill.class, 1);
+
+        assertEquals(0, monitor.getEventsForPlayer(player).size());
     }
 }
+

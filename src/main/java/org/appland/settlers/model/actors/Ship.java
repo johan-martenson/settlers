@@ -115,7 +115,7 @@ public class Ship extends Worker {
     protected void onArrival() {
         switch (state) {
             case SAILING_TO_HARBOR_TO_TAKE_ON_TASK -> {
-                var harbor = GameUtils.getClosestHarborOffroadForPlayer(getPlayer(), position, 5);
+                var harbor = GameUtils.getClosestHarborOffroadForPlayer(player, position, 5);
 
                 if (harbor.needsToShipToOtherHarbors()) {
                     var neededShipments = harbor.getNeededShipmentsFromThisHarbor();
@@ -136,8 +136,11 @@ public class Ship extends Worker {
                     harbor.addShipReadyForTask(this);
                 }
             }
-            case SAILING_TO_START_NEW_SETTLEMENT -> getPlayer().reportShipReachedDestination(this);
+
+            case SAILING_TO_START_NEW_SETTLEMENT -> player.reportShipReachedDestination(this);
+
             case SAILING_TO_POINT_TO_WAIT_FOR_ORDERS -> state = State.WAITING_FOR_TASK;
+
             case SAILING_TO_HARBOR_WITH_CARGO -> {
                 cargos.forEach(targetHarbor::putCargo);
                 cargos.clear();
@@ -195,9 +198,9 @@ public class Ship extends Worker {
     public void startSettlement() throws InvalidUserActionException {
         // TODO: make sure the harbor is not within any player's border
 
-        var newHarbor = map.placeBuilding(new Harbor(getPlayer()), targetHarborPoint, CAN_PLACE_OUTSIDE_BORDER);
+        var newHarbor = map.placeBuilding(new Harbor(player), targetHarborPoint, CAN_PLACE_OUTSIDE_BORDER);
 
-        var builder = new Builder(getPlayer(), map);
+        var builder = new Builder(player, map);
         map.placeWorker(builder, newHarbor.getFlag());
         builder.setTargetBuilding(newHarbor);
         newHarbor.promiseBuilder(builder);

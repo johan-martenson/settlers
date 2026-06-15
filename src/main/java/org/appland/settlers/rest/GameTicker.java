@@ -1,11 +1,8 @@
 package org.appland.settlers.rest;
 
 import org.appland.settlers.computer.CompositePlayer;
-import org.appland.settlers.computer.ComputerPlayer;
-import org.appland.settlers.model.buildings.Building;
-import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.actors.Scout;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.rest.resource.GameResource;
 import org.appland.settlers.rest.resource.GameSpeed;
 import org.appland.settlers.utils.CumulativeDuration;
@@ -13,7 +10,6 @@ import org.appland.settlers.utils.Group;
 import org.appland.settlers.utils.Stats;
 import org.appland.settlers.utils.Variable;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Executors;
@@ -99,7 +95,7 @@ public class GameTicker {
                     duration.after("Map.stepTime");
 
                     if (runComputers) {
-                        for (ComputerPlayer computerPlayer : computerPlayers) {
+                        for (var computerPlayer : computerPlayers) {
                             synchronized (map) {
 
                                 try {
@@ -195,7 +191,7 @@ public class GameTicker {
 
         var map = gameResource.getGameMap();
 
-        for (Building building : map.getBuildings()) {
+        for (var building : map.getBuildings()) {
             if (building instanceof Headquarter headquarter) {
 
                 headquarter.depositWorker(new Scout(headquarter.getPlayer(), map));

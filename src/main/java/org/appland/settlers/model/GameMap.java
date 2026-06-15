@@ -725,7 +725,7 @@ public class GameMap {
          *     -- normally this is done by isAvailableHousePoint
          */
         if (house.isHeadquarter() || house.isHarbor()) {
-            for (Player player : players) {
+            for (var player : players) {
                 if (!player.equals(house.getPlayer()) && player.isWithinBorder(point)) {
                     throw new InvalidUserActionException(String.format("Can't place building on %s within another player's border", point));
                 }
@@ -1523,7 +1523,7 @@ public class GameMap {
         var housePoints = new HashMap<Point, Size>();
 
         // This iterates over a set and the order is non-deterministic
-        for (Point point : player.getOwnedLand()) {
+        for (var point : player.getOwnedLand()) {
             var availableHouse = isAvailableHousePoint(player, point);
 
             if (availableHouse != null) {
@@ -2163,7 +2163,7 @@ public class GameMap {
                 .toList();
 
         // Remove roads connected to the flag
-        for (Road road : roadsToRemove) {
+        for (var road : roadsToRemove) {
             removeRoad(road);
         }
 
@@ -2865,7 +2865,7 @@ public class GameMap {
     public boolean isValidRouteThroughFlagsAndBuildingsViaRoads(List<Point> points) {
         var previous = (Point) null;
 
-        for (Point point : points) {
+        for (var point : points) {
             if (previous != null) {
                 var mp = getMapPoint(previous);
 

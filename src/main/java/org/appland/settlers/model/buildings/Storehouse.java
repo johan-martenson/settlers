@@ -76,7 +76,7 @@ public class Storehouse extends Building {
         inventory.merge(SHIELD, -privatesToDraft, Integer::sum);
         inventory.merge(SWORD, -privatesToDraft, Integer::sum);
 
-        map.getStatisticsManager().soldiersDrafted(getPlayer(), map.getTime(), privatesToDraft);
+        map.getStatisticsManager().soldiersDrafted(player, map.getTime(), privatesToDraft);
     }
 
     @Override
@@ -116,7 +116,7 @@ public class Storehouse extends Building {
         if (!sentOutWorker) {
             Material.WORKERS.stream()
                     .filter(worker -> getAmount(worker) > 0)
-                    .forEach(workerType -> getPlayer().getBuildings().stream()
+                    .forEach(workerType -> player.getBuildings().stream()
                             .filter(building -> !Objects.equals(building, this)) // Skip this storehouse
                             .filter(building -> building instanceof Storehouse) // Filter buildings that are not storehouses
                             .filter(Building::isReady) // Filter storehouses that are not ready
@@ -142,11 +142,11 @@ public class Storehouse extends Building {
             return false;
         }
 
-        return getPlayer().getBuildings().stream()
+        return player.getBuildings().stream()
                 .filter(building -> !building.equals(this))
-                .filter(building -> building.needsBuilder() && map.findWayWithExistingRoads(getPosition(), building.getPosition()) != null)
+                .filter(building -> building.needsBuilder() && map.findWayWithExistingRoads(position, building.getPosition()) != null)
                 .filter(building -> {
-                    var storehouse = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), building, getPlayer());
+                    var storehouse = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), building, player);
                     return storehouse == null || equals(storehouse) || !storehouse.hasAtLeastOne(BUILDER);
                 })
                 .findFirst()
@@ -170,7 +170,7 @@ public class Storehouse extends Building {
         // Go through the flags and look for flags waiting for geologists.
         return map.getFlags().stream()
                 .filter(Flag::needsGeologist)
-                .filter(flag -> map.arePointsConnectedByRoads(getPosition(), flag.getPosition()))
+                .filter(flag -> map.arePointsConnectedByRoads(position, flag.getPosition()))
                 .filter(flag -> isClosestStorage(this))
                 .findFirst()
                 .map(flag -> {
@@ -198,7 +198,7 @@ public class Storehouse extends Building {
         // Go through flags and look for flags that are waiting for scouts.
         return map.getFlags().stream()
                 .filter(Flag::needsScout)
-                .filter(flag -> map.arePointsConnectedByRoads(getPosition(), flag.getPosition()))
+                .filter(flag -> map.arePointsConnectedByRoads(position, flag.getPosition()))
                 .filter(flag -> isClosestStorage(this))
                 .findFirst()
                 .map(flag -> {
@@ -213,7 +213,7 @@ public class Storehouse extends Building {
     }
 
     private boolean assignWorkerToUnoccupiedBuildings() {
-        return getPlayer().getBuildings().stream()
+        return player.getBuildings().stream()
                 .filter(building -> !building.equals(this) && !building.isBurningDown() && !building.isDestroyed())
                 .filter(building -> {
                     if (building.isMilitaryBuilding() && !building.isHarbor()) {
@@ -229,7 +229,7 @@ public class Storehouse extends Building {
                             return false;
                         }
 
-                        var storehouse = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), building, getPlayer());
+                        var storehouse = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), building, player);
                         return storehouse == null || equals(storehouse) || !storehouse.hasMilitary();
                     } else if (building.needsWorker()) {
                         var material = building.getWorkerType();
@@ -242,11 +242,11 @@ public class Storehouse extends Building {
                             return false;
                         }
 
-                        if (map.findWayWithExistingRoads(getPosition(), building.getPosition()) == null) {
+                        if (map.findWayWithExistingRoads(position, building.getPosition()) == null) {
                             return false;
                         }
 
-                        var storehouse = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), building, getPlayer());
+                        var storehouse = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), building, player);
                         return storehouse == null || equals(storehouse) || !storehouse.hasAtLeastOne(material);
                     }
 
@@ -272,9 +272,9 @@ public class Storehouse extends Building {
 
     private boolean assignCouriers() {
         return hasAtLeastOne(COURIER) && map.getRoads().stream()
-                    .filter(road -> road.getPlayer().equals(getPlayer()) && road.needsCourier())
+                    .filter(road -> road.getPlayer().equals(player) && road.needsCourier())
                     .filter(road -> {
-                        var storehouse = GameUtils.getClosestStorageConnectedByRoads(road.getStart(), getPlayer());
+                        var storehouse = GameUtils.getClosestStorageConnectedByRoads(road.getStart(), player);
                         return equals(storehouse); // Ensure the current storehouse is the closest.
                     })
                     .findFirst()
@@ -298,7 +298,7 @@ public class Storehouse extends Building {
             super.putCargo(cargo);
         } else {
             storeOneInInventory(cargo.getMaterial());
-            getPlayer().reportProduction(cargo.getMaterial(), this);
+            player.reportProduction(cargo.getMaterial(), this);
         }
     }
 
@@ -310,7 +310,7 @@ public class Storehouse extends Building {
         retrieveOneFromInventory(material);
 
         var cargo = new Cargo(material, map);
-        cargo.setPosition(getFlag().getPosition());
+        cargo.setPosition(flag.getPosition());
         player.reportChangedInventory(this);
 
         return cargo;
@@ -325,7 +325,7 @@ public class Storehouse extends Building {
 
         storeOneInInventory(material);
         map.removeWorker(worker);
-        getPlayer().reportChangedInventory(this);
+        player.reportChangedInventory(this);
     }
 
     public Worker retrieveWorker(Material workerType, Building building) {
@@ -348,7 +348,7 @@ public class Storehouse extends Building {
         }
 
         var worker = InventoryUtils.createWorker(workerType, building, player, map);
-        worker.setPosition(getFlag().getPosition());
+        worker.setPosition(flag.getPosition());
         retrieveOneFromInventory(workerType);
 
         return worker;
@@ -367,31 +367,31 @@ public class Storehouse extends Building {
 
         var rank = material.toRank();
 
-        var soldier = new Soldier(getPlayer(), rank, map);
+        var soldier = new Soldier(player, rank, map);
 
-        soldier.setPosition(getFlag().getPosition());
+        soldier.setPosition(flag.getPosition());
 
         return soldier;
     }
 
     public Courier retrieveCourier() {
         // The storage never runs out of couriers
-        var courier = new Courier(getPlayer(), map);
-        courier.setPosition(getFlag().getPosition());
+        var courier = new Courier(player, map);
+        courier.setPosition(flag.getPosition());
         return courier;
     }
 
     public Soldier retrieveSoldierToPopulateBuilding() {
 
         // Go through the list in order of preference and try to retrieve a soldier
-        for (var rank : strengthToRank(getPlayer().getStrengthOfSoldiersPopulatingBuildings())) {
+        for (var rank : strengthToRank(player.getStrengthOfSoldiersPopulatingBuildings())) {
             var preferredSoldierType = rank.toMaterial();
 
             if (hasAtLeastOne(preferredSoldierType)) {
                 retrieveOneFromInventory(preferredSoldierType);
 
-                var soldier = new Soldier(getPlayer(), rank, map);
-                soldier.setPosition(getFlag().getPosition());
+                var soldier = new Soldier(player, rank, map);
+                soldier.setPosition(flag.getPosition());
 
                 return soldier;
             }
@@ -443,7 +443,7 @@ public class Storehouse extends Building {
     }
 
     private boolean isClosestStorage(Building building) {
-        var storehouse = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), getPlayer());
+        var storehouse = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), player);
         return equals(storehouse);
     }
 
@@ -453,17 +453,17 @@ public class Storehouse extends Building {
         }
 
         return map.getRoads().stream()
-                .filter(road -> road.getPlayer().equals(getPlayer())) // Filter roads that belong to the player
+                .filter(road -> road.getPlayer().equals(player)) // Filter roads that belong to the player
                 .filter(Road::isMainRoad) // Filter only main roads
                 .filter(Road::needsDonkey) // Filter roads that need a donkey
                 .filter(road -> {
-                    var storehouse = GameUtils.getClosestStorageConnectedByRoads(road.getStart(), getPlayer());
+                    var storehouse = GameUtils.getClosestStorageConnectedByRoads(road.getStart(), player);
                     return storehouse == null || equals(storehouse); // Ensure the current storehouse is the closest
                 })
                 .findFirst() // Find the first suitable road
                 .map(road -> {
                     var donkey = retrieveDonkey();
-                    map.placeWorker(donkey, getFlag());
+                    map.placeWorker(donkey, flag);
                     donkey.assignToRoad(road);
                     return true;
                 })
@@ -474,7 +474,7 @@ public class Storehouse extends Building {
         if (hasAtLeastOne(DONKEY)) {
             retrieveOneFromInventory(DONKEY);
 
-            return new Donkey(getPlayer(), map);
+            return new Donkey(player, map);
         }
 
         return null;
@@ -492,7 +492,7 @@ public class Storehouse extends Building {
 
     @Override
     public void onConstructionFinished() {
-        getPlayer().reportStorageReady(this);
+        player.reportStorageReady(this);
     }
 
     public void pushOutAll(Material material) {
@@ -526,5 +526,13 @@ public class Storehouse extends Building {
         }
 
         return cargos;
+    }
+
+    public void stopPushingOut(Material material) {
+        materialToPushOut.remove(material);
+    }
+
+    public void allowDeliveryOfMaterial(Material material) {
+        materialBlockedForDelivery.remove(material);
     }
 }

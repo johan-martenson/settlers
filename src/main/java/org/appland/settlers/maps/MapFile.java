@@ -289,7 +289,7 @@ public class MapFile {
         int gamePointY = isEven(height) ? height : height - 1;
         int gamePointX = isEven(gamePointY) ? 0 : 1;
 
-        for (MapFilePoint mapFilePoint : mapFilePoints) {
+        for (var mapFilePoint : mapFilePoints) {
             var gamePoint = new Point(gamePointX, gamePointY);
             java.awt.Point mapFilePosition = new java.awt.Point(mapFileX, mapFileY);
 

@@ -17,6 +17,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerChangeListener;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerGameViewMonitor;
 import org.appland.settlers.model.PlayerType;
@@ -39,6 +40,7 @@ import org.appland.settlers.model.buildings.Metalworks;
 import org.appland.settlers.model.buildings.Mill;
 import org.appland.settlers.model.buildings.Mint;
 import org.appland.settlers.model.buildings.PigFarm;
+import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.messages.Message;
 import org.appland.settlers.model.statistics.StatisticsListener;
 import org.appland.settlers.rest.GameTicker;
@@ -48,6 +50,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -60,12 +63,116 @@ import java.util.Set;
 import static org.appland.settlers.rest.resource.GameResources.GAME_RESOURCES;
 import static org.appland.settlers.rest.resource.GameUtils.startGame;
 
+/**
+ * WebSocket API endpoint for interacting with the game server.
+ *
+ * <h2>Concurrency and Synchronization Model</h2>
+ *
+ * This class is accessed concurrently by multiple threads:
+ * <ul>
+ *   <li>WebSocket container threads invoking {@code @OnMessage}, {@code @OnOpen}, {@code @OnClose}, {@code @OnError}</li>
+ *   <li>Game simulation threads (e.g. {@link org.appland.settlers.rest.GameTicker}) invoking listeners such as
+ *       {@link org.appland.settlers.model.PlayerGameViewMonitor}, {@link org.appland.settlers.model.statistics.StatisticsListener},
+ *       and {@link org.appland.settlers.model.PlayerChangeListener}</li>
+ * </ul>
+ *
+ * <p>Because of this, explicit synchronization is used. The following rules define the intended synchronization scheme.</p>
+ *
+ * <h3>1. Game State Synchronization</h3>
+ *
+ * <ul>
+ *   <li>The {@link GameMap} instance is the primary lock for all game-world state.</li>
+ *   <li>All mutations and reads of game state (buildings, roads, players, statistics, etc.) must be performed inside:
+ *       <pre>{@code synchronized (map) { ... }}</pre>
+ *   </li>
+ *   <li>Objects belonging to a map (e.g. {@link Building}) must be synchronized via their map:
+ *       <pre>{@code synchronized (building.getMap()) { ... }}</pre>
+ *   </li>
+ * </ul>
+ *
+ * <h3>2. Player Synchronization</h3>
+ *
+ * <ul>
+ *   <li>If a change to a {@link Player} affects gameplay (e.g. resources, units, statistics, map interaction),
+ *       the {@link GameMap} must be locked:
+ *       <pre>{@code synchronized (player.getMap()) { ... }}</pre>
+ *   </li>
+ *   <li>If a change only affects player metadata (e.g. name, color, nation), the {@link Player} instance itself must be locked:
+ *       <pre>{@code synchronized (player) { ... }}</pre>
+ *   </li>
+ *   <li>Code must not rely on both locks being held at the same time.</li>
+ * </ul>
+ *
+ * <h3>3. GameResource Synchronization</h3>
+ *
+ * <ul>
+ *   <li>{@link GameResource} instances are synchronized on themselves:
+ *       <pre>{@code synchronized (game) { ... }}</pre>
+ *   </li>
+ *   <li>This applies to lobby-level state such as players in a game, game name, map selection, etc.</li>
+ * </ul>
+ *
+ * <h3>4. Listener Collections</h3>
+ *
+ * The following collections are mutable and accessed from multiple threads:
+ *
+ * <ul>
+ *   <li>{@code gameListListeners}</li>
+ *   <li>{@code gameInfoListeners}</li>
+ *   <li>{@code chatRoomListeners}</li>
+ *   <li>{@code statisticsListeners}</li>
+ *   <li>{@code playerListeners}</li>
+ *   <li>{@code playerToSession}</li>
+ * </ul>
+ *
+ * <p>Access rules:</p>
+ * <ul>
+ *   <li>All modifications (add/remove) must be performed inside a synchronized block on the collection itself.</li>
+ *   <li>Iteration should also be performed under the same lock or using a defensive copy.</li>
+ *   <li>Callers must tolerate missing entries (i.e. {@code get(...)} may return {@code null}).</li>
+ * </ul>
+ *
+ * <h3>5. Listener Callbacks</h3>
+ *
+ * <ul>
+ *   <li>Callbacks such as {@link #onViewChangesForPlayer(Player, GameChangesList)} and
+ *       {@link #buildingStatisticsChanged(Building)} may be invoked while the game thread holds the map lock.</li>
+ *   <li>These methods must <b>not</b> attempt to acquire locks that could lead to deadlocks.</li>
+ *   <li>In particular, no synchronization on {@link GameMap} may occur inside these callbacks unless explicitly safe.</li>
+ * </ul>
+ *
+ * <h3>6. Session Access</h3>
+ *
+ * <ul>
+ *   <li>{@link Session} objects are not synchronized explicitly.</li>
+ *   <li>All writes use {@code session.getAsyncRemote().sendText(...)} which is thread-safe per WebSocket spec.</li>
+ *   <li>Callers must handle the possibility that a session has been closed or removed concurrently.</li>
+ *   <li>Sending to a session must not be done with locks held.</li>
+ * </ul>
+ *
+ * <h3>7. Error Handling and Robustness</h3>
+ *
+ * <ul>
+ *   <li>All listener maps may be concurrently modified; null checks are required when accessing them.</li>
+ *   <li>Client input is not trusted; lookups via {@link IdManager} may fail or return unexpected types.</li>
+ * </ul>
+ *
+ * <h3>Summary</h3>
+ *
+ * <ul>
+ *   <li>{@link GameMap} is the primary lock for simulation state.</li>
+ *   <li>{@link Player} uses dual locking depending on whether the change affects gameplay or metadata.</li>
+ *   <li>{@link GameResource} protects lobby state.</li>
+ *   <li>Listener collections must be explicitly synchronized.</li>
+ *   <li>Listener callbacks must avoid introducing new locks or blocking operations.</li>
+ * </ul>
+ */
 @ServerEndpoint(value = "/ws/api")
 public class WebsocketApi implements PlayerGameViewMonitor,
         GameResources.GameListListener,
         GameResource.GameResourceListener,
         ChatManager.ChatListener,
-        StatisticsListener {
+        StatisticsListener, PlayerChangeListener {
 
     private final Map<Player, Session> playerToSession = new HashMap<>();
     private final JsonUtils jsonUtils = new JsonUtils(IdManager.idManager);
@@ -76,13 +183,20 @@ public class WebsocketApi implements PlayerGameViewMonitor,
     private final Map<GameResource, Collection<Session>> gameInfoListeners = new HashMap<>();
     private final Map<String, Collection<Session>> chatRoomListeners = new HashMap<>();
     private final Map<GameMap, Set<Session>> statisticsListeners = new HashMap<>();
+    private final Map<Player, Set<Session>> playerListeners = new HashMap<>();
 
     public WebsocketApi() {
         System.out.println("CREATED NEW WEBSOCKET MONITOR");
-
-        //GAME_RESOURCES.addAddedAndRemovedGamesListener(this);
     }
 
+    /**
+     * Called when the given player receives a new chat message
+     *
+     * LOCKS HELD: ChatManager.class
+     *
+     * @param chatMessage
+     * @param player
+     */
     @Override
     public void newMessageForPlayer(ChatManager.ChatMessage chatMessage, Player player) {
         System.out.println("ON NEW MESSAGE FOR PLAYER");
@@ -94,62 +208,86 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 player);
     }
 
+    /**
+     * Called when the given chat room receives a new chat message
+     *
+     * LOCKS HELD: ChatManager.class
+     *
+     * @param chatMessage
+     * @param roomId
+     */
     @Override
     public void newMessageForRoom(ChatManager.ChatMessage chatMessage, String roomId) {
         System.out.println("ON NEW MESSAGE FOR ROOM");
 
-        System.out.println(chatRoomListeners.get(roomId));
-
-        chatRoomListeners.get(roomId).forEach(session -> sendToSession(session,
-                new JSONObject(Map.of(
-                        "type", "NEW_CHAT_MESSAGES",
-                        "chatMessage", jsonUtils.chatMessageToRoomToJson(chatMessage, roomId)
-                ))));
+        synchronized (chatRoomListeners) {
+            chatRoomListeners.get(roomId).forEach(session -> sendToSession(session,
+                    new JSONObject(Map.of(
+                            "type", "NEW_CHAT_MESSAGES",
+                            "chatMessage", jsonUtils.chatMessageToRoomToJson(chatMessage, roomId)
+                    ))));
+        }
     }
 
+    /**
+     * Called when the game resource changes. E.g. allow/disallow cheating
+     *
+     * LOCKS HELD: gameResource
+     *
+     * @param gameResource
+     */
     @Override
     public void onGameResourceChanged(GameResource gameResource) {
         System.out.println();
         System.out.println("ON GAME RESOURCE CHANGED");
 
-        if (gameInfoListeners.containsKey(gameResource)) {
-            gameInfoListeners.get(gameResource).forEach(session -> sendToSession(session,
-                    new JSONObject(Map.of(
-                            "type", "GAME_INFO_CHANGED",
-                            "gameInformation", jsonUtils.gameToJson(gameResource)
-                    ))));
+        synchronized (gameInfoListeners) {
+            if (gameInfoListeners.containsKey(gameResource)) {
+                gameInfoListeners.get(gameResource).forEach(session -> sendToSession(session,
+                        new JSONObject(Map.of(
+                                "type", "GAME_INFO_CHANGED",
+                                "gameInformation", jsonUtils.gameToJson(gameResource)
+                        ))));
+            }
         }
 
-        gameListListeners.forEach(session -> sendToSession(session,
-                new JSONObject(Map.of(
-                        "type", "GAME_LIST_CHANGED",
-                        "games", jsonUtils.gamesToJson(GAME_RESOURCES.getGames())
-                ))));
+        synchronized (gameListListeners) {
+            gameListListeners.forEach(session -> sendToSession(session,
+                    new JSONObject(Map.of(
+                            "type", "GAME_LIST_CHANGED",
+                            "games", jsonUtils.gamesToJson(GAME_RESOURCES.getGames())
+                    ))));
+        }
     }
 
+    /**
+     * Called when the full list of games changes.
+     *
+     * LOCKS HELD: GAME_RESOURCES
+     *
+     * @param games
+     */
     @Override
     public void onGameListChanged(Collection<GameResource> games) {
         System.out.println();
         System.out.println("ON GAME LIST CHANGED");
 
-        gameListListeners.forEach(session -> sendToSession(session,
-                new JSONObject(Map.of(
-                        "type", "GAME_LIST_CHANGED",
-                        "games", jsonUtils.gamesToJson(games)
-                ))));
+        synchronized (gameListListeners) {
+            gameListListeners.forEach(session -> sendToSession(session,
+                    new JSONObject(Map.of(
+                            "type", "GAME_LIST_CHANGED",
+                            "games", jsonUtils.gamesToJson(games)
+                    ))));
 
-        if (!gameListListeners.isEmpty()) {
-            games.forEach(gameResource -> gameResource.addChangeListener(this));
+            if (!gameListListeners.isEmpty()) {
+                games.forEach(gameResource -> gameResource.addChangeListener(this));
+            }
         }
     }
 
     @OnMessage
     public void onMessage(Session session, String message) throws Exception {
         System.out.println("\nON MESSAGE: " + message);
-
-        var player = (Player) session.getUserProperties().get("PLAYER");
-        var game = (GameResource) session.getUserProperties().get("GAME");
-        var map = player == null ? null : player.getMap();
 
         JSONObject jsonBody;
 
@@ -162,47 +300,130 @@ public class WebsocketApi implements PlayerGameViewMonitor,
         var command = Command.valueOf((String) jsonBody.get("command"));
 
         switch (command) {
-            case GET_TRANSPORT_PRIORITY -> {
-                sendToSession(session,
-                        new JSONObject(Map.of(
-                                "requestId", jsonBody.get("requestId"),
-                                "priority", jsonUtils.transportPriorityToJson(player.getTransportPriorities())
-                        )));
+            case BLOCK_MATERIAL -> {
+                var house = (Storehouse) idManager.getObject((String) jsonBody.get("houseId"));
+                var material = jsonUtils.jsonToMaterial((String) jsonBody.get("material"));
+
+                synchronized (house.getMap()) {
+                    house.blockDeliveryOfMaterial(material);
+                }
             }
+
+            case ALLOW_MATERIAL -> {
+                var house  = (Storehouse) idManager.getObject((String) jsonBody.get("houseId"));
+                var material = jsonUtils.jsonToMaterial((String) jsonBody.get("material"));
+
+                synchronized (house.getMap()) {
+                    house.allowDeliveryOfMaterial(material);
+                }
+            }
+
+            case SEND_OUT_MATERIAL -> {
+                var house = (Storehouse) idManager.getObject((String) jsonBody.get("houseId"));
+                var material = jsonUtils.jsonToMaterial((String) jsonBody.get("material"));
+
+                synchronized (house.getMap()) {
+                    house.pushOutAll(material);
+                }
+            }
+
+            case STOP_SENDING_OUT_MATERIAL -> {
+                var house = (Storehouse) idManager.getObject((String) jsonBody.get("houseId"));
+                var material = jsonUtils.jsonToMaterial((String) jsonBody.get("material"));
+
+                synchronized (house.getMap()) {
+                    house.stopPushingOut(material);
+                }
+            }
+
+            case LISTEN_TO_PLAYER -> {
+                var playerToListenTo = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+
+                synchronized (playerListeners) {
+                    if (!playerListeners.containsKey(playerToListenTo)) {
+                        playerListeners.put(playerToListenTo, new HashSet<>());
+                    }
+
+                    if (playerListeners.get(playerToListenTo).isEmpty()) {
+                        playerToListenTo.addPlayerChangeListener(this);
+                    }
+
+                    playerListeners.get(playerToListenTo).add(session);
+                }
+            }
+
+            case STOP_LISTENING_TO_PLAYER -> {
+                var playerToListenTo = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+
+                synchronized (playerListeners) {
+                    playerListeners.get(playerToListenTo).remove(session);
+
+                    if (playerListeners.get(playerToListenTo).isEmpty()) {
+                        playerToListenTo.removePlayerChangeListener(this);
+                    }
+                }
+            }
+
+            case GET_TRANSPORT_PRIORITY -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                synchronized (player.getMap()) {
+                    sendToSession(session,
+                            new JSONObject(Map.of(
+                                    "requestId", jsonBody.get("requestId"),
+                                    "priority", jsonUtils.transportPriorityToJson(player.getTransportPriorities())
+                            )));
+                }
+            }
+
             case LISTEN_TO_STATISTICS -> {
                 var playerForStatistics = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = playerForStatistics.getMap();
                 System.out.println("Listen to statistics for player " + playerForStatistics);
 
                 synchronized (map) {
                     map.getStatisticsManager().addListener(this);
                 }
 
-                statisticsListeners.computeIfAbsent(map, k -> new HashSet<>()).add(session);
-            }
-            case STOP_LISTENING_TO_STATISTICS -> {
-                var playerForStatistics = (Player) idManager.getObject((String) jsonBody.get("playerId"));
-                System.out.println("Stop listening to statistics for player " + playerForStatistics);
-
-                var listeners = statisticsListeners.get(map);
-
-                if (listeners != null) {
-                    listeners.remove(session);
-
-                    // TODO: Should stop listening...
+                synchronized (statisticsListeners) {
+                    statisticsListeners.computeIfAbsent(map, k -> new HashSet<>()).add(session);
                 }
             }
-            case GET_STATISTICS -> {
-                sendToSession(session,
-                        new JSONObject(Map.of(
-                                "requestId", jsonBody.get("requestId"),
-                                "statistics", jsonUtils.statisticsToJson(
-                                        map.getTime(),
-                                        player,
-                                        map.getPlayers(),
-                                        map.getStatisticsManager()
-                                )
-                        )));
+
+            case STOP_LISTENING_TO_STATISTICS -> {
+                var playerForStatistics = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map =  playerForStatistics.getMap();
+                System.out.println("Stop listening to statistics for player " + playerForStatistics);
+
+                synchronized (map) {
+                    var listeners = statisticsListeners.get(map);
+
+                    if (listeners != null) {
+                        listeners.remove(session);
+
+                        // TODO: Should stop listening...
+                    }
+                }
             }
+
+            case GET_STATISTICS -> {
+                var gameResource = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = gameResource.getGameMap();
+
+                synchronized (map) {
+                    sendToSession(session,
+                            new JSONObject(Map.of(
+                                    "requestId", jsonBody.get("requestId"),
+                                    "statistics", jsonUtils.statisticsToJson(
+                                            map.getTime(),
+                                            player,
+                                            map.getPlayers(),
+                                            map.getStatisticsManager()
+                                    )
+                            )));
+                }
+            }
+
             case GET_TERRAIN -> {
                 sendToSession(session,
                         new JSONObject(Map.of(
@@ -210,7 +431,10 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                                 "terrain", jsonUtils.mapFileTerrainToJson((MapFile) idManager.getObject((String) jsonBody.get("mapId")))
                         )));
             }
+
             case SET_TRANSPORT_PRIORITY -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var category = jsonUtils.jsonToTransportCategory((String) jsonBody.get("category"));
                 int priority = ((Long) jsonBody.get("priority")).intValue();
 
@@ -218,38 +442,57 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     player.setTransportPriority(priority, category);
                 }
             }
+
             case CANCEL_EVACUATION -> {
                 var house = (Building) idManager.getObject((String) jsonBody.get("houseId"));
 
-                house.cancelEvacuation();
+                synchronized (house.getMap()) {
+                    house.cancelEvacuation();
+                }
             }
+
             case DISABLE_PROMOTIONS -> {
                 var house = (Building) idManager.getObject((String) jsonBody.get("houseId"));
 
-                house.disablePromotions();
+                synchronized (house.getMap()) {
+                    house.disablePromotions();
+                }
             }
+
             case ENABLE_PROMOTIONS -> {
                 var house = (Building) idManager.getObject((String) jsonBody.get("houseId"));
 
-                house.enablePromotions();
+                synchronized (house.getMap()) {
+                    house.enablePromotions();
+                }
             }
+
             case PAUSE_PRODUCTION -> {
                 var house = (Building) idManager.getObject((String) jsonBody.get("houseId"));
 
-                house.stopProduction();
+                synchronized (house.getMap()) {
+                    house.stopProduction();
+                }
             }
+
             case RESUME_PRODUCTION -> {
                 var house = (Building) idManager.getObject((String) jsonBody.get("houseId"));
 
-                house.resumeProduction();
+                synchronized (house.getMap()) {
+                    house.resumeProduction();
+                }
             }
+
             case DELETE_GAME -> {
                 var gameToDelete = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
                 GAME_RESOURCES.removeGame(gameToDelete);
             }
+
             case FIND_NEW_ROAD -> {
+                var player =  (Player) idManager.getObject((String) jsonBody.get("playerId"));
                 var start = jsonUtils.jsonToPoint((JSONObject) jsonBody.get("from"));
                 var goal = jsonUtils.jsonToPoint((JSONObject) jsonBody.get("to"));
+                var map = player.getMap();
                 var avoid = (Set<Point>) null;
 
                 if (jsonBody.containsKey("avoid")) {
@@ -272,175 +515,198 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                             )));
                 }
             }
+
             case EVACUATE_HOUSE -> {
                 var house = (Building) idManager.getObject((String) jsonBody.get("houseId"));
 
-                house.evacuate();
+                synchronized (house.getMap()) {
+                    house.evacuate();
+                }
             }
+
             case ATTACK_HOUSE -> {
+                var player =  (Player) idManager.getObject((String) jsonBody.get("playerId"));
                 var house = (Building) idManager.getObject((String) jsonBody.get("houseId"));
                 var attackers = ((Long) jsonBody.get("attackers")).intValue();
                 var attackStrength = AttackStrength.valueOf((String) jsonBody.get("attackType"));
 
-                synchronized (map) {
+                synchronized (house.getMap()) {
                     player.attack(house, attackers, attackStrength);
                 }
             }
+
             case SET_TOOL_PRODUCTION_PRIORITY -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
                 var tool = Material.valueOf((String) jsonBody.get("tool"));
                 var prio = ((Long) jsonBody.get("priority")).intValue();
 
-                synchronized (map) {
+                synchronized (player.getMap()) {
                     player.setProductionQuotaForTool(tool, prio);
                 }
             }
+
             case GET_TOOL_PRODUCTION_PRIORITIES -> {
-                synchronized (map) {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+
+                synchronized (player.getMap()) {
                     sendToSession(session, new JSONObject(Map.of(
                             "requestId", jsonBody.get("requestId"),
                             "toolPriorities", jsonUtils.toolQuotasToJson(player)
                     )));
                 }
             }
+
             case GET_CHAT_HISTORY_FOR_ROOM -> {
                 var roomId = (String) jsonBody.get("roomId");
 
-                sendToSession(session,
-                        new JSONObject(Map.of(
-                                "requestId", jsonBody.get("requestId"),
-                                "chatHistory", jsonUtils.chatMessagesToRoomToJson(ChatManager.getChatHistoryForRoom(roomId), roomId)
-                        )));
+                synchronized (ChatManager.class) {
+                    sendToSession(session,
+                            new JSONObject(Map.of(
+                                    "requestId", jsonBody.get("requestId"),
+                                    "chatHistory", jsonUtils.chatMessagesToRoomToJson(ChatManager.getChatHistoryForRoom(roomId), roomId)
+                            )));
+                }
             }
+
             case LISTEN_TO_CHAT_MESSAGES -> {
                 if (jsonBody.containsKey("playerId")) {
-                    ChatManager.addMessageListenerForPlayer((Player) idManager.getObject((String) jsonBody.get("playerId")), this);
+                    synchronized (ChatManager.class) {
+                        ChatManager.addMessageListenerForPlayer((Player) idManager.getObject((String) jsonBody.get("playerId")), this);
+                    }
                 }
 
                 if (jsonBody.containsKey("roomIds")) {
                     ((JSONArray) jsonBody.get("roomIds"))
                             .forEach(roomId -> {
-                                ChatManager.addMessageListenerForRoom((String) roomId, this);
-
-                                if (!chatRoomListeners.containsKey(roomId)) {
-                                    chatRoomListeners.put((String) roomId, new HashSet<>());
+                                synchronized (ChatManager.class) {
+                                    ChatManager.addMessageListenerForRoom((String) roomId, this);
                                 }
 
-                                chatRoomListeners.get((String) roomId).add(session);
+                                synchronized (chatRoomListeners) {
+                                    if (!chatRoomListeners.containsKey(roomId)) {
+                                        chatRoomListeners.put((String) roomId, new HashSet<>());
+                                    }
+
+                                    chatRoomListeners.get((String) roomId).add(session);
+                                }
                             });
                 }
             }
+
             case SEND_CHAT_MESSAGE_TO_ROOM -> {
-                ChatManager.sendChatToRoom(
-                        (String) jsonBody.get("roomId"),
-                        (String) jsonBody.get("text"),
-                        (Player) idManager.getObject((String) jsonBody.get("from"))
-                );
-            }
-            case SET_GAME -> {
-                var gameToSet = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
-
-                session.getUserProperties().put("GAME", gameToSet);
-
-                sendToSession(session,
-                        new JSONObject(Map.of(
-                                "requestId", jsonBody.get("requestId"),
-                                "gameInformation", jsonUtils.gameToJson(gameToSet)
-                        )));
+                synchronized (ChatManager.class) {
+                    ChatManager.sendChatToRoom(
+                            (String) jsonBody.get("roomId"),
+                            (String) jsonBody.get("text"),
+                            (Player) idManager.getObject((String) jsonBody.get("from"))
+                    );
+                }
             }
 
-            case CLEAR_GAME -> session.getUserProperties().remove("GAME");
+            case SET_CHEATING_ON_OFF -> {
+                var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
 
-            case SET_CHEATING_ON_OFF -> game.setCheatingEnabled((Boolean) jsonBody.get("cheatingEnabled"));
-
-            case SET_SELF_PLAYER -> {
-                var playerToSet = (Player) idManager.getObject((String) jsonBody.get("playerId"));
-
-                session.getUserProperties().put("PLAYER", playerToSet);
-
-                sendToSession(session,
-                        new JSONObject(Map.of(
-                                "requestId", jsonBody.get("requestId"),
-                                "playerInformation", jsonUtils.playerToJson(playerToSet)
-                        )));
+                synchronized (game) {
+                    game.setCheatingEnabled((Boolean) jsonBody.get("cheatingEnabled"));
+                }
             }
+
             case LISTEN_TO_GAME_LIST -> {
-                gameListListeners.add(session);
+                synchronized (gameListListeners) {
+                    gameListListeners.add(session);
 
-                if (gameListListeners.size() == 1) {
-                    GAME_RESOURCES.addAddedAndRemovedGamesListener(this);
+                    if (gameListListeners.size() == 1) {
+                        GAME_RESOURCES.addAddedAndRemovedGamesListener(this);
+                    }
+
+                    GAME_RESOURCES.getGames().forEach(gameResource -> gameResource.addChangeListener(this));
                 }
-
-                GAME_RESOURCES.getGames().forEach(gameResource -> gameResource.addChangeListener(this));
             }
+
             case STOP_LISTENING_TO_GAME_LIST -> {
-                gameListListeners.remove(session);
+                synchronized (gameListListeners) {
+                    gameListListeners.remove(session);
 
-                if (gameListListeners.isEmpty()) {
-                    GAME_RESOURCES.removeAddedAndRemovedGamesListener(this);
+                    if (gameListListeners.isEmpty()) {
+                        GAME_RESOURCES.removeAddedAndRemovedGamesListener(this);
 
-                    GAME_RESOURCES.getGames().stream()
-                            .filter(gameResource -> !gameInfoListeners.containsKey(gameResource))
-                            .forEach(gameResource -> gameResource.removeChangeListener(this));
+                        GAME_RESOURCES.getGames().stream()
+                                .filter(gameResource -> !gameInfoListeners.containsKey(gameResource))
+                                .forEach(gameResource -> gameResource.removeChangeListener(this));
+                    }
                 }
             }
+
             case LISTEN_TO_GAME_INFO -> {
-                if (!gameInfoListeners.containsKey(game)) {
-                    gameInfoListeners.put(game, new HashSet<>());
-                }
+                var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
 
-                gameInfoListeners.get(game).add(session);
+                synchronized (gameInfoListeners) {
+                    if (!gameInfoListeners.containsKey(game)) {
+                        gameInfoListeners.put(game, new HashSet<>());
+                    }
 
-                game.addChangeListener(this);
+                    gameInfoListeners.get(game).add(session);
 
-                session.getUserProperties().put("GAME", game);
-
-                sendToSession(session,
-                        new JSONObject(Map.of(
-                                "requestId", jsonBody.get("requestId"),
-                                "gameInformation", jsonUtils.gameToJson(game)
-                        )));
-            }
-            case START_MONITORING_GAME -> {
-                player.monitorGameView(this);
-
-                playerToSession.put(player, session);
-
-                if (map != null) {
-
+                    game.addChangeListener(this);
 
                     sendToSession(session,
                             new JSONObject(Map.of(
                                     "requestId", jsonBody.get("requestId"),
-                                    "playerView", jsonUtils.playerViewToJson(map, player, game)
+                                    "gameInformation", jsonUtils.gameToJson(game)
                             )));
+                }
+            }
+
+            case START_MONITORING_GAME -> {
+                var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
+
+                synchronized (playerToSession) {
+                    playerToSession.put(player, session);
+                }
+
+                if (map != null) {
+                    synchronized (map) {
+                        player.monitorGameView(this);
+                        sendToSession(session,
+                                new JSONObject(Map.of(
+                                        "requestId", jsonBody.get("requestId"),
+                                        "playerView", jsonUtils.playerViewToJson(map, player, game)
+                                )));
+                    }
                 } else {
+                    player.monitorGameView(this);
                     sendToSession(session,
                             new JSONObject(Map.of(
                                     "requestId", jsonBody.get("requestId")
                             )));
                 }
             }
-            case STOP_LISTENING_TO_GAME_INFO -> {
-                gameInfoListeners.get(game).remove(session);
 
-                if (gameInfoListeners.get(game).isEmpty()) {
-                    game.removeChangeListener(this);
+            case STOP_LISTENING_TO_GAME_INFO -> {
+                var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
+
+                synchronized (gameInfoListeners) {
+                    gameInfoListeners.get(game).remove(session);
+
+                    if (gameInfoListeners.get(game).isEmpty()) {
+                        game.removeChangeListener(this);
+                    }
                 }
             }
+
             case CREATE_GAME -> {
                 var newGame = new GameResource(jsonUtils);
 
                 if (jsonBody.containsKey("players")) {
-                    newGame.setPlayers(
-                            jsonUtils.jsonToPlayers((JSONArray) jsonBody.get("players"))
-                    );
+                    newGame.setPlayers(jsonUtils.jsonToPlayers((JSONArray) jsonBody.get("players")));
                 }
 
                 if (jsonBody.containsKey("name")) {
                     newGame.setName((String) jsonBody.get("name"));
                 }
 
-                session.getUserProperties().put("GAME", newGame);
                 GAME_RESOURCES.addGame(newGame);
 
                 sendToSession(session, new JSONObject(Map.of(
@@ -448,15 +714,15 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                         "gameInformation", jsonUtils.gameToJson(newGame)
                 )));
             }
+
             case GET_MAP -> {
-                System.out.println("mapId");
-                System.out.println(idManager.getObject((String) jsonBody.get("mapId")));
                 sendToSession(session,
                         new JSONObject(Map.of(
                                 "requestId", jsonBody.get("requestId"),
                                 "map", jsonUtils.mapFileToJson((MapFile) idManager.getObject((String) jsonBody.get("mapId")))
                         )));
             }
+
             case GET_MAPS -> {
                 sendToSession(session,
                         new JSONObject(Map.of(
@@ -464,52 +730,88 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                                 "maps", jsonUtils.toJsonArray(MapsResource.mapsResource.getMaps(), jsonUtils::mapFileToJson)
                         )));
             }
-            case GET_GAMES -> {
+
+            case GET_MAP_WITH_TERRAIN -> {
+                var mapFile = (MapFile) idManager.getObject((String) jsonBody.get("mapId"));
+                var jsonMapFile = jsonUtils.mapFileToJson(mapFile);
+
+                jsonMapFile.put("terrain", jsonUtils.mapFileTerrainToJson(mapFile));
+
                 sendToSession(session,
                         new JSONObject(Map.of(
                                 "requestId", jsonBody.get("requestId"),
-                                "games", jsonUtils.gamesToJson(GAME_RESOURCES.getGames())
+                                "map", jsonMapFile
                         )));
             }
+
+            case GET_MAPS_WITH_TERRAIN -> {
+                sendToSession(session,
+                        new JSONObject(Map.of(
+                                "requestId", jsonBody.get("requestId"),
+                                "maps", jsonUtils.toJsonArray(
+                                        MapsResource.mapsResource.getMaps(),
+                                        mapFile -> {
+                                            var jsonMapFile = jsonUtils.mapFileToJson(mapFile);
+
+                                            jsonMapFile.put("terrain", jsonUtils.mapFileTerrainToJson(mapFile));
+
+                                            return jsonMapFile;
+                                        }
+                                ))));
+            }
+
+            case GET_GAMES -> {
+                synchronized (GAME_RESOURCES) {
+                    sendToSession(session,
+                            new JSONObject(Map.of(
+                                    "requestId", jsonBody.get("requestId"),
+                                    "games", jsonUtils.gamesToJson(GAME_RESOURCES.getGames())
+                            )));
+                }
+            }
+
             case UPDATE_PLAYER -> {
                 var playerId = (String) jsonBody.get("playerId");
-                var playerToUpdate = (Player) idManager.getObject(playerId);
+                var player = (Player) idManager.getObject(playerId);
                 var name = (String) jsonBody.get("name");
-                var playerColor = PlayerColor.valueOf((String) jsonBody.get("color"));
+                var color = PlayerColor.valueOf((String) jsonBody.get("color"));
                 var nation = Nation.valueOf((String) jsonBody.get("nation"));
 
-                synchronized (playerToUpdate) {
-                    playerToUpdate.update(name, nation, playerColor);
+                synchronized (player) {
+                    player.update(name, nation, color);
 
                     sendToSession(session,
                             new JSONObject(Map.of(
                                     "requestId", jsonBody.get("requestId"),
-                                    "playerInformation", jsonUtils.playerToJson(playerToUpdate))
+                                    "playerInformation", jsonUtils.playerToJson(player))
                             ));
                 }
             }
+
             case REMOVE_PLAYER -> {
+                var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
                 var playerId = (String) jsonBody.get("playerId");
-                var playerToRemove = (Player) idManager.getObject(playerId);
+                var player = (Player) idManager.getObject(playerId);
 
                 synchronized (game) {
-                    game.removePlayer(playerToRemove);
+                    game.removePlayer(player);
                 }
             }
+
             case CREATE_PLAYER -> {
                 var name = (String) jsonBody.get("name");
                 var playerColor = PlayerColor.valueOf((String) jsonBody.get("color"));
                 var nation = Nation.valueOf((String) jsonBody.get("nation"));
                 var playerType = PlayerType.valueOf((String) jsonBody.get("type"));
-
-                var newPlayer = new Player(name, playerColor, nation, playerType);
+                var player = new Player(name, playerColor, nation, playerType);
 
                 sendToSession(session,
                         new JSONObject(Map.of(
                                 "requestId", jsonBody.get("requestId"),
-                                "playerInformation", jsonUtils.playerToJson(newPlayer))
+                                "playerInformation", jsonUtils.playerToJson(player))
                         ));
             }
+
             case ADD_PLAYER_TO_GAME -> {
                 var playerToAdd = (Player) idManager.getObject((String) jsonBody.get("playerId"));
                 var gameToAddPlayerTo = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
@@ -530,6 +832,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             }
 
             case SET_OTHERS_CAN_JOIN -> {
+                var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
                 var othersCanJoin = (Boolean) jsonBody.get("othersCanJoin");
 
                 synchronized (game) {
@@ -542,6 +845,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                             )));
                 }
             }
+
             case START_GAME -> {
                 var gameToStart = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
 
@@ -549,30 +853,43 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     startGame(gameToStart, gameTicker);
                 }
             }
+
             case SET_MAP -> {
+                var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
+
                 synchronized (game) {
                     game.setMap((MapFile) idManager.getObject((String) jsonBody.get("mapId")));
                 }
             }
+
             case SET_INITIAL_RESOURCES -> {
+                var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
                 var resourceLevel = ResourceLevel.valueOf((String) jsonBody.get("resources"));
 
                 synchronized (game) {
                     game.setResource(resourceLevel);
                 }
             }
+
             case SET_GAME_NAME -> {
+                var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
+
                 synchronized (game) {
                     game.setName((String) jsonBody.get("name"));
                 }
             }
+
             case GET_GAME_INFORMATION -> {
+                var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
+
                 if (game != null) {
-                    sendToSession(session,
-                            new JSONObject(Map.of(
-                                    "requestId", jsonBody.get("requestId"),
-                                    "gameInformation", jsonUtils.gameToJson(game)
-                            )));
+                    synchronized (game) {
+                        sendToSession(session,
+                                new JSONObject(Map.of(
+                                        "requestId", jsonBody.get("requestId"),
+                                        "gameInformation", jsonUtils.gameToJson(game)
+                                )));
+                    }
                 } else {
                     sendToSession(session,
                             new JSONObject(Map.of(
@@ -581,16 +898,20 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                             )));
                 }
             }
+
             case UPGRADE -> {
-                var building = (Building) idManager.getObject((String) jsonBody.get("houseId"));
+                var house = (Building) idManager.getObject((String) jsonBody.get("houseId"));
+                var map = house.getMap();
 
                 synchronized (map) {
-                    building.upgrade();
+                    house.upgrade();
                 }
             }
+
             case FLAG_DEBUG_INFORMATION -> {
-                var flagId = (String) jsonBody.get("flagId");
-                var flag = (Flag) idManager.getObject(flagId);
+                var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
+                var map = game.getGameMap();
+                var flag = (Flag) idManager.getObject((String) jsonBody.get("flagId"));
 
                 synchronized (map) {
                     sendToSession(session, new JSONObject(Map.of(
@@ -599,68 +920,100 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     )));
                 }
             }
+
             case GET_SOLDIERS_AVAILABLE_FOR_ATTACK -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
+
                 synchronized (map) {
                     int amount = player.getAmountOfSoldiersAvailableForAttack();
-
                     sendAmountReplyToPlayer(amount, player, jsonBody);
                 }
             }
+
             case GET_POPULATE_MILITARY_FAR_FROM_BORDER -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
+
                 synchronized (map) {
                     int amount = player.getAmountOfSoldiersWhenPopulatingFarFromBorder();
-
                     sendAmountReplyToPlayer(amount, player, jsonBody);
                 }
             }
+
             case GET_POPULATE_MILITARY_CLOSER_TO_BORDER -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
+
                 synchronized (map) {
                     int amount = player.getAmountOfSoldiersWhenPopulatingAwayFromBorder();
-
                     sendAmountReplyToPlayer(amount, player, jsonBody);
                 }
             }
+
             case GET_POPULATE_MILITARY_CLOSE_TO_BORDER -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
+
                 synchronized (map) {
                     int amount = player.getAmountOfSoldiersWhenPopulatingCloseToBorder();
-
                     sendAmountReplyToPlayer(amount, player, jsonBody);
                 }
             }
+
             case SET_SOLDIERS_AVAILABLE_FOR_ATTACK -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var amount = ((Long) jsonBody.get("amount")).intValue();
 
                 synchronized (map) {
                     player.setAmountOfSoldiersAvailableForAttack(amount);
                 }
             }
+
             case SET_MILITARY_POPULATION_CLOSE_TO_BORDER -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var amount = ((Long) jsonBody.get("population")).intValue();
 
                 synchronized (map) {
                     player.setAmountOfSoldiersWhenPopulatingCloseToBorder(amount);
                 }
             }
+
             case SET_MILITARY_POPULATION_CLOSER_TO_BORDER -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var amount = ((Long) jsonBody.get("population")).intValue();
 
                 synchronized (map) {
                     player.setAmountOfSoldiersWhenPopulatingAwayFromBorder(amount);
                 }
             }
+
             case SET_MILITARY_POPULATION_FAR_FROM_BORDER -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var amount = ((Long) jsonBody.get("population")).intValue();
 
                 synchronized (map) {
                     player.setAmountOfSoldiersWhenPopulatingFarFromBorder(amount);
                 }
             }
+
             case SET_GAME_SPEED -> {
+                var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
                 var gameSpeed = GameSpeed.valueOf((String) jsonBody.get("speed"));
 
-                game.setGameSpeed(gameSpeed);
+                synchronized (game) {
+                    game.setGameSpeed(gameSpeed);
+                }
             }
+
             case GET_MILITARY_SETTINGS -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
+
                 synchronized (map) {
                     sendToSession(session, new JSONObject(Map.of(
                             "requestId", jsonBody.get("requestId"),
@@ -676,62 +1029,84 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             }
 
             case GET_DEFENSE_FROM_SURROUNDING_BUILDINGS -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
+
                 synchronized (map) {
                     int amount = player.getDefenseFromSurroundingBuildings();
-
                     sendAmountReplyToPlayer(amount, player, jsonBody);
                 }
             }
+
             case SET_DEFENSE_FROM_SURROUNDING_BUILDINGS -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 int strength = ((Long) jsonBody.get("strength")).intValue();
 
                 synchronized (map) {
                     player.setDefenseFromSurroundingBuildings(strength);
                 }
             }
+
             case GET_DEFENSE_STRENGTH -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
+
                 synchronized (map) {
                     int amount = player.getDefenseStrength();
-
                     sendAmountReplyToPlayer(amount, player, jsonBody);
                 }
             }
+
             case SET_DEFENSE_STRENGTH -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 int strength = ((Long) jsonBody.get("strength")).intValue();
 
                 synchronized (map) {
                     player.setDefenseStrength(strength);
                 }
             }
+
             case GET_STRENGTH_WHEN_POPULATING_MILITARY_BUILDING -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
+
                 synchronized (map) {
                     int amount = player.getStrengthOfSoldiersPopulatingBuildings();
-
                     sendAmountReplyToPlayer(amount, player, jsonBody);
                 }
             }
+
             case SET_STRENGTH_WHEN_POPULATING_MILITARY_BUILDING -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 int strength = ((Long) jsonBody.get("strength")).intValue();
 
                 synchronized (map) {
                     player.setStrengthOfSoldiersPopulatingBuildings(strength);
                 }
             }
+
             case PAUSE_GAME -> {
-                var gameToPause = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
+                var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
 
-                synchronized (gameToPause) {
-                    gameToPause.setStatus(GameStatus.PAUSED);
+                synchronized (game) {
+                    game.setStatus(GameStatus.PAUSED);
                 }
             }
+
             case RESUME_GAME -> {
-                var gameToResume = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
+                var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
 
-                synchronized (gameToResume) {
-                    gameToResume.setStatus(GameStatus.STARTED);
+                synchronized (game) {
+                    game.setStatus(GameStatus.STARTED);
                 }
             }
+
             case SET_IRON_BAR_QUOTAS -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var armoryAmount = (Long) jsonBody.get("armory");
                 var metalworksAmount = (Long) jsonBody.get("metalworks");
 
@@ -740,7 +1115,11 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     player.setIronBarQuota(Metalworks.class, metalworksAmount.intValue());
                 }
             }
+
             case GET_IRON_BAR_QUOTAS -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
+
                 synchronized (map) {
                     sendToSession(session, new JSONObject(Map.of(
                             "requestId", jsonBody.get("requestId"),
@@ -749,7 +1128,11 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     )));
                 }
             }
+
             case GET_WATER_QUOTAS -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
+
                 synchronized (map) {
                     sendToSession(session, new JSONObject(Map.of(
                             "requestId", jsonBody.get("requestId"),
@@ -760,7 +1143,11 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     )));
                 }
             }
+
             case GET_WHEAT_QUOTAS -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
+
                 synchronized (map) {
                     sendToSession(session, new JSONObject(Map.of(
                             "requestId", jsonBody.get("requestId"),
@@ -771,7 +1158,10 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     )));
                 }
             }
+
             case SET_WATER_QUOTAS -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var donkeyFarmAmount = (Long) jsonBody.get("donkeyFarm");
                 var pigFarmAmount = (Long) jsonBody.get("pigFarm");
                 var bakeryAmount = (Long) jsonBody.get("bakery");
@@ -784,7 +1174,10 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     player.setWaterQuota(Brewery.class, breweryAmount.intValue());
                 }
             }
+
             case SET_WHEAT_QUOTAS -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var donkeyFarmAmount = (Long) jsonBody.get("donkeyFarm");
                 var pigFarmAmount = (Long) jsonBody.get("pigFarm");
                 var millAmount = (Long) jsonBody.get("mill");
@@ -797,7 +1190,11 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     player.setWheatQuota(Brewery.class, breweryAmount.intValue());
                 }
             }
+
             case GET_FOOD_QUOTAS -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
+
                 synchronized (map) {
                     sendToSession(session, new JSONObject(Map.of(
                             "requestId", jsonBody.get("requestId"),
@@ -808,7 +1205,11 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     )));
                 }
             }
+
             case GET_COAL_QUOTAS -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
+
                 synchronized (map) {
                     sendToSession(session, new JSONObject(Map.of(
                             "requestId", jsonBody.get("requestId"),
@@ -818,7 +1219,10 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     )));
                 }
             }
+
             case SET_FOOD_QUOTAS -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var ironMineAmount = (Long) jsonBody.get("ironMine");
                 var coalMineAmount = (Long) jsonBody.get("coalMine");
                 var goldMineAmount = (Long) jsonBody.get("goldMine");
@@ -831,7 +1235,10 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     player.setFoodQuota(GraniteMine.class, graniteMineAmount.intValue());
                 }
             }
+
             case SET_COAL_QUOTAS -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var mintAmount = (Long) jsonBody.get("mint");
                 var armoryAmount = (Long) jsonBody.get("armory");
                 var ironSmelterAmount = (Long) jsonBody.get("ironSmelter");
@@ -842,23 +1249,32 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     player.setCoalQuota(IronSmelter.class, ironSmelterAmount.intValue());
                 }
             }
+
             case REMOVE_MESSAGES -> {
-                synchronized (player.getMap()) {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
+
+                synchronized (map) {
                     for (var messageId : (JSONArray) jsonBody.get("messageIds")) {
                         var gameMessage = (Message) idManager.getObject((String) messageId);
-
                         player.removeMessage(gameMessage);
                     }
                 }
             }
+
             case REMOVE_MESSAGE -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var gameMessage = (Message) idManager.getObject((String) jsonBody.get("messageId"));
 
-                synchronized (player.getMap()) {
+                synchronized (map) {
                     player.removeMessage(gameMessage);
                 }
             }
+
             case START_DETAILED_MONITORING -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var object = idManager.getObject((String) jsonBody.get("id"));
                 var jsonPlayerViewChanges = new JSONObject();
 
@@ -874,7 +1290,6 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                         var jsonUpdatedBuildings = new JSONArray();
 
                         jsonPlayerViewChanges.put("changedBuildings", jsonUpdatedBuildings);
-
                         jsonUpdatedBuildings.add(jsonUtils.houseToJson(building, player));
                     }
                 } else if (object instanceof Flag flag) {
@@ -884,27 +1299,31 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                         var jsonUpdatedFlags = new JSONArray();
 
                         jsonPlayerViewChanges.put("changedFlags", jsonUpdatedFlags);
-
                         jsonUpdatedFlags.add(jsonUtils.flagToJson(flag));
                     }
                 }
 
                 session.getAsyncRemote().sendText(jsonUpdate.toJSONString());
             }
+
             case STOP_DETAILED_MONITORING -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var monitoredObject = idManager.getObject((String) jsonBody.get("id"));
 
                 synchronized (map) {
                     if (monitoredObject instanceof Building building) {
                         player.removeDetailedMonitoring(building);
                     } else {
-                        var flag = (Flag) monitoredObject;
-
-                        player.removeDetailedMonitoring(flag);
+                        player.removeDetailedMonitoring((Flag) monitoredObject);
                     }
                 }
             }
+
             case SET_RESERVED_IN_HEADQUARTERS -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
+
                 synchronized (map) {
                     var optionalHeadquarter = player.getHeadquarter();
 
@@ -925,12 +1344,15 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     }
                 }
             }
+
             case INFORMATION_ON_POINTS -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var jsonPointsInformation = new JSONArray();
                 var points = jsonUtils.jsonToPoints((JSONArray) jsonBody.get("points"));
 
                 synchronized (map) {
-                    for (Point point : points) {
+                    for (var point : points) {
                         jsonPointsInformation.add(jsonUtils.pointToDetailedJson(point, player, map));
                     }
                 }
@@ -940,7 +1362,13 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                         "pointsWithInformation", jsonPointsInformation
                 )));
             }
+
             case FULL_SYNC -> {
+                var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = game.getGameMap();
+
+                // FIXME: should synchronize before accessing game.status
                 switch (game.status) {
                     case STARTED, PAUSED -> {
                         synchronized (map) {
@@ -963,27 +1391,34 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     }
                 }
             }
+
             case CALL_SCOUT -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var jsonPoint = (JSONObject) jsonBody.get("point");
                 var point = jsonUtils.jsonToPoint(jsonPoint);
 
                 synchronized (map) {
                     var flag = map.getFlagAtPoint(point);
-
                     flag.callScout();
                 }
             }
+
             case CALL_GEOLOGIST -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var jsonPoint = (JSONObject) jsonBody.get("point");
                 var point = jsonUtils.jsonToPoint(jsonPoint);
 
                 synchronized (map) {
                     var flag = map.getFlagAtPoint(point);
-
                     flag.callGeologist();
                 }
             }
+
             case PLACE_BUILDING -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var point = jsonUtils.jsonToPoint(jsonBody);
                 var building = jsonUtils.buildingFactory(jsonBody, player);
 
@@ -995,7 +1430,10 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     }
                 }
             }
+
             case PLACE_ROAD -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var jsonRoadPoints = (JSONArray) jsonBody.get("road");
                 var roadPoints = jsonUtils.jsonToPoints(jsonRoadPoints);
 
@@ -1007,7 +1445,10 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     }
                 }
             }
+
             case PLACE_FLAG -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var jsonFlag = (JSONObject) jsonBody.get("flag");
                 var flagPoint = jsonUtils.jsonToPoint(jsonFlag);
 
@@ -1019,14 +1460,15 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     }
                 }
             }
+
             case PLACE_FLAG_AND_ROAD -> {
                 // TODO: handle case where the flag already exists
 
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var jsonFlag = (JSONObject) jsonBody.get("flag");
                 var jsonRoadPoints = (JSONArray) jsonBody.get("road");
-
                 var flagPoint = jsonUtils.jsonToPoint(jsonFlag);
-
                 var roadPoints = jsonUtils.jsonToPoints(jsonRoadPoints);
 
                 // Handle the case where the last point overlaps with the flag point
@@ -1050,11 +1492,10 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 synchronized (map) {
                     try {
                         var flag = map.placeFlag(player, flagPoint);
-
                         var lastPointInRoad = roadPoints.getLast();
 
                         if (flagPoint.distance(lastPointInRoad) > 2) {
-                            List<Point> additionalRoad = map.findAutoSelectedRoad(
+                            var additionalRoad = map.findAutoSelectedRoad(
                                     player,
                                     lastPointInRoad,
                                     flagPoint,
@@ -1063,7 +1504,6 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
                             // Remove the first point in the extended list because it overlaps with the given road points
                             additionalRoad.removeFirst();
-
                             roadPoints.addAll(additionalRoad);
                         }
 
@@ -1075,9 +1515,11 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     }
                 }
             }
+
             case REMOVE_ROAD -> {
                 var roadId = (String) jsonBody.get("id");
                 var road = (Road) idManager.getObject(roadId);
+                var map = road.getPlayer().getMap();
 
                 try {
                     synchronized (map) {
@@ -1087,9 +1529,12 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     throw new RuntimeException(e);
                 }
             }
+
             case REMOVE_FLAG -> {
                 var flagId = (String) jsonBody.get("id");
                 var flag = (Flag) idManager.getObject(flagId);
+                var player = flag.getPlayer();
+                var map = player.getMap();
 
                 try {
                     synchronized (map) {
@@ -1099,9 +1544,12 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     throw new RuntimeException(e);
                 }
             }
+
             case REMOVE_BUILDING -> {
                 var buildingId = (String) jsonBody.get("id");
                 var building = (Building) idManager.getObject(buildingId);
+                var player = building.getPlayer();
+                var map = player.getMap();
 
                 try {
                     synchronized (map) {
@@ -1111,23 +1559,31 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     throw new RuntimeException(e);
                 }
             }
+
             case MARK_GAME_MESSAGES_READ -> {
-                ((JSONArray)jsonBody.get("messageIds"))
-                        .stream().map(messageId -> idManager.getObject((String) messageId))
-                        .forEach(readMessage -> player.markMessageAsRead((Message) readMessage));
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
+
+                synchronized (map) {
+                    ((JSONArray) jsonBody.get("messageIds"))
+                            .stream().map(messageId -> idManager.getObject((String) messageId))
+                            .forEach(readMessage -> player.markMessageAsRead((Message) readMessage));
+                }
             }
 
             case CHEAT -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
                 var cheatCode = (String) jsonBody.get("cheatCode");
 
                 if (cheatCode.equals("GIVE_ME_SOME_MORE")) {
-                    var headquarters = map.getBuildings().stream()
-                            .filter(building -> Objects.equals(building.getPlayer(), player))
-                            .filter(building -> building instanceof Headquarter)
-                            .findFirst();
+                    synchronized (map) {
+                        var headquarters = map.getBuildings().stream()
+                                .filter(building -> Objects.equals(building.getPlayer(), player))
+                                .filter(building -> building instanceof Headquarter)
+                                .findFirst();
 
-                    if (headquarters.isPresent()) {
-                        synchronized (map) {
+                        if (headquarters.isPresent()) {
                             for (var material : Material.values()) {
                                 GameUtils.deliver(material, 10, (Headquarter) headquarters.get());
                             }
@@ -1162,16 +1618,60 @@ public class WebsocketApi implements PlayerGameViewMonitor,
         System.out.println(">> Websocket session closed.");
 
         // Remove the closed session
-        gameListListeners.remove(session);
-        gameInfoListeners.forEach((game, listeners) -> listeners.remove(session));
-        chatRoomListeners.forEach((chatRoom, listeners) -> listeners.remove(session));
-
-        var player = (Player) session.getUserProperties().get("PLAYER");
-
-        if (player != null) {
-            System.out.println("Removing session for player: " + player);
-            playerToSession.remove(player);
+        synchronized (gameListListeners) {
+            gameListListeners.remove(session);
         }
+
+        synchronized (gameInfoListeners) {
+            gameInfoListeners.forEach((game, listeners) -> listeners.remove(session));
+
+            var gamesToStopListeningTo = new ArrayList<GameResource>();
+
+            for (var entry : gameInfoListeners.entrySet()) {
+                if (entry.getValue().isEmpty()) {
+                    gamesToStopListeningTo.add(entry.getKey());
+                }
+            }
+
+            gamesToStopListeningTo.forEach(game -> game.removeChangeListener(this));
+        }
+
+        synchronized (chatRoomListeners) {
+            chatRoomListeners.forEach((chatRoom, listeners) -> listeners.remove(session));
+
+            var roomsToStopListeningTo = new ArrayList<String>();
+
+            for (var entry : chatRoomListeners.entrySet()) {
+                if (entry.getValue().isEmpty()) {
+                    roomsToStopListeningTo.add(entry.getKey());
+                }
+            }
+
+            roomsToStopListeningTo.forEach(roomId -> ChatManager.removeMessageListenerForRoom(roomId));
+        }
+
+        synchronized (playerListeners) {
+            playerListeners.forEach((player, listeners) -> listeners.remove(session));
+        }
+
+        synchronized (chatRoomListeners) {
+            chatRoomListeners.forEach((chatRoom, listeners) -> listeners.remove(session));
+        }
+
+        var playerForSession = (Player) null;
+
+        synchronized (playerToSession) {
+            for (var entry : playerToSession.entrySet()) {
+                if (entry.getValue().equals(session)) {
+                    playerForSession = entry.getKey();
+                }
+            }
+
+            if (playerForSession != null) {
+                playerToSession.remove(playerForSession);
+            }
+        }
+
     }
 
     @OnError
@@ -1183,16 +1683,6 @@ public class WebsocketApi implements PlayerGameViewMonitor,
         System.out.println(Arrays.toString(throwable.getStackTrace()));
 
         // Remove the error session
-        gameListListeners.remove(session);
-        gameInfoListeners.forEach((game, listeners) -> listeners.remove(session));
-        chatRoomListeners.forEach((chatRoom, listeners) -> listeners.remove(session));
-
-        var player = (Player) session.getUserProperties().get("PLAYER");
-
-        if (player != null) {
-            System.out.println("Removing session for player: " + player);
-            playerToSession.remove(player);
-        }
     }
 
     @OnOpen
@@ -1209,13 +1699,24 @@ public class WebsocketApi implements PlayerGameViewMonitor,
         session.getAsyncRemote().sendText(jsonArray.toJSONString());
     }
 
+    /**
+     * Called when the view of the game is changed for the given player.
+     *
+     * LOCKS HELD: map
+     *
+     * @param player
+     * @param gameChangesList
+     */
     @Override
     public void onViewChangesForPlayer(Player player, GameChangesList gameChangesList) {
         // Note: This will be called when the gameTicker runs map.stepTime() and synchronizes on the map.
         //       No part of gameMonitoringEventsToJson can use synchronization - this will cause a deadlock.
 
         try {
-            var session = playerToSession.get(player);
+            var session = (Session) null;
+            synchronized (playerToSession) {
+                session = playerToSession.get(player);
+            }
 
             if (session != null) {
                 sendToSession(session, new JSONObject(Map.of(
@@ -1229,6 +1730,13 @@ public class WebsocketApi implements PlayerGameViewMonitor,
         }
     }
 
+    /**
+     * Called when the statistics are changed for the given building.
+     *
+     * LOCKS HELD: map
+     *
+     * @param building
+     */
     @Override
     public void buildingStatisticsChanged(Building building) {
         System.out.println(" >> BUILDING STATISTICS CHANGED");
@@ -1236,15 +1744,24 @@ public class WebsocketApi implements PlayerGameViewMonitor,
         var map = building.getMap();
         var statisticsManager = map.getStatisticsManager();
 
-        statisticsListeners.get(map).forEach(session -> sendToSession(
-                session,
-                new JSONObject(Map.of(
-                        "type", "STATISTICS_CHANGED",
-                        "statistics", jsonUtils.statisticsToJson(map.getTime(), building.getPlayer(), map.getPlayers(), statisticsManager)
-                ))
-        ));
+        synchronized (statisticsListeners) {
+            statisticsListeners.get(map).forEach(session -> sendToSession(
+                    session,
+                    new JSONObject(Map.of(
+                            "type", "STATISTICS_CHANGED",
+                            "statistics", jsonUtils.statisticsToJson(map.getTime(), building.getPlayer(), map.getPlayers(), statisticsManager)
+                    ))
+            ));
+        }
     }
 
+    /**
+     * Called when general statistics change.
+     *
+     * LOCKS HELD: map
+     *
+     * @param player
+     */
     @Override
     public void generalStatisticsChanged(Player player) {
         System.out.println(" >> GENERAL STATISTICS CHANGED");
@@ -1252,11 +1769,36 @@ public class WebsocketApi implements PlayerGameViewMonitor,
         var map = player.getMap();
         var statisticsManager = map.getStatisticsManager();
 
-        statisticsListeners.get(map).forEach(session -> sendToSession(
-                session,
-                new JSONObject(Map.of(
-                        "type", "STATISTICS_CHANGED",
-                        "statistics", jsonUtils.statisticsToJson(map.getTime(), player, map.getPlayers(), statisticsManager)
-                ))));
+        synchronized (statisticsListeners) {
+            statisticsListeners.get(map).forEach(session -> sendToSession(
+                    session,
+                    new JSONObject(Map.of(
+                            "type", "STATISTICS_CHANGED",
+                            "statistics", jsonUtils.statisticsToJson(map.getTime(), player, map.getPlayers(), statisticsManager)
+                    ))));
+        }
+    }
+
+    /**
+     * Called when the player information changes. E.g. color, name, etc.
+     *
+     * LOCKS HELD: TBD
+     *
+     * TODO: define locking rule for changing player settings. Should they be protected by lock on map or player?
+     *
+     * @param player
+     */
+    @Override
+    public void onPlayerChanged(Player player) {
+        System.out.println(" >> PLAYER_CHANGED");
+
+        synchronized (playerListeners) {
+            playerListeners.get(player).forEach(session -> sendToSession(
+                    session,
+                    new JSONObject(Map.of(
+                            "type", "PLAYER_CHANGED",
+                            "player", jsonUtils.playerToJson(player)
+                    ))));
+        }
     }
 }

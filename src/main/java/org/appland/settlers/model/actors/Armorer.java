@@ -6,7 +6,6 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
 
@@ -82,16 +81,13 @@ public class Armorer extends Worker {
             }
             case WAITING_FOR_SPACE_ON_FLAG -> {
                 if (home.getFlag().hasPlaceForMoreCargo()) {
-                    var cargo = new Cargo(nextWeapon, map);
-                    setCargo(cargo);
+                    setCargo(new Cargo(nextWeapon, map));
+                    home.getFlag().promiseCargo(carriedCargo);
 
                     nextWeapon = getNextWeapon(nextWeapon);
 
                     state = GOING_TO_FLAG_WITH_CARGO;
-
                     setTarget(home.getFlag().getPosition());
-
-                    home.getFlag().promiseCargo(getCargo());
                 }
             }
             case PRODUCING_WEAPON -> {
@@ -110,16 +106,13 @@ public class Armorer extends Worker {
                         if (!home.getFlag().hasPlaceForMoreCargo()) {
                             state = WAITING_FOR_SPACE_ON_FLAG;
                         } else {
-                            var cargo = new Cargo(nextWeapon, map);
-                            setCargo(cargo);
+                            setCargo(new Cargo(nextWeapon, map));
+                            home.getFlag().promiseCargo(carriedCargo);
 
                             nextWeapon = getNextWeapon(nextWeapon);
 
                             state = GOING_TO_FLAG_WITH_CARGO;
-
                             setTarget(home.getFlag().getPosition());
-
-                            home.getFlag().promiseCargo(getCargo());
                         }
                     } else {
                         countdown.step();
@@ -129,7 +122,6 @@ public class Armorer extends Worker {
                     }
                 } else {
                     productivityMeasurer.reportUnproductivity();
-
                     productivityMeasurer.nextProductivityCycle();
                 }
             }
@@ -148,29 +140,25 @@ public class Armorer extends Worker {
         switch (state) {
             case GOING_TO_FLAG_WITH_CARGO -> {
                 var flag = map.getFlagAtPoint(position);
-                var cargo = getCargo();
 
-                cargo.setPosition(position);
-                cargo.transportToStorage();
+                carriedCargo.setPosition(position);
+                carriedCargo.transportToStorage();
 
-                flag.putCargo(getCargo());
+                flag.putCargo(carriedCargo);
 
-                setCargo(null);
+                carriedCargo = null;
 
                 state = GOING_BACK_TO_HOUSE;
-
                 returnHome();
             }
             case GOING_BACK_TO_HOUSE -> {
                 enterBuilding(home);
 
                 state = RESTING_IN_HOUSE;
-
                 countdown.countFrom(RESTING_TIME);
             }
             case RETURNING_TO_STORAGE -> {
                 var storehouse = (Storehouse) map.getBuildingAtPoint(position);
-
                 storehouse.depositWorker(this);
             }
             case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
@@ -179,7 +167,6 @@ public class Armorer extends Worker {
 
                 if (Objects.nonNull(storehouse)) {
                     state = RETURNING_TO_STORAGE;
-
                     setTarget(storehouse.getPosition());
                 } else {
                     state = GOING_TO_DIE;
@@ -190,7 +177,6 @@ public class Armorer extends Worker {
                 setDead();
 
                 state = DEAD;
-
                 countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
             }
         }
@@ -202,21 +188,16 @@ public class Armorer extends Worker {
 
         if (Objects.nonNull(storage)) {
             state = RETURNING_TO_STORAGE;
-
             setTarget(storage.getPosition());
         } else {
-            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), ARMORER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, ARMORER);
 
             if (Objects.nonNull(storage)) {
                 state = RETURNING_TO_STORAGE;
-
                 setOffroadTarget(storage.getPosition());
             } else {
-                var point = findPlaceToDie();
-
-                setOffroadTarget(point, position.downRight());
-
                 state = GOING_TO_DIE;
+                setOffroadTarget(findPlaceToDie(), position.downRight());
             }
         }
     }
@@ -232,9 +213,7 @@ public class Armorer extends Worker {
     protected void onWalkingAndAtFixedPoint() {
 
         // Return to storage if the planned path no longer exists
-        if (state == WALKING_TO_TARGET &&
-                map.isFlagAtPoint(position) &&
-                !map.arePointsConnectedByRoads(position, getTarget())) {
+        if (state == WALKING_TO_TARGET && map.isFlagAtPoint(position) && !map.arePointsConnectedByRoads(position, target)) {
 
             // Don't try to enter the armory upon arrival.
             clearTargetBuilding();
@@ -255,7 +234,6 @@ public class Armorer extends Worker {
     @Override
     public void goToOtherStorage(Building building) {
         state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
-
         setTarget(building.getFlag().getPosition());
     }
 

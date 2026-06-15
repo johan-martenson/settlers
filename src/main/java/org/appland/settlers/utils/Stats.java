@@ -170,7 +170,7 @@ public class Stats {
 
         int longestVariableName = 0;
 
-        for (String name : variableNames) {
+        for (var name : variableNames) {
             if (name.length() > longestVariableName) {
                 longestVariableName = name.length();
             }
@@ -186,10 +186,10 @@ public class Stats {
 
         java.util.Collections.sort(variableNames);
 
-        for (String variableName : variableNames) {
+        for (var variableName : variableNames) {
             var variable = variableMap.get(variableName);
 
-            String valueRow = String.format("| %-" + variableColumnLength + "s | %10d | %10f | %10d | %10d |",
+            var valueRow = String.format("| %-" + variableColumnLength + "s | %10d | %10f | %10d | %10d |",
                     variableName,
                     variable.getLatestValue(),
                     variable.getAverage(),

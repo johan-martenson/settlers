@@ -4,11 +4,8 @@ import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
-
-import java.util.List;
 
 import static org.appland.settlers.model.Material.HUNTER;
 import static org.appland.settlers.model.Material.MEAT;
@@ -22,9 +19,9 @@ public class Hunter extends Worker {
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
     private final Countdown countdown = new Countdown();
-    private final ProductivityMeasurer productivityMeasurer;
+    private final ProductivityMeasurer productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_SHOOT, null);
 
-    private State state;
+    private State state = State.WALKING_TO_TARGET;
     private WildAnimal prey = null;
 
     private enum State {
@@ -44,16 +41,11 @@ public class Hunter extends Worker {
 
     public Hunter(Player player, GameMap map) {
         super(player, map);
-
-        state = State.WALKING_TO_TARGET;
-
-        productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_SHOOT, null);
     }
 
     @Override
     protected void onEnterBuilding(Building building) {
         state = State.RESTING_IN_HOUSE;
-
         countdown.countFrom(TIME_TO_REST);
 
         productivityMeasurer.setBuilding(building);
@@ -77,9 +69,9 @@ public class Hunter extends Worker {
                                 }
 
                                 // Filter animals that can't be reached
-                                List<Point> path = getPosition().equals(home.getPosition())
-                                        ? getMap().findWayOffroad(getPosition(), animal.getPosition(), home.getFlag().getPosition(), null)
-                                        : getMap().findWayOffroad(getPosition(), animal.getPosition(), null);
+                                var path = position.equals(home.getPosition())
+                                        ? getMap().findWayOffroad(position, animal.getPosition(), home.getFlag().getPosition(), null)
+                                        : getMap().findWayOffroad(position, animal.getPosition(), null);
 
                                 if (path == null) {
                                     continue;
@@ -87,8 +79,9 @@ public class Hunter extends Worker {
 
                                 // Start hunting the prey
                                 prey = animal;
-                                setOffroadTargetWithPath(path.subList(0, 2));
+
                                 state = State.TRACKING;
+                                setOffroadTargetWithPath(path.subList(0, 2));
                                 break;
                             }
 
@@ -128,9 +121,10 @@ public class Hunter extends Worker {
 
             case WAITING_FOR_SPACE_ON_FLAG -> {
                 if (home.getFlag().hasPlaceForMoreCargo()) {
+                    home.getFlag().promiseCargo(carriedCargo);
+
                     state = State.GOING_TO_FLAG_TO_LEAVE_CARGO;
                     setOffroadTarget(home.getFlag().getPosition());
-                    home.getFlag().promiseCargo(getCargo());
                 } else {
                     productivityMeasurer.reportUnproductivity();
                 }
@@ -162,8 +156,8 @@ public class Hunter extends Worker {
     protected void onArrival() {
         switch (state) {
             case TRACKING -> {
-                if (prey.getPosition().distance(getPosition()) > SHOOTING_DISTANCE) {
-                    var steps = getMap().findWayOffroad(getPosition(), prey.getPosition(), null);
+                if (prey.getPosition().distance(position) > SHOOTING_DISTANCE) {
+                    var steps = getMap().findWayOffroad(position, prey.getPosition(), null);
                     setOffroadTarget(steps.get(1));
                 } else if (prey.isExactlyAtPoint()) {
                     state = State.SHOOTING;
@@ -172,7 +166,7 @@ public class Hunter extends Worker {
             }
 
             case RETURNING_TO_STORAGE -> {
-                var storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
+                var storehouse = (Storehouse) map.getBuildingAtPoint(position);
                 storehouse.depositWorker(this);
             }
 
@@ -189,14 +183,13 @@ public class Hunter extends Worker {
             }
 
             case GOING_TO_FLAG_TO_LEAVE_CARGO -> {
-                var flag = map.getFlagAtPoint(getPosition());
+                var flag = map.getFlagAtPoint(position);
 
-                var cargo = getCargo();
-                cargo.setPosition(getPosition());
-                cargo.transportToReceivingBuilding(this::isMeatReceiver);
+                carriedCargo.setPosition(position);
+                carriedCargo.transportToReceivingBuilding(this::isMeatReceiver);
 
-                flag.putCargo(cargo);
-                setCargo(null);
+                flag.putCargo(carriedCargo);
+                carriedCargo = null;
 
                 state = State.GOING_BACK_TO_HOUSE_WITHOUT_CARGO;
                 setTarget(home.getPosition());
@@ -208,20 +201,20 @@ public class Hunter extends Worker {
             }
 
             case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
-                var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, HUNTER);
+                var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, HUNTER);
 
                 if (storehouse != null) {
                     state = State.RETURNING_TO_STORAGE;
                     setTarget(storehouse.getPosition());
                 } else {
                     state = State.GOING_TO_DIE;
-                    var point = findPlaceToDie();
-                    setOffroadTarget(point);
+                    setOffroadTarget(findPlaceToDie());
                 }
             }
 
             case GOING_TO_DIE -> {
                 setDead();
+
                 state = State.DEAD;
                 countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
             }
@@ -230,25 +223,20 @@ public class Hunter extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, HUNTER);
+        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, HUNTER);
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
-
             setTarget(storage.getPosition());
         } else {
-            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), HUNTER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, HUNTER);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
-
                 setOffroadTarget(storage.getPosition());
             } else {
-                var point = findPlaceToDie();
-
-                setOffroadTarget(point, getPosition().downRight());
-
                 state = State.GOING_TO_DIE;
+                setOffroadTarget(findPlaceToDie(), position.downRight());
             }
         }
     }
@@ -276,8 +264,7 @@ public class Hunter extends Worker {
             }
 
             case WALKING_TO_TARGET -> {
-                if (map.isFlagAtPoint(getPosition()) &&
-                        !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+                if (map.isFlagAtPoint(position) && !map.arePointsConnectedByRoads(position, target)) {
 
                     // Don't try to enter the hunter hut upon arrival
                     clearTargetBuilding();
@@ -301,7 +288,6 @@ public class Hunter extends Worker {
     @Override
     public void goToOtherStorage(Building building) {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
-
         setTarget(building.getFlag().getPosition());
     }
 

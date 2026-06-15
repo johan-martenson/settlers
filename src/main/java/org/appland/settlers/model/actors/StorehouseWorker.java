@@ -200,7 +200,7 @@ public class StorehouseWorker extends Worker {
 
                     if (cargo != null) {
                         setCargo(cargo);
-                        home.getFlag().promiseCargo(getCargo());
+                        home.getFlag().promiseCargo(carriedCargo);
 
                         setTarget(home.getFlag().getPosition());
                         state = State.DELIVERING_CARGO_TO_FLAG;
@@ -239,8 +239,8 @@ public class StorehouseWorker extends Worker {
         if (state == State.DELIVERING_CARGO_TO_FLAG) {
             var flag = home.getFlag();
 
-            flag.putCargo(getCargo());
-            setCargo(null);
+            flag.putCargo(carriedCargo);
+            carriedCargo = null;
 
             state = State.GOING_BACK_TO_HOUSE;
             returnHome();
@@ -251,7 +251,6 @@ public class StorehouseWorker extends Worker {
             countdown.countFrom(RESTING_TIME);
         } else if (state == State.RETURNING_TO_STORAGE) {
             var storehouse = (Storehouse)map.getBuildingAtPoint(position);
-
             storehouse.depositWorker(this);
         } else if (state == State.WALKING_TO_FLAG_TO_PICK_UP_RETURNED_CARGO) {
             home.getFlag().retrieveCargo(cargoToReturn);
@@ -263,8 +262,8 @@ public class StorehouseWorker extends Worker {
             state = State.WALKING_TO_HOME_TO_DELIVER_CARGO;
             setTarget(home.getPosition());
         } else if (state == State.WALKING_TO_HOME_TO_DELIVER_CARGO) {
-            home.putCargo(getCargo());
-            setCargo(null);
+            home.putCargo(carriedCargo);
+            carriedCargo = null;
 
             state = State.RESTING_IN_HOUSE;
         }

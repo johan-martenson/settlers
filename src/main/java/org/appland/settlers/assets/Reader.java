@@ -7,11 +7,8 @@ import org.appland.settlers.assets.decoders.LstDecoder;
 import org.appland.settlers.assets.decoders.PaletteDecoder;
 import org.appland.settlers.assets.decoders.TextDecoder;
 import org.appland.settlers.assets.resources.Bitmap;
-import org.appland.settlers.assets.resources.BitmapRLE;
-import org.appland.settlers.assets.resources.Bob;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.resources.PlayerBitmap;
-import org.appland.settlers.assets.resources.WaveFile;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -114,7 +111,7 @@ public class Reader {
                 (path, basicFileAttributes) -> path.toFile().getName().matches(".*." + type)
         ).toList();
 
-        for (Path path : paths) {
+        for (var path : paths) {
             if (!Files.isDirectory(path)) {
                 var filename = path.toString();
                 gameResourceMap.put(filename, loadFile(filename));
@@ -136,7 +133,7 @@ public class Reader {
             System.out.println();
             System.out.printf(" - File: %s", inputFile);
 
-            for (GameResource gameResource : gameResourceList) {
+            for (var gameResource : gameResourceList) {
                 switch (gameResource.getType()) {
                     case PLAYER_BITMAP_RESOURCE -> {
                         var playerBitmap = ((PlayerBitmapResource) gameResource).getBitmap();
@@ -244,7 +241,7 @@ public class Reader {
 
             var filenameWithoutPath = inputFilename.substring(inputFilename.lastIndexOf("/") + 1);
 
-            for (GameResource gameResource : gameResourceList) {
+            for (var gameResource : gameResourceList) {
                 String outFile;
 
                 if (gameResource.isNameSet()) {
@@ -282,7 +279,7 @@ public class Reader {
                     case BOB_RESOURCE -> {
                         var bob = ((BobResource) gameResource).getBob();
                         int j = 0;
-                        for (PlayerBitmap playerBitmap1 : bob.getAllBitmaps()) {
+                        for (var playerBitmap1 : bob.getAllBitmaps()) {
                             playerBitmap1.writeToFile(format("%s/%d-%s-%d.png", dirToWrite, j++, filenameWithoutPath, i));
                         }
 
@@ -315,7 +312,7 @@ public class Reader {
     private static void writeTextFile(String outTextFile, List<String> strings) throws IOException {
         var printWriter = new PrintWriter(new FileWriter(outTextFile));
 
-        for (String text : strings) {
+        for (var text : strings) {
             printWriter.println(text);
         }
 
@@ -336,7 +333,7 @@ public class Reader {
         byte[] data = new byte[width * height * 4]; // Create a BGRA picture
 
         int offset = 0;
-        for (PlayerBitmap bitmap : letterMap.values()) {
+        for (var bitmap : letterMap.values()) {
             for (int y = 0; y < bitmap.getHeight(); y++) {
                 for (int x = 0; x < bitmap.getWidth(); x++) {
                     int pixelOffset = (y * width + offset + x) * 4;

@@ -101,6 +101,7 @@ public class Scout extends Worker {
                     state = GOING_TO_NEXT_POINT;
                     setOffroadTarget(point);
                 }
+
                 previousPosition = position;
                 duration.after("Set offroad target 0");
             }
@@ -134,13 +135,13 @@ public class Scout extends Worker {
 
             case RETURNING_TO_FLAG -> {
                 state = RETURNING_TO_STORAGE;
-                var storage = GameUtils.getClosestStorageConnectedByRoads(flagPoint, getPlayer());
+                var storage = GameUtils.getClosestStorageConnectedByRoads(flagPoint, player);
                 duration.after("Find closest storage connected by roads");
 
                 if (storage != null) {
                     setTarget(storage.getPosition());
                 } else {
-                    storage = GameUtils.getClosestStorageOffroad(getPlayer(), flagPoint);
+                    storage = GameUtils.getClosestStorageOffroad(player, flagPoint);
                     setOffroadTarget(storage.getPosition(), storage.getFlag().getPosition());
                 }
 
@@ -164,8 +165,7 @@ public class Scout extends Worker {
                     setTarget(storehouse.getPosition());
                 } else {
                     state = GOING_TO_DIE;
-                    var point = findPlaceToDie();
-                    setOffroadTarget(point);
+                    setOffroadTarget(findPlaceToDie());
                 }
 
                 duration.after("Set offroad target 3");
@@ -225,14 +225,14 @@ public class Scout extends Worker {
             state == GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
             // Return to storage if the planned path no longer exists
-            if (map.isFlagAtPoint(position) && !map.arePointsConnectedByRoads(position, getTarget())) {
+            if (map.isFlagAtPoint(position) && !map.arePointsConnectedByRoads(position, target)) {
                 returnToStorage();
             }
 
             // Return to storage if the planned path no longer exists
             if (state == WALKING_TO_ASSIGNED_LOOKOUT_TOWER &&
                     map.isFlagAtPoint(position) &&
-                    !map.arePointsConnectedByRoads(position, getTarget())) {
+                    !map.arePointsConnectedByRoads(position, target)) {
                 clearTargetBuilding();
                 returnToStorage();
             }
@@ -299,7 +299,7 @@ public class Scout extends Worker {
     }
 
     private Point findDirectionToBorder() {
-        return getPlayer().getBorderPoints().stream()
+        return player.getBorderPoints().stream()
                 .min(Comparator.comparingDouble(position::distance))
                 .orElse(null);
     }
@@ -313,7 +313,7 @@ public class Scout extends Worker {
             state = RETURNING_TO_STORAGE;
             setTarget(storage.getPosition());
         } else {
-            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), SCOUT);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, SCOUT);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;

@@ -78,6 +78,8 @@ public class IconsExtractor {
             IoDat.HOUSE_ON_MAP,
             IoDat.WEAPONS_MOVING,
             IoDat.FOOD,
+            IoDat.HAMMER_AND_PLUS,
+            IoDat.HAMMER_AND_MINUS,
             IoDat.SAW_AND_MINUS,
             IoDat.SAW_AND_PLUS,
             IoDat.AXE_AND_MINUS,
@@ -117,7 +119,8 @@ public class IconsExtractor {
             IoDat.GRAPH_OF_OWNED_AREA_ON_MAP,
             IoDat.FORWARD,
             IoDat.REVERSE,
-            IoDat.PLUS_RETURN_TO_HEADQUARTERS
+            IoDat.PLUS_RETURN_TO_HEADQUARTERS,
+            IoDat.BLOCK_CROSS
     );
 
     public static void extractIcons(String fromDir, String toDir, Palette defaultPalette) throws UnknownResourceTypeException, IOException, InvalidFormatException {

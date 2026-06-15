@@ -144,7 +144,7 @@ public class Metalworker extends Worker {
                     var nextTool = getNextTool();
 
                     carriedCargo = new Cargo(nextTool, map);
-                    home.getFlag().promiseCargo(getCargo());
+                    home.getFlag().promiseCargo(carriedCargo);
 
                     // Go place the tool at the flag
                     state = State.GOING_TO_FLAG_WITH_CARGO;
@@ -185,12 +185,11 @@ public class Metalworker extends Worker {
                         var nextTool = getNextTool();
 
                         carriedCargo = new Cargo(nextTool, map);
+                        home.getFlag().promiseCargo(carriedCargo);
 
                         // Go place the tool at the flag
                         state = GOING_TO_FLAG_WITH_CARGO;
                         setTarget(home.getFlag().getPosition());
-
-                        home.getFlag().promiseCargo(getCargo());
                     }
                 } else {
                     countdown.step();
@@ -283,7 +282,7 @@ public class Metalworker extends Worker {
         // Return to storage if the planned path no longer exists
         if (state == WALKING_TO_TARGET &&
                 map.isFlagAtPoint(position) &&
-                !map.arePointsConnectedByRoads(position, getTarget())) {
+                !map.arePointsConnectedByRoads(position, target)) {
 
             // Don't try to enter upon arrival
             clearTargetBuilding();

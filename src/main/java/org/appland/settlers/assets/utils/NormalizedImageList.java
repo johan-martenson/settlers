@@ -1,6 +1,5 @@
 package org.appland.settlers.assets.utils;
 
-import org.appland.settlers.assets.Area;
 import org.appland.settlers.assets.TextureFormat;
 import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.PlayerBitmap;
@@ -25,7 +24,7 @@ public class NormalizedImageList {
         int maxHeightAboveNy = 0;
 
         // Calculate the normalized width, height, nx, and ny
-        for (Bitmap image : images) {
+        for (var image : images) {
             var visibleArea = image.getVisibleArea();
 
             maxWidthBeforeNx = Math.max(maxWidthBeforeNx, image.getNx() - visibleArea.x());
@@ -46,7 +45,7 @@ public class NormalizedImageList {
         // Create a list of adjusted images where they all share the same width, height, and offsets
         this.normalizedImages = new ArrayList<>();
 
-        for (Bitmap originalImage : originalImages) {
+        for (var originalImage : originalImages) {
             Bitmap normalizedImage;
 
             if (originalImage instanceof PlayerBitmap) {

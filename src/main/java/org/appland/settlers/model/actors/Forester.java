@@ -150,8 +150,8 @@ public class Forester extends Worker {
                             return;
                         }
 
-                        setOffroadTarget(point);
                         state = State.GOING_OUT_TO_PLANT;
+                        setOffroadTarget(point);
                     } else {
                         countdown.step();
                     }
@@ -164,7 +164,6 @@ public class Forester extends Worker {
                     // Place a tree if the point is still open
                     if (pointIsClearForTree(position)) {
                         var treeType = Tree.PLANTABLE_TREES[(int)(Math.floor(RANDOM.nextDouble() * Tree.PLANTABLE_TREES.length))];
-
                         map.placeTree(position, treeType, Tree.TreeSize.NEWLY_PLANTED);
                     }
 
@@ -232,6 +231,7 @@ public class Forester extends Worker {
 
             case GOING_TO_DIE -> {
                 setDead();
+
                 state = State.DEAD;
                 countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
             }
@@ -246,7 +246,7 @@ public class Forester extends Worker {
             state = State.RETURNING_TO_STORAGE;
             setTarget(storage.getPosition());
         } else {
-            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), FORESTER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, FORESTER);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
@@ -264,7 +264,7 @@ public class Forester extends Worker {
         // Return to storage if the planned path no longer exists
         if (state == State.WALKING_TO_TARGET &&
             map.isFlagAtPoint(position) &&
-            !map.arePointsConnectedByRoads(position, getTarget())) {
+            !map.arePointsConnectedByRoads(position, target)) {
 
             // Don't try to enter the forester hut upon arrival
             clearTargetBuilding();
@@ -277,7 +277,6 @@ public class Forester extends Worker {
     @Override
     public void goToOtherStorage(Building building) {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
-
         setTarget(building.getFlag().getPosition());
     }
 

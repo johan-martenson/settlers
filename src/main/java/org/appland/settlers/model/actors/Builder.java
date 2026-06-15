@@ -41,7 +41,7 @@ public class Builder extends Worker {
     @Override
     protected void onIdle() {
         if ((state == State.HAMMERING || state == State.GOING_TO_HAMMER) && building.isReady()) {
-            if (map.findWayOffroad(getPosition(), building.getFlag().getPosition(), null) != null) {
+            if (map.findWayOffroad(position, building.getFlag().getPosition(), null) != null) {
                 setOffroadTarget(building.getFlag().getPosition());
                 state = State.WALKING_TO_FLAG_TO_GO_BACK_TO_STORAGE;
             } else {
@@ -55,7 +55,6 @@ public class Builder extends Worker {
             if (countdown.hasReachedZero()) {
                 Point nextHammerPoint;
                 var buildingPoint = building.getPosition();
-                var position = getPosition();
 
                 if (position.equals(buildingPoint.downLeft())) {
                     nextHammerPoint = buildingPoint.downLeft().left();
@@ -89,12 +88,12 @@ public class Builder extends Worker {
     protected void onArrival() {
         switch (state) {
             case WALKING_TO_BUILDING_TO_CONSTRUCT -> {
-                building = map.getBuildingAtPoint(getPosition());
+                building = map.getBuildingAtPoint(position);
 
                 if (building != null) {
                     building.startConstruction();
 
-                    if (map.findWayOffroad(getPosition(), building.getPosition().downLeft(), null) != null) {
+                    if (map.findWayOffroad(position, building.getPosition().downLeft(), null) != null) {
                         setOffroadTarget(building.getPosition().downLeft());
                         state = State.GOING_TO_HAMMER;
                     } else {
@@ -118,7 +117,7 @@ public class Builder extends Worker {
             }
             case WALKING_TO_FLAG_TO_GO_BACK_TO_STORAGE -> returnToStorage();
             case RETURNING_TO_STORAGE -> {
-                var storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
+                var storehouse = (Storehouse) map.getBuildingAtPoint(position);
                 storehouse.depositWorker(this);
             }
             case GOING_TO_DIE -> {
@@ -127,7 +126,7 @@ public class Builder extends Worker {
                 countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
             }
             case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
-                var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BUILDER);
+                var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, BUILDER);
 
                 if (storehouse != null) {
                     state = State.RETURNING_TO_STORAGE;
@@ -147,18 +146,17 @@ public class Builder extends Worker {
 
         // Wait until next flag to find out that the building is gone and then go back
         if (state == State.WALKING_TO_BUILDING_TO_CONSTRUCT &&
-            (!isExactlyAtPoint() || !map.isFlagAtPoint(getPosition()))) {
+            (!isExactlyAtPoint() || !map.isFlagAtPoint(position))) {
             return;
         }
 
-        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BUILDER);
+        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, BUILDER);
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
-
             setTarget(storage.getPosition());
         } else {
-            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), BUILDER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, BUILDER);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
@@ -166,9 +164,9 @@ public class Builder extends Worker {
             } else {
                 var point = findPlaceToDie();
 
-                if (!Objects.equals(getPosition(), point)) {
+                if (!Objects.equals(position, point)) {
                     state = State.GOING_TO_DIE;
-                    setOffroadTarget(point, getPosition());
+                    setOffroadTarget(point, position);
                 } else {
                     setDead();
                     state = State.DEAD;
@@ -205,12 +203,11 @@ public class Builder extends Worker {
 
     @Override
     protected void onWalkingAndAtFixedPoint() {
-        var position = getPosition();
 
         // Return to storage if the planned path no longer exists
         if (state == State.WALKING_TO_BUILDING_TO_CONSTRUCT &&
                 map.isFlagAtPoint(position) &&
-                !map.arePointsConnectedByRoads(position, getTarget())) {
+                !map.arePointsConnectedByRoads(position, target)) {
 
             // Cancel the promise to the building
             getTargetBuilding().cancelPromisedBuilder(this);

@@ -6,7 +6,6 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.OffroadOption;
 import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
@@ -97,9 +96,6 @@ public class WellWorker extends Worker {
                     map.getStatisticsManager().waterProduced(player, map.getTime());
 
                     if (home.getFlag().hasPlaceForMoreCargo()) {
-                        //var cargo = new Cargo(WATER, map);
-                        //setCargo(cargo);
-
                         setTarget(home.getFlag().getPosition());
                         state = State.GOING_TO_FLAG_WITH_CARGO;
 
@@ -116,11 +112,10 @@ public class WellWorker extends Worker {
                 if (home.getFlag().hasPlaceForMoreCargo()) {
                     var cargo = new Cargo(WATER, map);
                     setCargo(cargo);
+                    home.getFlag().promiseCargo(cargo);
 
                     setTarget(home.getFlag().getPosition());
                     state = State.GOING_TO_FLAG_WITH_CARGO;
-
-                    home.getFlag().promiseCargo(cargo);
                 }
             }
 
@@ -221,21 +216,17 @@ public class WellWorker extends Worker {
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
-
             setTarget(storage.getPosition());
         } else {
-            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), WELL_WORKER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, WELL_WORKER);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
-
                 setOffroadTarget(storage.getPosition());
             } else {
-                var point = findPlaceToDie();
-
-                setOffroadTarget(point, position.downRight());
-
                 state = State.GOING_TO_DIE;
+                setOffroadTarget(findPlaceToDie(), position.downRight());
+
             }
         }
     }
@@ -246,7 +237,7 @@ public class WellWorker extends Worker {
         // Return to storage if the planned path no longer exists
         if (state == State.WALKING_TO_TARGET &&
             map.isFlagAtPoint(position) &&
-            !map.arePointsConnectedByRoads(position, getTarget())) {
+            !map.arePointsConnectedByRoads(position, target)) {
 
             // Don't try to enter the well upon arrival
             clearTargetBuilding();

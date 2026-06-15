@@ -99,7 +99,7 @@ public class Building implements EndPoint {
     protected Player player;
     protected Point position = null;
 
-    private Flag flag = new Flag(null);
+    protected Flag flag = new Flag(null);
     private Set<Point> defendedLand = null;
     private long generation;
     private State state = State.PLANNED; // TODO: make private again
@@ -622,7 +622,7 @@ public class Building implements EndPoint {
         int planks = 0;
         int stones = 0;
 
-        for (Material material : houseSize.material()) {
+        for (var material : houseSize.material()) {
             if (material == PLANK) {
                 planks++;
             } else if (material == STONE) {
@@ -733,7 +733,7 @@ public class Building implements EndPoint {
     }
 
     private boolean hostsPromotableSoldiers() {
-        for (Soldier military : hostedSoldiers) {
+        for (var military : hostedSoldiers) {
             if (military.getRank() != GENERAL_RANK) {
                 return true;
             }

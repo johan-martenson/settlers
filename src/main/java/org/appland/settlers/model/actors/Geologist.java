@@ -67,7 +67,7 @@ public class Geologist extends Worker {
 
                 // Report the find
                 if (foundMaterial != null) {
-                    getPlayer().reportGeologicalFinding(position, foundMaterial);
+                    player.reportGeologicalFinding(position, foundMaterial);
                 }
 
                 // Return after investigating five sites
@@ -97,12 +97,12 @@ public class Geologist extends Worker {
     protected void onArrival() {
         switch (state) {
             case WALKING_TO_TARGET -> {
-                flagPoint = getPosition();
+                flagPoint = position;
                 var point = findSiteToExamine();
 
                 if (point == null) {
                     state = RETURNING_TO_STORAGE;
-                    setTarget(GameUtils.getClosestStorageConnectedByRoads(flagPoint, getPlayer()).getPosition(), flagPoint);
+                    setTarget(GameUtils.getClosestStorageConnectedByRoads(flagPoint, player).getPosition(), flagPoint);
                 } else {
                     state = GOING_TO_NEXT_SITE;
                     setOffroadTarget(point);
@@ -122,13 +122,13 @@ public class Geologist extends Worker {
                 if (storage != null) {
                     setTarget(storage.getPosition());
                 } else {
-                    storage = getPlayer().getClosestStorageOffroad(flagPoint);
+                    storage = player.getClosestStorageOffroad(flagPoint);
                     setOffroadTarget(storage.getPosition());
                 }
             }
 
             case RETURNING_TO_STORAGE -> {
-                var storage = map.getBuildingAtPoint(getPosition());
+                var storage = map.getBuildingAtPoint(position);
                 storage.putCargo(new Cargo(GEOLOGIST, map));
                 enterBuilding(storage);
             }
@@ -187,7 +187,7 @@ public class Geologist extends Worker {
 
         // Iterate over the points with a random offset
         var filteredPoints = points.stream()
-                .filter(point -> !point.equals(getPosition())) // Ignore the current position
+                .filter(point -> !point.equals(position)) // Ignore the current position
                 .filter(point -> {
                     var mapPoint = map.getMapPoint(point);
 
@@ -198,7 +198,7 @@ public class Geologist extends Worker {
                            !mapPoint.isFlag() &&
                            !mapPoint.isBuilding();
                 })
-                .filter(point -> map.findWayOffroad(getPosition(), point, null) != null) // Ensure a path is available
+                .filter(point -> map.findWayOffroad(position, point, null) != null) // Ensure a path is available
                 .toList();
 
         if (!filteredPoints.isEmpty()) {
@@ -213,23 +213,22 @@ public class Geologist extends Worker {
 
         // Return to storage if the planned path no longer exists
         if (state == WALKING_TO_TARGET &&
-            map.isFlagAtPoint(getPosition()) &&
-            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+            map.isFlagAtPoint(position) &&
+            !map.arePointsConnectedByRoads(position, target)) {
             returnToStorage();
         }
     }
 
     @Override
     protected void onReturnToStorage() {
-        var storage = getPlayer().getClosestStorage(getPosition(), getHome());
+        var storage = player.getClosestStorage(position, home);
 
         state = RETURNING_TO_STORAGE;
 
         if (storage != null) {
             setTarget(storage.getPosition());
         } else {
-            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
-
+            storage = GameUtils.getClosestStorageOffroad(player, position);
             setOffroadTarget(storage.getPosition());
         }
     }

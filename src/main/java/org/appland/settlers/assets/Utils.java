@@ -41,7 +41,7 @@ public class Utils {
     static String getHex(byte[] bytes) {
         var hex = new StringBuilder();
 
-        for (byte b : bytes) {
+        for (var b : bytes) {
             hex.append(Integer.toHexString(b & 0xff));
         }
 
@@ -85,7 +85,7 @@ public class Utils {
     static void printBytesAsHex(byte[] bytes) {
         System.out.print("0x");
 
-        for (byte b : bytes) {
+        for (var b : bytes) {
             byte lower = (byte) (b & 0x0F);
             byte upper = (byte) ((b & 0xF0) >> 4);
 

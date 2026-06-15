@@ -55,7 +55,7 @@ public class Land {
                 closePoint = null;
                 lessClosePoint = null;
 
-                for (Point p : borderPoints) {
+                for (var p : borderPoints) {
                     if (p.distance(collectingBorder.getFirst()) < 1.5) {
                         closePoint = p;
                         break;

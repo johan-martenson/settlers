@@ -126,7 +126,7 @@ public class Fisherman extends Worker {
                 if (home.getFlag().hasPlaceForMoreCargo()) {
                     state = GOING_TO_FLAG;
                     setTarget(home.getFlag().getPosition());
-                    home.getFlag().promiseCargo(getCargo());
+                    home.getFlag().promiseCargo(carriedCargo);
                 } else {
                     state = WAITING_FOR_SPACE_ON_FLAG;
                 }
@@ -215,8 +215,8 @@ public class Fisherman extends Worker {
 
             case GOING_BACK_TO_HOUSE -> {
                 state = RESTING_IN_HOUSE;
-                enterBuilding(home);
                 countdown.countFrom(TIME_TO_REST);
+                enterBuilding(home);
             }
 
             case GOING_BACK_TO_HOUSE_WITH_FISH -> {
@@ -225,14 +225,13 @@ public class Fisherman extends Worker {
             }
 
             case GOING_TO_FLAG -> {
-                var cargo = getCargo();
-                cargo.setPosition(position);
-                cargo.transportToReceivingBuilding(this::isFishReceiver);
-                home.getFlag().putCargo(cargo);
-                setCargo(null);
+                carriedCargo.setPosition(position);
+                carriedCargo.transportToReceivingBuilding(this::isFishReceiver);
+                home.getFlag().putCargo(carriedCargo);
+                carriedCargo = null;
 
-                returnHome();
                 state = GOING_BACK_TO_HOUSE;
+                returnHome();
             }
 
             case RETURNING_TO_STORAGE -> {
@@ -254,6 +253,7 @@ public class Fisherman extends Worker {
 
             case GOING_TO_DIE -> {
                 setDead();
+
                 state = State.DEAD;
                 countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
             }
@@ -275,15 +275,15 @@ public class Fisherman extends Worker {
                 state = RETURNING_TO_STORAGE;
                 setOffroadTarget(storage.getPosition());
             } else {
-                setOffroadTarget(findPlaceToDie(), position.downRight());
                 state = GOING_TO_DIE;
+                setOffroadTarget(findPlaceToDie(), position.downRight());
             }
         }
     }
 
     @Override
     protected void onWalkingAndAtFixedPoint() {
-        if (state == WALKING_TO_TARGET && map.isFlagAtPoint(position) && !map.arePointsConnectedByRoads(position, getTarget())) {
+        if (state == WALKING_TO_TARGET && map.isFlagAtPoint(position) && !map.arePointsConnectedByRoads(position, target)) {
             clearTargetBuilding();
             returnToStorage();
         }

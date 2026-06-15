@@ -4,7 +4,6 @@ import org.appland.settlers.maps.MapLoader;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Material;
-import org.appland.settlers.model.Player;
 import org.appland.settlers.model.ResourceLevel;
 import org.appland.settlers.model.actors.WildAnimal;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -63,7 +62,7 @@ public class GameUtils {
     }
 
     public static void adjustResources(GameMap map, ResourceLevel resources) {
-        for (Player player : map.getPlayers()) {
+        for (var player : map.getPlayers()) {
             var headquarter = (Headquarter) player.getBuildings().getFirst();
 
             headquarter.setInitialResources(resources);

@@ -189,7 +189,7 @@ public class TestCaseGenerator {
 
         boolean first = true;
 
-        for (Point point : points) {
+        for (var point : points) {
             if (!first) {
                 System.out.print(", " + printPoint(point));
             } else {

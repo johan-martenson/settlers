@@ -1,18 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.appland.settlers.model.actors;
 
-import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
 
@@ -29,11 +21,11 @@ public class Miner extends Worker {
     private static final int TIME_TO_MINE = 49;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
-    private final Countdown countdown;
-    private final ProductivityMeasurer productivityMeasurer;
+    private final Countdown countdown = new Countdown();
+    private final ProductivityMeasurer productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + TIME_TO_MINE, null);
 
-    private Material mineral;
-    private State state;
+    private Material mineral = null;
+    private State state = WALKING_TO_TARGET;
 
     protected enum State {
         WALKING_TO_TARGET,
@@ -51,14 +43,6 @@ public class Miner extends Worker {
 
     public Miner(Player player, GameMap map) {
         super(player, map);
-
-        mineral = null;
-
-        countdown = new Countdown();
-
-        state = WALKING_TO_TARGET;
-
-        productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + TIME_TO_MINE, null);
     }
 
     public boolean isMining() {
@@ -66,8 +50,6 @@ public class Miner extends Worker {
     }
 
     private void consumeFood() {
-        var home = getHome();
-
         if (home.getAmount(BREAD) > 0) {
             home.consumeOne(BREAD);
         } else if (home.getAmount(FISH) > 0) {
@@ -82,7 +64,6 @@ public class Miner extends Worker {
         mineral = building.getProducedMaterial()[0];
 
         state = RESTING_IN_HOUSE;
-
         countdown.countFrom(RESTING_TIME);
 
         productivityMeasurer.setBuilding(building);
@@ -109,8 +90,8 @@ public class Miner extends Worker {
                 }
             }
             case MINING -> {
-                if (countdown.hasReachedZero() && getHome().isProductionEnabled()) {
-                    if (map.getAmountOfMineralAtPoint(mineral, getPosition()) > 0) {
+                if (countdown.hasReachedZero() && home.isProductionEnabled()) {
+                    if (map.getAmountOfMineralAtPoint(mineral, position) > 0) {
                         consumeFood();
 
                         // Report the production
@@ -119,45 +100,42 @@ public class Miner extends Worker {
                         map.getStatisticsManager().mined(player, map.getTime(), mineral);
 
                         // Handle transportation
-                        if (getHome().getFlag().hasPlaceForMoreCargo()) {
-                            var cargo = map.mineMineralAtPoint(mineral, getPosition());
+                        if (home.getFlag().hasPlaceForMoreCargo()) {
+                            var cargo = map.mineMineralAtPoint(mineral, position);
 
                             setCargo(cargo);
+                            home.getFlag().promiseCargo(carriedCargo);
 
                             // Go out to delivery the cargo to the flag
-                            setTarget(getHome().getFlag().getPosition());
-
                             state = State.GOING_OUT_TO_FLAG;
-
-                            getHome().getFlag().promiseCargo(getCargo());
+                            setTarget(home.getFlag().getPosition());
                         } else {
                             state = State.WAITING_FOR_SPACE_ON_FLAG;
                         }
                     } else {
 
                         // Report that there is no more ore available in the mine
-                        getHome().reportNoMoreNaturalResources();
+                        home.reportNoMoreNaturalResources();
 
-                        getPlayer().reportNoMoreResourcesForBuilding(getHome());
+                        player.reportNoMoreResourcesForBuilding(home);
 
                         state = State.NO_MORE_RESOURCES;
                     }
-                } else if (getHome().isProductionEnabled()) {
+                } else if (home.isProductionEnabled()) {
                     countdown.step();
                 }
             }
             case WAITING_FOR_SPACE_ON_FLAG -> {
-                if (getHome().getFlag().hasPlaceForMoreCargo()) {
-                    var cargo = map.mineMineralAtPoint(mineral, getPosition());
+                if (home.getFlag().hasPlaceForMoreCargo()) {
+                    var cargo = map.mineMineralAtPoint(mineral, position);
 
                     setCargo(cargo);
+                    home.getFlag().promiseCargo(carriedCargo);
 
                     // Go out to delivery the cargo to the flag
-                    setTarget(getHome().getFlag().getPosition());
 
                     state = State.GOING_OUT_TO_FLAG;
-
-                    getHome().getFlag().promiseCargo(getCargo());
+                    setTarget(home.getFlag().getPosition());
                 }
             }
             case DEAD -> {
@@ -189,80 +167,62 @@ public class Miner extends Worker {
     @Override
     protected void onArrival() {
         if (state == GOING_OUT_TO_FLAG) {
-            var cargo = getCargo();
+            carriedCargo.setPosition(position);
+            carriedCargo.transportToReceivingBuilding(this::isOreReceiver);
+            home.getFlag().putCargo(carriedCargo);
 
-            cargo.setPosition(getPosition());
-            cargo.transportToReceivingBuilding(this::isOreReceiver);
-            getHome().getFlag().putCargo(cargo);
-
-            setCargo(null);
-
-            returnHome();
+            carriedCargo = null;
 
             state = GOING_BACK_TO_HOUSE;
+            returnHome();
         } else if (state == GOING_BACK_TO_HOUSE) {
-            enterBuilding(getHome());
+            enterBuilding(home);
 
             state = RESTING_IN_HOUSE;
-
             countdown.countFrom(RESTING_TIME);
         } else if (state == RETURNING_TO_STORAGE) {
-            var storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
-
+            var storehouse = (Storehouse)map.getBuildingAtPoint(position);
             storehouse.depositWorker(this);
         } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
             // Go to the closest storage
-            var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, MINER);
+            var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, MINER);
 
             if (storehouse != null) {
                 state = RETURNING_TO_STORAGE;
-
                 setTarget(storehouse.getPosition());
             } else {
                 state = State.GOING_TO_DIE;
-
-                var point = findPlaceToDie();
-
-                setOffroadTarget(point);
+                setOffroadTarget(findPlaceToDie());
             }
         } else if (state == State.GOING_TO_DIE) {
             setDead();
 
             state = State.DEAD;
-
             countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
         }
     }
 
     private boolean hasFood() {
-        var home = getHome();
-
         return home.getAmount(BREAD) > 0 || home.getAmount(FISH)  > 0 || home.getAmount(MEAT)  > 0;
     }
 
     @Override
     protected void onReturnToStorage() {
-        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, MINER);
+        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, MINER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
-
             setTarget(storage.getPosition());
         } else {
-
-            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), MINER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, MINER);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;
-
                 setOffroadTarget(storage.getPosition());
             } else {
-                var point = findPlaceToDie();
-
-                setOffroadTarget(point, getPosition().downRight());
-
                 state = State.GOING_TO_DIE;
+                setOffroadTarget(findPlaceToDie(), position.downRight());
             }
         }
     }
@@ -272,8 +232,8 @@ public class Miner extends Worker {
 
         // Return to storage if the planned path no longer exists
         if (state == WALKING_TO_TARGET &&
-            map.isFlagAtPoint(getPosition()) &&
-            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+            map.isFlagAtPoint(position) &&
+            !map.arePointsConnectedByRoads(position, target)) {
 
             // Don't try to enter the mine upon arrival
             clearTargetBuilding();
@@ -295,7 +255,6 @@ public class Miner extends Worker {
     @Override
     public void goToOtherStorage(Building building) {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
-
         setTarget(building.getFlag().getPosition());
     }
 }

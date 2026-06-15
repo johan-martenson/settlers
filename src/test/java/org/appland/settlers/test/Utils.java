@@ -3,13 +3,13 @@ package org.appland.settlers.test;
 import org.appland.settlers.computer.ComputerPlayer;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Crop;
-import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerChangeListener;
 import org.appland.settlers.model.PlayerGameViewMonitor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Projectile;
@@ -38,10 +38,23 @@ import org.appland.settlers.model.actors.Stonemason;
 import org.appland.settlers.model.actors.WildAnimal;
 import org.appland.settlers.model.actors.WoodcutterWorker;
 import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.buildings.Armory;
+import org.appland.settlers.model.buildings.Bakery;
 import org.appland.settlers.model.buildings.Barracks;
+import org.appland.settlers.model.buildings.Brewery;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Catapult;
+import org.appland.settlers.model.buildings.CoalMine;
+import org.appland.settlers.model.buildings.DonkeyFarm;
+import org.appland.settlers.model.buildings.GoldMine;
+import org.appland.settlers.model.buildings.GraniteMine;
 import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.IronMine;
+import org.appland.settlers.model.buildings.IronSmelter;
+import org.appland.settlers.model.buildings.Metalworks;
+import org.appland.settlers.model.buildings.Mill;
+import org.appland.settlers.model.buildings.Mint;
+import org.appland.settlers.model.buildings.PigFarm;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.statistics.StatisticsListener;
 
@@ -1683,6 +1696,7 @@ public class Utils {
 
         switch (worker.getCargo().getMaterial()) {
             case AXE:
+            case HAMMER:
             case SHOVEL:
             case PICK_AXE:
             case FISHING_ROD:
@@ -2454,7 +2468,7 @@ public class Utils {
         var count = 0;
 
         for (var gameChangesList : monitor.getEvents()) {
-            for (Map.Entry<Point, DecorationType> entry : gameChangesList.newDecorations().entrySet()) {
+            for (var entry : gameChangesList.newDecorations().entrySet()) {
                 var decoratedPoint = entry.getKey();
                 var decorationType = entry.getValue();
 
@@ -3563,7 +3577,7 @@ public class Utils {
         public void setAvailableConstruction(Map<Point, Size> availableHousePoints, Collection<Point> availableFlagPoints, List<Point> availableMinePoints) {
             mirroredAvailableConstruction.clear();
 
-            for (Map.Entry<Point, Size> entry : availableHousePoints.entrySet()) {
+            for (var entry : availableHousePoints.entrySet()) {
                 if (entry.getValue() == LARGE) {
                     mirroredAvailableConstruction.put(entry.getKey(), new AvailableConstruction(LARGE_POSSIBLE, NO_FLAG_POSSIBLE, entry.getKey()));
                 } else if (entry.getValue() == MEDIUM) {
@@ -3600,7 +3614,7 @@ public class Utils {
             var availableMinesOnMap = map.getAvailableMinePoints(player0);
 
             // Run monitored against real
-            for (Map.Entry<Point, AvailableConstruction> entry : mirroredAvailableConstruction.entrySet()) {
+            for (var entry : mirroredAvailableConstruction.entrySet()) {
                 var point = entry.getKey();
 
                 if (entry.getValue().getAvailableBuilding() == NO_BUILDING_POSSIBLE) {
@@ -3989,5 +4003,130 @@ public class Utils {
         }
 
         assertTrue(quarry.isBurningDown());
+    }
+
+    public record CoalQuota(
+            int mint,
+            int armory,
+            int ironSmelter
+    ) {
+        public static CoalQuota from(Player player) {
+            return new CoalQuota(
+                    player.getCoalQuota(Mint.class),
+                    player.getCoalQuota(Armory.class),
+                    player.getCoalQuota(IronSmelter.class)
+            );
+        }
+    }
+
+    public record WheatQuota(
+            int mill,
+            int donkeyFarm,
+            int pigFarm,
+            int brewery
+    ) {
+        public static WheatQuota from(Player player) {
+            return new WheatQuota(
+                    player.getWheatQuota(Mill.class),
+                    player.getWheatQuota(DonkeyFarm.class),
+                    player.getWheatQuota(PigFarm.class),
+                    player.getWheatQuota(Brewery.class)
+            );
+        }
+    }
+
+    public record WaterQuota(
+            int bakery,
+            int donkeyFarm,
+            int pigFarm,
+            int brewery
+    ) {
+        public static WaterQuota from(Player player) {
+            return new WaterQuota(
+                    player.getWaterQuota(Bakery.class),
+                    player.getWaterQuota(DonkeyFarm.class),
+                    player.getWaterQuota(PigFarm.class),
+                    player.getWaterQuota(Brewery.class)
+            );
+        }
+    }
+
+    public record IronQuota(
+            int armory,
+            int metalworks
+    ) {
+        public static IronQuota from(Player player) {
+            return new IronQuota(
+                    player.getIronBarQuota(Armory.class),
+                    player.getIronBarQuota(Metalworks.class)
+            );
+        }
+    }
+
+    public record FoodQuota(
+            int ironMine,
+            int coalMine,
+            int goldMine,
+            int graniteMine
+    ) {
+        public static FoodQuota from(Player player) {
+            return new FoodQuota(
+                    player.getFoodQuota(IronMine.class),
+                    player.getFoodQuota(CoalMine.class),
+                    player.getFoodQuota(GoldMine.class),
+                    player.getFoodQuota(GraniteMine.class)
+            );
+        }
+    }
+
+    public record PlayerSnapshot(
+            int defenseFromSurroundingBuildings,
+            int defenseStrength,
+            int strengthOfSoldiersPopulatingBuildings,
+            int closeToBorder,
+            int awayFromBorder,
+            int farFromBorder,
+            int soldiersAvailableForAttack,
+            CoalQuota coalQuota,
+            IronQuota ironQuota,
+            FoodQuota foodQuota,
+            WaterQuota waterQuota,
+            WheatQuota wheatQuota
+    ) {}
+
+    public static class PlayerMonitor implements PlayerChangeListener {
+        private final Map<Player, List<PlayerSnapshot>> eventsByPlayer = new HashMap<>();
+
+        @Override
+        public void onPlayerChanged(Player player) {
+            if (!eventsByPlayer.containsKey(player)) {
+                eventsByPlayer.put(player, new ArrayList<>());
+            }
+
+            eventsByPlayer.get(player).add(
+                    new PlayerSnapshot(
+                            player.getDefenseFromSurroundingBuildings(),
+                            player.getDefenseStrength(),
+                            player.getStrengthOfSoldiersPopulatingBuildings(),
+                            player.getAmountOfSoldiersWhenPopulatingCloseToBorder(),
+                            player.getAmountOfSoldiersWhenPopulatingAwayFromBorder(),
+                            player.getAmountOfSoldiersWhenPopulatingFarFromBorder(),
+                            player.getAmountOfSoldiersAvailableForAttack(),
+                            CoalQuota.from(player),
+                            IronQuota.from(player),
+                            FoodQuota.from(player),
+                            WaterQuota.from(player),
+                            WheatQuota.from(player)
+                    )
+            );
+        }
+
+        public Map<Player, List<PlayerSnapshot>> getEvents() {
+            return eventsByPlayer;
+        }
+
+        public List<PlayerSnapshot> getEventsForPlayer(Player player) {
+            return eventsByPlayer.getOrDefault(player, new ArrayList<>());
+        }
     }
 }

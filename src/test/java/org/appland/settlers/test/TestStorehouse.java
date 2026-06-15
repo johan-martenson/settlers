@@ -9,7 +9,6 @@ package org.appland.settlers.test;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -17,7 +16,6 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.TransportCategory;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Scout;
@@ -34,7 +32,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
@@ -2060,6 +2057,61 @@ public class TestStorehouse {
     }
 
     @Test
+    public void testStopPushingOutCargo() throws Exception {
+
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 21);
+
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place storehouse
+        var point1 = new Point(16, 6);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        // Connect the storehouse with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        // Make sure there is enough construction material in the headquarters
+        Utils.adjustInventoryTo(headquarter, PLANK, 50);
+        Utils.adjustInventoryTo(headquarter, STONE, 50);
+
+        // Wait for the storehouse to get constructed and assigned a worker
+        Utils.waitForBuildingToBeConstructed(storehouse);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(storehouse);
+
+        // Push out fish from the headquarters
+        Utils.adjustInventoryTo(headquarter, FISH, 10);
+
+        headquarter.pushOutAll(FISH);
+
+        // Wait for two fishes to get pushed
+        assertEquals(headquarter.getFlag().getStackedCargo().size(), 0);
+
+        var headquarterWorker = headquarter.getWorker();
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, headquarterWorker, FISH);
+
+        Utils.fastForwardUntilWorkerCarriesNoCargo(map, headquarterWorker);
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, headquarterWorker, FISH);
+
+        // Verify that no more fish is pushed out when pushing out is stopped
+        headquarter.stopPushingOut(FISH);
+
+        Utils.fastForwardUntilWorkerCarriesNoCargo(map, headquarterWorker);
+
+        for (int i = 0; i < 2_000; i++) {
+            assertNull(headquarterWorker.getCargo());
+
+            map.stepTime();
+        }
+    }
+
+    @Test
     public void testPushedOutWorkerGoesToOtherStorehouseWhenOwnStoreIsBlocked() throws Exception {
 
         // Create single player game
@@ -2242,6 +2294,89 @@ public class TestStorehouse {
             assertNull(road0.getCourier().getCargo());
             assertEquals(storehouse.getAmount(WATER), i + 1);
         }
+    }
+
+    @Test
+    public void testAllowingDeliveriesAgainAfterBeingBlocked() throws Exception {
+
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+        var map = new GameMap(players, 20, 21);
+
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place storehouse
+        var point1 = new Point(16, 6);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        // Place well
+        var point2 = new Point(9, 7);
+        var well = map.placeBuilding(new Well(player0), point2);
+
+        // Make sure there is enough construction material in the headquarters
+        Utils.adjustInventoryTo(headquarter, PLANK, 50);
+        Utils.adjustInventoryTo(headquarter, STONE, 50);
+
+        // Connect the storehouse with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        // Wait for the storehouse to get constructed
+        Utils.waitForBuildingToBeConstructed(storehouse);
+
+        // Connect the well with the headquarters
+        var road1 = map.placeAutoSelectedRoad(player0, well.getFlag(), headquarter.getFlag());
+
+        // Wait for the well to get constructed
+        Utils.waitForBuildingToBeConstructed(well);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(well);
+
+        // Block delivery of water in the headquarters. All deliveries from the well go to the storehouse even if it's further away
+        assertTrue(well.isReady());
+        assertNotNull(well.getWorker());
+
+        headquarter.blockDeliveryOfMaterial(WATER);
+
+        Utils.adjustInventoryTo(storehouse, WATER, 0);
+
+        // Wait for the well worker to produce a water cargo
+        var cargo = Utils.fastForwardUntilWorkerCarriesCargo(map, well.getWorker(), WATER);
+
+        // Wait for the courier for the road between the well and the headquarters to pick up the water cargo
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road1.getCourier(), cargo);
+
+        assertEquals(road1.getCourier().getTarget(), headquarter.getFlag().getPosition());
+
+        // The cargo is put on the headquarters' flag and picked up by the second courier, instead of delivered to the headquarters
+        Utils.fastForwardUntilWorkerReachesPoint(map, road1.getCourier(), headquarter.getFlag().getPosition());
+
+        assertTrue(headquarter.getFlag().getStackedCargo().contains(cargo));
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier(), cargo);
+
+        assertEquals(road0.getCourier().getTarget(), storehouse.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getPosition());
+
+        assertNull(road0.getCourier().getCargo());
+        assertEquals(storehouse.getAmount(WATER), 1);
+
+        // Verify that deliveries go to the headquarters again when they are allowed
+        headquarter.allowDeliveryOfMaterial(WATER);
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road1.getCourier(), WATER);
+
+        assertEquals(headquarter.getAmount(WATER), 0);
+        assertEquals(road1.getCourier().getTarget(), headquarter.getPosition());
+        assertEquals(road1.getCourier().getCargo().getTarget(), headquarter);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road1.getCourier(), headquarter.getPosition());
+
+        assertEquals(headquarter.getAmount(WATER), 1);
+        assertNull(road1.getCourier().getCargo());
     }
 
     @Test

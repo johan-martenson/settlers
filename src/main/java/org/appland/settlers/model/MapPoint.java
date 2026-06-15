@@ -113,7 +113,7 @@ public class MapPoint {
 
         var previous = (Point) null;
 
-        for (Point current : road.getWayPoints()) {
+        for (var current : road.getWayPoints()) {
             if (current.equals(point) && previous != null) {
                 connectedNeighbors.remove(previous);
             }

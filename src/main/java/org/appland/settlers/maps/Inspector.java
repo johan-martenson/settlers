@@ -487,7 +487,7 @@ public class Inspector {
 
         int filtered = 0;
 
-        for (Map.Entry<Point, AvailableBuildingComparison> pointAndComparison : mismatched.entrySet()) {
+        for (var pointAndComparison : mismatched.entrySet()) {
             var point = pointAndComparison.getKey();
             var comparison = pointAndComparison.getValue();
 

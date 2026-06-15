@@ -27,6 +27,10 @@ public class ChatManager {
         return roomChatHistory.getOrDefault(room, List.of());
     }
 
+    public static void removeMessageListenerForRoom(String roomId) {
+        roomChatListeners.remove(roomId);
+    }
+
     public record ChatMessage(Player from, String text, SimpleTime time) {}
 
     public interface ChatListener {

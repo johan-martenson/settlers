@@ -178,15 +178,9 @@ public class JsonUtils {
     }
 
     JSONObject playerToJson(Player player, String playerId, GameResource gameResource) {
-        var jsonPlayer = new JSONObject(Map.of(
-                "id", playerId,
-                "name", player.getName(),
-                "color", player.getColor().name().toUpperCase(),
-                "nation", player.getNation().name(),
-                "type", gameResource.isComputerPlayer(player) ? "COMPUTER" : "HUMAN",
-                "discoveredPoints", pointsToJson(player.getDiscoveredLand()),
-                "ownedLand", pointsToJson(player.getOwnedLand())
-        ));
+        var jsonPlayer = playerToJson(player);
+
+        jsonPlayer.put("type", gameResource.isComputerPlayer(player) ? "COMPUTER" : "HUMAN");
 
         // Get the player's "center spot"
         player.getBuildings().stream()
@@ -492,7 +486,7 @@ public class JsonUtils {
                 "type", workerTypeToJson(worker),
                 "inside", worker.isInsideBuilding(),
                 "betweenPoints", !worker.isExactlyAtPoint(),
-                "direction", worker.getDirection().name().toUpperCase(),
+                "direction", worker.getDirection().toCompassDirection().name().toUpperCase(),
                 "color", worker.getPlayer().getColor().name().toUpperCase(),
                 "nation", worker.getPlayer().getNation().name().toUpperCase()
         ));
@@ -606,11 +600,53 @@ public class JsonUtils {
     }
 
     public JSONObject playerToJson(Player player) {
-        return new JSONObject(Map.of(
-                "id", idManager.getId(player),
-                "name", player.getName(),
-                "color", player.getColor().name().toUpperCase(),
-                "nation", player.getNation().name().toUpperCase()
+        var jsonCoalQuota = new JSONObject(Map.of());
+        var jsonWheatQuota = new JSONObject(Map.of());
+        var jsonWaterQuota = new JSONObject(Map.of());
+        var jsonIronQuota = new JSONObject(Map.of());
+        var jsonFoodQuota = new JSONObject(Map.of());
+
+        jsonCoalQuota.put("mint", player.getCoalQuota(Mint.class));
+        jsonCoalQuota.put("armory", player.getCoalQuota(Armory.class));
+        jsonCoalQuota.put("ironSmelter", player.getCoalQuota(IronSmelter.class));
+
+        jsonWheatQuota.put("mill", player.getWheatQuota(Mill.class));
+        jsonWheatQuota.put("donkeyFarm", player.getWheatQuota(DonkeyFarm.class));
+        jsonWheatQuota.put("pigFarm", player.getWheatQuota(PigFarm.class));
+        jsonWheatQuota.put("brewery",  player.getWheatQuota(Brewery.class));
+
+        jsonWaterQuota.put("bakery",  player.getWaterQuota(Bakery.class));
+        jsonWaterQuota.put("donkeyFarm",  player.getWaterQuota(DonkeyFarm.class));
+        jsonWaterQuota.put("pigFarm",  player.getWaterQuota(PigFarm.class));
+        jsonWaterQuota.put("brewery",  player.getWaterQuota(Brewery.class));
+
+        jsonIronQuota.put("armory", player.getIronBarQuota(Armory.class));
+        jsonIronQuota.put("metalworks", player.getIronBarQuota(Metalworks.class));
+
+        jsonFoodQuota.put("ironMine", player.getFoodQuota(IronMine.class));
+        jsonFoodQuota.put("coalMine", player.getFoodQuota(CoalMine.class));
+        jsonFoodQuota.put("goldMine", player.getFoodQuota(GoldMine.class));
+        jsonFoodQuota.put("graniteMine", player.getFoodQuota(GraniteMine.class));
+
+        return new JSONObject(Map.ofEntries(
+                entry("id", idManager.getId(player)),
+                entry("name", player.getName()),
+                entry("color", player.getColor().name().toUpperCase()),
+                entry("nation", player.getNation().name().toUpperCase()),
+                entry("discoveredPoints", pointsToJson(player.getDiscoveredLand())),
+                entry("ownedLand", pointsToJson(player.getOwnedLand())),
+                entry("strengthWhenPopulatingBuildings", player.getStrengthOfSoldiersPopulatingBuildings()),
+                entry("defenseFromSurroundingBuildings", player.getDefenseFromSurroundingBuildings()),
+                entry("defenseStrength", player.getDefenseStrength()),
+                entry("soldiersAvailableForAttack", player.getAmountOfSoldiersAvailableForAttack()),
+                entry("militaryPopulationFarFromBorder", player.getAmountOfSoldiersWhenPopulatingFarFromBorder()),
+                entry("militaryPopulationAwayFromBorder", player.getAmountOfSoldiersWhenPopulatingAwayFromBorder()),
+                entry("militaryPopulationCloseToBorder", player.getAmountOfSoldiersWhenPopulatingCloseToBorder()),
+                entry("coalQuota", jsonCoalQuota),
+                entry("wheatQuota", jsonWheatQuota),
+                entry("waterQuota", jsonWaterQuota),
+                entry("ironQuota", jsonIronQuota),
+                entry("foodQuota", jsonFoodQuota)
         ));
     }
 
@@ -1002,7 +1038,7 @@ public class JsonUtils {
                 "id", idManager.getId(entry.getKey()),
                 "x", entry.getKey().getPosition().x,
                 "y", entry.getKey().getPosition().y,
-                "direction", entry.getKey().getDirection().name().toUpperCase(),
+                "direction", entry.getKey().getDirection().toCompassDirection().name().toUpperCase(),
                 "startedAction", entry.getValue().name().toUpperCase()
         )));
     }
@@ -1022,7 +1058,7 @@ public class JsonUtils {
                 "state", ship.isUnderConstruction() ? "UNDER_CONSTRUCTION" : "READY",
                 "x", ship.getPosition().x,
                 "y", ship.getPosition().y,
-                "direction", ship.getDirection().name().toUpperCase(),
+                "direction", ship.getDirection().toCompassDirection().name().toUpperCase(),
                 "cargo", toJsonArray(cargos.entrySet(), entry -> new JSONObject(Map.of(
                         entry.getKey().name().toUpperCase(), entry.getValue()
                 )))
@@ -1349,7 +1385,7 @@ public class JsonUtils {
                 "y", wildAnimal.getPosition().y,
                 "type", wildAnimal.getType().name(),
                 "betweenPoints", !wildAnimal.isExactlyAtPoint(),
-                "direction", wildAnimal.getDirection().name().toUpperCase()
+                "direction", wildAnimal.getDirection().toCompassDirection().name().toUpperCase()
         ));
 
         if (wildAnimal.getPlannedPath() != null && wildAnimal.getPlannedPath().isEmpty()) {
@@ -1757,6 +1793,7 @@ public class JsonUtils {
     public JSONObject toolQuotasToJson(Player player) {
         return new JSONObject(Map.ofEntries(
                 entry(AXE, player.getProductionQuotaForTool(AXE)),
+                entry(HAMMER, player.getProductionQuotaForTool(HAMMER)),
                 entry(SHOVEL, player.getProductionQuotaForTool(SHOVEL)),
                 entry(PICK_AXE, player.getProductionQuotaForTool(PICK_AXE)),
                 entry(FISHING_ROD, player.getProductionQuotaForTool(FISHING_ROD)),
@@ -1768,5 +1805,9 @@ public class JsonUtils {
                 entry(TONGS, player.getProductionQuotaForTool(TONGS)),
                 entry(SCYTHE, player.getProductionQuotaForTool(SCYTHE))
         ));
+    }
+
+    public Material jsonToMaterial(String material) {
+        return Material.valueOf(material);
     }
 }

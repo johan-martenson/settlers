@@ -205,6 +205,7 @@ public enum Material {
 
     public static final List<Material> TOOLS = Arrays.asList(
             AXE,
+            HAMMER,
             SHOVEL,
             PICK_AXE,
             FISHING_ROD,

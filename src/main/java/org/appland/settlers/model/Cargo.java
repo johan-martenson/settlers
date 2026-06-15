@@ -108,7 +108,7 @@ public class Cargo {
     }
 
     private void returnToClosestStorage() {
-        var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, getMaterial());
+        var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, getMaterial());
 
         if (storehouse != null) {
             setTarget(storehouse);
@@ -116,7 +116,7 @@ public class Cargo {
     }
 
     private void returnToStorage() {
-        var storehouse0 = GameUtils.getClosestStorageConnectedByRoads(getPosition(), map);
+        var storehouse0 = GameUtils.getClosestStorageConnectedByRoads(position, map);
 
         if (storehouse0 != null) {
             setTarget(storehouse0);
@@ -141,26 +141,22 @@ public class Cargo {
              *
              * Note: the path only contains flags and buildings. It does not contain each individual step
             */
-            if (!map.isValidRouteThroughFlagsAndBuildingsViaRoads(getPosition(), target.getPosition())) {
+            if (!map.isValidRouteThroughFlagsAndBuildingsViaRoads(position, target.getPosition())) {
 
                 // Find the best way from this flag
-                var flag = map.getFlagAtPoint(getPosition());
-                var closestPath = map.findWayWithExistingRoadsInFlagsAndBuildings(flag, getTarget());
+                var flag = map.getFlagAtPoint(position);
+                var closestPath = map.findWayWithExistingRoadsInFlagsAndBuildings(flag, target);
 
                 // Return the cargo to storage if there is no available route to the target
                 if (closestPath == null) {
 
                     // Break the promise to deliver to the target
-                    getTarget().cancelPromisedDelivery(this);
+                    target.cancelPromisedDelivery(this);
 
                     // Return the cargo to the storage
                     returnToStorage();
                 }
             }
         }
-    }
-
-    GameMap getMap() {
-        return map;
     }
 }

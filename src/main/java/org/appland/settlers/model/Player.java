@@ -500,12 +500,24 @@ public class Player {
         return foodAllocation.get(aClass);
     }
 
-    public void setFoodQuota(Class<? extends Building> aClass, int i) {
-        foodAllocation.put(aClass, i);
+    public void setFoodQuota(Class<? extends Building> aClass, int amount) {
+        var previousAmount = foodAllocation.put(aClass, amount);
+
+        foodAllocation.put(aClass, amount);
+
+        if (previousAmount != amount) {
+            playerChangeListeners.forEach(listener -> listener.onPlayerChanged(this));
+        }
     }
 
-    public void setCoalQuota(Class<? extends Building> aClass, int i) {
-        coalAllocation.put(aClass, i);
+    public void setCoalQuota(Class<? extends Building> aClass, int amount) {
+        var previousAmount = coalAllocation.get(aClass);
+
+        coalAllocation.put(aClass, amount);
+
+        if (previousAmount != amount) {
+            playerChangeListeners.forEach(listener -> listener.onPlayerChanged(this));
+        }
     }
 
     public int getCoalQuota(Class<? extends Building> aClass) {
@@ -565,7 +577,7 @@ public class Player {
         }
 
         // Check each player if they own the point and return the player that does
-        for (Player player : map.getPlayers()) {
+        for (var player : map.getPlayers()) {
             if (player.isWithinBorder(point)) {
                 return player;
             }
@@ -614,13 +626,13 @@ public class Player {
         this.color = color;
         this.nation = nation;
 
-        playerChangeListeners.forEach(PlayerChangeListener::onPlayerChanged);
+        playerChangeListeners.forEach(listener -> listener.onPlayerChanged(this));
     }
 
     public void setName(String name) {
         this.name = name;
 
-        playerChangeListeners.forEach(PlayerChangeListener::onPlayerChanged);
+        playerChangeListeners.forEach(listener -> listener.onPlayerChanged(this));
     }
 
     public int getProducedMaterial(Material material) {
@@ -1442,7 +1454,7 @@ public class Player {
     public void setNation(Nation nation) {
         this.nation = nation;
 
-        playerChangeListeners.forEach(PlayerChangeListener::onPlayerChanged);
+        playerChangeListeners.forEach(listener -> listener.onPlayerChanged(this));
     }
 
     public Optional<Building> getHeadquarter() {
@@ -1575,7 +1587,7 @@ public class Player {
 
         // Does this soldier affect the number of available attackers in another building?
         if (building.isMilitaryBuilding() && !building.getHostedSoldiers().isEmpty()) {
-            for (Object monitoredObject : detailedMonitoring) {
+            for (var monitoredObject : detailedMonitoring) {
                 if (monitoredObject instanceof Building monitoredBuilding) {
                     if (!monitoredBuilding.isMilitaryBuilding()) {
                         continue;
@@ -1612,7 +1624,13 @@ public class Player {
     }
 
     public void setWheatQuota(Class<? extends Building> aClass, int amount) {
+        var previousAmount = wheatAllocation.get(aClass);;
+
         wheatAllocation.put(aClass, amount);
+
+        if (previousAmount != amount) {
+            playerChangeListeners.forEach(listener -> listener.onPlayerChanged(this));
+        }
     }
 
     public int getWheatQuota(Class<? extends Building> aClass) {
@@ -1620,7 +1638,13 @@ public class Player {
     }
 
     public void setWaterQuota(Class<? extends Building> aClass, int amount) {
+        var previousAmount = waterAllocation.get(aClass);
+
         waterAllocation.put(aClass, amount);
+
+        if (previousAmount != amount) {
+            playerChangeListeners.forEach(listener -> listener.onPlayerChanged(this));
+        }
     }
 
     public int getWaterQuota(Class<? extends Building> aClass) {
@@ -1628,7 +1652,13 @@ public class Player {
     }
 
     public void setIronBarQuota(Class<? extends Building> buildingClass, int amount) {
+        var previousAmount = ironBarAllocation.get(buildingClass);
+
         ironBarAllocation.put(buildingClass, amount);
+
+        if (previousAmount != amount) {
+            playerChangeListeners.forEach(listener -> listener.onPlayerChanged(this));
+        }
     }
 
     public int getIronBarQuota(Class<? extends Building> buildingClass) {
@@ -1640,7 +1670,13 @@ public class Player {
             throw new InvalidUserActionException("Can't set strength of soldiers when populating buildings to: " + strength);
         }
 
+        var isChange = this.strengthWhenPopulatingMilitaryBuildings != strength;
+
         strengthWhenPopulatingMilitaryBuildings = strength;
+
+        if (isChange) {
+            playerChangeListeners.forEach(listener -> listener.onPlayerChanged(this));
+        }
     }
 
     public int getStrengthOfSoldiersPopulatingBuildings() {
@@ -1656,7 +1692,13 @@ public class Player {
             throw new InvalidUserActionException("Can't set the defense strength to: " + defenseStrength);
         }
 
+        var isChange = this.defenseStrength != defenseStrength;
+
         this.defenseStrength = defenseStrength;
+
+        if (isChange) {
+            playerChangeListeners.forEach(listener -> listener.onPlayerChanged(this));
+        }
     }
 
     public void setDefenseFromSurroundingBuildings(int strength) throws InvalidUserActionException {
@@ -1664,7 +1706,13 @@ public class Player {
             throw new InvalidUserActionException("Can't set strength of defense from surrounding buildings to: " + strength);
         }
 
+        var isChange = this.defenseStrength != strength;
+
         defenseFromSurroundingBuildings = strength;
+
+        if (isChange) {
+            playerChangeListeners.forEach(listener -> listener.onPlayerChanged(this));
+        }
     }
 
     public int getDefenseFromSurroundingBuildings() {
@@ -1683,7 +1731,13 @@ public class Player {
             throw new InvalidUserActionException("Can't set amount of soldiers when populating close to border to: " + amount);
         }
 
+        var isChange = this.amountWhenPopulatingCloseToBorder != amount;
+
         amountWhenPopulatingCloseToBorder = amount;
+
+        if (isChange) {
+            playerChangeListeners.forEach(listener -> listener.onPlayerChanged(this));
+        }
     }
 
     public int getAmountOfSoldiersWhenPopulatingAwayFromBorder() {
@@ -1699,7 +1753,13 @@ public class Player {
             throw new InvalidUserActionException("Can't set amount of soldiers when populating closer to border to: " + amount);
         }
 
+        var isChange = this.amountWhenPopulatingAwayFromToBorder != amount;
+
         amountWhenPopulatingAwayFromToBorder = amount;
+
+        if (isChange) {
+            playerChangeListeners.forEach(listener -> listener.onPlayerChanged(this));
+        }
     }
 
     public void setAmountOfSoldiersWhenPopulatingFarFromBorder(int amount) throws InvalidUserActionException {
@@ -1707,7 +1767,13 @@ public class Player {
             throw new InvalidUserActionException("Can't set amount of soldiers when populating far from border to: " + amount);
         }
 
+        var isChange = this.amountWhenPopulatingFarFromBorder != amount;
+
         amountWhenPopulatingFarFromBorder = amount;
+
+        if (isChange) {
+            playerChangeListeners.forEach(listener -> listener.onPlayerChanged(this));
+        }
     }
 
     public int getAmountOfSoldiersAvailableForAttack() {
@@ -1719,7 +1785,13 @@ public class Player {
             throw new InvalidUserActionException("Can't set amount of soldiers to include in attacks to: " + amount);
         }
 
+        var isChange = amountSoldiersAvailableForAttack != amount;
+
         amountSoldiersAvailableForAttack = amount;
+
+        if (isChange) {
+            playerChangeListeners.forEach(listener -> listener.onPlayerChanged(this));
+        }
     }
 
     public void reportNewDecoration(Point point, DecorationType decoration) {
@@ -1732,7 +1804,7 @@ public class Player {
 
     public void setPlayerColor(PlayerColor playerColor) {
         color = playerColor;
-        playerChangeListeners.forEach(PlayerChangeListener::onPlayerChanged);
+        playerChangeListeners.forEach(listener -> listener.onPlayerChanged(this));
     }
 
     public PlayerType getPlayerType() {

@@ -1,6 +1,5 @@
 package org.appland.settlers.assets.extractors;
 
-import org.appland.settlers.assets.GameResource;
 import org.appland.settlers.assets.GameResourceType;
 import org.appland.settlers.assets.InvalidFormatException;
 import org.appland.settlers.assets.UnknownResourceTypeException;
@@ -8,7 +7,6 @@ import org.appland.settlers.assets.WaveGameResource;
 import org.appland.settlers.assets.decoders.LstDecoder;
 import org.appland.settlers.assets.gamefiles.SoundLst;
 import org.appland.settlers.assets.resources.Palette;
-import org.appland.settlers.assets.resources.WaveFile;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -18,7 +16,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class AudioExtractor {
     private record TitleAndFilename(String title, String filename) { }
@@ -39,7 +36,7 @@ public class AudioExtractor {
         // Write the music atlas
         var jsonSongs = new JSONArray();
 
-        for (TitleAndFilename titleAndFilename : MUSIC_TITLE_AND_FILENAMES) {
+        for (var titleAndFilename : MUSIC_TITLE_AND_FILENAMES) {
             var jsonSong = new JSONObject();
 
             jsonSong.put("path", toDir + "/" + titleAndFilename.filename);

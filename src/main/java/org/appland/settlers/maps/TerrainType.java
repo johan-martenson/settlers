@@ -21,7 +21,7 @@ public enum TerrainType {
     }
 
     static TerrainType fromUint8(short b) {
-        for (TerrainType value : TerrainType.values()) {
+        for (var value : TerrainType.values()) {
             if (value.id == (int)b) {
                 return value;
             }

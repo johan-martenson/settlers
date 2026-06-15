@@ -34,24 +34,18 @@ public class Miller extends Worker {
     private static final int RESTING_TIME = 99;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
-    private final Countdown countdown;
-    private final ProductivityMeasurer productivityMeasurer;
+    private final Countdown countdown = new Countdown();
+    private final ProductivityMeasurer productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + PRODUCTION_TIME, null);
 
-    private State state;
+    private State state = State.WALKING_TO_TARGET;
 
     public Miller(Player player, GameMap map) {
         super(player, map);
-
-        countdown = new Countdown();
-        state = State.WALKING_TO_TARGET;
-
-        productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + PRODUCTION_TIME, null);
     }
 
     @Override
     protected void onEnterBuilding(Building building) {
         state = RESTING_IN_HOUSE;
-
         countdown.countFrom(RESTING_TIME);
 
         productivityMeasurer.setBuilding(building);
@@ -62,48 +56,43 @@ public class Miller extends Worker {
         if (state == RESTING_IN_HOUSE) {
             if (countdown.hasReachedZero()) {
                 state = State.GRINDING_WHEAT;
-
-                player.reportChangedBuilding(getHome());
-
                 countdown.countFrom(PRODUCTION_TIME);
+
+                player.reportChangedBuilding(home);
             } else {
                 countdown.step();
             }
         } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
-            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+            if (home.getFlag().hasPlaceForMoreCargo()) {
                 var cargo = new Cargo(FLOUR, map);
 
                 setCargo(cargo);
-
-                getHome().getFlag().promiseCargo(getCargo());
+                home.getFlag().promiseCargo(cargo);
 
                 state = GOING_TO_FLAG_WITH_CARGO;
-
-                setTarget(getHome().getFlag().getPosition());
+                setTarget(home.getFlag().getPosition());
             }
 
         } else if (state == State.GRINDING_WHEAT) {
-            if (getHome().getAmount(WHEAT) > 0 && getHome().isProductionEnabled()) {
+            if (home.getAmount(WHEAT) > 0 && home.isProductionEnabled()) {
                 if (countdown.hasReachedZero()) {
 
                     // Consume the wheat
-                    getHome().consumeOne(WHEAT);
+                    home.consumeOne(WHEAT);
 
-                    player.reportChangedBuilding(getHome());
+                    player.reportChangedBuilding(home);
 
                     // Go out to the flag to deliver the flour
-                    if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                    if (home.getFlag().hasPlaceForMoreCargo()) {
                         var cargo = new Cargo(FLOUR, map);
 
-                        cargo.setPosition(getPosition());
+                        cargo.setPosition(position);
 
                         setCargo(cargo);
-
-                        setTarget(getHome().getFlag().getPosition());
+                        home.getFlag().promiseCargo(carriedCargo);
 
                         state = GOING_TO_FLAG_WITH_CARGO;
-
-                        getHome().getFlag().promiseCargo(getCargo());
+                        setTarget(home.getFlag().getPosition());
 
                     // Wait for space on the flag if it's full
                     } else {
@@ -145,74 +134,61 @@ public class Miller extends Worker {
     @Override
     protected void onArrival() {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
-            var flag = getHome().getFlag();
-            var cargo = getCargo();
+            var flag = home.getFlag();
 
-            cargo.setPosition(getPosition());
-            cargo.transportToReceivingBuilding(this::isFlourReceiver);
+            carriedCargo.setPosition(position);
+            carriedCargo.transportToReceivingBuilding(this::isFlourReceiver);
 
-            flag.putCargo(getCargo());
+            flag.putCargo(carriedCargo);
 
-            setCargo(null);
-
-            returnHome();
+            carriedCargo = null;
 
             state = GOING_BACK_TO_HOUSE;
+            returnHome();
         } else if (state == GOING_BACK_TO_HOUSE) {
-            enterBuilding(getHome());
+            enterBuilding(home);
 
             state = RESTING_IN_HOUSE;
             countdown.countFrom(RESTING_TIME);
         } else if (state == RETURNING_TO_STORAGE) {
-            var storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
-
+            var storehouse = (Storehouse) map.getBuildingAtPoint(position);
             storehouse.depositWorker(this);
         } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
             // Go to the closest storage
-            var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, MILLER);
+            var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, MILLER);
 
             if (storehouse != null) {
                 state = RETURNING_TO_STORAGE;
-
                 setTarget(storehouse.getPosition());
             } else {
                 state = State.GOING_TO_DIE;
-
-                var point = findPlaceToDie();
-
-                setOffroadTarget(point);
+                setOffroadTarget(findPlaceToDie());
             }
         } else if (state == State.GOING_TO_DIE) {
             setDead();
 
             state = State.DEAD;
-
             countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
         }
     }
 
     @Override
     protected void onReturnToStorage() {
-        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, MILLER);
+        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, MILLER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
-
             setTarget(storage.getPosition());
         } else {
-            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), MILLER);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, MILLER);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;
-
                 setOffroadTarget(storage.getPosition());
             } else {
-                var point = findPlaceToDie();
-
-                setOffroadTarget(point, getPosition().downRight());
-
                 state = State.GOING_TO_DIE;
+                setOffroadTarget(findPlaceToDie(), position.downRight());
             }
         }
     }
@@ -222,8 +198,8 @@ public class Miller extends Worker {
 
         // Return to storage if the planned path no longer exists
         if (state == WALKING_TO_TARGET &&
-            map.isFlagAtPoint(getPosition()) &&
-            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+            map.isFlagAtPoint(position) &&
+            !map.arePointsConnectedByRoads(position, target)) {
 
             // Don't try to enter the mill upon arrival
             clearTargetBuilding();
@@ -245,7 +221,6 @@ public class Miller extends Worker {
     @Override
     public void goToOtherStorage(Building building) {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
-
         setTarget(building.getFlag().getPosition());
     }
 

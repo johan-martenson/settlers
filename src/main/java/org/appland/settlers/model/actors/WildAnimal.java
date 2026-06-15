@@ -49,18 +49,15 @@ public class WildAnimal extends Worker {
     );
 
     private final Type type;
-    private final Countdown countdown;
+    private final Countdown countdown = new Countdown();
 
-    private State state;
+    private State state = State.ALIVE;
 
     public WildAnimal(GameMap map, Type type) {
         super(null, map);
 
         this.type = type;
 
-        state = State.ALIVE;
-
-        countdown = new Countdown();
         countdown.countFrom(TIME_TO_STAND);
     }
 
@@ -88,7 +85,7 @@ public class WildAnimal extends Worker {
     }
 
     public static boolean cannotWalkOnAny(Collection<Vegetation> surroundingTiles) {
-        for (Vegetation vegetation : surroundingTiles) {
+        for (var vegetation : surroundingTiles) {
             if (!Vegetation.WILD_ANIMAL_CAN_NOT_WALK_ON.contains(vegetation)) {
                 return false;
             }
@@ -99,7 +96,6 @@ public class WildAnimal extends Worker {
 
     @Override
     protected void onIdle() {
-
         if (state == State.ALIVE) {
             if (countdown.hasReachedZero()) {
 
@@ -109,7 +105,6 @@ public class WildAnimal extends Worker {
                     // Stand still for a while
                     countdown.countFrom(TIME_TO_STAND);
                 } else {
-
                     var pathToNextPoint = findNextPoint();
 
                     // Walk if there is an available spot
@@ -124,7 +119,7 @@ public class WildAnimal extends Worker {
     }
 
     private List<Point> findNextPoint() {
-        for (Point point : map.getPossibleAdjacentOffRoadConnections(getPosition())) {
+        for (var point : map.getPossibleAdjacentOffRoadConnections(position)) {
 
             var mapPoint = map.getMapPoint(point);
 
@@ -142,7 +137,7 @@ public class WildAnimal extends Worker {
 
             var step = new ArrayList<Point>();
 
-            step.add(getPosition());
+            step.add(position);
             step.add(point);
 
             return step;
@@ -163,7 +158,6 @@ public class WildAnimal extends Worker {
 
     void shoot() {
         state = State.DEAD;
-
         cancelWalkingToTarget();
     }
 

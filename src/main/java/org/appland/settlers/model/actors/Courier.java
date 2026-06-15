@@ -83,18 +83,18 @@ public class Courier extends Worker {
                 var cargoAtEnd = findCargoToCarry(end);
 
                 // Pick up cargo if available
-                if (cargoAtStart != null && !(start.isFightingAtFlag() && start.getPosition().distance(getPosition()) == 1)) {
+                if (cargoAtStart != null && !(start.isFightingAtFlag() && start.getPosition().distance(position) == 1)) {
                     cargoAtStart.promisePickUp();
                     intendedCargo = cargoAtStart;
-                    setTarget(start.getPosition());
 
                     state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
-                } else if (cargoAtEnd != null && !(end.isFightingAtFlag() && end.getPosition().distance(getPosition()) == 1)) {
+                    setTarget(start.getPosition());
+                } else if (cargoAtEnd != null && !(end.isFightingAtFlag() && end.getPosition().distance(position) == 1)) {
                     cargoAtEnd.promisePickUp();
                     intendedCargo = cargoAtEnd;
-                    setTarget(end.getPosition());
 
                     state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
+                    setTarget(end.getPosition());
                 }
 
                 // Handle special actions
@@ -154,13 +154,14 @@ public class Courier extends Worker {
                     }
                 }
             }
+
             case WAITING_FOR_FIGHTING_AT_FLAG -> {
                 if (!waitToGoToFlag.isFightingAtFlag()) {
-                    if (getCargo() != null) {
+                    if (carriedCargo != null) {
                         if (waitToGoToFlag.hasPlaceForMoreCargo()) {
                             state = GOING_TO_FLAG_TO_DELIVER_CARGO;
                             setTarget(waitToGoToFlag.getPosition());
-                            waitToGoToFlag.promiseCargo(getCargo());
+                            waitToGoToFlag.promiseCargo(carriedCargo);
                         } else {
                             state = WAITING_FOR_SPACE_ON_FLAG;
                         }
@@ -179,11 +180,13 @@ public class Courier extends Worker {
                     }
                 }
             }
+
             case WAITING_FOR_SPACE_ON_FLAG -> {
                 if (waitToGoToFlag.hasPlaceForMoreCargo()) {
                     state = GOING_TO_FLAG_TO_DELIVER_CARGO;
                     setTarget(waitToGoToFlag.getPosition());
-                    waitToGoToFlag.promiseCargo(getCargo());
+
+                    waitToGoToFlag.promiseCargo(carriedCargo);
                 }
             }
         }
@@ -213,7 +216,7 @@ public class Courier extends Worker {
             case GOING_TO_FLAG_TO_DELIVER_CARGO -> {
 
                 // Change the target if it doesn't match any of the end points of the new road
-                if (!getTarget().equals(newRoad.getStart()) && !getTarget().equals(newRoad.getEnd())) {
+                if (!target.equals(newRoad.getStart()) && !target.equals(newRoad.getEnd())) {
                     if (newRoad.getStart().equals(previousRoad.getStart()) || newRoad.getStart().equals(previousRoad.getEnd())) {
                         setTarget(newRoad.getEnd());
                     } else {
@@ -221,11 +224,12 @@ public class Courier extends Worker {
                     }
                 }
             }
+
             case GOING_TO_BUILDING_TO_DELIVER_CARGO -> {
                 var plannedPath = getPlannedPath();
 
                 // Deliver cargo to the closest flag in the road if none of the flags are next to the current targeted building
-                if (!getTarget().equals(newRoad.getStart().upLeft()) && !getTarget().equals(newRoad.getEnd().upLeft())) {
+                if (!target.equals(newRoad.getStart().upLeft()) && !target.equals(newRoad.getEnd().upLeft())) {
                     int indexOfStart = plannedPath.indexOf(newRoad.getStart());
                     int indexOfEnd = plannedPath.indexOf(newRoad.getEnd());
 
@@ -238,6 +242,7 @@ public class Courier extends Worker {
                     }
                 }
             }
+
             case GOING_TO_FLAG_TO_PICK_UP_CARGO -> {
                 intendedCargo.cancelPromisedPickUp();
                 intendedCargo = null;
@@ -245,6 +250,7 @@ public class Courier extends Worker {
                 state = WALKING_TO_ROAD;
                 setTarget(idlePoint);
             }
+
             default -> {
                 state = WALKING_TO_ROAD;
                 setTarget(idlePoint);
@@ -256,8 +262,9 @@ public class Courier extends Worker {
     protected void onArrival() {
         switch (state) {
             case WALKING_TO_ROAD, RETURNING_TO_IDLE_SPOT -> state = IDLE_AT_ROAD;
+
             case GOING_TO_FLAG_TO_PICK_UP_CARGO -> {
-                var flag = map.getFlagAtPoint(getPosition());
+                var flag = map.getFlagAtPoint(position);
                 var cargoToPickUp = findCargoToCarry(flag);
 
                 if (intendedCargo != null) {
@@ -272,28 +279,30 @@ public class Courier extends Worker {
                     state = RETURNING_TO_IDLE_SPOT;
                 }
             }
+
             case GOING_TO_BUILDING_TO_DELIVER_CARGO -> {
-                var building = map.getBuildingAtPoint(getPosition());
+                var building = map.getBuildingAtPoint(position);
 
                 // Cannot deliver if the building has just been torn down
                 if (building == null || building.isBurningDown() || building.isDestroyed()) {
 
                     // Return to the headquarters off-road because the driveway is gone
                     state = GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO;
-                    setOffroadTarget(getPosition().downRight());
+                    setOffroadTarget(position.downRight());
 
                     // Deliver the cargo normally
                 } else {
                     deliverCargo();
 
                     state = GOING_BACK_TO_ROAD;
-                    setTarget(getPosition().downRight());
+                    setTarget(position.downRight());
                 }
             }
+
             case GOING_TO_FLAG_TO_DELIVER_CARGO -> {
                 deliverCargo();
 
-                var cargoToPickUp = findCargoToCarry(map.getFlagAtPoint(getPosition()));
+                var cargoToPickUp = findCargoToCarry(map.getFlagAtPoint(position));
 
                 if (cargoToPickUp != null) {
                     pickUpCargoAndGoDeliver(cargoToPickUp);
@@ -302,8 +311,9 @@ public class Courier extends Worker {
                     setTarget(idlePoint);
                 }
             }
+
             case GOING_BACK_TO_ROAD -> {
-                var flag = map.getFlagAtPoint(getPosition());
+                var flag = map.getFlagAtPoint(position);
                 var cargoToPickUp = findCargoToCarry(flag);
 
                 if (cargoToPickUp != null) {
@@ -313,28 +323,28 @@ public class Courier extends Worker {
                     setTarget(idlePoint);
                 }
             }
+
             case RETURNING_TO_STORAGE -> {
-                var storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
+                var storehouse = (Storehouse) map.getBuildingAtPoint(position);
                 storehouse.depositWorker(this);
             }
+
             case GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO -> {
 
                 // Return the cargo to the headquarters
-                getCargo().transportToStorage();
+                carriedCargo.transportToStorage();
 
                 state = GOING_TO_BUILDING_TO_DELIVER_CARGO;
-                setTarget(getCargo().getTarget().getPosition());
+                setTarget(carriedCargo.getTarget().getPosition());
             }
         }
     }
 
     @Override
     protected void onWalkingAndAtFixedPoint() {
-        var position = getPosition();
         var plannedPath = getPlannedPath();
         var mapPoint = map.getMapPoint(position);
-        var cargo = getCargo();
-        var targetBuilding = cargo != null ? cargo.getTarget() : null;
+        var targetBuilding = carriedCargo != null ? carriedCargo.getTarget() : null;
         var isAtPointBeforeFlag = !plannedPath.isEmpty() && map.isFlagAtPoint(plannedPath.getFirst());
 
         switch (state) {
@@ -345,47 +355,45 @@ public class Courier extends Worker {
                     var flag = mapPointNext.getFlag();
 
                     if (!flag.hasPlaceForMoreCargo()) {
-                        state = WAITING_FOR_SPACE_ON_FLAG;
                         waitToGoToFlag = flag;
 
+                        state = WAITING_FOR_SPACE_ON_FLAG;
                         stopWalkingToTarget();
                     } else if (flag.isFightingAtFlag()) {
-                        state = WAITING_FOR_FIGHTING_AT_FLAG;
-
                         waitToGoToFlag = flag;
 
+                        state = WAITING_FOR_FIGHTING_AT_FLAG;
                         stopWalkingToTarget();
                     } else {
-                        flag.promiseCargo(getCargo());
+                        flag.promiseCargo(carriedCargo);
                     }
                 } else if (mapPoint.isFlag()) {
                     if (targetBuilding != null &&
                             (targetBuilding.isBurningDown() ||
                                     targetBuilding.isDestroyed() ||
-                                    !targetBuilding.equals(map.getBuildingAtPoint(getCargo().getTarget().getPosition())))) {
+                                    !targetBuilding.equals(map.getBuildingAtPoint(carriedCargo.getTarget().getPosition())))) {
 
-                        var material = getCargo().getMaterial();
-
+                        var material = carriedCargo.getMaterial();
                         var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, material);
 
                         // Return the cargo to the storage if possible
                         if (storage != null) {
-                            cargo.setTarget(storage);
+                            carriedCargo.setTarget(storage);
 
                             // Deliver the cargo either to the storage's flag or directly to the storage
-                            deliverToFlagOrBuilding(cargo);
+                            deliverToFlagOrBuilding(carriedCargo);
 
                             // Drop the cargo if it cannot be delivered or returned
                         } else  {
                             setCargo(null);
 
                             state = RETURNING_TO_IDLE_SPOT;
-
                             setTarget(idlePoint);
                         }
                     }
                 }
             }
+
             case GOING_TO_FLAG_TO_PICK_UP_CARGO -> {
                 if (isAtPointBeforeFlag) {
                     var nextPoint = plannedPath.getFirst();
@@ -393,20 +401,20 @@ public class Courier extends Worker {
                     var flag = mapPointNext.getFlag();
 
                     if (flag.isFightingAtFlag()) {
-                        state = WAITING_FOR_FIGHTING_AT_FLAG;
-
                         waitToGoToFlag = flag;
 
+                        state = WAITING_FOR_FIGHTING_AT_FLAG;
                         stopWalkingToTarget();
                     }
                 }
             }
+
             case GOING_TO_BUILDING_TO_DELIVER_CARGO -> {
                 if (mapPoint.isFlag()) {
 
                     // Is the courier at the flag of the building and should the door be open for a delivery?
                     if (targetBuilding != null &&
-                            getPosition().equals(targetBuilding.getPosition().downRight()) &&
+                            position.equals(targetBuilding.getPosition().downRight()) &&
                             targetBuilding.isReady()) {
                         targetBuilding.openDoor(TIME_WALK_TO_FLAG * 2);
 
@@ -416,18 +424,17 @@ public class Courier extends Worker {
                     if (targetBuilding != null &&
                             (targetBuilding.isBurningDown() ||
                                     targetBuilding.isDestroyed() ||
-                                    !targetBuilding.equals(map.getBuildingAtPoint(getCargo().getTarget().getPosition())))) {
+                                    !targetBuilding.equals(map.getBuildingAtPoint(carriedCargo.getTarget().getPosition())))) {
 
-                        var material = getCargo().getMaterial();
-
+                        var material = carriedCargo.getMaterial();
                         var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, material);
 
                         // Return the cargo to the storage if possible
                         if (storage != null) {
-                            cargo.setTarget(storage);
+                            carriedCargo.setTarget(storage);
 
                             // Deliver the cargo either to the storage's flag or directly to the storage
-                            deliverToFlagOrBuilding(cargo);
+                            deliverToFlagOrBuilding(carriedCargo);
 
                             // Drop the cargo if it cannot be delivered or returned
                         } else  {
@@ -439,7 +446,6 @@ public class Courier extends Worker {
                     }
                 }
             }
-            default -> { }
         }
     }
 
@@ -447,24 +453,21 @@ public class Courier extends Worker {
     protected void onReturnToStorage() {
 
         // Cancel any promised deliveries
-        var cargo = getCargo();
-
-        if (cargo != null && cargo.getTarget() != null) {
-            var building = cargo.getTarget();
+        if (carriedCargo != null && carriedCargo.getTarget() != null) {
+            var building = carriedCargo.getTarget();
 
             if (!building.isStorehouse()) {
-                building.cancelPromisedDelivery(cargo);
+                building.cancelPromisedDelivery(carriedCargo);
             }
         }
 
         // Return to storage
-        var storage = getPlayer().getClosestStorage(getPosition(), null);
+        var storage = player.getClosestStorage(position, null);
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
-
             setTarget(storage.getPosition());
         } else {
-            getPlayer().getBuildings().stream()
+            player.getBuildings().stream()
                     .filter(Building::isStorehouse)
                     .findFirst()
                     .ifPresent(building -> {
@@ -477,43 +480,40 @@ public class Courier extends Worker {
     @Override
     public String toString() {
         return isExactlyAtPoint() ?
-                (getCargo() == null ?
-                        String.format("Courier for %s at %s", assignedRoad, getPosition()) :
-                        String.format("Courier for %s at %s carrying %s", assignedRoad, getPosition(), getCargo().getMaterial())) :
-                (getCargo() == null ?
-                        String.format("Courier for %s walking %s - %s", assignedRoad, getPosition(), getNextPoint()) :
-                        String.format("Courier for %s walking %s - %s carrying %s", assignedRoad, getPosition(), getNextPoint(), getCargo().getMaterial()));
+                (carriedCargo == null ?
+                        String.format("Courier for %s at %s", assignedRoad, position) :
+                        String.format("Courier for %s at %s carrying %s", assignedRoad, position, carriedCargo.getMaterial())) :
+                (carriedCargo == null ?
+                        String.format("Courier for %s walking %s - %s", assignedRoad, position, getNextPoint()) :
+                        String.format("Courier for %s walking %s - %s carrying %s", assignedRoad, position, getNextPoint(), carriedCargo.getMaterial()));
     }
 
     private void deliverCargo() {
 
         // Deliver cargo
-        var cargo = getCargo();
-        var currentPosition = getPosition();
+        var currentPosition = position;
         var endPoint = getEndPointAtPoint(currentPosition);
 
-        endPoint.putCargo(cargo);
-        cargo.setPosition(currentPosition);
+        endPoint.putCargo(carriedCargo);
+        carriedCargo.setPosition(currentPosition);
 
-        lastCargo = cargo;
-
-        setCargo(null);
+        lastCargo = carriedCargo;
+        carriedCargo = null;
     }
 
     private void pickUpCargoAndGoDeliver(Cargo cargoToPickUp) {
-        var point = getPosition();
-        var endPoint = map.getFlagAtPoint(point);
+        var endPoint = map.getFlagAtPoint(position);
 
         // Pick up the right cargo if we have promised to do so
         if (intendedCargo != null) {
             setCargo(endPoint.retrieveCargo(intendedCargo));
 
             intendedCargo = null;
-            getCargo().cancelPromisedPickUp();
+            carriedCargo.cancelPromisedPickUp();
 
         // Pick up the cargo where we stand if needed
         } else if (cargoToPickUp != null) {
-            if (!point.equals(endPoint.getPosition())) {
+            if (!position.equals(endPoint.getPosition())) {
                 throw new InvalidGameLogicException(String.format("Not at %s", endPoint));
             }
 
@@ -522,7 +522,7 @@ public class Courier extends Worker {
         }
 
         // Deliver the cargo to the other flag or all the way to the building
-        deliverToFlagOrBuilding(getCargo());
+        deliverToFlagOrBuilding(carriedCargo);
     }
 
     private void deliverToFlagOrBuilding(Cargo cargo) {
@@ -535,7 +535,7 @@ public class Courier extends Worker {
             var roadPoints = assignedRoad.getWayPoints();
             var toWalk = new ArrayList<>(roadPoints);
 
-            if (!roadPoints.getFirst().equals(getPosition())) {
+            if (!roadPoints.getFirst().equals(position)) {
                 Collections.reverse(toWalk);
             }
 
@@ -545,7 +545,7 @@ public class Courier extends Worker {
         } else {
             state = GOING_TO_FLAG_TO_DELIVER_CARGO;
 
-            if (assignedRoad.getWayPoints().getFirst().equals(getPosition())) {
+            if (assignedRoad.getWayPoints().getFirst().equals(position)) {
                 setTargetWithPath(assignedRoad.getWayPoints());
             } else {
                 var toWalk = new LinkedList<>(assignedRoad.getWayPoints());
@@ -559,7 +559,6 @@ public class Courier extends Worker {
 
     private Point findIdlePointAtRoad(Road road) {
         var wayPoints = road.getWayPoints();
-
         return wayPoints.get(wayPoints.size() / 2);
     }
 

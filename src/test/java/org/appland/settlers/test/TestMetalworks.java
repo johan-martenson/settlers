@@ -2,7 +2,6 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -12,8 +11,6 @@ import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Metalworker;
-import org.appland.settlers.model.actors.Worker;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Metalworks;
@@ -25,8 +22,6 @@ import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static org.appland.settlers.model.Material.*;
@@ -37,6 +32,7 @@ public class TestMetalworks {
 
     private final static Set<Material> TOOLS = new HashSet<>(Arrays.asList(
             AXE,
+            HAMMER,
             SHOVEL,
             PICK_AXE,
             FISHING_ROD,

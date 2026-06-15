@@ -1,18 +1,15 @@
 package org.appland.settlers.model.actors;
 
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
-import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Vegetation;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Shipyard;
 import org.appland.settlers.model.buildings.Storehouse;
-
-import java.util.List;
-import java.util.Set;
 
 import static org.appland.settlers.model.Material.*;
 
@@ -26,10 +23,10 @@ public class Shipwright extends Worker {
     private static final int PLANKS_NEEDED_FOR_BOAT = 2;
     private static final int PLANKS_NEEDED_FOR_SHIP = 4;
 
-    private final Countdown countdown;
-    private final ProductivityMeasurer productivityMeasurer;
+    private final Countdown countdown = new Countdown();
+    private final ProductivityMeasurer productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_BUILD_SHIP, null);
 
-    private State state;
+    private State state = State.WALKING_TO_TARGET;
     private Ship ship;
     private Shipyard shipyard;
 
@@ -51,11 +48,6 @@ public class Shipwright extends Worker {
 
     public Shipwright(Player player, GameMap map) {
         super(player, map);
-
-        state = State.WALKING_TO_TARGET;
-        countdown = new Countdown();
-
-        productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_BUILD_SHIP, null);
     }
 
     @Override
@@ -71,22 +63,20 @@ public class Shipwright extends Worker {
 
     @Override
     protected void onIdle() {
-
         if (state == State.RESTING_IN_HOUSE) {
-            if (countdown.hasReachedZero() && getHome().isProductionEnabled()) {
+            if (countdown.hasReachedZero() && home.isProductionEnabled()) {
                 if (shipyard.isProducingShips()) {
-                    if  (getHome().getAmount(PLANK) >= PLANKS_NEEDED_FOR_SHIP) {
+                    if  (home.getAmount(PLANK) >= PLANKS_NEEDED_FOR_SHIP) {
                         var pointToBuildShip = findPlaceToBuildShip();
 
                         if (pointToBuildShip != null) {
+                            home.consumeOne(PLANK);
+                            home.consumeOne(PLANK);
+                            home.consumeOne(PLANK);
+                            home.consumeOne(PLANK);
+
                             state = State.GOING_OUT_TO_BUILD_SHIP;
-
                             setOffroadTarget(pointToBuildShip);
-
-                            getHome().consumeOne(PLANK);
-                            getHome().consumeOne(PLANK);
-                            getHome().consumeOne(PLANK);
-                            getHome().consumeOne(PLANK);
                         } else {
 
                             // Report that it's not possible to harvest or plant
@@ -95,10 +85,9 @@ public class Shipwright extends Worker {
                     }
                 } else {
                     state = State.MAKING_BOAT;
-
                     countdown.countFrom(TIME_TO_MAKE_BOAT);
                 }
-            } else if (getHome().isProductionEnabled()) {
+            } else if (home.isProductionEnabled()) {
                 countdown.step();
             } else {
 
@@ -108,36 +97,29 @@ public class Shipwright extends Worker {
         } else if (state == State.HAMMERING) {
             if (countdown.hasReachedZero()) {
                 state = State.GOING_BACK_TO_HOUSE;
-
                 returnHomeOffroad();
             } else {
                 countdown.step();
             }
         } else if (state == State.IN_HOUSE_WITH_CARGO) {
-
-            if (getHome().getFlag().hasPlaceForMoreCargo()) {
-
-                setTarget(getHome().getFlag().getPosition());
-
+            if (home.getFlag().hasPlaceForMoreCargo()) {
                 state = State.GOING_TO_FLAG_WITH_CARGO;
+                setTarget(home.getFlag().getPosition());
 
                 // Tell the flag that the cargo will be delivered
-                getHome().getFlag().promiseCargo(getCargo());
+                home.getFlag().promiseCargo(carriedCargo);
             } else {
                 state = State.WAITING_FOR_SPACE_ON_FLAG;
             }
         } else if (state == State.WAITING_FOR_SPACE_ON_FLAG) {
-            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+            if (home.getFlag().hasPlaceForMoreCargo()) {
                 var cargo = new Cargo(BOAT, map);
 
                 setCargo(cargo);
+                home.getFlag().promiseCargo(carriedCargo);
 
                 state = State.GOING_TO_FLAG_WITH_CARGO;
-
-                setTarget(getHome().getFlag().getPosition());
-
-                // Tell the flag that the cargo will be delivered
-                getHome().getFlag().promiseCargo(getCargo());
+                setTarget(home.getFlag().getPosition());
             }
         } else if (state == State.DEAD) {
             if (countdown.hasReachedZero()) {
@@ -147,7 +129,7 @@ public class Shipwright extends Worker {
             }
         } else if (state == State.MAKING_BOAT) {
             if (countdown.hasReachedZero()) {
-                if (getHome().getAmount(PLANK) >= PLANKS_NEEDED_FOR_BOAT) {
+                if (home.getAmount(PLANK) >= PLANKS_NEEDED_FOR_BOAT) {
 
                     // Report that the shipwright produced a boat
                     productivityMeasurer.reportProductivity();
@@ -156,21 +138,19 @@ public class Shipwright extends Worker {
                     map.getStatisticsManager().boatProduced(player, map.getTime());
 
                     // Consume the planks
-                    getHome().consumeOne(PLANK);
-                    getHome().consumeOne(PLANK);
+                    home.consumeOne(PLANK);
+                    home.consumeOne(PLANK);
 
                     // Handle transportation
-                    if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                    if (home.getFlag().hasPlaceForMoreCargo()) {
                         var cargo = new Cargo(BOAT, map);
 
                         setCargo(cargo);
+                        home.getFlag().promiseCargo(cargo);
 
                         // Go out to the flag to deliver the water
-                        setTarget(getHome().getFlag().getPosition());
-
                         state = State.GOING_TO_FLAG_WITH_CARGO;
-
-                        getHome().getFlag().promiseCargo(getCargo());
+                        setTarget(home.getFlag().getPosition());
                     } else {
                         state = State.WAITING_FOR_SPACE_ON_FLAG;
                     }
@@ -186,10 +166,10 @@ public class Shipwright extends Worker {
     }
 
     private Point findPlaceToBuildShip() {
-        var largeSurroundingArea = GameUtils.getHexagonAreaAroundPoint(getHome().getPosition(), 8, map);
+        var largeSurroundingArea = GameUtils.getHexagonAreaAroundPoint(home.getPosition(), 8, map);
 
         // Find points that are on the water's edge
-        for (Point point : largeSurroundingArea) {
+        for (var point : largeSurroundingArea) {
             var surroundingVegetation = map.getSurroundingTiles(point);
 
             // Filter points that are not on the water's edge
@@ -199,7 +179,7 @@ public class Shipwright extends Worker {
 
             // Filter points that can't be reached
             // TODO: test that shipwright doesn't pick point it cannot go to
-            if (map.findWayOffroad(getHome().getFlag().getPosition(), point, null) == null) {
+            if (map.findWayOffroad(home.getFlag().getPosition(), point, null) == null) {
                 continue;
             }
 
@@ -221,82 +201,63 @@ public class Shipwright extends Worker {
 
     @Override
     public void onArrival() {
-
         if (state == State.GOING_TO_FLAG_WITH_CARGO) {
+            carriedCargo.setPosition(position);
+            carriedCargo.transportToReceivingBuilding(this::isBoatReceiver);
+            home.getFlag().putCargo(carriedCargo);
 
-            var cargo = getCargo();
-
-            cargo.setPosition(getPosition());
-            cargo.transportToReceivingBuilding(this::isBoatReceiver);
-            getHome().getFlag().putCargo(cargo);
-
-            setCargo(null);
+            carriedCargo = null;
 
             state = State.GOING_BACK_TO_HOUSE;
-
-            setTarget(getHome().getPosition());
+            setTarget(home.getPosition());
         } else if (state == State.GOING_BACK_TO_HOUSE) {
             state = State.RESTING_IN_HOUSE;
-
-            enterBuilding(getHome());
-
             countdown.countFrom(TIME_TO_REST);
+
+            enterBuilding(home);
         } else if (state == State.GOING_OUT_TO_BUILD_SHIP) {
-            ship = map.placeShip(getPlayer(), getPosition());
+            ship = map.placeShip(player, position);
 
             state = State.HAMMERING;
-
             countdown.countFrom(TIME_TO_HAMMER);
         } else if (state == State.RETURNING_TO_STORAGE) {
-            var storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
-
+            var storehouse = (Storehouse)map.getBuildingAtPoint(position);
             storehouse.depositWorker(this);
         } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
             // Go to the closest storage
-            var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SHIPWRIGHT);
+            var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, SHIPWRIGHT);
 
             if (storehouse != null) {
                 state = State.RETURNING_TO_STORAGE;
-
                 setTarget(storehouse.getPosition());
             } else {
                 state = State.GOING_TO_DIE;
-
-                var point = findPlaceToDie();
-
-                setOffroadTarget(point);
+                setOffroadTarget(findPlaceToDie());
             }
         } else if (state == State.GOING_TO_DIE) {
             setDead();
 
             state = State.DEAD;
-
             countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
         }
     }
 
     @Override
     protected void onReturnToStorage() {
-        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SHIPWRIGHT);
+        var storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, SHIPWRIGHT);
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
-
             setTarget(storage.getPosition());
         } else {
-
-            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), SHIPWRIGHT);
+            storage = (Storehouse) GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, SHIPWRIGHT);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
-
                 setOffroadTarget(storage.getPosition());
             } else {
-                var point = findPlaceToDie();
-
-                setOffroadTarget(point, getPosition().downRight());
-
+                setOffroadTarget(findPlaceToDie(), position.downRight());
                 state = State.GOING_TO_DIE;
             }
         }
@@ -307,8 +268,8 @@ public class Shipwright extends Worker {
 
         // Return to storage if the planned path no longer exists
         if (state == State.WALKING_TO_TARGET &&
-                map.isFlagAtPoint(getPosition()) &&
-                !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+                map.isFlagAtPoint(position) &&
+                !map.arePointsConnectedByRoads(position, target)) {
 
             // Don't try to enter the shipyard upon arrival
             clearTargetBuilding();
@@ -330,7 +291,6 @@ public class Shipwright extends Worker {
     @Override
     public void goToOtherStorage(Building building) {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
-
         setTarget(building.getFlag().getPosition());
     }
 

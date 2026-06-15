@@ -1,7 +1,5 @@
 package org.appland.settlers.model;
 
-import org.appland.settlers.model.buildings.Building;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -11,31 +9,22 @@ public class Flag implements EndPoint {
 
     private static final int MAX_NUMBER_OF_STACKED_CARGO = 8;
 
-    private final List<Cargo> stackedCargo;
-    private final Set<Cargo> promisedCargo;
+    private final List<Cargo> stackedCargo = new ArrayList<>();
+    private final Set<Cargo> promisedCargo = new HashSet<>();
 
-    private Point  position;
-    private int    geologistsCalled;
-    private int    scoutsCalled;
-    private Player player;
-    private FlagType flagType;
-    private boolean fightIsHappening;
+    private Point    position;
+    private int      geologistsCalled = 0;
+    private int      scoutsCalled = 0;
+    private Player   player;
+    private FlagType flagType = FlagType.NORMAL;
+    private boolean  fightIsHappening = false;
 
     public Flag(Point point) {
-        position         = point;
-        stackedCargo     = new ArrayList<>();
-        geologistsCalled = 0;
-        scoutsCalled     = 0;
-        promisedCargo    = new HashSet<>();
-        fightIsHappening = false;
-
-        // Default flag type is normal
-        flagType = FlagType.NORMAL;
+        position = point;
     }
 
     Flag(Player player, Point point) {
         this(point);
-
         this.player = player;
     }
 
@@ -45,8 +34,7 @@ public class Flag implements EndPoint {
 
     @Override
     public void putCargo(Cargo cargo) {
-
-        cargo.setPosition(getPosition());
+        cargo.setPosition(position);
         stackedCargo.add(cargo);
 
         // Give the cargo a chance to re-plan
@@ -81,7 +69,7 @@ public class Flag implements EndPoint {
         } else {
             var stringBuilder = new StringBuilder("Flag " + position + " (stacked cargo:");
 
-            for (Cargo cargo : stackedCargo) {
+            for (var cargo : stackedCargo) {
                 stringBuilder.append(" ").append(cargo.getMaterial().name());
             }
 
@@ -92,9 +80,7 @@ public class Flag implements EndPoint {
     }
 
     public Cargo retrieveCargo(Cargo cargo) {
-
         if (stackedCargo.contains(cargo)) {
-
             stackedCargo.remove(cargo);
 
             if (player != null) {
@@ -154,14 +140,12 @@ public class Flag implements EndPoint {
     public void onRemove() {
 
         // Break delivery promises for any stacked cargo
-        for (Cargo cargo : stackedCargo) {
-
+        for (var cargo : stackedCargo) {
             if (!cargo.isPickupPromised()) {
                 continue;
             }
 
             var building = cargo.getTarget();
-
             building.cancelPromisedDelivery(cargo);
         }
     }

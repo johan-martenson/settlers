@@ -512,7 +512,7 @@ public abstract class Worker {
             }
 
             if (map.getBuildingAtPoint(position).isReady()) {
-                getHome().openDoor(10);
+                home.openDoor(10);
             }
         }
 

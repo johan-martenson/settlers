@@ -161,11 +161,11 @@ public class BobDecoder {
         var workerImages = new EnumMap<JobType, RenderedWorker>(JobType.class);
 
         // Go through each job type
-        for (JobType job : JobType.values()) {
+        for (var job : JobType.values()) {
             var worker = new RenderedWorker(job);
 
-            for (Nation nation : Nation.values()) {
-                for (CompassDirection compassDirection : CompassDirection.values()) {
+            for (var nation : Nation.values()) {
+                for (var compassDirection : CompassDirection.values()) {
                     for (int animationStep = 0; animationStep < 8; animationStep++) {
                         var workerDetails = workerDetailsMap.get(job);
                         int id = workerDetails.getBobId(nation);
