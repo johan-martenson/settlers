@@ -137,6 +137,9 @@ public class Player {
     private final Map<Class<? extends Building>, Integer> wheatAllocation = new HashMap<>();
     private final Map<Class<? extends Building>, Integer> waterAllocation = new HashMap<>();
     private final Map<Class<? extends Building>, Integer> ironBarAllocation = new HashMap<>();
+    private int constructionPlankQuota = 1;
+    private int shipyardPlankQuota = 1;
+    private int metalworksPlankQuota = 1;
     private final Set<Stone> changedStones = new HashSet<>();
     private final Set<Tree> newFallingTrees = new HashSet<>();
     private final Collection<PlayerChangeListener> playerChangeListeners = new HashSet<>();
@@ -1292,7 +1295,6 @@ public class Player {
 
         // Enable/disable the tree conservation program if needed
         if (shouldConserveTrees()) {
-
             if (!treeConservationProgramActive && treeConservationProgramEnabled) {
                 activateTreeConservationProgram();
             }
@@ -1380,6 +1382,8 @@ public class Player {
     }
 
     public void setProductionQuotaForTool(Material tool, int quota) throws InvalidUserActionException {
+
+        // Validate the request
         if (quota > MAX_PRODUCTION_QUOTA) {
             throw new InvalidUserActionException("Cannot set quota %d above max quota at %d".formatted(quota, MAX_PRODUCTION_QUOTA));
         }
@@ -1392,6 +1396,7 @@ public class Player {
             throw new InvalidUserActionException("Cannot set quota for material that is not a tool: %s".formatted(tool));
         }
 
+        // Apply the change
         if (quota != getProductionQuotaForTool(tool)) {
             toolQuotasChanged.add(tool);
         }
@@ -1663,6 +1668,79 @@ public class Player {
 
     public int getIronBarQuota(Class<? extends Building> buildingClass) {
         return ironBarAllocation.get(buildingClass);
+    }
+
+    /**
+     * Sets the plank quota for construction deliveries.
+     */
+    public void setConstructionPlankQuota(int amount) throws InvalidUserActionException {
+        validatePlankQuota(amount);
+
+        var previousAmount = constructionPlankQuota;
+
+        constructionPlankQuota = amount;
+
+        // Notify listeners about the change
+        if (previousAmount != amount) {
+            playerChangeListeners.forEach(listener -> listener.onPlayerChanged(this));
+        }
+    }
+
+    /**
+     * Returns the plank quota for construction deliveries.
+     */
+    public int getConstructionPlankQuota() {
+        return constructionPlankQuota;
+    }
+
+    /**
+     * Sets the plank quota for shipyard production deliveries.
+     */
+    public void setShipyardPlankQuota(int amount) throws InvalidUserActionException {
+        validatePlankQuota(amount);
+
+        var previousAmount = shipyardPlankQuota;
+
+        shipyardPlankQuota = amount;
+
+        if (previousAmount != amount) {
+            playerChangeListeners.forEach(listener -> listener.onPlayerChanged(this));
+        }
+    }
+
+
+    public void setMetalworksPlankQuota(int amount) throws InvalidUserActionException {
+        validatePlankQuota(amount);
+
+        var previousAmount = metalworksPlankQuota;
+
+        metalworksPlankQuota = amount;
+
+        if (previousAmount != amount) {
+            playerChangeListeners.forEach(listener -> listener.onPlayerChanged(this));
+        }
+    }
+
+    /**
+     * Returns the plank quota for shipyard production deliveries.
+     */
+    public int getShipyardPlankQuota() {
+        return shipyardPlankQuota;
+    }
+
+
+    public int getMetalworksPlankQuota() {
+        return metalworksPlankQuota;
+    }
+
+    private void validatePlankQuota(int amount) throws InvalidUserActionException {
+        if (amount > MAX_PRODUCTION_QUOTA) {
+            throw new InvalidUserActionException("Cannot set quota %d above max quota at %d".formatted(amount, MAX_PRODUCTION_QUOTA));
+        }
+
+        if (amount < MIN_PRODUCTION_QUOTA) {
+            throw new InvalidUserActionException("Cannot set quota %d below min quota at %d".formatted(amount, MIN_PRODUCTION_QUOTA));
+        }
     }
 
     public void setStrengthOfSoldiersPopulatingBuildings(int strength) throws InvalidUserActionException {

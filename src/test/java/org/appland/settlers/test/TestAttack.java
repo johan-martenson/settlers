@@ -137,6 +137,7 @@ public class TestAttack {
         // Place and occupy a military target for player 1
         var point2 = new Point(21, 15);
         var barracks1 = map.placeBuilding(new Barracks(player1), point2);
+
         Utils.constructHouse(barracks1);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
 

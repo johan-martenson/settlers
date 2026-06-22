@@ -44,6 +44,8 @@ import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.utils.MilitaryUtils.*;
 
 public class Building implements EndPoint {
+    private static final int TIME_FOR_HEALTH_RECOVERY_STEP = 98;
+
     public record PlanksAndStones(int planks, int stones) {
         public boolean contains(Material material) {
             return (material == PLANK && planks > 0) || (material == STONE && stones > 0);
@@ -80,6 +82,7 @@ public class Building implements EndPoint {
     private final Set<Soldier> remoteDefenders = new HashSet<>();
     public final Countdown countdown = new Countdown();
     private final Countdown upgradeCountdown = new Countdown();
+    private final Countdown healthRecoveryCountdown = new Countdown();
     private final Map<Material, Integer> promisedDeliveries = new EnumMap<>(Material.class);
     private final List<Soldier> hostedSoldiers = new ArrayList<>();
     private final List<Soldier> promisedSoldier = new ArrayList<>();
@@ -103,7 +106,7 @@ public class Building implements EndPoint {
     private Set<Point> defendedLand = null;
     private long generation;
     private State state = State.PLANNED; // TODO: make private again
-    private Worker worker = null;
+    protected Worker worker = null;
     private Worker promisedWorker = null;
     private boolean enablePromotions = true;
     private boolean evacuated = false;
@@ -312,6 +315,10 @@ public class Building implements EndPoint {
         var previousState = state;
         state = State.OCCUPIED;
 
+        if (soldier.isHurt() && !healthRecoveryCountdown.isActive()) {
+            healthRecoveryCountdown.countFrom(TIME_FOR_HEALTH_RECOVERY_STEP);
+        }
+
         if (previousState == State.UNOCCUPIED) {
             map.updateBorder(this, BorderChangeCause.MILITARY_BUILDING_OCCUPIED);
             player.reportMilitaryBuildingOccupied(this);
@@ -421,6 +428,28 @@ public class Building implements EndPoint {
                 map.reportChangedBuilding(this);
             } else {
                 doorClosing--;
+            }
+        }
+
+        if (isMilitaryBuilding() && healthRecoveryCountdown.isActive()) {
+            if (healthRecoveryCountdown.hasReachedZero()) {
+                var anyRemainingHurtSoldier = false;
+
+                for (var soldier : hostedSoldiers) {
+                    if (soldier.getHealth() < soldier.getMaxHealth()) {
+                        soldier.recoverHealthOneStep();
+                    }
+
+                    if (soldier.isHurt()) {
+                        anyRemainingHurtSoldier = true;
+                    }
+                }
+
+                if (anyRemainingHurtSoldier) {
+                    healthRecoveryCountdown.countFrom(TIME_FOR_HEALTH_RECOVERY_STEP);
+                }
+            } else {
+                healthRecoveryCountdown.step();
             }
         }
 

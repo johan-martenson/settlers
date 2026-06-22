@@ -156,9 +156,11 @@ public class Soldier extends Worker {
 
     @Override
     public String toString() {
+        var maxHealth = getMaxHealth();
+
         return isExactlyAtPoint() ?
-                String.format("%s soldier %s (%s)", rank.getSimpleName(), position, state) :
-                String.format("%s soldier %s - %s (%s)", rank.getSimpleName(), position, getNextPoint(), state);
+                String.format("%s soldier %s (%s, health: %d/%d)", rank.getSimpleName(), position, state, health, maxHealth) :
+                String.format("%s soldier %s - %s (%s, health: %d/%d)", rank.getSimpleName(), position, getNextPoint(), state, health, maxHealth);
     }
 
     @Override
@@ -887,11 +889,23 @@ public class Soldier extends Worker {
         return health;
     }
 
+    public int getMaxHealth() {
+        return getHealthForRank(rank);
+    }
+
     public boolean isWalkingApartToFight() {
         return state == WALKING_APART_TO_DEFEND || state == WALKING_APART_TO_ATTACK;
     }
 
     public boolean isWalkingBackToFixedPointAfterFight() {
         return state == WALKING_TO_FIXED_POINT_AFTER_ATTACK || state == WALKING_TO_FIXED_POINT_AFTER_DEFENSE;
+    }
+
+    public void recoverHealthOneStep() {
+        health = Math.min(health + 1, getHealthForRank(rank));
+    }
+
+    public boolean isHurt() {
+        return health != getMaxHealth();
     }
 }

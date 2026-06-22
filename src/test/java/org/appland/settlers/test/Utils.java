@@ -1169,7 +1169,7 @@ public class Utils {
     public static void waitForBuildingToBeConstructed(Building building) throws InvalidUserActionException {
         var map = building.getMap();
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 10_000; i++) {
             if (building.isReady()) {
                 break;
             }
@@ -3486,6 +3486,21 @@ public class Utils {
 
             map.stepTime();
         }
+    }
+
+    public static void waitForMilitaryBuildingToHaveNumberOfHostedSoldiers(Building building, int amount) throws InvalidUserActionException {
+        for (int i = 0; i < 2_000; i++) {
+            assertEquals(building.getNumberOfHostedSoldiers(), building.getHostedSoldiers().size());
+
+            if (building.getNumberOfHostedSoldiers() == amount) {
+                break;
+            }
+
+            building.getMap().stepTime();
+        }
+
+        assertEquals(building.getNumberOfHostedSoldiers(), amount);
+        assertEquals(building.getHostedSoldiers().size(), amount);
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor, StatisticsListener {

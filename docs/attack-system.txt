@@ -1,375 +1,204 @@
-# SETTLERS II COMBAT SYSTEM SPECIFICATION
+# **SETTLERS II COMBAT SYSTEM SPECIFICATION**
 
-## Status
+## **Status**
 
-This document describes the combat system of Settlers II as accurately
-as currently understood.
+This document describes the combat system of Settlers II, incorporating corrections to pathfinding, combat math, logistical mechanics, and routing logic to accurately reflect the original engine's behavior.
 
-## Definitions
+## **Definitions**
 
-Military Building
-Barracks, Guardhouse, Watchtower, Fortress (and to some degree Headquarters).
-
-Attacker
-Soldier participating in an attack against an enemy military building.
-
-Defender
-Soldier defending an attacked military building.
-
-Garrison
-Soldiers currently stationed inside a military building.
-
-Combat Slot
+**Military Building**  
+Barracks, Guardhouse, Watchtower, Fortress (and to some degree Headquarters).  
+**Attacker**  
+Soldier participating in an attack against an enemy military building.  
+**Defender**  
+Soldier defending an attacked military building.  
+**Garrison**  
+Soldiers currently stationed inside a military building.  
+**Combat Slot**  
 A simultaneous one-on-one fight between an attacker and a defender.
 
-## Overview
+## **Overview**
 
-Combat in Settlers II is building-centric rather than unit-centric.
-
-The player never directly commands military units.
-
+Combat in Settlers II is building-centric rather than unit-centric.  
+The player never directly commands military units.  
 The player can only:
 
-* Select an enemy military building.
-* Choose how many soldiers to commit.
-* Select weak attackers or strong attackers.
+* Select an enemy military building.  
+* Choose the quantity of soldiers to commit to the attack.  
+* Toggle global military settings to prioritize sending "weakest first" or "strongest first."
 
 Combat consists of:
 
-* Soldiers traveling to the target.
-* Defenders being gathered.
-* Multiple simultaneous one-on-one duels.
+* Soldiers traveling cross-country to the target.  
+* Defenders being gathered based on distance and global military settings.  
+* Multiple simultaneous one-on-one duels at the target's flag.  
 * Capture or defense of the military building.
 
-## Attack Preconditions
+## **Attack Preconditions**
 
 A building may be attacked only if:
 
-* It belongs to an enemy.
-* It is a military building.
-* It is constructed and has been occupied.
-* It is within attack range of the player's territory.
+* It belongs to an enemy.  
+* It is a military building.  
+* It is constructed and has been occupied.  
+* It is within attack range of the player's territory.  
 * At least one friendly military building can provide attackers.
 
-## Starting an Attack
+## **Starting an Attack**
 
-1. Player selects an enemy military building.
-2. Game determines how many attackers are available.
-3. Player chooses the number of attackers and weak or strong attackers.
-4. Eligible soldiers are selected automatically.
-5. Selected soldiers leave their military buildings.
+1. Player selects an enemy military building.  
+2. Game determines how many attackers are available in range.  
+3. Player chooses the number of attackers.  
+4. Eligible soldiers are selected automatically based on distance and the global weakest/strongest setting.  
+5. Selected soldiers leave their military buildings.  
 6. Soldiers physically walk toward the target.
 
 The originating military building immediately loses those soldiers.
 
-## Attacker Selection
+## **Movement and Pathfinding**
 
-Attackers are selected automatically.
-
-Selection is influenced by:
-
-* Distance to the target.
-* Military settings.
-* Soldier availability.
-
-The player does not choose individual soldiers.
-
-## Movement
-
-Soldiers travel physically across the map. They walk both on regular roads and off roads which ever is closest.
-
+When a soldier leaves a building for a combat assignment (attacking or defending), they **completely ignore the road network**.  
 During movement:
 
-* Soldiers may be attacked by nobody.
-* Soldiers do not fight until reaching the target.
-* Soldiers do not heal.
-* Current health is preserved.
+* Soldiers use a direct, cross-country pathfinding algorithm toward the target flag.  
+* They navigate around geographical obstacles but do not snap to road nodes.  
+* Soldiers may be attacked by nobody while en route.  
+* Soldiers do not fight until reaching the target.  
+* Soldiers do not passively heal while traveling.
 
-Attackers may arrive at different times due to path length and traffic.
+Attackers may arrive at different times due to path length and terrain obstacles.
 
-## Attacker Placements
+## **Attacker Placements & Combat Slots**
 
-An attacker will go to the target building's flag and wait for the first defender from the target building's garrison
-to come out to defend it in combat. The other attackers will either:
+An attacker will go to the target building's flag and wait for a defender from the target building's garrison to come out to fight.
 
-1) cluster around the flag, and wait for defenders to fight, or
-2) go directly to meet defenders from other military buildings nearby to fight them.
+* There is a physical space limitation around the flag.  
+* Excess arriving attackers will cluster around the flag and stand idle, waiting for a combat slot to open up, or go directly to meet defenders from nearby military buildings arriving as reinforcements.
 
-## Defender Selection
+## **Defender Selection**
 
-The target building's own garrison defends against attackers that walk up to its flag.
-
-Additional defenders may be requested from nearby military buildings.
-
+The target building's own garrison defends against attackers that walk up to its flag. Additional defenders may be requested from nearby military buildings.  
 A military building may provide defenders only if:
 
-* It belongs to the defending player.
-* It is within military support range.
+* It belongs to the defending player.  
+* It is within military support range.  
 * It contains soldiers above its required minimum garrison.
 
-Buildings do not normally empty themselves completely.
+**Note:** If the player sets the global "Minimum Defenders" slider to 0, buildings *can* empty themselves completely to aid in the defense of a neighboring structure.
 
-## Defender Selection Priority
+## **Defender Selection Priority**
 
-Defender source buildings appear to be chosen primarily by distance.
+Defender source buildings and the specific soldiers chosen are evaluated by two main factors:
 
-Approximate priority:
+1. **Distance:** Closest military buildings are prioritized.  
+2. **Global Military Settings:** The game checks the ranks of available soldiers and selects them based on whether the player has prioritized defending with weaker or stronger soldiers.
 
-1. Closest military building.
-2. Next closest military building.
-3. Next closest military building.
+## **Defender Reinforcement Logic**
 
-There is no evidence that rank influences building selection.
-
-## Defender Dispatch
-
-Selected defenders:
-
-* Leave their source building.
-* Walk to the attacked building.
-* Join combat when they arrive.
-
-Defenders may arrive after combat has already started.
-
-## Defender Reinforcement Logic
-
-Combat does not appear to use fixed reinforcement waves.
-
-Instead, the game continuously evaluates defensive strength.
-
+Combat does not use fixed reinforcement waves. The game continuously evaluates defensive strength.  
 Conceptually:
 
-```
-while attack active:
-    evaluate defenders needed
+Plaintext  
+while attack active:  
+    evaluate defenders needed  
     dispatch additional defenders if required
-```
 
-Additional defenders may be requested when:
+Additional defenders may be requested when a defender dies, too few defenders are available, or new attackers arrive. Defenders already traveling toward the target count as pending reinforcements.
 
-* A defender dies.
-* Too few defenders are available.
-* New attackers arrive.
-* Existing defenders are already occupied in combat.
+## **Soldier Ranks and Combat Math**
 
-Defenders already travelling toward the target count as pending
-reinforcements and should not trigger duplicate requests.
+Soldiers have ranks: Private, Private First Class, Sergeant, Officer, and General.  
+Rank affects three critical combat variables:
 
-## Combat Structure
+1. **Maximum Health (HP)**  
+2. **Hit Probability:** Higher ranks have a significantly higher chance to land a successful strike.  
+3. **Block/Evasion Probability:** Higher ranks have a significantly higher chance to block or dodge an incoming attack.
 
-Combat consists of multiple simultaneous one-on-one duels.
+**Maximum Health Scale:**
 
-Example:
+* Private: 3 HP  
+* Private First Class: 4 HP  
+* Sergeant: 5 HP  
+* Officer: 6 HP  
+* General: 7 HP
 
-```
-Attacker A vs Defender A
-Attacker B vs Defender B
-Attacker C vs Defender C
-```
+## **Combat Resolution**
 
-Several duels may occur at the same time.
-
-Combat is not formation-based.
-
-Combat is not squad-based.
-
-## Combat Slots
-
-Each combat slot contains:
-
-* One attacker.
-* One defender.
-
-When a soldier dies:
-
-* The slot becomes vacant.
-* Another available soldier may enter the slot.
-
-Combat continues until one side has no soldiers remaining.
-
-## Soldier Ranks
-
-Soldiers have ranks:
-
-* Private
-* Private First Class
-* Sergeant
-* Officer
-* General
-
-Rank affects:
-
-* Maximum health.
-* Combat effectiveness.
-
-## Soldier Health
-
-Each soldier has:
-
-* Rank
-* Current health
-
-Health persists between battles.
-
-Health persists while travelling.
-
-Health persists after promotion.
-
-## Maximum Health
-
-Private             3 HP
-Private First Class 4 HP
-Sergeant            5 HP
-Officer             6 HP
-General             7 HP
-
-## Combat Resolution
-
-Combat occurs in rounds.
-
+Combat occurs in multiple simultaneous one-on-one duels.  
 Each round:
 
-1. One soldier attacks.
-2. Attack may hit or miss.
-3. Successful hit removes 1 HP.
-4. Combat continues.
+1. One soldier attacks.  
+2. The engine calculates hit/block probability based on the ranks of the two combatants.  
+3. Attack either hits or is blocked/misses.  
+4. A successful hit removes exactly 1 HP.  
+5. Combat continues until one soldier reaches 0 HP.
 
-A duel ends when one soldier reaches 0 HP.
+When a soldier dies, the slot becomes vacant, and another available soldier steps in.
 
-## Winner Behavior
+## **Winner Behavior & Successive Duels**
 
-The winner survives with remaining health.
-
+The winner survives with their current remaining health.  
 Example:
 
-```
-General starts with 7 HP
-Takes 5 damage
-Wins duel
-```
+Plaintext  
+General starts with 7 HP  
+Takes 5 damage during the duel  
+Wins duel  
+Result: General remains alive with 2 HP
 
-Result:
+If surviving attackers/defenders remain, the soldier enters subsequent duels with this current remaining health. Health does NOT reset between duels.
 
-```
-General remains alive with 2 HP
-```
+## **Promotion and Logistics**
 
-The soldier keeps this health value.
+Soldiers do not gain experience from combat. **Promotions are strictly driven by logistics.**
 
-The soldier does not automatically heal after victory.
+* A soldier is promoted when the logistics network delivers a **Gold Coin** to their military building.  
+* **Healing Effect:** Promotion instantly restores the soldier's health entirely to the new rank's maximum HP. This is the primary method of healing in the game.
 
-## Successive Duels
-
-A surviving soldier may participate in additional duels.
-
-The soldier enters subsequent duels with current remaining health.
-
-Example:
-
-```
-Duel 1:
-    7 HP -> 3 HP
-
-Duel 2:
-    Starts at 3 HP
-```
-
-Health does not reset between duels.
-
-## Promotion
-
-Promotion changes rank.
-
-Promotion does NOT heal the soldier.
-
-Example:
-
-```
-Sergeant
-Current HP = 1
-Max HP = 5
-```
-
-Promoted to Officer
-
-Result:
-
-```
-Current HP = 1
-Max HP = 6
-```
-
-## Health Recovery
+## **Health Recovery**
 
 Known behavior:
 
-* Soldiers heal while stationed in military buildings.
-* Soldiers do not heal while travelling.
-* Soldiers do not heal during combat.
-* Promotion does not heal.
+* Promotion (via Gold Coin) fully heals a soldier.  
+* Passive healing while stationed in military buildings is incredibly slow (and effectively non-existent in many combat scenarios).  
+* Soldiers do not heal while traveling or fighting.
 
-Exact healing timing is not fully documented.
+## **Routing and Evacuation**
 
-A likely implementation is:
+Soldiers must react to changes in the combat state while they are en route:
 
-```
-periodically:
-    health = min(maxHealth, health + 1)
-```
+* **Target Captured/Destroyed:** If a building is captured by an enemy, or destroyed (e.g., by a catapult), any attackers or defenders currently walking to that target will abort their mission, turn around, and walk back to their originating building.  
+* **Evacuation:** The player can click "Evacuate" on a military building. Garrisoned units inside will leave and retreat to the nearest available military building. However, units actively engaged in a duel at the flag cannot retreat.
 
-## Building Capture
+## **Building Capture**
 
-If all defenders are defeated:
+If all defenders are defeated and the building's garrison reaches 0:
 
-1. Defending force collapses.
-2. Final surviving attacker becomes occupier.
-3. Building changes ownership.
-4. Territory is recalculated.
+1. Defending force collapses.  
+2. **All surviving attackers** will enter and occupy the captured building, up to its maximum garrison capacity.
+3. Any excess surviving attackers will turn around and walk back to their originating military building.  
+4. The building immediately changes ownership and territory is recalculated.
 
-The building immediately becomes part of the attacker's military network.
-
-## Building Defense Success
+## **Building Defense Success**
 
 If all attackers are defeated:
 
-1. Attack ends.
-2. Building remains under defender ownership.
-3. Surviving defenders remain alive.
-4. Surviving defenders keep remaining health.
+1. Attack ends.  
+2. Building remains under defender ownership.  
+3. Surviving defenders return inside the building, keeping their remaining health.
 
-## Territory Recalculation
+## **Catapults**
+
+Catapults operate outside the duel system but are critical to military interaction:
+
+* Catapults throw stones at enemy military buildings within range.  
+* A successful hit instantly kills one garrisoned soldier inside the target building, completely bypassing the duel system and health mechanics.  
+* If a catapult kills the last defender, the building is destroyed.
+
+## **Territory Recalculation**
 
 After a successful capture:
 
-* Territory ownership is recalculated.
-* Borders move.
-* Enemy structures outside valid territory may collapse.
+* Territory ownership is recalculated and borders move.  
+* Enemy structures (e.g., woodcutters, mines) outside valid territory collapse.  
 * Roads may become disconnected.
-
-## Important Design Principles
-
-The combat system should be modeled as:
-
-```
-Buildings fighting over territory
-```
-
-rather than:
-
-```
-Units fighting over units
-```
-
-Key properties:
-
-* Building-centric.
-* Persistent soldier health.
-* Persistent soldier ranks.
-* Multiple simultaneous duels.
-* Physical soldier movement.
-* Dynamic reinforcements.
-* Territory-based conquest.
-
-These characteristics are what make Settlers II combat feel distinct
-from conventional RTS combat systems.
-

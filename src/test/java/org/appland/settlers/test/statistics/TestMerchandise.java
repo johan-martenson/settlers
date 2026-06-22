@@ -63,7 +63,8 @@ public class TestMerchandise {
             ROLLING_PIN,
             CRUCIBLE,
             TONGS,
-            SCYTHE));
+            SCYTHE,
+            HAMMER));
 
     // Initial values.
 

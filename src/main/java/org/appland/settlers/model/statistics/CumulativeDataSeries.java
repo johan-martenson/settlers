@@ -17,6 +17,14 @@ public class CumulativeDataSeries {
         measurements.add(new Measurement(1, initialAmount));
     }
 
+    @Override
+    public String toString() {
+        return "CumulativeDataSeries{" +
+                "name='" + name + '\'' +
+                ", measurements=" + measurements +
+                '}';
+    }
+
     public String getName() {
         return name;
     }

@@ -761,9 +761,9 @@ public class TestWaterPrioritization {
         Utils.occupyBuilding(new PigBreeder(player0, map), pigFarm0);
 
         // Set the quota to even distribution
-        player0.setFoodQuota(Bakery.class, 1);
-        player0.setFoodQuota(DonkeyFarm.class, 1);
-        player0.setFoodQuota(PigFarm.class, 1);
+        player0.setWaterQuota(Bakery.class, 1);
+        player0.setWaterQuota(DonkeyFarm.class, 1);
+        player0.setWaterQuota(PigFarm.class, 1);
 
         // Make sure the headquarters has no wheat
         Utils.adjustInventoryTo(headquarter0, WATER, 0);

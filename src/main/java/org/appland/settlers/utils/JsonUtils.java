@@ -600,53 +600,74 @@ public class JsonUtils {
     }
 
     public JSONObject playerToJson(Player player) {
-        var jsonCoalQuota = new JSONObject(Map.of());
-        var jsonWheatQuota = new JSONObject(Map.of());
-        var jsonWaterQuota = new JSONObject(Map.of());
-        var jsonIronQuota = new JSONObject(Map.of());
-        var jsonFoodQuota = new JSONObject(Map.of());
+        var jsonCoalQuota = new JSONObject(Map.of(
+                "mint", player.getCoalQuota(Mint.class),
+                "armory", player.getCoalQuota(Armory.class),
+                "ironSmelter", player.getCoalQuota(IronSmelter.class)
+        ));
 
-        jsonCoalQuota.put("mint", player.getCoalQuota(Mint.class));
-        jsonCoalQuota.put("armory", player.getCoalQuota(Armory.class));
-        jsonCoalQuota.put("ironSmelter", player.getCoalQuota(IronSmelter.class));
+        var jsonWheatQuota = new JSONObject(Map.of(
+                "mill", player.getWheatQuota(Mill.class),
+                "donkeyFarm", player.getWheatQuota(DonkeyFarm.class),
+                "pigFarm", player.getWheatQuota(PigFarm.class),
+                "brewery",  player.getWheatQuota(Brewery.class)
+        ));
 
-        jsonWheatQuota.put("mill", player.getWheatQuota(Mill.class));
-        jsonWheatQuota.put("donkeyFarm", player.getWheatQuota(DonkeyFarm.class));
-        jsonWheatQuota.put("pigFarm", player.getWheatQuota(PigFarm.class));
-        jsonWheatQuota.put("brewery",  player.getWheatQuota(Brewery.class));
+        var jsonWaterQuota = new JSONObject(Map.of(
+                "bakery",  player.getWaterQuota(Bakery.class),
+                "donkeyFarm",  player.getWaterQuota(DonkeyFarm.class),
+                "pigFarm",  player.getWaterQuota(PigFarm.class),
+                "brewery",  player.getWaterQuota(Brewery.class)
+        ));
 
-        jsonWaterQuota.put("bakery",  player.getWaterQuota(Bakery.class));
-        jsonWaterQuota.put("donkeyFarm",  player.getWaterQuota(DonkeyFarm.class));
-        jsonWaterQuota.put("pigFarm",  player.getWaterQuota(PigFarm.class));
-        jsonWaterQuota.put("brewery",  player.getWaterQuota(Brewery.class));
+        var jsonIronQuota = new JSONObject(Map.of(
+                "armory", player.getIronBarQuota(Armory.class),
+                "metalworks", player.getIronBarQuota(Metalworks.class)
+        ));
 
-        jsonIronQuota.put("armory", player.getIronBarQuota(Armory.class));
-        jsonIronQuota.put("metalworks", player.getIronBarQuota(Metalworks.class));
+        var jsonFoodQuota = new JSONObject(Map.of(
+                "ironMine", player.getFoodQuota(IronMine.class),
+                "coalMine", player.getFoodQuota(CoalMine.class),
+                "goldMine", player.getFoodQuota(GoldMine.class),
+                "graniteMine", player.getFoodQuota(GraniteMine.class)
+        ));
 
-        jsonFoodQuota.put("ironMine", player.getFoodQuota(IronMine.class));
-        jsonFoodQuota.put("coalMine", player.getFoodQuota(CoalMine.class));
-        jsonFoodQuota.put("goldMine", player.getFoodQuota(GoldMine.class));
-        jsonFoodQuota.put("graniteMine", player.getFoodQuota(GraniteMine.class));
+        var jsonPlanksQuota = new JSONObject(Map.of(
+                "construction", player.getConstructionPlankQuota(),
+                "shipyard", player.getShipyardPlankQuota(),
+                "metalworks", player.getMetalworksPlankQuota()
+        ));
 
-        return new JSONObject(Map.ofEntries(
-                entry("id", idManager.getId(player)),
-                entry("name", player.getName()),
-                entry("color", player.getColor().name().toUpperCase()),
-                entry("nation", player.getNation().name().toUpperCase()),
-                entry("discoveredPoints", pointsToJson(player.getDiscoveredLand())),
-                entry("ownedLand", pointsToJson(player.getOwnedLand())),
-                entry("strengthWhenPopulatingBuildings", player.getStrengthOfSoldiersPopulatingBuildings()),
-                entry("defenseFromSurroundingBuildings", player.getDefenseFromSurroundingBuildings()),
-                entry("defenseStrength", player.getDefenseStrength()),
-                entry("soldiersAvailableForAttack", player.getAmountOfSoldiersAvailableForAttack()),
-                entry("militaryPopulationFarFromBorder", player.getAmountOfSoldiersWhenPopulatingFarFromBorder()),
-                entry("militaryPopulationAwayFromBorder", player.getAmountOfSoldiersWhenPopulatingAwayFromBorder()),
-                entry("militaryPopulationCloseToBorder", player.getAmountOfSoldiersWhenPopulatingCloseToBorder()),
-                entry("coalQuota", jsonCoalQuota),
-                entry("wheatQuota", jsonWheatQuota),
-                entry("waterQuota", jsonWaterQuota),
-                entry("ironQuota", jsonIronQuota),
-                entry("foodQuota", jsonFoodQuota)
+        var jsonResourceQuotas = new JSONObject(Map.of(
+                "COAL", jsonCoalQuota,
+                "WHEAT", jsonWheatQuota,
+                "WATER", jsonWaterQuota,
+                "IRON", jsonIronQuota,
+                "FOOD", jsonFoodQuota,
+                "PLANKS", jsonPlanksQuota
+        ));
+
+        var jsonMilitarySettings = new JSONObject(Map.of(
+                "strengthWhenPopulatingBuildings", player.getStrengthOfSoldiersPopulatingBuildings(),
+                "defenseFromSurroundingBuildings", player.getDefenseFromSurroundingBuildings(),
+                "defenseStrength", player.getDefenseStrength(),
+                "soldiersAvailableForAttack", player.getAmountOfSoldiersAvailableForAttack(),
+                "militaryPopulationFarFromBorder", player.getAmountOfSoldiersWhenPopulatingFarFromBorder(),
+                "militaryPopulationAwayFromBorder", player.getAmountOfSoldiersWhenPopulatingAwayFromBorder(),
+                "militaryPopulationCloseToBorder", player.getAmountOfSoldiersWhenPopulatingCloseToBorder()
+        ));
+
+        return new JSONObject(Map.of(
+                "id", idManager.getId(player),
+                "name", player.getName(),
+                "color", player.getColor().name().toUpperCase(),
+                "nation", player.getNation().name().toUpperCase(),
+                "discoveredPoints", pointsToJson(player.getDiscoveredLand()),
+                "ownedLand", pointsToJson(player.getOwnedLand()),
+                "militarySettings", jsonMilitarySettings,
+                "resourceQuotas", jsonResourceQuotas,
+                "toolQuotas", toolQuotasToJson(player),
+                "transportPriority", transportPriorityToJson(player.getTransportPriorities())
         ));
     }
 

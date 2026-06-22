@@ -1842,9 +1842,9 @@ public class TestPrioritization {
         Utils.occupyBuilding(new Armorer(player0, map), armory0);
 
         // Set the quota to even distribution
-        player0.setFoodQuota(IronSmelter.class, 1);
-        player0.setFoodQuota(Mint.class, 1);
-        player0.setFoodQuota(Armory.class, 1);
+        player0.setCoalQuota(IronSmelter.class, 1);
+        player0.setCoalQuota(Mint.class, 1);
+        player0.setCoalQuota(Armory.class, 1);
 
         // Make sure the headquarter has no coal
         Utils.adjustInventoryTo(headquarter0, COAL, 0);

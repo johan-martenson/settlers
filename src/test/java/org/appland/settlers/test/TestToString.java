@@ -218,12 +218,12 @@ public class TestToString {
         assertEquals(military.getRank(), Soldier.Rank.PRIVATE_RANK);
 
         // Verify that the toString() method is correct
-        assertEquals(military.toString(), "Private soldier (10, 10) (WALKING_TO_TARGET)");
+        assertEquals(military.toString(), "Private soldier (10, 10) (WALKING_TO_TARGET, health: 3/3)");
 
         map.stepTime();
 
         assertFalse(military.isExactlyAtPoint());
-        assertEquals(military.toString(), "Private soldier (10, 10) - (11, 9) (WALKING_TO_TARGET)");
+        assertEquals(military.toString(), "Private soldier (10, 10) - (11, 9) (WALKING_TO_TARGET, health: 3/3)");
     }
 
     @Test
@@ -262,12 +262,12 @@ public class TestToString {
         assertEquals(soldier.getRank(), Soldier.Rank.PRIVATE_FIRST_CLASS_RANK);
 
         // Verify that the toString() method is correct
-        assertEquals(soldier.toString(), "Private first class soldier (10, 10) (WALKING_TO_TARGET)");
+        assertEquals(soldier.toString(), "Private first class soldier (10, 10) (WALKING_TO_TARGET, health: 4/4)");
 
         map.stepTime();
 
         assertFalse(soldier.isExactlyAtPoint());
-        assertEquals(soldier.toString(), "Private first class soldier (10, 10) - (11, 9) (WALKING_TO_TARGET)");
+        assertEquals(soldier.toString(), "Private first class soldier (10, 10) - (11, 9) (WALKING_TO_TARGET, health: 4/4)");
     }
 
     @Test
@@ -306,12 +306,12 @@ public class TestToString {
         assertEquals(military.getRank(), Soldier.Rank.SERGEANT_RANK);
 
         // Verify that the toString() method is correct
-        assertEquals(military.toString(), "Sergeant soldier (10, 10) (WALKING_TO_TARGET)");
+        assertEquals(military.toString(), "Sergeant soldier (10, 10) (WALKING_TO_TARGET, health: 5/5)");
 
         map.stepTime();
 
         assertFalse(military.isExactlyAtPoint());
-        assertEquals(military.toString(), "Sergeant soldier (10, 10) - (11, 9) (WALKING_TO_TARGET)");
+        assertEquals(military.toString(), "Sergeant soldier (10, 10) - (11, 9) (WALKING_TO_TARGET, health: 5/5)");
     }
 
     @Test
@@ -350,12 +350,12 @@ public class TestToString {
         assertEquals(military.getRank(), Soldier.Rank.OFFICER_RANK);
 
         // Verify that the toString() method is correct
-        assertEquals(military.toString(), "Officer soldier (10, 10) (WALKING_TO_TARGET)");
+        assertEquals(military.toString(), "Officer soldier (10, 10) (WALKING_TO_TARGET, health: 6/6)");
 
         map.stepTime();
 
         assertFalse(military.isExactlyAtPoint());
-        assertEquals(military.toString(), "Officer soldier (10, 10) - (11, 9) (WALKING_TO_TARGET)");
+        assertEquals(military.toString(), "Officer soldier (10, 10) - (11, 9) (WALKING_TO_TARGET, health: 6/6)");
     }
 
     @Test
@@ -394,12 +394,12 @@ public class TestToString {
         assertEquals(military.getRank(), Soldier.Rank.GENERAL_RANK);
 
         // Verify that the toString() method is correct
-        assertEquals(military.toString(), "General soldier (10, 10) (WALKING_TO_TARGET)");
+        assertEquals(military.toString(), "General soldier (10, 10) (WALKING_TO_TARGET, health: 7/7)");
 
         map.stepTime();
 
         assertFalse(military.isExactlyAtPoint());
-        assertEquals(military.toString(), "General soldier (10, 10) - (11, 9) (WALKING_TO_TARGET)");
+        assertEquals(military.toString(), "General soldier (10, 10) - (11, 9) (WALKING_TO_TARGET, health: 7/7)");
     }
 
     @Test

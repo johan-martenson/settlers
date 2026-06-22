@@ -1116,6 +1116,20 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
 
+            case SET_PLANK_QUOTAS -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
+                var constructionAmount = (Long) jsonBody.get("construction");
+                var shipyardAmount = (Long) jsonBody.get("shipyard");
+                var metalworksAmount = (Long) jsonBody.get("metalworks");
+
+                synchronized (map) {
+                    player.setConstructionPlankQuota(constructionAmount.intValue());
+                    player.setShipyardPlankQuota(shipyardAmount.intValue());
+                    player.setMetalworksPlankQuota(metalworksAmount.intValue());
+                }
+            }
+
             case GET_IRON_BAR_QUOTAS -> {
                 var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
                 var map = player.getMap();

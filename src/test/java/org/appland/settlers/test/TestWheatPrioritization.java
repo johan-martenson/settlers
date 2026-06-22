@@ -7,7 +7,6 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Brewer;
 import org.appland.settlers.model.actors.DonkeyBreeder;
 import org.appland.settlers.model.actors.Farmer;
@@ -27,7 +26,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.appland.settlers.model.Material.*;
 import static org.junit.Assert.*;
@@ -766,9 +764,9 @@ public class TestWheatPrioritization {
         Utils.occupyBuilding(new PigBreeder(player0, map), pigFarm0);
 
         // Set the quota to even distribution
-        player0.setFoodQuota(Mill.class, 1);
-        player0.setFoodQuota(DonkeyFarm.class, 1);
-        player0.setFoodQuota(PigFarm.class, 1);
+        player0.setWheatQuota(Mill.class, 1);
+        player0.setWheatQuota(DonkeyFarm.class, 1);
+        player0.setWheatQuota(PigFarm.class, 1);
 
         // Make sure the headquarters has no wheat
         Utils.adjustInventoryTo(headquarter0, WHEAT, 0);
@@ -1783,9 +1781,9 @@ public class TestWheatPrioritization {
         var farmer = Utils.occupyBuilding(new Farmer(player0, map), farm);
 
         // Set the quota to even distribution
-        player0.setFoodQuota(Mill.class, 1);
-        player0.setFoodQuota(DonkeyFarm.class, 1);
-        player0.setFoodQuota(PigFarm.class, 1);
+        player0.setWheatQuota(Mill.class, 1);
+        player0.setWheatQuota(DonkeyFarm.class, 1);
+        player0.setWheatQuota(PigFarm.class, 1);
 
         // Make sure the headquarters has no wheat and will not receive any
         Utils.adjustInventoryTo(headquarter0, WHEAT, 0);
