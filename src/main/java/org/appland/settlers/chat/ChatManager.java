@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ChatManager {
-    private static final Map<Player, ChatListener> playerChatListeners = new HashMap<>();
+    private static final Map<Player, List<ChatListener>> playerChatListeners = new HashMap<>();
     private static final Map<Player, List<ChatMessage>> playerChatHistory = new HashMap<>();
 
     private static final Map<GameMap, Collection<ChatListener>> gameChatListeners = new HashMap<>();
@@ -110,19 +110,27 @@ public class ChatManager {
                 .computeIfAbsent(to, p -> new ArrayList<>())
                 .add(chatMessage);
 
-        var listener = playerChatListeners.get(to);
+        var listeners = playerChatListeners.get(to);
 
-        if (listener != null) {
-            listener.newMessageForPlayer(chatMessage, to);
+        if (listeners != null) {
+            listeners.forEach(listener -> listener.newMessageForPlayer(chatMessage, to));
         }
     }
 
     public static void addMessageListenerForPlayer(Player player, ChatListener chatListener) {
-        playerChatListeners.put(player, chatListener);
+        playerChatListeners.computeIfAbsent(player, k -> new ArrayList<>()).add(chatListener);
     }
 
-    public static void removeMessageListenerForPlayer(Player player) {
-        playerChatListeners.remove(player);
+    public static void removeMessageListenerForPlayer(Player player, ChatListener chatListener) {
+        var listeners = playerChatListeners.get(player);
+
+        if (listeners != null) {
+            listeners.remove(chatListener);
+
+            if (listeners.isEmpty()) {
+                playerChatListeners.remove(player);
+            }
+        }
     }
 
     public static Collection<ChatMessage> getChatHistoryForPlayer(Player player) {

@@ -24,6 +24,7 @@ public class GameResources {
         games.remove(gameResource);
 
         listeners.forEach(listener -> listener.onGameListChanged(games));
+        listeners.forEach(listener -> listener.onGameRemoved(gameResource));
     }
 
     Collection<GameResource> getGames() {
@@ -40,6 +41,7 @@ public class GameResources {
 
     interface GameListListener {
         void onGameListChanged(Collection<GameResource> games);
+        void onGameRemoved(GameResource game);
     }
 
     GameResource getGameResource(GameMap map) {

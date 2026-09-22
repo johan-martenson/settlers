@@ -1,6 +1,5 @@
 package org.appland.settlers.rest.resource;
 
-import org.appland.settlers.computer.ChatPlayer;
 import org.appland.settlers.computer.CompositePlayer;
 import org.appland.settlers.computer.ComputerPlayer;
 import org.appland.settlers.maps.MapFile;
@@ -125,7 +124,7 @@ public class GameResource implements PlayerChangeListener {
         return this.resourceLevel;
     }
 
-    void setResource(ResourceLevel resourceLevel) {
+    void setResourceLevel(ResourceLevel resourceLevel) {
         this.resourceLevel = resourceLevel;
 
         notifyGameResourceListeners();

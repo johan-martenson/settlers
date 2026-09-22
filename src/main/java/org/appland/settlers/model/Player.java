@@ -801,6 +801,10 @@ public class Player {
         gameViewMonitors.add(monitor);
     }
 
+    public void stopMonitoringGameView(PlayerGameViewMonitor monitor) {
+        gameViewMonitors.remove(monitor);
+    }
+
     public boolean hasMonitor() {
         return !gameViewMonitors.isEmpty();
     }

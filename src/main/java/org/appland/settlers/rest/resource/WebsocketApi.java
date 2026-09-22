@@ -56,7 +56,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -68,7 +67,7 @@ import static org.appland.settlers.rest.resource.GameUtils.startGame;
  * WebSocket API endpoint for interacting with the game server.
  *
  * <h2>Concurrency and Synchronization Model</h2>
- *
+ * <p>
  * This class is accessed concurrently by multiple threads:
  * <ul>
  *   <li>WebSocket container threads invoking {@code @OnMessage}, {@code @OnOpen}, {@code @OnClose}, {@code @OnError}</li>
@@ -114,7 +113,7 @@ import static org.appland.settlers.rest.resource.GameUtils.startGame;
  * </ul>
  *
  * <h3>4. Listener Collections</h3>
- *
+ * <p>
  * The following collections are mutable and accessed from multiple threads:
  *
  * <ul>
@@ -175,7 +174,8 @@ public class WebsocketApi implements PlayerGameViewMonitor,
         ChatManager.ChatListener,
         StatisticsListener, PlayerChangeListener {
 
-    private final Map<Player, Session> playerToSession = new HashMap<>();
+    private final Map<Player, Set<Session>> playerToSessions = new HashMap<>();
+    private final Map<Session, Player> sessionToPlayer = new HashMap<>();
     private final JsonUtils jsonUtils = new JsonUtils(IdManager.idManager);
     private final JSONParser parser = new JSONParser();
     private final IdManager idManager = IdManager.idManager;
@@ -185,6 +185,8 @@ public class WebsocketApi implements PlayerGameViewMonitor,
     private final Map<String, Collection<Session>> chatRoomListeners = new HashMap<>();
     private final Map<GameMap, Set<Session>> statisticsListeners = new HashMap<>();
     private final Map<Player, Set<Session>> playerListeners = new HashMap<>();
+    private final Map<Session, Set<String>> detailedMonitoringIds = new HashMap<>();
+    private final Map<Session, Set<Player>> chatPlayerListeners = new HashMap<>();
 
     public WebsocketApi() {
         System.out.println("CREATED NEW WEBSOCKET MONITOR");
@@ -192,7 +194,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
     /**
      * Called when the given player receives a new chat message
-     *
+     * <p>
      * LOCKS HELD: ChatManager.class
      *
      * @param chatMessage
@@ -211,7 +213,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
     /**
      * Called when the given chat room receives a new chat message
-     *
+     * <p>
      * LOCKS HELD: ChatManager.class
      *
      * @param chatMessage
@@ -233,7 +235,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
     /**
      * Called when the game receives a new chat message. Translates the GameMap instance to a room id and sends the
      * message on to listening frontend instances.
-     *
+     * <p>
      * LOCKS HELD: ChatManager.class
      *
      * @param chatMessage
@@ -245,16 +247,18 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
         var roomId = "game-" + idManager.getId(GAME_RESOURCES.getGameResource(game));
 
-        chatRoomListeners.get(roomId).forEach(session -> sendToSession(session,
-                new JSONObject(Map.of(
-                        "type", "NEW_CHAT_MESSAGE",
-                        "chatMessage", jsonUtils.chatMessageToRoomToJson(chatMessage, roomId)
-                ))));
+        synchronized (chatRoomListeners) {
+            chatRoomListeners.get(roomId).forEach(session -> sendToSession(session,
+                    new JSONObject(Map.of(
+                            "type", "NEW_CHAT_MESSAGE",
+                            "chatMessage", jsonUtils.chatMessageToRoomToJson(chatMessage, roomId)
+                    ))));
+        }
     }
 
     /**
      * Called when the game resource changes. E.g. allow/disallow cheating
-     *
+     * <p>
      * LOCKS HELD: gameResource
      *
      * @param gameResource
@@ -285,7 +289,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
     /**
      * Called when the full list of games changes.
-     *
+     * <p>
      * LOCKS HELD: GAME_RESOURCES
      *
      * @param games
@@ -304,6 +308,15 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
             if (!gameListListeners.isEmpty()) {
                 games.forEach(gameResource -> gameResource.addChangeListener(this));
+            }
+        }
+    }
+
+    @Override
+    public void onGameRemoved(GameResource game) {
+        synchronized (gameInfoListeners) {
+            if (!gameInfoListeners.containsKey(game)) {
+                game.removeChangeListener(this);
             }
         }
     }
@@ -333,7 +346,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             }
 
             case ALLOW_MATERIAL -> {
-                var house  = (Storehouse) idManager.getObject((String) jsonBody.get("houseId"));
+                var house = (Storehouse) idManager.getObject((String) jsonBody.get("houseId"));
                 var material = jsonUtils.jsonToMaterial((String) jsonBody.get("material"));
 
                 synchronized (house.getMap()) {
@@ -360,35 +373,41 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             }
 
             case LISTEN_TO_PLAYER -> {
-                var playerToListenTo = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
 
                 synchronized (playerListeners) {
-                    if (!playerListeners.containsKey(playerToListenTo)) {
-                        playerListeners.put(playerToListenTo, new HashSet<>());
+                    if (!playerListeners.containsKey(player)) {
+                        playerListeners.put(player, new HashSet<>());
                     }
 
-                    if (playerListeners.get(playerToListenTo).isEmpty()) {
-                        playerToListenTo.addPlayerChangeListener(this);
+                    if (playerListeners.get(player).isEmpty()) {
+                        player.addPlayerChangeListener(this);
                     }
 
-                    playerListeners.get(playerToListenTo).add(session);
+                    playerListeners.get(player).add(session);
                 }
             }
 
             case STOP_LISTENING_TO_PLAYER -> {
-                var playerToListenTo = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
 
                 synchronized (playerListeners) {
-                    playerListeners.get(playerToListenTo).remove(session);
+                    var listeners = playerListeners.get(player);
 
-                    if (playerListeners.get(playerToListenTo).isEmpty()) {
-                        playerToListenTo.removePlayerChangeListener(this);
+                    if (listeners != null) {
+                        listeners.remove(session);
+
+                        if (listeners.isEmpty()) {
+                            playerListeners.remove(player);
+                            player.removePlayerChangeListener(this);
+                        }
                     }
                 }
             }
 
             case GET_TRANSPORT_PRIORITY -> {
                 var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+
                 synchronized (player.getMap()) {
                     sendToSession(session,
                             new JSONObject(Map.of(
@@ -399,12 +418,13 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             }
 
             case LISTEN_TO_STATISTICS -> {
-                var playerForStatistics = (Player) idManager.getObject((String) jsonBody.get("playerId"));
-                var map = playerForStatistics.getMap();
-                System.out.println("Listen to statistics for player " + playerForStatistics);
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
 
                 synchronized (map) {
-                    map.getStatisticsManager().addListener(this);
+                    if (statisticsListeners.getOrDefault(map, Set.of()).isEmpty()) {
+                        map.getStatisticsManager().addListener(this);
+                    }
                 }
 
                 synchronized (statisticsListeners) {
@@ -413,9 +433,8 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             }
 
             case STOP_LISTENING_TO_STATISTICS -> {
-                var playerForStatistics = (Player) idManager.getObject((String) jsonBody.get("playerId"));
-                var map =  playerForStatistics.getMap();
-                System.out.println("Stop listening to statistics for player " + playerForStatistics);
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
 
                 synchronized (map) {
                     var listeners = statisticsListeners.get(map);
@@ -424,6 +443,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                         listeners.remove(session);
 
                         if (listeners.isEmpty()) {
+                            statisticsListeners.remove(map);
                             map.getStatisticsManager().removeListener(this);
                         }
                     }
@@ -509,12 +529,12 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             }
 
             case DELETE_GAME -> {
-                var gameToDelete = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
-                GAME_RESOURCES.removeGame(gameToDelete);
+                var gameResource = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
+                GAME_RESOURCES.removeGame(gameResource);
             }
 
             case FIND_NEW_ROAD -> {
-                var player =  (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
                 var start = jsonUtils.jsonToPoint((JSONObject) jsonBody.get("from"));
                 var goal = jsonUtils.jsonToPoint((JSONObject) jsonBody.get("to"));
                 var map = player.getMap();
@@ -524,12 +544,8 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     avoid = jsonUtils.jsonToPointsSet((JSONArray) jsonBody.get("avoid"));
                 }
 
-                List<Point> possibleRoad;
-
                 synchronized (map) {
-                    possibleRoad = map.findAutoSelectedRoad(player, start, goal, avoid);
-
-                    System.out.println("Possible road: " + possibleRoad);
+                    var possibleRoad = map.findAutoSelectedRoad(player, start, goal, avoid);
 
                     sendToSession(session,
                             new JSONObject(Map.of(
@@ -550,7 +566,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             }
 
             case ATTACK_HOUSE -> {
-                var player =  (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
                 var house = (Building) idManager.getObject((String) jsonBody.get("houseId"));
                 var attackers = ((Long) jsonBody.get("attackers")).intValue();
                 var attackStrength = AttackStrength.valueOf((String) jsonBody.get("attackType"));
@@ -645,8 +661,16 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
             case LISTEN_TO_CHAT_MESSAGES -> {
                 if (jsonBody.containsKey("playerId")) {
+                    var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+
                     synchronized (ChatManager.class) {
-                        ChatManager.addMessageListenerForPlayer((Player) idManager.getObject((String) jsonBody.get("playerId")), this);
+                        ChatManager.addMessageListenerForPlayer(player, this);
+                    }
+
+                    synchronized (chatPlayerListeners) {
+                        chatPlayerListeners
+                                .computeIfAbsent(session, k -> new HashSet<>())
+                                .add(player);
                     }
                 }
 
@@ -675,8 +699,8 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
             case SEND_CHAT_MESSAGE_TO_ROOM -> {
                 var roomId = (String) jsonBody.get("roomId");
-                var chatMessageToRoom = (String) jsonBody.get("text");
-                var fromPlayer = (Player) idManager.getObject((String) jsonBody.get("from"));
+                var chatMessage = (String) jsonBody.get("text");
+                var player = (Player) idManager.getObject((String) jsonBody.get("from"));
 
                 // Sending to a game uses one API while sending to another room uses another API
                 // Messages to a game starts with "game-".
@@ -685,13 +709,13 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     var game = (GameResource) idManager.getObject(roomId.substring(5));
 
                     synchronized (ChatManager.class) {
-                        ChatManager.sendChatToGame(chatMessageToRoom, fromPlayer, game.getGameMap());
+                        ChatManager.sendChatToGame(chatMessage, player, game.getGameMap());
                     }
                 } else {
                     synchronized (ChatManager.class) {
                         ChatManager.sendChatToRoom(
                                 roomId,
-                                chatMessageToRoom,
+                                chatMessage,
                                 (Player) idManager.getObject((String) jsonBody.get("from"))
                         );
                     }
@@ -714,7 +738,13 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                         GAME_RESOURCES.addAddedAndRemovedGamesListener(this);
                     }
 
-                    GAME_RESOURCES.getGames().forEach(gameResource -> gameResource.addChangeListener(this));
+                    synchronized (gameInfoListeners) {
+                        GAME_RESOURCES.getGames().forEach(gameResource -> {
+                            if (!gameInfoListeners.containsKey(gameResource)) {
+                                gameResource.addChangeListener(this);
+                            }
+                        });
+                    }
                 }
             }
 
@@ -725,9 +755,11 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     if (gameListListeners.isEmpty()) {
                         GAME_RESOURCES.removeAddedAndRemovedGamesListener(this);
 
-                        GAME_RESOURCES.getGames().stream()
-                                .filter(gameResource -> !gameInfoListeners.containsKey(gameResource))
-                                .forEach(gameResource -> gameResource.removeChangeListener(this));
+                        synchronized (gameInfoListeners) {
+                            GAME_RESOURCES.getGames().stream()
+                                    .filter(gameResource -> !gameInfoListeners.containsKey(gameResource))
+                                    .forEach(gameResource -> gameResource.removeChangeListener(this));
+                        }
                     }
                 }
             }
@@ -757,13 +789,46 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
                 var map = player.getMap();
 
-                synchronized (playerToSession) {
-                    playerToSession.put(player, session);
+                var previousPlayer = (Player) null;
+
+                synchronized (sessionToPlayer) {
+                    previousPlayer = sessionToPlayer.get(session);
+
+                    sessionToPlayer.put(session, player);
+                }
+
+                var startMonitoring = false;
+
+                synchronized (playerToSessions) {
+
+                    // Clean up previous sessions for the previous player (if any)
+                    var sessionsForPreviousPlayer = playerToSessions.get(previousPlayer);
+
+                    if (sessionsForPreviousPlayer != null) {
+                        sessionsForPreviousPlayer.remove(session);
+
+                        if (sessionsForPreviousPlayer.isEmpty()) {
+                            playerToSessions.remove(previousPlayer);
+                            previousPlayer.stopMonitoringGameView(this);
+                        }
+                    }
+
+                    // Handle sessions for the new player
+                    var sessions = playerToSessions.computeIfAbsent(player, k -> new HashSet<>());
+
+                    if (sessions.isEmpty()) {
+                        startMonitoring = true;
+                    }
+
+                    sessions.add(session);
+                }
+
+                if (startMonitoring) {
+                    player.monitorGameView(this);
                 }
 
                 if (map != null) {
                     synchronized (map) {
-                        player.monitorGameView(this);
                         sendToSession(session,
                                 new JSONObject(Map.of(
                                         "requestId", jsonBody.get("requestId"),
@@ -771,7 +836,6 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                                 )));
                     }
                 } else {
-                    player.monitorGameView(this);
                     sendToSession(session,
                             new JSONObject(Map.of(
                                     "requestId", jsonBody.get("requestId")
@@ -783,30 +847,38 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
 
                 synchronized (gameInfoListeners) {
-                    gameInfoListeners.get(game).remove(session);
+                    var listeners = gameInfoListeners.get(game);
 
-                    if (gameInfoListeners.get(game).isEmpty()) {
-                        game.removeChangeListener(this);
+                    if (listeners != null) {
+                        listeners.remove(session);
+
+                        if (listeners.isEmpty()) {
+                            gameInfoListeners.remove(game);
+
+                            if (gameListListeners.isEmpty()) {
+                                game.removeChangeListener(this);
+                            }
+                        }
                     }
                 }
             }
 
             case CREATE_GAME -> {
-                var newGame = new GameResource(jsonUtils);
+                var gameResource = new GameResource(jsonUtils);
 
                 if (jsonBody.containsKey("players")) {
-                    newGame.setPlayers(jsonUtils.jsonToPlayers((JSONArray) jsonBody.get("players")));
+                    gameResource.setPlayers(jsonUtils.jsonToPlayers((JSONArray) jsonBody.get("players")));
                 }
 
                 if (jsonBody.containsKey("name")) {
-                    newGame.setName((String) jsonBody.get("name"));
+                    gameResource.setName((String) jsonBody.get("name"));
                 }
 
-                GAME_RESOURCES.addGame(newGame);
+                GAME_RESOURCES.addGame(gameResource);
 
                 sendToSession(session, new JSONObject(Map.of(
                         "requestId", jsonBody.get("requestId"),
-                        "gameInformation", jsonUtils.gameToJson(newGame)
+                        "gameInformation", jsonUtils.gameToJson(gameResource)
                 )));
             }
 
@@ -885,8 +957,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
             case REMOVE_PLAYER -> {
                 var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
-                var playerId = (String) jsonBody.get("playerId");
-                var player = (Player) idManager.getObject(playerId);
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
 
                 synchronized (game) {
                     game.removePlayer(player);
@@ -908,20 +979,20 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             }
 
             case ADD_PLAYER_TO_GAME -> {
-                var playerToAdd = (Player) idManager.getObject((String) jsonBody.get("playerId"));
-                var gameToAddPlayerTo = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
 
-                synchronized (gameToAddPlayerTo) {
-                    if (playerToAdd.getPlayerType() == PlayerType.COMPUTER) {
-                        gameToAddPlayerTo.addComputerPlayer(playerToAdd);
+                synchronized (game) {
+                    if (player.getPlayerType() == PlayerType.COMPUTER) {
+                        game.addComputerPlayer(player);
                     } else {
-                        gameToAddPlayerTo.addHumanPlayer(playerToAdd);
+                        game.addHumanPlayer(player);
                     }
 
                     sendToSession(session,
                             new JSONObject(Map.of(
                                     "requestId", jsonBody.get("requestId"),
-                                    "gameInformation", jsonUtils.gameToJson(gameToAddPlayerTo)
+                                    "gameInformation", jsonUtils.gameToJson(game)
                             )));
                 }
             }
@@ -933,6 +1004,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 synchronized (game) {
                     game.setOthersCanJoin(othersCanJoin);
 
+                    // FIXME: this results in sending the updated player twice
                     sendToSession(session,
                             new JSONObject(Map.of(
                                     "requestId", jsonBody.get("requestId"),
@@ -942,10 +1014,10 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             }
 
             case START_GAME -> {
-                var gameToStart = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
+                var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
 
-                synchronized (gameToStart) {
-                    startGame(gameToStart, gameTicker);
+                synchronized (game) {
+                    startGame(game, gameTicker);
                 }
             }
 
@@ -959,10 +1031,10 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
             case SET_INITIAL_RESOURCES -> {
                 var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
-                var resourceLevel = ResourceLevel.valueOf((String) jsonBody.get("resources"));
+                var resources = ResourceLevel.valueOf((String) jsonBody.get("resources"));
 
                 synchronized (game) {
-                    game.setResource(resourceLevel);
+                    game.setResourceLevel(resources);
                 }
             }
 
@@ -1098,10 +1170,10 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
             case SET_GAME_SPEED -> {
                 var game = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
-                var gameSpeed = GameSpeed.valueOf((String) jsonBody.get("speed"));
+                var speed = GameSpeed.valueOf((String) jsonBody.get("speed"));
 
                 synchronized (game) {
-                    game.setGameSpeed(gameSpeed);
+                    game.setGameSpeed(speed);
                 }
             }
 
@@ -1384,13 +1456,18 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             case START_DETAILED_MONITORING -> {
                 var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
                 var map = player.getMap();
-                var object = idManager.getObject((String) jsonBody.get("id"));
+                var id = (String) jsonBody.get("id");
+                var object = idManager.getObject(id);
                 var jsonPlayerViewChanges = new JSONObject();
 
                 var jsonUpdate = new JSONObject(Map.of(
                         "type", "PLAYER_VIEW_CHANGED",
                         "playerViewChanges", jsonPlayerViewChanges
                 ));
+
+                synchronized (detailedMonitoringIds) {
+                    detailedMonitoringIds.computeIfAbsent(session, k -> new HashSet<>()).add(id);
+                }
 
                 if (object instanceof Building building) {
                     synchronized (map) {
@@ -1418,13 +1495,28 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             case STOP_DETAILED_MONITORING -> {
                 var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
                 var map = player.getMap();
-                var monitoredObject = idManager.getObject((String) jsonBody.get("id"));
+                var id = (String) jsonBody.get("id");
+                var monitoredObject = idManager.getObject(id);
+
+                // FIXME: if two sessions monitor the same building, the first session closing will remove the building for both
+
+                synchronized (detailedMonitoringIds) {
+                    var ids = detailedMonitoringIds.get(session);
+
+                    if (ids != null) {
+                        ids.remove(id);
+
+                        if (ids.isEmpty()) {
+                            detailedMonitoringIds.remove(session);
+                        }
+                    }
+                }
 
                 synchronized (map) {
                     if (monitoredObject instanceof Building building) {
                         player.removeDetailedMonitoring(building);
-                    } else {
-                        player.removeDetailedMonitoring((Flag) monitoredObject);
+                    } else if (monitoredObject instanceof Flag flag) {
+                        player.removeDetailedMonitoring(flag);
                     }
                 }
             }
@@ -1504,8 +1596,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             case CALL_SCOUT -> {
                 var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
                 var map = player.getMap();
-                var jsonPoint = (JSONObject) jsonBody.get("point");
-                var point = jsonUtils.jsonToPoint(jsonPoint);
+                var point = jsonUtils.jsonToPoint((JSONObject) jsonBody.get("point"));
 
                 synchronized (map) {
                     var flag = map.getFlagAtPoint(point);
@@ -1516,8 +1607,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             case CALL_GEOLOGIST -> {
                 var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
                 var map = player.getMap();
-                var jsonPoint = (JSONObject) jsonBody.get("point");
-                var point = jsonUtils.jsonToPoint(jsonPoint);
+                var point = jsonUtils.jsonToPoint((JSONObject) jsonBody.get("point"));
 
                 synchronized (map) {
                     var flag = map.getFlagAtPoint(point);
@@ -1543,12 +1633,11 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             case PLACE_ROAD -> {
                 var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
                 var map = player.getMap();
-                var jsonRoadPoints = (JSONArray) jsonBody.get("road");
-                var roadPoints = jsonUtils.jsonToPoints(jsonRoadPoints);
+                var roadPoints = jsonUtils.jsonToPoints((JSONArray) jsonBody.get("road"));
 
                 synchronized (map) {
                     try {
-                        var road = map.placeRoad(player, roadPoints);
+                        map.placeRoad(player, roadPoints);
                     } catch (InvalidUserActionException e) {
                         System.out.printf("Refusing to place invalid road: %s", roadPoints);
                     }
@@ -1558,8 +1647,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             case PLACE_CONNECTION -> {
                 var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
                 var map = player.getMap();
-                var jsonRoadPoints = (JSONArray) jsonBody.get("points");
-                var roadPoints = jsonUtils.jsonToPoints(jsonRoadPoints);
+                var roadPoints = jsonUtils.jsonToPoints((JSONArray) jsonBody.get("points"));
 
                 synchronized (map) {
                     try {
@@ -1604,7 +1692,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
                 synchronized (map) {
                     try {
-                        var flag = map.placeFlag(player, flagPoint);
+                        map.placeFlag(player, flagPoint);
                     } catch (InvalidUserActionException e) {
                         throw new RuntimeException(e);
                     }
@@ -1667,8 +1755,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             }
 
             case REMOVE_ROAD -> {
-                var roadId = (String) jsonBody.get("id");
-                var road = (Road) idManager.getObject(roadId);
+                var road = (Road) idManager.getObject((String) jsonBody.get("id"));
                 var map = road.getPlayer().getMap();
 
                 try {
@@ -1681,8 +1768,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             }
 
             case REMOVE_FLAG -> {
-                var flagId = (String) jsonBody.get("id");
-                var flag = (Flag) idManager.getObject(flagId);
+                var flag = (Flag) idManager.getObject((String) jsonBody.get("id"));
                 var player = flag.getPlayer();
                 var map = player.getMap();
 
@@ -1696,8 +1782,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             }
 
             case REMOVE_BUILDING -> {
-                var buildingId = (String) jsonBody.get("id");
-                var building = (Building) idManager.getObject(buildingId);
+                var building = (Building) idManager.getObject((String) jsonBody.get("id"));
                 var player = building.getPlayer();
                 var map = player.getMap();
 
@@ -1760,92 +1845,181 @@ public class WebsocketApi implements PlayerGameViewMonitor,
     }
 
     private void sendToPlayer(JSONObject jsonMessage, Player player) {
-        playerToSession.get(player).getAsyncRemote().sendText(jsonMessage.toJSONString());
+        synchronized (playerToSessions) {
+            playerToSessions.get(player).forEach(session -> session.getAsyncRemote().sendText(jsonMessage.toString()));
+        }
     }
 
     @OnClose
     public void onClose(Session session) {
-        System.out.println(">> Websocket session closed.");
+        System.out.println(">> WEBSOCKET SESSION CLOSED.");
 
         // Remove the closed session
+        var stopListeningToGameList = false;
         synchronized (gameListListeners) {
             gameListListeners.remove(session);
+
+            if (gameListListeners.isEmpty()) {
+                GAME_RESOURCES.removeAddedAndRemovedGamesListener(this);
+                stopListeningToGameList = true;
+            }
         }
 
         synchronized (gameInfoListeners) {
-            gameInfoListeners.forEach((game, listeners) -> listeners.remove(session));
-
             var gamesToStopListeningTo = new ArrayList<GameResource>();
 
-            for (var entry : gameInfoListeners.entrySet()) {
-                if (entry.getValue().isEmpty()) {
-                    gamesToStopListeningTo.add(entry.getKey());
-                }
-            }
+            gameInfoListeners.forEach((game, listeners) -> {
+                listeners.remove(session);
 
-            gamesToStopListeningTo.forEach(game -> game.removeChangeListener(this));
-        }
-
-        synchronized (chatRoomListeners) {
-            chatRoomListeners.forEach((chatRoom, listeners) -> listeners.remove(session));
-
-            var roomsToStopListeningTo = new ArrayList<String>();
-
-            for (var entry : chatRoomListeners.entrySet()) {
-                if (entry.getValue().isEmpty()) {
-                    roomsToStopListeningTo.add(entry.getKey());
-                }
-            }
-
-            roomsToStopListeningTo.forEach(roomId -> {
-                ChatManager.removeMessageListenerForRoom(roomId, this);
-
-                if ((roomId).startsWith("game-")) {
-                    var game = ((GameResource) idManager.getObject((roomId).substring(5))).getGameMap();
-                    ChatManager.removeMessageListenerForGame(game, this);
+                if (listeners.isEmpty()) {
+                    gamesToStopListeningTo.add(game);
                 }
             });
+
+            gamesToStopListeningTo.forEach(game -> {
+                gameInfoListeners.remove(game);
+
+                if (gameListListeners.isEmpty()) {
+                    game.removeChangeListener(this);
+                }
+            });
+
+            if (stopListeningToGameList) {
+                GAME_RESOURCES.getGames().stream()
+                        .filter(game -> !gameInfoListeners.containsKey(game))
+                        .forEach(game -> game.removeChangeListener(this));
+            }
+        }
+
+        synchronized (ChatManager.class) {
+            synchronized (chatRoomListeners) {
+                var roomsToStopListeningTo = new ArrayList<String>();
+
+                chatRoomListeners.forEach((chatRoom, listeners) -> {
+                    listeners.remove(session);
+
+                    if (listeners.isEmpty()) {
+                        roomsToStopListeningTo.add(chatRoom);
+                    }
+                });
+
+                roomsToStopListeningTo.forEach(roomId -> {
+                    ChatManager.removeMessageListenerForRoom(roomId, this);
+
+                    if (roomId.startsWith("game-")) {
+                        var gameResource = (GameResource) idManager.getObject(roomId.substring(5));
+
+                        if (gameResource != null) {
+                            ChatManager.removeMessageListenerForGame(gameResource.getGameMap(), this);
+                        }
+                    }
+                });
+            }
         }
 
         synchronized (playerListeners) {
-            playerListeners.forEach((player, listeners) -> listeners.remove(session));
+            var playersToRemove = new ArrayList<Player>();
+
+            playerListeners.forEach((player, listeners) -> {
+                listeners.remove(session);
+
+                if (listeners.isEmpty()) {
+                    playersToRemove.add(player);
+                }
+            });
+
+            playersToRemove.forEach(player -> {
+                playerListeners.remove(player);
+                player.removePlayerChangeListener(this);
+            });
         }
 
-        synchronized (chatRoomListeners) {
-            chatRoomListeners.forEach((chatRoom, listeners) -> listeners.remove(session));
+        synchronized (statisticsListeners) {
+            var mapsToRemove = new ArrayList<GameMap>();
+
+            statisticsListeners.forEach((map, listeners) -> {
+                listeners.remove(session);
+
+                if (listeners.isEmpty()) {
+                    mapsToRemove.add(map);
+                }
+            });
+
+            mapsToRemove.forEach(map -> {
+                statisticsListeners.remove(map);
+                map.getStatisticsManager().removeListener(this);
+            });
         }
 
-        var playerForSession = (Player) null;
+        synchronized (detailedMonitoringIds) {
+            var ids = detailedMonitoringIds.remove(session);
 
-        synchronized (playerToSession) {
-            for (var entry : playerToSession.entrySet()) {
-                if (entry.getValue().equals(session)) {
-                    playerForSession = entry.getKey();
+            if (ids != null) {
+                ids.forEach(id -> {
+                    var object = idManager.getObject(id);
+
+                    switch (object) {
+                        case Building building -> building.getPlayer().removeDetailedMonitoring(building);
+                        case Flag flag -> flag.getPlayer().removeDetailedMonitoring(flag);
+                        default -> {
+                        }
+                    }
+                });
+            }
+        }
+
+        var player = (Player) null;
+        synchronized (sessionToPlayer) {
+            player = sessionToPlayer.remove(session);
+        }
+
+        Set<Player> playersToStopListeningTo;
+
+        synchronized (chatPlayerListeners) {
+            playersToStopListeningTo = chatPlayerListeners.remove(session);
+        }
+
+        if (playersToStopListeningTo != null) {
+            synchronized (ChatManager.class) {
+                playersToStopListeningTo.forEach(
+                        playerToStopListeningTo ->
+                                ChatManager.removeMessageListenerForPlayer(playerToStopListeningTo, this)
+                );
+            }
+        }
+
+        synchronized (playerToSessions) {
+            if (player != null) {
+                var sessions = playerToSessions.get(player);
+
+                if (sessions != null) {
+                    sessions.remove(session);
+
+                    if (sessions.isEmpty()) {
+                        playerToSessions.remove(player);
+
+                        player.stopMonitoringGameView(this);
+                    }
                 }
             }
-
-            if (playerForSession != null) {
-                playerToSession.remove(playerForSession);
-            }
         }
-
     }
 
     @OnError
     public void onError(Session session, Throwable throwable) {
-        System.out.println(">> Error in websocket session: " + throwable);
+        System.out.println(">> ERROR IN WEBSOCKET: " + throwable);
         System.out.println(throwable.getCause());
         System.out.println(Arrays.asList(throwable.getCause().getStackTrace()));
         System.out.println(throwable.getMessage());
         System.out.println(Arrays.toString(throwable.getStackTrace()));
 
-        // Remove the error session
+        // Cleaning up the session is handling in onClose
     }
 
     @OnOpen
     public void onOpen(Session session, EndpointConfig config) {
         System.out.println();
-        System.out.println(">> Websocket session opened.");
+        System.out.println(">> WEBSOCKET SESSION OPENED.");
     }
 
     void sendToSession(Session session, JSONObject jsonObject) {
@@ -1858,7 +2032,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
     /**
      * Called when the view of the game is changed for the given player.
-     *
+     * <p>
      * LOCKS HELD: map
      *
      * @param player
@@ -1869,27 +2043,23 @@ public class WebsocketApi implements PlayerGameViewMonitor,
         // Note: This will be called when the gameTicker runs map.stepTime() and synchronizes on the map.
         //       No part of gameMonitoringEventsToJson can use synchronization - this will cause a deadlock.
 
-        try {
-            var session = (Session) null;
-            synchronized (playerToSession) {
-                session = playerToSession.get(player);
-            }
-
-            if (session != null) {
-                sendToSession(session, new JSONObject(Map.of(
-                        "type", "PLAYER_VIEW_CHANGED",
-                        "playerViewChanges", jsonUtils.gameMonitoringEventToJson(gameChangesList, player)
-                )));
-            }
-        } catch (Exception e) {
-            System.out.println("Exception while sending updates to frontend: " + e);
-            e.printStackTrace();
+        synchronized (playerToSessions) {
+            playerToSessions.get(player).forEach(session -> {
+                try {
+                    sendToSession(session, new JSONObject(Map.of(
+                            "type", "PLAYER_VIEW_CHANGED",
+                            "playerViewChanges", jsonUtils.gameMonitoringEventToJson(gameChangesList, player)
+                    )));
+                } catch (InvalidUserActionException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
     }
 
     /**
      * Called when the statistics are changed for the given building.
-     *
+     * <p>
      * LOCKS HELD: map
      *
      * @param building
@@ -1914,7 +2084,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
     /**
      * Called when general statistics change.
-     *
+     * <p>
      * LOCKS HELD: map
      *
      * @param player
@@ -1938,9 +2108,9 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
     /**
      * Called when the player information changes. E.g. color, name, etc.
-     *
+     * <p>
      * LOCKS HELD: TBD
-     *
+     * <p>
      * TODO: define locking rule for changing player settings. Should they be protected by lock on map or player?
      *
      * @param player
