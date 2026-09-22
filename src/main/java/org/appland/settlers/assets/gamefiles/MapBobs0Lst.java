@@ -28,6 +28,10 @@ public class MapBobs0Lst {
     public static final ImageAndShadowIndex SMALL_BUSH_AND_SHADOW = new ImageAndShadowIndex(324, 382);
     public static final ImageAndShadowIndex CATTAIL_3_AND_SHADOW = new ImageAndShadowIndex(325, 383);
     public static final ImageAndShadowIndex CATTAIL_4_AND_SHADOW = new ImageAndShadowIndex(326, 384);
+
+    public static final ImageIndex HUMAN_SKELETON_FRESH = new ImageIndex(327);
+    public static final ImageIndex HUMAN_SKELETON_DECAYED = new ImageIndex(328);
+
     public static final ImageAndShadowIndex PORTAL_AND_SHADOW = new ImageAndShadowIndex(339, 394);
     public static final ImageAndShadowIndex SHINING_PORTAL_AND_SHADOW = new ImageAndShadowIndex(340, 395);
     public static final ImageAndShadowIndex BROWN_MUSHROOM_AND_SHADOW = new ImageAndShadowIndex(329, 385);
