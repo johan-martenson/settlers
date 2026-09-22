@@ -45,7 +45,11 @@ public class IdManager {
     }
 
     public void updateObject(Object oldObject, Object updatedObject) {
-        int id = objectToId.get(oldObject);
+        Integer id = objectToId.get(oldObject);
+
+        if (id == null) {
+            return;
+        }
 
         objectToId.remove(oldObject);
         idToObject.remove(id);

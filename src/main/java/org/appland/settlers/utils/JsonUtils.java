@@ -3,7 +3,6 @@ package org.appland.settlers.utils;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.chat.ChatManager;
 import org.appland.settlers.maps.MapFile;
-import org.appland.settlers.maps.MapLoader;
 import org.appland.settlers.maps.utils.GeometryMapping;
 import org.appland.settlers.model.BorderChange;
 import org.appland.settlers.model.Cargo;
@@ -46,6 +45,7 @@ import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.GoldMine;
 import org.appland.settlers.model.buildings.GraniteMine;
 import org.appland.settlers.model.buildings.GuardHouse;
+import org.appland.settlers.model.buildings.Harbor;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.HunterHut;
 import org.appland.settlers.model.buildings.IronMine;
@@ -105,7 +105,6 @@ import static org.appland.settlers.model.messages.Message.MessageType.*;
 
 public class JsonUtils {
     private final IdManager idManager;
-    private final MapLoader mapLoader = new MapLoader();
 
     public JsonUtils(IdManager idManager) {
         this.idManager = idManager;
@@ -222,7 +221,12 @@ public class JsonUtils {
         var color = jsonToPlayerColor((String) jsonPlayer.get("color"));
         var nation = Nation.valueOf((String) jsonPlayer.get("nation"));
 
-        return new Player(name, color, nation, PlayerType.HUMAN);
+        if (jsonPlayer.containsKey("type")) {
+            var playerType = PlayerType.valueOf((String) jsonPlayer.get("type"));
+            return new Player(name, color, nation, playerType);
+        } else {
+            return new Player(name, color, nation, PlayerType.HUMAN);
+        }
     }
 
     private PlayerColor jsonToPlayerColor(String colorName) {
@@ -416,7 +420,7 @@ public class JsonUtils {
     }
 
     public int jsonToInt(Object jsonValue) {
-        return jsonValue instanceof String ? Integer.parseInt((String) jsonValue) : ((Long) jsonValue).intValue();
+        return jsonValue instanceof String ? Integer.parseInt((String) jsonValue) : ((Number) jsonValue).intValue();
     }
 
     public Point jsonToPoint(JSONObject point) {
@@ -465,6 +469,7 @@ public class JsonUtils {
             case "LookoutTower" -> new LookoutTower(player);
             case "Metalworks" -> new Metalworks(player);
             case "Shipyard" -> new Shipyard(player);
+            case "Harbor" -> new Harbor(player);
             default -> {
                 System.out.println("DON'T KNOW HOW TO CREATE BUILDING " + buildingType);
                 System.exit(1);
@@ -903,10 +908,6 @@ public class JsonUtils {
 
         gameChangesList.upgradedBuildings().forEach(newAndOldBuilding -> {
             // Move the id to the new building
-            System.out.println("Old building: " + newAndOldBuilding.oldBuilding);
-            System.out.println("Id: " + idManager.getId(newAndOldBuilding.oldBuilding));
-            System.out.println("New building: " + newAndOldBuilding.newBuilding);
-
             idManager.updateObject(newAndOldBuilding.oldBuilding, newAndOldBuilding.newBuilding);
 
             // Tell the frontend that the house has changed
@@ -1091,6 +1092,7 @@ public class JsonUtils {
         }
 
         return new JSONObject(Map.of(
+                "id", idManager.getId(ship),
                 "state", ship.isUnderConstruction() ? "UNDER_CONSTRUCTION" : "READY",
                 "x", ship.getPosition().x,
                 "y", ship.getPosition().y,
@@ -1385,7 +1387,7 @@ public class JsonUtils {
 
                     return jsonWorkerWithNewTarget;
                 },
-                worker -> !(worker instanceof WildAnimal));
+                worker -> !(worker instanceof WildAnimal) && !(worker instanceof Ship));
     }
 
     private String workerTypeToJson(Worker worker) {
@@ -1432,7 +1434,7 @@ public class JsonUtils {
                 "direction", wildAnimal.getDirection().toCompassDirection().name().toUpperCase()
         ));
 
-        if (wildAnimal.getPlannedPath() != null && wildAnimal.getPlannedPath().isEmpty()) {
+        if (wildAnimal.getPlannedPath() != null && !wildAnimal.getPlannedPath().isEmpty()) {
             jsonWildAnimal.put("path", pointsToJson(wildAnimal.getPlannedPath()));
         }
 
@@ -1665,10 +1667,12 @@ public class JsonUtils {
         var jsonMapPoints = new JSONArray();
 
         var jsonMap = new JSONObject(Map.of(
-                "title", mapFile.getTitle(),
+                "id", idManager.getId(mapFile),
+                "name", mapFile.getTitle(),
                 "author", mapFile.getAuthor(),
                 "width", mapFile.getWidth(),
-                "maxNumberPlayers", mapFile.getMaxNumberOfPlayers(),
+                "height", mapFile.getHeight(),
+                "maxPlayers", mapFile.getMaxNumberOfPlayers(),
                 "terrain", mapFile.getTerrainType().name().toUpperCase(),
                 "startingPoints", toJsonArray(mapFile.getStartingPoints().stream()
                         .map(mapFilePoint -> GeometryMapping.mapFilePointToGamePoint(mapFilePoint, mapFile.getHeight()))
