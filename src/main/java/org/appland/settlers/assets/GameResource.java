@@ -4,6 +4,7 @@ import java.util.Optional;
 
 public abstract class GameResource {
     Optional<String> name = Optional.empty();
+    private int index;
 
     public abstract GameResourceType getType();
 
@@ -17,5 +18,13 @@ public abstract class GameResource {
 
     String getName() {
         return name.get();
+    }
+
+    public void setOriginIndex(int index) {
+        this.index = index;
+    }
+
+    public int getIndex() {
+        return index;
     }
 }
