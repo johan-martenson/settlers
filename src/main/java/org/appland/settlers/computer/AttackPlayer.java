@@ -1,5 +1,6 @@
 package org.appland.settlers.computer;
 
+import org.appland.settlers.computer.util.GamePlay;
 import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
@@ -57,7 +58,7 @@ public class AttackPlayer implements ComputerPlayer {
         switch (state) {
             case INITIAL_STATE -> state = State.LOOK_FOR_BUILDINGS_TO_ATTACK;
             case LOOK_FOR_BUILDINGS_TO_ATTACK -> {
-                var visibleOpponentBuildings = GamePlayUtils.findVisibleOpponentBuildings(map, player);
+                var visibleOpponentBuildings = GamePlay.findVisibleOpponentBuildings(map, player);
 
                 var buildingToAttack = findBuildingToAttack(visibleOpponentBuildings);
 

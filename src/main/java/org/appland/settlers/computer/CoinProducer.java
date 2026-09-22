@@ -1,9 +1,9 @@
 package org.appland.settlers.computer;
 
+import org.appland.settlers.computer.util.GamePlay;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Mint;
@@ -78,8 +78,8 @@ public class CoinProducer implements ComputerPlayer {
                     mints.add(mint);
 
                     // Connect the mint with the headquarter
-                    var road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, mint.getFlag().getPosition(), headquarter);
-                    GamePlayUtils.fillRoadWithFlags(map, road);
+                    var road = GamePlay.connectPointToBuilding(controlledPlayer, map, mint.getFlag().getPosition(), headquarter);
+                    GamePlay.fillRoadWithFlags(map, road);
 
                     state = State.WAITING_FOR_MINT;
                 }
@@ -136,6 +136,6 @@ public class CoinProducer implements ComputerPlayer {
      * @return true if at least one mint is ready, false otherwise.
      */
     boolean coinProductionDone() {
-        return GamePlayUtils.listContainsAtLeastOneReadyBuilding(mints);
+        return GamePlay.listContainsAtLeastOneReadyBuilding(mints);
     }
 }

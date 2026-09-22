@@ -1,15 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.appland.settlers.computer;
 
+import org.appland.settlers.computer.util.Placement;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerGameViewMonitor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.actors.Geologist;
 import org.appland.settlers.model.buildings.Building;
@@ -24,31 +23,50 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
+import static org.appland.settlers.computer.util.GamePlay.connectToBuildingByRoad;
+import static org.appland.settlers.computer.util.Placement.findBestPointForFlag;
 import static org.appland.settlers.model.Material.*;
 
 /**
  *
  * @author johan
  */
-public class SearchForMineralsPlayer implements ComputerPlayer {
+public class SearchForMineralsPlayer extends BasePlayer implements PlayerGameViewMonitor {
     private static final int RANGE_BETWEEN_FLAG_AND_POINT = 5;
     private static final int GEOLOGIST_WAIT_TIMEOUT = 200;
 
-    private final Player                 controlledPlayer;
-    private final Set<Point>             concludedPoints;
-    private final Set<Point>             pointsToInvestigate;
-    private final Map<Point, Material>   foundMinerals;
-    private final Map<Material, Integer> activeMines;
-    private final Countdown              countdown;
-    private final Set<Point>             unreachablePoints;
+    private final Set<Point>             concludedPoints     = new HashSet<>();
+    private final Set<Point>             pointsToInvestigate = new HashSet<>();
+    private final Map<Point, Material>   foundMinerals       = new HashMap<>();
+    private final Map<Material, Integer> activeMines         = new EnumMap<>(Material.class);
+    private final Countdown              countdown           = new Countdown();
+    private final Set<Point>             unreachablePoints   = new HashSet<>();
+    private final EventTrigger           eventTrigger;
 
-    private GameMap   map;
-    private State     state;
-    private Building  headquarter;
-    private Flag      geologistFlag;
-    private Geologist calledGeologist;
+    private State      state = State.INITIALIZING;
+    private Building   headquarter;
+    private Flag       geologistFlag = null;
+    private Geologist  calledGeologist;
+    private Set<Point> ownedLand = new HashSet<>();
+
+    @Override
+    public void onViewChangesForPlayer(Player player, GameChangesList gameChangesList) {
+
+        // Track newly found points to investigate
+        if (!gameChangesList.changedBorders().isEmpty()) {
+            player.getOwnedLand().stream()
+                    .filter(point -> !ownedLand.contains(point))
+                    .filter(point -> map.isOnMineableMountain(point))
+                    .forEach(pointsToInvestigate::add);
+
+            // Track the player's owned land
+            ownedLand.clear();
+            ownedLand.addAll(player.getOwnedLand());
+        }
+    }
 
     private enum State {
         INITIALIZING,
@@ -58,227 +76,190 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
         ALL_CURRENTLY_CONCLUDED
     }
 
-    public SearchForMineralsPlayer(Player player, GameMap m) {
-        controlledPlayer = player;
-        map              = m;
+    public SearchForMineralsPlayer(Player player, GameMap map, EventTrigger eventTrigger) {
+        super(map, player);
 
-        concludedPoints     = new HashSet<>();
-        pointsToInvestigate = new HashSet<>();
-        unreachablePoints   = new HashSet<>();
-        geologistFlag       = null;
-        foundMinerals       = new HashMap<>();
-        activeMines         = new EnumMap<>(Material.class);
+        this.eventTrigger = eventTrigger;
 
         activeMines.put(GOLD, 0);
         activeMines.put(IRON, 0);
         activeMines.put(COAL, 0);
         activeMines.put(STONE, 0);
-
-        countdown = new Countdown();
-
-        state = State.INITIALIZING;
     }
 
     @Override
     public void turn() throws Exception {
-        if (state == State.INITIALIZING) {
-            for (var building : controlledPlayer.getBuildings()) {
-                if (building instanceof Headquarter) {
-                    headquarter = building;
+        switch (state) {
+            case INITIALIZING -> {
 
-                    break;
+                // Ensure we have access to the map
+                map = map != null ? map : player.getMap();
+
+                if (map == null) {
+                    return;
                 }
-            }
 
-            if (headquarter != null) {
-                state = State.LOOKING_FOR_MINERALS;
-            }
-        } else if (state == State.LOOKING_FOR_MINERALS) {
-            lookForNewPointsToHandle();
+                // Find the headquarters
+                headquarter = map.getBuildings().stream()
+                        .filter(building -> building instanceof Headquarter)
+                        .filter(building -> Objects.equals(building.getPlayer(), this.player))
+                        .findFirst()
+                        .orElse(null);
 
-            // Update points to investigate
-            var noLongerValid = new LinkedList<Point>();
-
-            for (var p : pointsToInvestigate) {
-                if (!isAvailableForSign(p)) {
-                    noLongerValid.add(p);
+                if (headquarter != null) {
+                    state = State.LOOKING_FOR_MINERALS;
                 }
+
+                // Track the player's owned land
+                ownedLand.addAll(player.getOwnedLand());
+
+                pointsToInvestigate.addAll(ownedLand.stream()
+                        .filter(point -> map.isOnMineableMountain(point))
+                        .filter(this::isAvailableForSign)
+                        .toList());
+
+                // Listen to changes to the player
+                player.monitorGameView(this);
             }
 
-            noLongerValid.forEach(pointsToInvestigate::remove);
+            case LOOKING_FOR_MINERALS -> {
 
-            if (pointsToInvestigate.isEmpty()) {
-                System.out.println(" - Has investigated all available spots");
+                // Update points to investigate
+                var noLongerValid = pointsToInvestigate.stream()
+                        .filter(point -> !isAvailableForSign(point))
+                        .toList();
 
-                state = State.ALL_CURRENTLY_CONCLUDED;
-            } else {
+                noLongerValid.forEach(pointsToInvestigate::remove);
 
-                // Send out geologists if needed and possible
-                for (var p : pointsToInvestigate) {
+                if (pointsToInvestigate.isEmpty()) {
+                    System.out.println(" - Has investigated all available spots");
 
-                    // Skip un-reachable points
-                    if (unreachablePoints.contains(p)) {
-                        continue;
-                    }
+                    state = State.ALL_CURRENTLY_CONCLUDED;
+                } else {
 
-                    // Temporarily skip points if needed
-                    if (map.isBuildingAtPoint(p)) {
-                        continue;
-                    }
+                    // Send out geologists if needed and possible
+                    for (var p : pointsToInvestigate) {
 
-                    if (map.isTreeAtPoint(p)) {
-                        continue;
-                    }
+                        // Skip un-reachable points
+                        if (unreachablePoints.contains(p)) {
+                            continue;
+                        }
 
-                    if (map.isFlagAtPoint(p)) {
-                        continue;
-                    }
+                        // Skip points where no sign can be placed
+                        if (!isAvailableForSign(p)) {
+                            continue;
+                        }
 
-                    // Look for a suitable flag close to the point
-                    var flag = findFlagCloseBy(p);
+                        // Look for a suitable flag close to the point
+                        var flag = findFlagCloseBy(p);
 
-                    if (flag == null) {
+                        if (flag == null) {
+                            var flagPoint = findBestPointForFlag(
+                                    player,
 
-                        var flagPoint = findPointForFlagCloseBy(p);
+                                    // Preferred
+                                    Set.of(
+                                            new Placement.PlacementHeuristic(100, point ->
+                                            Integer.MAX_VALUE - GameUtils.distanceInGameSteps(point, p))),
 
-                        if (flagPoint != null) {
-                            flag = map.placeFlag(controlledPlayer, flagPoint);
+                                    // Required
+                                    Set.of()
+                            );
 
-                            // Build a road that connects with the headquarter
-                            var road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, flagPoint, headquarter);
+                            if (flagPoint != null) {
+                                flag = map.placeFlag(player, flagPoint);
 
-                            // Fill the road with flags
-                            GamePlayUtils.fillRoadWithFlags(map, road);
-                        } else {
-                            unreachablePoints.add(p);
+                                connectToBuildingByRoad(flagPoint, headquarter, player, 0.5);
+                            } else {
+                                unreachablePoints.add(p);
+                            }
+                        }
+
+                        if (flag != null) {
+                            state = State.LOOKING_FOR_GEOLOGIST;
+
+                            geologistFlag = flag;
+
+                            // Call two geologist to speed up search
+                            flag.callGeologist();
+                            flag.callGeologist();
+
+                            // Set a countdown for how long to wait for the geologist
+                            countdown.countFrom(GEOLOGIST_WAIT_TIMEOUT);
+
+                            break;
                         }
                     }
+                }
+            }
 
-                    if (flag != null) {
-                        state = State.LOOKING_FOR_GEOLOGIST;
+            case LOOKING_FOR_GEOLOGIST -> {
+                for (var w : map.getWorkers()) {
+                    if (! (w instanceof Geologist)) {
+                        continue;
+                    }
 
-                        geologistFlag = flag;
+                    if (w.getTarget().equals(geologistFlag.getPosition())) {
+                        calledGeologist = (Geologist)w;
 
-                        // Call two geologist to speed up search
-                        flag.callGeologist();
-                        flag.callGeologist();
-
-                        // Set a countdown for how long to wait for the geologist
-                        countdown.countFrom(GEOLOGIST_WAIT_TIMEOUT);
+                        state = State.WAITING_FOR_GEOLOGY_RESULTS;
 
                         break;
                     }
                 }
-            }
-        } else if (state == State.LOOKING_FOR_GEOLOGIST) {
-            for (var w : map.getWorkers()) {
 
-                if (! (w instanceof Geologist)) {
-                    continue;
-                }
+                if (countdown.hasReachedZero()) {
 
-                if (w.getTarget().equals(geologistFlag.getPosition())) {
-                    calledGeologist = (Geologist)w;
-
-                    state = State.WAITING_FOR_GEOLOGY_RESULTS;
-
-                    break;
+                    // Give up on waiting for the geologist if the timeout expired
+                    state = State.LOOKING_FOR_MINERALS;
+                } else {
+                    countdown.step();
                 }
             }
 
-            if (countdown.hasReachedZero()) {
+            case WAITING_FOR_GEOLOGY_RESULTS -> {
+                var newlyInvestigatedPoints = new LinkedList<Point>();
 
-                // Give up on waiting for the geologist if the timeout expired
-                state = State.LOOKING_FOR_MINERALS;
-            } else {
-                countdown.step();
-            }
-        } else if (state == State.WAITING_FOR_GEOLOGY_RESULTS) {
-            var newlyInvestigatedPoints = new LinkedList<Point>();
+                // Find any new results
+                for (var point : pointsToInvestigate) {
+                    if (!map.isSignAtPoint(point)) {
+                        continue;
+                    }
 
-            // Find any new results
-            for (var p : pointsToInvestigate) {
+                    var sign = map.getSignAtPoint(point);
 
-                if (!map.isSignAtPoint(p)) {
-                    continue;
+                    if (sign.getType() == null) {
+                        continue;
+                    }
+
+                    if (sign.getType() == GOLD) {
+                        eventTrigger.report(GamePlayEvent.FOUND_GOLD, player);
+                    }
+
+                    foundMinerals.put(point, sign.getType());
+
+                    newlyInvestigatedPoints.add(point);
+
+                    if (buildMineIfPossible(point, sign.getType())) {
+
+                        // Remove the flag as well from the list of points to investigate
+                        newlyInvestigatedPoints.add(point.downRight());
+                    }
                 }
 
-                var sign = map.getSignAtPoint(p);
+                concludedPoints.addAll(newlyInvestigatedPoints);
 
-                if (sign.getType() == null) {
-                    continue;
+                newlyInvestigatedPoints.forEach(pointsToInvestigate::remove);
+
+                if (calledGeologist.getTarget().equals(headquarter.getPosition())) {
+                    state = State.LOOKING_FOR_MINERALS;
                 }
-
-                foundMinerals.put(p, sign.getType());
-
-                newlyInvestigatedPoints.add(p);
-
-                if (buildMineIfPossible(p, sign.getType())) {
-
-                    // Remove the flag as well from the list of points to investigate
-                    newlyInvestigatedPoints.add(p.downRight());
-                }
-            }
-
-            concludedPoints.addAll(newlyInvestigatedPoints);
-
-            newlyInvestigatedPoints.forEach(pointsToInvestigate::remove);
-
-            if (calledGeologist.getTarget().equals(headquarter.getPosition())) {
-                state = State.LOOKING_FOR_MINERALS;
             }
         }
-    }
-
-    @Override
-    public void setMap(GameMap map) {
-        this.map = map;
-    }
-
-    private void lookForNewPointsToHandle() {
-        // Look for any new points to handle
-        for (var point : controlledPlayer.getOwnedLand()) {
-
-            if (concludedPoints.contains(point)) {
-                continue;
-            }
-
-            if (!map.isOnMineableMountain(point)) {
-                concludedPoints.add(point);
-
-                continue;
-            }
-
-            pointsToInvestigate.add(point);
-        }
-    }
-
-    @Override
-    public Player getControlledPlayer() {
-        return controlledPlayer;
-    }
-
-    private Point findPointForFlagCloseBy(Point point) {
-        for (var p : map.getPointsWithinRadius(point, RANGE_BETWEEN_FLAG_AND_POINT)) {
-
-            if (!map.isAvailableFlagPoint(controlledPlayer, p)) {
-                continue;
-            }
-
-            var hqFlagPoint = headquarter.getFlag().getPosition();
-            var connectPoint = GamePlayUtils.findConnectionToDestinationOrExistingRoad(controlledPlayer, map, p, hqFlagPoint);
-
-            if (connectPoint != null) {
-                return p;
-            }
-        }
-
-        return null;
     }
 
     private Flag findFlagCloseBy(Point point) {
         for (var p : map.getPointsWithinRadius(point, RANGE_BETWEEN_FLAG_AND_POINT)) {
-
             if (!map.isFlagAtPoint(p)) {
                 continue;
             }
@@ -293,22 +274,18 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
         return null;
     }
 
-    private boolean buildMineIfPossible(Point p, Material type) throws Exception {
-
-        if (map.isAvailableMinePoint(controlledPlayer, p)) {
-
-            Building mine = switch (type) {
-                case GOLD -> map.placeBuilding(new GoldMine(controlledPlayer), p);
-                case IRON -> map.placeBuilding(new IronMine(controlledPlayer), p);
-                case COAL -> map.placeBuilding(new CoalMine(controlledPlayer), p);
-                case STONE -> map.placeBuilding(new GraniteMine(controlledPlayer), p);
-                default -> throw new Exception("Cannot create mine to get " + type);
+    private boolean buildMineIfPossible(Point point, Material type) throws Exception {
+        if (map.isAvailableMinePoint(player, point)) {
+            switch (type) {
+                case GOLD -> map.placeBuilding(new GoldMine(player), point);
+                case IRON -> map.placeBuilding(new IronMine(player), point);
+                case COAL -> map.placeBuilding(new CoalMine(player), point);
+                case STONE -> map.placeBuilding(new GraniteMine(player), point);
+                default -> throw new Exception("Cannot create mine to get %s".formatted(type));
             };
 
             if (activeMines.get(type) == 0) {
-                var road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, p.downRight(), headquarter);
-
-                GamePlayUtils.fillRoadWithFlags(map, road);
+                connectToBuildingByRoad(point.downRight(), headquarter, player, 0.5);
 
                 activeMines.put(type, 1);
             }
@@ -324,60 +301,37 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
     }
 
     boolean hasCoalMine() {
-        return activeMines.containsKey(COAL) && activeMines.get(COAL) > 0;
+        return activeMines.getOrDefault(COAL, 0) > 0;
     }
 
     boolean hasIronMine() {
-        return activeMines.containsKey(IRON) && activeMines.get(IRON) > 0;
+        return activeMines.getOrDefault(IRON, 0) > 0;
     }
 
     boolean hasGoldMine() {
-        return activeMines.containsKey(GOLD) && activeMines.get(GOLD) > 0;
+        return activeMines.getOrDefault(GOLD, 0) > 0;
     }
 
     private boolean hasGraniteMine() {
-        return activeMines.containsKey(STONE) && activeMines.get(STONE) > 0;
+        return activeMines.getOrDefault(STONE, 0) > 0;
     }
 
     boolean hasMines() {
         return hasCoalMine() || hasIronMine() || hasGoldMine() || hasGraniteMine();
     }
 
-    private boolean isAvailableForSign(Point p) {
-
-        if (!map.isOnMineableMountain(p)) {
-            return false;
-        }
-
-        if (map.isBuildingAtPoint(p)) {
-            return false;
-        }
-
-        if (map.isCropAtPoint(p)) {
-            return false;
-        }
-
-        if (map.isFlagAtPoint(p)) {
-            return false;
-        }
-
-        if (map.isSignAtPoint(p)) {
-            return false;
-        }
-
-        if (map.isStoneAtPoint(p)) {
-            return false;
-        }
-
-        if (map.isTreeAtPoint(p)) {
-            return false;
-        }
-
-        return true;
+    private boolean isAvailableForSign(Point point) {
+        return map.isOnMineableMountain(point)
+                && !map.isBuildingAtPoint(point)
+                && !map.isCropAtPoint(point)
+                && !map.isFlagAtPoint(point)
+                && !map.isSignAtPoint(point)
+                && !map.isStoneAtPoint(point)
+                && !map.isTreeAtPoint(point)
+                && !map.isRoadAtPoint(point);
     }
 
     void scanForNewMinerals() {
-
         if (state != State.INITIALIZING) {
             state = State.LOOKING_FOR_MINERALS;
         }

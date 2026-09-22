@@ -5,6 +5,7 @@
  */
 package org.appland.settlers.computer;
 
+import org.appland.settlers.computer.util.GamePlay;
 import org.appland.settlers.model.buildings.CoalMine;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.GameMap;
@@ -33,7 +34,7 @@ import static org.appland.settlers.model.Material.WHEAT;
 /**
  * CompositePlayer controls the overall behavior of a computer player, coordinating different aspects like resource production, military management, and expansion.
  */
-public class CompositePlayer implements ComputerPlayer {
+public class CompositePlayer extends BasePlayer {
     private static final int PERIODIC_ENEMY_SCAN = 100;
     private static final int PERIODIC_SCAN_FOR_NEW_MINERALS = 30;
     private static final int PERIODIC_TRANSPORT_PRIORITY_REVIEW = 200;
@@ -43,7 +44,8 @@ public class CompositePlayer implements ComputerPlayer {
     private static final int PERIODIC_LAKE_SCAN = 40;
     private static final String AGGREGATED_EACH_STEP_TIME_GROUP = "COLLECT_EACH_TURN";
 
-    private final Player player;
+    private final EventTrigger eventTrigger;
+    private final ChatPlayer chatPlayer;
     private final ConstructionPreparationPlayer constructionPlayer;
     private final SearchForMineralsPlayer mineralsPlayer;
     private final FoodProducer foodPlayer;
@@ -54,10 +56,10 @@ public class CompositePlayer implements ComputerPlayer {
     private final Countdown countdown;
     private final Group collectEachStepTimeGroup;
     private final Stats stats;
-    private GameMap map;
     private ComputerPlayer previousPlayer;
     private ComputerPlayer currentPlayer;
     private int counter = 0;
+    private boolean firstTurn = true;
 
     /**
      * Constructs a CompositePlayer to manage different aspects of gameplay for the specified player and game map.
@@ -66,16 +68,17 @@ public class CompositePlayer implements ComputerPlayer {
      * @param map    The game map.
      */
     public CompositePlayer(Player player, GameMap map) {
-        this.player = player;
-        this.map = map;
+        super(map, player);
 
         countdown = new Countdown();
         stats = new Stats();
         collectEachStepTimeGroup = stats.createVariableGroupIfAbsent(AGGREGATED_EACH_STEP_TIME_GROUP);
 
         // Initialize the individual components of the composite player
+        eventTrigger = new EventTrigger(player);
+        chatPlayer = new ChatPlayer(player, eventTrigger);
         constructionPlayer = new ConstructionPreparationPlayer(player, map);
-        mineralsPlayer = new SearchForMineralsPlayer(player, map);
+        mineralsPlayer = new SearchForMineralsPlayer(player, map, eventTrigger);
         foodPlayer = new FoodProducer(player, map);
         coinPlayer = new CoinProducer(player, map);
         militaryProducer = new MilitaryProducer(player, map);
@@ -95,6 +98,9 @@ public class CompositePlayer implements ComputerPlayer {
     @Override
     public void turn() throws Exception {
         var duration = stats.measureOneShotDuration("CompositePlayer.turn");
+
+        // Run the event trigger
+        eventTrigger.turn();
 
         // Periodic tasks management
         if (counter > COUNTER_MAX) {
@@ -256,7 +262,7 @@ public class CompositePlayer implements ComputerPlayer {
             }
 
             // Look for enemies close by to attack
-            var enemyBuilding = GamePlayUtils.getCloseEnemyBuilding(player);
+            var enemyBuilding = GamePlay.getCloseEnemyBuilding(player);
 
             duration.after("Look for enemy buildings to attack");
 
