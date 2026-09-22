@@ -29,7 +29,7 @@ import static java.nio.ByteOrder.LITTLE_ENDIAN;
 
 public class LstDecoder {
 
-    private static boolean debug = false;
+    public static boolean debug = false;
 
     private static void debugPrint(String debugString) {
         if (debug) {
@@ -49,9 +49,7 @@ public class LstDecoder {
      */
     public static List<GameResource> loadLstFile(String filename, Palette defaultPalette) throws IOException, UnknownResourceTypeException, InvalidFormatException {
         var gameResources = new ArrayList<GameResource>();
-
         var streamReader = new ByteArrayReader(Files.newInputStream(Paths.get(filename)).readAllBytes(), LITTLE_ENDIAN);
-
         var palette = defaultPalette;
         int header = streamReader.getUint16();
 
@@ -106,6 +104,8 @@ public class LstDecoder {
                         case PALETTE_ANIM -> throw new RuntimeException("Todo: implement loading of animated palettes");
                         default -> throw new UnknownResourceTypeException("Can't handle resource type " + resourceType);
                     };
+
+                    gameResource.setOriginIndex((int) i);
 
                     if (gameResource.getType() == GameResourceType.PALETTE_RESOURCE) {
                         palette = ((PaletteResource) gameResource).getPalette();
