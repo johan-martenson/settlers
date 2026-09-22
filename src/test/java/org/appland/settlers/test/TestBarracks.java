@@ -19,7 +19,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.*;
+import static org.appland.settlers.model.actors.Rank.*;
 import static org.junit.Assert.*;
 
 /**
@@ -150,7 +150,7 @@ public class TestBarracks {
         // Wait for the military to reach the barracks
         assertEquals(military.getTarget(), barracks0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, barracks0.getPosition());
 
         assertTrue(military.isInsideBuilding());
     }
@@ -260,7 +260,7 @@ public class TestBarracks {
         assertTrue(player0.getBorderPoints().contains(point2));
         assertFalse(player0.getBorderPoints().contains(point3));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, barracks0.getPosition());
 
         assertTrue(player0.getBorderPoints().contains(point3));
         assertFalse(player0.getBorderPoints().contains(point2));
@@ -660,7 +660,7 @@ public class TestBarracks {
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
         // Occupy the road
-        var courier = Utils.occupyRoad(road0, map);
+        var courier = Utils.occupyRoad(road0);
 
         // Verify that promotions are enabled initially
         assertTrue(barracks0.isPromotionEnabled());
@@ -674,7 +674,7 @@ public class TestBarracks {
         assertFalse(barracks0.isPromotionEnabled());
 
         // Verify that no coins are delivered
-        Utils.verifyNoDeliveryOfMaterial(map, road0);
+        Utils.verifyNoDeliveryOfMaterial(road0);
     }
 
     @Test
@@ -701,7 +701,7 @@ public class TestBarracks {
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
         // Occupy the road
-        var courier = Utils.occupyRoad(road0, map);
+        var courier = Utils.occupyRoad(road0);
 
         // Disable coins to the barracks and verify that it doesn't need coins
         barracks0.disablePromotions();
@@ -709,7 +709,7 @@ public class TestBarracks {
         assertFalse(barracks0.needsMaterial(COIN));
 
         // Verify that no coins are delivered
-        Utils.verifyNoDeliveryOfMaterial(map, road0);
+        Utils.verifyNoDeliveryOfMaterial(road0);
 
         // Resume delivery of coins to the barracks
         barracks0.enablePromotions();
@@ -721,7 +721,7 @@ public class TestBarracks {
         assertTrue(barracks0.isPromotionEnabled());
 
         // Verify that a coin is delivered to the barracks
-        Utils.verifyDeliveryOfMaterial(map, road0);
+        Utils.verifyDeliveryOfMaterial(road0, COIN);
     }
 
     @Test
@@ -796,7 +796,7 @@ public class TestBarracks {
         assertEquals(military.getTarget(), headquarter0.getPosition());
         var amount = headquarter0.getAmount(PRIVATE);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(military, military.getTarget());
 
         assertTrue(military.isInsideBuilding());
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
@@ -836,7 +836,7 @@ public class TestBarracks {
         assertEquals(military.getTarget(), headquarter0.getPosition());
         var amount = headquarter0.getAmount(PRIVATE);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(military, military.getTarget());
 
         assertTrue(military.isInsideBuilding());
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
@@ -914,7 +914,7 @@ public class TestBarracks {
         assertEquals(military.getTarget(), headquarter0.getPosition());
         var amount = headquarter0.getAmount(PRIVATE);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(military, military.getTarget());
 
         assertTrue(military.isInsideBuilding());
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
@@ -965,7 +965,7 @@ public class TestBarracks {
         assertEquals(military.getTarget(), headquarter0.getPosition());
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, headquarter0.getPosition());
 
         // Verify that the military is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
@@ -1400,38 +1400,38 @@ public class TestBarracks {
         assertTrue(barracks0.needsMaterial(STONE));
 
         // Verify that the courier picks up a stone
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier0);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier0);
 
         assertEquals(courier0.getCargo().getMaterial(), STONE);
 
         // Verify that the courier delivers the stone
         assertEquals(courier0.getCargo().getTarget(), barracks0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier0, barracks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier0, barracks0.getPosition());
 
         assertNull(courier0.getCargo());
 
         // Verify that the courier picks up the second stone
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier0);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier0);
 
         assertEquals(courier0.getCargo().getMaterial(), STONE);
 
         // Verify that the courier delivers the stone
         assertEquals(courier0.getCargo().getTarget(), barracks0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier0, barracks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier0, barracks0.getPosition());
 
         assertNull(courier0.getCargo());
 
         // Verify that the courier picks up the third stone
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier0);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier0);
 
         assertEquals(courier0.getCargo().getMaterial(), STONE);
 
         // Verify that the courier delivers the stone
         assertEquals(courier0.getCargo().getTarget(), barracks0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier0, barracks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier0, barracks0.getPosition());
 
         assertNull(courier0.getCargo());
 
@@ -1987,34 +1987,34 @@ public class TestBarracks {
         Utils.constructHouse(barracks0);
 
         // Wait for a military to start walking to the barracks
-        var military = (Soldier) null;
+        var soldier = (Soldier) null;
         for (int i = 0; i < 1000; i++) {
             for (var worker : map.getWorkers()) {
                 if (worker instanceof Soldier && worker.getTarget().equals(barracks0.getPosition())) {
-                    military = (Soldier)worker;
+                    soldier = (Soldier)worker;
                     break;
                 }
             }
 
-            if (military != null) {
+            if (soldier != null) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertNotNull(military);
+        assertNotNull(soldier);
         assertTrue(Utils.getAmountMilitary(headquarter0) < originalAmount);
 
         // Evacuate the barracks
         barracks0.evacuate();
 
         // Wait for the military to reach the barracks
-        assertEquals(military.getTarget(), barracks0.getPosition());
+        assertEquals(soldier.getTarget(), barracks0.getPosition());
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 0);
         assertFalse(barracks0.isOccupied());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(soldier, barracks0.getPosition());
 
         assertTrue(barracks0.isOccupied());
 
@@ -2089,7 +2089,7 @@ public class TestBarracks {
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 0);
         assertFalse(barracks0.isOccupied());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, barracks0.getPosition());
 
         assertTrue(barracks0.isOccupied());
 

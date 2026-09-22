@@ -4,9 +4,11 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.PigFarm;
 import org.appland.settlers.model.buildings.Storehouse;
 
 import static org.appland.settlers.model.Material.*;
@@ -23,10 +25,10 @@ PigBreeder extends Worker {
     private static final int TIME_TO_PREPARE_PIG = 19;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
-    private State state = State.WALKING_TO_TARGET;
+    public State state = State.WALKING_TO_TARGET;
 
     private final Countdown countdown = new Countdown();
-    private final ProductivityMeasurer productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_FEED + TIME_TO_PREPARE_PIG, null);
+    private final org.appland.settlers.model.utils.ProductivityMeasurer productivityMeasurer = new org.appland.settlers.model.utils.ProductivityMeasurer();
 
     protected enum State {
         WALKING_TO_TARGET,
@@ -41,6 +43,8 @@ PigBreeder extends Worker {
         GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
         GOING_TO_DIE,
         DEAD,
+        RESTING_BEFORE_STARTING_FIRST_PRODUCTION_CYCLE,
+        WAITING_FOR_RESOURCES,
         RETURNING_TO_STORAGE
     }
 
@@ -54,24 +58,71 @@ PigBreeder extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) {
-        state = RESTING_IN_HOUSE;
+        if (state == WALKING_TO_TARGET) {
+            productivityMeasurer.reset();
+            state = State.RESTING_BEFORE_STARTING_FIRST_PRODUCTION_CYCLE;
+        } else {
+            state = RESTING_IN_HOUSE;
+        }
+
         countdown.countFrom(TIME_TO_REST);
-        productivityMeasurer.setBuilding(building);
+    }
+
+    @Override
+    public void stepTime() throws InvalidUserActionException {
+        super.stepTime();
+
+        productivityMeasurer.reportProductivity(
+                state == RESTING_IN_HOUSE ||
+                state == GOING_OUT_TO_FEED ||
+                state == FEEDING ||
+                state == GOING_BACK_TO_HOUSE_AFTER_FEEDING ||
+                state == PREPARING_PIG_FOR_DELIVERY ||
+                state == GOING_OUT_TO_PUT_CARGO ||
+                state == GOING_BACK_TO_HOUSE
+        );
+
+        if (home instanceof PigFarm pigFarm) {
+            pigFarm.setNumberOfPigs(productivityToNumberOfPigs());
+        }
+    }
+
+    private int productivityToNumberOfPigs() {
+        var productivity = productivityMeasurer.productivity();
+
+        if (productivity < 20) {
+            return 1;
+        } else if (productivity < 40) {
+            return 2;
+        } else if (productivity < 60) {
+            return 3;
+        } else if (productivity < 80) {
+            return 4;
+        } else {
+            return 5;
+        }
     }
 
     @Override
     protected void onIdle() {
         switch (state) {
-            case RESTING_IN_HOUSE -> {
+            case RESTING_IN_HOUSE, RESTING_BEFORE_STARTING_FIRST_PRODUCTION_CYCLE -> {
                 if (countdown.hasReachedZero() && home.isProductionEnabled()) {
                     if (home.getAmount(WATER) > 0 && home.getAmount(WHEAT) > 0) {
                         state = State.GOING_OUT_TO_FEED;
                         setOffroadTarget(home.getPosition().downRight());
                     } else {
-                        productivityMeasurer.reportUnproductivity();
+                        state = WAITING_FOR_RESOURCES;
                     }
                 } else if (home.isProductionEnabled()) {
                     countdown.step();
+                }
+            }
+
+            case WAITING_FOR_RESOURCES -> {
+                if (home.isProductionEnabled() && home.getAmount(WATER) > 0 && home.getAmount(WHEAT) > 0) {
+                    state = GOING_OUT_TO_FEED;
+                    setOffroadTarget(home.getPosition().downRight());
                 }
             }
 
@@ -89,8 +140,6 @@ PigBreeder extends Worker {
 
             case PREPARING_PIG_FOR_DELIVERY -> {
                 if (countdown.hasReachedZero()) {
-                    productivityMeasurer.reportProductivity();
-                    productivityMeasurer.nextProductivityCycle();
                     map.getStatisticsManager().pigGrown(player, map.getTime());
 
                     if (home.getFlag().hasPlaceForMoreCargo()) {
@@ -231,11 +280,7 @@ PigBreeder extends Worker {
 
     @Override
     public int getProductivity() {
-
-        // Measure productivity across the length of four rest-work periods
-        return (int)
-                (((double) productivityMeasurer.getSumMeasured() /
-                        (productivityMeasurer.getNumberOfCycles())) * 100);
+        return productivityMeasurer.productivity();
     }
 
     @Override

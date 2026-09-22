@@ -20,6 +20,7 @@ import org.appland.settlers.model.actors.Miner;
 import org.appland.settlers.model.actors.Minter;
 import org.appland.settlers.model.actors.PigBreeder;
 import org.appland.settlers.model.actors.Carpenter;
+import org.appland.settlers.model.actors.Rank;
 import org.appland.settlers.model.actors.Scout;
 import org.appland.settlers.model.actors.Shipwright;
 import org.appland.settlers.model.actors.Soldier;
@@ -285,17 +286,17 @@ public enum Material {
         return nameWithSpaces.toLowerCase();
     }
 
-    public boolean isMilitary() {
+    public boolean isSoldier() {
         return SOLDIERS.contains(this);
     }
 
-    public Soldier.Rank toRank() {
+    public Rank toRank() {
         return switch (this) {
-            case PRIVATE -> Soldier.Rank.PRIVATE_RANK;
-            case PRIVATE_FIRST_CLASS -> Soldier.Rank.PRIVATE_FIRST_CLASS_RANK;
-            case SERGEANT -> Soldier.Rank.SERGEANT_RANK;
-            case OFFICER -> Soldier.Rank.OFFICER_RANK;
-            case GENERAL -> Soldier.Rank.GENERAL_RANK;
+            case PRIVATE -> Rank.PRIVATE_RANK;
+            case PRIVATE_FIRST_CLASS -> Rank.PRIVATE_FIRST_CLASS_RANK;
+            case SERGEANT -> Rank.SERGEANT_RANK;
+            case OFFICER -> Rank.OFFICER_RANK;
+            case GENERAL -> Rank.GENERAL_RANK;
             default -> throw new InvalidGameLogicException("Can't translate " + this + " to rank");
         };
     }

@@ -22,7 +22,7 @@ import java.util.List;
 
 import static org.appland.settlers.model.PlayerColor.BLUE;
 import static org.appland.settlers.model.PlayerColor.GREEN;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 /**
@@ -1563,5 +1563,31 @@ public class TestGameMap {
         assertTrue(tiles.contains(Vegetation.DESERT_1));
         assertTrue(tiles.contains(Vegetation.DESERT_2));
         assertTrue(tiles.contains(Vegetation.WATER));
+    }
+
+    @Test
+    public void testCannotRemoveFlagTwice() throws InvalidUserActionException {
+
+        // Create new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 101);
+
+        // Place headquarters
+        var point0 = new Point(15, 15);
+        var headquarters = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place flag
+        var point1 = new Point(20, 20);
+        var flag0 = map.placeFlag(player0, point1);
+
+        // Remove the flag
+        map.removeFlag(flag0);
+
+        // Verify that it's not possible to remove the flag twice
+        try {
+            map.removeFlag(flag0);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
     }
 }

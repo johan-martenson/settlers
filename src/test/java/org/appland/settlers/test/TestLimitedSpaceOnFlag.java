@@ -1,18 +1,15 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.TransportCategory;
 import org.appland.settlers.model.actors.Courier;
-import org.appland.settlers.model.actors.Soldier;
-import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.actors.Rank;
 import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -22,8 +19,6 @@ import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
 import static org.junit.Assert.*;
@@ -97,10 +92,10 @@ public class TestLimitedSpaceOnFlag {
         // Wait for both roads to get their couriers assigned and standing idle
         var couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1);
 
-        Utils.waitForCouriersToBeIdle(map, couriers);
+        Utils.waitForCouriersToBeIdle(couriers);
 
         // Place eight cargos on the flag between the roads targeting the headquarter
-        Utils.placeCargos(map, WATER, 8, flag1, headquarter0);
+        Utils.placeCargos(WATER, 8, flag1, headquarter0);
 
         // Place two cargos on the other flag
         Utils.placeCargo(map, IRON, flag0, headquarter0);
@@ -111,13 +106,13 @@ public class TestLimitedSpaceOnFlag {
         assertEquals(road1.getCourier().getTarget(), flag1.getPosition());
         assertNull(road1.getCourier().getCargo());
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Wait for the courier for the short road to be one step away from the middle flag
         assertEquals(road1.getCourier().getTarget(), flag1.getPosition());
         assertNull(road1.getCourier().getCargo());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), flag1.getPosition().right());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), flag1.getPosition().right());
 
         // Verify that the courier waits because there is no space on the flag for more cargo
         assertEquals(flag1.getStackedCargo().size(), 8);
@@ -166,10 +161,10 @@ public class TestLimitedSpaceOnFlag {
         // Wait for both roads to get their couriers assigned and standing idle
         var couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1);
 
-        Utils.waitForCouriersToBeIdle(map, couriers);
+        Utils.waitForCouriersToBeIdle(couriers);
 
         // Place eight cargos on the flag between the roads targeting the headquarter
-        Utils.placeCargos(map, WATER, 8, flag1, headquarter0);
+        Utils.placeCargos(WATER, 8, flag1, headquarter0);
 
         // Place two cargos on the other flag
         Utils.placeCargo(map, IRON, flag0, headquarter0);
@@ -180,13 +175,13 @@ public class TestLimitedSpaceOnFlag {
         assertEquals(road1.getCourier().getTarget(), flag1.getPosition());
         assertNull(road1.getCourier().getCargo());
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Wait for the courier for the short road to be one step away from the middle flag
         assertEquals(road1.getCourier().getTarget(), flag1.getPosition());
         assertNull(road1.getCourier().getCargo());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), flag1.getPosition().right());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), flag1.getPosition().right());
 
         // Wait for the courier on the long road to deliver its cargo and come back to pick up the second cargo
         assertEquals(flag1.getStackedCargo().size(), 8);
@@ -215,7 +210,7 @@ public class TestLimitedSpaceOnFlag {
 
         assertEquals(road0.getCourier().getTarget(), flag1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), flag1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), flag1.getPosition());
 
         assertEquals(flag1.getStackedCargo().size(), 8);
         assertNull(road0.getCourier().getCargo());
@@ -257,10 +252,10 @@ public class TestLimitedSpaceOnFlag {
         // Wait for both roads to get their couriers assigned and standing idle
         var couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1, road2);
 
-        Utils.waitForCouriersToBeIdle(map, couriers);
+        Utils.waitForCouriersToBeIdle(couriers);
 
         // Place eight cargos on the flag between the roads targeting the headquarter
-        Utils.placeCargos(map, WATER, 7, flag1, headquarter0);
+        Utils.placeCargos(WATER, 7, flag1, headquarter0);
 
         // Place cargos on the other flags for the short roads
         Utils.placeCargo(map, IRON, flag0, headquarter0);
@@ -274,7 +269,7 @@ public class TestLimitedSpaceOnFlag {
         assertEquals(courierAtLongRoad.getTarget(), flag1.getPosition());
         assertNull(courierAtLongRoad.getCargo());
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         assertTrue(road1.getCourier().isExactlyAtPoint());
         assertEquals(road1.getCourier().getPosition(), flag2.getPosition());
@@ -285,7 +280,7 @@ public class TestLimitedSpaceOnFlag {
         assertEquals(road0.getCourier().getTarget(), flag1.getPosition());
         assertEquals(road1.getCourier().getTarget(), flag1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), flag1.getPosition().right());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), flag1.getPosition().right());
 
         assertTrue(road0.getCourier().isExactlyAtPoint());
         assertTrue(road1.getCourier().isExactlyAtPoint());
@@ -366,10 +361,10 @@ public class TestLimitedSpaceOnFlag {
         // Wait for both roads to get their couriers assigned and standing idle
         var couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1, road2);
 
-        Utils.waitForCouriersToBeIdle(map, couriers);
+        Utils.waitForCouriersToBeIdle(couriers);
 
         // Place eight cargos on the flag between the roads targeting the headquarter
-        Utils.placeCargos(map, WATER, 8, flag1, headquarter0);
+        Utils.placeCargos(WATER, 8, flag1, headquarter0);
 
         // Place cargos on the other flags for the short roads
         Utils.placeCargo(map, IRON, flag0, headquarter0);
@@ -383,7 +378,7 @@ public class TestLimitedSpaceOnFlag {
         assertEquals(courierAtLongRoad.getTarget(), flag1.getPosition());
         assertNull(courierAtLongRoad.getCargo());
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         assertTrue(road1.getCourier().isExactlyAtPoint());
         assertEquals(road1.getCourier().getPosition(), flag2.getPosition());
@@ -394,7 +389,7 @@ public class TestLimitedSpaceOnFlag {
         assertEquals(road0.getCourier().getTarget(), flag1.getPosition());
         assertEquals(road1.getCourier().getTarget(), flag1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), flag1.getPosition().right());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), flag1.getPosition().right());
 
         assertTrue(road0.getCourier().isExactlyAtPoint());
         assertTrue(road1.getCourier().isExactlyAtPoint());
@@ -496,10 +491,10 @@ public class TestLimitedSpaceOnFlag {
         // Wait for both roads to get their couriers assigned and standing idle
         var couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1, road2);
 
-        Utils.waitForCouriersToBeIdle(map, couriers);
+        Utils.waitForCouriersToBeIdle(couriers);
 
         // Place eight cargos on the flag between the roads targeting the headquarter
-        Utils.placeCargos(map, WATER, 8, flag1, headquarter0);
+        Utils.placeCargos(WATER, 8, flag1, headquarter0);
 
         // Place cargos on the other flags for the short roads
         Utils.placeCargo(map, IRON, flag0, headquarter0);
@@ -513,7 +508,7 @@ public class TestLimitedSpaceOnFlag {
         assertEquals(courierAtLongRoad.getTarget(), flag1.getPosition());
         assertNull(courierAtLongRoad.getCargo());
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         assertTrue(road1.getCourier().isExactlyAtPoint());
         assertEquals(road1.getCourier().getPosition(), flag2.getPosition());
@@ -524,7 +519,7 @@ public class TestLimitedSpaceOnFlag {
         assertEquals(road0.getCourier().getTarget(), flag1.getPosition());
         assertEquals(road1.getCourier().getTarget(), flag1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), flag1.getPosition().right());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), flag1.getPosition().right());
 
         assertTrue(road0.getCourier().isExactlyAtPoint());
         assertTrue(road1.getCourier().isExactlyAtPoint());
@@ -592,7 +587,7 @@ public class TestLimitedSpaceOnFlag {
         // Wait for the courier for the long road to pick up a cargo
         assertEquals(flag1.getStackedCargo().size(), 8);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courierAtLongRoad, flag1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courierAtLongRoad, flag1.getPosition());
 
         assertEquals(flag1.getStackedCargo().size(), 7);
 
@@ -601,7 +596,7 @@ public class TestLimitedSpaceOnFlag {
 
         assertEquals(courierWaiting.getTarget(), flag1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courierWaiting, flag1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courierWaiting, flag1.getPosition());
 
         assertNull(courierWaiting.getCargo());
         assertEquals(flag1.getStackedCargo().size(), 8);
@@ -637,13 +632,13 @@ public class TestLimitedSpaceOnFlag {
         for (int i = 0; i < 20; i++) {
 
             // Wait for the miller to come out carrying flour
-            Utils.fastForwardUntilWorkerCarriesCargo(map, mill.getWorker(), FLOUR);
+            Utils.fastForwardUntilWorkerCarriesCargo(mill.getWorker(), FLOUR);
 
             assertNotNull(mill.getWorker().getCargo());
             assertEquals(mill.getWorker().getCargo().getMaterial(), FLOUR);
 
             // Wait for the miller to leave the flour at the flag
-            Utils.fastForwardUntilWorkerReachesPoint(map, mill.getWorker(), mill.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(mill.getWorker(), mill.getFlag().getPosition());
 
             assertNull(mill.getWorker().getCargo());
         }
@@ -676,16 +671,16 @@ public class TestLimitedSpaceOnFlag {
         var road1 = map.placeAutoSelectedRoad(player0, flag0, mill.getFlag());
 
         // Wait for the first road to get assigned a courier
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road0);
 
         // Wait for the courier to carry cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier);
 
         // Fill up the flag to make it impossible for the courier to put down the cargo
-        Utils.placeCargos(map, STONE, 8, flag0, headquarter);
+        Utils.placeCargos(STONE, 8, flag0, headquarter);
 
         // Wait for the courier to stop, unable to put down the cargo
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition().left());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, flag0.getPosition().left());
 
         assertEquals(flag0.getStackedCargo().size(), 8);
         assertTrue(courier.isExactlyAtPoint());
@@ -704,14 +699,14 @@ public class TestLimitedSpaceOnFlag {
         var road3 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mill.getFlag());
 
         // Wait for a courier to get assigned to the new road
-        var courier1 = Utils.waitForRoadToGetAssignedCourier(map, road3);
+        var courier1 = Utils.waitForRoadToGetAssignedCourier(road3);
 
         // Verify that the new courier picks up the cargo waiting and delivers it to the mill
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier1);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier1);
 
         assertEquals(courier1.getPosition(), headquarter.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier1, mill.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier1, mill.getPosition());
 
         assertNull(courier1.getCargo());
     }
@@ -740,7 +735,7 @@ public class TestLimitedSpaceOnFlag {
         Utils.constructHouse(fortress0);
 
         // Occupy the fortress
-        Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(Rank.PRIVATE_RANK, fortress0);
 
         // Place sawmill connected directly to the flag
         var mill = map.placeBuilding(new Mill(player0), flag0.getPosition().upLeft());
@@ -797,10 +792,10 @@ public class TestLimitedSpaceOnFlag {
         Utils.waitForNonMilitaryBuildingsToGetPopulated(mill, woodcutter0, foresterHut0, woodcutter1, foresterHut1, woodcutter2, foresterHut2);
 
         // Put some initial load on the flag
-        Utils.placeCargos(map, GOLD, 7, flag0, headquarter);
-        Utils.placeCargos(map, GOLD, 7, woodcutter0.getFlag(), headquarter);
-        Utils.placeCargos(map, GOLD, 7, woodcutter1.getFlag(), headquarter);
-        Utils.placeCargos(map, GOLD, 7, woodcutter2.getFlag(), headquarter);
+        Utils.placeCargos(GOLD, 7, flag0, headquarter);
+        Utils.placeCargos(GOLD, 7, woodcutter0.getFlag(), headquarter);
+        Utils.placeCargos(GOLD, 7, woodcutter1.getFlag(), headquarter);
+        Utils.placeCargos(GOLD, 7, woodcutter2.getFlag(), headquarter);
 
         // Make wood the highest priority to transport
         player0.setTransportPriority(0, TransportCategory.WHEAT);
@@ -815,7 +810,7 @@ public class TestLimitedSpaceOnFlag {
         //Utils.waitForCouriersToGetBlocked(map, road6.getCourier(), road3.getCourier(), road4.getCourier(), road5.getCourier());
 
         // Wait for the flag to get full of cargos
-        Utils.waitForFlagToGetStackedCargo(map, flag0, 8);
+        Utils.waitForFlagToGetStackedCargo(flag0, 8);
 
         // Verify that the flag stays full of cargos and that the amount of cargos stays at the limit
         for (int i = 0; i < 400; i++) {

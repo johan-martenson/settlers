@@ -44,42 +44,61 @@ public class BbmDecoder {
                 throw new InvalidFormatException(String.format("Must match 'FORM'. Not %s", header));
             }
 
+            debugPrint("Header is valid");
+
             long length = streamReader.getUint32();
+
+            debugPrint("Length is " + length);
 
             var pbm = streamReader.getUint8ArrayAsString(4);
             if (!pbm.equals("PBM ")) {
                 throw new InvalidFormatException(String.format("Must match 'PBM '. Not %s", pbm));
             }
 
+            debugPrint("PBM is valid");
+
             // Read the palettes
             var palettes = new ArrayList<GameResource>();
             long i = 0;
 
             // Read chunks until EOF
-            while (!streamReader.isEof()) {
-                var chunkId = streamReader.getUint8ArrayAsString(4);
+            debugPrint("Reading chunks");
+            try {
+                var read = 0;
 
-                if (chunkId.equals("CMAP")) {
-                    length = streamReader.getUint32();
+                while (read < length) {
+                    debugPrint("\nNext chunk");
 
-                    // Adjust for odd length
-                    if ((length & 1) == 1) {
-                        length = length + 1;
+                    var chunkId = streamReader.getUint8ArrayAsString(4);
+                    read += 4;
+                    debugPrint("Chunk id is " + chunkId);
+
+                    if (chunkId.equals("CMAP")) {
+                        var paletteLength = streamReader.getUint32();
+                        read += 4;
+
+                        // Ensure the length is even
+                        if ((paletteLength & 1) == 1) {
+                            paletteLength = paletteLength + 1;
+                        }
+
+                        if (paletteLength != PALETTE_LENGTH) {
+                            throw new InvalidFormatException(String.format("Length must match %d. Not %d", PALETTE_LENGTH, paletteLength));
+                        }
+
+                        var palette = Palette.loadPalette(streamReader, false);
+                        int lastSeparator = filename.lastIndexOf("/");
+
+                        palette.setName(String.format("%s(%d)", filename.substring(lastSeparator + 1), i));
+                        debugPrint("Loaded palette " + palette.getName());
+                        palettes.add(new PaletteResource(palette));
+
+                        i++;
+                    } else {
+                        debugPrint("Unknown chunk id " + chunkId);
                     }
-
-                    if (length != PALETTE_LENGTH) {
-                        throw new InvalidFormatException(String.format("Length must match %d. Not %d", PALETTE_LENGTH, length));
-                    }
-
-                    var palette = Palette.loadPalette(streamReader, false);
-                    int lastSeparator = filename.lastIndexOf("/");
-
-                    palette.setName(String.format("%s(%d)", filename.substring(lastSeparator + 1), i));
-                    palettes.add(new PaletteResource(palette));
-
-                    i++;
                 }
-            }
+            } catch (IOException e) { }
 
             return palettes;
         }

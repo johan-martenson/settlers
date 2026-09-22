@@ -1,5 +1,7 @@
 package org.appland.settlers.model;
 
+import org.appland.settlers.model.actors.Rank;
+import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Harbor;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -18,10 +20,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
 import static java.lang.String.format;
 import static org.appland.settlers.model.Direction.*;
-import static org.appland.settlers.model.Material.*;
+import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.utils.Search.*;
 
 /**
@@ -328,11 +330,11 @@ public class GameUtils {
 
         for (int i = 0; i < currentMilitary; i++) {
 
-            // Move one military from the old to the new building
-            var military = fromBuilding.retrieveHostedSoldier();
+            // Move one soldier from the old to the new building
+            var soldier = fromBuilding.retrieveHostedSoldierForDefense();
 
-            upgraded.promiseSoldier(military);
-            military.enterBuilding(upgraded);
+            upgraded.promiseSoldier(soldier);
+            soldier.enterBuilding(upgraded);
         }
 
         // Make sure the border is updated only once
@@ -508,11 +510,12 @@ public class GameUtils {
      * Represents a point and its estimated cost for pathfinding.
      * Used in priority queues for pathfinding algorithms.
      */
+    // TODO: change this to a record
     public static class PointAndCost implements Comparable<PointAndCost> {
         public final Point point;
-        private final int cost;
+        public final double cost;
 
-        public PointAndCost(Point point, int cost) {
+        public PointAndCost(Point point, double cost) {
             this.point = point;
             this.cost = cost;
         }
@@ -520,12 +523,20 @@ public class GameUtils {
         // TODO: align with implementation of equals to make them consistent!
         @Override
         public int compareTo(PointAndCost pointAndCost) {
-            return Integer.compare(this.cost, pointAndCost.cost);
+            return Double.compare(this.cost, pointAndCost.cost);
         }
 
         @Override
         public String toString() {
             return format("Point: %s, cost: %d", point, cost);
+        }
+
+        public double cost() {
+            return this.cost;
+        }
+
+        public Point point() {
+            return this.point;
         }
     }
 
@@ -971,5 +982,20 @@ public class GameUtils {
         public boolean isStorehouse() {
             return building != null && building.isStorehouse();
         }
+    }
+
+    public static Set<Soldier> createSoldiersForStorehouse(Rank rank, int amount, Player player, Building home) {
+        var soldiers = new HashSet<Soldier>();
+
+        for (int i = 0; i < amount; i++) {
+            var soldier = new Soldier(player, rank, player.getMap());
+
+            soldier.setHome(home);
+            soldier.setPosition(home.getPosition());
+
+            soldiers.add(soldier);
+        }
+
+        return soldiers;
     }
 }

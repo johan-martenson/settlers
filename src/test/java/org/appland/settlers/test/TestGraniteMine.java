@@ -8,6 +8,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -30,7 +31,7 @@ import java.util.LinkedList;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.SMALL;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.*;
 
@@ -492,13 +493,13 @@ public class TestGraniteMine {
         assertEquals(miner.getTarget(), mine.getFlag().getPosition());
         assertTrue(mine.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, mine.getFlag().getPosition());
 
         assertNull(miner.getCargo());
         assertFalse(mine.getFlag().getStackedCargo().isEmpty());
         assertEquals(miner.getTarget(), mine.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, mine.getPosition());
 
         assertTrue(miner.isInsideBuilding());
     }
@@ -542,18 +543,18 @@ public class TestGraniteMine {
         Utils.waitForNonMilitaryBuildingsToGetPopulated(graniteMine);
 
         // Wait for the courier on the road between the mint and the granite mine hut to have a stone cargo
-        Utils.waitForFlagToGetStackedCargo(map, graniteMine.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(graniteMine.getFlag(), 1);
 
         assertEquals(graniteMine.getFlag().getStackedCargo().getFirst().getMaterial(), STONE);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that the courier delivers the granite to the mint (and not the headquarters)
         assertEquals(graniteMine.getAmount(STONE), 0);
         assertTrue(mint.needsMaterial(STONE));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), mint.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), mint.getPosition());
 
         assertEquals(mint.getAmount(STONE), 1);
     }
@@ -605,12 +606,12 @@ public class TestGraniteMine {
         // Wait for the courier on the road between the storehouse and the granite mine to have a plank cargo
         Utils.deliverCargo(graniteMine, BREAD);
 
-        Utils.waitForFlagToGetStackedCargo(map, graniteMine.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(graniteMine.getFlag(), 1);
 
         assertEquals(graniteMine.getFlag().getStackedCargo().getFirst().getMaterial(), STONE);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters
         assertEquals(headquarter.getAmount(STONE), 0);
@@ -618,7 +619,7 @@ public class TestGraniteMine {
         assertFalse(storehouse.needsMaterial(STONE));
         assertTrue(storehouse.isUnderConstruction());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
         assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(STONE));
@@ -672,12 +673,12 @@ public class TestGraniteMine {
         // Wait for the flag on the road between the storehouse and the granite mine to have a stone cargo
         Utils.deliverCargo(graniteMine, BREAD);
 
-        Utils.waitForFlagToGetStackedCargo(map, graniteMine.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(graniteMine.getFlag(), 1);
 
         assertEquals(graniteMine.getFlag().getStackedCargo().getFirst().getMaterial(), STONE);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that no stone is delivered from the headquarters
         Utils.adjustInventoryTo(headquarter, STONE, 1);
@@ -771,11 +772,11 @@ public class TestGraniteMine {
         // Wait for the miner to leave the granite at the flag
         assertEquals(miner.getTarget(), mine.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, mine.getFlag().getPosition());
 
         assertNull(miner.getCargo());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, mine.getPosition());
 
         assertTrue(miner.isInsideBuilding());
 
@@ -975,12 +976,12 @@ public class TestGraniteMine {
         for (int i = 0; i < 3; i++) {
 
             // Wait for the miner to produce ore
-            Utils.fastForwardUntilWorkerCarriesCargo(map, miner, STONE);
+            Utils.fastForwardUntilWorkerCarriesCargo(miner, STONE);
 
             // Wait for the miner to leave the ore at the flag
             assertEquals(miner.getTarget(), mine.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(miner, mine.getFlag().getPosition());
 
             assertNull(miner.getCargo());
         }
@@ -1035,7 +1036,7 @@ public class TestGraniteMine {
         assertEquals(miner.getTarget(), graniteMine0.getFlag().getPosition());
         assertTrue(graniteMine0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, graniteMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, graniteMine0.getFlag().getPosition());
 
         assertNull(miner.getCargo());
         assertFalse(graniteMine0.getFlag().getStackedCargo().isEmpty());
@@ -1043,7 +1044,7 @@ public class TestGraniteMine {
         // Wait for the worker to go back to the granite mine
         assertEquals(miner.getTarget(), graniteMine0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, graniteMine0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, graniteMine0.getPosition());
 
         // Wait for the worker to rest and produce another cargo
         Utils.fastForward(150, map);
@@ -1053,7 +1054,7 @@ public class TestGraniteMine {
         // Verify that the second cargo is put at the flag
         assertEquals(miner.getTarget(), graniteMine0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, graniteMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, graniteMine0.getFlag().getPosition());
 
         assertNull(miner.getCargo());
         assertEquals(graniteMine0.getFlag().getStackedCargo().size(), 2);
@@ -1105,7 +1106,7 @@ public class TestGraniteMine {
         assertEquals(miner.getTarget(), graniteMine0.getFlag().getPosition());
         assertTrue(graniteMine0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, graniteMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, graniteMine0.getFlag().getPosition());
 
         assertNull(miner.getCargo());
         assertFalse(graniteMine0.getFlag().getStackedCargo().isEmpty());
@@ -1135,14 +1136,14 @@ public class TestGraniteMine {
         assertNotEquals(courier.getTarget(), graniteMine0.getFlag().getPosition());
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         // Verify that the courier walks to pick up the cargo
         map.stepTime();
 
         assertEquals(courier.getTarget(), graniteMine0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         // Verify that the courier has picked up the cargo
         assertNotNull(courier.getCargo());
@@ -1153,7 +1154,7 @@ public class TestGraniteMine {
 
         var amount = headquarter0.getAmount(STONE);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
         // Verify that the courier has delivered the cargo to the headquarter
         assertNull(courier.getCargo());
@@ -1200,7 +1201,7 @@ public class TestGraniteMine {
 
         var amount = headquarter0.getAmount(MINER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, headquarter0.getPosition());
 
         // Verify that the miner is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(MINER), amount + 1);
@@ -1300,14 +1301,14 @@ public class TestGraniteMine {
         Utils.fastForward(100, map);
 
         // Wait for the miner to produce cargo
-        Utils.fastForwardUntilWorkerProducesCargo(map, miner);
+        Utils.fastForwardUntilWorkerProducesCargo(miner);
 
         assertEquals(miner.getCargo().getMaterial(), STONE);
 
         // Wait for the worker to deliver the cargo
         assertEquals(miner.getTarget(), graniteMine0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, graniteMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, graniteMine0.getFlag().getPosition());
 
         // Stop production and verify that no stone is produced
         graniteMine0.stopProduction();
@@ -1364,14 +1365,14 @@ public class TestGraniteMine {
         Utils.fastForward(100, map);
 
         // Wait for the miner to produce stone
-        Utils.fastForwardUntilWorkerProducesCargo(map, miner);
+        Utils.fastForwardUntilWorkerProducesCargo(miner);
 
         assertEquals(miner.getCargo().getMaterial(), STONE);
 
         // Wait for the worker to deliver the cargo
         assertEquals(miner.getTarget(), graniteMine0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, graniteMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, graniteMine0.getFlag().getPosition());
 
         // Stop production
         graniteMine0.stopProduction();
@@ -1387,7 +1388,7 @@ public class TestGraniteMine {
 
         assertTrue(graniteMine0.isProductionEnabled());
 
-        Utils.fastForwardUntilWorkerProducesCargo(map, miner);
+        Utils.fastForwardUntilWorkerProducesCargo(miner);
 
         assertNotNull(miner.getCargo());
     }
@@ -1534,7 +1535,7 @@ public class TestGraniteMine {
         assertNotNull(miner);
         assertEquals(miner.getTarget(), graniteMine0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1545,14 +1546,14 @@ public class TestGraniteMine {
         map.removeRoad(road1);
 
         // Verify that the miner continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, flag0.getPosition());
 
         assertEquals(miner.getPosition(), flag0.getPosition());
 
         // Verify that the miner returns to the headquarter when it reaches the flag
         assertEquals(miner.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, headquarter0.getPosition());
     }
 
     @Test
@@ -1599,7 +1600,7 @@ public class TestGraniteMine {
         assertNotNull(miner);
         assertEquals(miner.getTarget(), graniteMine0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1610,14 +1611,14 @@ public class TestGraniteMine {
         map.removeRoad(road0);
 
         // Verify that the miner continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, flag0.getPosition());
 
         assertEquals(miner.getPosition(), flag0.getPosition());
 
         // Verify that the miner continues to the final flag
         assertEquals(miner.getTarget(), graniteMine0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, graniteMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, graniteMine0.getFlag().getPosition());
 
         // Verify that the miner goes out to miner instead of going directly back
         assertNotEquals(miner.getTarget(), headquarter0.getPosition());
@@ -1668,7 +1669,7 @@ public class TestGraniteMine {
         assertEquals(miner.getTarget(), graniteMine0.getPosition());
 
         // Wait for the miner to reach the first flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, flag0.getPosition());
 
         map.stepTime();
 
@@ -1679,7 +1680,7 @@ public class TestGraniteMine {
         graniteMine0.tearDown();
 
         // Verify that the miner continues walking to the next flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, graniteMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, graniteMine0.getFlag().getPosition());
 
         assertEquals(miner.getPosition(), graniteMine0.getFlag().getPosition());
 
@@ -1734,7 +1735,7 @@ public class TestGraniteMine {
 
         var amount = storehouse0.getAmount(MINER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, storehouse0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, storehouse0.getPosition());
 
         // Verify that the miner is stored correctly in the headquarter
         assertEquals(storehouse0.getAmount(MINER), amount + 1);
@@ -1790,7 +1791,7 @@ public class TestGraniteMine {
 
         var amount = headquarter0.getAmount(MINER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, headquarter0.getPosition());
 
         // Verify that the miner is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(MINER), amount + 1);
@@ -1849,7 +1850,7 @@ public class TestGraniteMine {
 
         var amount = headquarter0.getAmount(MINER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, headquarter0.getPosition());
 
         // Verify that the miner is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(MINER), amount + 1);
@@ -1899,7 +1900,7 @@ public class TestGraniteMine {
 
         var amount = headquarter0.getAmount(MINER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, headquarter0.getPosition());
 
         // Verify that the miner is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(MINER), amount + 1);
@@ -1935,7 +1936,7 @@ public class TestGraniteMine {
         var worker = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, graniteMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, graniteMine0.getFlag().getPosition());
 
         // Tear down the building
         graniteMine0.tearDown();
@@ -1943,11 +1944,11 @@ public class TestGraniteMine {
         // Verify that the worker goes to the building and then returns to the headquarter instead of entering
         assertEquals(worker.getTarget(), graniteMine0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, graniteMine0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, graniteMine0.getPosition());
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
     }
 
     @Test
@@ -2294,7 +2295,7 @@ public class TestGraniteMine {
         Utils.deliverCargo(graniteMine, FISH);
 
         // Fill the flag with flour cargos
-        Utils.placeCargos(map, FLOUR, 8, graniteMine.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, graniteMine.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2311,7 +2312,7 @@ public class TestGraniteMine {
         var road1 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2328,7 +2329,7 @@ public class TestGraniteMine {
         assertEquals(graniteMine.getFlag().getStackedCargo().size(), 7);
 
         // Verify that the worker produces a cargo of flour and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, graniteMine.getWorker(), STONE);
+        Utils.fastForwardUntilWorkerCarriesCargo(graniteMine.getWorker(), STONE);
     }
 
     @Test
@@ -2365,7 +2366,7 @@ public class TestGraniteMine {
         Utils.deliverCargo(graniteMine, FISH);
 
         // Fill the flag with cargos
-        Utils.placeCargos(map, FLOUR, 8, graniteMine.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, graniteMine.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2382,7 +2383,7 @@ public class TestGraniteMine {
         var road1 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2402,12 +2403,12 @@ public class TestGraniteMine {
         map.removeRoad(road1);
 
         // The worker produces a cargo and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, graniteMine.getWorker(), STONE);
+        Utils.fastForwardUntilWorkerCarriesCargo(graniteMine.getWorker(), STONE);
 
         // Wait for the worker to put the cargo on the flag
         assertEquals(graniteMine.getWorker().getTarget(), graniteMine.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, graniteMine.getWorker(), graniteMine.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(graniteMine.getWorker(), graniteMine.getFlag().getPosition());
 
         assertEquals(graniteMine.getFlag().getStackedCargo().size(), 8);
 
@@ -2463,9 +2464,9 @@ public class TestGraniteMine {
         headquarter0.blockDeliveryOfMaterial(STONE);
 
         // Verify that the stone mine puts eight stones on the flag and then stops
-        Utils.waitForFlagToGetStackedCargo(map, stoneMine0.getFlag(), 8);
+        Utils.waitForFlagToGetStackedCargo(stoneMine0.getFlag(), 8);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner0, stoneMine0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner0, stoneMine0.getPosition());
 
         for (int i = 0; i < 300; i++) {
             map.stepTime();
@@ -2538,7 +2539,7 @@ public class TestGraniteMine {
 
         assertFalse(miner0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner0, stoneMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner0, stoneMine0.getFlag().getPosition());
 
         assertEquals(miner0.getTarget(), storehouse.getPosition());
 
@@ -2608,11 +2609,11 @@ public class TestGraniteMine {
 
         assertFalse(miner0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner0, stoneMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner0, stoneMine0.getFlag().getPosition());
 
         assertEquals(miner0.getTarget(), storehouse.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner0, storehouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner0, storehouse.getPosition());
 
         assertFalse(map.getWorkers().contains(miner0));
     }
@@ -2643,12 +2644,12 @@ public class TestGraniteMine {
             assertEquals(worker.getPosition(), headquarter0.getPosition());
             assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
             assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
             assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
             assertFalse(map.getWorkers().contains(worker));
         }
@@ -2677,25 +2678,16 @@ public class TestGraniteMine {
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
-
-        for (int i = 0; i < 100; i++) {
-            assertTrue(worker.isDead());
-            assertTrue(map.getWorkers().contains(worker));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(worker));
     }
 
     @Test
@@ -2739,7 +2731,7 @@ public class TestGraniteMine {
 
         assertEquals(worker.getPosition(), stoneMine0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, stoneMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, stoneMine0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), stoneMine0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
@@ -2747,18 +2739,36 @@ public class TestGraniteMine {
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
 
-        for (int i = 0; i < 100; i++) {
+        // Verify that the skeleton decays
+        for (int i = 0; i < 6000; i++) {
             assertTrue(worker.isDead());
             assertTrue(map.getWorkers().contains(worker));
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
+
+            map.stepTime();
+        }
+
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(DecorationType.HUMAN_SKELETON_DECAYED, map.getDecorationAtPoint(worker.getPosition()));
+
+        // Verify that the skeleton disappears
+        for (int i = 0; i < 4000; i++) {
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
 
             map.stepTime();
         }
 
         assertFalse(map.getWorkers().contains(worker));
+        assertFalse(map.isDecoratedAtPoint(worker.getPosition()));
+        assertNotEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
     }
 
     @Test
@@ -2794,7 +2804,7 @@ public class TestGraniteMine {
         var miner = Utils.waitForWorkerOutsideBuilding(Miner.class, player0);
 
         // Wait for the miner to go past the headquarter's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -2805,7 +2815,7 @@ public class TestGraniteMine {
 
         stoneMine0.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, stoneMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, stoneMine0.getFlag().getPosition());
 
         assertEquals(miner.getPosition(), stoneMine0.getFlag().getPosition());
         assertNotEquals(miner.getTarget(), headquarter0.getPosition());
@@ -2813,17 +2823,8 @@ public class TestGraniteMine {
         assertNull(stoneMine0.getWorker());
         assertNotNull(miner.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, miner.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, miner.getTarget());
 
-        var point = miner.getPosition();
-        for (int i = 0; i < 100; i++) {
-            assertTrue(miner.isDead());
-            assertEquals(miner.getPosition(), point);
-            assertTrue(map.getWorkers().contains(miner));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(miner));
+        assertTrue(miner.isDead());
     }
 }

@@ -14,7 +14,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.actors.Courier;
-import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.actors.Rank;
 import org.appland.settlers.model.actors.WellWorker;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Fortress;
@@ -139,15 +139,15 @@ public class TestRoads {
         var fortress0 = map.placeBuilding(new Fortress(player0), pointX);
 
         Utils.constructHouse(fortress0);
-        Utils.occupyMilitaryBuilding(Soldier.Rank.GENERAL_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(Rank.GENERAL_RANK, fortress0);
 
         var fortress1 = map.placeBuilding(new Fortress(player0), pointY);
         Utils.constructHouse(fortress1);
-        Utils.occupyMilitaryBuilding(Soldier.Rank.GENERAL_RANK, fortress1);
+        Utils.occupyMilitaryBuilding(Rank.GENERAL_RANK, fortress1);
 
         var fortress2 = map.placeBuilding(new Fortress(player0), pointZ);
         Utils.constructHouse(fortress2);
-        Utils.occupyMilitaryBuilding(Soldier.Rank.GENERAL_RANK, fortress2);
+        Utils.occupyMilitaryBuilding(Rank.GENERAL_RANK, fortress2);
 
         // Create the list of points for the roads
         Point[] points = {
@@ -239,7 +239,7 @@ public class TestRoads {
         assertTrue(road.needsCourier());
 
         // Assign a courier to the road
-        Utils.occupyRoad(road, map);
+        Utils.occupyRoad(road);
 
         // Verify that the road doesn't need a courier
         assertFalse(road.needsCourier());
@@ -1029,7 +1029,7 @@ public class TestRoads {
         map.placeWorker(courier, endFlag);
         courier.assignToRoad(road);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertEquals(courier.getAssignedRoad(), road);
         assertEquals(road.getCourier(), courier);
@@ -1097,10 +1097,10 @@ public class TestRoads {
         assertTrue(headquarter.getAmount(PLANK) > 0);
         assertTrue(map.arePointsConnectedByRoads(headquarter.getPosition(), woodcutter.getPosition()));
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier, PLANK);
 
         // Wait for the courier to reach the woodcutter's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, woodcutter.getFlag().getPosition());
 
         // Make the courier take a step toward the woodcutter
         map.stepTime();
@@ -1166,10 +1166,10 @@ public class TestRoads {
         assertTrue(headquarter.getAmount(PLANK) > 0);
         assertTrue(map.arePointsConnectedByRoads(headquarter.getPosition(), woodcutter.getPosition()));
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier, PLANK);
 
         // Wait for the courier to reach the woodcutter
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, woodcutter.getPosition());
 
         // Make the courier take a step from the woodcutter
         map.stepTime();
@@ -1213,7 +1213,7 @@ public class TestRoads {
         assertEquals(courier.getTarget(), middlePoint2);
         assertEquals(courier.getAssignedRoad(), road);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, middlePoint1);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, middlePoint1);
 
         assertTrue(courier.isAt(middlePoint1));
 
@@ -1292,7 +1292,7 @@ public class TestRoads {
         map.placeWorker(courier, endFlag);
         courier.assignToRoad(road);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertEquals(courier.getAssignedRoad(), road);
         assertEquals(road.getCourier(), courier);
@@ -1309,7 +1309,7 @@ public class TestRoads {
         assertEquals(courier.getTarget(), endPoint);
 
         // Make the courier pick up a cargo and start walking to deliver it
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, endPoint);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, endPoint);
 
         map.stepTime();
 
@@ -1354,13 +1354,13 @@ public class TestRoads {
                 point1);
 
         // Wait for a courier to occupy the road
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road);
 
         assertEquals(courier.getAssignedRoad(), road);
         assertEquals(road.getCourier(), courier);
 
         // Wait for the courier to be idle at the middle the road
-        Utils.waitForCouriersToBeIdle(map, courier);
+        Utils.waitForCouriersToBeIdle(courier);
 
         assertTrue(courier.isIdle());
         assertTrue(courier.isAt(middlePoint2));
@@ -1373,7 +1373,7 @@ public class TestRoads {
         assertEquals(courier.getTarget(), point1);
 
         // Fast forward until the courier picks up the cargo
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point1);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, point1);
 
         map.stepTime();
 
@@ -1391,7 +1391,7 @@ public class TestRoads {
         assertEquals(courier.getTarget(), middlePoint2);
 
         // Let the courier leave the cargo
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, middlePoint2);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, middlePoint2);
 
         assertNull(courier.getCargo());
         assertTrue(middleFlag.getStackedCargo().contains(cargo));
@@ -1399,7 +1399,7 @@ public class TestRoads {
         // Verify that the courier becomes idle after delivery
         assertEquals(courier.getTarget(), middlePoint3);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertTrue(courier.isIdle());
         assertEquals(courier.getPosition(), middlePoint3);
@@ -1435,7 +1435,7 @@ public class TestRoads {
         map.placeWorker(courier, endFlag);
         courier.assignToRoad(road);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertEquals(courier.getAssignedRoad(), road);
         assertEquals(road.getCourier(), courier);
@@ -1452,7 +1452,7 @@ public class TestRoads {
         assertEquals(courier.getTarget(), endPoint);
 
         // Fast forward until the courier picks up the cargo
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, endPoint);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, endPoint);
 
         map.stepTime();
 
@@ -1461,7 +1461,7 @@ public class TestRoads {
         assertEquals(courier.getTarget(), headquarter.getPosition());
 
         // Let the courier pass the middle of the road
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, middlePoint1);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, middlePoint1);
 
         // Split road with the courier on the new road closer to the headquarters
         var middleFlag = map.placeFlag(player0, middlePoint2);
@@ -1475,7 +1475,7 @@ public class TestRoads {
         // Let the courier leave the cargo
         assertEquals(headquarter.getAmount(BEER), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter.getPosition());
 
         assertNull(courier.getCargo());
         assertEquals(headquarter.getAmount(BEER), 1);
@@ -1483,12 +1483,12 @@ public class TestRoads {
         // Let the courier walk back to the headquarters's flag
         assertEquals(courier.getTarget(), headquarter.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter.getFlag().getPosition());
 
         // Verify that the courier becomes idle after delivery
         assertEquals(courier.getTarget(), middlePoint1);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertTrue(courier.isIdle());
         assertEquals(courier.getPosition(), middlePoint1);
@@ -1537,7 +1537,7 @@ public class TestRoads {
         assertTrue(courier.getTarget().equals(middlePoint1)
                 || courier.getTarget().equals(middlePoint3));
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertTrue(courier.isIdle());
     }
@@ -1572,7 +1572,7 @@ public class TestRoads {
         map.placeWorker(courier, endFlag);
         courier.assignToRoad(road);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertEquals(courier.getAssignedRoad(), road);
         assertEquals(road.getCourier(), courier);
@@ -1658,7 +1658,7 @@ public class TestRoads {
         map.placeWorker(courier, endFlag);
         courier.assignToRoad(road);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertEquals(courier.getAssignedRoad(), road);
         assertEquals(road.getCourier(), courier);
@@ -1674,7 +1674,7 @@ public class TestRoads {
 
         assertEquals(courier.getTarget(), endPoint);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, endPoint);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, endPoint);
 
         map.stepTime();
 
@@ -1683,14 +1683,14 @@ public class TestRoads {
         assertEquals(courier.getTarget(), headquarter.getPosition());
 
         // Let the courier get close to the headquarters
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, middlePoint1);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, middlePoint1);
 
         // Split road with the courier close to the headquarters
         var middleFlag = map.placeFlag(player0, middlePoint2);
 
         assertEquals(headquarter.getAmount(BEER), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter.getPosition());
 
         assertNull(courier.getCargo());
         assertEquals(headquarter.getAmount(BEER), 1);
@@ -1768,7 +1768,7 @@ public class TestRoads {
 
         var worker = workersAfter.getFirst();
 
-        Utils.fastForwardUntilWorkersReachTarget(map, worker);
+        Utils.fastForwardUntilWorkersReachTarget(worker);
 
         assertFalse(road0.needsCourier());
         assertEquals(road0.getCourier(), worker);
@@ -2085,7 +2085,7 @@ public class TestRoads {
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Occupy the road
-        Utils.occupyRoad(road0, map);
+        Utils.occupyRoad(road0);
 
         // Remove the road
         var worker = road0.getCourier();
@@ -2097,7 +2097,7 @@ public class TestRoads {
         // Verify that the worker goes back to the headquarters
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
         // Verify that the worker is no longer on the map
         assertFalse(map.getWorkers().contains(worker));
@@ -2125,7 +2125,7 @@ public class TestRoads {
         var road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         // Occupy the road
-        Utils.occupyRoad(road1, map);
+        Utils.occupyRoad(road1);
 
         // Remove the road
         var courier = road1.getCourier();
@@ -2193,7 +2193,7 @@ public class TestRoads {
         var road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
 
         // Place a worker on the road
-        var courier = Utils.occupyRoad(road0, map);
+        var courier = Utils.occupyRoad(road0);
 
         // Deliver 99 cargo and verify that the road does not become a main road
         for (int i = 0; i < 99; i++) {
@@ -2202,12 +2202,12 @@ public class TestRoads {
             // Wait for the courier to pick up the cargo
             assertNull(courier.getCargo());
 
-            Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
+            Utils.fastForwardUntilWorkerCarriesCargo(courier, cargo);
 
             // Wait for the courier to deliver the cargo
             assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
             assertNull(courier.getCargo());
 
@@ -2224,12 +2224,12 @@ public class TestRoads {
         // Wait for the courier to pick up the cargo
         assertNull(courier.getCargo());
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier, cargo);
 
         // Wait for the courier to deliver the cargo
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
         assertTrue(road0.isMainRoad());
     }
@@ -2260,8 +2260,8 @@ public class TestRoads {
         var road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         // Place workers on the roads
-        var courier0 = Utils.occupyRoad(road0, map);
-        var courier1 = Utils.occupyRoad(road1, map);
+        var courier0 = Utils.occupyRoad(road0);
+        var courier1 = Utils.occupyRoad(road1);
 
         // Deliver 99 cargo and verify that the road does not become a main road
         for (int i = 0; i < 99; i++) {
@@ -2270,12 +2270,12 @@ public class TestRoads {
             // Wait for the courier to pick up the cargo
             assertNull(courier1.getCargo());
 
-            Utils.fastForwardUntilWorkerCarriesCargo(map, courier1, cargo);
+            Utils.fastForwardUntilWorkerCarriesCargo(courier1, cargo);
 
             // Wait for the courier to deliver the cargo
             assertEquals(courier1.getTarget(), flag0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, courier1, flag0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(courier1, flag0.getPosition());
 
             assertNull(courier1.getCargo());
 
@@ -2292,12 +2292,12 @@ public class TestRoads {
         // Wait for the courier to pick up the cargo
         assertNull(courier1.getCargo());
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier1, cargo);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier1, cargo);
 
         // Wait for the courier to deliver the cargo
         assertEquals(courier1.getTarget(), flag0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier1, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier1, flag0.getPosition());
 
         assertTrue(road1.isMainRoad());
     }
@@ -2327,7 +2327,7 @@ public class TestRoads {
         var road0 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
 
         // Place a worker on the road
-        var courier = Utils.occupyRoad(road0, map);
+        var courier = Utils.occupyRoad(road0);
 
         // Wait for the courier to deliver 99 water cargo without turning the driveways into main roads
         var driveway = map.getRoad(headquarter0.getPosition(), headquarter0.getFlag().getPosition());
@@ -2335,12 +2335,12 @@ public class TestRoads {
         for (int i = 0; i < 99; i++) {
 
             // Wait for the courier to pick up a water cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, courier, WATER);
+            Utils.fastForwardUntilWorkerCarriesCargo(courier, WATER);
 
             // Wait for the courier to deliver the water
             assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
             assertNull(courier.getCargo());
             assertFalse(driveway.isMainRoad());
@@ -2349,12 +2349,12 @@ public class TestRoads {
         // Verify that the driveways become main roads after one more delivery
         assertNull(courier.getCargo());
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, WATER);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier, WATER);
 
         // Wait for the courier to deliver the cargo
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
         assertTrue(driveway.isMainRoad());
     }
@@ -2384,7 +2384,7 @@ public class TestRoads {
         var road0 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
 
         // Place a worker on the road
-        Utils.occupyRoad(road0, map);
+        Utils.occupyRoad(road0);
 
         // Wait for the well worker to deliver 99 water cargo without turning the driveways into main roads
         var driveway = map.getRoad(well0.getPosition(), well0.getFlag().getPosition());
@@ -2392,14 +2392,14 @@ public class TestRoads {
         for (int i = 0; i < 99; i++) {
 
             // Wait for the well worker to pick up a water cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, wellWorker, WATER);
+            Utils.fastForwardUntilWorkerCarriesCargo(wellWorker, WATER);
 
             // Wait for the well worker to deliver the water
-            Utils.waitForWorkerToSetTarget(map, wellWorker, well0.getFlag().getPosition());
+            Utils.waitForWorkerToSetTarget(wellWorker, well0.getFlag().getPosition());
 
             assertEquals(wellWorker.getTarget(), well0.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(wellWorker, well0.getFlag().getPosition());
 
             assertNull(wellWorker.getCargo());
             assertFalse(driveway.isMainRoad());
@@ -2408,14 +2408,14 @@ public class TestRoads {
         // Verify that the driveways become main roads after one more delivery
         assertNull(wellWorker.getCargo());
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, wellWorker, WATER);
+        Utils.fastForwardUntilWorkerCarriesCargo(wellWorker, WATER);
 
         // Wait for the courier to deliver the cargo
-        Utils.waitForWorkerToSetTarget(map, wellWorker, well0.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(wellWorker, well0.getFlag().getPosition());
 
         assertEquals(wellWorker.getTarget(), well0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, well0.getFlag().getPosition());
 
         assertTrue(driveway.isMainRoad());
     }
@@ -2502,8 +2502,8 @@ public class TestRoads {
         var road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         // Place workers on the roads
-        var courier0 = Utils.occupyRoad(road0, map);
-        var courier1 = Utils.occupyRoad(road1, map);
+        var courier0 = Utils.occupyRoad(road0);
+        var courier1 = Utils.occupyRoad(road1);
 
         // Deliver 99 cargo and verify that the road does not become a main road
         for (int i = 0; i < 99; i++) {
@@ -2512,12 +2512,12 @@ public class TestRoads {
             // Wait for the courier to pick up the cargo
             assertNull(courier1.getCargo());
 
-            Utils.fastForwardUntilWorkerCarriesCargo(map, courier1, cargo);
+            Utils.fastForwardUntilWorkerCarriesCargo(courier1, cargo);
 
             // Wait for the courier to deliver the cargo
             assertEquals(courier1.getTarget(), flag0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, courier1, flag0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(courier1, flag0.getPosition());
 
             assertNull(courier1.getCargo());
 
@@ -2534,12 +2534,12 @@ public class TestRoads {
         // Wait for the courier to pick up the cargo
         assertNull(courier1.getCargo());
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier1, cargo);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier1, cargo);
 
         // Wait for the courier to deliver the cargo
         assertEquals(courier1.getTarget(), flag0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier1, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier1, flag0.getPosition());
 
         assertTrue(road1.isMainRoad());
 
@@ -2616,5 +2616,38 @@ public class TestRoads {
         assertFalse(road0.isMainRoad());
         assertTrue(road1.isMainRoad());
         assertFalse(road2.isMainRoad());
+    }
+
+
+    @Test
+    public void testCannotRemoveInvalidRoad() throws Exception {
+
+        // Creating new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 41);
+
+        // Place headquarters
+        var point38 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+
+        // Place flag
+        var point1 = new Point(14, 4);
+        var flag0 = map.placeFlag(player0, point1);
+
+        // Place road
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        // Place a second flag to split the road and make the existing road invalid
+        var point2 = new Point(10, 4);
+        var flag1 = map.placeFlag(player0, point2);
+
+        // Verify that the invalid road can't be removed
+        assertFalse(map.getRoads().contains(road0));
+
+        try {
+            map.removeRoad(road0);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
     }
 }

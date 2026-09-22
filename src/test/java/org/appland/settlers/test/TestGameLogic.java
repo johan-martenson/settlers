@@ -2,17 +2,14 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Forester;
 import org.appland.settlers.model.actors.Soldier;
-import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -21,7 +18,6 @@ import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
 import static org.junit.Assert.*;
@@ -102,10 +98,10 @@ public class TestGameLogic {
         var road0 = map.placeAutoSelectedRoad(player0, flag0, sawmill0.getFlag());
 
         // Occupy the road
-        var courier = Utils.occupyRoad(road0, map);
+        var courier = Utils.occupyRoad(road0);
 
         // Fast forward so the courier can reach its road and be assigned
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         var cargo = new Cargo(PLANK, map);
 
@@ -124,7 +120,7 @@ public class TestGameLogic {
 
         assertEquals(courier.getTarget(), flag0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, flag0.getPosition());
 
         // Verify that the courier has picked up the cargo
         assertNotNull(courier.getCargo());
@@ -156,10 +152,10 @@ public class TestGameLogic {
         var road0 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
 
         // Occupy the road
-        var courier = Utils.occupyRoad(road0, map);
+        var courier = Utils.occupyRoad(road0);
 
         // Fast forward to let the courier reach its road and get assigned
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         var cargo0 = new Cargo(PLANK, map);
 
@@ -171,14 +167,14 @@ public class TestGameLogic {
 
         assertEquals(courier.getTarget(), flag0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, flag0.getPosition());
 
         assertEquals(courier.getCargo(), cargo0);
 
         // Move worker to the sawmill
         assertEquals(courier.getTarget(), woodcutter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, woodcutter0.getPosition());
 
         assertTrue(courier.isAt(woodcutter0.getPosition()));
 
@@ -243,7 +239,7 @@ public class TestGameLogic {
         var courier1 = (Courier)map.getWorkers().get(2);
 
         // Fast forward to let the couriers reach their roads
-        Utils.fastForwardUntilWorkersReachTarget(map, courier0, courier1);
+        Utils.fastForwardUntilWorkersReachTarget(courier0, courier1);
 
         assertEquals(courier0.getAssignedRoad(), road0);
 
@@ -291,7 +287,7 @@ public class TestGameLogic {
         assertEquals(headquarter0.getAmount(PRIVATE), currentNumberOfMilitary - 1);
 
         // Let the military reach the barracks
-        Utils.fastForwardUntilWorkersReachTarget(map, military);
+        Utils.fastForwardUntilWorkersReachTarget(military);
 
         assertTrue(map.getWorkers().size() >= 5);
         assertTrue(military.isArrived());
@@ -302,7 +298,7 @@ public class TestGameLogic {
 
         assertEquals(soldiersOutside.size(), 1);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, soldiersOutside.getFirst());
+        Utils.fastForwardUntilWorkersReachTarget(soldiersOutside.getFirst());
 
         assertFalse(barracks0.needsMilitaryManning());
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 2);
@@ -342,7 +338,7 @@ public class TestGameLogic {
         }
 
         // Let the forester reach the forester hut
-        Utils.fastForwardUntilWorkersReachTarget(map, forester);
+        Utils.fastForwardUntilWorkersReachTarget(forester);
 
         assertNotNull(foresterHut0.getWorker());
         assertTrue(foresterHut0.getWorker() instanceof Forester);

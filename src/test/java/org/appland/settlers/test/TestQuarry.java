@@ -2,6 +2,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -25,7 +26,7 @@ import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Stone.StoneType.STONE_1;
 import static org.appland.settlers.model.Stone.StoneType.STONE_2;
 import static org.appland.settlers.model.Vegetation.WATER;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.*;
 
@@ -374,7 +375,7 @@ public class TestQuarry {
 
         // Wait for the stonemason to arrive if it isn't already at the right spot
         if (!stonemason.isArrived()) {
-            Utils.fastForwardUntilWorkersReachTarget(map, stonemason);
+            Utils.fastForwardUntilWorkersReachTarget(stonemason);
         }
 
         assertEquals(stonemason.getPosition(), point2);
@@ -430,7 +431,7 @@ public class TestQuarry {
 
         // Let the stonemason reach the chosen spot if it isn't already there
         if (!stonemason.isArrived()) {
-            Utils.fastForwardUntilWorkersReachTarget(map, stonemason);
+            Utils.fastForwardUntilWorkersReachTarget(stonemason);
         }
 
         assertTrue(stonemason.isArrived());
@@ -509,7 +510,7 @@ public class TestQuarry {
 
         // Let the stonemason reach the chosen spot if it isn't already there
         if (!stonemason.isArrived()) {
-            Utils.fastForwardUntilWorkersReachTarget(map, stonemason);
+            Utils.fastForwardUntilWorkersReachTarget(stonemason);
         }
 
         assertTrue(stonemason.isArrived());
@@ -583,7 +584,7 @@ public class TestQuarry {
 
         // Let the stonemason reach the chosen spot if it isn't already there
         if (!stonemason.isArrived()) {
-            Utils.fastForwardUntilWorkersReachTarget(map, stonemason);
+            Utils.fastForwardUntilWorkersReachTarget(stonemason);
         }
 
         assertTrue(stonemason.isArrived());
@@ -606,7 +607,7 @@ public class TestQuarry {
         assertNotNull(stonemason.getCargo());
         assertEquals(quarry.getFlag().getStackedCargo().size(), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, quarry.getFlag().getPosition());
 
         assertFalse(stonemason.isInsideBuilding());
         assertNull(stonemason.getCargo());
@@ -617,7 +618,7 @@ public class TestQuarry {
         assertFalse(stonemason.isInsideBuilding());
         assertEquals(stonemason.getTarget(), quarry.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, quarry.getPosition());
 
         assertTrue(stonemason.isInsideBuilding());
     }
@@ -660,19 +661,19 @@ public class TestQuarry {
         Utils.waitForNonMilitaryBuildingToGetPopulated(quarry);
 
         // Wait for the courier on the road between the guard house and the quarry hut to have a stone cargo
-        Utils.waitForFlagToGetStackedCargo(map, quarry.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(quarry.getFlag(), 1);
 
         assertEquals(quarry.getFlag().getStackedCargo().getFirst().getMaterial(), STONE);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that the courier delivers the cargo to the guard house (and not the headquarters)
         assertEquals(quarry.getAmount(STONE), 0);
         assertTrue(guardHouse.needsMaterial(STONE));
         assertTrue(guardHouse.isUnderConstruction());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), guardHouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), guardHouse.getPosition());
 
         assertEquals(guardHouse.getAmount(STONE), 1);
     }
@@ -724,12 +725,12 @@ public class TestQuarry {
         Utils.waitForNonMilitaryBuildingToGetPopulated(quarry);
 
         // Wait for the courier on the road between the storehouse and the quarry hut to have a stone cargo
-        Utils.waitForFlagToGetStackedCargo(map, quarry.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(quarry.getFlag(), 1);
 
         assertEquals(quarry.getFlag().getStackedCargo().getFirst().getMaterial(), STONE);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters
         assertEquals(headquarter.getAmount(STONE), 17);
@@ -737,7 +738,7 @@ public class TestQuarry {
         assertFalse(storehouse.needsMaterial(STONE));
         assertTrue(storehouse.isUnderConstruction());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
         assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(STONE));
@@ -789,12 +790,12 @@ public class TestQuarry {
         Utils.waitForNonMilitaryBuildingToGetPopulated(quarry);
 
         // Wait for the flag on the road between the storehouse and the quarry to have a stone cargo
-        Utils.waitForFlagToGetStackedCargo(map, quarry.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(quarry.getFlag(), 1);
 
         assertEquals(quarry.getFlag().getStackedCargo().getFirst().getMaterial(), STONE);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that no stone is delivered from the headquarters
         Utils.adjustInventoryTo(headquarter, STONE, 1);
@@ -955,7 +956,7 @@ public class TestQuarry {
 
         assertEquals(stonemason.getTarget(), stone.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, stonemason.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, stonemason.getTarget());
 
         // Wait for the stonemason to get a new stone
         Utils.fastForward(50, map);
@@ -968,7 +969,7 @@ public class TestQuarry {
         assertEquals(stonemason.getTarget(), quarry0.getFlag().getPosition());
         assertTrue(quarry0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, quarry0.getFlag().getPosition());
 
         assertNull(stonemason.getCargo());
         assertFalse(quarry0.getFlag().getStackedCargo().isEmpty());
@@ -976,14 +977,14 @@ public class TestQuarry {
         // Wait for the worker to go back to the quarry
         assertEquals(stonemason.getTarget(), quarry0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, quarry0.getPosition());
 
         // Wait for the worker to rest and produce another cargo
         Utils.fastForward(100, map);
 
         assertEquals(stonemason.getTarget(), stone.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, stonemason.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, stonemason.getTarget());
 
         // Wait for the stonemason to get a new stone
         Utils.fastForward(50, map);
@@ -995,7 +996,7 @@ public class TestQuarry {
 
         assertEquals(stonemason.getTarget(), quarry0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, quarry0.getFlag().getPosition());
 
         assertNull(stonemason.getCargo());
         assertEquals(quarry0.getFlag().getStackedCargo().size(), 2);
@@ -1034,7 +1035,7 @@ public class TestQuarry {
 
         assertEquals(stonemason.getTarget(), stone.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, stonemason.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, stonemason.getTarget());
 
         // Wait for the stonemason to get a new stone
         Utils.fastForward(50, map);
@@ -1047,7 +1048,7 @@ public class TestQuarry {
         assertEquals(stonemason.getTarget(), quarry0.getFlag().getPosition());
         assertTrue(quarry0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, quarry0.getFlag().getPosition());
 
         assertNull(stonemason.getCargo());
         assertFalse(quarry0.getFlag().getStackedCargo().isEmpty());
@@ -1072,14 +1073,14 @@ public class TestQuarry {
         assertNotEquals(courier.getTarget(), quarry0.getFlag().getPosition());
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         // Verify that the courier walks to pick up the cargo
         map.stepTime();
 
         assertEquals(courier.getTarget(), quarry0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         // Verify that the courier has picked up the cargo
         assertNotNull(courier.getCargo());
@@ -1090,7 +1091,7 @@ public class TestQuarry {
 
         var amount = headquarter0.getAmount(STONE);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
         // Verify that the courier has delivered the cargo to the headquarters
         assertNull(courier.getCargo());
@@ -1132,7 +1133,7 @@ public class TestQuarry {
 
         var amount = headquarter0.getAmount(STONEMASON);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, headquarter0.getPosition());
 
         // Verify that the stonemason is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(STONEMASON), amount + 1);
@@ -1320,18 +1321,18 @@ public class TestQuarry {
         Utils.fastForward(100, map);
 
         // Wait for the stonemason to produce cargo
-        Utils.fastForwardUntilWorkerProducesCargo(map, stonemason);
+        Utils.fastForwardUntilWorkerProducesCargo(stonemason);
 
         assertEquals(stonemason.getCargo().getMaterial(), STONE);
 
         // Wait for the worker to leave the stone at the flag and go back to the house
         assertEquals(stonemason.getTarget(), quarry0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, quarry0.getFlag().getPosition());
 
         assertEquals(stonemason.getTarget(), quarry0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, quarry0.getPosition());
 
         // Stop production and verify that no stone is produced
         quarry0.stopProduction();
@@ -1384,7 +1385,7 @@ public class TestQuarry {
         Utils.fastForward(100, map);
 
         // Wait for the stonemason to produce stone
-        Utils.fastForwardUntilWorkerProducesCargo(map, stonemason);
+        Utils.fastForwardUntilWorkerProducesCargo(stonemason);
 
         assertEquals(stonemason.getCargo().getMaterial(), STONE);
 
@@ -1393,7 +1394,7 @@ public class TestQuarry {
 
         assertEquals(stonemason.getTarget(), quarry0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, quarry0.getFlag().getPosition());
 
         // Stop production
         quarry0.stopProduction();
@@ -1409,7 +1410,7 @@ public class TestQuarry {
 
         assertTrue(quarry0.isProductionEnabled());
 
-        Utils.fastForwardUntilWorkerProducesCargo(map, stonemason);
+        Utils.fastForwardUntilWorkerProducesCargo(stonemason);
 
         assertNotNull(stonemason.getCargo());
     }
@@ -1535,7 +1536,7 @@ public class TestQuarry {
         assertNotNull(stoneMason);
         assertEquals(stoneMason.getTarget(), quarry0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stoneMason, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1546,14 +1547,14 @@ public class TestQuarry {
         map.removeRoad(road1);
 
         // Verify that the stonemason continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stoneMason, flag0.getPosition());
 
         assertEquals(stoneMason.getPosition(), flag0.getPosition());
 
         // Verify that the stonemason returns to the headquarters when it reaches the flag
         assertEquals(stoneMason.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stoneMason, headquarter0.getPosition());
     }
 
     @Test
@@ -1595,7 +1596,7 @@ public class TestQuarry {
         assertNotNull(stoneMason);
         assertEquals(stoneMason.getTarget(), quarry0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stoneMason, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1606,14 +1607,14 @@ public class TestQuarry {
         map.removeRoad(road0);
 
         // Verify that the stonemason continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stoneMason, flag0.getPosition());
 
         assertEquals(stoneMason.getPosition(), flag0.getPosition());
 
         // Verify that the stonemason continues to the final flag
         assertEquals(stoneMason.getTarget(), quarry0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, quarry0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stoneMason, quarry0.getFlag().getPosition());
 
         // Verify that the stonemason goes out to quarry instead of going directly back
         assertNotEquals(stoneMason.getTarget(), headquarter0.getPosition());
@@ -1659,7 +1660,7 @@ public class TestQuarry {
         assertEquals(stonemason.getTarget(), quarry0.getPosition());
 
         // Wait for the stonemason to reach the first flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, flag0.getPosition());
 
         map.stepTime();
 
@@ -1670,7 +1671,7 @@ public class TestQuarry {
         quarry0.tearDown();
 
         // Verify that the stonemason continues walking to the next flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, quarry0.getFlag().getPosition());
 
         assertEquals(stonemason.getPosition(), quarry0.getFlag().getPosition());
 
@@ -1720,7 +1721,7 @@ public class TestQuarry {
 
         var amount = storehouse0.getAmount(STONEMASON);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, storehouse0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, storehouse0.getPosition());
 
         // Verify that the stonemason is stored correctly in the headquarters
         assertEquals(storehouse0.getAmount(STONEMASON), amount + 1);
@@ -1771,7 +1772,7 @@ public class TestQuarry {
 
         var amount = headquarter0.getAmount(STONEMASON);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, headquarter0.getPosition());
 
         // Verify that the stonemason is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(STONEMASON), amount + 1);
@@ -1825,7 +1826,7 @@ public class TestQuarry {
 
         var amount = headquarter0.getAmount(STONEMASON);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, headquarter0.getPosition());
 
         // Verify that the stonemason is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(STONEMASON), amount + 1);
@@ -1870,7 +1871,7 @@ public class TestQuarry {
 
         var amount = headquarter0.getAmount(STONEMASON);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, headquarter0.getPosition());
 
         // Verify that the stonemason is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(STONEMASON), amount + 1);
@@ -1901,7 +1902,7 @@ public class TestQuarry {
         var worker = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, quarry0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, quarry0.getFlag().getPosition());
 
         // Tear down the building
         quarry0.tearDown();
@@ -1909,11 +1910,11 @@ public class TestQuarry {
         // Verify that the worker goes to the building and then returns to the headquarters instead of entering
         assertEquals(worker.getTarget(), quarry0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, quarry0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, quarry0.getPosition());
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
     }
 
     @Test
@@ -1958,7 +1959,7 @@ public class TestQuarry {
         assertEquals(stonemason0.getTarget(), stone.getPosition());
 
         // Wait for the stonemasons to try to get the same stone
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason0, stonemason0.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason0, stonemason0.getTarget());
 
         // Wait for the stonemason to get a new stone
         for (int i = 0; i < 1000; i++) {
@@ -2362,7 +2363,7 @@ public class TestQuarry {
         Utils.waitForNonMilitaryBuildingToGetPopulated(quarry);
 
         // Fill the flag with flour cargos
-        Utils.placeCargos(map, FLOUR, 8, quarry.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, quarry.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2389,7 +2390,7 @@ public class TestQuarry {
         var road1 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2405,7 +2406,7 @@ public class TestQuarry {
         assertEquals(quarry.getFlag().getStackedCargo().size(), 7);
 
         // Verify that the worker produces a cargo of flour and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, quarry.getWorker(), STONE);
+        Utils.fastForwardUntilWorkerCarriesCargo(quarry.getWorker(), STONE);
     }
 
     @Test
@@ -2435,7 +2436,7 @@ public class TestQuarry {
         Utils.waitForNonMilitaryBuildingToGetPopulated(quarry);
 
         // Fill the flag with cargos
-        Utils.placeCargos(map, FLOUR, 8, quarry.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, quarry.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2451,7 +2452,7 @@ public class TestQuarry {
         var road1 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2470,12 +2471,12 @@ public class TestQuarry {
         map.removeRoad(road1);
 
         // The worker produces a cargo and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, quarry.getWorker(), STONE);
+        Utils.fastForwardUntilWorkerCarriesCargo(quarry.getWorker(), STONE);
 
         // Wait for the worker to put the cargo on the flag
-        Utils.waitForFlagToGetStackedCargo(map, quarry.getFlag(), 8);
+        Utils.waitForFlagToGetStackedCargo(quarry.getFlag(), 8);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, quarry.getWorker(), quarry.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(quarry.getWorker(), quarry.getFlag().getPosition());
 
         assertEquals(quarry.getFlag().getStackedCargo().size(), 8);
 
@@ -2517,13 +2518,13 @@ public class TestQuarry {
         Utils.waitForWorkerToBeOutside(stonemason, map);
 
         // Fill the flag with cargos
-        Utils.placeCargos(map, FLOUR, 8, quarry.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, quarry.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
 
         // Wait for the stonemason to get the stone
-        Utils.fastForwardUntilWorkerCarriesCargo(map, stonemason, STONE);
+        Utils.fastForwardUntilWorkerCarriesCargo(stonemason, STONE);
 
         assertNotNull(stonemason.getCargo());
 
@@ -2550,20 +2551,20 @@ public class TestQuarry {
         // Verify tha the stonemason delivers at the flag when there is space available
         var road1 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
 
-        Utils.waitForFlagToHaveAmountStackedCargo(map, quarry.getFlag(), 7);
+        Utils.waitForFlagToHaveAmountStackedCargo(quarry.getFlag(), 7);
 
         map.stepTime();
 
         assertEquals(stonemason.getTarget(), quarry.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, quarry.getFlag().getPosition());
 
         assertNull(stonemason.getCargo());
         assertEquals(quarry.getFlag().getStackedCargo().size(), 8);
 
         assertEquals(stonemason.getTarget(), quarry.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, quarry.getPosition());
 
         assertTrue(stonemason.isInsideBuilding());
     }
@@ -2598,13 +2599,13 @@ public class TestQuarry {
         Utils.waitForWorkerToBeOutside(stonemason, map);
 
         // Fill the flag with cargos
-        Utils.placeCargos(map, FLOUR, 8, quarry.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, quarry.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
 
         // Wait for the stonemason to get the stone
-        Utils.fastForwardUntilWorkerCarriesCargo(map, stonemason, STONE);
+        Utils.fastForwardUntilWorkerCarriesCargo(stonemason, STONE);
 
         assertNotNull(stonemason.getCargo());
 
@@ -2627,20 +2628,20 @@ public class TestQuarry {
         // Verify tha the stonemason delivers at the flag when there is space available
         var road1 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
 
-        Utils.waitForFlagToHaveAmountStackedCargo(map, quarry.getFlag(), 7);
+        Utils.waitForFlagToHaveAmountStackedCargo(quarry.getFlag(), 7);
 
         map.stepTime();
 
         assertEquals(stonemason.getTarget(), quarry.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, quarry.getFlag().getPosition());
 
         assertNull(stonemason.getCargo());
         assertEquals(quarry.getFlag().getStackedCargo().size(), 8);
 
         assertEquals(stonemason.getTarget(), quarry.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, quarry.getPosition());
 
         assertTrue(stonemason.isInsideBuilding());
     }
@@ -2685,9 +2686,9 @@ public class TestQuarry {
         headquarter0.blockDeliveryOfMaterial(STONE);
 
         // Verify that the quarry puts eight stones on the flag and then stops
-        Utils.waitForFlagToGetStackedCargo(map, quarry0.getFlag(), 8);
+        Utils.waitForFlagToGetStackedCargo(quarry0.getFlag(), 8);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason0, quarry0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason0, quarry0.getPosition());
 
         for (int i = 0; i < 300; i++) {
             map.stepTime();
@@ -2750,7 +2751,7 @@ public class TestQuarry {
 
         assertFalse(stonemason0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason0, quarry0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason0, quarry0.getFlag().getPosition());
 
         assertEquals(stonemason0.getTarget(), storehouse.getPosition());
 
@@ -2811,11 +2812,11 @@ public class TestQuarry {
 
         assertFalse(stonemason0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason0, quarry0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason0, quarry0.getFlag().getPosition());
 
         assertEquals(stonemason0.getTarget(), storehouse.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason0, storehouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason0, storehouse.getPosition());
 
         assertFalse(map.getWorkers().contains(stonemason0));
     }
@@ -2845,12 +2846,12 @@ public class TestQuarry {
             assertEquals(worker.getPosition(), headquarter0.getPosition());
             assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
             assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
             assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
             assertFalse(map.getWorkers().contains(worker));
         }
@@ -2878,25 +2879,16 @@ public class TestQuarry {
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
-
-        for (int i = 0; i < 100; i++) {
-            assertTrue(worker.isDead());
-            assertTrue(map.getWorkers().contains(worker));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(worker));
     }
 
     @Test
@@ -2935,7 +2927,7 @@ public class TestQuarry {
 
         assertEquals(worker.getPosition(), quarry0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, quarry0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, quarry0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), quarry0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
@@ -2943,18 +2935,37 @@ public class TestQuarry {
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
 
-        for (int i = 0; i < 100; i++) {
+        // Verify that the skeleton decays
+        for (int i = 0; i < 6000; i++) {
             assertTrue(worker.isDead());
             assertTrue(map.getWorkers().contains(worker));
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
+
+            map.stepTime();
+        }
+
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(DecorationType.HUMAN_SKELETON_DECAYED, map.getDecorationAtPoint(worker.getPosition()));
+
+        // Verify that the skeleton disappears
+        for (int i = 0; i < 4000; i++) {
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
 
             map.stepTime();
         }
 
         assertFalse(map.getWorkers().contains(worker));
+        assertFalse(map.isDecoratedAtPoint(worker.getPosition()));
+        assertNotEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
+
     }
 
     @Test
@@ -2985,7 +2996,7 @@ public class TestQuarry {
         var stonemason = Utils.waitForWorkerOutsideBuilding(Stonemason.class, player0);
 
         // Wait for the stonemason to go past the headquarters's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -2996,7 +3007,7 @@ public class TestQuarry {
 
         quarry0.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, quarry0.getFlag().getPosition());
 
         assertEquals(stonemason.getPosition(), quarry0.getFlag().getPosition());
         assertNotEquals(stonemason.getTarget(), headquarter0.getPosition());
@@ -3004,18 +3015,9 @@ public class TestQuarry {
         assertNull(quarry0.getWorker());
         assertNotNull(stonemason.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, stonemason.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(stonemason, stonemason.getTarget());
 
-        var point = stonemason.getPosition();
-        for (int i = 0; i < 100; i++) {
-            assertTrue(stonemason.isDead());
-            assertEquals(stonemason.getPosition(), point);
-            assertTrue(map.getWorkers().contains(stonemason));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(stonemason));
+        assertTrue(stonemason.isDead());
     }
 
     @Test

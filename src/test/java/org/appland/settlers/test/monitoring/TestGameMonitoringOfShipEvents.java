@@ -3,15 +3,11 @@ package org.appland.settlers.test.monitoring;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Vegetation;
-import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
-import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.actors.Ship;
 import org.appland.settlers.model.actors.Shipwright;
 import org.appland.settlers.model.buildings.Harbor;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -20,8 +16,6 @@ import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import static org.appland.settlers.model.Material.*;
 import static org.junit.Assert.*;
@@ -88,7 +82,7 @@ public class TestGameMonitoringOfShipEvents {
         // Let the shipwright reach the spot and start to build a ship
         assertEquals(map.getShips().size(), 0);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -170,7 +164,7 @@ public class TestGameMonitoringOfShipEvents {
         // Let the shipwright reach the spot and start to build a ship
         assertEquals(map.getShips().size(), 0);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -251,7 +245,7 @@ public class TestGameMonitoringOfShipEvents {
         assertFalse(shipwright.isInsideBuilding());
 
         // Wait for the shipwright to reach the position where the new ship will be built
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipwright.getTarget());
 
         // Set up monitoring subscription for the player
         var monitor = new Utils.GameViewMonitor();
@@ -345,7 +339,7 @@ public class TestGameMonitoringOfShipEvents {
         assertFalse(shipwright.isInsideBuilding());
 
         // Wait for the shipwright to reach the position where the new ship will be built
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipwright.getTarget());
 
         // Set up monitoring subscription for the player
         var monitor = new Utils.GameViewMonitor();
@@ -482,7 +476,7 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -644,7 +638,7 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));

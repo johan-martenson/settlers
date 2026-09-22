@@ -6,19 +6,14 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Carpenter;
-import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Quarry;
 import org.appland.settlers.model.buildings.Sawmill;
@@ -26,8 +21,6 @@ import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.LARGE;
@@ -102,7 +95,7 @@ public class TestScenarios {
         Utils.occupyBuilding(new Carpenter(player0, map), sawmill0);
 
         // Let the couriers reach their targeted roads
-        Utils.waitForCouriersToBeIdle(map, courier0, courier1, courier2);
+        Utils.waitForCouriersToBeIdle(courier0, courier1, courier2);
 
         // --   START TEST   --
 
@@ -138,7 +131,7 @@ public class TestScenarios {
 
         assertEquals(courierWcToHq.getTarget(), woodcutter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courierWcToHq, woodcutter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courierWcToHq, woodcutter0.getFlag().getPosition());
 
         assertNotNull(courierWcToHq.getCargo());
         assertEquals(courierWcToHq.getTarget(), headquarter0.getPosition());
@@ -178,7 +171,7 @@ public class TestScenarios {
 
         var amountInStack = headquarter0.getFlag().getStackedCargo().size();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
         var courierSmToHq = smToHqRoad.getCourier();
 
@@ -210,7 +203,7 @@ public class TestScenarios {
         assertEquals(courierSmToHq.getCargo().getTarget(), sawmill0);
 
         // Get the wood transported to the sawmill and deliver it
-        Utils.fastForwardUntilWorkerReachesPoint(map, courierSmToHq, sawmill0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courierSmToHq, sawmill0.getPosition());
 
         // Cargo has arrived at the sawmill and the courier has delivered it
         assertTrue(sawmill0.getAmount(WOOD) > 0);
@@ -251,7 +244,7 @@ public class TestScenarios {
         // Let the sawmill worker leave the cargo at the flag
         assertEquals(sawmill0.getWorker().getTarget(), sawmill0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sawmill0.getWorker(), sawmill0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(sawmill0.getWorker(), sawmill0.getFlag().getPosition());
 
         // Wait for the courier to pick up the wood cargo
         for (int i = 0; i < 200; i++) {
@@ -268,7 +261,7 @@ public class TestScenarios {
         // Transport planks and new wood to nearest storage
         assertEquals(courierSmToHq.getTarget(), sawmill0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courierSmToHq, sawmill0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courierSmToHq, sawmill0.getFlag().getPosition());
 
         assertNotNull(courierSmToHq.getCargo());
         assertEquals(courierSmToHq.getCargo().getMaterial(), PLANK);
@@ -276,7 +269,7 @@ public class TestScenarios {
         assertEquals(courierSmToHq.getTarget(), headquarter0.getPosition());
         assertFalse(courierSmToHq.isAt(headquarter0.getFlag().getPosition()));
 
-        fastForwardUntilWorkersReachTarget(map, courierSmToHq);
+        fastForwardUntilWorkersReachTarget(courierSmToHq);
 
         assertNull(courierSmToHq.getCargo());
     }

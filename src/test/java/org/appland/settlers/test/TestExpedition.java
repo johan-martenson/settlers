@@ -70,14 +70,14 @@ public class TestExpedition {
         var point1 = new Point(12, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -134,7 +134,7 @@ public class TestExpedition {
         var point1 = new Point(7, 9);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -174,7 +174,7 @@ public class TestExpedition {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -203,7 +203,7 @@ public class TestExpedition {
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -250,7 +250,7 @@ public class TestExpedition {
         var point0 = new Point(13, 9);
         Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -258,7 +258,7 @@ public class TestExpedition {
         var point3 = new Point(10, 6);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -290,7 +290,7 @@ public class TestExpedition {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -332,7 +332,7 @@ public class TestExpedition {
         var point1 = new Point(12, 6);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -340,7 +340,7 @@ public class TestExpedition {
         var point3 = new Point(16, 6);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -372,7 +372,7 @@ public class TestExpedition {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -398,7 +398,7 @@ public class TestExpedition {
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -439,7 +439,7 @@ public class TestExpedition {
         var point1 = new Point(9, 11);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -447,7 +447,7 @@ public class TestExpedition {
         var point3 = new Point(10, 6);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -479,7 +479,7 @@ public class TestExpedition {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -505,7 +505,7 @@ public class TestExpedition {
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -548,7 +548,7 @@ public class TestExpedition {
         var point1 = new Point(9, 11);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -556,7 +556,7 @@ public class TestExpedition {
         var point3 = new Point(10, 6);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -588,7 +588,7 @@ public class TestExpedition {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -614,7 +614,7 @@ public class TestExpedition {
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -651,7 +651,7 @@ public class TestExpedition {
         var point1 = new Point(9, 29);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 35);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -659,7 +659,7 @@ public class TestExpedition {
         var point3 = new Point(10, 36);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -691,7 +691,7 @@ public class TestExpedition {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -717,7 +717,7 @@ public class TestExpedition {
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -754,7 +754,7 @@ public class TestExpedition {
         var point1 = new Point(7, 9);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -762,7 +762,7 @@ public class TestExpedition {
         var point3 = new Point(10, 6);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -794,7 +794,7 @@ public class TestExpedition {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -820,7 +820,7 @@ public class TestExpedition {
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -857,7 +857,7 @@ public class TestExpedition {
         var point1 = new Point(52, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(60, 6);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -865,7 +865,7 @@ public class TestExpedition {
         var point3 = new Point(55, 9);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -897,7 +897,7 @@ public class TestExpedition {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -923,7 +923,7 @@ public class TestExpedition {
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -966,7 +966,7 @@ public class TestExpedition {
         var point1 = new Point(50, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(60, 6);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -974,7 +974,7 @@ public class TestExpedition {
         var point3 = new Point(55, 9);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -1006,7 +1006,7 @@ public class TestExpedition {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -1032,7 +1032,7 @@ public class TestExpedition {
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -1075,7 +1075,7 @@ public class TestExpedition {
         var point1 = new Point(50, 52);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(60, 56);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -1083,7 +1083,7 @@ public class TestExpedition {
         var point3 = new Point(55, 59);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -1115,7 +1115,7 @@ public class TestExpedition {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -1141,7 +1141,7 @@ public class TestExpedition {
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -1184,7 +1184,7 @@ public class TestExpedition {
         var point1 = new Point(5, 9);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(4, 4);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -1224,7 +1224,7 @@ public class TestExpedition {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -1253,7 +1253,7 @@ public class TestExpedition {
         // Make the ship sail to the waiting point
         assertNotNull(ship.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
@@ -1282,7 +1282,7 @@ public class TestExpedition {
 
         assertTrue(harbor.getPosition().distance(target.x, target.y) < 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, target);
+        Utils.fastForwardUntilWorkerReachesPoint(ship, target);
 
         // Verify that there is a possible expedition up-right
         var directions = ship.getPossibleDirectionsForExpedition();
@@ -1319,7 +1319,7 @@ public class TestExpedition {
         var point1 = new Point(5, 57);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(6, 60);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -1327,7 +1327,7 @@ public class TestExpedition {
         var point3 = new Point(11, 59);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -1359,7 +1359,7 @@ public class TestExpedition {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -1385,7 +1385,7 @@ public class TestExpedition {
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -1432,7 +1432,7 @@ public class TestExpedition {
         var point1 = new Point(52, 52);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(60, 56);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -1440,7 +1440,7 @@ public class TestExpedition {
         var point3 = new Point(55, 59);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -1472,7 +1472,7 @@ public class TestExpedition {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -1498,7 +1498,7 @@ public class TestExpedition {
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -1536,14 +1536,14 @@ public class TestExpedition {
         var point1 = new Point(8, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -1620,14 +1620,14 @@ public class TestExpedition {
         var point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -1643,7 +1643,7 @@ public class TestExpedition {
         var point3 = new Point(14, 8);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -1677,7 +1677,7 @@ public class TestExpedition {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -1707,7 +1707,7 @@ public class TestExpedition {
         assertNotNull(ship.getTarget());
         assertNotEquals(ship.getPosition(), ship.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Prepare for the expedition
         Utils.adjustInventoryTo(headquarter, PLANK, 30);
@@ -1745,7 +1745,7 @@ public class TestExpedition {
 
         assertTrue(point1.distance(target.x, target.y) < 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, target);
+        Utils.fastForwardUntilWorkerReachesPoint(ship, target);
 
         // The collected material for the expedition is transferred to the ship
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -1784,7 +1784,7 @@ public class TestExpedition {
         assertFalse(map.isBuildingAtPoint(point0));
 
         // Wait for the ship to sail to the possible harbor point
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point5);
+        Utils.fastForwardUntilWorkerReachesPoint(ship, point5);
 
         assertEquals(map.getShips().size(), 1);
 
@@ -1829,14 +1829,14 @@ public class TestExpedition {
         var point1 = new Point(4, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -1852,7 +1852,7 @@ public class TestExpedition {
         var point3 = new Point(14, 8);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed
@@ -1886,7 +1886,7 @@ public class TestExpedition {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -1926,7 +1926,7 @@ public class TestExpedition {
         // Wait for the ship to sail to a waiting point
         assertNotNull(ship.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Prepare for the expedition
         Utils.adjustInventoryTo(headquarter, PLANK, 20);
@@ -1993,20 +1993,18 @@ public class TestExpedition {
         var point1 = new Point(4, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
-
-        Utils.fastForward(2000, map);
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
@@ -2016,7 +2014,7 @@ public class TestExpedition {
         var point3 = new Point(14, 8);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed
@@ -2050,7 +2048,7 @@ public class TestExpedition {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -2090,7 +2088,7 @@ public class TestExpedition {
         // Wait for the ship to sail to a waiting point
         assertNotNull(ship.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Prepare for the expedition
         Utils.adjustInventoryTo(headquarter, PLANK, 20);
@@ -2102,8 +2100,7 @@ public class TestExpedition {
         assertTrue(harbor.isCollectingMaterialForExpedition());
 
         // Wait for the harbor to collect the required material for the expedition
-        for (int i = 0; i < 10000; i++) {
-
+        for (int i = 0; i < 10_000; i++) {
             if (!harbor.isCollectingMaterialForExpedition()) {
                 break;
             }
@@ -2118,7 +2115,7 @@ public class TestExpedition {
         assertEquals(map.getShips().size(), 2);
 
         // Wait for a ship to reach the harbor and load up the material
-        for (int i = 0; i < 5000; i++) {
+        for (int i = 0; i < 5_000; i++) {
             if (ship.getPosition().equals(harbor.getPosition()) || ship1.getPosition().equals(harbor.getPosition())) {
                 break;
             }
@@ -2153,7 +2150,7 @@ public class TestExpedition {
         assertTrue(harbor.isCollectingMaterialForExpedition());
 
         // Wait for the harbor to collect the required material for the expedition
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 10_000; i++) {
             if (!harbor.isCollectingMaterialForExpedition()) {
                 break;
             }
@@ -2163,13 +2160,21 @@ public class TestExpedition {
             map.stepTime();
         }
 
+        System.out.println(harbor);
+        System.out.println(harbor.getAmount(PLANK));
+        System.out.println(harbor.getAmount(STONE));
+        System.out.println(harbor.getAmount(BUILDER));
+        assertFalse(harbor.isCollectingMaterialForExpedition());
+
         map.stepTime();
 
         // Verify that the other ship sails to the harbor and takes on the expedition
+        System.out.println(ship);
+        System.out.println(shipForSecondExpedition);
         assertTrue(shipForSecondExpedition.getTarget().distance(harbor.getPosition()) < 4);
         assertEquals(shipForSecondExpedition.getCargos().size(), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipForSecondExpedition, shipForSecondExpedition.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(shipForSecondExpedition, shipForSecondExpedition.getTarget());
 
         assertEquals(shipForSecondExpedition.getCargos().size(), 11);
     }

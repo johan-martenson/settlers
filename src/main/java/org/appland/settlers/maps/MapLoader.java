@@ -13,6 +13,7 @@ import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
 import java.awt.Point;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteOrder;
@@ -153,8 +154,8 @@ public class MapLoader {
     public MapFile loadMapFromFile(String mapFilename) throws SettlersMapLoadingException, IOException, InvalidMapException {
         debug(format("Loading: %s", mapFilename));
 
-        try (var fileInputStream = Files.newInputStream(Paths.get(mapFilename))) {
-            return loadMapFromStream(fileInputStream);
+        try (var input = new BufferedInputStream(Files.newInputStream(Paths.get(mapFilename)))) {
+            return loadMapFromStream(input);
         }
     }
 

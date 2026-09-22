@@ -1,23 +1,18 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.STONE;
@@ -77,29 +72,29 @@ public class TestRobustTransportation {
         // Wait for the roads to get assigned couriers and for the couriers to be idle
         var couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1, road2, road3);
 
-        Utils.waitForCouriersToBeIdle(map, couriers);
+        Utils.waitForCouriersToBeIdle(couriers);
 
         // Place a cargo for the courier on the fastest route to pick up
         var cargo0 = Utils.placeCargo(map, GOLD, headquarter.getFlag(), woodcutter);
 
         // Wait for the courier of the short route to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier(), cargo0);
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier(), cargo0);
 
         // Place a second cargo that the courier for the first road of the longer route will pick up
         var cargo1 = Utils.placeCargo(map, STONE, headquarter.getFlag(), woodcutter);
 
         // Wait for the first courier of the longer route to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road1.getCourier(), cargo1);
+        Utils.fastForwardUntilWorkerCarriesCargo(road1.getCourier(), cargo1);
 
         // Verify that the courier transports the cargo and does not immediately transport it back to the start again
         assertEquals(road1.getCourier().getTarget(), flag0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road1.getCourier(), flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road1.getCourier(), flag0.getPosition());
 
         assertNull(road1.getCourier().getCargo());
         assertEquals(road1.getCourier().getTarget(), flag0.getPosition().upRight());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road1.getCourier(), flag0.getPosition().upRight());
+        Utils.fastForwardUntilWorkerReachesPoint(road1.getCourier(), flag0.getPosition().upRight());
 
         assertNull(road1.getCourier().getCargo());
     }

@@ -1,5 +1,6 @@
 package org.appland.settlers.model.actors;
 
+import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.GameMap;
@@ -12,6 +13,7 @@ import org.appland.settlers.model.WorkerAction;
 import java.util.Objects;
 
 import static org.appland.settlers.model.Material.BUILDER;
+import static org.appland.settlers.model.Material.HAMMER;
 
 @Walker(speed = 10)
 public class Builder extends Worker {
@@ -21,7 +23,7 @@ public class Builder extends Worker {
     private final Countdown countdown = new Countdown();
 
     private Building building;
-    private State state = State.WALKING_TO_BUILDING_TO_CONSTRUCT;
+    public State state = State.WALKING_TO_BUILDING_TO_CONSTRUCT;
 
     private enum State {
         GOING_TO_HAMMER,
@@ -31,7 +33,7 @@ public class Builder extends Worker {
         GOING_TO_DIE,
         DEAD,
         GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
-        WALKING_TO_BUILDING_TO_CONSTRUCT
+        WALKING_TO_FINISHED_STOREHOUSE, WALKING_TO_BUILDING_TO_CONSTRUCT
     }
 
     public Builder(Player player, GameMap map) {
@@ -42,13 +44,17 @@ public class Builder extends Worker {
     protected void onIdle() {
         if ((state == State.HAMMERING || state == State.GOING_TO_HAMMER) && building.isReady()) {
             if (map.findWayOffroad(position, building.getFlag().getPosition(), null) != null) {
-                setOffroadTarget(building.getFlag().getPosition());
-                state = State.WALKING_TO_FLAG_TO_GO_BACK_TO_STORAGE;
+                if (building instanceof Storehouse) {
+                    setOffroadTarget(building.getPosition(), building.getFlag().getPosition());
+                    state = State.WALKING_TO_FINISHED_STOREHOUSE;
+                } else {
+                    setOffroadTarget(building.getFlag().getPosition());
+                    state = State.WALKING_TO_FLAG_TO_GO_BACK_TO_STORAGE;
+                }
             } else {
                 setDead();
 
                 state = State.DEAD;
-
                 countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
             }
         } else if (state == State.HAMMERING) {
@@ -87,6 +93,21 @@ public class Builder extends Worker {
     @Override
     protected void onArrival() {
         switch (state) {
+            case WALKING_TO_FINISHED_STOREHOUSE -> {
+                if (building.isReady()) {
+                    var storehouse = map.getBuildingAtPoint(position);
+                    var storehouseWorker = new StorehouseWorker(player, map);
+                    map.placeWorkerFromStepTime(storehouseWorker, storehouse);
+                    storehouseWorker.enterBuilding(building);
+                    building.assignWorker(storehouseWorker);
+                    storehouse.promiseDelivery(HAMMER);
+                    storehouse.putCargo(new Cargo(HAMMER, map));
+                    map.removeWorker(this);
+                } else {
+                    returnToStorage();
+                }
+            }
+
             case WALKING_TO_BUILDING_TO_CONSTRUCT -> {
                 building = map.getBuildingAtPoint(position);
 
@@ -110,6 +131,9 @@ public class Builder extends Worker {
                     state = State.HAMMERING;
                     doAction(WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW);
                     countdown.countFrom(TIME_TO_HAMMER);
+                } else if (building instanceof Storehouse) {
+                    state = State.WALKING_TO_FINISHED_STOREHOUSE;
+                    setOffroadTarget(building.getPosition(), building.getPosition().downLeft());
                 } else {
                     setOffroadTarget(building.getFlag().getPosition());
                     state = State.WALKING_TO_FLAG_TO_GO_BACK_TO_STORAGE;
@@ -205,18 +229,22 @@ public class Builder extends Worker {
     protected void onWalkingAndAtFixedPoint() {
 
         // Return to storage if the planned path no longer exists
-        if (state == State.WALKING_TO_BUILDING_TO_CONSTRUCT &&
-                map.isFlagAtPoint(position) &&
-                !map.arePointsConnectedByRoads(position, target)) {
+        switch (state) {
+            case WALKING_TO_BUILDING_TO_CONSTRUCT -> {
+                if (map.isFlagAtPoint(position) && !map.arePointsConnectedByRoads(position, target)) {
+                    getTargetBuilding().cancelPromisedBuilder(this);
+                    clearTargetBuilding();
+                    returnToStorage();
+                }
+            }
 
-            // Cancel the promise to the building
-            getTargetBuilding().cancelPromisedBuilder(this);
-
-            // Don't try to start construction upon arrival
-            clearTargetBuilding();
-
-            // Go back to the storage
-            returnToStorage();
+            case WALKING_TO_FINISHED_STOREHOUSE -> {
+                if ((position.equals(target.downRight()) && !map.isFlagAtPoint(position)) ||
+                    (map.isFlagAtPoint(position) && !map.arePointsConnectedByRoads(position, target))) {
+                    clearTargetBuilding();
+                    returnToStorage();
+                }
+            }
         }
     }
 }

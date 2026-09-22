@@ -3,6 +3,7 @@ package org.appland.settlers.model.utils;
 import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.actors.Rank;
 import org.appland.settlers.model.actors.Soldier;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class MilitaryUtils {
     public record SoldierAndDistance(Soldier soldier, int distance) { }
 
     ///  Internal utility functions
-    private static int rankToInt(Soldier.Rank rank) {
+    private static int rankToInt(Rank rank) {
         return switch (rank) {
             case PRIVATE_RANK -> 0;
             case PRIVATE_FIRST_CLASS_RANK -> 1;
@@ -51,7 +52,7 @@ public class MilitaryUtils {
      * @param strength The strength value to convert.
      * @return A list of Soldier ranks ordered by preference.
      */
-    public static List<Soldier.Rank> strengthToRank(int strength) {
+    public static List<Rank> strengthToRank(int strength) {
         var populationPreferenceOrder = new ArrayList<Integer>();
 
         populationPreferenceOrder.add(strength);
@@ -67,10 +68,10 @@ public class MilitaryUtils {
         }
 
         // Go through the list in order of preference and add the rank
-        var ranks = new ArrayList<Soldier.Rank>();
+        var ranks = new ArrayList<Rank>();
 
         for (int preferred : populationPreferenceOrder) {
-            var rank = Soldier.Rank.intToRank(preferred);
+            var rank = Rank.intToRank(preferred);
 
             if (ranks.isEmpty() || ranks.getLast() != rank) {
                 ranks.add(rank);

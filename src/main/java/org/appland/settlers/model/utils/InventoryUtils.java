@@ -59,7 +59,7 @@ import java.util.Set;
 
 import static java.lang.String.format;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.*;
+import static org.appland.settlers.model.actors.Rank.*;
 
 public class InventoryUtils {
 

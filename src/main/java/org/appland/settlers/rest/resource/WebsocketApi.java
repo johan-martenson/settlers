@@ -9,6 +9,7 @@ import jakarta.websocket.Session;
 import jakarta.websocket.server.ServerEndpoint;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.chat.ChatManager;
+import org.appland.settlers.computer.util.GamePlay;
 import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Flag;
@@ -24,7 +25,7 @@ import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.ResourceLevel;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.actors.Rank;
 import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Bakery;
 import org.appland.settlers.model.buildings.Brewery;
@@ -202,7 +203,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
         System.out.println("ON NEW MESSAGE FOR PLAYER");
 
         sendToPlayer(new JSONObject(Map.of(
-                        "type", "NEW_CHAT_MESSAGES",
+                        "type", "NEW_CHAT_MESSAGE",
                         "chatMessage", jsonUtils.chatMessageToPlayerToJson(chatMessage, player)
                 )),
                 player);
@@ -223,10 +224,32 @@ public class WebsocketApi implements PlayerGameViewMonitor,
         synchronized (chatRoomListeners) {
             chatRoomListeners.get(roomId).forEach(session -> sendToSession(session,
                     new JSONObject(Map.of(
-                            "type", "NEW_CHAT_MESSAGES",
+                            "type", "NEW_CHAT_MESSAGE",
                             "chatMessage", jsonUtils.chatMessageToRoomToJson(chatMessage, roomId)
                     ))));
         }
+    }
+
+    /**
+     * Called when the game receives a new chat message. Translates the GameMap instance to a room id and sends the
+     * message on to listening frontend instances.
+     *
+     * LOCKS HELD: ChatManager.class
+     *
+     * @param chatMessage
+     * @param game
+     */
+    @Override
+    public void newMessageForGame(ChatManager.ChatMessage chatMessage, GameMap game) {
+        System.out.println("NEW MESSAGE FOR GAME");
+
+        var roomId = "game-" + idManager.getId(GAME_RESOURCES.getGameResource(game));
+
+        chatRoomListeners.get(roomId).forEach(session -> sendToSession(session,
+                new JSONObject(Map.of(
+                        "type", "NEW_CHAT_MESSAGE",
+                        "chatMessage", jsonUtils.chatMessageToRoomToJson(chatMessage, roomId)
+                ))));
     }
 
     /**
@@ -400,7 +423,9 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     if (listeners != null) {
                         listeners.remove(session);
 
-                        // TODO: Should stop listening...
+                        if (listeners.isEmpty()) {
+                            map.getStatisticsManager().removeListener(this);
+                        }
                     }
                 }
             }
@@ -556,15 +581,65 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
 
+            case GET_CHAT_HISTORY_FOR_ROOMS -> {
+                var roomIds = (JSONArray) jsonBody.get("roomIds");
+
+                for (var roomIdObj : roomIds) {
+                    var roomId = (String) roomIdObj;
+
+                    if (roomId.startsWith("game-")) {
+                        var map = ((GameResource) idManager.getObject(roomId.substring("game-".length()))).getGameMap();
+
+                        synchronized (ChatManager.class) {
+                            var msg = new JSONObject(Map.of(
+                                    "requestId", jsonBody.get("requestId"),
+                                    "chatHistory", jsonUtils.chatMessagesToRoomToJson(ChatManager.getChatHistoryForGame(map), roomId)
+                            ));
+
+                            sendToSession(session,
+                                    new JSONObject(Map.of(
+                                            "requestId", jsonBody.get("requestId"),
+                                            "chatHistory", jsonUtils.chatMessagesToRoomToJson(ChatManager.getChatHistoryForGame(map), roomId)
+                                    )));
+                        }
+                    } else {
+                        synchronized (ChatManager.class) {
+                            sendToSession(session,
+                                    new JSONObject(Map.of(
+                                            "requestId", jsonBody.get("requestId"),
+                                            "chatHistory", jsonUtils.chatMessagesToRoomToJson(ChatManager.getChatHistoryForRoom(roomId), roomId)
+                                    )));
+                        }
+                    }
+                }
+            }
+
             case GET_CHAT_HISTORY_FOR_ROOM -> {
                 var roomId = (String) jsonBody.get("roomId");
 
-                synchronized (ChatManager.class) {
-                    sendToSession(session,
-                            new JSONObject(Map.of(
-                                    "requestId", jsonBody.get("requestId"),
-                                    "chatHistory", jsonUtils.chatMessagesToRoomToJson(ChatManager.getChatHistoryForRoom(roomId), roomId)
-                            )));
+                if (roomId.startsWith("game-")) {
+                    var map = ((GameResource) idManager.getObject(roomId.substring("game-".length()))).getGameMap();
+
+                    synchronized (ChatManager.class) {
+                        var msg = new JSONObject(Map.of(
+                                "requestId", jsonBody.get("requestId"),
+                                "chatHistory", jsonUtils.chatMessagesToRoomToJson(ChatManager.getChatHistoryForGame(map), roomId)
+                        ));
+
+                        sendToSession(session,
+                                new JSONObject(Map.of(
+                                        "requestId", jsonBody.get("requestId"),
+                                        "chatHistory", jsonUtils.chatMessagesToRoomToJson(ChatManager.getChatHistoryForGame(map), roomId)
+                                )));
+                    }
+                } else {
+                    synchronized (ChatManager.class) {
+                        sendToSession(session,
+                                new JSONObject(Map.of(
+                                        "requestId", jsonBody.get("requestId"),
+                                        "chatHistory", jsonUtils.chatMessagesToRoomToJson(ChatManager.getChatHistoryForRoom(roomId), roomId)
+                                )));
+                    }
                 }
             }
 
@@ -579,27 +654,47 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     ((JSONArray) jsonBody.get("roomIds"))
                             .forEach(roomId -> {
                                 synchronized (ChatManager.class) {
-                                    ChatManager.addMessageListenerForRoom((String) roomId, this);
+                                    var roomIdString = (String) roomId;
+
+                                    if (roomIdString.startsWith("game-")) {
+                                        var gameResource = (GameResource) idManager.getObject(roomIdString.substring(5));
+                                        ChatManager.addMessageListenerForGame(gameResource.getGameMap(), this);
+                                    } else {
+                                        ChatManager.addMessageListenerForRoom((String) roomId, this);
+                                    }
                                 }
 
                                 synchronized (chatRoomListeners) {
-                                    if (!chatRoomListeners.containsKey(roomId)) {
-                                        chatRoomListeners.put((String) roomId, new HashSet<>());
-                                    }
-
-                                    chatRoomListeners.get((String) roomId).add(session);
+                                    chatRoomListeners
+                                            .computeIfAbsent((String) roomId, k -> new HashSet<>())
+                                            .add(session);
                                 }
                             });
                 }
             }
 
             case SEND_CHAT_MESSAGE_TO_ROOM -> {
-                synchronized (ChatManager.class) {
-                    ChatManager.sendChatToRoom(
-                            (String) jsonBody.get("roomId"),
-                            (String) jsonBody.get("text"),
-                            (Player) idManager.getObject((String) jsonBody.get("from"))
-                    );
+                var roomId = (String) jsonBody.get("roomId");
+                var chatMessageToRoom = (String) jsonBody.get("text");
+                var fromPlayer = (Player) idManager.getObject((String) jsonBody.get("from"));
+
+                // Sending to a game uses one API while sending to another room uses another API
+                // Messages to a game starts with "game-".
+
+                if (roomId.startsWith("game-")) {
+                    var game = (GameResource) idManager.getObject(roomId.substring(5));
+
+                    synchronized (ChatManager.class) {
+                        ChatManager.sendChatToGame(chatMessageToRoom, fromPlayer, game.getGameMap());
+                    }
+                } else {
+                    synchronized (ChatManager.class) {
+                        ChatManager.sendChatToRoom(
+                                roomId,
+                                chatMessageToRoom,
+                                (Player) idManager.getObject((String) jsonBody.get("from"))
+                        );
+                    }
                 }
             }
 
@@ -1344,7 +1439,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     if (optionalHeadquarter.isPresent()) {
                         var headquarter = (Headquarter) optionalHeadquarter.get();
 
-                        Arrays.stream(Soldier.Rank.values()).iterator().forEachRemaining(
+                        Arrays.stream(Rank.values()).iterator().forEachRemaining(
                                 rank -> {
                                     if (jsonBody.containsKey(rank.name().toUpperCase())) {
                                         var amountLong = (Long) jsonBody.get(rank.name().toUpperCase());
@@ -1454,6 +1549,47 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 synchronized (map) {
                     try {
                         var road = map.placeRoad(player, roadPoints);
+                    } catch (InvalidUserActionException e) {
+                        System.out.printf("Refusing to place invalid road: %s", roadPoints);
+                    }
+                }
+            }
+
+            case PLACE_CONNECTION -> {
+                var player = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var map = player.getMap();
+                var jsonRoadPoints = (JSONArray) jsonBody.get("points");
+                var roadPoints = jsonUtils.jsonToPoints(jsonRoadPoints);
+
+                synchronized (map) {
+                    try {
+                        var road = new ArrayList<Point>();
+
+                        for (var point : roadPoints) {
+                            if (road.isEmpty()) {
+                                road.add(point);
+
+                                continue;
+                            }
+
+                            var lastPoint = road.getLast();
+
+                            // Is there more than one step between the current and the previous point?
+                            if (Math.abs(lastPoint.x - point.x) > 2 || Math.abs(lastPoint.y - point.y) > 1) {
+
+                                // Place the road before the gap
+                                if (road.size() > 2) {
+                                    map.placeRoad(player, road);
+                                }
+
+                                road.clear();
+
+                                // Fill in the gap between the last point and the current point
+                                GamePlay.connectToPointByRoad(lastPoint, point, player, 0.5);
+                            }
+
+                            road.add(point);
+                        }
                     } catch (InvalidUserActionException e) {
                         System.out.printf("Refusing to place invalid road: %s", roadPoints);
                     }
@@ -1579,8 +1715,8 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 var map = player.getMap();
 
                 synchronized (map) {
-                    ((JSONArray) jsonBody.get("messageIds"))
-                            .stream().map(messageId -> idManager.getObject((String) messageId))
+                    ((JSONArray) jsonBody.get("messageIds")).stream()
+                            .map(messageId -> idManager.getObject((String) messageId))
                             .forEach(readMessage -> player.markMessageAsRead((Message) readMessage));
                 }
             }
@@ -1661,7 +1797,14 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
 
-            roomsToStopListeningTo.forEach(roomId -> ChatManager.removeMessageListenerForRoom(roomId));
+            roomsToStopListeningTo.forEach(roomId -> {
+                ChatManager.removeMessageListenerForRoom(roomId, this);
+
+                if ((roomId).startsWith("game-")) {
+                    var game = ((GameResource) idManager.getObject((roomId).substring(5))).getGameMap();
+                    ChatManager.removeMessageListenerForGame(game, this);
+                }
+            });
         }
 
         synchronized (playerListeners) {

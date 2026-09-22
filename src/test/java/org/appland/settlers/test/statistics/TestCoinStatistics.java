@@ -9,7 +9,7 @@ import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.actors.Minter;
-import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.actors.Rank;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Mint;
@@ -156,7 +156,7 @@ public class TestCoinStatistics {
             assertNull(minter.getCargo());
         }
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, mint.getWorker(), COIN);
+        Utils.fastForwardUntilWorkerCarriesCargo(mint.getWorker(), COIN);
 
         map.stepTime();
 
@@ -172,7 +172,7 @@ public class TestCoinStatistics {
 
         // Wait for the coin to get consumed when a soldier gets promoted
         assertEquals(barracks.getHostedSoldiers().size(), 1);
-        assertEquals(barracks.getHostedSoldiers().getFirst().getRank(), Soldier.Rank.PRIVATE_RANK);
+        assertEquals(barracks.getHostedSoldiers().getFirst().getRank(), Rank.PRIVATE_RANK);
         assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().size(), 2);
         assertTrue(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().time() > 1);
         assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().value(), 1);
@@ -180,7 +180,7 @@ public class TestCoinStatistics {
         Utils.waitForBuildingToHave(barracks, COIN, 0);
 
         assertEquals(barracks.getHostedSoldiers().size(), 1);
-        assertEquals(barracks.getHostedSoldiers().getFirst().getRank(), Soldier.Rank.PRIVATE_FIRST_CLASS_RANK);
+        assertEquals(barracks.getHostedSoldiers().getFirst().getRank(), Rank.PRIVATE_FIRST_CLASS_RANK);
         assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().size(), 2);
         assertTrue(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().time() > 1);
         assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().value(), 1);

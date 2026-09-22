@@ -2,6 +2,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -24,7 +25,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.*;
 
@@ -553,7 +554,7 @@ public class TestHunterHut {
         // Wait for the hunter to go out the hut and reach the flag
         assertEquals(hunter.getTarget(), hunterHut.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunterHut.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, hunterHut.getFlag().getPosition());
 
         // Verify that the hunter tracks the wild animal
         for (int i = 0; i < 1000; i++) {
@@ -577,7 +578,7 @@ public class TestHunterHut {
             assertTrue(hunterHut.isWorking());
 
             // Wait for the hunter to reach the next spot
-            Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunter.getTarget());
+            Utils.fastForwardUntilWorkerReachesPoint(hunter, hunter.getTarget());
         }
     }
 
@@ -656,7 +657,7 @@ public class TestHunterHut {
         assertTrue(hunter.getTarget().equals(lastAnimalPoint) || hunter.getPosition().equals(lastAnimalPoint));
 
         if (hunter.getTarget().equals(lastAnimalPoint)) {
-            Utils.fastForwardUntilWorkerReachesPoint(map, hunter, lastAnimalPoint);
+            Utils.fastForwardUntilWorkerReachesPoint(hunter, lastAnimalPoint);
         }
 
         assertEquals(animal.getPosition(), lastAnimalPoint);
@@ -711,7 +712,7 @@ public class TestHunterHut {
         assertTrue(hunter.getTarget().equals(animal.getPosition()) || hunter.getPosition().equals(animal.getPosition()));
 
         if (hunter.getTarget().equals(animal.getPosition())) {
-            Utils.fastForwardUntilWorkerReachesPoint(map, hunter, animal.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(hunter, animal.getPosition());
         }
 
         assertNotNull(hunter.getCargo());
@@ -723,7 +724,7 @@ public class TestHunterHut {
 
         var cargo = hunter.getCargo();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunterHut.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, hunterHut.getFlag().getPosition());
 
         assertNull(hunter.getCargo());
         assertTrue(hunterHut.getFlag().getStackedCargo().contains(cargo));
@@ -731,7 +732,7 @@ public class TestHunterHut {
         // Verify that the hunter goes to the hut
         assertEquals(hunter.getTarget(), hunterHut.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunterHut.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, hunterHut.getPosition());
 
         assertEquals(hunter.getPosition(), hunterHut.getPosition());
         assertTrue(hunter.isInsideBuilding());
@@ -784,7 +785,7 @@ public class TestHunterHut {
         assertTrue(hunter.getTarget().equals(animal.getPosition()) || hunter.getPosition().equals(animal.getPosition()));
 
         if (hunter.getTarget().equals(animal.getPosition())) {
-            Utils.fastForwardUntilWorkerReachesPoint(map, hunter, animal.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(hunter, animal.getPosition());
         }
 
         assertNotNull(hunter.getCargo());
@@ -813,7 +814,7 @@ public class TestHunterHut {
         // Verify that the hunter goes to the flag and leaves the meat when there is space
         var road1 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
 
-        Utils.waitForFlagToHaveAmountStackedCargo(map, hunterHut.getFlag(), 7);
+        Utils.waitForFlagToHaveAmountStackedCargo(hunterHut.getFlag(), 7);
 
         map.stepTime();
 
@@ -821,7 +822,7 @@ public class TestHunterHut {
 
         var cargo = hunter.getCargo();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunterHut.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, hunterHut.getFlag().getPosition());
 
         assertNull(hunter.getCargo());
         assertTrue(hunterHut.getFlag().getStackedCargo().contains(cargo));
@@ -829,7 +830,7 @@ public class TestHunterHut {
         // Verify that the hunter goes to the hut
         assertEquals(hunter.getTarget(), hunterHut.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunterHut.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, hunterHut.getPosition());
 
         assertEquals(hunter.getPosition(), hunterHut.getPosition());
         assertTrue(hunter.isInsideBuilding());
@@ -1007,17 +1008,17 @@ public class TestHunterHut {
         Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut);
 
         // Wait for the courier on the road between the coal mine and the var hut to have a meat cargo
-        Utils.waitForFlagToGetStackedCargo(map, hunterHut.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(hunterHut.getFlag(), 1);
 
         assertEquals(hunterHut.getFlag().getStackedCargo().getFirst().getMaterial(), MEAT);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that the courier delivers the cargo to the coal mine (and not the headquarters)
         assertEquals(hunterHut.getAmount(MEAT), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), coalMine.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), coalMine.getPosition());
 
         assertEquals(coalMine.getAmount(MEAT), 1);
     }
@@ -1059,12 +1060,12 @@ public class TestHunterHut {
         Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut);
 
         // Wait for the courier on the road between the storehouse and the var hut to have a meat cargo
-        Utils.waitForFlagToGetStackedCargo(map, hunterHut.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(hunterHut.getFlag(), 1);
 
         assertEquals(hunterHut.getFlag().getStackedCargo().getFirst().getMaterial(), MEAT);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters
         assertEquals(headquarter.getAmount(MEAT), 0);
@@ -1072,7 +1073,7 @@ public class TestHunterHut {
         assertFalse(storehouse.needsMaterial(MEAT));
         assertTrue(storehouse.isUnderConstruction());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
         assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(MEAT));
@@ -1125,12 +1126,12 @@ public class TestHunterHut {
         Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut);
 
         // Wait for the flag on the road between the gold mine and the var hut to have a meat cargo
-        Utils.waitForFlagToGetStackedCargo(map, hunterHut.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(hunterHut.getFlag(), 1);
 
         assertEquals(hunterHut.getFlag().getStackedCargo().getFirst().getMaterial(), MEAT);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that no stone is delivered from the headquarters
         Utils.adjustInventoryTo(headquarter, MEAT, 1);
@@ -1182,7 +1183,7 @@ public class TestHunterHut {
 
         var amount = headquarter0.getAmount(HUNTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, headquarter0.getPosition());
 
         // Verify that the miner is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(HUNTER), amount + 1);
@@ -1484,7 +1485,7 @@ public class TestHunterHut {
         assertNotNull(hunter);
         assertEquals(hunter.getTarget(), hunterHut0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1495,14 +1496,14 @@ public class TestHunterHut {
         map.removeRoad(road1);
 
         // Verify that the hunter continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, flag0.getPosition());
 
         assertEquals(hunter.getPosition(), flag0.getPosition());
 
         // Verify that the hunter returns to the headquarter when it reaches the flag
         assertEquals(hunter.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, headquarter0.getPosition());
     }
 
     @Test
@@ -1544,7 +1545,7 @@ public class TestHunterHut {
         assertNotNull(hunter);
         assertEquals(hunter.getTarget(), hunterHut0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1555,14 +1556,14 @@ public class TestHunterHut {
         map.removeRoad(road0);
 
         // Verify that the hunter continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, flag0.getPosition());
 
         assertEquals(hunter.getPosition(), flag0.getPosition());
 
         // Verify that the hunter continues to the final flag
         assertEquals(hunter.getTarget(), hunterHut0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunterHut0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, hunterHut0.getFlag().getPosition());
 
         // Verify that the hunter goes out to hunter instead of going directly back
         assertNotEquals(hunter.getTarget(), headquarter0.getPosition());
@@ -1608,7 +1609,7 @@ public class TestHunterHut {
         assertEquals(hunter.getTarget(), hunterHut0.getPosition());
 
         // Wait for the hunter to reach the first flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, flag0.getPosition());
 
         map.stepTime();
 
@@ -1619,7 +1620,7 @@ public class TestHunterHut {
         hunterHut0.tearDown();
 
         // Verify that the hunter continues walking to the next flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunterHut0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, hunterHut0.getFlag().getPosition());
 
         assertEquals(hunter.getPosition(), hunterHut0.getFlag().getPosition());
 
@@ -1669,7 +1670,7 @@ public class TestHunterHut {
 
         var amount = storehouse0.getAmount(HUNTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, storehouse0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, storehouse0.getPosition());
 
         // Verify that the hunter is stored correctly in the headquarter
         assertEquals(storehouse0.getAmount(HUNTER), amount + 1);
@@ -1720,7 +1721,7 @@ public class TestHunterHut {
 
         var amount = headquarter0.getAmount(HUNTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, headquarter0.getPosition());
 
         // Verify that the hunter is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(HUNTER), amount + 1);
@@ -1774,7 +1775,7 @@ public class TestHunterHut {
 
         var amount = headquarter0.getAmount(HUNTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, headquarter0.getPosition());
 
         // Verify that the hunter is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(HUNTER), amount + 1);
@@ -1819,7 +1820,7 @@ public class TestHunterHut {
 
         var amount = headquarter0.getAmount(HUNTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, headquarter0.getPosition());
 
         // Verify that the hunter is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(HUNTER), amount + 1);
@@ -1850,7 +1851,7 @@ public class TestHunterHut {
         var worker = Utils.waitForWorkersOutsideBuilding(Hunter.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, hunterHut0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, hunterHut0.getFlag().getPosition());
 
         // Tear down the building
         hunterHut0.tearDown();
@@ -1858,11 +1859,11 @@ public class TestHunterHut {
         // Verify that the worker goes to the building and then returns to the headquarter instead of entering
         assertEquals(worker.getTarget(), hunterHut0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, hunterHut0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, hunterHut0.getPosition());
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
     }
 
     @Test
@@ -2028,7 +2029,7 @@ public class TestHunterHut {
         assertEquals(hunter.getPosition(), hunterHut0.getFlag().getPosition());
         assertEquals(hunter.getTarget(), hunterHut0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunterHut0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, hunterHut0.getPosition());
 
         assertEquals(hunter.getPosition(), hunterHut0.getPosition());
 
@@ -2256,7 +2257,7 @@ public class TestHunterHut {
         Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut);
 
         // Fill the flag with flour cargos
-        Utils.placeCargos(map, FLOUR, 8, hunterHut.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, hunterHut.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2273,7 +2274,7 @@ public class TestHunterHut {
         var road1 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 800; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2289,7 +2290,7 @@ public class TestHunterHut {
         assertEquals(hunterHut.getFlag().getStackedCargo().size(), 7);
 
         // Verify that the worker produces a cargo of flour and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, hunterHut.getWorker(), MEAT);
+        Utils.fastForwardUntilWorkerCarriesCargo(hunterHut.getWorker(), MEAT);
     }
 
     @Test
@@ -2315,7 +2316,7 @@ public class TestHunterHut {
         Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut);
 
         // Fill the flag with cargos
-        Utils.placeCargos(map, FLOUR, 8, hunterHut.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, hunterHut.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2331,7 +2332,7 @@ public class TestHunterHut {
         var road1 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 800; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2350,10 +2351,10 @@ public class TestHunterHut {
         map.removeRoad(road1);
 
         // Wait for the hunter to get more meat
-        Utils.fastForwardUntilWorkerCarriesCargo(map, hunterHut.getWorker(), MEAT);
+        Utils.fastForwardUntilWorkerCarriesCargo(hunterHut.getWorker(), MEAT);
 
         // Wait for the worker to put the cargo on the flag
-        Utils.waitForFlagToGetStackedCargo(map, hunterHut.getFlag(), 8);
+        Utils.waitForFlagToGetStackedCargo(hunterHut.getFlag(), 8);
 
         assertEquals(hunterHut.getFlag().getStackedCargo().size(), 8);
 
@@ -2403,9 +2404,9 @@ public class TestHunterHut {
         headquarter0.blockDeliveryOfMaterial(MEAT);
 
         // Verify that the var hut puts eight wheats on the flag and then stops
-        Utils.waitForFlagToGetStackedCargo(map, hunterHut0.getFlag(), 8);
+        Utils.waitForFlagToGetStackedCargo(hunterHut0.getFlag(), 8);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter0, hunterHut0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter0, hunterHut0.getPosition());
 
         for (int i = 0; i < 300; i++) {
             map.stepTime();
@@ -2473,7 +2474,7 @@ public class TestHunterHut {
 
         assertFalse(hunter0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter0, hunterHut0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter0, hunterHut0.getFlag().getPosition());
 
         assertEquals(hunter0.getTarget(), storehouse.getPosition());
 
@@ -2539,11 +2540,11 @@ public class TestHunterHut {
 
         assertFalse(hunter0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter0, hunterHut0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter0, hunterHut0.getFlag().getPosition());
 
         assertEquals(hunter0.getTarget(), storehouse.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter0, storehouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter0, storehouse.getPosition());
 
         assertFalse(map.getWorkers().contains(hunter0));
     }
@@ -2573,12 +2574,12 @@ public class TestHunterHut {
             assertEquals(worker.getPosition(), headquarter0.getPosition());
             assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
             assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
             assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
             assertFalse(map.getWorkers().contains(worker));
         }
@@ -2606,25 +2607,16 @@ public class TestHunterHut {
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
-
-        for (int i = 0; i < 100; i++) {
-            assertTrue(worker.isDead());
-            assertTrue(map.getWorkers().contains(worker));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(worker));
     }
 
     @Test
@@ -2663,7 +2655,7 @@ public class TestHunterHut {
 
         assertEquals(worker.getPosition(), hunterHut0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, hunterHut0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, hunterHut0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), hunterHut0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
@@ -2671,18 +2663,37 @@ public class TestHunterHut {
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
 
-        for (int i = 0; i < 100; i++) {
+        // Verify that the skeleton decays
+        for (int i = 0; i < 6000; i++) {
             assertTrue(worker.isDead());
             assertTrue(map.getWorkers().contains(worker));
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
+
+            map.stepTime();
+        }
+
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(DecorationType.HUMAN_SKELETON_DECAYED, map.getDecorationAtPoint(worker.getPosition()));
+
+        // Verify that the skeleton disappears
+        for (int i = 0; i < 4000; i++) {
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
 
             map.stepTime();
         }
 
         assertFalse(map.getWorkers().contains(worker));
+        assertFalse(map.isDecoratedAtPoint(worker.getPosition()));
+        assertNotEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
+
     }
 
     @Test
@@ -2713,7 +2724,7 @@ public class TestHunterHut {
         var hunter = Utils.waitForWorkerOutsideBuilding(Hunter.class, player0);
 
         // Wait for the hunter to go past the headquarter's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -2724,7 +2735,7 @@ public class TestHunterHut {
 
         hunterHut0.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunterHut0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, hunterHut0.getFlag().getPosition());
 
         assertEquals(hunter.getPosition(), hunterHut0.getFlag().getPosition());
         assertNotEquals(hunter.getTarget(), headquarter0.getPosition());
@@ -2732,17 +2743,8 @@ public class TestHunterHut {
         assertNull(hunterHut0.getWorker());
         assertNotNull(hunter.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunter.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(hunter, hunter.getTarget());
 
-        var point = hunter.getPosition();
-        for (int i = 0; i < 100; i++) {
-            assertTrue(hunter.isDead());
-            assertEquals(hunter.getPosition(), point);
-            assertTrue(map.getWorkers().contains(hunter));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(hunter));
+        assertTrue(hunter.isDead());
     }
 }

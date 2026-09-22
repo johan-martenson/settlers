@@ -440,7 +440,9 @@ public class Extractor {
         );
 
         var decorationsWithoutShadows = Map.of(
-                DecorationType.MINI_STONE_WITH_GRASS, MapBobs0Lst.MINI_STONE_WITH_GRASS_AND_SHADOW
+                DecorationType.MINI_STONE_WITH_GRASS, MapBobs0Lst.MINI_STONE_WITH_GRASS_AND_SHADOW,
+                DecorationType.HUMAN_SKELETON_FRESH, MapBobs0Lst.HUMAN_SKELETON_FRESH,
+                DecorationType.HUMAN_SKELETON_DECAYED, MapBobs0Lst.HUMAN_SKELETON_DECAYED
         );
 
         var decorativeImageCollection = new DecorativeImageCollection();

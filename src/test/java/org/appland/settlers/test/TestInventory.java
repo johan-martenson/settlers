@@ -12,7 +12,6 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Forester;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -21,10 +20,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.*;
+import static org.appland.settlers.model.actors.Rank.*;
 import static org.junit.Assert.*;
 
 /**

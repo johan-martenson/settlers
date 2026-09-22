@@ -14,7 +14,6 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Farm;
 import org.appland.settlers.model.buildings.GoldMine;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -23,7 +22,6 @@ import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
 import static org.junit.Assert.*;
@@ -135,7 +133,7 @@ public class TestConstruction {
         assertTrue(barracks0.isMilitaryBuilding());
         assertEquals(barracks0.getMaxHostedSoldiers(), 2);
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 0);
-        assertEquals(barracks0.getPromisedSoldier(), 0);
+        assertEquals(barracks0.getPromisedSoldiers(), 0);
         assertFalse(barracks0.needsMilitaryManning());
 
         // Construct the barracks

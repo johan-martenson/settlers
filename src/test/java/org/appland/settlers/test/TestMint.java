@@ -2,6 +2,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -20,10 +21,9 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 /**
@@ -218,7 +218,8 @@ public class TestMint {
 
     @Test
     public void testHeadquarterHasOneMinterAtStart() {
-        var headquarter = new Headquarter(null);
+        var player = new Player("Player 1", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var headquarter = new Headquarter(player);
 
         assertEquals(headquarter.getAmount(MINTER), 1);
     }
@@ -269,7 +270,7 @@ public class TestMint {
         assertNotNull(minter);
         assertEquals(minter.getTarget(), mint.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, minter);
+        Utils.fastForwardUntilWorkersReachTarget(minter);
 
         assertTrue(minter.isInsideBuilding());
         assertEquals(minter.getHome(), mint);
@@ -359,7 +360,7 @@ public class TestMint {
         assertNotNull(minter);
         assertEquals(minter.getTarget(), mint.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, minter);
+        Utils.fastForwardUntilWorkersReachTarget(minter);
 
         assertTrue(minter.isInsideBuilding());
         assertEquals(minter.getHome(), mint);
@@ -544,14 +545,14 @@ public class TestMint {
         // Verify that the mint worker leaves the cargo at the flag
         assertEquals(minter.getTarget(), mint.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter, mint.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(minter, mint.getFlag().getPosition());
 
         assertFalse(mint.getFlag().getStackedCargo().isEmpty());
         assertNull(minter.getCargo());
         assertEquals(minter.getTarget(), mint.getPosition());
 
         // Verify that the minter goes back to the mint
-        Utils.fastForwardUntilWorkersReachTarget(map, minter);
+        Utils.fastForwardUntilWorkersReachTarget(minter);
 
         assertTrue(minter.isInsideBuilding());
     }
@@ -599,17 +600,17 @@ public class TestMint {
         Utils.adjustInventoryTo(headquarter, COAL, 1);
         Utils.adjustInventoryTo(headquarter, GOLD, 1);
 
-        Utils.waitForFlagToGetStackedCargo(map, mint.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(mint.getFlag(), 1);
 
         assertEquals(mint.getFlag().getStackedCargo().getFirst().getMaterial(), COIN);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that the courier delivers the cargo to the coal mine (and not the headquarters)
         assertEquals(mint.getAmount(COIN), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), barracks.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), barracks.getPosition());
 
         assertEquals(barracks.getAmount(COIN), 1);
     }
@@ -656,12 +657,12 @@ public class TestMint {
         Utils.deliverCargo(mint, COAL);
         Utils.deliverCargo(mint, GOLD);
 
-        Utils.waitForFlagToGetStackedCargo(map, mint.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(mint.getFlag(), 1);
 
         assertEquals(mint.getFlag().getStackedCargo().getFirst().getMaterial(), COIN);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters
         assertEquals(headquarter.getAmount(COIN), 0);
@@ -669,7 +670,7 @@ public class TestMint {
         assertFalse(storehouse.needsMaterial(COIN));
         assertTrue(storehouse.isUnderConstruction());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
         assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(COIN));
@@ -721,12 +722,12 @@ public class TestMint {
         Utils.deliverCargo(mint, COAL);
         Utils.deliverCargo(mint, GOLD);
 
-        Utils.waitForFlagToGetStackedCargo(map, mint.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(mint.getFlag(), 1);
 
         assertEquals(mint.getFlag().getStackedCargo().getFirst().getMaterial(), COIN);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         assertEquals(road0.getCourier().getCargo().getTarget(), barracks);
 
@@ -867,7 +868,7 @@ public class TestMint {
         assertEquals(worker.getTarget(), mint0.getFlag().getPosition());
         assertTrue(mint0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, mint0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, mint0.getFlag().getPosition());
 
         assertNull(worker.getCargo());
         assertFalse(mint0.getFlag().getStackedCargo().isEmpty());
@@ -875,7 +876,7 @@ public class TestMint {
         // Wait for the worker to go back to the mint
         assertEquals(worker.getTarget(), mint0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, mint0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, mint0.getPosition());
 
         // Wait for the worker to rest and produce another cargo
         Utils.fastForward(150, map);
@@ -885,7 +886,7 @@ public class TestMint {
         // Verify that the second cargo is put at the flag
         assertEquals(worker.getTarget(), mint0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, mint0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, mint0.getFlag().getPosition());
 
         assertNull(worker.getCargo());
         assertEquals(mint0.getFlag().getStackedCargo().size(), 2);
@@ -931,7 +932,7 @@ public class TestMint {
         assertEquals(worker.getTarget(), mint0.getFlag().getPosition());
         assertTrue(mint0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, mint0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, mint0.getFlag().getPosition());
 
         assertNull(worker.getCargo());
         assertFalse(mint0.getFlag().getStackedCargo().isEmpty());
@@ -960,14 +961,14 @@ public class TestMint {
         assertNotEquals(courier.getTarget(), mint0.getFlag().getPosition());
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         // Verify that the courier walks to pick up the cargo
         map.stepTime();
 
         assertEquals(courier.getTarget(), mint0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         // Verify that the courier has picked up the cargo
         assertNotNull(courier.getCargo());
@@ -978,7 +979,7 @@ public class TestMint {
 
         var amount = headquarter0.getAmount(COIN);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
         // Verify that the courier has delivered the cargo to the headquarter
         assertNull(courier.getCargo());
@@ -1021,7 +1022,7 @@ public class TestMint {
 
         var amount = headquarter0.getAmount(MINTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
         // Verify that the minter is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(MINTER), amount + 1);
@@ -1211,14 +1212,14 @@ public class TestMint {
         Utils.fastForward(100, map);
 
         // Wait for the minter to produce cargo
-        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
+        Utils.fastForwardUntilWorkerProducesCargo(worker);
 
         assertEquals(worker.getCargo().getMaterial(), COIN);
 
         // Wait for the worker to deliver the cargo
         assertEquals(worker.getTarget(), mint0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, mint0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, mint0.getFlag().getPosition());
 
         // Stop production and verify that no coin is produced
         mint0.stopProduction();
@@ -1269,14 +1270,14 @@ public class TestMint {
         Utils.fastForward(100, map);
 
         // Wait for the minter to produce coin
-        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
+        Utils.fastForwardUntilWorkerProducesCargo(worker);
 
         assertEquals(worker.getCargo().getMaterial(), COIN);
 
         // Wait for the worker to deliver the cargo
         assertEquals(worker.getTarget(), mint0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, mint0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, mint0.getFlag().getPosition());
 
         // Stop production
         mint0.stopProduction();
@@ -1292,7 +1293,7 @@ public class TestMint {
 
         assertTrue(mint0.isProductionEnabled());
 
-        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
+        Utils.fastForwardUntilWorkerProducesCargo(worker);
 
         assertNotNull(worker.getCargo());
     }
@@ -1427,7 +1428,7 @@ public class TestMint {
         assertNotNull(minter);
         assertEquals(minter.getTarget(), mint0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(minter, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1438,14 +1439,14 @@ public class TestMint {
         map.removeRoad(road1);
 
         // Verify that the minter continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(minter, flag0.getPosition());
 
         assertEquals(minter.getPosition(), flag0.getPosition());
 
         // Verify that the minter returns to the headquarter when it reaches the flag
         assertEquals(minter.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(minter, headquarter0.getPosition());
     }
 
     @Test
@@ -1488,7 +1489,7 @@ public class TestMint {
         assertNotNull(minter);
         assertEquals(minter.getTarget(), mint0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(minter, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1499,14 +1500,14 @@ public class TestMint {
         map.removeRoad(road0);
 
         // Verify that the minter continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(minter, flag0.getPosition());
 
         assertEquals(minter.getPosition(), flag0.getPosition());
 
         // Verify that the minter continues to the final flag
         assertEquals(minter.getTarget(), mint0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter, mint0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(minter, mint0.getFlag().getPosition());
 
         // Verify that the minter goes out to minter instead of going directly back
         assertNotEquals(minter.getTarget(), headquarter0.getPosition());
@@ -1553,7 +1554,7 @@ public class TestMint {
         assertEquals(minter.getTarget(), mint0.getPosition());
 
         // Wait for the minter to reach the first flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(minter, flag0.getPosition());
 
         map.stepTime();
 
@@ -1564,7 +1565,7 @@ public class TestMint {
         mint0.tearDown();
 
         // Verify that the minter continues walking to the next flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter, mint0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(minter, mint0.getFlag().getPosition());
 
         assertEquals(minter.getPosition(), mint0.getFlag().getPosition());
 
@@ -1615,7 +1616,7 @@ public class TestMint {
 
         var amount = storehouse0.getAmount(MINTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter, storehouse0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(minter, storehouse0.getPosition());
 
         // Verify that the minter is stored correctly in the headquarter
         assertEquals(storehouse0.getAmount(MINTER), amount + 1);
@@ -1667,7 +1668,7 @@ public class TestMint {
 
         var amount = headquarter0.getAmount(MINTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(minter, headquarter0.getPosition());
 
         // Verify that the minter is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(MINTER), amount + 1);
@@ -1722,7 +1723,7 @@ public class TestMint {
 
         var amount = headquarter0.getAmount(MINTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(minter, headquarter0.getPosition());
 
         // Verify that the minter is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(MINTER), amount + 1);
@@ -1768,7 +1769,7 @@ public class TestMint {
 
         var amount = headquarter0.getAmount(MINTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(minter, headquarter0.getPosition());
 
         // Verify that the minter is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(MINTER), amount + 1);
@@ -1800,7 +1801,7 @@ public class TestMint {
         var worker = Utils.waitForWorkersOutsideBuilding(Minter.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, mint0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, mint0.getFlag().getPosition());
 
         // Tear down the building
         mint0.tearDown();
@@ -1808,11 +1809,11 @@ public class TestMint {
         // Verify that the worker goes to the building and then returns to the headquarter instead of entering
         assertEquals(worker.getTarget(), mint0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, mint0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, mint0.getPosition());
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
     }
 
     @Test
@@ -2142,7 +2143,7 @@ public class TestMint {
         Utils.deliverCargo(mint, COAL);
 
         // Fill the flag with flour cargos
-        Utils.placeCargos(map, FLOUR, 8, mint.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, mint.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2159,7 +2160,7 @@ public class TestMint {
         var road1 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2176,7 +2177,7 @@ public class TestMint {
         assertEquals(mint.getFlag().getStackedCargo().size(), 7);
 
         // Verify that the worker produces a cargo of flour and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, mint.getWorker(), COIN);
+        Utils.fastForwardUntilWorkerCarriesCargo(mint.getWorker(), COIN);
     }
 
     @Test
@@ -2209,7 +2210,7 @@ public class TestMint {
         Utils.deliverCargo(mint, COAL);
 
         // Fill the flag with cargos
-        Utils.placeCargos(map, FLOUR, 8, mint.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, mint.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2226,7 +2227,7 @@ public class TestMint {
         var road1 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2246,12 +2247,12 @@ public class TestMint {
         map.removeRoad(road1);
 
         // The worker produces a cargo and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, mint.getWorker(), COIN);
+        Utils.fastForwardUntilWorkerCarriesCargo(mint.getWorker(), COIN);
 
         // Wait for the worker to put the cargo on the flag
         assertEquals(mint.getWorker().getTarget(), mint.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, mint.getWorker(), mint.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(mint.getWorker(), mint.getFlag().getPosition());
 
         assertEquals(mint.getFlag().getStackedCargo().size(), 8);
 
@@ -2303,9 +2304,9 @@ public class TestMint {
         headquarter0.blockDeliveryOfMaterial(COIN);
 
         // Verify that the mint puts eight coins on the flag and then stops
-        Utils.waitForFlagToGetStackedCargo(map, mint0.getFlag(), 8);
+        Utils.waitForFlagToGetStackedCargo(mint0.getFlag(), 8);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter0, mint0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(minter0, mint0.getPosition());
 
         for (int i = 0; i < 300; i++) {
             map.stepTime();
@@ -2374,7 +2375,7 @@ public class TestMint {
 
         assertFalse(minter0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter0, mint0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(minter0, mint0.getFlag().getPosition());
 
         assertEquals(minter0.getTarget(), storehouse.getPosition());
 
@@ -2440,11 +2441,11 @@ public class TestMint {
 
         assertFalse(minter0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter0, mint0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(minter0, mint0.getFlag().getPosition());
 
         assertEquals(minter0.getTarget(), storehouse.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter0, storehouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(minter0, storehouse.getPosition());
 
         assertFalse(map.getWorkers().contains(minter0));
     }
@@ -2475,12 +2476,12 @@ public class TestMint {
             assertEquals(worker.getPosition(), headquarter0.getPosition());
             assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
             assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
             assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
             assertFalse(map.getWorkers().contains(worker));
         }
@@ -2509,25 +2510,16 @@ public class TestMint {
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
-
-        for (int i = 0; i < 100; i++) {
-            assertTrue(worker.isDead());
-            assertTrue(map.getWorkers().contains(worker));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(worker));
     }
 
     @Test
@@ -2569,7 +2561,7 @@ public class TestMint {
 
         assertEquals(worker.getPosition(), mint0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, mint0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, mint0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), mint0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
@@ -2577,18 +2569,37 @@ public class TestMint {
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
 
-        for (int i = 0; i < 100; i++) {
+        // Verify that the skeleton decays
+        for (int i = 0; i < 6000; i++) {
             assertTrue(worker.isDead());
             assertTrue(map.getWorkers().contains(worker));
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
+
+            map.stepTime();
+        }
+
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(DecorationType.HUMAN_SKELETON_DECAYED, map.getDecorationAtPoint(worker.getPosition()));
+
+        // Verify that the skeleton disappears
+        for (int i = 0; i < 4000; i++) {
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
 
             map.stepTime();
         }
 
         assertFalse(map.getWorkers().contains(worker));
+        assertFalse(map.isDecoratedAtPoint(worker.getPosition()));
+        assertNotEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
+
     }
 
     @Test
@@ -2620,7 +2631,7 @@ public class TestMint {
         var minter = Utils.waitForWorkerOutsideBuilding(Minter.class, player0);
 
         // Wait for the minter to go past the headquarter's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(minter, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -2631,7 +2642,7 @@ public class TestMint {
 
         mint0.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter, mint0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(minter, mint0.getFlag().getPosition());
 
         assertEquals(minter.getPosition(), mint0.getFlag().getPosition());
         assertNotEquals(minter.getTarget(), headquarter0.getPosition());
@@ -2639,17 +2650,8 @@ public class TestMint {
         assertNull(mint0.getWorker());
         assertNotNull(minter.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter, minter.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(minter, minter.getTarget());
 
-        var point = minter.getPosition();
-        for (int i = 0; i < 100; i++) {
-            assertTrue(minter.isDead());
-            assertEquals(minter.getPosition(), point);
-            assertTrue(map.getWorkers().contains(minter));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(minter));
+        assertTrue(minter.isDead());
     }
 }

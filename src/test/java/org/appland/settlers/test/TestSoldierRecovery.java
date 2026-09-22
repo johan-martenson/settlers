@@ -7,6 +7,7 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.GuardHouse;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -15,7 +16,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.*;
+import static org.appland.settlers.model.actors.Rank.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -45,11 +46,11 @@ public class TestSoldierRecovery {
         // Clear soldiers from the inventories and configure ranks for the fight
         Utils.clearSoldiersFromInventory(headquarter0, headquarter1);
 
-        headquarter0.setReservedSoldiers(PRIVATE_RANK, 0);
+        headquarter0.setReservedSoldiers(SERGEANT_RANK, 0);
         headquarter1.setReservedSoldiers(GENERAL_RANK, 0);
 
         // Player 0 gets a weak attacker (Private), Player 1 gets a strong defender (General)
-        Utils.adjustInventoryTo(headquarter0, PRIVATE, 2);
+        Utils.adjustInventoryTo(headquarter0, SERGEANT, 2);
         Utils.adjustInventoryTo(headquarter1, GENERAL, 1);
 
         // Place barracks for both players
@@ -79,14 +80,14 @@ public class TestSoldierRecovery {
 
         // Get the attacker and defender
         var attacker = Utils.findSoldierOutsideBuilding(player0);
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         var defender = Utils.findSoldierOutsideBuilding(player1);
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
 
         // Wait for the fight to start and the defender to win
         Utils.waitForFightToStart(map, attacker, defender);
-        Utils.waitForSoldierToWinFight(defender, map);
+        Utils.waitForSoldierToWinFight(defender);
 
         // Verify that the defender took damage
         assertTrue(defender.getHealth() < defender.getMaxHealth());
@@ -96,8 +97,8 @@ public class TestSoldierRecovery {
         // Wait for the defender to go back into the barracks
         assertEquals(defender.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, defender.getTarget());
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, barracks1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, defender.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, barracks1.getPosition());
 
         assertTrue(defender.isInsideBuilding());
 
@@ -162,20 +163,20 @@ public class TestSoldierRecovery {
         map.stepTime();
 
         var attacker = Utils.findSoldierOutsideBuilding(player0);
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, headquarter1.getFlag().getPosition());
 
         var defender = Utils.findSoldierOutsideBuilding(player1);
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
 
         // Let the fight conclude with the defender winning
         Utils.waitForFightToStart(map, attacker, defender);
-        Utils.waitForSoldierToWinFight(defender, map);
+        Utils.waitForSoldierToWinFight(defender);
 
         assertTrue(defender.getHealth() < defender.getMaxHealth());
 
         // Defender goes back to the headquarters
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, headquarter1.getFlag().getPosition());
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, headquarter1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, headquarter1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, headquarter1.getPosition());
 
         assertTrue(defender.isInsideBuilding());
 
@@ -213,11 +214,11 @@ public class TestSoldierRecovery {
         Utils.clearSoldiersFromInventory(headquarter0, headquarter1);
 
         headquarter0.setReservedSoldiers(GENERAL_RANK, 0);
-        headquarter1.setReservedSoldiers(PRIVATE_RANK, 0);
+        headquarter1.setReservedSoldiers(SERGEANT_RANK, 0);
 
         // Player 0 gets a strong attacker (General), Player 1 gets a weak defender (Private)
-        Utils.adjustInventoryTo(headquarter0, GENERAL, 2);
-        Utils.adjustInventoryTo(headquarter1, PRIVATE, 1);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 4);
+        Utils.adjustInventoryTo(headquarter1, SERGEANT, 1);
 
         // Place barracks
         var point2 = new Point(21, 5);
@@ -233,22 +234,35 @@ public class TestSoldierRecovery {
         Utils.waitForBuildingsToBeConstructed(barracks0, barracks1);
         Utils.waitForMilitaryBuildingsToGetPopulated(barracks0, barracks1);
 
-        // Initiate attack
-        assertTrue(player0.canAttack(barracks1));
+        // Keep attacking until the attacker gets hurt
+        var attacker = (Soldier) null;
 
-        player0.attack(barracks1, 1, AttackStrength.STRONG);
+        for (int i = 0; i < 200; i++) {
 
-        map.stepTime();
+            // Wait for player 0's barracks to fill up again
+            Utils.waitForMilitaryBuildingToHaveNumberOfHostedSoldiers(barracks0, 2);
 
-        var attacker = Utils.findSoldierOutsideBuilding(player0);
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+            // Initiate attack
+            assertTrue(player0.canAttack(barracks1));
 
-        var defender = Utils.findSoldierOutsideBuilding(player1);
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+            player0.attack(barracks1, 1, AttackStrength.STRONG);
 
-        // Wait for the fight to start and the attacker to win
-        Utils.waitForFightToStart(map, attacker, defender);
-        Utils.waitForSoldierToWinFight(attacker, map);
+            map.stepTime();
+
+            attacker = Utils.findSoldierOutsideBuilding(player0);
+            Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
+
+            var defender = Utils.findSoldierOutsideBuilding(player1);
+            Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
+
+            // Wait for the fight to start and the attacker to win
+            Utils.waitForFightToStart(map, attacker, defender);
+            Utils.waitForSoldierToWinFight(attacker);
+
+            if (attacker.getHealth() < attacker.getMaxHealth()) {
+                break;
+            }
+        }
 
         // Verify the attacker was hurt during the fight
         assertTrue(attacker.getHealth() < attacker.getMaxHealth());
@@ -256,8 +270,11 @@ public class TestSoldierRecovery {
         int healthAfterFight = attacker.getHealth();
 
         // The attacker returns to the flag, then captures the building
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
+
+        System.out.println(attacker);
+
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getPosition());
 
         assertTrue(attacker.isInsideBuilding());
         assertEquals(barracks1.getPlayer(), player0);
@@ -317,28 +334,58 @@ public class TestSoldierRecovery {
         Utils.waitForBuildingsToBeConstructed(barracks0, guardHouse1);
         Utils.waitForMilitaryBuildingsToGetPopulated(barracks0, guardHouse1);
 
-        // Initiate attack against the GuardHouse
-        assertTrue(player0.canAttack(guardHouse1));
+        // Iterate until the attacker gets hurt and wins
+        Soldier attacker = null;
+        Soldier defender = null;
 
-        player0.attack(guardHouse1, 1, AttackStrength.STRONG);
+        for (int i = 0; i < 3_000; i++) {
 
-        map.stepTime();
+            // Initiate attack against the GuardHouse
+            assertTrue(player0.canAttack(guardHouse1));
 
-        var attacker = Utils.findSoldierOutsideBuilding(player0);
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, guardHouse1.getFlag().getPosition());
+            player0.attack(guardHouse1, 1, AttackStrength.STRONG);
 
-        var defender = Utils.findSoldierOutsideBuilding(player1);
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+            map.stepTime();
 
-        // Wait for the fight to start and the attacker to win
-        Utils.waitForFightToStart(map, attacker, defender);
-        Utils.waitForSoldierToWinFight(attacker, map);
+            attacker = Utils.findSoldierOutsideBuilding(player0);
+            Utils.fastForwardUntilWorkerReachesPoint(attacker, guardHouse1.getFlag().getPosition());
+
+            defender = Utils.findSoldierOutsideBuilding(player1);
+            Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
+
+            // Wait for the fight to start and the attacker to win
+            Utils.waitForFightToStart(map, attacker, defender);
+            Utils.waitForSoldierToWinFight(attacker);
+
+            assertTrue(defender.isDying() || defender.isDead());
+
+            if (attacker.getHealth() < attacker.getMaxHealth()) {
+                break;
+            }
+
+            // If the attacker won but didn't get hurt
+            //   - wait for it to take over the guard house, then burn it down, place a new one and wait for it to get occupied
+            assertEquals(guardHouse1.getPosition(), attacker.getTarget());
+
+            Utils.fastForwardUntilWorkerReachesPoint(attacker, guardHouse1.getPosition());
+
+            assertEquals(player0, guardHouse1.getPlayer());
+
+            guardHouse1.tearDown();
+
+            Utils.waitForBuildingToBurnDown(guardHouse1);
+
+            guardHouse1 = map.placeBuilding(new GuardHouse(player1), guardHouse1.getPosition());
+            map.placeAutoSelectedRoad(player1, guardHouse1.getFlag(), headquarter1.getFlag());
+
+            Utils.waitForMilitaryBuildingToGetPopulated(guardHouse1);
+        }
 
         assertTrue(attacker.getHealth() < attacker.getMaxHealth());
 
         // The attacker captures the GuardHouse
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, guardHouse1.getFlag().getPosition());
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, guardHouse1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, guardHouse1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, guardHouse1.getPosition());
 
         assertTrue(attacker.isInsideBuilding());
         assertEquals(guardHouse1.getPlayer(), player0);
@@ -405,14 +452,14 @@ public class TestSoldierRecovery {
 
         // Get the attacker and defender and fast-forward to the fight
         var attacker = Utils.findSoldierOutsideBuilding(player0);
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         var defender = Utils.findSoldierOutsideBuilding(player1);
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
 
         // Wait for the fight to start and the defender to win
         Utils.waitForFightToStart(map, attacker, defender);
-        Utils.waitForSoldierToWinFight(defender, map);
+        Utils.waitForSoldierToWinFight(defender);
 
         // Verify the defender took damage
         assertTrue(defender.getHealth() < defender.getMaxHealth());
@@ -479,14 +526,14 @@ public class TestSoldierRecovery {
 
         // Get the attacker and defender and fast-forward to the fight
         var attacker = Utils.findSoldierOutsideBuilding(player0);
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         var defender = Utils.findSoldierOutsideBuilding(player1);
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
 
         // Wait for the fight to start and the attacker to win
         Utils.waitForFightToStart(map, attacker, defender);
-        Utils.waitForSoldierToWinFight(attacker, map);
+        Utils.waitForSoldierToWinFight(attacker);
 
         // Verify the attacker was hurt during the fight
         assertTrue(attacker.getHealth() < attacker.getMaxHealth());

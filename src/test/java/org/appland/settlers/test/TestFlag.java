@@ -9,13 +9,10 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.appland.settlers.model.Flag.FlagType.*;
 import static org.appland.settlers.model.Material.COIN;
@@ -96,8 +93,8 @@ public class TestFlag {
         var road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         // Place workers on the roads
-        var courier0 = Utils.occupyRoad(road0, map);
-        var courier1 = Utils.occupyRoad(road1, map);
+        var courier0 = Utils.occupyRoad(road0);
+        var courier1 = Utils.occupyRoad(road1);
 
         // Deliver 99 cargo and verify that the road does not become a main road
         for (int i = 0; i < 99; i++) {
@@ -110,12 +107,12 @@ public class TestFlag {
             // Wait for the courier to pick up the cargo
             assertNull(courier1.getCargo());
 
-            Utils.fastForwardUntilWorkerCarriesCargo(map, courier1, cargo);
+            Utils.fastForwardUntilWorkerCarriesCargo(courier1, cargo);
 
             // Wait for the courier to deliver the cargo
             assertEquals(courier1.getTarget(), flag0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, courier1, flag0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(courier1, flag0.getPosition());
 
             assertNull(courier1.getCargo());
 
@@ -132,13 +129,13 @@ public class TestFlag {
         // Wait for the courier to pick up the cargo
         assertNull(courier1.getCargo());
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier1, cargo);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier1, cargo);
 
         // Wait for the road to become a main road and verify that a donkey gets dispatched from the headquarter
         assertEquals(courier1.getTarget(), flag0.getPosition());
         assertNull(road1.getDonkey());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier1, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier1, flag0.getPosition());
 
         assertTrue(road1.isMainRoad());
         assertEquals(flag0.getType(), MAIN);

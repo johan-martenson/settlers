@@ -22,8 +22,8 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 public class TestMilitaryStrengthStatistics {
@@ -197,7 +197,7 @@ public class TestMilitaryStrengthStatistics {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 2);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
@@ -208,7 +208,7 @@ public class TestMilitaryStrengthStatistics {
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
 
         assertEquals(defender.getPosition(), attacker.getPosition());
 
@@ -377,7 +377,7 @@ public class TestMilitaryStrengthStatistics {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 2);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
@@ -388,7 +388,7 @@ public class TestMilitaryStrengthStatistics {
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
 
         assertEquals(defender.getPosition(), attacker.getPosition());
 

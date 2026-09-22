@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
-import java.util.Random;
 
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
@@ -35,9 +34,7 @@ public class Farmer extends Worker {
     private static final int TIME_TO_REST = 99;
     private static final int TIME_TO_PLANT = 19;
     private static final int TIME_TO_HARVEST = 19;
-    private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
     private static final int MAX_NON_HARVESTED_CROPS = 5;
-    private static final Random RANDOM = new Random(0);
 
     private final Countdown countdown = new Countdown();
     private final ProductivityMeasurer productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_HARVEST + TIME_TO_PLANT, null);

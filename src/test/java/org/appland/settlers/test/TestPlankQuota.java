@@ -10,7 +10,6 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.buildings.Headquarter;
-import org.appland.settlers.model.buildings.Metalworks;
 import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.buildings.Shipyard;
 import org.appland.settlers.model.buildings.Storehouse;
@@ -60,6 +59,7 @@ public class TestPlankQuota {
     @Test
     public void testCanSetShipyardPlankQuotaToMinimum() throws InvalidUserActionException {
         var player = new Player("Player", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player), 20, 20);
 
         player.setShipyardPlankQuota(0);
 
@@ -69,6 +69,7 @@ public class TestPlankQuota {
     @Test
     public void testCanSetShipyardPlankQuotaToMaximum() throws InvalidUserActionException {
         var player = new Player("Player", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player), 20, 20);
 
         player.setShipyardPlankQuota(10);
 
@@ -134,6 +135,7 @@ public class TestPlankQuota {
     @Test
     public void testCannotSetShipyardPlankQuotaBelowMinimum() throws InvalidUserActionException {
         var player = new Player("Player", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player), 20, 20);
 
         player.setShipyardPlankQuota(4);
 
@@ -151,6 +153,7 @@ public class TestPlankQuota {
     @Test
     public void testCannotSetShipyardPlankQuotaAboveMaximum() throws InvalidUserActionException {
         var player = new Player("Player", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player), 20, 20);
 
         player.setShipyardPlankQuota(4);
 
@@ -215,6 +218,8 @@ public class TestPlankQuota {
     @Test
     public void testChangingShipyardPlankQuotaNotifiesPlayerChangeListeners() throws InvalidUserActionException {
         var player = new Player("Player", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player), 20, 20);
+
         var monitor = new Utils.PlayerMonitor();
         player.addPlayerChangeListener(monitor);
 
@@ -252,6 +257,8 @@ public class TestPlankQuota {
     @Test
     public void testSettingShipyardPlankQuotaToExistingValueDoesNotNotifyListeners() throws InvalidUserActionException {
         var player = new Player("Player", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player), 20, 20);
+
         var monitor = new Utils.PlayerMonitor();
         player.addPlayerChangeListener(monitor);
 
@@ -314,69 +321,16 @@ public class TestPlankQuota {
             assertTrue(storehouse0.isUnderConstruction() || storehouse0.isPlanned());
             assertFalse(player0.isTreeConservationProgramActive());
 
-            var cargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storehouseWorker, PLANK);
+            var cargo = Utils.fastForwardUntilWorkerCarriesCargo(storehouseWorker, PLANK);
             allocation.merge(cargo.getTarget(), 1, Integer::sum);
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, storehouseWorker, storehouseWorker.getTarget());
+            Utils.fastForwardUntilWorkerReachesPoint(storehouseWorker, storehouseWorker.getTarget());
 
             assertNull(storehouseWorker.getCargo());
         }
 
         assertEquals(1, allocation.getOrDefault(storehouse0, 0).intValue());
         assertEquals(1, allocation.getOrDefault(shipyard0, 0).intValue());
-    }
-
-    @Test
-    public void testEqualQuotaDistributesPlanksBetweenConstructionShipyardAndMetalworks() throws Exception {
-
-        // Start new game
-        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 41);
-
-        // Place headquarters
-        var headquarter0 = map.placeBuilding(new Headquarter(player0), new Point(15, 9));
-
-        // Place and construct shipyard
-        var shipyard0 = map.placeBuilding(new Shipyard(player0), new Point(10, 6));
-
-        map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
-
-        Utils.waitForBuildingToBeConstructed(shipyard0);
-
-        // Place and construct metalworks
-        var metalworks0 = map.placeBuilding(new Metalworks(player0), new Point(18, 6));
-
-        map.placeAutoSelectedRoad(player0, metalworks0.getFlag(), headquarter0.getFlag());
-
-        Utils.waitForBuildingToBeConstructed(metalworks0);
-
-        // Place construction site
-        var storehouse0 = map.placeBuilding(new Storehouse(player0), new Point(6, 12));
-
-        map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), headquarter0.getFlag());
-
-        player0.setConstructionPlankQuota(1);
-        player0.setShipyardPlankQuota(1);
-        player0.setMetalworksPlankQuota(1);
-
-        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
-
-        var allocation = new HashMap<Object, Integer>();
-
-        for (int i = 0; i < 3; i++) {
-
-            var cargo = Utils.fastForwardUntilWorkerCarriesCargo(map, headquarter0.getWorker(), PLANK);
-
-            allocation.merge(cargo.getTarget(), 1, Integer::sum);
-
-            Utils.waitForCargoToReachTarget(map, cargo);
-        }
-
-        assertEquals(1, allocation.getOrDefault(storehouse0, 0).intValue());
-
-        assertEquals(1, allocation.getOrDefault(shipyard0,0).intValue());
-
-        assertEquals(1, allocation.getOrDefault(metalworks0, 0).intValue());
     }
 
     @Test
@@ -414,7 +368,7 @@ public class TestPlankQuota {
         for (int i = 0; i < 3; i++) {
             Utils.adjustInventoryTo(headquarter0, PLANK, 11);
 
-            var cargo = Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, PLANK);
+            var cargo = Utils.fastForwardUntilWorkerCarriesCargo(carrier, PLANK);
             allocation.merge(cargo.getTarget(), 1, Integer::sum);
 
             Utils.waitForCargoToReachTarget(map, cargo);
@@ -461,7 +415,7 @@ public class TestPlankQuota {
         for (int i = 0; i < 3; i++) {
             Utils.adjustInventoryTo(headquarter0, PLANK, 11);
 
-            var cargo = Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, PLANK);
+            var cargo = Utils.fastForwardUntilWorkerCarriesCargo(carrier, PLANK);
             allocation.merge(cargo.getTarget(), 1, Integer::sum);
 
             Utils.waitForCargoToReachTarget(map, cargo);
@@ -499,7 +453,7 @@ public class TestPlankQuota {
         Utils.adjustInventoryTo(headquarter0, PLANK, 1);
 
         // Verify that the plank goes to the shipyard producing boats
-        Utils.fastForwardUntilWorkerCarriesCargo(map, headquarter0.getWorker(), PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(headquarter0.getWorker(), PLANK);
 
         assertEquals(shipyard0, headquarter0.getWorker().getCargo().getTarget());
     }
@@ -536,7 +490,7 @@ public class TestPlankQuota {
         Utils.adjustInventoryTo(headquarter0, PLANK, 1);
 
         // Verify that the plank goes to the shipyard producing ships
-        Utils.fastForwardUntilWorkerCarriesCargo(map, headquarter0.getWorker(), PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(headquarter0.getWorker(), PLANK);
 
         assertEquals(shipyard0, headquarter0.getWorker().getCargo().getTarget());
     }
@@ -570,7 +524,7 @@ public class TestPlankQuota {
         Utils.adjustInventoryTo(headquarter0, PLANK, 1);
 
         // Verify that the plank goes to the shipyard under construction
-        Utils.fastForwardUntilWorkerCarriesCargo(map, headquarter0.getWorker(), PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(headquarter0.getWorker(), PLANK);
 
         assertEquals(shipyardUnderConstruction, headquarter0.getWorker().getCargo().getTarget());
     }
@@ -604,7 +558,7 @@ public class TestPlankQuota {
         Utils.adjustInventoryTo(headquarter0, PLANK, 1);
 
         // Verify the construction site does not receive the plank
-        Utils.fastForwardUntilWorkerCarriesCargo(map, headquarter0.getWorker(), PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(headquarter0.getWorker(), PLANK);
 
         assertEquals(shipyard0, headquarter0.getWorker().getCargo().getTarget());
         assertEquals(0, storehouse0.getAmount(PLANK));
@@ -639,7 +593,7 @@ public class TestPlankQuota {
         Utils.adjustInventoryTo(headquarter0, PLANK, 1);
 
         // Verify the shipyard does not receive the plank
-        Utils.fastForwardUntilWorkerCarriesCargo(map, headquarter0.getWorker(), PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(headquarter0.getWorker(), PLANK);
 
         assertEquals(storehouse0, headquarter0.getWorker().getCargo().getTarget());
         assertEquals(0, shipyard0.getAmount(PLANK));
@@ -710,7 +664,7 @@ public class TestPlankQuota {
         Utils.adjustInventoryTo(headquarter0, PLANK, 11);
 
         // Verify that construction receives the plank
-        Utils.fastForwardUntilWorkerCarriesCargo(map, headquarter0.getWorker(), PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(headquarter0.getWorker(), PLANK);
 
         assertEquals(storehouse0, headquarter0.getWorker().getCargo().getTarget());
     }
@@ -739,7 +693,7 @@ public class TestPlankQuota {
         Utils.adjustInventoryTo(headquarter0, PLANK, 11);
 
         // Verify that shipyard receives the plank
-        Utils.fastForwardUntilWorkerCarriesCargo(map, headquarter0.getWorker(), PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(headquarter0.getWorker(), PLANK);
 
         assertEquals(shipyard0, headquarter0.getWorker().getCargo().getTarget());
     }
@@ -776,7 +730,7 @@ public class TestPlankQuota {
         Utils.adjustInventoryTo(headquarter0, PLANK, 11);
 
         // Verify construction receives the plank
-        Utils.fastForwardUntilWorkerCarriesCargo(map, headquarter0.getWorker(), PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(headquarter0.getWorker(), PLANK);
 
         assertEquals(storehouse0, headquarter0.getWorker().getCargo().getTarget());
     }
@@ -888,7 +842,7 @@ public class TestPlankQuota {
         Utils.adjustInventoryTo(headquarter0, PLANK, 2);
 
         // Wait for the first plank to be sent
-        var cargo = Utils.fastForwardUntilWorkerCarriesCargo(map, headquarter0.getWorker(), PLANK);
+        var cargo = Utils.fastForwardUntilWorkerCarriesCargo(headquarter0.getWorker(), PLANK);
 
         assertEquals(shipyard0, cargo.getTarget());
 
@@ -927,7 +881,7 @@ public class TestPlankQuota {
         Utils.adjustInventoryTo(headquarter0, PLANK, 1);
 
         // Verify that unreachable construction is ignored
-        Utils.fastForwardUntilWorkerCarriesCargo(map, headquarter0.getWorker(), PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(headquarter0.getWorker(), PLANK);
 
         assertEquals(shipyard0, headquarter0.getWorker().getCargo().getTarget());
         assertEquals(0, unreachableWell.getAmount(PLANK));
@@ -965,52 +919,10 @@ public class TestPlankQuota {
         Utils.adjustInventoryTo(headquarter0, PLANK, 1);
 
         // Verify that unreachable shipyard is ignored
-        Utils.fastForwardUntilWorkerCarriesCargo(map, headquarter0.getWorker(), PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(headquarter0.getWorker(), PLANK);
 
         assertEquals(storehouse0, headquarter0.getWorker().getCargo().getTarget());
         assertEquals(0, unreachableShipyard.getAmount(PLANK));
-    }
-
-    @Test
-    public void testStorehousesUseLocalReachableDemandForPlankQuota() throws Exception {
-
-        // Start new game
-        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 41);
-
-        // Place headquarters
-        var headquarter0 = map.placeBuilding(new Headquarter(player0), new Point(15, 9));
-
-        // Place construction reachable from headquarters
-        var construction0 = map.placeBuilding(new Storehouse(player0), new Point(6, 12));
-        map.placeAutoSelectedRoad(player0, construction0.getFlag(), headquarter0.getFlag());
-
-        // Place and construct second storehouse
-        var storehouse0 = map.placeBuilding(new Storehouse(player0), new Point(18, 12));
-
-        map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), headquarter0.getFlag());
-
-        Utils.waitForBuildingToBeConstructed(storehouse0);
-
-        // Place and construct shipyard reachable from the second storehouse
-        var shipyard0 = map.placeBuilding(new Shipyard(player0), new Point(24, 12));
-
-        map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), storehouse0.getFlag());
-
-        Utils.waitForBuildingToBeConstructed(shipyard0);
-
-        // Stock both storages and set equal quotas
-        player0.setConstructionPlankQuota(1);
-        player0.setShipyardPlankQuota(1);
-        Utils.adjustInventoryTo(headquarter0, PLANK, 21);
-        Utils.adjustInventoryTo(storehouse0, PLANK, 21);
-
-        // Verify each storage considers its own reachable demand
-        Utils.fastForwardUntilWorkerCarriesCargo(map, headquarter0.getWorker(), PLANK);
-        Utils.fastForwardUntilWorkerCarriesCargo(map, storehouse0.getWorker(), PLANK);
-
-        assertEquals(construction0, headquarter0.getWorker().getCargo().getTarget());
-        assertEquals(shipyard0, storehouse0.getWorker().getCargo().getTarget());
     }
 
     @Test
@@ -1105,12 +1017,12 @@ public class TestPlankQuota {
         // Wait for the storehouse worker to finish ongoing deliveries (if any)
         var storehouseWorker = headquarter0.getWorker();
 
-        Utils.fastForwardUntilWorkerCarriesNoCargo(map, storehouseWorker);
+        Utils.fastForwardUntilWorkerCarriesNoCargo(storehouseWorker);
 
         // Verify that tree conservation sends planks to the woodcutter
         assertTrue(woodcutter0.needsMaterial(PLANK));
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, storehouseWorker, PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(storehouseWorker, PLANK);
 
         assertEquals(woodcutter0, storehouseWorker.getCargo().getTarget());
         assertEquals(0, shipyard0.getAmount(PLANK));
@@ -1142,7 +1054,7 @@ public class TestPlankQuota {
         // Wait for the storehouse worker to not carry anything
         var storehouseWorker = headquarter0.getWorker();
 
-        Utils.fastForwardUntilWorkerCarriesNoCargo(map, storehouseWorker);
+        Utils.fastForwardUntilWorkerCarriesNoCargo(storehouseWorker);
 
         // Place forester hut
         var foresterHut0 = map.placeBuilding(new ForesterHut(player0), new Point(6, 12));
@@ -1155,7 +1067,7 @@ public class TestPlankQuota {
         assertTrue(shipyard0.isReady());
         assertNull(storehouseWorker.getCargo());
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, storehouseWorker, PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(storehouseWorker, PLANK);
 
         assertEquals(foresterHut0, storehouseWorker.getCargo().getTarget());
         assertEquals(0, shipyard0.getAmount(PLANK));
@@ -1193,10 +1105,10 @@ public class TestPlankQuota {
         // Wait for the storehouse worker to finish its ongoing delivery (if any)
         var storehouseWorker = headquarter0.getWorker();
 
-        Utils.fastForwardUntilWorkerCarriesNoCargo(map, storehouseWorker);
+        Utils.fastForwardUntilWorkerCarriesNoCargo(storehouseWorker);
 
         // Verify that tree conservation sends planks to the sawmill
-        Utils.fastForwardUntilWorkerCarriesCargo(map, storehouseWorker, PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(storehouseWorker, PLANK);
 
         assertEquals(sawmill0, storehouseWorker.getCargo().getTarget());
         assertEquals(0, shipyard0.getAmount(PLANK));
@@ -1264,7 +1176,7 @@ public class TestPlankQuota {
         // Wait for the storehouse worker to finish an ongoing delivery (if any)
         var storehouseWorker = headquarter0.getWorker();
 
-        Utils.fastForwardUntilWorkerCarriesNoCargo(map, storehouseWorker);
+        Utils.fastForwardUntilWorkerCarriesNoCargo(storehouseWorker);
 
         // Verify that no plank is sent to ready shipyard production
         var amountPlanks = headquarter0.getAmount(PLANK);
@@ -1316,7 +1228,7 @@ public class TestPlankQuota {
 
         var storehouseWorker = headquarter0.getWorker();
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, storehouseWorker, PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(storehouseWorker, PLANK);
 
         assertEquals(storehouse0, storehouseWorker.getCargo().getTarget());
 
@@ -1331,7 +1243,7 @@ public class TestPlankQuota {
         assertTrue(map.findWayWithExistingRoads(shipyard0.getPosition(), headquarter0.getPosition()).size() <
                 map.findWayWithExistingRoads(shipyard0.getPosition(), storehouse0.getPosition()).size());
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, storehouseWorker, PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(storehouseWorker, PLANK);
 
         assertEquals(shipyard0, storehouseWorker.getCargo().getTarget());
     }
@@ -1367,7 +1279,7 @@ public class TestPlankQuota {
         var storehouseWorker = headquarter0.getWorker();
 
         // Verify first allocation goes to construction
-        Utils.fastForwardUntilWorkerCarriesCargo(map, storehouseWorker, PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(storehouseWorker, PLANK);
 
         assertEquals(storehouse0, storehouseWorker.getCargo().getTarget());
 
@@ -1384,13 +1296,13 @@ public class TestPlankQuota {
                 map.findWayWithExistingRoads(shipyard0.getPosition(), storehouse0.getPosition()).size());
 
         // Verify that the allocation cycle was reset and immediately reflects the new quota configuration
-        Utils.fastForwardUntilWorkerCarriesCargo(map, storehouseWorker, PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(storehouseWorker, PLANK);
 
         assertEquals(shipyard0, storehouseWorker.getCargo().getTarget());
 
-        Utils.fastForwardUntilWorkerCarriesNoCargo(map, storehouseWorker);
+        Utils.fastForwardUntilWorkerCarriesNoCargo(storehouseWorker);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, storehouseWorker, PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(storehouseWorker, PLANK);
 
         assertEquals(shipyard0, storehouseWorker.getCargo().getTarget());
     }

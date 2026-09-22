@@ -232,6 +232,10 @@ public class GameMap {
             throw new InvalidUserActionException("Cannot remove a driveway");
         }
 
+        if (!roads.contains(road)) {
+            throw new InvalidUserActionException("Cannot remove a road that's not on the map: %s".formatted(road));
+        }
+
         doRemoveRoad(road);
     }
 
@@ -1077,7 +1081,7 @@ public class GameMap {
 
 
         if (maybeInvalidPoint.isPresent()) {
-            throw new InvalidUserActionException(maybeInvalidPoint.get() + " in road is invalid");
+            throw new InvalidUserActionException("While placing road %s, found point %s to be invalid".formatted(wayPoints, maybeInvalidPoint.get()));
         }
 
         return doPlaceRoad(player, wayPoints);
@@ -1281,7 +1285,6 @@ public class GameMap {
         if (mapPoint.isRoad()) {
             var existingRoad = mapPoint.getRoad();
             var courier = existingRoad.getCourier();
-
             var points = existingRoad.getWayPoints();
 
             int index = points.indexOf(flagPoint);
@@ -1534,7 +1537,7 @@ public class GameMap {
         return housePoints;
     }
 
-    private List<Point> getPossibleAdjacentRoadConnections(Player player, Point start, Point end) {
+    public List<Point> getPossibleAdjacentRoadConnections(Player player, Point start, Point end) {
         Point[] adjacentPoints = {
             new Point(start.x - 2, start.y),
             new Point(start.x + 2, start.y),
@@ -2145,6 +2148,10 @@ public class GameMap {
             throw new InvalidUserActionException("Cannot remove flag that is null");
         }
 
+        if (!flags.contains(flag)) {
+            throw new InvalidUserActionException("Cannot remove flag that is not in the map");
+        }
+
         var mapPointUpLeft = getMapPoint(flag.getPosition().upLeft());
         var mapPoint = getMapPoint(flag.getPosition());
 
@@ -2626,6 +2633,10 @@ public class GameMap {
      */
     public Stone getStoneAtPoint(Point point) {
         return getMapPoint(point).getStone();
+    }
+
+    public Collection<Road> getRoadsFromFlag(Point point) {
+        return getMapPoint(point).getConnectedRoads();
     }
 
     /**
@@ -3314,6 +3325,7 @@ public class GameMap {
     }
 
     public DecorationType getDecorationAtPoint(Point point) {
+        // TODO: decorations seem to be handled both in MapFile and in GameMap::decorations. Needs to be resolved!
         return decorations.get(point);
     }
 
@@ -3321,7 +3333,7 @@ public class GameMap {
         return decorations;
     }
 
-    private void removeDecorationAtPoint(Point point) {
+    public void removeDecorationAtPoint(Point point) {
         var mapPoint = getMapPoint(point);
         mapPoint.removeDecoration();
 

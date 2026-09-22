@@ -79,7 +79,7 @@ public class TestWorkerHasDirections {
         var courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
         // Wait for the courier to reach the headquarters' flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getFlag().getPosition());
 
         // Let the courier take a first step on the next road
         map.stepTime();
@@ -110,7 +110,7 @@ public class TestWorkerHasDirections {
         var courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
         // Wait for the courier to reach the headquarters' flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getFlag().getPosition());
 
         // Let the courier take a first step on the next road
         map.stepTime();
@@ -141,7 +141,7 @@ public class TestWorkerHasDirections {
         var courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
         // Wait for the courier to reach the headquarters' flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getFlag().getPosition());
 
         // Let the courier take a first step on the next road
         map.stepTime();
@@ -172,7 +172,7 @@ public class TestWorkerHasDirections {
         var courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
         // Wait for the courier to reach the headquarters' flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getFlag().getPosition());
 
         // Let the courier take a first step on the next road
         map.stepTime();
@@ -203,7 +203,7 @@ public class TestWorkerHasDirections {
         var courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
         // Wait for the courier to reach the headquarters' flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getFlag().getPosition());
 
         // Let the courier take a first step on the next road
         map.stepTime();
@@ -231,7 +231,7 @@ public class TestWorkerHasDirections {
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Wait for the road to get its courier assigned
-        var courier0 = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier0 = Utils.waitForRoadToGetAssignedCourier(road0);
 
         // Place flag
         var point2 = new Point(10, 6);
@@ -266,10 +266,10 @@ public class TestWorkerHasDirections {
         assertNotNull(courier1);
 
         // Wait for the second courier to reach the headquarters' flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier1, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier1, headquarter0.getFlag().getPosition());
 
         // Wait for the courier to reach the second flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier1, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier1, flag0.getPosition());
 
         // Let the courier take a first step on the next road
         map.stepTime();
@@ -302,16 +302,16 @@ public class TestWorkerHasDirections {
         var courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
         // Wait for the courier to reach the headquarters' flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getFlag().getPosition());
 
         // Let the courier get to the the middle of its road
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point1.left());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, point1.left());
 
         // Place a house at the second flag so the courier needs to go and pick up cargos
         var point2 = new Point(9, 5);
         var woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
 
-        Utils.waitForWorkerToSetTarget(map, courier, headquarter0.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(courier, headquarter0.getFlag().getPosition());
 
         // Verify that the courier has the right direction set
         assertEquals(courier.getDirection(), Direction.LEFT);
@@ -372,7 +372,7 @@ public class TestWorkerHasDirections {
 
         assertTrue(forester.isTraveling());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, forester);
+        Utils.fastForwardUntilWorkersReachTarget(forester);
 
         assertTrue(forester.isArrived());
         assertTrue(forester.isAt(point));
@@ -409,7 +409,7 @@ public class TestWorkerHasDirections {
         var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
 
         // Wait for the road to get an assigned courier
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road0);
 
         // Wait for the courier to stand in the middle of the road
         Utils.waitForWorkerToGoToPoint(map, courier, point3.left());
@@ -419,7 +419,7 @@ public class TestWorkerHasDirections {
         var foresterHut = map.placeBuilding(new ForesterHut(player0), point2);
 
         // Wait for the courier to pick up a cargo for the forester hut
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier);
 
         // Verify that the worker has the right direction set
         assertEquals(courier.getPosition(), headquarter.getFlag().getPosition());
@@ -470,7 +470,7 @@ public class TestWorkerHasDirections {
             Utils.waitForWorkerToBeOutside(fisherman, map);
 
             // Wait for the fisherman to get to the fishing spot
-            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fisherman.getTarget());
+            Utils.fastForwardUntilWorkerReachesPoint(fisherman, fisherman.getTarget());
 
             // Store the direction the fisherman has while he's fishing
             map.stepTime();
@@ -489,18 +489,18 @@ public class TestWorkerHasDirections {
             // Wait for the fisherman to go back to the fishery
             assertEquals(fisherman.getTarget(), fishery.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(fisherman, fishery.getPosition());
 
             // Wait for the fisherman to leave the fish by the flag and go back to the house
             Utils.waitForWorkerToBeOutside(fisherman, map);
 
             assertEquals(fisherman.getTarget(), fishery.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fisherman.getTarget());
+            Utils.fastForwardUntilWorkerReachesPoint(fisherman, fisherman.getTarget());
 
             assertEquals(fisherman.getTarget(), fishery.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(fisherman, fishery.getPosition());
         }
 
         assertEquals(fishingDirection.size(), 6);
@@ -559,7 +559,7 @@ public class TestWorkerHasDirections {
         Utils.waitForWorkerToBeOutside(fisherman, map);
 
         // Wait for the fisherman to get to the fishing spot
-        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fisherman.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(fisherman, fisherman.getTarget());
 
         // Verify the direction the fisherman has while he's fishing
         map.stepTime();

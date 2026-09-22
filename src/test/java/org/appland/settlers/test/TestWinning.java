@@ -19,7 +19,7 @@ import org.junit.Test;
 import java.util.LinkedList;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 /**
@@ -105,7 +105,7 @@ public class TestWinning {
         // Wait for the attacker to get to the attacked buildings flag
         assertEquals(attacker.getTarget(), headquarter1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, headquarter1.getFlag().getPosition());
 
         map.stepTime();
 
@@ -117,7 +117,7 @@ public class TestWinning {
         assertEquals(attacker.getTarget(), headquarter1.getPosition());
         assertNull(map.getWinner());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, headquarter1.getPosition());
 
         assertEquals(map.getWinner(), player0);
         assertEquals(player1.getBuildings().size(), 1);

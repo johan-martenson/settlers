@@ -21,8 +21,8 @@ import org.appland.settlers.model.messages.ShipHasReachedDestinationMessage;
 import org.appland.settlers.model.messages.ShipReadyForExpeditionMessage;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.appland.settlers.model.Direction.RIGHT;
 import static org.appland.settlers.model.Material.*;
@@ -76,8 +76,7 @@ public class TestExpeditionNormalFlow {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place a lake
         for (int i = 5; i < 53; i += 2) {
@@ -90,7 +89,7 @@ public class TestExpeditionNormalFlow {
         var point1 = new Point(3, 9);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(13, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -141,7 +140,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -167,7 +166,7 @@ public class TestExpeditionNormalFlow {
         // Wait for the ship to sail to its waiting point
         assertNotNull(ship.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Verify that the ship waits close to the shipyard
         assertTrue(GameUtils.distanceInGameSteps(shipyard.getPosition(), harbor.getPosition()) > 8);
@@ -185,8 +184,7 @@ public class TestExpeditionNormalFlow {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place a lake
         for (int i = 7; i < 57; i += 2) {
@@ -203,14 +201,14 @@ public class TestExpeditionNormalFlow {
         var point1 = new Point(8, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -236,7 +234,6 @@ public class TestExpeditionNormalFlow {
 
         // Verify that the harbor collects the required material for the expedition
         for (int i = 0; i < 10000; i++) {
-
             var expeditionMaterial = harbor.getMaterialForExpedition();
 
             if (expeditionMaterial.getOrDefault(PLANK, 0) == 4 &&
@@ -262,8 +259,7 @@ public class TestExpeditionNormalFlow {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 60, 21);
+        var map = new GameMap(List.of(player0), 60, 21);
 
         // Place a lake
         for (int i = 3; i < 53; i += 2) {
@@ -280,14 +276,14 @@ public class TestExpeditionNormalFlow {
         var point1 = new Point(4, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -303,7 +299,7 @@ public class TestExpeditionNormalFlow {
         var point3 = new Point(14, 8);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed
@@ -337,7 +333,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -366,7 +362,7 @@ public class TestExpeditionNormalFlow {
         // Wait for the ship to sail to a waiting point
         assertNotNull(ship.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Prepare for the expedition
         Utils.adjustInventoryTo(headquarter, PLANK, 20);
@@ -379,7 +375,6 @@ public class TestExpeditionNormalFlow {
 
         // Wait for the harbor to collect the required material for the expedition
         for (int i = 0; i < 10000; i++) {
-
             if (!harbor.isCollectingMaterialForExpedition()) {
                 break;
             }
@@ -397,7 +392,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(ship.getTarget().distance(point1) < 4);
         assertTrue(ship.getPosition().distance(point1) > 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         assertTrue(ship.getPosition().distance(point1) < 4);
         assertTrue(ship.isWaitingForExpedition());
@@ -416,8 +411,7 @@ public class TestExpeditionNormalFlow {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 60, 21);
+        var map = new GameMap(List.of(player0), 60, 21);
 
         // Place a lake
         for (int i = 3; i < 53; i += 2) {
@@ -434,14 +428,14 @@ public class TestExpeditionNormalFlow {
         var point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -457,7 +451,7 @@ public class TestExpeditionNormalFlow {
         var point3 = new Point(14, 8);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -491,7 +485,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -518,7 +512,7 @@ public class TestExpeditionNormalFlow {
         assertNotNull(ship.getTarget());
         assertNotEquals(ship.getPosition(), ship.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Prepare for the expedition
         Utils.adjustInventoryTo(headquarter, PLANK, 30);
@@ -534,7 +528,6 @@ public class TestExpeditionNormalFlow {
 
         // Wait for the harbor to collect the required material for the expedition
         for (int i = 0; i < 10000; i++) {
-
             var expeditionMaterial = harbor.getMaterialForExpedition();
 
             if (expeditionMaterial.getOrDefault(PLANK, 0) == 4 &&
@@ -551,7 +544,7 @@ public class TestExpeditionNormalFlow {
         // Wait for the ship to sail to the harbor
         assertTrue(ship.getTarget().distance(point1) < 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Verify that the collected material for the expedition was transferred to the ship
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -580,8 +573,7 @@ public class TestExpeditionNormalFlow {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 60, 21);
+        var map = new GameMap(List.of(player0), 60, 21);
 
         // Place a lake
         for (int i = 3; i < 53; i += 2) {
@@ -598,14 +590,14 @@ public class TestExpeditionNormalFlow {
         var point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -621,7 +613,7 @@ public class TestExpeditionNormalFlow {
         var point3 = new Point(14, 8);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -655,7 +647,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -682,7 +674,7 @@ public class TestExpeditionNormalFlow {
         assertNotNull(ship.getTarget());
         assertNotEquals(ship.getPosition(), ship.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Prepare for the expedition
         Utils.adjustInventoryTo(headquarter, PLANK, 30);
@@ -698,7 +690,6 @@ public class TestExpeditionNormalFlow {
 
         // Wait for the harbor to collect the required material for the expedition
         for (int i = 0; i < 10000; i++) {
-
             var expeditionMaterial = harbor.getMaterialForExpedition();
 
             if (expeditionMaterial.getOrDefault(PLANK, 0) == 4 &&
@@ -715,7 +706,7 @@ public class TestExpeditionNormalFlow {
         // Wait for the ship to sail to the harbor
         assertTrue(ship.getTarget().distance(point1) < 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // The collected material for the expedition is transferred to the ship
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -750,8 +741,7 @@ public class TestExpeditionNormalFlow {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
@@ -770,14 +760,14 @@ public class TestExpeditionNormalFlow {
         var point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -793,7 +783,7 @@ public class TestExpeditionNormalFlow {
         var point3 = new Point(14, 8);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -827,7 +817,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -854,7 +844,7 @@ public class TestExpeditionNormalFlow {
         assertNotNull(ship.getTarget());
         assertNotEquals(ship.getPosition(), ship.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Prepare for the expedition
         Utils.adjustInventoryTo(headquarter, PLANK, 30);
@@ -870,7 +860,6 @@ public class TestExpeditionNormalFlow {
 
         // Wait for the harbor to collect the required material for the expedition
         for (int i = 0; i < 10000; i++) {
-
             var expeditionMaterial = harbor.getMaterialForExpedition();
 
             if (expeditionMaterial.getOrDefault(PLANK, 0) == 4 &&
@@ -887,7 +876,7 @@ public class TestExpeditionNormalFlow {
         // Wait for the ship to sail to the harbor
         assertTrue(ship.getTarget().distance(point1) < 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // The collected material for the expedition is transferred to the ship
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -925,8 +914,7 @@ public class TestExpeditionNormalFlow {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
@@ -945,14 +933,14 @@ public class TestExpeditionNormalFlow {
         var point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -968,7 +956,7 @@ public class TestExpeditionNormalFlow {
         var point3 = new Point(14, 8);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -1002,7 +990,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -1029,7 +1017,7 @@ public class TestExpeditionNormalFlow {
         assertNotNull(ship.getTarget());
         assertNotEquals(ship.getPosition(), ship.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Prepare for the expedition
         Utils.adjustInventoryTo(headquarter, PLANK, 30);
@@ -1045,7 +1033,6 @@ public class TestExpeditionNormalFlow {
 
         // Wait for the harbor to collect the required material for the expedition
         for (int i = 0; i < 10000; i++) {
-
             var expeditionMaterial = harbor.getMaterialForExpedition();
 
             if (expeditionMaterial.getOrDefault(PLANK, 0) == 4 &&
@@ -1062,7 +1049,7 @@ public class TestExpeditionNormalFlow {
         // Wait for the ship to sail to the harbor
         assertTrue(ship.getTarget().distance(point1) < 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // The collected material for the expedition is transferred to the ship
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -1101,7 +1088,7 @@ public class TestExpeditionNormalFlow {
         assertFalse(map.isBuildingAtPoint(point0));
 
         // Wait for the ship to sail to the possible harbor point
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Verify that a harbor is built automatically, only if the player decides to
         assertFalse(map.isBuildingAtPoint(point0));
@@ -1112,8 +1099,7 @@ public class TestExpeditionNormalFlow {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
@@ -1132,14 +1118,14 @@ public class TestExpeditionNormalFlow {
         var point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -1155,7 +1141,7 @@ public class TestExpeditionNormalFlow {
         var point3 = new Point(14, 8);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -1189,7 +1175,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -1216,8 +1202,7 @@ public class TestExpeditionNormalFlow {
         assertNotNull(ship.getTarget());
         assertNotEquals(ship.getPosition(), ship.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
-
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Prepare for the expedition
         Utils.adjustInventoryTo(headquarter, PLANK, 30);
@@ -1237,7 +1222,6 @@ public class TestExpeditionNormalFlow {
 
         // Wait for the harbor to collect the required material for the expedition
         for (int i = 0; i < 10000; i++) {
-
             var expeditionMaterial = harbor.getMaterialForExpedition();
 
             if (expeditionMaterial.getOrDefault(PLANK, 0) == 4 &&
@@ -1254,7 +1238,7 @@ public class TestExpeditionNormalFlow {
         // Wait for the ship to sail to the harbor
         assertTrue(ship.getTarget().distance(point1) < 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // The collected material for the expedition is transferred to the ship
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -1293,7 +1277,7 @@ public class TestExpeditionNormalFlow {
         assertFalse(map.isBuildingAtPoint(point0));
 
         // Wait for the ship to sail to the possible harbor point
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point5);
+        Utils.fastForwardUntilWorkerReachesPoint(ship, point5);
 
         // Verify that a game message is sent
         assertFalse(player0.getMessages().isEmpty());
@@ -1310,8 +1294,7 @@ public class TestExpeditionNormalFlow {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
@@ -1330,14 +1313,14 @@ public class TestExpeditionNormalFlow {
         var point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -1353,7 +1336,7 @@ public class TestExpeditionNormalFlow {
         var point3 = new Point(14, 8);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -1387,7 +1370,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -1414,7 +1397,7 @@ public class TestExpeditionNormalFlow {
         assertNotNull(ship.getTarget());
         assertNotEquals(ship.getPosition(), ship.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Prepare for the expedition
         Utils.adjustInventoryTo(headquarter, PLANK, 30);
@@ -1430,7 +1413,6 @@ public class TestExpeditionNormalFlow {
 
         // Wait for the harbor to collect the required material for the expedition
         for (int i = 0; i < 10000; i++) {
-
             var expeditionMaterial = harbor.getMaterialForExpedition();
 
             if (expeditionMaterial.getOrDefault(PLANK, 0) == 4 &&
@@ -1447,7 +1429,7 @@ public class TestExpeditionNormalFlow {
         // Wait for the ship to sail to the harbor
         assertTrue(ship.getTarget().distance(point1) < 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // The collected material for the expedition is transferred to the ship
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -1486,7 +1468,7 @@ public class TestExpeditionNormalFlow {
         assertFalse(map.isBuildingAtPoint(point0));
 
         // Wait for the ship to sail to the possible harbor point
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Verify that a harbor can be built
         assertFalse(map.isBuildingAtPoint(point0));
@@ -1510,8 +1492,7 @@ public class TestExpeditionNormalFlow {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
@@ -1530,7 +1511,7 @@ public class TestExpeditionNormalFlow {
         var point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -1587,7 +1568,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -1614,7 +1595,7 @@ public class TestExpeditionNormalFlow {
         assertNotNull(ship.getTarget());
         assertNotEquals(ship.getPosition(), ship.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Prepare for the expedition
         Utils.adjustInventoryTo(headquarter, PLANK, 30);
@@ -1640,8 +1621,7 @@ public class TestExpeditionNormalFlow {
         // Wait for the harbor to collect the required material for the expedition
         assertTrue(ship.getPosition().distance(point1) > 4);
 
-        for (int i = 0; i < 10000; i++) {
-
+        for (int i = 0; i < 10_000; i++) {
             var expeditionMaterial = harbor.getMaterialForExpedition();
 
             if (expeditionMaterial.getOrDefault(PLANK, 0) == 4 &&
@@ -1659,7 +1639,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(ship.getTarget().distance(point1) < 4);
         assertTrue(ship.getPosition().distance(point1) > 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         assertTrue(ship.getPosition().distance(point1) < 4);
 
@@ -1700,7 +1680,7 @@ public class TestExpeditionNormalFlow {
         assertFalse(map.isBuildingAtPoint(point0));
 
         // Wait for the ship to sail to the possible harbor point
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Verify that a harbor can be built
         assertFalse(map.isBuildingAtPoint(point0));
@@ -1732,8 +1712,7 @@ public class TestExpeditionNormalFlow {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
@@ -1752,14 +1731,14 @@ public class TestExpeditionNormalFlow {
         var point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -1775,7 +1754,7 @@ public class TestExpeditionNormalFlow {
         var point3 = new Point(14, 8);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -1809,7 +1788,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -1832,12 +1811,11 @@ public class TestExpeditionNormalFlow {
         assertTrue(ship.isReady());
         assertFalse(ship.isUnderConstruction());
 
-
         // The ship sails to a waiting point close to the shipyard
         assertNotNull(ship.getTarget());
         assertNotEquals(ship.getPosition(), ship.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Prepare for the expedition
         Utils.adjustInventoryTo(headquarter, PLANK, 30);
@@ -1853,7 +1831,6 @@ public class TestExpeditionNormalFlow {
 
         // Wait for the harbor to collect the required material for the expedition
         for (int i = 0; i < 10000; i++) {
-
             var expeditionMaterial = harbor.getMaterialForExpedition();
 
             if (expeditionMaterial.getOrDefault(PLANK, 0) == 4 &&
@@ -1870,7 +1847,7 @@ public class TestExpeditionNormalFlow {
         // Wait for the ship to sail to the harbor
         assertTrue(ship.getTarget().distance(point1) < 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // The collected material for the expedition is transferred to the ship
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -1909,7 +1886,7 @@ public class TestExpeditionNormalFlow {
         assertFalse(map.isBuildingAtPoint(point0));
 
         // Wait for the ship to sail to the possible harbor point
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point5);
+        Utils.fastForwardUntilWorkerReachesPoint(ship, point5);
 
         // Verify that a harbor is built and that it gets its border when construction starts
         var point6 = new Point(point0.x + 9, point0.y + 9);
@@ -1928,8 +1905,7 @@ public class TestExpeditionNormalFlow {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
@@ -1948,14 +1924,14 @@ public class TestExpeditionNormalFlow {
         var point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
         var harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -1971,7 +1947,7 @@ public class TestExpeditionNormalFlow {
         var point3 = new Point(14, 8);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -2005,7 +1981,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -2028,12 +2004,11 @@ public class TestExpeditionNormalFlow {
         assertTrue(ship.isReady());
         assertFalse(ship.isUnderConstruction());
 
-
         // The ship sails to a waiting point close to the shipyard
         assertNotNull(ship.getTarget());
         assertNotEquals(ship.getPosition(), ship.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Prepare for the expedition
         Utils.adjustInventoryTo(headquarter, PLANK, 30);
@@ -2049,7 +2024,6 @@ public class TestExpeditionNormalFlow {
 
         // Wait for the harbor to collect the required material for the expedition
         for (int i = 0; i < 10000; i++) {
-
             var expeditionMaterial = harbor.getMaterialForExpedition();
 
             if (expeditionMaterial.getOrDefault(PLANK, 0) == 4 &&
@@ -2066,7 +2040,7 @@ public class TestExpeditionNormalFlow {
         // Wait for the ship to sail to the harbor
         assertTrue(ship.getTarget().distance(point1) < 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // The collected material for the expedition is transferred to the ship
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -2105,7 +2079,7 @@ public class TestExpeditionNormalFlow {
         assertFalse(map.isBuildingAtPoint(point0));
 
         // Wait for the ship to sail to the possible harbor point
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Start a settlement
         ship.startSettlement();
@@ -2124,10 +2098,12 @@ public class TestExpeditionNormalFlow {
 
         // Verify that the builder gets stored in the newly constructed harbor
         assertEquals(harbor1.getAmount(BUILDER), 0);
+        assertEquals(harbor1.getAmount(HAMMER), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder, harbor1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder, harbor1.getPosition());
 
-        assertEquals(harbor1.getAmount(BUILDER), 1);
+        assertEquals(harbor1.getAmount(BUILDER), 0);
+        assertEquals(harbor1.getAmount(HAMMER), 1);
     }
 
     @Test
@@ -2135,8 +2111,7 @@ public class TestExpeditionNormalFlow {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
@@ -2155,14 +2130,14 @@ public class TestExpeditionNormalFlow {
         var point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         // Place harbor
         var harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
-        // Connect the harbor to the headquarter
+        // Connect the harbor to the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter.getFlag());
 
         // Wait for the harbor to get constructed and occupied
@@ -2178,7 +2153,7 @@ public class TestExpeditionNormalFlow {
         var point3 = new Point(14, 8);
         var shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        // Connect the shipyard to the headquarter
+        // Connect the shipyard to the headquarters
         var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the shipyard to get constructed and occupied
@@ -2212,7 +2187,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -2242,7 +2217,7 @@ public class TestExpeditionNormalFlow {
         assertNotNull(ship.getTarget());
         assertNotEquals(ship.getPosition(), ship.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Prepare for the expedition
         Utils.adjustInventoryTo(headquarter, PLANK, 30);
@@ -2258,7 +2233,6 @@ public class TestExpeditionNormalFlow {
 
         // Wait for the harbor to collect the required material for the expedition
         for (int i = 0; i < 10000; i++) {
-
             var expeditionMaterial = harbor0.getMaterialForExpedition();
 
             if (expeditionMaterial.getOrDefault(PLANK, 0) == 4 &&
@@ -2275,7 +2249,7 @@ public class TestExpeditionNormalFlow {
         // Wait for the ship to sail to the harbor
         assertTrue(ship.getTarget().distance(point1) < 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // The collected material for the expedition is transferred to the ship
         assertEquals((int)harbor0.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -2312,7 +2286,7 @@ public class TestExpeditionNormalFlow {
         assertFalse(map.isBuildingAtPoint(point0));
 
         // Wait for the ship to sail to the possible harbor point
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Start a settlement
         ship.startSettlement();
@@ -2348,7 +2322,7 @@ public class TestExpeditionNormalFlow {
         assertEquals(ship.getCargos().size(), 0);
         assertEquals(harbor0.getAmount(PLANK), 30);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         assertEquals(map.getShips().size(), 1);
         assertEquals(ship.getCargos().size(), 2);
@@ -2356,7 +2330,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(ship.getTarget().distance(harbor1.getPosition()) < 4);
         assertEquals(harbor1.getAmount(PLANK), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         assertEquals(ship.getCargos().size(), 0);
         assertEquals(harbor1.getAmount(PLANK), 2);
@@ -2367,8 +2341,7 @@ public class TestExpeditionNormalFlow {
 
         // Create single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place a lake
         for (int i = 3; i < 57; i += 2) {
@@ -2387,7 +2360,7 @@ public class TestExpeditionNormalFlow {
         var point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        // Place headquarter
+        // Place headquarters
         var point2 = new Point(5, 5);
         var headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -2444,7 +2417,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -2474,7 +2447,7 @@ public class TestExpeditionNormalFlow {
         assertNotNull(ship.getTarget());
         assertNotEquals(ship.getPosition(), ship.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Prepare for the expedition
         Utils.adjustInventoryTo(headquarter, PLANK, 30);
@@ -2501,7 +2474,6 @@ public class TestExpeditionNormalFlow {
         assertTrue(ship.getPosition().distance(point1) > 4);
 
         for (int i = 0; i < 10000; i++) {
-
             var expeditionMaterial = harbor.getMaterialForExpedition();
 
             if (expeditionMaterial.getOrDefault(PLANK, 0) == 4 &&
@@ -2519,7 +2491,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(ship.getTarget().distance(point1) < 4);
         assertTrue(ship.getPosition().distance(point1) > 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // The collected material for the expedition is transferred to the ship
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -2558,7 +2530,7 @@ public class TestExpeditionNormalFlow {
         assertFalse(map.isBuildingAtPoint(point0));
 
         // Wait for the ship to sail to the possible harbor point
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         // Verify that a harbor can be built
         assertFalse(map.isBuildingAtPoint(point0));
@@ -2591,7 +2563,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(ship.getTarget().distance(harbor.getPosition()) < 4);
         assertFalse(ship.isReadyToStartExpedition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ship, ship.getTarget());
 
         assertEquals(ship.getCargos().size(), 11);
         assertTrue(ship.isReadyToStartExpedition());

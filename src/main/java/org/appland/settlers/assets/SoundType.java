@@ -5,7 +5,7 @@ public enum SoundType {
     WAVE,
     MIDI,
     OGG,
-    WAVE_WITHOUT_HEADER,
+    RAW_PCM,
     XMID_DIR,
     MP3
 }

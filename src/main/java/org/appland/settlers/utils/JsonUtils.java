@@ -25,6 +25,8 @@ import org.appland.settlers.model.TransportCategory;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.actors.Pig;
+import org.appland.settlers.model.actors.Rank;
 import org.appland.settlers.model.actors.Ship;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.WildAnimal;
@@ -125,6 +127,7 @@ public class JsonUtils {
         return toJsonArray(chatMessages, chatMessage -> new JSONObject(Map.of(
                 "id", idManager.getId(chatMessage),
                 "fromName", chatMessage.from().getName(),
+                "fromPlayerId", idManager.getId(chatMessage.from()),
                 "toRoomId", roomId,
                 "text", chatMessage.text(),
                 "time", simpleTimeToJson(chatMessage.time())
@@ -370,7 +373,7 @@ public class JsonUtils {
             jsonHouse.put("reserved", jsonReserved);
             jsonHouse.put("inReserve", jsonInReserve);
 
-            Arrays.stream(Soldier.Rank.values()).iterator().forEachRemaining(
+            Arrays.stream(Rank.values()).iterator().forEachRemaining(
                     rank -> {
                         jsonReserved.put(rank.name().toUpperCase(), headquarter.getReservedSoldiers(rank));
                         jsonInReserve.put(rank.name().toUpperCase(), headquarter.getActualReservedSoldiers().get(rank));
@@ -383,7 +386,19 @@ public class JsonUtils {
             jsonHouse.put("availableAttackers", availableAttackers);
         }
 
+        if (building instanceof PigFarm pigFarm && pigFarm.isReady()) {
+            jsonHouse.put("pigs", pigsToJson(pigFarm.getPigs()));
+        }
+
         return jsonHouse;
+    }
+
+    private JSONArray pigsToJson(List<Pig> pigs) {
+        return toJsonArray(pigs, pig -> new JSONObject(Map.of(
+                "id", idManager.getId(pig),
+                "slot", pig.slot().name().toUpperCase(),
+                "age", pig.getAge().name().toUpperCase()
+        )));
     }
 
     <T> List<T> jsonArrayToList(JSONArray jsonArray, Function<JSONObject, T> jsonToObject) {
@@ -1134,6 +1149,7 @@ public class JsonUtils {
 
     private JSONObject gameEndedMessageToJson(GameEndedMessage message) {
         return new JSONObject(Map.of(
+                "id", idManager.getId(message),
                 "type", GAME_ENDED.name().toUpperCase(),
                 "isRead", message.isRead(),
                 "winnerPlayerId", idManager.getId(message.winner())
@@ -1144,6 +1160,7 @@ public class JsonUtils {
         var ship = message.ship();
 
         return new JSONObject(Map.of(
+                "id", idManager.getId(message),
                 "type", SHIP_HAS_REACHED_DESTINATION.name().toUpperCase(),
                 "isRead", message.isRead(),
                 "shipId", idManager.getId(ship),
@@ -1155,6 +1172,7 @@ public class JsonUtils {
         var ship = message.ship();
 
         return new JSONObject(Map.of(
+                "id", idManager.getId(message),
                 "type", SHIP_READY_FOR_EXPEDITION.name().toUpperCase(),
                 "isRead", message.isRead(),
                 "shipId", idManager.getId(ship),
@@ -1166,6 +1184,7 @@ public class JsonUtils {
         var building = message.building();
 
         return new JSONObject(Map.of(
+                "id", idManager.getId(message),
                 "type", BOMBARDED_BY_CATAPULT.name().toUpperCase(),
                 "isRead", message.isRead(),
                 "houseType", building.getSimpleName().toUpperCase(),
@@ -1178,6 +1197,7 @@ public class JsonUtils {
         var harbor = message.harbor();
 
         return new JSONObject(Map.of(
+                "id", idManager.getId(message),
                 "type", HARBOR_IS_FINISHED.name().toUpperCase(),
                 "isRead", message.isRead(),
                 "houseId", idManager.getId(harbor),
@@ -1189,6 +1209,7 @@ public class JsonUtils {
         var building = message.building();
 
         return new JSONObject(Map.of(
+                "id", idManager.getId(message),
                 "type", MILITARY_BUILDING_CAUSED_LOST_LAND.toString(),
                 "isRead", message.isRead(),
                 "houseId", idManager.getId(building),
@@ -1202,6 +1223,7 @@ public class JsonUtils {
 
     private JSONObject treeConservationProgramDeactivatedMessageToJson(TreeConservationProgramDeactivatedMessage message) {
         return new JSONObject(Map.of(
+                "id", idManager.getId(message),
                 "type", TREE_CONSERVATION_PROGRAM_DEACTIVATED.toString(),
                 "isRead", message.isRead()
         ));
@@ -1209,6 +1231,7 @@ public class JsonUtils {
 
     private JSONObject treeConservationProgramActivatedMessageToJson(TreeConservationProgramActivatedMessage message) {
         return new JSONObject(Map.of(
+                "id", idManager.getId(message),
                 "type", TREE_CONSERVATION_PROGRAM_ACTIVATED.toString(),
                 "isRead", message.isRead()
         ));
@@ -1465,11 +1488,10 @@ public class JsonUtils {
                     road -> road.getWayPoints().stream().anyMatch(discoveredLand::contains)
             );
 
-            // Fill in the points the player has discovered
             var jsonDiscoveredPoints = pointsToJson(discoveredLand);
 
             var jsonBorders = new JSONArray();
-            jsonBorders.add(borderToJson(player, idManager.getId(player)));
+            map.getPlayers().forEach(p -> jsonBorders.add(borderToJson(p, idManager.getId(p))));
 
             var jsonSigns = toJsonArrayWithFilter(
                     map.getSigns(),
@@ -1600,7 +1622,8 @@ public class JsonUtils {
     public JSONObject chatMessageToPlayerToJson(ChatManager.ChatMessage chatMessage, Player player) {
         return new JSONObject(Map.of(
                 "id", idManager.getId(chatMessage),
-                "fromName", idManager.getId(chatMessage.from()),
+                "fromName", chatMessage.from().getName(),
+                "fromPlayerId", idManager.getId(chatMessage.from()),
                 "text", chatMessage.text(),
                 "toPlayerId", idManager.getId(player),
                 "time", timeToJson(chatMessage.time())

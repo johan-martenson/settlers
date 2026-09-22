@@ -36,6 +36,7 @@ public class WoodcutterWorker extends Worker {
     private State state = State.WALKING_TO_TARGET;
 
     private Point getTreeToCutDown() {
+        // TODO: should be a hexagon. Add test and fix.
         return map.getPointsWithinRadius(home.getPosition(), RANGE).stream()
                 .filter(map::isTreeAtPoint)
                 .map(map::getTreeAtPoint)

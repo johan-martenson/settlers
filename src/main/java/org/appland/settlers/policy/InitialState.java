@@ -49,4 +49,6 @@ public class InitialState {
     public static final int STORAGE_INITIAL_METALWORKER = 1;
     public static final int STORAGE_INITIAL_BUILDER = 5;
     public static final int STORAGE_INITIAL_SHIPWRIGHT = 1;
+    public static final int STORAGE_INITIAL_PRIVATE_FIRST_CLASS = 0;
+    public static final int STORAGE_INITIAL_OFFICER = 0;
 }

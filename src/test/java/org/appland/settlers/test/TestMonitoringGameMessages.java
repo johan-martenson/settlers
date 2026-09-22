@@ -3,25 +3,19 @@ package org.appland.settlers.test;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.actors.Fisherman;
 import org.appland.settlers.model.actors.Geologist;
 import org.appland.settlers.model.actors.Miner;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.Stonemason;
-import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Bakery;
 import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.CoalMine;
 import org.appland.settlers.model.buildings.Fishery;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -42,14 +36,13 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import static org.appland.settlers.model.Vegetation.WATER;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.SMALL;
-import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.messages.Message.MessageType.*;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.*;
@@ -361,7 +354,7 @@ public class TestMonitoringGameMessages {
         player0.monitorGameView(monitor);
 
         // Verify a message is sent when the barracks is populated
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, barracks0.getPosition());
 
         var gameChangesList = monitor.getLastEvent();
 
@@ -418,7 +411,7 @@ public class TestMonitoringGameMessages {
         player0.monitorGameView(monitor);
 
         // Verify a message is sent when the barracks is populated
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, barracks0.getPosition());
 
         var gameChangesList = monitor.getLastEvent();
 
@@ -478,7 +471,7 @@ public class TestMonitoringGameMessages {
         assertNotNull(military);
 
         // Verify a message is sent when the barracks is populated
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, barracks0.getPosition());
 
         // Set up monitoring subscription for the player
         var monitor = new Utils.GameViewMonitor();
@@ -745,7 +738,7 @@ public class TestMonitoringGameMessages {
         // Let the fisherman reach the spot and start fishing
         var amountOfFish = map.getAmountFishAtPoint(point);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
+        Utils.fastForwardUntilWorkersReachTarget(fisherman);
 
         assertTrue(fisherman.isArrived());
         assertTrue(fisherman.isAt(point));
@@ -759,19 +752,19 @@ public class TestMonitoringGameMessages {
         // Let the fisherman go back to the fishery
         assertEquals(fisherman.getTarget(), fishery.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
+        Utils.fastForwardUntilWorkersReachTarget(fisherman);
 
         // Wait for the fisherman to leave the cargo of fish at the flag
         map.stepTime();
 
         assertEquals(fisherman.getTarget(), fishery.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(fisherman, fishery.getFlag().getPosition());
 
         assertNull(fisherman.getCargo());
         assertEquals(fisherman.getTarget(), fishery.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
+        Utils.fastForwardUntilWorkersReachTarget(fisherman);
 
         // Verify that a message is sent when there is no more fish
         assertEquals(map.getAmountFishAtPoint(point0), 0);
@@ -858,7 +851,7 @@ public class TestMonitoringGameMessages {
         // Let the fisherman reach the spot and start fishing
         var amountOfFish = map.getAmountFishAtPoint(point);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
+        Utils.fastForwardUntilWorkersReachTarget(fisherman);
 
         assertTrue(fisherman.isArrived());
         assertTrue(fisherman.isAt(point));
@@ -872,19 +865,19 @@ public class TestMonitoringGameMessages {
         // Let the fisherman go back to the fishery
         assertEquals(fisherman.getTarget(), fishery.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
+        Utils.fastForwardUntilWorkersReachTarget(fisherman);
 
         // Wait for the fisherman to leave the cargo of fish at the flag
         map.stepTime();
 
         assertEquals(fisherman.getTarget(), fishery.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(fisherman, fishery.getFlag().getPosition());
 
         assertNull(fisherman.getCargo());
         assertEquals(fisherman.getTarget(), fishery.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
+        Utils.fastForwardUntilWorkersReachTarget(fisherman);
 
         // Verify that a message is sent when there is no more fish
         assertEquals(map.getAmountFishAtPoint(point0), 0);
@@ -978,7 +971,7 @@ public class TestMonitoringGameMessages {
         // Let the fisherman reach the spot and start fishing
         var amountOfFish = map.getAmountFishAtPoint(point);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
+        Utils.fastForwardUntilWorkersReachTarget(fisherman);
 
         assertTrue(fisherman.isArrived());
         assertTrue(fisherman.isAt(point));
@@ -992,19 +985,19 @@ public class TestMonitoringGameMessages {
         // Let the fisherman go back to the fishery
         assertEquals(fisherman.getTarget(), fishery.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
+        Utils.fastForwardUntilWorkersReachTarget(fisherman);
 
         // Wait for the fisherman to leave the cargo of fish at the flag
         map.stepTime();
 
         assertEquals(fisherman.getTarget(), fishery.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(fisherman, fishery.getFlag().getPosition());
 
         assertNull(fisherman.getCargo());
         assertEquals(fisherman.getTarget(), fishery.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
+        Utils.fastForwardUntilWorkersReachTarget(fisherman);
 
         // Verify that a message is sent when there is no more fish
         assertEquals(map.getAmountFishAtPoint(point0), 0);
@@ -1068,10 +1061,10 @@ public class TestMonitoringGameMessages {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to reach the first site to investigate
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Set up monitoring subscription for the player
         var monitor = new Utils.GameViewMonitor();
@@ -1145,10 +1138,10 @@ public class TestMonitoringGameMessages {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to reach the first site to investigate
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Set up monitoring subscription for the player
         var monitor = new Utils.GameViewMonitor();
@@ -1229,10 +1222,10 @@ public class TestMonitoringGameMessages {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to reach the first site to investigate
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Verify that a message is sent when the geologist finds gold
         assertTrue(geologist.isInvestigating());
@@ -1549,7 +1542,7 @@ public class TestMonitoringGameMessages {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
@@ -1560,21 +1553,21 @@ public class TestMonitoringGameMessages {
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
 
         assertEquals(defender.getPosition(), attacker.getPosition());
 
         // Wait for the general to beat the private
         Utils.waitForFightToStart(map, attacker, defender);
 
-        Utils.waitForSoldierToWinFight(attacker, map);
+        Utils.waitForSoldierToWinFight(attacker);
 
         assertFalse(map.getWorkers().contains(defender));
 
         // Wait for the attacker to go back to the fixed point
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, attacker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, attacker.getTarget());
 
         // Set up monitoring subscription for the player
         var monitorForPlayer0 = new Utils.GameViewMonitor();
@@ -1587,7 +1580,7 @@ public class TestMonitoringGameMessages {
         assertTrue(player0.getMessages().size() >= 2);
         assertTrue(player1.getMessages().size() >= 3);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getPosition());
 
         var gameChangesListForPlayer0 = monitorForPlayer0.getLastEvent();
         var gameChangesListForPlayer1 = monitorForPlayer1.getLastEvent();
@@ -1666,7 +1659,7 @@ public class TestMonitoringGameMessages {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
@@ -1677,19 +1670,19 @@ public class TestMonitoringGameMessages {
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
 
         assertEquals(defender.getPosition(), attacker.getPosition());
 
         // Wait for the general to beat the private
         Utils.waitForFightToStart(map, attacker, defender);
 
-        Utils.waitForSoldierToWinFight(attacker, map);
+        Utils.waitForSoldierToWinFight(attacker);
 
         // Wait for the attacker to go back to the fixed point
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, attacker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, attacker.getTarget());
 
         // Set up monitoring subscription for the player
         var monitorForPlayer0 = new Utils.GameViewMonitor();
@@ -1702,7 +1695,7 @@ public class TestMonitoringGameMessages {
         assertTrue(player0.getMessages().size() >= 2);
         assertTrue(player1.getMessages().size() >= 3);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getPosition());
 
         var gameChangesListForPlayer0 = monitorForPlayer0.getLastEvent();
         var gameChangesListForPlayer1 = monitorForPlayer1.getLastEvent();
@@ -1792,7 +1785,7 @@ public class TestMonitoringGameMessages {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
@@ -1803,19 +1796,19 @@ public class TestMonitoringGameMessages {
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
 
         assertEquals(defender.getPosition(), attacker.getPosition());
 
         // Wait for the general to beat the private
         Utils.waitForFightToStart(map, attacker, defender);
 
-        Utils.waitForSoldierToWinFight(attacker, map);
+        Utils.waitForSoldierToWinFight(attacker);
 
         // Wait for the attacker to go back to the fixed point
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, attacker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, attacker.getTarget());
 
         // Set up monitoring subscription for the player
 
@@ -1824,7 +1817,7 @@ public class TestMonitoringGameMessages {
         assertTrue(player0.getMessages().size() >= 2);
         assertTrue(player1.getMessages().size() >= 3);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getPosition());
 
         // Set up monitoring subscription for the player
         var monitorForPlayer0 = new Utils.GameViewMonitor();
@@ -1899,11 +1892,11 @@ public class TestMonitoringGameMessages {
         // Wait for the miner to leave the gold at the flag
         assertEquals(miner.getTarget(), mine.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, mine.getFlag().getPosition());
 
         assertNull(miner.getCargo());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, mine.getPosition());
 
         assertTrue(miner.isInsideBuilding());
         assertEquals(player0.getMessages().size(), 0);
@@ -1986,11 +1979,11 @@ public class TestMonitoringGameMessages {
         // Wait for the miner to leave the gold at the flag
         assertEquals(miner.getTarget(), mine.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, mine.getFlag().getPosition());
 
         assertNull(miner.getCargo());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, mine.getPosition());
 
         assertTrue(miner.isInsideBuilding());
         assertEquals(player0.getMessages().size(), 0);
@@ -2080,11 +2073,11 @@ public class TestMonitoringGameMessages {
         // Wait for the miner to leave the gold at the flag
         assertEquals(miner.getTarget(), mine.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, mine.getFlag().getPosition());
 
         assertNull(miner.getCargo());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, mine.getPosition());
 
         assertTrue(miner.isInsideBuilding());
         assertEquals(player0.getMessages().size(), 0);
@@ -2590,5 +2583,54 @@ public class TestMonitoringGameMessages {
         for (var gameChangesList : monitor.getEvents()) {
             assertEquals(gameChangesList.newMessages().size(), 0);
         }
+    }
+
+
+    @Test
+    public void testMonitoringEventWhenGameMessageIsMarkedRead() throws Exception {
+
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var players = new ArrayList<Player>();        players.add(player0);
+
+        // Create game map
+        var map = new GameMap(players, 40, 41);
+
+        // Place headquarters
+        var point21 = new Point(5, 17);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        // Place barracks
+        var point22 = new Point(5, 23);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point22);
+
+        // Place road
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+
+        // Set up monitoring subscription for the player
+        var monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        // A message is sent when the barracks is finished
+        assertTrue(player0.getMessages().isEmpty());
+
+        Utils.fastForwardUntilBuildingIsConstructed(barracks0);
+
+        var gameChangesList = monitor.getLastEvent();
+
+        assertEquals(gameChangesList.newMessages().size(), 1);
+
+        var message = (MilitaryBuildingReadyMessage) gameChangesList.newMessages().getFirst();
+
+        assertEquals(message.getMessageType(), Message.MessageType.MILITARY_BUILDING_READY);
+        assertEquals(message.building(), barracks0);
+
+        // Verify that an event is sent when the message is marked as read
+        player0.markMessageAsRead(message);
+
+        map.stepTime();
+
+        assertTrue(player0.getMessages().getFirst().isRead());
+        assertTrue(monitor.getLastEvent().readMessages().contains(message));
     }
 }

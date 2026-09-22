@@ -20,6 +20,14 @@ import java.util.List;
 public class AudioExtractor {
     private record TitleAndFilename(String title, String filename) { }
 
+    public static boolean debug = false;
+
+    private static void debugPrint(String text) {
+        if (debug) {
+            System.out.println(text);
+        }
+    }
+
     private static final List<TitleAndFilename> MUSIC_TITLE_AND_FILENAMES = new ArrayList<>(List.of(
             new TitleAndFilename("Track 1", "audio/01_-_Track_01.mp3"),
             new TitleAndFilename("Track 2", "audio/02_-_Track_02.mp3"),
@@ -51,10 +59,13 @@ public class AudioExtractor {
         Files.createDirectory(Paths.get(toDir, "audio"));
 
         // The music files are converted from XMI to MP3s outside this tool. Tell the user where to place them:
-        System.out.println("ACTION: place the music files in audio/song[0-9].mp3");
+        debugPrint("ACTION: place the music files in audio/song[0-9].mp3");
 
         // Extract each individual sound
+        LstDecoder.debug = true;
         var gameResources = LstDecoder.loadLstFile(fromDir + "/" + SoundLst.FILENAME, defaultPalette);
+
+        debugPrint(gameResources.toString());
 
         // Save each wave file, so we can try to figure out when they are used
         for (int i = 0; i < gameResources.size(); i++) {
@@ -76,17 +87,17 @@ public class AudioExtractor {
         sounds.put(toDir + "/audio/fighting-unknown.wave", SoundLst.FIGHTING_UNKNOWN);
         sounds.put(toDir + "/audio/fighting-soldier-died.wave", SoundLst.FIGHTING_SOLDIER_DIED);
         sounds.put(toDir + "/audio/fighting-hit-1.wave", SoundLst.FIGHTING_HIT_1);
-        sounds.put(toDir + "/audio/woodcutter-0.wave", SoundLst.SAWMILL_WORKER_0);
-        sounds.put(toDir + "/audio/woodcutter-1.wave", SoundLst.SAWMILL_WORKER_1);
-        sounds.put(toDir + "/audio/pig-breeder-0.wave", SoundLst.PIG_BREEDER_0);
-        sounds.put(toDir + "/audio/pig-breeder-1.wave", SoundLst.PIG_BREEDER_1);
+        sounds.put(toDir + "/audio/woodcutter-0.wave", SoundLst.CARPENTER_0);
+        sounds.put(toDir + "/audio/woodcutter-1.wave", SoundLst.CARPENTER_1);
+        sounds.put(toDir + "/audio/pig-breeder-0.wave", SoundLst.PIG_BREEDER_WORKING);
+        sounds.put(toDir + "/audio/pig-breeder-1.wave", SoundLst.PIG_OINK);
         sounds.put(toDir + "/audio/shipwright-0.wave", SoundLst.SHIPWRIGHT_0);
         sounds.put(toDir + "/audio/shipwright-1.wave", SoundLst.SHIPWRIGHT_1);
-        sounds.put(toDir + "/audio/forester-0.wave", SoundLst.FORESTER_0);
-        sounds.put(toDir + "/audio/forester-1.wave", SoundLst.FORESTER_1);
-        sounds.put(toDir + "/audio/iron-founder-and-brewer.wave", SoundLst.IRON_FOUNDER_AND_BREWER);
+        sounds.put(toDir + "/audio/forester-0.wave", SoundLst.FORESTER_PLANTING_TREE);
+        sounds.put(toDir + "/audio/forester-1.wave", SoundLst.FORESTER_SHOVELING);
+        sounds.put(toDir + "/audio/iron-founder-and-brewer.wave", SoundLst.MINTER_MINTING);
         sounds.put(toDir + "/audio/farmer.wave", SoundLst.FARMER);
-        sounds.put(toDir + "/audio/miner.wave", SoundLst.MINER);
+        sounds.put(toDir + "/audio/miner.wave", SoundLst.MINER_MINING);
         sounds.put(toDir + "/audio/geologist-digging-0.wave", SoundLst.GEOLOGIST_DIGGING_0);
         sounds.put(toDir + "/audio/geologist-digging-1.wave", SoundLst.GEOLOGIST_DIGGING_1);
 
@@ -96,20 +107,20 @@ public class AudioExtractor {
         sounds.put(toDir + "/audio/builder-standing-hammering.wave", SoundLst.BUILDER_STANDING_HAMMERING);
         sounds.put(toDir + "/audio/stonemason-hacking.wave", SoundLst.STONEMASON_HACKING);
         sounds.put(toDir + "/audio/miller.wave", SoundLst.MILLER);
-        sounds.put(toDir + "/audio/butcher.wave", SoundLst.BUTCHER);
-        sounds.put(toDir + "/audio/fisherman.wave", SoundLst.FISHERMAN);
+        sounds.put(toDir + "/audio/butcher.wave", SoundLst.BUTCHER_BUTCHERING);
+        sounds.put(toDir + "/audio/fisherman.wave", SoundLst.FISHERMAN_CAST_OR_RETRIEVE);
         sounds.put(toDir + "/audio/planer-0.wave", SoundLst.PLANER_0);
-        sounds.put(toDir + "/audio/planer-1.wave", SoundLst.PLANER_1);
+        sounds.put(toDir + "/audio/planer-1.wave", SoundLst.PLANER_SHOVELING);
         sounds.put(toDir + "/audio/woodcutter-cutting.wave", SoundLst.WOODCUTTER_CUTTING);
         sounds.put(toDir + "/audio/falling-tree.wave", SoundLst.FALLING_TREE);
-        sounds.put(toDir + "/audio/baker-baking.wave", SoundLst.BAKER);
-        sounds.put(toDir + "/audio/hunter.wave", SoundLst.HUNTER);
+        sounds.put(toDir + "/audio/baker-baking.wave", SoundLst.BAKER_BAKING);
+        sounds.put(toDir + "/audio/hunter.wave", SoundLst.HUNTER_SHOOTING);
         sounds.put(toDir + "/audio/metalworker-0.wave", SoundLst.METALWORKER_0);
         sounds.put(toDir + "/audio/metalworker-1.wave", SoundLst.METALWORKER_1);
         sounds.put(toDir + "/audio/metalworker-2.wave", SoundLst.METALWORKER_2);
         sounds.put(toDir + "/audio/armorer.wave", SoundLst.ARMORER);
-        sounds.put(toDir + "/audio/courier-with-boat.wave", SoundLst.COURIER_WITH_BOAT);
-        sounds.put(toDir + "/audio/well-worker.wave", SoundLst.WELL_WORKER);
+        sounds.put(toDir + "/audio/courier-with-boat.wave", SoundLst.COURIER_WALKING_OR_CARRYING);
+        sounds.put(toDir + "/audio/well-worker.wave", SoundLst.WELL_WORKER_DRAWING_WATER);
 
         sounds.put(toDir + "/audio/duck-quack.wave", SoundLst.DUCK_QUACK);
         sounds.put(toDir + "/audio/geologist-finding.wave", SoundLst.GEOLOGIST_FOUND_ORE);

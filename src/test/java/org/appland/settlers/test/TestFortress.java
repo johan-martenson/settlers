@@ -22,7 +22,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.*;
+import static org.appland.settlers.model.actors.Rank.*;
 import static org.junit.Assert.*;
 
 /**
@@ -211,7 +211,7 @@ public class TestFortress {
         // Wait for the military to reach the fortress
         assertEquals(military.getTarget(), fortress0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, fortress0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, fortress0.getPosition());
 
         assertTrue(military.isInsideBuilding());
     }
@@ -287,7 +287,7 @@ public class TestFortress {
         assertEquals(military.getTarget(), fortress0.getPosition());
         assertTrue(player0.getBorderPoints().contains(point3));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, fortress0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, fortress0.getPosition());
 
         assertFalse(player0.getBorderPoints().contains(point3));
         assertTrue(player0.getBorderPoints().contains(point4));
@@ -783,7 +783,7 @@ public class TestFortress {
         assertEquals(military.getTarget(), headquarter0.getPosition());
         var amount = headquarter0.getAmount(PRIVATE);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(military, military.getTarget());
 
         assertTrue(military.isInsideBuilding());
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
@@ -823,7 +823,7 @@ public class TestFortress {
         assertEquals(military.getTarget(), headquarter0.getPosition());
         var amount = headquarter0.getAmount(PRIVATE);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(military, military.getTarget());
 
         assertTrue(military.isInsideBuilding());
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
@@ -895,7 +895,7 @@ public class TestFortress {
         assertEquals(military.getTarget(), headquarter0.getPosition());
         var amount = headquarter0.getAmount(PRIVATE);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(military, military.getTarget());
 
         assertTrue(military.isInsideBuilding());
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
@@ -942,7 +942,7 @@ public class TestFortress {
 
         var amount = headquarter0.getAmount(PRIVATE);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, headquarter0.getPosition());
 
         // Verify that the military is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);

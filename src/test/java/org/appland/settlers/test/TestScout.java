@@ -7,7 +7,6 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -15,16 +14,13 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.actors.Scout;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Headquarter;
-import org.appland.settlers.model.buildings.Storehouse;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.appland.settlers.model.Vegetation.WATER;
 import static org.appland.settlers.model.Material.SCOUT;
@@ -212,12 +208,12 @@ public class TestScout {
         assertNotNull(scout);
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, scout.getTarget());
 
         // Verify that the scout keeps going
         assertNotEquals(scout.getTarget(), scout.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, scout.getTarget());
     }
 
     @Test
@@ -259,7 +255,7 @@ public class TestScout {
         assertNotNull(scout);
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, scout.getTarget());
 
         // Verify that the scout goes east toward the border
         Utils.fastForward(100, map);
@@ -306,7 +302,7 @@ public class TestScout {
         assertNotNull(scout);
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, scout.getTarget());
 
         // Verify that the scout goes north toward the border
         assertTrue(scout.getTarget().y >= scout.getPosition().y);
@@ -361,7 +357,7 @@ public class TestScout {
         assertNotNull(scout);
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, scout.getTarget());
 
         // Verify that the scout walks 30 steps
         for (int i = 0; i < 30; i++) {
@@ -378,7 +374,7 @@ public class TestScout {
 
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, flag.getPosition());
 
         assertEquals(scout.getPosition(), flag.getPosition());
     }
@@ -424,7 +420,7 @@ public class TestScout {
         assertNotNull(scout);
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, scout.getTarget());
 
         // Verify that the scout does not go outside the map
         for (int i = 0; i < 1000; i++) {
@@ -478,20 +474,20 @@ public class TestScout {
         assertNotNull(scout);
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, scout.getTarget());
 
         // Verify that the scout discovers new ground
         for (int i = 0; i < 30; i++) {
             assertNotEquals(scout.getTarget(), scout.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+            Utils.fastForwardUntilWorkerReachesPoint(scout, scout.getTarget());
 
             assertTrue(player0.getDiscoveredLand().contains(scout.getPosition()));
         }
 
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, flag.getPosition());
 
         assertEquals(scout.getPosition(), flag.getPosition());
     }
@@ -535,20 +531,20 @@ public class TestScout {
         assertNotNull(scout);
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, scout.getTarget());
 
         // Verify that the scout discovers new ground
         for (int i = 0; i < 30; i++) {
             assertNotEquals(scout.getTarget(), scout.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+            Utils.fastForwardUntilWorkerReachesPoint(scout, scout.getTarget());
 
             assertTrue(player0.getDiscoveredLand().contains(scout.getPosition()));
         }
 
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, flag.getPosition());
 
         assertEquals(scout.getPosition(), flag.getPosition());
     }
@@ -658,7 +654,7 @@ public class TestScout {
         assertNotNull(scout);
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, scout.getTarget());
 
         // Call for a second scout
         flag.callScout();
@@ -674,12 +670,12 @@ public class TestScout {
 
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, flag.getPosition());
 
         // Let the scout go back to the headquarter
         assertEquals(scout.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, headquarter0.getPosition());
 
         // Verify that the scout leaves again
         scout = null;
@@ -746,7 +742,7 @@ public class TestScout {
         assertNotNull(scout);
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, scout.getTarget());
 
         // Verify that the amount of scouts in the headquarter is 0
         assertEquals(headquarter0.getAmount(SCOUT), 0);
@@ -762,12 +758,12 @@ public class TestScout {
 
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, flag.getPosition());
 
         // Let the scout go back to the headquarter
         assertEquals(scout.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, headquarter0.getPosition());
 
         // Verify that the amount of scouts is 1
         assertEquals(headquarter0.getAmount(SCOUT), 1);
@@ -890,7 +886,7 @@ public class TestScout {
         assertNotNull(scout);
         assertEquals(scout.getTarget(), flag1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -901,14 +897,14 @@ public class TestScout {
         map.removeRoad(road1);
 
         // Verify that the scout continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, flag0.getPosition());
 
         assertEquals(scout.getPosition(), flag0.getPosition());
 
         // Verify that the scout returns to the headquarter when it reaches the flag
         assertEquals(scout.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, headquarter0.getPosition());
 
         assertTrue(scout.isInsideBuilding());
     }
@@ -956,7 +952,7 @@ public class TestScout {
         assertNotNull(scout);
         assertEquals(scout.getTarget(), flag1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -967,14 +963,14 @@ public class TestScout {
         map.removeRoad(road0);
 
         // Verify that the scout continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, flag0.getPosition());
 
         assertEquals(scout.getPosition(), flag0.getPosition());
 
         // Verify that the scout continues to the final flag
         assertEquals(scout.getTarget(), flag1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, flag1.getPosition());
 
         // Verify that the scout goes out to scout instead of going directly back
         assertNotEquals(scout.getTarget(), headquarter0.getPosition());
@@ -1024,7 +1020,7 @@ public class TestScout {
         assertEquals(scout.getTarget(), flag1.getPosition());
 
         // Wait for the scout to reach the first flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, flag0.getPosition());
 
         map.stepTime();
 
@@ -1035,7 +1031,7 @@ public class TestScout {
         map.removeFlag(flag1);
 
         // Verify that the scout continues walking to the second flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, flag1.getPosition());
 
         assertEquals(scout.getPosition(), flag1.getPosition());
 
@@ -1129,7 +1125,7 @@ public class TestScout {
         // Wait for the scout to reach the flag
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, flag.getPosition());
 
         // Ensure that the scout walks and does not get stuck until it is back in the headquarter
         for (int i = 0; i < 100; i++) {
@@ -1140,7 +1136,7 @@ public class TestScout {
 
             assertNotEquals(scout.getPosition(), scout.getTarget());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+            Utils.fastForwardUntilWorkerReachesPoint(scout, scout.getTarget());
         }
 
         assertEquals(scout.getPosition(), headquarter0.getPosition());
@@ -1174,7 +1170,7 @@ public class TestScout {
         // Wait for the scout to reach the flag
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, flag.getPosition());
 
         // Verify that the scout discovers its surroundings with the same radius until it goes back to the headquarter
         for (int i = 0; i < 100; i++) {
@@ -1215,7 +1211,7 @@ public class TestScout {
 
             assertNotEquals(scout.getPosition(), scout.getTarget());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+            Utils.fastForwardUntilWorkerReachesPoint(scout, scout.getTarget());
         }
 
         assertEquals(scout.getPosition(), headquarter0.getPosition());
@@ -1249,7 +1245,7 @@ public class TestScout {
         // Wait for the scout to reach the flag
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, flag.getPosition());
 
         // Wait for the scout to leave the flag
         assertEquals(scout.getPosition(), flag.getPosition());
@@ -1260,7 +1256,7 @@ public class TestScout {
         assertFalse(scout.isExactlyAtPoint());
 
         // Wait for the scout to be on the way back to the flag
-        Utils.waitForWorkerToSetTarget(map, scout, flag.getPosition());
+        Utils.waitForWorkerToSetTarget(scout, flag.getPosition());
 
         // Wait for the scout to be almost at the flag
         for (int i = 0; i < 2000; i++) {

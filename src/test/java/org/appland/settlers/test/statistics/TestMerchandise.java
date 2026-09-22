@@ -364,14 +364,14 @@ public class TestMerchandise {
         var wcWorker = (WoodcutterWorker) Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter);
 
         // Wait for the woodcutter to start cutting down the tree
-        Utils.waitForWoodcutterToStartCuttingTree(wcWorker, map);
+        Utils.waitForWoodcutterToStartCuttingTree(wcWorker);
 
         // Verify that the merchandise statistics for wood are updated when the tree is cut down
         var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.wood().getMeasurements().size(), 1);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, wcWorker, WOOD);
+        Utils.fastForwardUntilWorkerCarriesCargo(wcWorker, WOOD);
 
         assertEquals(merchandiseStatistics.wood().getMeasurements().size(), 2);
         assertTrue(merchandiseStatistics.wood().getMeasurements().getLast().time() > 1);
@@ -408,7 +408,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.plank().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.plank().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, sawmillWorker0, PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(sawmillWorker0, PLANK);
 
         assertEquals(merchandiseStatistics.plank().getMeasurements().size(), 2);
         assertTrue(merchandiseStatistics.plank().getMeasurements().getLast().time() > 1);
@@ -448,7 +448,7 @@ public class TestMerchandise {
 
         assertEquals(merchandiseStatistics.stone().getMeasurements().size(), 1);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, stonemason, STONE);
+        Utils.fastForwardUntilWorkerCarriesCargo(stonemason, STONE);
 
         assertEquals(merchandiseStatistics.stone().getMeasurements().size(), 2);
         assertTrue(merchandiseStatistics.stone().getMeasurements().getLast().time() > 1);
@@ -536,7 +536,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, butcher, MEAT);
+        Utils.fastForwardUntilWorkerCarriesCargo(butcher, MEAT);
 
         assertEquals(merchandiseStatistics.food().getMeasurements().size(), 2);
         assertTrue(merchandiseStatistics.food().getMeasurements().getLast().time() > 1);
@@ -576,7 +576,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, hunter, MEAT);
+        Utils.fastForwardUntilWorkerCarriesCargo(hunter, MEAT);
 
         assertEquals(merchandiseStatistics.food().getMeasurements().size(), 2);
         assertTrue(merchandiseStatistics.food().getMeasurements().getLast().time() > 1);
@@ -621,7 +621,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, baker, BREAD);
+        Utils.fastForwardUntilWorkerCarriesCargo(baker, BREAD);
 
         assertEquals(merchandiseStatistics.food().getMeasurements().size(), 2);
         assertTrue(merchandiseStatistics.food().getMeasurements().getLast().time() > 1);
@@ -658,9 +658,9 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.water().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.water().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, wellWorker, Material.WATER);
+        Utils.fastForwardUntilWorkerCarriesCargo(wellWorker, Material.WATER);
 
-        Utils.waitForWorkerToSetTarget(map, wellWorker, well.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(wellWorker, well.getFlag().getPosition());
 
         assertEquals(merchandiseStatistics.water().getMeasurements().size(), 2);
         assertTrue(merchandiseStatistics.water().getMeasurements().getLast().time() > 1);
@@ -703,7 +703,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.beer().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.beer().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, brewer0, Material.BEER);
+        Utils.fastForwardUntilWorkerCarriesCargo(brewer0, Material.BEER);
 
         assertEquals(merchandiseStatistics.beer().getMeasurements().size(), 2);
         assertTrue(merchandiseStatistics.beer().getMeasurements().getLast().time() > 1);
@@ -744,7 +744,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.coal().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.coal().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, miner, COAL);
+        Utils.fastForwardUntilWorkerCarriesCargo(miner, COAL);
 
         assertEquals(merchandiseStatistics.coal().getMeasurements().size(), 2);
         assertTrue(merchandiseStatistics.coal().getMeasurements().getLast().time() > 1);
@@ -785,7 +785,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.iron().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.iron().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, miner, IRON);
+        Utils.fastForwardUntilWorkerCarriesCargo(miner, IRON);
 
         assertEquals(merchandiseStatistics.iron().getMeasurements().size(), 2);
         assertTrue(merchandiseStatistics.iron().getMeasurements().getLast().time() > 1);
@@ -826,7 +826,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.gold().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.gold().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, miner, GOLD);
+        Utils.fastForwardUntilWorkerCarriesCargo(miner, GOLD);
 
         assertEquals(merchandiseStatistics.gold().getMeasurements().size(), 2);
         assertTrue(merchandiseStatistics.gold().getMeasurements().getLast().time() > 1);
@@ -867,7 +867,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.ironBar().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.ironBar().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, ironFounder0, IRON_BAR);
+        Utils.fastForwardUntilWorkerCarriesCargo(ironFounder0, IRON_BAR);
 
         assertEquals(merchandiseStatistics.ironBar().getMeasurements().size(), 2);
         assertTrue(merchandiseStatistics.ironBar().getMeasurements().getLast().time() > 1);
@@ -912,7 +912,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.coin().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.coin().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, minter, COIN);
+        Utils.fastForwardUntilWorkerCarriesCargo(minter, COIN);
 
         assertEquals(merchandiseStatistics.coin().getMeasurements().size(), 2);
         assertTrue(merchandiseStatistics.coin().getMeasurements().getLast().time() > 1);
@@ -963,7 +963,7 @@ public class TestMerchandise {
             assertEquals(merchandiseStatistics.tools().getMeasurements().getFirst().time(), 1);
             assertEquals(merchandiseStatistics.tools().getMeasurements().getFirst().value(), 0);
 
-            Utils.fastForwardUntilWorkerCarriesCargo(map, metalworker0, tool);
+            Utils.fastForwardUntilWorkerCarriesCargo(metalworker0, tool);
 
             assertEquals(merchandiseStatistics.tools().getMeasurements().size(), 2);
             assertTrue(merchandiseStatistics.tools().getMeasurements().getLast().time() > 1);
@@ -1013,7 +1013,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.weapons().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.weapons().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerProducesCargo(map, armorer0);
+        Utils.fastForwardUntilWorkerProducesCargo(armorer0);
 
         assertTrue(armorer0.getCargo().getMaterial() == SWORD || armorer0.getCargo().getMaterial() == SHIELD);
         assertEquals(merchandiseStatistics.weapons().getMeasurements().size(), 2);
@@ -1053,7 +1053,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.boats().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.boats().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, shipwright, BOAT);
+        Utils.fastForwardUntilWorkerCarriesCargo(shipwright, BOAT);
 
         assertEquals(merchandiseStatistics.boats().getMeasurements().size(), 2);
         assertTrue(merchandiseStatistics.boats().getMeasurements().getLast().time() > 1);
@@ -1098,7 +1098,7 @@ public class TestMerchandise {
         map.getStatisticsManager().addListener(monitor);
 
         // Wait for the woodcutter to start cutting down the tree
-        Utils.waitForWoodcutterToStartCuttingTree(wcWorker, map);
+        Utils.waitForWoodcutterToStartCuttingTree(wcWorker);
 
         // Verify that a listening event is sent
         var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
@@ -1106,7 +1106,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.wood().getMeasurements().size(), 1);
         assertEquals(monitor.getStatisticsEvents().size(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, wcWorker, WOOD);
+        Utils.fastForwardUntilWorkerCarriesCargo(wcWorker, WOOD);
 
         assertEquals(monitor.getStatisticsEvents().size(), 1);
         assertEquals(merchandiseStatistics.wood().getMeasurements().size(), 2);
@@ -1150,7 +1150,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.plank().getMeasurements().getFirst().value(), 0);
         assertEquals(monitor.getStatisticsEvents().size(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, sawmillWorker0, PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(sawmillWorker0, PLANK);
 
         assertEquals(monitor.getStatisticsEvents().size(), 1);
         assertEquals(merchandiseStatistics.plank().getMeasurements().size(), 2);
@@ -1197,7 +1197,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.stone().getMeasurements().size(), 1);
         assertEquals(monitor.getStatisticsEvents().size() ,0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, stonemason, STONE);
+        Utils.fastForwardUntilWorkerCarriesCargo(stonemason, STONE);
 
         assertEquals(monitor.getStatisticsEvents().size(), 1);
         assertEquals(merchandiseStatistics.stone().getMeasurements().size(), 2);
@@ -1303,7 +1303,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().value(), 0);
         assertEquals(monitor.getStatisticsEvents().size(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, baker, BREAD);
+        Utils.fastForwardUntilWorkerCarriesCargo(baker, BREAD);
 
         assertEquals(merchandiseStatistics.food().getMeasurements().size(), 2);
         assertTrue(merchandiseStatistics.food().getMeasurements().getLast().time() > 1);
@@ -1357,7 +1357,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, butcher, MEAT);
+        Utils.fastForwardUntilWorkerCarriesCargo(butcher, MEAT);
 
         assertEquals(monitor.getStatisticsEvents().size(), 1);
         assertEquals(merchandiseStatistics.food().getMeasurements().size(), 2);
@@ -1404,7 +1404,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, hunter, MEAT);
+        Utils.fastForwardUntilWorkerCarriesCargo(hunter, MEAT);
 
         assertEquals(monitor.getStatisticsEvents().size(), 1);
         assertEquals(merchandiseStatistics.food().getMeasurements().size(), 2);
@@ -1448,9 +1448,9 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.water().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.water().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, wellWorker, Material.WATER);
+        Utils.fastForwardUntilWorkerCarriesCargo(wellWorker, Material.WATER);
 
-        Utils.waitForWorkerToSetTarget(map, wellWorker, well.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(wellWorker, well.getFlag().getPosition());
 
         assertEquals(monitor.getStatisticsEvents().size(), 1);
         assertEquals(merchandiseStatistics.water().getMeasurements().size(), 2);
@@ -1500,7 +1500,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.beer().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.beer().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, brewer0, Material.BEER);
+        Utils.fastForwardUntilWorkerCarriesCargo(brewer0, Material.BEER);
 
         assertEquals(monitor.getStatisticsEvents().size(), 1);
         assertEquals(merchandiseStatistics.beer().getMeasurements().size(), 2);
@@ -1548,7 +1548,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.coal().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.coal().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, miner, COAL);
+        Utils.fastForwardUntilWorkerCarriesCargo(miner, COAL);
 
         assertEquals(monitor.getStatisticsEvents().size(), 1);
         assertEquals(merchandiseStatistics.coal().getMeasurements().size(), 2);
@@ -1596,7 +1596,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.iron().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.iron().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, miner, IRON);
+        Utils.fastForwardUntilWorkerCarriesCargo(miner, IRON);
 
         assertEquals(monitor.getStatisticsEvents().size(), 1);
         assertEquals(merchandiseStatistics.iron().getMeasurements().size(), 2);
@@ -1644,7 +1644,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.gold().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.gold().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, miner, GOLD);
+        Utils.fastForwardUntilWorkerCarriesCargo(miner, GOLD);
 
         assertEquals(monitor.getStatisticsEvents().size(), 1);
         assertEquals(merchandiseStatistics.gold().getMeasurements().size(), 2);
@@ -1692,7 +1692,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.ironBar().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.ironBar().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, ironFounder0, IRON_BAR);
+        Utils.fastForwardUntilWorkerCarriesCargo(ironFounder0, IRON_BAR);
 
         assertEquals(monitor.getStatisticsEvents().size(), 1);
         assertEquals(merchandiseStatistics.ironBar().getMeasurements().size(), 2);
@@ -1744,7 +1744,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.coin().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.coin().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, minter, COIN);
+        Utils.fastForwardUntilWorkerCarriesCargo(minter, COIN);
 
         assertEquals(monitor.getStatisticsEvents().size(), 1);
         assertEquals(merchandiseStatistics.coin().getMeasurements().size(), 2);
@@ -1802,7 +1802,7 @@ public class TestMerchandise {
             assertEquals(merchandiseStatistics.tools().getMeasurements().getFirst().time(), 1);
             assertEquals(merchandiseStatistics.tools().getMeasurements().getFirst().value(), 0);
 
-            Utils.fastForwardUntilWorkerCarriesCargo(map, metalworker0, tool);
+            Utils.fastForwardUntilWorkerCarriesCargo(metalworker0, tool);
 
             assertEquals(monitor.getStatisticsEvents().size(), 1);
             assertEquals(merchandiseStatistics.tools().getMeasurements().size(), 2);
@@ -1858,7 +1858,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.weapons().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.weapons().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerProducesCargo(map, armorer0);
+        Utils.fastForwardUntilWorkerProducesCargo(armorer0);
 
         assertEquals(monitor.getStatisticsEvents().size(), 1);
         assertTrue(armorer0.getCargo().getMaterial() == SWORD || armorer0.getCargo().getMaterial() == SHIELD);
@@ -1905,7 +1905,7 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.boats().getMeasurements().getFirst().time(), 1);
         assertEquals(merchandiseStatistics.boats().getMeasurements().getFirst().value(), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, shipwright, BOAT);
+        Utils.fastForwardUntilWorkerCarriesCargo(shipwright, BOAT);
 
         assertEquals(monitor.getStatisticsEvents().size(), 1);
         assertEquals(merchandiseStatistics.boats().getMeasurements().size(), 2);

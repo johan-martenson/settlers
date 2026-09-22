@@ -267,36 +267,47 @@ public class StorehouseWorker extends Worker {
 
     @Override
     protected void onArrival() {
-        if (state == State.DELIVERING_CARGO_TO_FLAG) {
-            var flag = home.getFlag();
+        switch (state) {
+            case DELIVERING_CARGO_TO_FLAG -> {
+                var flag = home.getFlag();
 
-            flag.putCargo(carriedCargo);
-            carriedCargo = null;
+                flag.putCargo(carriedCargo);
+                carriedCargo = null;
 
-            state = State.GOING_BACK_TO_HOUSE;
-            returnHome();
-        } else if (state == State.GOING_BACK_TO_HOUSE) {
-            enterBuilding(home);
+                state = State.GOING_BACK_TO_HOUSE;
+                returnHome();
+            }
 
-            state = State.RESTING_IN_HOUSE;
-            countdown.countFrom(RESTING_TIME);
-        } else if (state == State.RETURNING_TO_STORAGE) {
-            var storehouse = (Storehouse) map.getBuildingAtPoint(position);
-            storehouse.depositWorker(this);
-        } else if (state == State.WALKING_TO_FLAG_TO_PICK_UP_RETURNED_CARGO) {
-            home.getFlag().retrieveCargo(cargoToReturn);
+            case GOING_BACK_TO_HOUSE -> {
+                enterBuilding(home);
 
-            // TODO: can the cargo be gone when the storage worker gets to the flag?
+                state = State.RESTING_IN_HOUSE;
+                countdown.countFrom(RESTING_TIME);
+            }
 
-            setCargo(cargoToReturn);
+            case RETURNING_TO_STORAGE -> {
+                var storehouse = (Storehouse) map.getBuildingAtPoint(position);
+                storehouse.depositWorker(this);
+            }
 
-            state = State.WALKING_TO_HOME_TO_DELIVER_CARGO;
-            setTarget(home.getPosition());
-        } else if (state == State.WALKING_TO_HOME_TO_DELIVER_CARGO) {
-            home.putCargo(carriedCargo);
-            carriedCargo = null;
+            case WALKING_TO_FLAG_TO_PICK_UP_RETURNED_CARGO -> {
+                home.getFlag().retrieveCargo(cargoToReturn);
 
-            state = State.RESTING_IN_HOUSE;
+                // TODO: can the cargo be gone when the storage worker gets to the flag?
+
+                setCargo(cargoToReturn);
+
+                state = State.WALKING_TO_HOME_TO_DELIVER_CARGO;
+                setTarget(home.getPosition());
+            }
+
+            case WALKING_TO_HOME_TO_DELIVER_CARGO -> {
+                home.putCargo(carriedCargo);
+                carriedCargo = null;
+
+                state = State.RESTING_IN_HOUSE;
+
+            }
         }
     }
 
@@ -318,7 +329,6 @@ public class StorehouseWorker extends Worker {
     }
 
     private boolean resetAllocationIfNeeded(Material material) {
-
         if (material.isFood()) {
 
             // Reset count if all building types have reached their quota
@@ -559,5 +569,17 @@ public class StorehouseWorker extends Worker {
             // Go back to the storage
             returnToStorage();
         }
+    }
+
+    public void resetPlankAllocationCycle() {
+        assignedShipyardPlanks = 0;
+        assignedConstructionPlanks = 0;
+    }
+
+    @Override
+    public String toString() {
+        return getCargo() != null
+                ? "Storehouse worker at %s with cargo (%s) (%s)".formatted(position, getCargo().getMaterial(), state)
+                : "Storehouse worker at %s (%s)".formatted(position, state);
     }
 }

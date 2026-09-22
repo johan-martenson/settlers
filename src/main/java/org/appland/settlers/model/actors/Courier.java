@@ -39,7 +39,7 @@ public class Courier extends Worker {
 
     private Cargo intendedCargo = null;
     private Road assignedRoad = null;
-    private States state = WALKING_TO_ROAD;
+    public States state = WALKING_TO_ROAD;
     private Point idlePoint;
     private Cargo lastCargo = null;
     private Flag waitToGoToFlag;
@@ -62,7 +62,7 @@ public class Courier extends Worker {
         IDLE_JUMPING_SKIP_ROPE,
         IDLE_SITTING_DOWN,
         WAITING_FOR_FIGHTING_AT_FLAG,
-        RETURNING_TO_STORAGE
+        GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
     }
 
     public Courier(Player player, GameMap map) {
@@ -337,6 +337,11 @@ public class Courier extends Worker {
                 state = GOING_TO_BUILDING_TO_DELIVER_CARGO;
                 setTarget(carriedCargo.getTarget().getPosition());
             }
+
+            case GOING_TO_DIE -> {
+                state = DEAD;
+                setDead();
+            }
         }
     }
 
@@ -466,14 +471,21 @@ public class Courier extends Worker {
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
             setTarget(storage.getPosition());
+
+            return;
+        }
+
+        var offroadStorage = player.getBuildings().stream()
+                .filter(Building::isStorehouse)
+                .filter(Building::isReady)
+                .findFirst();
+
+        if (offroadStorage.isPresent()) {
+            state = RETURNING_TO_STORAGE;
+            setOffroadTarget(offroadStorage.get().getPosition());
         } else {
-            player.getBuildings().stream()
-                    .filter(Building::isStorehouse)
-                    .findFirst()
-                    .ifPresent(building -> {
-                        state = RETURNING_TO_STORAGE;
-                        setOffroadTarget(building.getPosition());
-                    });
+            state = States.GOING_TO_DIE;
+            setOffroadTarget(findPlaceToDie());
         }
     }
 

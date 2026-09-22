@@ -13,8 +13,10 @@ import org.appland.settlers.model.actors.Builder;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Donkey;
 import org.appland.settlers.model.actors.Geologist;
+import org.appland.settlers.model.actors.Rank;
 import org.appland.settlers.model.actors.Scout;
 import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.actors.StorehouseWorker;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.utils.InventoryUtils;
 
@@ -34,7 +36,13 @@ import static org.appland.settlers.model.utils.MilitaryUtils.strengthToRank;
 @RequiresWorker(workerType = STOREHOUSE_WORKER)
 public class Storehouse extends Building {
     private static final int TIME_TO_CREATE_NEW_SOLDIER = 100;
-    private static final Set<Material> CAN_CREATE_WORKER_WITHOUT_TOOL = Set.of(WELL_WORKER, HELPER, BREWER, PIG_BREEDER);
+    private static final Set<Material> CAN_CREATE_WORKER_WITHOUT_TOOL = Set.of(
+            WELL_WORKER,
+            HELPER,
+            BREWER,
+            PIG_BREEDER,
+            STOREHOUSE_WORKER
+    );
     private static final Map<Material, Material> WORKER_TO_TOOL_MAP = Map.ofEntries(
             entry(WOODCUTTER_WORKER, AXE),
             entry(FORESTER, SHOVEL),
@@ -55,6 +63,8 @@ public class Storehouse extends Building {
             entry(GEOLOGIST, PICK_AXE),
             entry(METALWORKER, HAMMER)
     );
+
+    private final Set<Material> HELPER_TASKS = Set.of(COURIER, CATAPULT_WORKER, WELL_WORKER);
 
     private final Countdown draftCountdown = new Countdown();
     private final Set<Material> materialToPushOut = EnumSet.noneOf(Material.class);
@@ -133,8 +143,12 @@ public class Storehouse extends Building {
     }
 
     private boolean assignNewWorkerToUnoccupiedPlaces() {
-        return assignCouriers() || assignDonkeys() || assignBuildersToPlannedBuildings()
-                || assignWorkerToUnoccupiedBuildings() || assignGeologists() || assignScouts();
+        return assignCouriers() ||
+                assignDonkeys() ||
+                assignBuildersToPlannedBuildings() ||
+                assignWorkersToBuildings() ||
+                assignGeologists() ||
+                assignScouts();
     }
 
     private boolean assignBuildersToPlannedBuildings() {
@@ -212,7 +226,7 @@ public class Storehouse extends Building {
                 .orElse(false);
     }
 
-    private boolean assignWorkerToUnoccupiedBuildings() {
+    private boolean assignWorkersToBuildings() {
         return player.getBuildings().stream()
                 .filter(building -> !building.equals(this) && !building.isBurningDown() && !building.isDestroyed())
                 .filter(building -> {
@@ -235,8 +249,7 @@ public class Storehouse extends Building {
                         var material = building.getWorkerType();
                         var toolForWorker = WORKER_TO_TOOL_MAP.get(material);
                         var hasWorker = hasAtLeastOne(material);
-                        var canMakeWorker = (toolForWorker != null && hasAtLeastOne(toolForWorker))
-                                || CAN_CREATE_WORKER_WITHOUT_TOOL.contains(material);
+                        var canMakeWorker = (toolForWorker != null && hasAtLeastOne(toolForWorker)) || CAN_CREATE_WORKER_WITHOUT_TOOL.contains(material);
 
                         if (!hasWorker && !canMakeWorker) {
                             return false;
@@ -255,16 +268,17 @@ public class Storehouse extends Building {
                 .findFirst()
                 .map(building -> {
                     if (building.isMilitaryBuilding() && !building.isHarbor()) {
-                        var military = retrieveSoldierToPopulateBuilding();
-                        map.placeWorker(military, this);
-                        military.setTargetBuilding(building);
-                        building.promiseSoldier(military);
+                        var soldier = retrieveSoldierToPopulateBuilding();
+                        map.placeWorker(soldier, this);
+                        soldier.setTargetBuilding(building);
+                        building.promiseSoldier(soldier);
                     } else if (building.needsWorker()) {
                         var worker = retrieveWorker(building.getWorkerType(), building);
                         map.placeWorker(worker, this);
                         worker.setTargetBuilding(building);
                         building.promiseWorker(worker);
                     }
+
                     return true;
                 })
                 .orElse(false);
@@ -354,7 +368,7 @@ public class Storehouse extends Building {
         return worker;
     }
 
-    public Soldier retrieveSoldierFromInventory(Soldier.Rank rank) {
+    public Soldier retrieveSoldierFromInventory(Rank rank) {
         return retrieveSoldierFromInventory(rank.toMaterial());
     }
 
@@ -365,9 +379,7 @@ public class Storehouse extends Building {
 
         retrieveOneFromInventory(material);
 
-        var rank = material.toRank();
-
-        var soldier = new Soldier(player, rank, map);
+        var soldier = new Soldier(player, material.toRank(), map);
 
         soldier.setPosition(flag.getPosition());
 
@@ -401,8 +413,9 @@ public class Storehouse extends Building {
     }
 
     private boolean hasAtLeastOne(Material material) {
-        return material == COURIER || material == CATAPULT_WORKER ||
-                inventory.getOrDefault(material, 0) > 0;
+        return material == COURIER ||
+                material == CATAPULT_WORKER ||
+                getAmount(material) > 0;
     }
 
     private void retrieveOneFromInventory(Material material) {
@@ -435,11 +448,11 @@ public class Storehouse extends Building {
     }
 
     private boolean hasMilitary() {
-        return inventory.getOrDefault(PRIVATE, 0) > 0 ||
-                inventory.getOrDefault(PRIVATE_FIRST_CLASS, 0) > 0 ||
-                inventory.getOrDefault(SERGEANT, 0) > 0 ||
-                inventory.getOrDefault(OFFICER, 0) > 0 ||
-                inventory.getOrDefault(GENERAL, 0) > 0;
+        return getAmount(PRIVATE) > 0 ||
+                getAmount(PRIVATE_FIRST_CLASS) > 0 ||
+                getAmount(SERGEANT) > 0 ||
+                getAmount(OFFICER) > 0 ||
+                getAmount(GENERAL) > 0;
     }
 
     private boolean isClosestStorage(Building building) {
@@ -534,5 +547,16 @@ public class Storehouse extends Building {
 
     public void allowDeliveryOfMaterial(Material material) {
         materialBlockedForDelivery.remove(material);
+    }
+
+    public void resetPlankAllocationCycle() {
+        if (worker != null) {
+            ((StorehouseWorker) worker).resetPlankAllocationCycle();
+        }
+    }
+
+    @Override
+    public boolean needsWorker() {
+        return false;
     }
 }

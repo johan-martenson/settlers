@@ -1,7 +1,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -20,7 +20,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 /**
@@ -154,7 +154,8 @@ public class TestArmory {
 
     @Test
     public void testHeadquarterHasOneArmorerAtStart() {
-        var headquarter = new Headquarter(null);
+        var player = new Player("Player 1", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var headquarter = new Headquarter(player);
 
         assertEquals(headquarter.getAmount(ARMORER), 1);
     }
@@ -199,7 +200,7 @@ public class TestArmory {
         assertNotNull(armorer0);
         assertEquals(armorer0.getTarget(), armory0.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, armorer0);
+        Utils.fastForwardUntilWorkersReachTarget(armorer0);
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), armory0);
@@ -291,7 +292,7 @@ public class TestArmory {
         assertNotNull(armorer0);
         assertEquals(armorer0.getTarget(), armory0.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, armorer0);
+        Utils.fastForwardUntilWorkersReachTarget(armorer0);
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), armory0);
@@ -475,14 +476,14 @@ public class TestArmory {
         // Verify that the armory worker leaves the cargo at the flag
         assertEquals(armorer0.getTarget(), armory0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, armory0.getFlag().getPosition());
 
         assertFalse(armory0.getFlag().getStackedCargo().isEmpty());
         assertNull(armorer0.getCargo());
         assertEquals(armorer0.getTarget(), armory0.getPosition());
 
         // Verify that the armorer goes back to the armory
-        Utils.fastForwardUntilWorkersReachTarget(map, armorer0);
+        Utils.fastForwardUntilWorkersReachTarget(armorer0);
 
         assertTrue(armorer0.isInsideBuilding());
     }
@@ -527,14 +528,14 @@ public class TestArmory {
         // Wait for the courier on the road between the storehouse and the armory to have a plank cargo
         Utils.deliverCargos(armory, COAL, IRON_BAR);
 
-        Utils.waitForFlagToGetStackedCargo(map, armory.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(armory.getFlag(), 1);
 
         var weapon = armory.getFlag().getStackedCargo().getFirst().getMaterial();
 
         assertTrue(weapon == SWORD || weapon == SHIELD);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters
         assertEquals(headquarter.getAmount(weapon), 0);
@@ -542,7 +543,7 @@ public class TestArmory {
         assertFalse(storehouse.needsMaterial(weapon));
         assertTrue(storehouse.isUnderConstruction());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
         assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(weapon));
@@ -674,12 +675,12 @@ public class TestArmory {
         // Wait for the armorer to put the sword at the flag
         assertEquals(armorer0.getTarget(), armory0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, armory0.getFlag().getPosition());
 
         // Wait for the armorer to go back to the armory
         assertEquals(armorer0.getTarget(), armory0.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, armorer0);
+        Utils.fastForwardUntilWorkersReachTarget(armorer0);
 
         // Verify that the armorer produces a shield
         Utils.fastForward(150, map);
@@ -726,7 +727,7 @@ public class TestArmory {
         assertEquals(armorer0.getTarget(), armory0.getFlag().getPosition());
         assertTrue(armory0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, armory0.getFlag().getPosition());
 
         assertNull(armorer0.getCargo());
         assertFalse(armory0.getFlag().getStackedCargo().isEmpty());
@@ -734,7 +735,7 @@ public class TestArmory {
         // Wait for the worker to go back to the armory
         assertEquals(armorer0.getTarget(), armory0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, armory0.getPosition());
 
         // Wait for the worker to rest and produce another cargo
         Utils.fastForward(150, map);
@@ -744,7 +745,7 @@ public class TestArmory {
         // Verify that the second cargo is put at the flag
         assertEquals(armorer0.getTarget(), armory0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, armory0.getFlag().getPosition());
 
         assertNull(armorer0.getCargo());
         assertEquals(armory0.getFlag().getStackedCargo().size(), 2);
@@ -789,7 +790,7 @@ public class TestArmory {
         assertEquals(armorer0.getTarget(), armory0.getFlag().getPosition());
         assertTrue(armory0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, armory0.getFlag().getPosition());
 
         assertNull(armorer0.getCargo());
         assertFalse(armory0.getFlag().getStackedCargo().isEmpty());
@@ -818,14 +819,14 @@ public class TestArmory {
         assertNotEquals(courier.getTarget(), armory0.getFlag().getPosition());
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         // Verify that the courier walks to pick up the cargo
         map.stepTime();
 
         assertEquals(courier.getTarget(), armory0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         // Verify that the courier has picked up the cargo
         assertNotNull(courier.getCargo());
@@ -838,7 +839,7 @@ public class TestArmory {
         var material = cargo.getMaterial();
         var amount = headquarter0.getAmount(material);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
         // Verify that the courier has delivered the cargo to the headquarters
         assertNull(courier.getCargo());
@@ -880,7 +881,7 @@ public class TestArmory {
 
         var amount = headquarter0.getAmount(ARMORER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, headquarter0.getPosition());
 
         // Verify that the armorer is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(ARMORER), amount + 1);
@@ -970,12 +971,12 @@ public class TestArmory {
         Utils.fastForward(100, map);
 
         // Wait for the armorer to produce cargo
-        Utils.fastForwardUntilWorkerProducesCargo(map, armorer0);
+        Utils.fastForwardUntilWorkerProducesCargo(armorer0);
 
         // Wait for the worker to deliver the cargo
         assertEquals(armorer0.getTarget(), armory0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, armory0.getFlag().getPosition());
 
         // Stop production and verify that no water is produced
         armory0.stopProduction();
@@ -1025,12 +1026,12 @@ public class TestArmory {
         Utils.fastForward(100, map);
 
         // Wait for the armorer to produce water
-        Utils.fastForwardUntilWorkerProducesCargo(map, armorer0);
+        Utils.fastForwardUntilWorkerProducesCargo(armorer0);
 
         // Wait for the worker to deliver the cargo
         assertEquals(armorer0.getTarget(), armory0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, armory0.getFlag().getPosition());
 
         // Stop production
         armory0.stopProduction();
@@ -1046,7 +1047,7 @@ public class TestArmory {
 
         assertTrue(armory0.isProductionEnabled());
 
-        Utils.fastForwardUntilWorkerProducesCargo(map, armorer0);
+        Utils.fastForwardUntilWorkerProducesCargo(armorer0);
 
         assertNotNull(armorer0.getCargo());
     }
@@ -1132,7 +1133,7 @@ public class TestArmory {
         // Verify that the worker goes back to its own storage when the fortress is torn down
         fortress0.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, armory0.getFlag().getPosition());
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
     }
@@ -1202,7 +1203,7 @@ public class TestArmory {
         assertNotNull(armorer0);
         assertEquals(armorer0.getTarget(), armory0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1213,14 +1214,14 @@ public class TestArmory {
         map.removeRoad(road1);
 
         // Verify that the armorer continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, flag0.getPosition());
 
         assertEquals(armorer0.getPosition(), flag0.getPosition());
 
         // Verify that the armorer returns to the headquarters when it reaches the flag
         assertEquals(armorer0.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, headquarter0.getPosition());
     }
 
     @Test
@@ -1262,7 +1263,7 @@ public class TestArmory {
         assertNotNull(armorer0);
         assertEquals(armorer0.getTarget(), armory0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1273,14 +1274,14 @@ public class TestArmory {
         map.removeRoad(road0);
 
         // Verify that the armorer continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, flag0.getPosition());
 
         assertEquals(armorer0.getPosition(), flag0.getPosition());
 
         // Verify that the armorer continues to the final flag
         assertEquals(armorer0.getTarget(), armory0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, armory0.getFlag().getPosition());
 
         // Verify that the armorer goes out to the armory instead of going directly back
         assertNotEquals(armorer0.getTarget(), headquarter0.getPosition());
@@ -1339,7 +1340,7 @@ public class TestArmory {
         assertEquals(armorer0.getTarget(), armory0.getPosition());
 
         // Wait for the armorer to reach the first flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, flag0.getPosition());
 
         map.stepTime();
 
@@ -1350,7 +1351,7 @@ public class TestArmory {
         armory0.tearDown();
 
         // Verify that the armorer continues walking to the next flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, armory0.getFlag().getPosition());
 
         assertEquals(armorer0.getPosition(), armory0.getFlag().getPosition());
 
@@ -1434,7 +1435,7 @@ public class TestArmory {
 
         var amount = storehouse0.getAmount(ARMORER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, storehouse0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, storehouse0.getPosition());
 
         // Verify that the armorer is stored correctly in the headquarters
         assertEquals(storehouse0.getAmount(ARMORER), amount + 1);
@@ -1485,7 +1486,7 @@ public class TestArmory {
 
         var amount = headquarter0.getAmount(ARMORER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, headquarter0.getPosition());
 
         // Verify that the armorer is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(ARMORER), amount + 1);
@@ -1539,7 +1540,7 @@ public class TestArmory {
 
         var amount = headquarter0.getAmount(ARMORER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, headquarter0.getPosition());
 
         // Verify that the armorer is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(ARMORER), amount + 1);
@@ -1586,7 +1587,7 @@ public class TestArmory {
 
         var amount = headquarter0.getAmount(ARMORER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, headquarter0.getPosition());
 
         // Verify that the armorer is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(ARMORER), amount + 1);
@@ -1617,7 +1618,7 @@ public class TestArmory {
         var worker = Utils.waitForWorkersOutsideBuilding(Armorer.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, armory0.getFlag().getPosition());
 
         // Tear down the building
         armory0.tearDown();
@@ -1625,11 +1626,11 @@ public class TestArmory {
         // Verify that the worker goes to the building and then returns to the headquarters instead of entering
         assertEquals(worker.getTarget(), armory0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, armory0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, armory0.getPosition());
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
     }
 
     @Test
@@ -1997,7 +1998,7 @@ public class TestArmory {
         Utils.deliverCargo(armory, COAL);
 
         // Fill the flag with flour cargos
-        Utils.placeCargos(map, FLOUR, 8, armory.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, armory.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2014,7 +2015,7 @@ public class TestArmory {
         var road1 = map.placeAutoSelectedRoad(player0, armory.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2031,7 +2032,7 @@ public class TestArmory {
         assertEquals(armory.getFlag().getStackedCargo().size(), 7);
 
         // Verify that the worker produces a cargo of flour and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, armory.getWorker(), SHIELD, SWORD);
+        Utils.fastForwardUntilWorkerCarriesCargo(armory.getWorker(), SHIELD, SWORD);
     }
 
     @Test
@@ -2063,7 +2064,7 @@ public class TestArmory {
         Utils.deliverCargo(armory, COAL);
 
         // Fill the flag with cargos
-        Utils.placeCargos(map, FLOUR, 8, armory.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, armory.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2080,7 +2081,7 @@ public class TestArmory {
         var road1 = map.placeAutoSelectedRoad(player0, armory.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2100,12 +2101,12 @@ public class TestArmory {
         map.removeRoad(road1);
 
         // The worker produces a cargo of shield or sword and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, armory.getWorker(), FLOUR, SWORD);
+        Utils.fastForwardUntilWorkerCarriesCargo(armory.getWorker(), FLOUR, SWORD);
 
         // Wait for the worker to put the cargo on the flag
         assertEquals(armory.getWorker().getTarget(), armory.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armory.getWorker(), armory.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armory.getWorker(), armory.getFlag().getPosition());
 
         assertEquals(armory.getFlag().getStackedCargo().size(), 8);
 
@@ -2157,9 +2158,9 @@ public class TestArmory {
         headquarter0.blockDeliveryOfMaterial(SWORD);
 
         // Verify that the armory puts eight weapons on the flag and then stops
-        Utils.waitForFlagToGetStackedCargo(map, armory0.getFlag(), 8);
+        Utils.waitForFlagToGetStackedCargo(armory0.getFlag(), 8);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, armory0.getPosition());
 
         for (int i = 0; i < 300; i++) {
             map.stepTime();
@@ -2228,7 +2229,7 @@ public class TestArmory {
 
         assertFalse(armorer0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, armory0.getFlag().getPosition());
 
         assertEquals(armorer0.getTarget(), storehouse.getPosition());
 
@@ -2293,11 +2294,11 @@ public class TestArmory {
 
         assertFalse(armorer0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, armory0.getFlag().getPosition());
 
         assertEquals(armorer0.getTarget(), storehouse.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, storehouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer0, storehouse.getPosition());
 
         assertFalse(map.getWorkers().contains(armorer0));
     }
@@ -2327,12 +2328,12 @@ public class TestArmory {
             assertEquals(worker.getPosition(), headquarter0.getPosition());
             assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
             assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
             assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
             assertFalse(map.getWorkers().contains(worker));
         }
@@ -2360,25 +2361,16 @@ public class TestArmory {
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
-
-        for (int i = 0; i < 100; i++) {
-            assertTrue(worker.isDead());
-            assertTrue(map.getWorkers().contains(worker));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(worker));
     }
 
     @Test
@@ -2417,7 +2409,7 @@ public class TestArmory {
 
         assertEquals(worker.getPosition(), armory0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, armory0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), armory0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
@@ -2425,18 +2417,36 @@ public class TestArmory {
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
 
-        for (int i = 0; i < 100; i++) {
+        // Verify that the skeleton decays
+        for (int i = 0; i < 6000; i++) {
             assertTrue(worker.isDead());
             assertTrue(map.getWorkers().contains(worker));
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
+
+            map.stepTime();
+        }
+
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(DecorationType.HUMAN_SKELETON_DECAYED, map.getDecorationAtPoint(worker.getPosition()));
+
+        // Verify that the skeleton disappears
+        for (int i = 0; i < 4000; i++) {
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
 
             map.stepTime();
         }
 
         assertFalse(map.getWorkers().contains(worker));
+        assertFalse(map.isDecoratedAtPoint(worker.getPosition()));
+        assertNotEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
     }
 
     @Test
@@ -2467,7 +2477,7 @@ public class TestArmory {
         var armorer = Utils.waitForWorkerOutsideBuilding(Armorer.class, player0);
 
         // Wait for the armorer to go past the headquarters's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -2478,7 +2488,7 @@ public class TestArmory {
 
         armory0.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer, armory0.getFlag().getPosition());
 
         assertEquals(armorer.getPosition(), armory0.getFlag().getPosition());
         assertNotEquals(armorer.getTarget(), headquarter0.getPosition());
@@ -2486,18 +2496,8 @@ public class TestArmory {
         assertNull(armory0.getWorker());
         assertNotNull(armorer.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, armorer.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(armorer, armorer.getTarget());
 
-        var point = armorer.getPosition();
-
-        for (int i = 0; i < 100; i++) {
-            assertTrue(armorer.isDead());
-            assertEquals(armorer.getPosition(), point);
-            assertTrue(map.getWorkers().contains(armorer));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(armorer));
+        assertTrue(armorer.isDead());
     }
 }

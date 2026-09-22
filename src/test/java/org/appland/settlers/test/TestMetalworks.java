@@ -2,6 +2,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -25,7 +26,7 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 public class TestMetalworks {
@@ -236,7 +237,8 @@ public class TestMetalworks {
 
     @Test
     public void testHeadquarterHasOneMetalworkerAtStart() {
-        var headquarter = new Headquarter(null);
+        var player = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var headquarter = new Headquarter(player);
 
         assertEquals(headquarter.getAmount(METALWORKER), 1);
     }
@@ -274,7 +276,7 @@ public class TestMetalworks {
         assertNotNull(metalworker0);
         assertEquals(metalworker0.getTarget(), metalworks.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, metalworker0);
+        Utils.fastForwardUntilWorkersReachTarget(metalworker0);
 
         assertTrue(metalworker0.isInsideBuilding());
         assertEquals(metalworker0.getHome(), metalworks);
@@ -505,7 +507,7 @@ public class TestMetalworks {
         metalworks.putCargo(new Cargo(IRON_BAR, map));
 
         // Wait for the metalworker to produce a tool
-        Utils.fastForwardUntilWorkerCarriesCargo(map, metalworker0);
+        Utils.fastForwardUntilWorkerCarriesCargo(metalworker0);
 
         Utils.verifyWorkerCarriesTool(metalworker0);
 
@@ -514,13 +516,13 @@ public class TestMetalworks {
         // Verify that the metalworks worker leaves the cargo at the flag
         assertEquals(metalworker0.getTarget(), metalworks.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworker0, metalworks.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworker0, metalworks.getFlag().getPosition());
 
         assertFalse(metalworks.getFlag().getStackedCargo().isEmpty());
         assertNull(metalworker0.getCargo());
         assertEquals(metalworker0.getTarget(), metalworks.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, metalworker0);
+        Utils.fastForwardUntilWorkersReachTarget(metalworker0);
 
         assertTrue(metalworker0.isInsideBuilding());
     }
@@ -567,14 +569,14 @@ public class TestMetalworks {
         Utils.deliverCargo(metalworks, IRON_BAR);
         Utils.deliverCargo(metalworks, PLANK);
 
-        Utils.waitForFlagToGetStackedCargo(map, metalworks.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(metalworks.getFlag(), 1);
 
         var tool = metalworks.getFlag().getStackedCargo().getFirst().getMaterial();
 
         assertTrue(tool.isTool());
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters
         Utils.adjustInventoryTo(headquarter, tool, 0);
@@ -584,7 +586,7 @@ public class TestMetalworks {
         assertFalse(storehouse.needsMaterial(tool));
         assertTrue(storehouse.isUnderConstruction());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
         assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(tool));
@@ -621,7 +623,7 @@ public class TestMetalworks {
         assertEquals(metalworks.getAmount(PLANK), 1);
         assertEquals(metalworks.getAmount(IRON_BAR), 1);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, metalworker0);
+        Utils.fastForwardUntilWorkerCarriesCargo(metalworker0);
 
         assertEquals(metalworks.getAmount(PLANK), 0);
         assertEquals(metalworks.getAmount(IRON_BAR), 0);
@@ -772,7 +774,7 @@ public class TestMetalworks {
             metalworks.putCargo(new Cargo(IRON_BAR, map));
 
             // Wait until the metalworks produces tool
-            Utils.fastForwardUntilWorkerCarriesCargo(map, metalworker0);
+            Utils.fastForwardUntilWorkerCarriesCargo(metalworker0);
 
             Utils.verifyWorkerCarriesTool(metalworker0);
 
@@ -785,14 +787,14 @@ public class TestMetalworks {
             // Wait for the metalworks worker to leave the cargo at the flag
             assertEquals(metalworker0.getTarget(), metalworks.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, metalworker0, metalworks.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(metalworker0, metalworks.getFlag().getPosition());
 
             assertFalse(metalworks.getFlag().getStackedCargo().isEmpty());
             assertNull(metalworker0.getCargo());
             assertEquals(metalworker0.getTarget(), metalworks.getPosition());
 
             // Wait for the metalworks worker to go back to the house
-            Utils.fastForwardUntilWorkersReachTarget(map, metalworker0);
+            Utils.fastForwardUntilWorkersReachTarget(metalworker0);
 
             assertTrue(metalworker0.isInsideBuilding());
         }
@@ -850,7 +852,7 @@ public class TestMetalworks {
             metalworks.putCargo(new Cargo(IRON_BAR, map));
 
             // Wait until the metalworks produces tool
-            Utils.fastForwardUntilWorkerCarriesCargo(map, metalworker0);
+            Utils.fastForwardUntilWorkerCarriesCargo(metalworker0);
 
             Utils.verifyWorkerCarriesTool(metalworker0);
 
@@ -863,14 +865,14 @@ public class TestMetalworks {
             // Wait for the metalworks worker to leave the cargo at the flag
             assertEquals(metalworker0.getTarget(), metalworks.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, metalworker0, metalworks.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(metalworker0, metalworks.getFlag().getPosition());
 
             assertFalse(metalworks.getFlag().getStackedCargo().isEmpty());
             assertNull(metalworker0.getCargo());
             assertEquals(metalworker0.getTarget(), metalworks.getPosition());
 
             // Wait for the metalworks worker to go back to the house
-            Utils.fastForwardUntilWorkersReachTarget(map, metalworker0);
+            Utils.fastForwardUntilWorkersReachTarget(metalworker0);
 
             assertTrue(metalworker0.isInsideBuilding());
         }
@@ -982,7 +984,7 @@ public class TestMetalworks {
             metalworks.putCargo(new Cargo(IRON_BAR, map));
 
             // Wait until the metalworks produces tool
-            Utils.fastForwardUntilWorkerCarriesCargo(map, metalworker0);
+            Utils.fastForwardUntilWorkerCarriesCargo(metalworker0);
 
             Utils.verifyWorkerCarriesTool(metalworker0);
 
@@ -995,14 +997,14 @@ public class TestMetalworks {
             // Wait for the metalworks worker to leave the cargo at the flag
             assertEquals(metalworker0.getTarget(), metalworks.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, metalworker0, metalworks.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(metalworker0, metalworks.getFlag().getPosition());
 
             assertFalse(metalworks.getFlag().getStackedCargo().isEmpty());
             assertNull(metalworker0.getCargo());
             assertEquals(metalworker0.getTarget(), metalworks.getPosition());
 
             // Wait for the metalworks worker to go back to the house
-            Utils.fastForwardUntilWorkersReachTarget(map, metalworker0);
+            Utils.fastForwardUntilWorkersReachTarget(metalworker0);
 
             assertTrue(metalworker0.isInsideBuilding());
         }
@@ -1188,7 +1190,7 @@ public class TestMetalworks {
         // Wait for the metalworker to produce a new tool cargo
         var metalworker0 = (Metalworker) metalworks0.getWorker();
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, metalworker0);
+        Utils.fastForwardUntilWorkerCarriesCargo(metalworker0);
 
         var worker = metalworks0.getWorker();
 
@@ -1198,7 +1200,7 @@ public class TestMetalworks {
         assertEquals(worker.getTarget(), metalworks0.getFlag().getPosition());
         assertTrue(metalworks0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, metalworks0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, metalworks0.getFlag().getPosition());
 
         assertNull(worker.getCargo());
         assertFalse(metalworks0.getFlag().getStackedCargo().isEmpty());
@@ -1206,17 +1208,17 @@ public class TestMetalworks {
         // Wait for the worker to go back to the metalworks
         assertEquals(worker.getTarget(), metalworks0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, metalworks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, metalworks0.getPosition());
 
         // Wait for the worker to rest and produce another cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, metalworker0);
+        Utils.fastForwardUntilWorkerCarriesCargo(metalworker0);
 
         assertNotNull(worker.getCargo());
 
         // Verify that the second cargo is put at the flag
         assertEquals(worker.getTarget(), metalworks0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, metalworks0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, metalworks0.getFlag().getPosition());
 
         assertNull(worker.getCargo());
         assertEquals(metalworks0.getFlag().getStackedCargo().size(), 2);
@@ -1260,7 +1262,7 @@ public class TestMetalworks {
         // Wait for the metalworker to produce a new tool cargo
         var metalworker0 = (Metalworker) metalworks0.getWorker();
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, metalworker0);
+        Utils.fastForwardUntilWorkerCarriesCargo(metalworker0);
 
         var worker = metalworks0.getWorker();
 
@@ -1270,7 +1272,7 @@ public class TestMetalworks {
         assertEquals(worker.getTarget(), metalworks0.getFlag().getPosition());
         assertTrue(metalworks0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, metalworks0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, metalworks0.getFlag().getPosition());
 
         assertNull(worker.getCargo());
         assertFalse(metalworks0.getFlag().getStackedCargo().isEmpty());
@@ -1299,14 +1301,14 @@ public class TestMetalworks {
         assertNotEquals(courier.getTarget(), metalworks0.getFlag().getPosition());
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         // Verify that the courier walks to pick up the cargo
         map.stepTime();
 
         assertEquals(courier.getTarget(), metalworks0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         // Verify that the courier has picked up the cargo
         assertNotNull(courier.getCargo());
@@ -1319,7 +1321,7 @@ public class TestMetalworks {
 
         var amount = headquarter0.getAmount(toolType);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
         // Verify that the courier has delivered the cargo to the headquarter
         assertNull(courier.getCargo());
@@ -1362,7 +1364,7 @@ public class TestMetalworks {
 
         var amount = headquarter0.getAmount(METALWORKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
         // Verify that the metalworker is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(METALWORKER), amount + 1);
@@ -1460,14 +1462,14 @@ public class TestMetalworks {
         Utils.fastForward(100, map);
 
         // Wait for the metalworker to produce cargo
-        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
+        Utils.fastForwardUntilWorkerProducesCargo(worker);
 
         Utils.verifyWorkerCarriesTool(worker);
 
         // Wait for the worker to deliver the cargo
         assertEquals(worker.getTarget(), metalworks0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, metalworks0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, metalworks0.getFlag().getPosition());
 
         // Stop production and verify that no tool is produced
         metalworks0.stopProduction();
@@ -1524,14 +1526,14 @@ public class TestMetalworks {
         Utils.fastForward(100, map);
 
         // Wait for the metalworker to produce tool
-        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
+        Utils.fastForwardUntilWorkerProducesCargo(worker);
 
         Utils.verifyWorkerCarriesTool(worker);
 
         // Wait for the worker to deliver the cargo
         assertEquals(worker.getTarget(), metalworks0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, metalworks0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, metalworks0.getFlag().getPosition());
 
         // Stop production
         metalworks0.stopProduction();
@@ -1547,7 +1549,7 @@ public class TestMetalworks {
 
         assertTrue(metalworks0.isProductionEnabled());
 
-        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
+        Utils.fastForwardUntilWorkerProducesCargo(worker);
 
         assertNotNull(worker.getCargo());
     }
@@ -1682,7 +1684,7 @@ public class TestMetalworks {
         assertNotNull(metalworker);
         assertEquals(metalworker.getTarget(), metalworks.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworker, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1693,14 +1695,14 @@ public class TestMetalworks {
         map.removeRoad(road1);
 
         // Verify that the metalworker continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworker, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworker, flag0.getPosition());
 
         assertEquals(metalworker.getPosition(), flag0.getPosition());
 
         // Verify that the metalworker returns to the headquarter when it reaches the flag
         assertEquals(metalworker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworker, headquarter0.getPosition());
     }
 
     @Test
@@ -1743,7 +1745,7 @@ public class TestMetalworks {
         assertNotNull(metalworker);
         assertEquals(metalworker.getTarget(), metalworks0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworker, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1754,14 +1756,14 @@ public class TestMetalworks {
         map.removeRoad(road0);
 
         // Verify that the metalworker continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworker, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworker, flag0.getPosition());
 
         assertEquals(metalworker.getPosition(), flag0.getPosition());
 
         // Verify that the metalworker continues to the final flag
         assertEquals(metalworker.getTarget(), metalworks0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworker, metalworks0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworker, metalworks0.getFlag().getPosition());
 
         // Verify that the metalworker goes out to metalworker instead of going directly back
         assertNotEquals(metalworker.getTarget(), headquarter0.getPosition());
@@ -1808,7 +1810,7 @@ public class TestMetalworks {
         assertEquals(metalworker.getTarget(), metalworks0.getPosition());
 
         // Wait for the metalworker to reach the first flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworker, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworker, flag0.getPosition());
 
         map.stepTime();
 
@@ -1819,7 +1821,7 @@ public class TestMetalworks {
         metalworks0.tearDown();
 
         // Verify that the metalworker continues walking to the next flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworker, metalworks0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworker, metalworks0.getFlag().getPosition());
 
         assertEquals(metalworker.getPosition(), metalworks0.getFlag().getPosition());
 
@@ -1870,7 +1872,7 @@ public class TestMetalworks {
 
         var amount = storehouse0.getAmount(METALWORKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworker, storehouse0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworker, storehouse0.getPosition());
 
         // Verify that the metalworker is stored correctly in the headquarter
         assertEquals(storehouse0.getAmount(METALWORKER), amount + 1);
@@ -1922,7 +1924,7 @@ public class TestMetalworks {
 
         var amount = headquarter0.getAmount(METALWORKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworker, headquarter0.getPosition());
 
         // Verify that the metalworker is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(METALWORKER), amount + 1);
@@ -1977,7 +1979,7 @@ public class TestMetalworks {
 
         var amount = headquarter0.getAmount(METALWORKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworker, headquarter0.getPosition());
 
         // Verify that the metalworker is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(METALWORKER), amount + 1);
@@ -2023,7 +2025,7 @@ public class TestMetalworks {
 
         var amount = headquarter0.getAmount(METALWORKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworker, headquarter0.getPosition());
 
         // Verify that the metalworker is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(METALWORKER), amount + 1);
@@ -2055,7 +2057,7 @@ public class TestMetalworks {
         var worker = Utils.waitForWorkersOutsideBuilding(Metalworker.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, metalworks0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, metalworks0.getFlag().getPosition());
 
         // Tear down the building
         metalworks0.tearDown();
@@ -2063,11 +2065,11 @@ public class TestMetalworks {
         // Verify that the worker goes to the building and then returns to the headquarter instead of entering
         assertEquals(worker.getTarget(), metalworks0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, metalworks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, metalworks0.getPosition());
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
     }
 
     @Test
@@ -2400,7 +2402,7 @@ public class TestMetalworks {
         Utils.deliverCargo(metalworks, IRON_BAR);
 
         // Fill the flag with flour cargos
-        Utils.placeCargos(map, PLANK, 8, metalworks.getFlag(), headquarter);
+        Utils.placeCargos(PLANK, 8, metalworks.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2417,7 +2419,7 @@ public class TestMetalworks {
         var road1 = map.placeAutoSelectedRoad(player0, metalworks.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == PLANK) {
@@ -2434,7 +2436,7 @@ public class TestMetalworks {
         assertEquals(metalworks.getFlag().getStackedCargo().size(), 7);
 
         // Verify that the worker produces a cargo of tool and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, metalworks.getWorker());
+        Utils.fastForwardUntilWorkerCarriesCargo(metalworks.getWorker());
 
         Utils.verifyWorkerCarriesTool(metalworks.getWorker());
     }
@@ -2469,7 +2471,7 @@ public class TestMetalworks {
         Utils.deliverCargo(metalworks, IRON_BAR);
 
         // Fill the flag with cargos
-        Utils.placeCargos(map, PLANK, 8, metalworks.getFlag(), headquarter);
+        Utils.placeCargos(PLANK, 8, metalworks.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2486,7 +2488,7 @@ public class TestMetalworks {
         var road1 = map.placeAutoSelectedRoad(player0, metalworks.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == PLANK) {
@@ -2506,14 +2508,14 @@ public class TestMetalworks {
         map.removeRoad(road1);
 
         // The worker produces a cargo and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, metalworks.getWorker());
+        Utils.fastForwardUntilWorkerCarriesCargo(metalworks.getWorker());
 
         Utils.verifyWorkerCarriesTool(metalworks.getWorker());
 
         // Wait for the worker to put the cargo on the flag
         assertEquals(metalworks.getWorker().getTarget(), metalworks.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworks.getWorker(), metalworks.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworks.getWorker(), metalworks.getFlag().getPosition());
 
         assertEquals(metalworks.getFlag().getStackedCargo().size(), 8);
 
@@ -2565,9 +2567,9 @@ public class TestMetalworks {
         Utils.blockDeliveryOfTools(headquarter0);
 
         // Verify that the metalworks puts eight tools on the flag and then stops
-        Utils.waitForFlagToGetStackedCargo(map, metalworks0.getFlag(), 8);
+        Utils.waitForFlagToGetStackedCargo(metalworks0.getFlag(), 8);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworker0, metalworks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworker0, metalworks0.getPosition());
 
         for (int i = 0; i < 300; i++) {
             map.stepTime();
@@ -2636,7 +2638,7 @@ public class TestMetalworks {
 
         assertFalse(metalworker0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworker0, metalworks0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworker0, metalworks0.getFlag().getPosition());
 
         assertEquals(metalworker0.getTarget(), storehouse.getPosition());
 
@@ -2702,11 +2704,11 @@ public class TestMetalworks {
 
         assertFalse(metalworker0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworker0, metalworks0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworker0, metalworks0.getFlag().getPosition());
 
         assertEquals(metalworker0.getTarget(), storehouse.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworker0, storehouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworker0, storehouse.getPosition());
 
         assertFalse(map.getWorkers().contains(metalworker0));
     }
@@ -2737,12 +2739,12 @@ public class TestMetalworks {
             assertEquals(worker.getPosition(), headquarter0.getPosition());
             assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
             assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
             assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
             assertFalse(map.getWorkers().contains(worker));
         }
@@ -2771,25 +2773,16 @@ public class TestMetalworks {
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
-
-        for (int i = 0; i < 100; i++) {
-            assertTrue(worker.isDead());
-            assertTrue(map.getWorkers().contains(worker));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(worker));
     }
 
     @Test
@@ -2829,7 +2822,7 @@ public class TestMetalworks {
 
         assertEquals(worker.getPosition(), metalworks0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, metalworks0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, metalworks0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), metalworks0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
@@ -2837,18 +2830,36 @@ public class TestMetalworks {
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
 
-        for (int i = 0; i < 100; i++) {
+        // Verify that the skeleton decays
+        for (int i = 0; i < 6000; i++) {
             assertTrue(worker.isDead());
             assertTrue(map.getWorkers().contains(worker));
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
+
+            map.stepTime();
+        }
+
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(DecorationType.HUMAN_SKELETON_DECAYED, map.getDecorationAtPoint(worker.getPosition()));
+
+        // Verify that the skeleton disappears
+        for (int i = 0; i < 4000; i++) {
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
 
             map.stepTime();
         }
 
         assertFalse(map.getWorkers().contains(worker));
+        assertFalse(map.isDecoratedAtPoint(worker.getPosition()));
+        assertNotEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
     }
 
     @Test
@@ -2880,7 +2891,7 @@ public class TestMetalworks {
         var metalworker = Utils.waitForWorkerOutsideBuilding(Metalworker.class, player0);
 
         // Wait for the metalworker to go past the headquarter's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworker, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -2891,7 +2902,7 @@ public class TestMetalworks {
 
         metalworks0.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworker, metalworks0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworker, metalworks0.getFlag().getPosition());
 
         assertEquals(metalworker.getPosition(), metalworks0.getFlag().getPosition());
         assertNotEquals(metalworker.getTarget(), headquarter0.getPosition());
@@ -2899,17 +2910,8 @@ public class TestMetalworks {
         assertNull(metalworks0.getWorker());
         assertNotNull(metalworker.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, metalworker, metalworker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(metalworker, metalworker.getTarget());
 
-        var point = metalworker.getPosition();
-        for (int i = 0; i < 100; i++) {
-            assertTrue(metalworker.isDead());
-            assertEquals(metalworker.getPosition(), point);
-            assertTrue(map.getWorkers().contains(metalworker));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(metalworker));
+        assertTrue(metalworker.isDead());
     }
 }

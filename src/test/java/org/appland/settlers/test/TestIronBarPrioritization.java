@@ -18,8 +18,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static org.appland.settlers.model.Material.*;
 import static org.junit.Assert.*;
@@ -86,7 +84,7 @@ public class TestIronBarPrioritization {
             Utils.adjustInventoryTo(headquarter0, IRON_BAR, 1);
 
             // Wait for the storage worker to pick up a wheat cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, IRON_BAR);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, IRON_BAR);
 
             // Keep track of where the wheat cargos end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -185,7 +183,7 @@ public class TestIronBarPrioritization {
             Utils.adjustInventoryTo(headquarter0, IRON_BAR, 1);
 
             // Wait for the storage worker to pick up an iron bar cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, IRON_BAR);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, IRON_BAR);
 
             // Keep track of where the iron bar cargos end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -284,7 +282,7 @@ public class TestIronBarPrioritization {
             Utils.adjustInventoryTo(headquarter0, IRON_BAR, 1);
 
             // Wait for the storage worker to pick up an iron bar cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, IRON_BAR);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, IRON_BAR);
 
             // Keep track of where the iron bar cargos end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -384,7 +382,7 @@ public class TestIronBarPrioritization {
             Utils.adjustInventoryTo(headquarter0, IRON_BAR, 1);
 
             // Wait for the storage worker to pick up an iron bar cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, IRON_BAR);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, IRON_BAR);
 
             // Keep track of where the iron bar cargos end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -492,7 +490,7 @@ public class TestIronBarPrioritization {
             Utils.adjustInventoryTo(headquarter0, IRON_BAR, 1);
 
             // Wait for the storage worker to pick up a wheat cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, IRON_BAR);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, IRON_BAR);
 
             // Keep track of where the wheat cargos end up
             var targetBuilding = carrier.getCargo().getTarget();

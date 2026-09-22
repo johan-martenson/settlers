@@ -2,6 +2,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -19,10 +20,9 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 /**
@@ -407,7 +407,7 @@ public class TestDonkeyFarm {
         assertTrue(donkeyBreeder.isTraveling());
 
         // Let the donkey breeder reach the spot and start to feed the donkeys
-        Utils.fastForwardUntilWorkersReachTarget(map, donkeyBreeder);
+        Utils.fastForwardUntilWorkersReachTarget(donkeyBreeder);
 
         assertTrue(donkeyBreeder.isArrived());
         assertTrue(donkeyBreeder.isAt(point));
@@ -480,7 +480,7 @@ public class TestDonkeyFarm {
         assertTrue(donkeyBreeder.isTraveling());
 
         // Let the donkey breeder reach the intended spot and start to feed
-        Utils.fastForwardUntilWorkersReachTarget(map, donkeyBreeder);
+        Utils.fastForwardUntilWorkersReachTarget(donkeyBreeder);
 
         assertTrue(donkeyBreeder.isArrived());
         assertTrue(donkeyBreeder.isAt(point));
@@ -499,7 +499,7 @@ public class TestDonkeyFarm {
         assertEquals(donkeyBreeder.getTarget(), donkeyFarm.getPosition());
         assertTrue(donkeyBreeder.getPlannedPath().contains(donkeyFarm.getFlag().getPosition()));
 
-        Utils.fastForwardUntilWorkersReachTarget(map, donkeyBreeder);
+        Utils.fastForwardUntilWorkersReachTarget(donkeyBreeder);
 
         assertTrue(donkeyBreeder.isArrived());
         assertTrue(donkeyBreeder.isInsideBuilding());
@@ -555,7 +555,7 @@ public class TestDonkeyFarm {
         assertTrue(donkeyBreeder.isTraveling());
 
         // Let the donkey breeder reach the intended spot
-        Utils.fastForwardUntilWorkersReachTarget(map, donkeyBreeder);
+        Utils.fastForwardUntilWorkersReachTarget(donkeyBreeder);
 
         assertTrue(donkeyBreeder.isArrived());
         assertTrue(donkeyBreeder.isAt(point));
@@ -574,7 +574,7 @@ public class TestDonkeyFarm {
         assertNull(donkeyBreeder.getCargo());
 
         // Let the donkey breeder reach the farm
-        Utils.fastForwardUntilWorkersReachTarget(map, donkeyBreeder);
+        Utils.fastForwardUntilWorkersReachTarget(donkeyBreeder);
 
         assertTrue(donkeyBreeder.isArrived());
         assertTrue(donkeyBreeder.isInsideBuilding());
@@ -604,7 +604,7 @@ public class TestDonkeyFarm {
         assertEquals(donkey.getTarget(), headquarter.getPosition());
 
         // Verify that the donkey walks to the headquarter
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkey, headquarter.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(donkey, headquarter.getPosition());
 
         assertEquals(donkey.getPosition(), headquarter.getPosition());
     }
@@ -811,7 +811,7 @@ public class TestDonkeyFarm {
 
         var amount = headquarter0.getAmount(DONKEY_BREEDER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
         // Verify that the donkey breeder is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(DONKEY_BREEDER), amount + 1);
@@ -992,7 +992,7 @@ public class TestDonkeyFarm {
         assertTrue(donkeyBreeder.isTraveling());
 
         // Let the donkey breeder reach the intended spot
-        Utils.fastForwardUntilWorkersReachTarget(map, donkeyBreeder);
+        Utils.fastForwardUntilWorkersReachTarget(donkeyBreeder);
 
         assertTrue(donkeyBreeder.isArrived());
         assertTrue(donkeyBreeder.isAt(point));
@@ -1626,7 +1626,7 @@ public class TestDonkeyFarm {
         assertNotNull(donkeyBreeder);
         assertEquals(donkeyBreeder.getTarget(), donkeyFarm0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(donkeyBreeder, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1637,14 +1637,14 @@ public class TestDonkeyFarm {
         map.removeRoad(road1);
 
         // Verify that the donkey breeder continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(donkeyBreeder, flag0.getPosition());
 
         assertEquals(donkeyBreeder.getPosition(), flag0.getPosition());
 
         // Verify that the donkey breeder returns to the headquarter when it reaches the flag
         assertEquals(donkeyBreeder.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(donkeyBreeder, headquarter0.getPosition());
     }
 
     @Test
@@ -1687,7 +1687,7 @@ public class TestDonkeyFarm {
         assertNotNull(donkeyBreeder);
         assertEquals(donkeyBreeder.getTarget(), donkeyFarm0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(donkeyBreeder, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1698,14 +1698,14 @@ public class TestDonkeyFarm {
         map.removeRoad(road0);
 
         // Verify that the donkey breeder continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(donkeyBreeder, flag0.getPosition());
 
         assertEquals(donkeyBreeder.getPosition(), flag0.getPosition());
 
         // Verify that the donkey breeder continues to the final flag
         assertEquals(donkeyBreeder.getTarget(), donkeyFarm0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, donkeyFarm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(donkeyBreeder, donkeyFarm0.getFlag().getPosition());
 
         // Verify that the donkey breeder goes out to the donkey farm instead of going directly back
         assertNotEquals(donkeyBreeder.getTarget(), headquarter0.getPosition());
@@ -1752,7 +1752,7 @@ public class TestDonkeyFarm {
         assertEquals(donkeyBreeder.getTarget(), donkeyFarm0.getPosition());
 
         // Wait for the donkey breeder to reach the first flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(donkeyBreeder, flag0.getPosition());
 
         map.stepTime();
 
@@ -1763,7 +1763,7 @@ public class TestDonkeyFarm {
         donkeyFarm0.tearDown();
 
         // Verify that the donkey breeder continues walking to the next flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, donkeyFarm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(donkeyBreeder, donkeyFarm0.getFlag().getPosition());
 
         assertEquals(donkeyBreeder.getPosition(), donkeyFarm0.getFlag().getPosition());
 
@@ -1814,7 +1814,7 @@ public class TestDonkeyFarm {
 
         var amount = storehouse0.getAmount(DONKEY_BREEDER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, storehouse0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(donkeyBreeder, storehouse0.getPosition());
 
         // Verify that the donkey breeder is stored correctly in the headquarter
         assertEquals(storehouse0.getAmount(DONKEY_BREEDER), amount + 1);
@@ -1866,7 +1866,7 @@ public class TestDonkeyFarm {
 
         var amount = headquarter0.getAmount(DONKEY_BREEDER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(donkeyBreeder, headquarter0.getPosition());
 
         // Verify that the donkey breeder is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(DONKEY_BREEDER), amount + 1);
@@ -1921,7 +1921,7 @@ public class TestDonkeyFarm {
 
         var amount = headquarter0.getAmount(DONKEY_BREEDER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(donkeyBreeder, headquarter0.getPosition());
 
         // Verify that the donkey breeder is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(DONKEY_BREEDER), amount + 1);
@@ -1967,7 +1967,7 @@ public class TestDonkeyFarm {
 
         var amount = headquarter0.getAmount(DONKEY_BREEDER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(donkeyBreeder, headquarter0.getPosition());
 
         // Verify that the donkey breeder is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(DONKEY_BREEDER), amount + 1);
@@ -1999,7 +1999,7 @@ public class TestDonkeyFarm {
         var worker = Utils.waitForWorkersOutsideBuilding(DonkeyBreeder.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, donkeyFarm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, donkeyFarm0.getFlag().getPosition());
 
         // Tear down the building
         donkeyFarm0.tearDown();
@@ -2007,11 +2007,11 @@ public class TestDonkeyFarm {
         // Verify that the worker goes to the building and then returns to the headquarter instead of entering
         assertEquals(worker.getTarget(), donkeyFarm0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, donkeyFarm0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, donkeyFarm0.getPosition());
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
     }
 
     @Test
@@ -2080,24 +2080,23 @@ public class TestDonkeyFarm {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), donkeyFarm.getFlag());
 
         // Make the donkey farm create some donkeys with full resources available
-        for (int i = 0; i < 1000; i++) {
-            map.stepTime();
-
-            if (donkeyFarm.needsMaterial(WATER) && donkeyFarm.getAmount(WATER) < 2) {
-                donkeyFarm.putCargo(new Cargo(WATER, map));
+        Utils.fastForwardUntil(map, () -> {
+            if (donkeyFarm.needsMaterial(WATER)) {
+                Utils.deliverCargo(donkeyFarm, WATER);
             }
 
-            if (donkeyFarm.needsMaterial(WHEAT) && donkeyFarm.getAmount(WHEAT) < 2) {
-                donkeyFarm.putCargo(new Cargo(WHEAT, map));
+            if (donkeyFarm.needsMaterial(WHEAT)) {
+                Utils.deliverCargo(donkeyFarm, WHEAT);
             }
-        }
+
+            return donkeyFarm.getProductivity() == 100;
+        });
 
         // Verify that the productivity is 100% and stays there
         assertEquals(donkeyFarm.getProductivity(), 100);
 
         for (int i = 0; i < 1000; i++) {
             map.stepTime();
-
 
             if (donkeyFarm.needsMaterial(WATER) && donkeyFarm.getAmount(WATER) < 2) {
                 donkeyFarm.putCargo(new Cargo(WATER, map));
@@ -2137,28 +2136,26 @@ public class TestDonkeyFarm {
         assertEquals(donkeyBreeder0.getHome(), donkeyFarm);
         assertEquals(donkeyFarm.getWorker(), donkeyBreeder0);
 
-        // Connect the donkey farm with the headquarter
+        // Connect the donkey farm with the headquarters
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), donkeyFarm.getFlag());
 
         // Make the donkey farm create some donkeys with full resources available
-        for (int i = 0; i < 1000; i++) {
-            map.stepTime();
+        Utils.deliverCargos(donkeyFarm, WATER, 6);
+        Utils.deliverCargos(donkeyFarm, WHEAT, 6);
 
-            if (donkeyFarm.needsMaterial(WATER) && donkeyFarm.getAmount(WATER) < 2) {
-                donkeyFarm.putCargo(new Cargo(WATER, map));
+        Utils.fastForwardUntil(map, () -> {
+            if (donkeyFarm.needsMaterial(WATER)) {
+                Utils.deliverCargo(donkeyFarm, WATER);
+                Utils.deliverCargo(donkeyFarm, WHEAT);
             }
 
-            if (donkeyFarm.needsMaterial(WHEAT) && donkeyFarm.getAmount(WHEAT) < 2) {
-                donkeyFarm.putCargo(new Cargo(WHEAT, map));
-            }
-        }
+            return donkeyFarm.getProductivity() == 100;
+        });
 
         // Verify that the productivity goes down when resources run out
         assertEquals(donkeyFarm.getProductivity(), 100);
 
-        for (int i = 0; i < 5000; i++) {
-            map.stepTime();
-        }
+        Utils.fastForwardUntil(map, () -> donkeyFarm.getProductivity() == 0);
 
         assertEquals(donkeyFarm.getProductivity(), 0);
     }
@@ -2410,7 +2407,7 @@ public class TestDonkeyFarm {
 
         assertFalse(donkeyBreeder0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder0, donkeyFarm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(donkeyBreeder0, donkeyFarm0.getFlag().getPosition());
 
         assertEquals(donkeyBreeder0.getTarget(), storehouse.getPosition());
 
@@ -2476,11 +2473,11 @@ public class TestDonkeyFarm {
 
         assertFalse(donkeyBreeder0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder0, donkeyFarm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(donkeyBreeder0, donkeyFarm0.getFlag().getPosition());
 
         assertEquals(donkeyBreeder0.getTarget(), storehouse.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder0, storehouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(donkeyBreeder0, storehouse.getPosition());
 
         assertFalse(map.getWorkers().contains(donkeyBreeder0));
     }
@@ -2511,12 +2508,12 @@ public class TestDonkeyFarm {
             assertEquals(worker.getPosition(), headquarter0.getPosition());
             assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
             assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
             assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
             assertFalse(map.getWorkers().contains(worker));
         }
@@ -2545,25 +2542,16 @@ public class TestDonkeyFarm {
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
-
-        for (int i = 0; i < 100; i++) {
-            assertTrue(worker.isDead());
-            assertTrue(map.getWorkers().contains(worker));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(worker));
     }
 
     @Test
@@ -2603,7 +2591,7 @@ public class TestDonkeyFarm {
 
         assertEquals(worker.getPosition(), donkeyFarm0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, donkeyFarm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, donkeyFarm0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), donkeyFarm0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
@@ -2611,18 +2599,37 @@ public class TestDonkeyFarm {
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
 
-        for (int i = 0; i < 100; i++) {
+        // Verify that the skeleton decays
+        for (int i = 0; i < 6000; i++) {
             assertTrue(worker.isDead());
             assertTrue(map.getWorkers().contains(worker));
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
+
+            map.stepTime();
+        }
+
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(DecorationType.HUMAN_SKELETON_DECAYED, map.getDecorationAtPoint(worker.getPosition()));
+
+        // Verify that the skeleton disappears
+        for (int i = 0; i < 4000; i++) {
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
 
             map.stepTime();
         }
 
         assertFalse(map.getWorkers().contains(worker));
+        assertFalse(map.isDecoratedAtPoint(worker.getPosition()));
+        assertNotEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
+
     }
 
     @Test
@@ -2654,7 +2661,7 @@ public class TestDonkeyFarm {
         var donkeyBreeder = Utils.waitForWorkerOutsideBuilding(DonkeyBreeder.class, player0);
 
         // Wait for the donkey breeder to go past the headquarter's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(donkeyBreeder, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -2665,7 +2672,7 @@ public class TestDonkeyFarm {
 
         donkeyFarm0.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, donkeyFarm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(donkeyBreeder, donkeyFarm0.getFlag().getPosition());
 
         assertEquals(donkeyBreeder.getPosition(), donkeyFarm0.getFlag().getPosition());
         assertNotEquals(donkeyBreeder.getTarget(), headquarter0.getPosition());
@@ -2673,17 +2680,8 @@ public class TestDonkeyFarm {
         assertNull(donkeyFarm0.getWorker());
         assertNotNull(donkeyBreeder.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, donkeyBreeder.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(donkeyBreeder, donkeyBreeder.getTarget());
 
-        var point = donkeyBreeder.getPosition();
-        for (int i = 0; i < 100; i++) {
-            assertTrue(donkeyBreeder.isDead());
-            assertEquals(donkeyBreeder.getPosition(), point);
-            assertTrue(map.getWorkers().contains(donkeyBreeder));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(donkeyBreeder));
+        assertTrue(donkeyBreeder.isDead());
     }
 }

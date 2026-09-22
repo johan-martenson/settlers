@@ -50,8 +50,8 @@ import static org.appland.settlers.model.Vegetation.WATER;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.SMALL;
-import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.messages.Message.MessageType.*;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.*;
@@ -187,7 +187,7 @@ public class TestMessages {
         assertEquals(player0.getMessages().size(), 1);
         assertEquals(player0.getMessages().getFirst().getMessageType(), Message.MessageType.MILITARY_BUILDING_READY);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, barracks0.getPosition());
 
         assertEquals(player0.getMessages().size(), 2);
         assertEquals(player0.getMessages().get(1).getMessageType(), Message.MessageType.MILITARY_BUILDING_OCCUPIED);
@@ -319,7 +319,7 @@ public class TestMessages {
         // Let the fisherman reach the spot and start fishing
         var amountOfFish = map.getAmountFishAtPoint(point);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
+        Utils.fastForwardUntilWorkersReachTarget(fisherman);
 
         assertTrue(fisherman.isArrived());
         assertTrue(fisherman.isAt(point));
@@ -333,19 +333,19 @@ public class TestMessages {
         // Let the fisherman go back to the fishery
         assertEquals(fisherman.getTarget(), fishery.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
+        Utils.fastForwardUntilWorkersReachTarget(fisherman);
 
         // Wait for the fisherman to leave the cargo of fish at the flag
         map.stepTime();
 
         assertEquals(fisherman.getTarget(), fishery.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(fisherman, fishery.getFlag().getPosition());
 
         assertNull(fisherman.getCargo());
         assertEquals(fisherman.getTarget(), fishery.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
+        Utils.fastForwardUntilWorkersReachTarget(fisherman);
 
         // Verify that a message is sent when there is no more fish
         assertEquals(map.getAmountFishAtPoint(point0), 0);
@@ -435,10 +435,10 @@ public class TestMessages {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to reach the first site to investigate
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Verify that a message is sent when the geologist finds gold
         assertTrue(geologist.isInvestigating());
@@ -505,10 +505,10 @@ public class TestMessages {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to reach the first site to investigate
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Verify that a message is sent when the geologist finds gold
         assertTrue(geologist.isInvestigating());
@@ -651,7 +651,7 @@ public class TestMessages {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
@@ -662,14 +662,14 @@ public class TestMessages {
         // Wait for the general to beat the private
         Utils.waitForFightToStart(map, attacker, defender);
 
-        Utils.waitForSoldierToWinFight(attacker, map);
+        Utils.waitForSoldierToWinFight(attacker);
 
         assertFalse(map.getWorkers().contains(defender));
 
         // Wait for the attacker to go back to the fixed point
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, attacker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, attacker.getTarget());
 
         // Verify that the attacker takes over the building
         assertEquals(attacker.getTarget(), barracks1.getPosition());
@@ -679,7 +679,7 @@ public class TestMessages {
         var amountMessagesForPlayer0Before = player0.getMessages().size();
         var amountMessagesForPlayer1Before = player1.getMessages().size();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getPosition());
 
         assertEquals(barracks1.getPlayer(), player0);
         assertEquals(player0.getMessages().size(), amountMessagesForPlayer0Before + 1);
@@ -755,11 +755,11 @@ public class TestMessages {
         // Wait for the miner to leave the gold at the flag
         assertEquals(miner.getTarget(), mine.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, mine.getFlag().getPosition());
 
         assertNull(miner.getCargo());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, mine.getPosition());
 
         assertTrue(miner.isInsideBuilding());
         assertEquals(player0.getMessages().size(), 0);
@@ -839,11 +839,11 @@ public class TestMessages {
         // Wait for the miner to leave the gold at the flag
         assertEquals(miner.getTarget(), mine.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, mine.getFlag().getPosition());
 
         assertNull(miner.getCargo());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(miner, mine.getPosition());
 
         assertTrue(miner.isInsideBuilding());
         assertEquals(player0.getMessages().size(), 0);
@@ -1162,7 +1162,7 @@ public class TestMessages {
         var point3 = new Point(12, 18);
         assertTrue(player1.getBorderPoints().contains(point3));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, fortress0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, fortress0.getPosition());
 
         assertFalse(player1.getBorderPoints().contains(point3));
         assertEquals(player1.getMessages().size(), 1);
@@ -1224,7 +1224,7 @@ public class TestMessages {
 
         assertTrue(player1.getBorderPoints().contains(point3));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, fortress0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, fortress0.getPosition());
 
         assertFalse(player1.getBorderPoints().contains(point3));
         assertEquals(player1.getMessages().size(), 1);
@@ -1297,7 +1297,7 @@ public class TestMessages {
         // Wait for the attacker to get to the attacked buildings flag
         assertEquals(attacker.getTarget(), headquarter1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, headquarter1.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1313,7 +1313,7 @@ public class TestMessages {
             assertNotEquals(message.getMessageType(), GAME_ENDED);
         }
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, headquarter1.getPosition());
 
         map.stepTime();
 
@@ -1379,7 +1379,7 @@ public class TestMessages {
         // Wait for the attacker to get to the attacked buildings flag
         assertEquals(attacker.getTarget(), headquarter1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, headquarter1.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1395,7 +1395,7 @@ public class TestMessages {
             assertNotEquals(message.getMessageType(), GAME_ENDED);
         }
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, headquarter1.getPosition());
 
         map.stepTime();
 
@@ -1473,7 +1473,7 @@ public class TestMessages {
         // Wait for the attacker to get to the attacked buildings flag
         assertEquals(attacker.getTarget(), headquarter1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, headquarter1.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1489,7 +1489,7 @@ public class TestMessages {
             assertNotEquals(message.getMessageType(), GAME_ENDED);
         }
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, headquarter1.getPosition());
 
         map.stepTime();
 

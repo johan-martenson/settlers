@@ -20,8 +20,8 @@ import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -36,10 +36,9 @@ public class TestConstructionPreparationPlayer {
 
         // Create players
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 10, 11);
+        var map = new GameMap(List.of(player0), 10, 11);
 
         // Create the computer player
         var computerPlayer = new ConstructionPreparationPlayer(player0, map);
@@ -50,10 +49,9 @@ public class TestConstructionPreparationPlayer {
 
         // Create players
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Create the computer player
         var computerPlayer = new ConstructionPreparationPlayer(player0, map);
@@ -83,10 +81,9 @@ public class TestConstructionPreparationPlayer {
 
         // Create players
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Create the computer player
         var computerPlayer = new ConstructionPreparationPlayer(player0, map);
@@ -104,10 +101,9 @@ public class TestConstructionPreparationPlayer {
 
         // Create players
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Create the computer player
         var computerPlayer = new ConstructionPreparationPlayer(player0, map);
@@ -145,10 +141,9 @@ public class TestConstructionPreparationPlayer {
 
         // Create players
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Create the computer player
         var computerPlayer = new ConstructionPreparationPlayer(player0, map);
@@ -172,10 +167,9 @@ public class TestConstructionPreparationPlayer {
 
         // Create players
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place stone
         var point1 = new Point(15, 17);
@@ -206,10 +200,9 @@ public class TestConstructionPreparationPlayer {
 
         // Create players
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place stone
         var point1 = new Point(15, 17);
@@ -243,10 +236,9 @@ public class TestConstructionPreparationPlayer {
 
         // Create players
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place stone
         var point1 = new Point(16, 10);
@@ -322,10 +314,9 @@ public class TestConstructionPreparationPlayer {
 
         // Create players
         var player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var players = new ArrayList<Player>();        players.add(player0);
 
         // Create game map
-        var map = new GameMap(players, 100, 101);
+        var map = new GameMap(List.of(player0), 100, 101);
 
         // Place stone
         var point1 = new Point(15, 17);

@@ -7,7 +7,7 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.actors.Rank;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.GuardHouse;
@@ -15,7 +15,6 @@ import org.appland.settlers.model.buildings.Headquarter;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
 import static org.junit.Assert.assertEquals;
@@ -254,11 +253,11 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         Utils.adjustInventoryTo(headquarter0, GENERAL, 2);
 
         // Military settings - no reserve and prefer strong population
-        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 0);
-        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
-        headquarter0.setReservedSoldiers(Soldier.Rank.SERGEANT_RANK, 0);
-        headquarter0.setReservedSoldiers(Soldier.Rank.OFFICER_RANK, 0);
-        headquarter0.setReservedSoldiers(Soldier.Rank.GENERAL_RANK, 0);
+        headquarter0.setReservedSoldiers(Rank.PRIVATE_RANK, 0);
+        headquarter0.setReservedSoldiers(Rank.PRIVATE_FIRST_CLASS_RANK, 0);
+        headquarter0.setReservedSoldiers(Rank.SERGEANT_RANK, 0);
+        headquarter0.setReservedSoldiers(Rank.OFFICER_RANK, 0);
+        headquarter0.setReservedSoldiers(Rank.GENERAL_RANK, 0);
 
         player0.setStrengthOfSoldiersPopulatingBuildings(10);
 
@@ -282,11 +281,11 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         Utils.fastForward(200, map);
 
         assertEquals(fortress.getHostedSoldiers().size(), 9);
-        assertEquals(fortress.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 1);
-        assertEquals(fortress.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK), 2);
-        assertEquals(fortress.getHostedSoldiersWithRank(Soldier.Rank.SERGEANT_RANK), 2);
-        assertEquals(fortress.getHostedSoldiersWithRank(Soldier.Rank.OFFICER_RANK), 2);
-        assertEquals(fortress.getHostedSoldiersWithRank(Soldier.Rank.GENERAL_RANK), 2);
+        assertEquals(fortress.getHostedSoldiersWithRank(Rank.PRIVATE_RANK), 1);
+        assertEquals(fortress.getHostedSoldiersWithRank(Rank.PRIVATE_FIRST_CLASS_RANK), 2);
+        assertEquals(fortress.getHostedSoldiersWithRank(Rank.SERGEANT_RANK), 2);
+        assertEquals(fortress.getHostedSoldiersWithRank(Rank.OFFICER_RANK), 2);
+        assertEquals(fortress.getHostedSoldiersWithRank(Rank.GENERAL_RANK), 2);
 
         // Verify that more soldiers are sent out to the fortress when the setting is changed
         player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(5);
@@ -298,11 +297,11 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         Utils.fastForward(200, map);
 
         assertEquals(fortress.getHostedSoldiers().size(), 5);
-        assertEquals(fortress.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 0);
-        assertEquals(fortress.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK), 0);
-        assertEquals(fortress.getHostedSoldiersWithRank(Soldier.Rank.SERGEANT_RANK), 1);
-        assertEquals(fortress.getHostedSoldiersWithRank(Soldier.Rank.OFFICER_RANK), 2);
-        assertEquals(fortress.getHostedSoldiersWithRank(Soldier.Rank.GENERAL_RANK), 2);
+        assertEquals(fortress.getHostedSoldiersWithRank(Rank.PRIVATE_RANK), 0);
+        assertEquals(fortress.getHostedSoldiersWithRank(Rank.PRIVATE_FIRST_CLASS_RANK), 0);
+        assertEquals(fortress.getHostedSoldiersWithRank(Rank.SERGEANT_RANK), 1);
+        assertEquals(fortress.getHostedSoldiersWithRank(Rank.OFFICER_RANK), 2);
+        assertEquals(fortress.getHostedSoldiersWithRank(Rank.GENERAL_RANK), 2);
     }
 
     @Test
@@ -325,11 +324,11 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         Utils.adjustInventoryTo(headquarter0, GENERAL, 2);
 
         // Military settings - no reserve and prefer strong population
-        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 0);
-        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
-        headquarter0.setReservedSoldiers(Soldier.Rank.SERGEANT_RANK, 0);
-        headquarter0.setReservedSoldiers(Soldier.Rank.OFFICER_RANK, 0);
-        headquarter0.setReservedSoldiers(Soldier.Rank.GENERAL_RANK, 0);
+        headquarter0.setReservedSoldiers(Rank.PRIVATE_RANK, 0);
+        headquarter0.setReservedSoldiers(Rank.PRIVATE_FIRST_CLASS_RANK, 0);
+        headquarter0.setReservedSoldiers(Rank.SERGEANT_RANK, 0);
+        headquarter0.setReservedSoldiers(Rank.OFFICER_RANK, 0);
+        headquarter0.setReservedSoldiers(Rank.GENERAL_RANK, 0);
 
         player0.setStrengthOfSoldiersPopulatingBuildings(10);
 
@@ -1174,7 +1173,13 @@ public class TestSettingsForPopulatingMilitaryBuildings {
         // Verify that changing to medium setting affects the center buildings
         player0.setAmountOfSoldiersWhenPopulatingFarFromBorder(5);
 
-        Utils.fastForward(300, map);
+        Utils.fastForward(200, map);
+
+        // Three possibilities
+        // 1. The headquarters promises twice
+        //  -- Seems like it's not the case.
+        // 2. The promised soldier never reaches the guardhouse
+        // 3. The promise is not cleared
 
         assertEquals(guardHouse.getHostedSoldiers().size(), 2);
         assertEquals(guardHouse2.getHostedSoldiers().size(), 2); // Also far from border...

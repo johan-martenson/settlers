@@ -1,7 +1,14 @@
 package org.appland.settlers.model.actors;
 
+import org.appland.settlers.model.buildings.PigFarm;
+
 public class Pig {
     private PigAge pigAge;
+    private PigFarm.StyeSlot slot;
+
+    public PigFarm.StyeSlot slot() {
+        return slot;
+    }
 
     public enum PigAction {
         PIG_ACTION_1,
@@ -19,8 +26,9 @@ public class Pig {
         PIGLET
     }
 
-    public Pig(PigAge pigAge) {
+    public Pig(PigAge pigAge, PigFarm.StyeSlot slot) {
         this.pigAge = pigAge;
+        this.slot = slot;
     }
 
     public PigAge getAge() {

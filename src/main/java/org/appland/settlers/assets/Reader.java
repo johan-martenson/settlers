@@ -9,6 +9,7 @@ import org.appland.settlers.assets.decoders.TextDecoder;
 import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.resources.PlayerBitmap;
+import org.appland.settlers.assets.utils.SoundLoader;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -53,6 +54,9 @@ public class Reader {
     private Palette palette;
 
     public static void main(String[] args) throws CmdLineException, IOException, InvalidFormatException {
+        LstDecoder.debug = true;
+        SoundLoader.debug = true;
+
         var reader = new Reader();
         var parser = new CmdLineParser(reader);
 
@@ -251,7 +255,7 @@ public class Reader {
                     outFile = format("%s/%s-%d.png", dirToWrite, filenameWithoutPath, i);
                 }
 
-                var outSoundFile = format("%s/%s-%d.wav", dirToWrite, filenameWithoutPath, i);
+                var outSoundFile = format("%s/%s-%d (orig index: %d).wav", dirToWrite, filenameWithoutPath, i, gameResource.getIndex());
                 i++;
 
                 switch (gameResource.getType()) {

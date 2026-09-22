@@ -242,13 +242,13 @@ public class TestDoorOpenClose {
         var road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
 
         // Wait for the road to get an assigned courier
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road0);
 
         // Place a cargo to be delivered to the headquarters
         var cargo = Utils.placeCargo(map, COIN, flag0, headquarter0);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier, cargo);
 
         // Verify that the door of the headquarters is closed, and opens when the delivery happens
         assertTrue(headquarter0.isDoorClosed());

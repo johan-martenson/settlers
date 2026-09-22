@@ -2351,7 +2351,7 @@ public class TestMonitoringOfAvailableConstruction {
         assertNull(map.isAvailableHousePoint(player0, barracks0.getFlag().getPosition().downLeft().downLeft()));
         assertTrue(map.isAvailableFlagPoint(player0, barracks0.getFlag().getPosition().downLeft().downLeft()));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, barracks0.getPosition());
 
         assertFalse(player0.getBorderPoints().contains(point3));
         assertTrue(player0.getBorderPoints().contains(point4));
@@ -2414,7 +2414,7 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, barracks0.getPosition());
 
         System.out.println("SOLDIER REACHED BARRACKS");
 
@@ -2475,7 +2475,7 @@ public class TestMonitoringOfAvailableConstruction {
         assertTrue(player0.getBorderPoints().contains(point3));
         assertFalse(player0.getBorderPoints().contains(point4));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, barracks0.getPosition());
 
         assertFalse(player0.getBorderPoints().contains(point3));
         assertTrue(player0.getBorderPoints().contains(point4));
@@ -2543,7 +2543,7 @@ public class TestMonitoringOfAvailableConstruction {
         assertTrue(player0.getBorderPoints().contains(point3));
         assertFalse(player0.getBorderPoints().contains(point4));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, barracks0.getPosition());
 
         assertFalse(player0.getBorderPoints().contains(point3));
         assertTrue(player0.getBorderPoints().contains(point4));

@@ -191,8 +191,8 @@ public class Ship extends Worker {
     @Override
     public String toString() {
         return state == State.UNDER_CONSTRUCTION
-                ? String.format("Ship under construction %s", position)
-                : String.format("Ship %s", position);
+                ? String.format("Ship under construction %s (%s)", position, state)
+                : String.format("Ship %s (%s)", position, state);
     }
 
     public void startSettlement() throws InvalidUserActionException {

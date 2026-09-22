@@ -9,8 +9,7 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.actors.Rank;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -19,11 +18,9 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.*;
+import static org.appland.settlers.model.actors.Rank.*;
 import static org.junit.Assert.*;
 
 public class TestSoldierCreationAndPromotion {
@@ -71,13 +68,13 @@ public class TestSoldierCreationAndPromotion {
     @Test
     public void testAvailableRanks() {
 
-        assertEquals(Soldier.Rank.values().length, 5);
+        assertEquals(Rank.values().length, 5);
 
-        assertEquals(Soldier.Rank.valueOf("PRIVATE_RANK"), Soldier.Rank.PRIVATE_RANK);
-        assertEquals(Soldier.Rank.valueOf("PRIVATE_FIRST_CLASS_RANK"), PRIVATE_FIRST_CLASS_RANK);
-        assertEquals(Soldier.Rank.valueOf("SERGEANT_RANK"), SERGEANT_RANK);
-        assertEquals(Soldier.Rank.valueOf("OFFICER_RANK"), OFFICER_RANK);
-        assertEquals(Soldier.Rank.valueOf("GENERAL_RANK"), GENERAL_RANK);
+        assertEquals(Rank.valueOf("PRIVATE_RANK"), Rank.PRIVATE_RANK);
+        assertEquals(Rank.valueOf("PRIVATE_FIRST_CLASS_RANK"), PRIVATE_FIRST_CLASS_RANK);
+        assertEquals(Rank.valueOf("SERGEANT_RANK"), SERGEANT_RANK);
+        assertEquals(Rank.valueOf("OFFICER_RANK"), OFFICER_RANK);
+        assertEquals(Rank.valueOf("GENERAL_RANK"), GENERAL_RANK);
     }
 
     @Test
@@ -104,19 +101,27 @@ public class TestSoldierCreationAndPromotion {
         Utils.adjustInventoryTo(headquarter0, COIN, 10);
         Utils.adjustInventoryTo(headquarter0, GOLD, 10);
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 10);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 0);
+        Utils.adjustInventoryTo(headquarter0, SERGEANT, 0);
+        Utils.adjustInventoryTo(headquarter0, OFFICER, 0);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
 
         assertEquals(10, headquarter0.getAmount(COIN));
         assertEquals(10, headquarter0.getAmount(GOLD));
         assertEquals(10, headquarter0.getAmount(PRIVATE));
-        assertEquals(0, headquarter0.getAmount(Material.SERGEANT));
-        assertEquals(0, headquarter0.getAmount(Material.GENERAL));
+        assertEquals(0, headquarter0.getAmount(PRIVATE_FIRST_CLASS));
+        assertEquals(0, headquarter0.getAmount(SERGEANT));
+        assertEquals(0, headquarter0.getAmount(OFFICER));
+        assertEquals(0, headquarter0.getAmount(GENERAL));
 
         Utils.fastForward(500, map);
 
         assertEquals(10, headquarter0.getAmount(COIN));
         assertEquals(10, headquarter0.getAmount(GOLD));
         assertEquals(10, headquarter0.getAmount(PRIVATE));
-        assertEquals(0, headquarter0.getAmount(Material.SERGEANT));
+        assertEquals(0, headquarter0.getAmount(PRIVATE_FIRST_CLASS));
+        assertEquals(0, headquarter0.getAmount(SERGEANT));
+        assertEquals(0, headquarter0.getAmount(OFFICER));
         assertEquals(0, headquarter0.getAmount(Material.GENERAL));
     }
 
@@ -201,13 +206,13 @@ public class TestSoldierCreationAndPromotion {
         Utils.constructHouse(fortress0);
 
         // Verify that no promotion happens without gold
-        var military0 = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, fortress0);
-        var military1 = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, fortress0);
+        var military0 = Utils.occupyMilitaryBuilding(Rank.PRIVATE_RANK, fortress0);
+        var military1 = Utils.occupyMilitaryBuilding(Rank.PRIVATE_RANK, fortress0);
 
         Utils.fastForward(100, map);
 
-        assertEquals(military0.getRank(), Soldier.Rank.PRIVATE_RANK);
-        assertEquals(military1.getRank(), Soldier.Rank.PRIVATE_RANK);
+        assertEquals(military0.getRank(), Rank.PRIVATE_RANK);
+        assertEquals(military1.getRank(), Rank.PRIVATE_RANK);
     }
 
     @Test
@@ -259,7 +264,7 @@ public class TestSoldierCreationAndPromotion {
         Utils.constructHouse(barracks0);
 
         // Place a private in the barracks
-        var military0 = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, barracks0);
+        var military0 = Utils.occupyMilitaryBuilding(Rank.PRIVATE_RANK, barracks0);
 
         // Add one coin
         var coinCargo = new Cargo(COIN, map);
@@ -445,7 +450,7 @@ public class TestSoldierCreationAndPromotion {
 
         Utils.waitForBuildingToGetAmountOfMaterial(fortress0, COIN, 0);
 
-        var rankCount = new HashMap<Soldier.Rank, Integer>();
+        var rankCount = new HashMap<Rank, Integer>();
         for (var military : fortress0.getHostedSoldiers()) {
             var amount = rankCount.getOrDefault(military.getRank(), 0);
 
@@ -495,7 +500,7 @@ public class TestSoldierCreationAndPromotion {
 
         Utils.waitForBuildingToGetAmountOfMaterial(fortress0, COIN, 0);
 
-        var rankCount = new HashMap<Soldier.Rank, Integer>();
+        var rankCount = new HashMap<Rank, Integer>();
         for (var military : fortress0.getHostedSoldiers()) {
             var amount = rankCount.getOrDefault(military.getRank(), 0);
 
@@ -545,7 +550,7 @@ public class TestSoldierCreationAndPromotion {
 
         Utils.waitForBuildingToGetAmountOfMaterial(fortress0, COIN, 0);
 
-        var rankCount = new HashMap<Soldier.Rank, Integer>();
+        var rankCount = new HashMap<Rank, Integer>();
         for (var military : fortress0.getHostedSoldiers()) {
             var amount = rankCount.getOrDefault(military.getRank(), 0);
 
@@ -595,7 +600,7 @@ public class TestSoldierCreationAndPromotion {
 
         Utils.waitForBuildingToGetAmountOfMaterial(fortress0, COIN, 0);
 
-        var rankCount = new HashMap<Soldier.Rank, Integer>();
+        var rankCount = new HashMap<Rank, Integer>();
         for (var military : fortress0.getHostedSoldiers()) {
             var amount = rankCount.getOrDefault(military.getRank(), 0);
 
@@ -645,7 +650,7 @@ public class TestSoldierCreationAndPromotion {
 
         Utils.waitForBuildingToGetAmountOfMaterial(fortress0, COIN, 0);
 
-        var rankCount = new HashMap<Soldier.Rank, Integer>();
+        var rankCount = new HashMap<Rank, Integer>();
         for (var military : fortress0.getHostedSoldiers()) {
             var amount = rankCount.getOrDefault(military.getRank(), 0);
 

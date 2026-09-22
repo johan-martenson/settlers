@@ -1,7 +1,10 @@
 package org.appland.settlers.rest.resource;
 
+import org.appland.settlers.model.GameMap;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 public class GameResources {
     private final Collection<GameResource> games = new ArrayList<>();
@@ -37,5 +40,12 @@ public class GameResources {
 
     interface GameListListener {
         void onGameListChanged(Collection<GameResource> games);
+    }
+
+    GameResource getGameResource(GameMap map) {
+        return games.stream()
+                .filter(game -> Objects.equals(game.getGameMap(), (map)))
+                .findFirst()
+                .orElse(null);
     }
 }

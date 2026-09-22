@@ -68,7 +68,7 @@ public class TestGeologist {
         var geologist = Utils.waitForWorkerOutsideBuilding(Geologist.class, player0);
 
         // Wait for the geologist to reach the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, flag.getPosition());
 
         // Remove the road to the flag
         var road1 = map.getRoad(flag.getPosition(), storehouse0.getFlag().getPosition());
@@ -79,7 +79,7 @@ public class TestGeologist {
 
         assertEquals(geologist.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, headquarter0.getPosition());
 
         assertTrue(geologist.isInsideBuilding());
         assertEquals(geologist.getPosition(), headquarter0.getPosition());
@@ -212,12 +212,12 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Verify that the geologist keeps going to a point within a radius of 7
         assertTrue(geologist.getPosition().distance(geologist.getTarget()) < 7);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
     }
 
     @Test
@@ -258,10 +258,10 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to reach the first site to investigate
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Verify that the geologist investigates the point for the right amount of time
         var site = geologist.getPosition();
@@ -321,7 +321,7 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Verify that the geologist investigates the road since it's the only point without a tree
         assertTrue(map.isRoadAtPoint(geologist.getTarget()));
@@ -372,7 +372,7 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Verify that the geologist investigates the road since it's the only point without a stone
         assertTrue(map.isRoadAtPoint(geologist.getTarget()));
@@ -416,10 +416,10 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, flag.getPosition());
 
         // Wait for the geologist to reach the first site to investigate
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate the first site
         assertTrue(geologist.isInvestigating());
@@ -430,7 +430,7 @@ public class TestGeologist {
         assertNotEquals(geologist.getTarget(), flag.getPosition());
 
         // Let the var go to the second site
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate the second site
         assertTrue(geologist.isInvestigating());
@@ -441,7 +441,7 @@ public class TestGeologist {
         assertNotEquals(geologist.getTarget(), flag.getPosition());
 
         // Let the var go to the third site
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate the third site
         assertTrue(geologist.isInvestigating());
@@ -452,7 +452,7 @@ public class TestGeologist {
         assertNotEquals(geologist.getTarget(), flag.getPosition());
 
         // Let the var go to the fourth site
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate the fourth site
         assertTrue(geologist.isInvestigating());
@@ -463,7 +463,7 @@ public class TestGeologist {
         assertNotEquals(geologist.getTarget(), flag.getPosition());
 
         // Let the var go to the fifth site
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate the fifth site
         assertTrue(geologist.isInvestigating());
@@ -471,7 +471,7 @@ public class TestGeologist {
         Utils.fastForward(20, map);
 
         // Wait for the geologist to reach the sixth site to investigate
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate the sixth site
         assertTrue(geologist.isInvestigating());
@@ -482,7 +482,7 @@ public class TestGeologist {
         assertNotEquals(geologist.getTarget(), flag.getPosition());
 
         // Let the var go to the seventh site
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate the seventh site
         assertTrue(geologist.isInvestigating());
@@ -493,7 +493,7 @@ public class TestGeologist {
         assertNotEquals(geologist.getTarget(), flag.getPosition());
 
         // Let the var go to the eighth site
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate the eighth site
         assertTrue(geologist.isInvestigating());
@@ -504,7 +504,7 @@ public class TestGeologist {
         assertNotEquals(geologist.getTarget(), flag.getPosition());
 
         // Let the var go to the ninth site
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate the ninth site
         assertTrue(geologist.isInvestigating());
@@ -515,7 +515,7 @@ public class TestGeologist {
         assertNotEquals(geologist.getTarget(), flag.getPosition());
 
         // Let the var go to the tenth site
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate the tenth site
         assertTrue(geologist.isInvestigating());
@@ -564,10 +564,10 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to reach the first site to investigate
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate the first site
         assertTrue(geologist.isInvestigating());
@@ -625,10 +625,10 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to reach the first site to investigate
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate the first site
         assertTrue(geologist.isInvestigating());
@@ -680,10 +680,10 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to reach the first site to investigate
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate a site on the mountain
         for (int i = 0; i < 2_000; i++) {
@@ -754,10 +754,10 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to reach the first site to investigate
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate the first site
         assertTrue(geologist.isInvestigating());
@@ -815,10 +815,10 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to reach the first site to investigate
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate the first site
         assertTrue(geologist.isInvestigating());
@@ -873,7 +873,7 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate ten sites
         for (int i = 0; i < 10; i++) {
@@ -887,7 +887,7 @@ public class TestGeologist {
             assertFalse(map.isSignAtPoint(geologist.getTarget()));
 
             // Wait for the geologist to reach the next site to investigate
-            Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+            Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
             // Wait for the geologist to investigate the site
             assertTrue(geologist.isInvestigating());
@@ -900,14 +900,14 @@ public class TestGeologist {
         // Wait for the geologist to reach the flag
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, flag.getPosition());
 
         assertEquals(geologist.getTarget(), headquarter0.getPosition());
 
         // Wait for the geologist to reach the headquarters and verify that it's correctly stored
         var amount = headquarter0.getAmount(GEOLOGIST);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, geologist);
+        Utils.fastForwardUntilWorkersReachTarget(geologist);
 
         assertEquals(headquarter0.getAmount(GEOLOGIST), amount + 1);
     }
@@ -957,7 +957,7 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Verify that cannot find a place to investigate and goes back
         assertEquals(geologist.getTarget(), headquarter0.getPosition());
@@ -1007,7 +1007,7 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Verify that the geologist only investigates free points
         while (!geologist.getTarget().equals(flag.getPosition())) {
@@ -1019,7 +1019,7 @@ public class TestGeologist {
         // Verify that the var goes back
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, flag.getPosition());
 
         assertEquals(geologist.getTarget(), headquarter0.getPosition());
     }
@@ -1070,7 +1070,7 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Verify that the geologist only investigates free points
         while (!geologist.getTarget().equals(flag.getPosition())) {
@@ -1083,7 +1083,7 @@ public class TestGeologist {
         // Verify that the var goes back
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, flag.getPosition());
 
         assertEquals(geologist.getTarget(), headquarter0.getPosition());
     }
@@ -1131,12 +1131,12 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), headquarter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, headquarter0.getFlag().getPosition());
 
         // Verify that the var goes back again because there are no free points
         assertEquals(geologist.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, headquarter0.getFlag().getPosition());
 
         assertEquals(geologist.getTarget(), headquarter0.getPosition());
     }
@@ -1182,7 +1182,7 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate five sites
         for (int i = 0; i < 5; i++) {
@@ -1198,7 +1198,7 @@ public class TestGeologist {
             assertFalse(map.isSignAtPoint(target));
 
             // Wait for the geologist to reach the next site to investigate
-            Utils.fastForwardUntilWorkerReachesPoint(map, geologist, target);
+            Utils.fastForwardUntilWorkerReachesPoint(geologist, target);
 
             // Wait for the geologist to investigate the site
             assertTrue(geologist.isInvestigating());
@@ -1317,7 +1317,7 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Call for a second geologist
         flag.callGeologist();
@@ -1333,12 +1333,12 @@ public class TestGeologist {
 
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, flag.getPosition());
 
         // Let the var go back to the headquarters
         assertEquals(geologist.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, headquarter0.getPosition());
 
         // Verify that the geologist leaves again
         geologist = null;
@@ -1404,7 +1404,7 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Verify that the amount of geologists in the headquarters is 0
         assertEquals(headquarter0.getAmount(GEOLOGIST), 0);
@@ -1420,12 +1420,12 @@ public class TestGeologist {
 
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, flag.getPosition());
 
         // Let the var go back to the headquarters
         assertEquals(geologist.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, headquarter0.getPosition());
 
         // Verify that the amount of geologists is 1
         assertEquals(headquarter0.getAmount(GEOLOGIST), 1);
@@ -1536,10 +1536,10 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate the first site
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate the site
         assertTrue(geologist.isInvestigating());
@@ -1563,7 +1563,7 @@ public class TestGeologist {
 
         var amount = headquarter0.getAmount(GEOLOGIST);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, geologist);
+        Utils.fastForwardUntilWorkersReachTarget(geologist);
 
         assertEquals(headquarter0.getAmount(GEOLOGIST), amount + 1);
     }
@@ -1610,10 +1610,10 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate the first site
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to investigate the site
         assertTrue(geologist.isInvestigating());
@@ -1637,7 +1637,7 @@ public class TestGeologist {
 
         var amount = headquarter0.getAmount(GEOLOGIST);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, geologist);
+        Utils.fastForwardUntilWorkersReachTarget(geologist);
 
         assertEquals(headquarter0.getAmount(GEOLOGIST), amount + 1);
     }
@@ -1686,7 +1686,7 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1697,14 +1697,14 @@ public class TestGeologist {
         map.removeRoad(road1);
 
         // Verify that the geologist continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, flag0.getPosition());
 
         assertEquals(geologist.getPosition(), flag0.getPosition());
 
         // Verify that the geologist returns to the headquarters when it reaches the flag
         assertEquals(geologist.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, headquarter0.getPosition());
 
         assertTrue(geologist.isInsideBuilding());
     }
@@ -1750,7 +1750,7 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1761,14 +1761,14 @@ public class TestGeologist {
         map.removeRoad(road0);
 
         // Verify that the geologist continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, flag0.getPosition());
 
         assertEquals(geologist.getPosition(), flag0.getPosition());
 
         // Verify that the geologist continues to the final flag
         assertEquals(geologist.getTarget(), flag1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, flag1.getPosition());
 
         // Verify that the var goes out to geologist instead of going directly back
         assertNotEquals(geologist.getTarget(), headquarter0.getPosition());
@@ -1816,7 +1816,7 @@ public class TestGeologist {
         assertEquals(geologist.getTarget(), flag1.getPosition());
 
         // Wait for the geologist to reach the first flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, flag0.getPosition());
 
         map.stepTime();
 
@@ -1827,7 +1827,7 @@ public class TestGeologist {
         map.removeFlag(flag1);
 
         // Verify that the geologist continues walking to the second flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, flag1.getPosition());
 
         assertEquals(geologist.getPosition(), flag1.getPosition());
 
@@ -1864,7 +1864,7 @@ public class TestGeologist {
         // Wait for the geologist to reach the flag
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, flag.getPosition());
 
         // Wait for the geologist to leave the flag
         assertEquals(geologist.getPosition(), flag.getPosition());
@@ -1875,7 +1875,7 @@ public class TestGeologist {
         assertFalse(geologist.isExactlyAtPoint());
 
         // Wait for the geologist to be on the way back to the flag
-        Utils.waitForWorkerToSetTarget(map, geologist, flag.getPosition());
+        Utils.waitForWorkerToSetTarget(geologist, flag.getPosition());
 
         // Wait for the geologist to be almost at the flag
         for (int i = 0; i < 2000; i++) {

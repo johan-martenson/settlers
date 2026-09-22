@@ -35,7 +35,7 @@ import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.PlayerColor.BLUE;
 import static org.appland.settlers.model.Vegetation.*;
 import static org.appland.settlers.model.Vegetation.WATER;
-import static org.appland.settlers.model.actors.Soldier.Rank.*;
+import static org.appland.settlers.model.actors.Rank.*;
 import static org.junit.Assert.*;
 
 public class TestMisc {
@@ -71,7 +71,7 @@ public class TestMisc {
         var woodcutter0 = map.placeBuilding(new Woodcutter(player0), flag0.getPosition().upLeft());
 
         // Wait for the road to get an assigned courier
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road0);
 
         // Fast forward a bit until the courier is carrying a cargo to deliver to the woodcutter
         for (int i = 0; i < 2000; i++) {
@@ -98,7 +98,7 @@ public class TestMisc {
         // Verify that the courier goes back to the headquarters
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
         assertEquals(courier.getPosition(), headquarter0.getPosition());
         assertFalse(map.getWorkers().contains(courier));
@@ -133,7 +133,7 @@ public class TestMisc {
             // Wait the scout to get to the flag
             assertEquals(scout.getTarget(), flag0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(scout, flag0.getPosition());
 
             assertEquals(scout.getPosition(), flag0.getPosition());
 
@@ -159,7 +159,7 @@ public class TestMisc {
             assertEquals(scout.getPosition(), flag0.getPosition());
 
             // Verify that the scout goes back to the headquarters
-            Utils.fastForwardUntilWorkerReachesPoint(map, scout, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(scout, headquarter0.getPosition());
 
             assertEquals(scout.getPosition(), headquarter0.getPosition());
         }
@@ -256,7 +256,7 @@ public class TestMisc {
         assertEquals(military.getTarget(), guardHouse0.getPosition());
         assertFalse(player0.getDiscoveredLand().contains(point04));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, guardHouse0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, guardHouse0.getPosition());
 
         assertTrue(player0.getDiscoveredLand().contains(point04));
         assertFalse(player0.getDiscoveredLand().contains(point05));
@@ -519,7 +519,7 @@ public class TestMisc {
 
         assertEquals(military.getTarget(), headquarter1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, headquarter1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, headquarter1.getPosition());
 
         Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
 
@@ -540,7 +540,7 @@ public class TestMisc {
         // Wait for the attacker to get to the attacked buildings flag
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         map.stepTime();
 
@@ -553,7 +553,7 @@ public class TestMisc {
         assertTrue(barracks1.isReady());
         assertTrue(barracks1.isEvacuated());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getPosition());
 
         assertFalse(barracks1.isEvacuated());
         assertEquals(barracks1.getPlayer(), player0);
@@ -591,7 +591,7 @@ public class TestMisc {
         // Wait for the fortress to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(fortress0);
         Utils.waitForMilitaryBuildingToGetPopulated(fortress0, 5);
-
+        System.out.println(headquarter0.getHostedSoldiers());
         // Verify that when the fortress is burned down, all soldiers go back and get stored properly
         assertEquals(headquarter0.getAmount(PRIVATE), 0);
         assertEquals(headquarter0.getAmount(PRIVATE_FIRST_CLASS), 0);
@@ -692,7 +692,7 @@ public class TestMisc {
 
         assertEquals(military.getTarget(), headquarter1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, headquarter1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, headquarter1.getPosition());
 
         Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
 
@@ -713,7 +713,7 @@ public class TestMisc {
         // Wait for the attacker to get to the attacked buildings flag
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         map.stepTime();
 
@@ -732,7 +732,7 @@ public class TestMisc {
         assertTrue(barracks2.isUnoccupied());
         assertEquals(barracks2.getPlayer(), player1);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getPosition());
 
         assertEquals(barracks1.getPlayer(), player0);
         assertFalse(map.getRoads().contains(road0));
@@ -768,7 +768,7 @@ public class TestMisc {
         var courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
         // Wait for the courier to carry a cargo to the woodcutter
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier);
 
         map.stepTime();
 
@@ -783,7 +783,7 @@ public class TestMisc {
 
         woodcutter.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, woodcutter.getFlag().getPosition());
 
         assertEquals(woodcutter.getAmount(PLANK), 0);
         assertEquals(woodcutter.getAmount(STONE), 0);
@@ -815,7 +815,7 @@ public class TestMisc {
         var courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
 
         // Wait for the courier to carry a cargo to the woodcutter
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier);
 
         map.stepTime();
 
@@ -833,7 +833,7 @@ public class TestMisc {
         assertFalse(map.isBuildingAtPoint(point1));
         assertNull(map.getBuildingAtPoint(point1));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, woodcutter.getFlag().getPosition());
 
         assertEquals(woodcutter.getAmount(PLANK), 0);
         assertEquals(woodcutter.getAmount(STONE), 0);
@@ -869,10 +869,10 @@ public class TestMisc {
         var road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter.getFlag());
 
         // Wait for the first road to get assigned a courier
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road0);
 
         // Wait for the courier to carry a cargo intended for the woodcutter
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier);
 
         map.stepTime();
 
@@ -885,7 +885,7 @@ public class TestMisc {
 
         woodcutter.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, flag0.getPosition());
 
         assertEquals(woodcutter.getAmount(PLANK), 0);
         assertEquals(woodcutter.getAmount(STONE), 0);
@@ -955,7 +955,7 @@ public class TestMisc {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
@@ -966,7 +966,7 @@ public class TestMisc {
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
 
         assertEquals(defender.getPosition(), attacker.getPosition());
 
@@ -985,14 +985,14 @@ public class TestMisc {
         // Wait for the attacker to return to the fixed point
         Utils.waitForWorkerToHaveTarget(map, attacker, barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, attacker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, attacker.getTarget());
 
         // Wait for the attacker to go to the barracks
         assertEquals(attacker.getTarget(), barracks1.getPosition());
         assertTrue(woodcutter0.isDestroyed());
         assertTrue(map.getBuildings().contains(woodcutter0));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getPosition());
 
         // Verify that the border is updated to include the captured building and that it's not in player 1's border anymore
         assertTrue(map.getBuildings().contains(woodcutter0));
@@ -1030,10 +1030,10 @@ public class TestMisc {
         var road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter.getFlag());
 
         // Wait for courier to get assigned to the first road
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road0);
 
         // Wait for the courier to hold a cargo for the woodcutter
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier);
 
         assertNotNull(courier.getCargo());
         assertEquals(courier.getCargo().getTarget(), woodcutter);
@@ -1041,7 +1041,7 @@ public class TestMisc {
         var cargo = courier.getCargo();
 
         // Wait for the courier to place the cargo on the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, flag0.getPosition());
 
         assertNull(courier.getCargo());
         assertTrue(flag0.getStackedCargo().contains(cargo));
@@ -1092,10 +1092,10 @@ public class TestMisc {
             }
         }
 
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road0);
 
         // Wait for the courier to hold a cargo for the woodcutter
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier);
 
         assertNotNull(courier.getCargo());
         assertEquals(courier.getCargo().getTarget(), woodcutter);
@@ -1103,7 +1103,7 @@ public class TestMisc {
         var cargo = courier.getCargo();
 
         // Wait for the courier to reach the middle of the road
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition().left());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, flag0.getPosition().left());
 
         assertNotNull(courier.getCargo());
 
@@ -1950,7 +1950,7 @@ public class TestMisc {
         assertEquals(donkey.getPosition(), sawmill0.getFlag().getPosition());
 
         // Wait for the donkey to go to the sawmill and deliver the cargo
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkey, sawmill0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(donkey, sawmill0.getPosition());
 
         // Verify that the donkey goes back to the headquarters when it's between the sawmill and its flag, and its road is removed
         map.stepTime();
@@ -1963,7 +1963,7 @@ public class TestMisc {
         assertEquals(donkey.getTarget(), headquarter.getPosition());
         assertTrue(map.getWorkers().contains(donkey));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkey, headquarter.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(donkey, headquarter.getPosition());
 
         assertFalse(map.getWorkers().contains(donkey));
     }
@@ -2013,7 +2013,7 @@ public class TestMisc {
         assertEquals(fisherman0.getTarget(), point1.left());
         assertEquals(fisherman1.getTarget(), point1.left());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman0, point1.left());
+        Utils.fastForwardUntilWorkerReachesPoint(fisherman0, point1.left());
 
         Utils.waitForFishermanToStopFishing(fisherman0, map);
 
@@ -2031,7 +2031,7 @@ public class TestMisc {
                         (fisherman0.getTarget().equals(fishery1.getPosition()) && fisherman1.getTarget().equals(fishery0.getPosition()))
         );
 
-        Utils.fastForwardUntilWorkersReachTarget(map, fisherman0, fisherman1);
+        Utils.fastForwardUntilWorkersReachTarget(fisherman0, fisherman1);
     }
 
     @Test
@@ -2076,14 +2076,14 @@ public class TestMisc {
         // Wait for the sawmill to produce a plank and place it at its flag
         Utils.adjustInventoryTo(headquarter, WOOD, 1);
 
-        Utils.waitForFlagToGetStackedCargo(map, sawmill.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(sawmill.getFlag(), 1);
 
         assertEquals(sawmill.getFlag().getStackedCargo().getFirst().getMaterial(), PLANK);
 
         // Verify that the plank is delivered to the sawmill
         assertEquals(shipyard.getAmount(PLANK), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road1.getCourier(), PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(road1.getCourier(), PLANK);
 
         assertEquals(road1.getCourier().getTarget(), shipyard.getPosition());
 
@@ -2155,9 +2155,9 @@ public class TestMisc {
 
         assertEquals(attacker.getTarget(), barracks.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks.getFlag().getPosition());
 
-        Utils.waitForSoldierToBeFighting(attacker, map);
+        Utils.waitForSoldierToBeFighting(attacker);
 
         var defenderFighting = attacker.getOpponent();
 
@@ -2170,7 +2170,7 @@ public class TestMisc {
 
         newDefender.setTargetBuilding(barracks);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, newDefender, barracks.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(newDefender, barracks.getPosition());
 
         assertTrue(newDefender.isInsideBuilding());
 
@@ -2210,7 +2210,7 @@ public class TestMisc {
         // Wait for a coin to get delivered to the barracks
         var courier = road.getCourier();
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, COIN);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier, COIN);
 
         // Stop promotions in the barracks
         barracks.disablePromotions();
@@ -2218,7 +2218,7 @@ public class TestMisc {
         // Verify that the coin can still be delivered
         assertEquals(barracks.getAmount(COIN), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, barracks.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, barracks.getPosition());
 
         assertEquals(barracks.getAmount(COIN), 1);
         assertNull(courier.getCargo());

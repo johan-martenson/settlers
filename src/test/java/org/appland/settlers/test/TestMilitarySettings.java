@@ -8,6 +8,7 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.actors.Rank;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Fortress;
@@ -17,7 +18,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.*;
+import static org.appland.settlers.model.actors.Rank.*;
 import static org.junit.Assert.*;
 
 public class TestMilitarySettings {
@@ -175,8 +176,8 @@ public class TestMilitarySettings {
         var soldiers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
 
         assertEquals(soldiers.size(), 2);
-        assertEquals(soldiers.getFirst().getRank(), Soldier.Rank.PRIVATE_RANK);
-        assertEquals(soldiers.get(1).getRank(), Soldier.Rank.PRIVATE_RANK);
+        assertEquals(soldiers.getFirst().getRank(), Rank.PRIVATE_RANK);
+        assertEquals(soldiers.get(1).getRank(), Rank.PRIVATE_RANK);
     }
 
     @Test
@@ -216,8 +217,8 @@ public class TestMilitarySettings {
         var soldiers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
 
         assertEquals(soldiers.size(), 2);
-        assertEquals(soldiers.getFirst().getRank(), Soldier.Rank.PRIVATE_FIRST_CLASS_RANK);
-        assertEquals(soldiers.get(1).getRank(), Soldier.Rank.PRIVATE_FIRST_CLASS_RANK);
+        assertEquals(soldiers.getFirst().getRank(), Rank.PRIVATE_FIRST_CLASS_RANK);
+        assertEquals(soldiers.get(1).getRank(), Rank.PRIVATE_FIRST_CLASS_RANK);
     }
 
     @Test
@@ -255,8 +256,8 @@ public class TestMilitarySettings {
         var soldiers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
 
         assertEquals(soldiers.size(), 2);
-        assertEquals(soldiers.getFirst().getRank(), Soldier.Rank.SERGEANT_RANK);
-        assertEquals(soldiers.get(1).getRank(), Soldier.Rank.SERGEANT_RANK);
+        assertEquals(soldiers.getFirst().getRank(), Rank.SERGEANT_RANK);
+        assertEquals(soldiers.get(1).getRank(), Rank.SERGEANT_RANK);
     }
 
     @Test
@@ -294,8 +295,8 @@ public class TestMilitarySettings {
         var soldiers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
 
         assertEquals(soldiers.size(), 2);
-        assertEquals(soldiers.getFirst().getRank(), Soldier.Rank.OFFICER_RANK);
-        assertEquals(soldiers.get(1).getRank(), Soldier.Rank.OFFICER_RANK);
+        assertEquals(soldiers.getFirst().getRank(), Rank.OFFICER_RANK);
+        assertEquals(soldiers.get(1).getRank(), Rank.OFFICER_RANK);
     }
 
     @Test
@@ -333,8 +334,8 @@ public class TestMilitarySettings {
         var soldiers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
 
         assertEquals(soldiers.size(), 2);
-        assertEquals(soldiers.getFirst().getRank(), Soldier.Rank.GENERAL_RANK);
-        assertEquals(soldiers.get(1).getRank(), Soldier.Rank.GENERAL_RANK);
+        assertEquals(soldiers.getFirst().getRank(), Rank.GENERAL_RANK);
+        assertEquals(soldiers.get(1).getRank(), Rank.GENERAL_RANK);
     }
 
     @Test
@@ -374,8 +375,8 @@ public class TestMilitarySettings {
         var soldiers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
 
         assertEquals(soldiers.size(), 2);
-        assertEquals(soldiers.getFirst().getRank(), Soldier.Rank.SERGEANT_RANK);
-        assertEquals(soldiers.get(1).getRank(), Soldier.Rank.SERGEANT_RANK);
+        assertEquals(soldiers.getFirst().getRank(), Rank.SERGEANT_RANK);
+        assertEquals(soldiers.get(1).getRank(), Rank.SERGEANT_RANK);
     }
 
     @Test
@@ -415,8 +416,8 @@ public class TestMilitarySettings {
         var soldiers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
 
         assertEquals(soldiers.size(), 2);
-        assertEquals(soldiers.getFirst().getRank(), Soldier.Rank.OFFICER_RANK);
-        assertEquals(soldiers.get(1).getRank(), Soldier.Rank.OFFICER_RANK);
+        assertEquals(soldiers.getFirst().getRank(), Rank.OFFICER_RANK);
+        assertEquals(soldiers.get(1).getRank(), Rank.OFFICER_RANK);
     }
 
     // Test strength of defenders
@@ -505,7 +506,7 @@ public class TestMilitarySettings {
         assertEquals(fortress.getNumberOfHostedSoldiers(), 5);
         assertEquals(attacker.getTarget(), fortress.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, fortress.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, fortress.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), fortress.getFlag().getPosition());
         assertEquals(fortress.getNumberOfHostedSoldiers(), 4);
@@ -584,7 +585,7 @@ public class TestMilitarySettings {
         assertEquals(fortress.getNumberOfHostedSoldiers(), 5);
         assertEquals(attacker.getTarget(), fortress.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, fortress.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, fortress.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), fortress.getFlag().getPosition());
         assertEquals(fortress.getNumberOfHostedSoldiers(), 4);
@@ -663,7 +664,7 @@ public class TestMilitarySettings {
         assertEquals(fortress.getNumberOfHostedSoldiers(), 5);
         assertEquals(attacker.getTarget(), fortress.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, fortress.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, fortress.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), fortress.getFlag().getPosition());
         assertEquals(fortress.getNumberOfHostedSoldiers(), 4);
@@ -742,7 +743,7 @@ public class TestMilitarySettings {
         assertEquals(fortress.getNumberOfHostedSoldiers(), 5);
         assertEquals(attacker.getTarget(), fortress.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, fortress.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, fortress.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), fortress.getFlag().getPosition());
         assertEquals(fortress.getNumberOfHostedSoldiers(), 4);
@@ -821,7 +822,7 @@ public class TestMilitarySettings {
         assertEquals(fortress.getNumberOfHostedSoldiers(), 5);
         assertEquals(attacker.getTarget(), fortress.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, fortress.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, fortress.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), fortress.getFlag().getPosition());
         assertEquals(fortress.getNumberOfHostedSoldiers(), 4);
@@ -896,7 +897,7 @@ public class TestMilitarySettings {
 
         assertEquals(soldier.getTarget(), headquarter1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(soldier, headquarter1.getPosition());
 
         // Set defense strength for player 1 and amount of defense from surrounding buildings
         player1.setDefenseStrength(0);
@@ -921,7 +922,7 @@ public class TestMilitarySettings {
         // Verify that a military leaves from a surrounding building to defend when the attacker reaches the flag
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
 
@@ -994,7 +995,7 @@ public class TestMilitarySettings {
 
         assertEquals(soldier.getTarget(), headquarter1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(soldier, headquarter1.getPosition());
 
         // Set defense strength for player 1
         player1.setDefenseStrength(3);
@@ -1019,7 +1020,7 @@ public class TestMilitarySettings {
         // Verify that a military leaves from a surrounding building to defend when the attacker reaches the flag
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
 
@@ -1092,7 +1093,7 @@ public class TestMilitarySettings {
 
         assertEquals(soldier.getTarget(), headquarter1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(soldier, headquarter1.getPosition());
 
         // Set defense strength for player 1
         player1.setDefenseStrength(5);
@@ -1117,7 +1118,7 @@ public class TestMilitarySettings {
         // Verify that a military leaves from a surrounding building to defend when the attacker reaches the flag
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
 
@@ -1190,7 +1191,7 @@ public class TestMilitarySettings {
 
         assertEquals(soldier.getTarget(), headquarter1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(soldier, headquarter1.getPosition());
 
         // Set defense strength for player 1
         player1.setDefenseStrength(8);
@@ -1215,7 +1216,7 @@ public class TestMilitarySettings {
         // Verify that a military leaves from a surrounding building to defend when the attacker reaches the flag
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
 
@@ -1288,7 +1289,7 @@ public class TestMilitarySettings {
 
         assertEquals(soldier.getTarget(), headquarter1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(soldier, headquarter1.getPosition());
 
         // Set defense strength for player 1
         player1.setDefenseStrength(9);
@@ -1313,7 +1314,7 @@ public class TestMilitarySettings {
         // Verify that a military leaves from a surrounding building to defend when the attacker reaches the flag
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
 
@@ -1409,7 +1410,7 @@ public class TestMilitarySettings {
 
         assertEquals(soldier.getTarget(), headquarter1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(soldier, headquarter1.getPosition());
 
         // Set defense amount from surrounding buildings
         player1.setDefenseFromSurroundingBuildings(0);
@@ -1505,7 +1506,7 @@ public class TestMilitarySettings {
 
         assertEquals(soldier.getTarget(), headquarter1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(soldier, headquarter1.getPosition());
 
         // Set defense amount from surrounding buildings
         player1.setDefenseFromSurroundingBuildings(3);
@@ -1528,21 +1529,21 @@ public class TestMilitarySettings {
         // Wait for the attacker to reach the barracks' flag
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         // Verify that right amount of soldiers leave from a surrounding building to defend when the attacker reaches the flag
         for (int i = 0; i < 10; i++) {
-            if (Utils.findSoldiersOutsideBuilding(player1).size() == 2) {
+            if (Utils.findSoldiersOutsideBuilding(player1).size() == 3) {
                 break;
             }
 
-            assertEquals(fortress.getNumberOfHostedSoldiers(), 9);
+            assertEquals(9, fortress.getNumberOfHostedSoldiers());
             assertEquals(Utils.findWorkersOfTypeOutsideForPlayer(Soldier.class, player1).size(), 0);
 
             map.stepTime();
         }
 
-        assertEquals(Utils.findSoldiersOutsideBuilding(player1).size(), 2);
+        assertEquals(3, Utils.findSoldiersOutsideBuilding(player1).size());
     }
 
     @Test
@@ -1612,7 +1613,7 @@ public class TestMilitarySettings {
 
         assertEquals(soldier.getTarget(), headquarter1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(soldier, headquarter1.getPosition());
 
         // Set defense amount from surrounding buildings
         player1.setDefenseFromSurroundingBuildings(5);
@@ -1635,9 +1636,10 @@ public class TestMilitarySettings {
         // Wait for the attacker to reach the barracks' flag
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         // Verify that right amount of soldiers leave from a surrounding building to defend when the attacker reaches the flag
+        // -- including one soldier from the headquarters because it's not reserved
         for (int i = 0; i < 10; i++) {
             if (Utils.findSoldiersOutsideBuilding(player1).size() == 4) {
                 break;
@@ -1646,7 +1648,7 @@ public class TestMilitarySettings {
             map.stepTime();
         }
 
-        assertEquals(Utils.findSoldiersOutsideBuilding(player1).size(), 4);
+        assertEquals(5, Utils.findSoldiersOutsideBuilding(player1).size());
     }
 
     @Test
@@ -1668,6 +1670,19 @@ public class TestMilitarySettings {
         // Clear soldiers from the inventories
         Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
         Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
+        assertEquals(0, headquarter1.getReservedSoldiers(PRIVATE_RANK));
+        assertEquals(0, headquarter1.getReservedSoldiers(PRIVATE_FIRST_CLASS_RANK));
+        assertEquals(0, headquarter1.getReservedSoldiers(SERGEANT_RANK));
+        assertEquals(0, headquarter1.getReservedSoldiers(OFFICER_RANK));
+        assertEquals(0, headquarter1.getReservedSoldiers(GENERAL_RANK));
+
+        assertTrue(headquarter1.getHostedSoldiers().isEmpty());
+        assertEquals(0, headquarter1.getAmount(PRIVATE));
+        assertEquals(0, headquarter1.getAmount(PRIVATE_FIRST_CLASS));
+        assertEquals(0, headquarter1.getAmount(SERGEANT));
+        assertEquals(0, headquarter1.getAmount(OFFICER));
+        assertEquals(0, headquarter1.getAmount(GENERAL));
 
         // Place barracks for player 0
         var point2 = new Point(21, 5);
@@ -1706,8 +1721,14 @@ public class TestMilitarySettings {
 
         assertNotNull(soldier);
         assertEquals(soldier.getTarget(), headquarter1.getPosition());
+        assertEquals(0, headquarter1.getAmount(PRIVATE));
+        assertEquals(0, headquarter1.getHostedSoldiers().size());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(soldier, headquarter1.getPosition());
+
+        assertEquals(1, headquarter1.getAmount(PRIVATE));
+        assertEquals(1, headquarter1.getHostedSoldiers().size());
+        assertTrue(headquarter1.getHostedSoldiers().contains(soldier));
 
         // Set defense amount from surrounding buildings
         player1.setDefenseFromSurroundingBuildings(8);
@@ -1716,7 +1737,6 @@ public class TestMilitarySettings {
 
         // Order an attack
         assertTrue(player0.canAttack(barracks1));
-
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
@@ -1730,10 +1750,13 @@ public class TestMilitarySettings {
 
         // Wait for the attacker to reach the barracks' flag
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+        assertEquals(barracks1.getHostedSoldiers().size(), 0);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         // Verify that right amount of soldiers leave from a surrounding building to defend when the attacker reaches the flag
+        //  -- including one soldier from the headquarters because it's not reserved.
         for (int i = 0; i < 10; i++) {
             if (Utils.findSoldiersOutsideBuilding(player1).size() == 6) {
                 break;
@@ -1742,7 +1765,7 @@ public class TestMilitarySettings {
             map.stepTime();
         }
 
-        assertEquals(Utils.findSoldiersOutsideBuilding(player1).size(), 6);
+        assertEquals(7, Utils.findSoldiersOutsideBuilding(player1).size());
     }
 
     @Test
@@ -1812,7 +1835,7 @@ public class TestMilitarySettings {
 
         assertEquals(soldier.getTarget(), headquarter1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(soldier, headquarter1.getPosition());
 
         // Set defense amount from surrounding buildings
         player1.setDefenseFromSurroundingBuildings(10);
@@ -1835,9 +1858,10 @@ public class TestMilitarySettings {
         // Wait for the attacker to reach the barracks' flag
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         // Verify that right amount of soldiers leave from a surrounding building to defend when the attacker reaches the flag
+        // -- including one soldier from the headquarters because it's not reserved
         for (int i = 0; i < 10; i++) {
             if (Utils.findSoldiersOutsideBuilding(player1).size() == 8) {
                 break;
@@ -1846,7 +1870,7 @@ public class TestMilitarySettings {
             map.stepTime();
         }
 
-        assertEquals(Utils.findSoldiersOutsideBuilding(player1).size(), 8);
+        assertEquals(9, Utils.findSoldiersOutsideBuilding(player1).size());
     }
 
 

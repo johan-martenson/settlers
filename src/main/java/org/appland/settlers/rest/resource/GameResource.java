@@ -1,5 +1,6 @@
 package org.appland.settlers.rest.resource;
 
+import org.appland.settlers.computer.ChatPlayer;
 import org.appland.settlers.computer.CompositePlayer;
 import org.appland.settlers.computer.ComputerPlayer;
 import org.appland.settlers.maps.MapFile;

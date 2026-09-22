@@ -3,7 +3,6 @@ package org.appland.settlers.test;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.DecorationType;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.InvalidUserActionException;
@@ -11,12 +10,8 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.actors.Forester;
-import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Woodcutter;
@@ -33,8 +28,8 @@ import static org.appland.settlers.model.DecorationType.*;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Stone.StoneType.STONE_1;
-import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 public class TestDecorations {
@@ -274,7 +269,7 @@ public class TestDecorations {
             // Wait for the forester to reach the point to plant
             assertNotNull(forester.getTarget());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, forester, forester.getTarget());
+            Utils.fastForwardUntilWorkerReachesPoint(forester, forester.getTarget());
 
             // Verify that the forester places a tree on a decoration (and that the decoration then is removed)
             var point3 = forester.getPosition();
@@ -351,7 +346,7 @@ public class TestDecorations {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
@@ -369,15 +364,15 @@ public class TestDecorations {
 
         // Verify that a skeleton is placed when the defender dies
         assertFalse(map.isDecoratedAtPoint(defender.getPosition()));
-        assertNotEquals(map.getDecorations().get(defender.getPosition()), HUMAN_SKELETON_1);
-        assertNotEquals(map.getDecorationAtPoint(defender.getPosition()), HUMAN_SKELETON_1);
+        assertNotEquals(map.getDecorations().get(defender.getPosition()), HUMAN_SKELETON_FRESH);
+        assertNotEquals(map.getDecorationAtPoint(defender.getPosition()), HUMAN_SKELETON_FRESH);
 
         Utils.waitForWorkerToDie(map, defender);
 
         assertFalse(map.getWorkers().contains(defender));
         assertTrue(map.isDecoratedAtPoint(defender.getPosition()));
-        assertEquals(map.getDecorations().get(defender.getPosition()), HUMAN_SKELETON_1);
-        assertEquals(map.getDecorationAtPoint(defender.getPosition()), HUMAN_SKELETON_1);
+        assertEquals(map.getDecorations().get(defender.getPosition()), HUMAN_SKELETON_FRESH);
+        assertEquals(map.getDecorationAtPoint(defender.getPosition()), HUMAN_SKELETON_FRESH);
     }
 
     @Test

@@ -8,7 +8,6 @@ import org.appland.settlers.utils.ByteArrayReader;
 import org.appland.settlers.utils.ByteReader;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -40,7 +39,7 @@ public class WaveDecoder {
         debugPrint("      - Length: " + length);
         debugPrint("      - Has header: " + hasHeader);
 
-        if (hasHeader && length < WAVE_HEADER_SIZE) { //
+        if (hasHeader && length < WAVE_HEADER_SIZE) { // FIXME: should the header size be 44 bytes?
             throw new InvalidFormatException(String.format("Length must be larger than header size. Was %d", length));
         }
 
@@ -118,7 +117,6 @@ public class WaveDecoder {
             );
 
             byte[] waveData = streamReader.getUint8ArrayAsBytes((int) length);
-
             waveFile.setData(waveData);
         }
 

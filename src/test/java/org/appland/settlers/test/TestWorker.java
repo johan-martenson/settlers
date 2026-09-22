@@ -24,8 +24,8 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 /**
@@ -262,7 +262,7 @@ public class TestWorker {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertTrue(attacker.isExactlyAtPoint());
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
@@ -277,7 +277,7 @@ public class TestWorker {
         assertEquals(defender.getTarget(), attacker.getPosition());
         assertFalse(defender.isFighting());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
 
         assertEquals(defender.getPosition(), attacker.getPosition());
 
@@ -348,7 +348,7 @@ public class TestWorker {
         assertTrue(defender.isDying());
 
         // Verify that the attacker isn't fighting when it's walking back
-        Utils.waitForSoldierToWinFight(attacker, map);
+        Utils.waitForSoldierToWinFight(attacker);
 
         // Verify that the winner walks back to the flag
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());

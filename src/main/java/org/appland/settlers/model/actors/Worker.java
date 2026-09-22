@@ -31,6 +31,10 @@ import static java.lang.String.format;
  * @author johan
  */
 public abstract class Worker {
+    static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
+    private static final int TIME_FOR_FRESH_SKELETON_TO_DECAY = 5999;
+    private static final int TIME_FOR_DECAYED_SKELETON_TO_DISAPPEAR = 3999;
+
     private enum State {
         WALKING_AND_EXACTLY_AT_POINT,
         WALKING_BETWEEN_POINTS,
@@ -38,6 +42,8 @@ public abstract class Worker {
         IDLE_INSIDE,
         WALKING_HALF_WAY,
         WALKING_HALFWAY_AND_EXACTLY_AT_POINT,
+        DEAD_WITH_FRESH_SKELETON,
+        DEAD_WITH_DECAYED_SKELETON,
         IDLE_HALF_WAY
     }
 
@@ -54,8 +60,8 @@ public abstract class Worker {
     protected Building   targetBuilding = null;
 
     private final Countdown walkCountdown = new Countdown();
+    private final Countdown countdown = new Countdown();
 
-    private boolean     dead = false;
     private List<Point> path = null;
     private State       state = State.IDLE_OUTSIDE;
 
@@ -213,6 +219,29 @@ public abstract class Worker {
             }
 
             case IDLE_INSIDE, IDLE_OUTSIDE, IDLE_HALF_WAY -> onIdle();
+
+            case DEAD_WITH_FRESH_SKELETON -> {
+                if (countdown.hasReachedZero()) {
+                    map.placeDecoration(position, DecorationType.HUMAN_SKELETON_DECAYED);
+
+                    state = State.DEAD_WITH_DECAYED_SKELETON;
+                    countdown.countFrom(TIME_FOR_DECAYED_SKELETON_TO_DISAPPEAR);
+                } else {
+                    countdown.step();
+                }
+            }
+
+            case DEAD_WITH_DECAYED_SKELETON ->  {
+                if (countdown.hasReachedZero()) {
+                    map.removeWorker(this);
+
+                    if (map.isDecoratedAtPoint(position) && map.getDecorationAtPoint(position) == DecorationType.HUMAN_SKELETON_DECAYED) {
+                        map.removeDecorationAtPoint(position);
+                    }
+                } else {
+                    countdown.step();
+                }
+            }
         }
 
         duration.after("stepTime");
@@ -320,7 +349,7 @@ public abstract class Worker {
         targetBuilding = building;
         setTarget(building.getPosition());
 
-        // Let sub classes add logic
+        // Let subclasses add logic
         onSetTargetBuilding(building);
     }
 
@@ -396,11 +425,11 @@ public abstract class Worker {
     }
 
     void setOffroadTarget(Point point) {
-        setOffroadTarget(point, null, null);
+        setOffroadTarget(point, null, (OffroadOption[]) null);
     }
 
     void setOffroadTarget(Point point, Point via) {
-        setOffroadTarget(point, via, null);
+        setOffroadTarget(point, via, (OffroadOption[]) null);
     }
 
     // FIXME: HOTSPOT - allocations
@@ -661,7 +690,7 @@ public abstract class Worker {
     }
 
     public boolean isDead() {
-        return dead;
+        return state == State.DEAD_WITH_DECAYED_SKELETON || state == State.DEAD_WITH_FRESH_SKELETON;
     }
 
     protected Point findPlaceToDie() {
@@ -677,8 +706,10 @@ public abstract class Worker {
     }
 
     protected void setDead() {
-        dead = true;
-        map.placeDecoration(position, DecorationType.HUMAN_SKELETON_1);
+        map.placeDecoration(position, DecorationType.HUMAN_SKELETON_FRESH);
+
+        state = State.DEAD_WITH_FRESH_SKELETON;
+        countdown.countFrom(TIME_FOR_FRESH_SKELETON_TO_DECAY);
     }
 
     public void goToStorehouse(Storehouse storehouse) {

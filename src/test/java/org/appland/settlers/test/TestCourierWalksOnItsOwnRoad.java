@@ -52,21 +52,21 @@ public class TestCourierWalksOnItsOwnRoad {
         var road2 = map.placeAutoSelectedRoad(player0, flag1, woodcutter.getFlag());
 
         // Wait for the first road to get occupied
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road0);
 
         // Wait for the courier to carry cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier);
 
         assertEquals(courier.getCargo().getMaterial(), PLANK);
         assertEquals(courier.getCargo().getTarget(), woodcutter);
 
         // Fill up the flag to make it impossible to deliver cargo the fast way
-        Utils.placeCargos(map, STONE, 8, flag0, headquarter);
+        Utils.placeCargos(STONE, 8, flag0, headquarter);
 
         headquarter.blockDeliveryOfMaterial(STONE);
 
         // Wait for the courier to get blocked
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition().left());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, flag0.getPosition().left());
 
         // Make sure the courier is stuck
         Utils.verifyWorkerDoesNotMove(map, courier, 20);
@@ -75,14 +75,14 @@ public class TestCourierWalksOnItsOwnRoad {
         var road3 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag1);
 
         // Wait for the new road to get occupied
-        var courier1 = Utils.waitForRoadToGetAssignedCourier(map, road3);
+        var courier1 = Utils.waitForRoadToGetAssignedCourier(road3);
 
         // Wait for the new courier to carry a cargo
         Utils.waitForFlagToHaveCargoWaiting(map, headquarter.getFlag(), PLANK);
 
         assertTrue(headquarter.getFlag().getStackedCargo().stream().anyMatch(c -> c.getMaterial().equals(PLANK)));
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier1, STONE);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier1, STONE);
 
         // Verify that the courier walks following its own road
         assertEquals(courier1.getPosition(), flag1.getPosition());
@@ -137,10 +137,10 @@ public class TestCourierWalksOnItsOwnRoad {
         Utils.adjustInventoryTo(headquarter, PLANK, 0);
 
         // Wait for the roads to get occupied
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road2);
-        var courier3 = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road2);
+        var courier3 = Utils.waitForRoadToGetAssignedCourier(road1);
 
-        Utils.waitForCouriersToBeIdle(map, courier, courier3);
+        Utils.waitForCouriersToBeIdle(courier, courier3);
 
         // Place cargo for the couriers to pick up
         Utils.placeCargo(map, PLANK, woodcutter.getFlag(), headquarter);
@@ -150,10 +150,10 @@ public class TestCourierWalksOnItsOwnRoad {
         Utils.fastForwardUntilWorkersCarryCargo(map, courier, courier3);
 
         // Fill up the first flag to make it impossible to deliver cargo the fast way
-        Utils.placeCargos(map, STONE, 8, flag1, woodcutter);
+        Utils.placeCargos(STONE, 8, flag1, woodcutter);
 
         // Wait for the courier to get blocked
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag1.getPosition().right());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, flag1.getPosition().right());
 
         // Make sure the courier is stuck
         Utils.verifyWorkerDoesNotMove(map, courier, 20);
@@ -162,13 +162,13 @@ public class TestCourierWalksOnItsOwnRoad {
         var road3 = map.placeAutoSelectedRoad(player0, flag0, woodcutter.getFlag());
 
         // Wait for the new road to get occupied
-        var courier1 = Utils.waitForRoadToGetAssignedCourier(map, road3);
+        var courier1 = Utils.waitForRoadToGetAssignedCourier(road3);
 
         // Place a cargo for the courier to pick up
         Utils.placeCargo(map, GOLD, woodcutter.getFlag(), headquarter);
 
         // Wait for the new courier to carry a cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier1);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier1);
 
         // Verify that the courier walks to the woodcutter following its own road
         assertEquals(courier1.getPosition(), woodcutter.getFlag().getPosition());
@@ -212,40 +212,40 @@ public class TestCourierWalksOnItsOwnRoad {
         var road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter.getFlag());
 
         // Wait for the first road to get occupied
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road0);
 
         // Wait for the courier to carry cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier);
 
         assertEquals(courier.getCargo().getTarget(), woodcutter);
 
         // Fill up the flag to make it impossible to deliver cargo the fast way
-        Utils.placeCargos(map, STONE, 8, flag0, headquarter);
+        Utils.placeCargos(STONE, 8, flag0, headquarter);
 
         // Wait for the courier to get blocked
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition().left());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, flag0.getPosition().left());
 
         // Make sure the courier is stuck
         Utils.verifyWorkerDoesNotMove(map, courier, 20);
 
         // Wait for a second cargo for the woodcutter to get placed on the headquarters' flag
-        Utils.waitForFlagToGetStackedCargo(map, headquarter.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(headquarter.getFlag(), 1);
 
         assertEquals(headquarter.getFlag().getStackedCargo().size(), 1);
         assertEquals(headquarter.getFlag().getStackedCargo().getFirst().getTarget(), woodcutter);
         assertEquals(woodcutter.getFlag().getStackedCargo().size(), 0);
 
         // Fill up the woodcutter's flag to make it impossible to deliver cargo to it
-        Utils.placeCargos(map, STONE, 8, woodcutter.getFlag(), woodcutter);
+        Utils.placeCargos(STONE, 8, woodcutter.getFlag(), woodcutter);
 
         // Place a second, longer road between the headquarters and the woodcutter
         var road2 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), woodcutter.getFlag());
 
         // Wait for the new road to get occupied
-        var courier1 = Utils.waitForRoadToGetAssignedCourier(map, road2);
+        var courier1 = Utils.waitForRoadToGetAssignedCourier(road2);
 
         // Wait for the new courier to carry a cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier1);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier1);
 
         // Verify that the courier walks to the woodcutter following its own road
         assertEquals(courier1.getPosition(), headquarter.getFlag().getPosition());
@@ -300,21 +300,21 @@ public class TestCourierWalksOnItsOwnRoad {
         Utils.adjustInventoryTo(headquarter, PLANK, 0);
 
         // Wait for the second road to get occupied
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road2);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road2);
 
         // Place a cargo for the courier to pick up
         Utils.placeCargo(map, PLANK, woodcutter.getFlag(), headquarter);
 
         // Wait for the courier to carry cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier);
 
         assertEquals(courier.getCargo().getTarget(), headquarter);
 
         // Fill up the first flag to make it impossible to deliver cargo the fast way
-        Utils.placeCargos(map, STONE, 8, flag1, woodcutter);
+        Utils.placeCargos(STONE, 8, flag1, woodcutter);
 
         // Wait for the courier to get blocked
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag1.getPosition().right());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, flag1.getPosition().right());
 
         // Make sure the courier is stuck
         Utils.verifyWorkerDoesNotMove(map, courier, 20);
@@ -323,13 +323,13 @@ public class TestCourierWalksOnItsOwnRoad {
         var road3 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), woodcutter.getFlag());
 
         // Wait for the new road to get occupied
-        var courier1 = Utils.waitForRoadToGetAssignedCourier(map, road3);
+        var courier1 = Utils.waitForRoadToGetAssignedCourier(road3);
 
         // Place a cargo for the courier to pick up
         Utils.placeCargo(map, GOLD, woodcutter.getFlag(), headquarter);
 
         // Wait for the new courier to carry a cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier1);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier1);
 
         // Verify that the courier walks to the woodcutter following its own road
         assertEquals(courier1.getPosition(), woodcutter.getFlag().getPosition());

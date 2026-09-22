@@ -63,7 +63,6 @@ import org.appland.settlers.model.buildings.SlaughterHouse;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.buildings.Well;
 import org.appland.settlers.model.buildings.Woodcutter;
-import org.appland.settlers.model.statistics.StatisticsManager;
 import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
@@ -72,8 +71,8 @@ import java.util.Objects;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Vegetation.WATER;
-import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.*;
 
@@ -162,7 +161,7 @@ public class TestGoodsStatistics {
         Utils.occupyBuilding(wcWorker, woodcutter);
 
         // Let the woodcutter reach the tree and start cutting
-        Utils.waitForWoodcutterToStartCuttingTree(wcWorker, map);
+        Utils.waitForWoodcutterToStartCuttingTree(wcWorker);
 
         map.stepTime();
 
@@ -2771,7 +2770,7 @@ public class TestGoodsStatistics {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
@@ -2782,21 +2781,21 @@ public class TestGoodsStatistics {
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
 
         assertEquals(defender.getPosition(), attacker.getPosition());
 
         // Wait for the attacking general to beat the defending private
         Utils.waitForSoldierToBeDying(defender, map);
 
-        Utils.waitForSoldierToWinFight(attacker, map);
+        Utils.waitForSoldierToWinFight(attacker);
 
         assertFalse(map.getWorkers().contains(defender));
 
         // Wait for the attacker to go back to the fixed point
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, attacker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, attacker.getTarget());
 
         // Start monitoring statistics
         var monitor = new Utils.GameViewMonitor();
@@ -2817,7 +2816,7 @@ public class TestGoodsStatistics {
         var totalAmountsBuildingsBefore = statisticsManager.getPlayerStatistics(player0).totalAmountBuildings().getMeasurements().getLast().value();
         var nrEventsBefore = monitor.getStatisticsEvents().size();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getPosition());
 
         assertEquals(barracks1.getPlayer(), player0);
         assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().size(), nrMeasurementsBefore + 1);
@@ -2896,7 +2895,7 @@ public class TestGoodsStatistics {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
@@ -2907,21 +2906,21 @@ public class TestGoodsStatistics {
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
 
         assertEquals(defender.getPosition(), attacker.getPosition());
 
         // Wait for the attacking general to beat the defending private
         Utils.waitForSoldierToBeDying(defender, map);
 
-        Utils.waitForSoldierToWinFight(attacker, map);
+        Utils.waitForSoldierToWinFight(attacker);
 
         assertFalse(map.getWorkers().contains(defender));
 
         // Wait for the attacker to go back to the fixed point
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, attacker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, attacker.getTarget());
 
         // Start monitoring statistics
         var monitor = new Utils.GameViewMonitor();
@@ -2942,7 +2941,7 @@ public class TestGoodsStatistics {
         var totalAmountsBuildingsBefore = statisticsManager.getPlayerStatistics(player1).totalAmountBuildings().getMeasurements().getLast().value();
         var nrEventsBefore = monitor.getStatisticsEvents().size();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getPosition());
 
         assertEquals(barracks1.getPlayer(), player0);
         assertEquals(statisticsManager.getPlayerStatistics(player1).goods().getMeasurements().size(), nrMeasurementsBefore + 1);

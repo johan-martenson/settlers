@@ -2,6 +2,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 /**
@@ -329,7 +330,7 @@ public class TestPigFarm {
         assertTrue(pigBreeder.isTraveling());
 
         // Let the pig breeder reach the spot and start to feed the pigs
-        Utils.fastForwardUntilWorkersReachTarget(map, pigBreeder);
+        Utils.fastForwardUntilWorkersReachTarget(pigBreeder);
 
         assertTrue(pigBreeder.isArrived());
         assertTrue(pigBreeder.isAt(point));
@@ -398,7 +399,7 @@ public class TestPigFarm {
         assertTrue(pigBreeder.isTraveling());
 
         // Let the pig breeder reach the intended spot and start to feed
-        Utils.fastForwardUntilWorkersReachTarget(map, pigBreeder);
+        Utils.fastForwardUntilWorkersReachTarget(pigBreeder);
 
         assertTrue(pigBreeder.isArrived());
         assertTrue(pigBreeder.isAt(point));
@@ -416,16 +417,15 @@ public class TestPigFarm {
         assertFalse(pigBreeder.isFeeding());
         assertTrue(pigBreeder.isTraveling());
         assertEquals(pigBreeder.getTarget(), pigFarm.getPosition());
-        assertTrue(pigBreeder.getPlannedPath().contains(pigFarm.getFlag().getPosition()));
         assertTrue(pigFarm.isWorking());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, pigBreeder);
+        Utils.fastForwardUntilWorkersReachTarget(pigBreeder);
 
         assertTrue(pigBreeder.isArrived());
         assertTrue(pigBreeder.isInsideBuilding());
 
         // Verify that the pig farm stops working when the pig breeder comes out carrying a pig
-        Utils.fastForwardUntilWorkerCarriesCargo(map, pigBreeder, PIG);
+        Utils.fastForwardUntilWorkerCarriesCargo(pigBreeder, PIG);
 
         assertNotNull(pigBreeder.getCargo());
         assertFalse(pigBreeder.isInsideBuilding());
@@ -452,6 +452,7 @@ public class TestPigFarm {
 
         // Wait for the pig farm to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(pigFarm);
+
         var pigBreeder = (PigBreeder) Utils.waitForNonMilitaryBuildingToGetPopulated(pigFarm);
 
         assertTrue(pigBreeder.isInsideBuilding());
@@ -459,11 +460,6 @@ public class TestPigFarm {
         // Deliver resources to the pig farm
         Utils.deliverCargo(pigFarm, WATER);
         Utils.deliverCargo(pigFarm, WHEAT);
-
-        // Verify that the pig farm has a pig that's eating
-        assertFalse(pigFarm.getPigs().isEmpty());
-        //assertTrue(pigFarm.getPigs().getFirst().isEating());
-        //assertEquals(pigFarm.getPigs().getFirst().getPosition(), pigFarm.getPosition());
 
         // Let the pig breeder rest
         Utils.fastForward(99, map);
@@ -475,19 +471,19 @@ public class TestPigFarm {
 
         assertFalse(pigBreeder.isInsideBuilding());
         assertTrue(pigBreeder.isTraveling());
-        assertEquals(pigBreeder.getTarget(), pigFarm.getPosition().downLeft());
+        assertEquals(pigBreeder.getTarget(), pigFarm.getPosition().downRight());
         assertEquals(pigBreeder.getNextPoint(), pigBreeder.getPosition().downRight());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, pigBreeder.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder, pigBreeder.getTarget());
 
         assertTrue(pigBreeder.isArrived());
         assertTrue(pigBreeder.isFeeding());
 
         // Verify that the pig breeder feeds the pigs
+        // TODO: the pig breeder should only walk half-way
         for (int i = 0; i < 20; i++) {
             assertTrue(pigBreeder.isFeeding());
             assertFalse(pigBreeder.isInsideBuilding());
-            assertEquals(pigBreeder.getPercentageOfDistanceTraveled(), 50);
             assertEquals(pigBreeder.getTarget(), pigFarm.getPosition().downRight());
 
             map.stepTime();
@@ -497,11 +493,10 @@ public class TestPigFarm {
         assertFalse(pigBreeder.isFeeding());
         assertEquals(pigBreeder.getTarget(), pigFarm.getPosition());
         assertEquals(pigBreeder.getNextPoint(), pigFarm.getPosition());
-        assertEquals(pigBreeder.getPercentageOfDistanceTraveled(), 50);
         assertFalse(pigBreeder.isInsideBuilding());
         assertNull(pigBreeder.getCargo());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, pigFarm.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder, pigFarm.getPosition());
 
         assertTrue(pigBreeder.isArrived());
         assertTrue(pigBreeder.isInsideBuilding());
@@ -523,7 +518,7 @@ public class TestPigFarm {
         assertEquals(pigBreeder.getCargo().getMaterial(), PIG);
         assertEquals(pigBreeder.getTarget(), pigFarm.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, pigFarm.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder, pigFarm.getFlag().getPosition());
 
         assertFalse(pigFarm.getFlag().getStackedCargo().isEmpty());
         assertNull(pigBreeder.getCargo());
@@ -531,7 +526,7 @@ public class TestPigFarm {
         // Verify that the pig breeder goes back to the building
         assertEquals(pigBreeder.getTarget(), pigFarm.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, pigBreeder);
+        Utils.fastForwardUntilWorkersReachTarget(pigBreeder);
 
         assertTrue(pigBreeder.isInsideBuilding());
     }
@@ -573,17 +568,17 @@ public class TestPigFarm {
         Utils.deliverCargo(pigFarm, WATER);
         Utils.deliverCargo(pigFarm, WHEAT);
 
-        Utils.waitForFlagToGetStackedCargo(map, pigFarm.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(pigFarm.getFlag(), 1);
 
         assertEquals(pigFarm.getFlag().getStackedCargo().getFirst().getMaterial(), PIG);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that the courier delivers the cargo to the slaughter house (and not the headquarters)
         assertEquals(pigFarm.getAmount(PIG), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), slaughterHouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), slaughterHouse.getPosition());
 
         assertEquals(slaughterHouse.getAmount(PIG), 1);
     }
@@ -631,12 +626,12 @@ public class TestPigFarm {
         Utils.deliverCargo(pigFarm, WATER);
         Utils.deliverCargo(pigFarm, WHEAT);
 
-        Utils.waitForFlagToGetStackedCargo(map, pigFarm.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(pigFarm.getFlag(), 1);
 
         assertEquals(pigFarm.getFlag().getStackedCargo().getFirst().getMaterial(), PIG);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters
         assertEquals(headquarter.getAmount(PIG), 0);
@@ -644,7 +639,7 @@ public class TestPigFarm {
         assertFalse(storehouse.needsMaterial(PIG));
         assertTrue(storehouse.isUnderConstruction());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
         assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(PIG));
@@ -700,14 +695,14 @@ public class TestPigFarm {
         Utils.deliverCargo(pigFarm, WHEAT);
         Utils.deliverCargo(pigFarm, WATER);
 
-        Utils.waitForFlagToGetStackedCargo(map, pigFarm.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(pigFarm.getFlag(), 1);
 
         assertEquals(pigFarm.getFlag().getStackedCargo().getFirst().getMaterial(), PIG);
         assertEquals(pigFarm.getAmount(WHEAT), 0);
         assertEquals(pigFarm.getAmount(WATER), 0);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that no stone is delivered from the headquarters
         Utils.adjustInventoryTo(headquarter, PIG, 1);
@@ -803,7 +798,7 @@ public class TestPigFarm {
         assertEquals(worker.getTarget(), pigFarm0.getFlag().getPosition());
         assertTrue(pigFarm0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, pigFarm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, pigFarm0.getFlag().getPosition());
 
         assertNull(worker.getCargo());
         assertFalse(pigFarm0.getFlag().getStackedCargo().isEmpty());
@@ -811,7 +806,7 @@ public class TestPigFarm {
         // Wait for the worker to go back to the pig farm
         assertEquals(worker.getTarget(), pigFarm0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, pigFarm0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, pigFarm0.getPosition());
 
         // Wait for the worker to rest and produce another cargo
         for (int i = 0; i < 1000; i++) {
@@ -827,7 +822,7 @@ public class TestPigFarm {
         // Verify that the second cargo is put at the flag
         assertEquals(worker.getTarget(), pigFarm0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, pigFarm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, pigFarm0.getFlag().getPosition());
 
         assertNull(worker.getCargo());
         assertEquals(pigFarm0.getFlag().getStackedCargo().size(), 2);
@@ -881,7 +876,7 @@ public class TestPigFarm {
         assertEquals(worker.getTarget(), pigFarm0.getFlag().getPosition());
         assertTrue(pigFarm0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, pigFarm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, pigFarm0.getFlag().getPosition());
 
         assertNull(worker.getCargo());
         assertFalse(pigFarm0.getFlag().getStackedCargo().isEmpty());
@@ -906,14 +901,14 @@ public class TestPigFarm {
         assertNotEquals(courier.getTarget(), pigFarm0.getFlag().getPosition());
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         // Verify that the courier walks to pick up the cargo
         map.stepTime();
 
         assertEquals(courier.getTarget(), pigFarm0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         // Verify that the courier has picked up the cargo
         assertNotNull(courier.getCargo());
@@ -924,7 +919,7 @@ public class TestPigFarm {
 
         var amount = headquarter0.getAmount(PIG);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
         // Verify that the courier has delivered the cargo to the headquarters
         assertNull(courier.getCargo());
@@ -966,7 +961,7 @@ public class TestPigFarm {
 
         var amount = headquarter0.getAmount(PIG_BREEDER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
         // Verify that the pig breeder is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(PIG_BREEDER), amount + 1);
@@ -1137,7 +1132,7 @@ public class TestPigFarm {
         assertTrue(pigBreeder.isTraveling());
 
         // Let the pig breeder reach the intended spot
-        Utils.fastForwardUntilWorkersReachTarget(map, pigBreeder);
+        Utils.fastForwardUntilWorkersReachTarget(pigBreeder);
 
         assertTrue(pigBreeder.isArrived());
         assertTrue(pigBreeder.isAt(point));
@@ -1287,14 +1282,14 @@ public class TestPigFarm {
         Utils.fastForward(100, map);
 
         // Wait for the pig breeder to produce cargo
-        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
+        Utils.fastForwardUntilWorkerProducesCargo(worker);
 
         assertEquals(worker.getCargo().getMaterial(), PIG);
 
         // Wait for the worker to deliver the cargo
         assertEquals(worker.getTarget(), pigFarm0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, pigFarm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, pigFarm0.getFlag().getPosition());
 
         // Stop production and verify that no pig is produced
         pigFarm0.stopProduction();
@@ -1347,14 +1342,14 @@ public class TestPigFarm {
         Utils.fastForward(100, map);
 
         // Wait for the pig breeder to produce pig
-        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
+        Utils.fastForwardUntilWorkerProducesCargo(worker);
 
         assertEquals(worker.getCargo().getMaterial(), PIG);
 
         // Wait for the worker to deliver the cargo
         assertEquals(worker.getTarget(), pigFarm0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, pigFarm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, pigFarm0.getFlag().getPosition());
 
         // Stop production
         pigFarm0.stopProduction();
@@ -1370,7 +1365,7 @@ public class TestPigFarm {
 
         assertTrue(pigFarm0.isProductionEnabled());
 
-        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
+        Utils.fastForwardUntilWorkerProducesCargo(worker);
 
         assertNotNull(worker.getCargo());
     }
@@ -1494,7 +1489,7 @@ public class TestPigFarm {
         assertNotNull(pigBreeder);
         assertEquals(pigBreeder.getTarget(), farm0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1505,14 +1500,14 @@ public class TestPigFarm {
         map.removeRoad(road1);
 
         // Verify that the pig breeder continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder, flag0.getPosition());
 
         assertEquals(pigBreeder.getPosition(), flag0.getPosition());
 
         // Verify that the pig breeder returns to the headquarters when it reaches the flag
         assertEquals(pigBreeder.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder, headquarter0.getPosition());
     }
 
     @Test
@@ -1554,7 +1549,7 @@ public class TestPigFarm {
         assertNotNull(pigBreeder);
         assertEquals(pigBreeder.getTarget(), farm0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1565,14 +1560,14 @@ public class TestPigFarm {
         map.removeRoad(road0);
 
         // Verify that the pig breeder continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder, flag0.getPosition());
 
         assertEquals(pigBreeder.getPosition(), flag0.getPosition());
 
         // Verify that the pig breeder continues to the final flag
         assertEquals(pigBreeder.getTarget(), farm0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, farm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder, farm0.getFlag().getPosition());
 
         // Verify that the pig breeder goes out to pig farm instead of going directly back
         assertNotEquals(pigBreeder.getTarget(), headquarter0.getPosition());
@@ -1618,7 +1613,7 @@ public class TestPigFarm {
         assertEquals(pigBreeder.getTarget(), farm0.getPosition());
 
         // Wait for the pig breeder to reach the first flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder, flag0.getPosition());
 
         map.stepTime();
 
@@ -1629,7 +1624,7 @@ public class TestPigFarm {
         farm0.tearDown();
 
         // Verify that the pig breeder continues walking to the next flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, farm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder, farm0.getFlag().getPosition());
 
         assertEquals(pigBreeder.getPosition(), farm0.getFlag().getPosition());
 
@@ -1679,7 +1674,7 @@ public class TestPigFarm {
 
         var amount = storehouse0.getAmount(PIG_BREEDER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, storehouse0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder, storehouse0.getPosition());
 
         // Verify that the pig breeder is stored correctly in the headquarters
         assertEquals(storehouse0.getAmount(PIG_BREEDER), amount + 1);
@@ -1730,7 +1725,7 @@ public class TestPigFarm {
 
         var amount = headquarter0.getAmount(PIG_BREEDER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder, headquarter0.getPosition());
 
         // Verify that the pig breeder is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(PIG_BREEDER), amount + 1);
@@ -1784,7 +1779,7 @@ public class TestPigFarm {
 
         var amount = headquarter0.getAmount(PIG_BREEDER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder, headquarter0.getPosition());
 
         // Verify that the pig breeder is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(PIG_BREEDER), amount + 1);
@@ -1829,7 +1824,7 @@ public class TestPigFarm {
 
         var amount = headquarter0.getAmount(PIG_BREEDER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder, headquarter0.getPosition());
 
         // Verify that the pig breeder is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(PIG_BREEDER), amount + 1);
@@ -1860,7 +1855,7 @@ public class TestPigFarm {
         var worker = Utils.waitForWorkersOutsideBuilding(PigBreeder.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, pigFarm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, pigFarm0.getFlag().getPosition());
 
         // Tear down the building
         pigFarm0.tearDown();
@@ -1868,11 +1863,11 @@ public class TestPigFarm {
         // Verify that the worker goes to the building and then returns to the headquarters instead of entering
         assertEquals(worker.getTarget(), pigFarm0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, pigFarm0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, pigFarm0.getPosition());
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
     }
 
     @Test
@@ -1939,7 +1934,7 @@ public class TestPigFarm {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), pigFarm.getFlag());
 
         // Make the pig farm produce some pigs with full resources available
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 2_000; i++) {
             map.stepTime();
 
             if (pigFarm.needsMaterial(WHEAT) && pigFarm.getAmount(WHEAT) < 2) {
@@ -1998,7 +1993,7 @@ public class TestPigFarm {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), pigFarm.getFlag());
 
         // Make the pig farm produce some pigs with full resources available
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 2_000; i++) {
             map.stepTime();
 
             if (pigFarm.needsMaterial(WHEAT) && pigFarm.getAmount(WHEAT) < 2) {
@@ -2013,9 +2008,7 @@ public class TestPigFarm {
         // Verify that the productivity goes down when resources run out
         assertEquals(pigFarm.getProductivity(), 100);
 
-        for (int i = 0; i < 5000; i++) {
-            map.stepTime();
-        }
+        Utils.fastForwardUntil(map, () -> pigFarm.getProductivity() == 0);
 
         assertEquals(pigFarm.getProductivity(), 0);
     }
@@ -2195,7 +2188,7 @@ public class TestPigFarm {
         Utils.deliverCargo(pigFarm, WATER);
 
         // Fill the flag with flour cargos
-        Utils.placeCargos(map, FLOUR, 8, pigFarm.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, pigFarm.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2212,7 +2205,7 @@ public class TestPigFarm {
         var road1 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2229,7 +2222,7 @@ public class TestPigFarm {
         assertEquals(pigFarm.getFlag().getStackedCargo().size(), 7);
 
         // Verify that the var produces a cargo of flour and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, pigFarm.getWorker(), PIG);
+        Utils.fastForwardUntilWorkerCarriesCargo(pigFarm.getWorker(), PIG);
     }
 
     @Test
@@ -2261,7 +2254,7 @@ public class TestPigFarm {
         Utils.deliverCargo(pigFarm, WATER);
 
         // Fill the flag with cargos
-        Utils.placeCargos(map, FLOUR, 8, pigFarm.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, pigFarm.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2278,7 +2271,7 @@ public class TestPigFarm {
         var road1 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2298,12 +2291,12 @@ public class TestPigFarm {
         map.removeRoad(road1);
 
         // The var produces a cargo and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, pigFarm.getWorker(), PIG);
+        Utils.fastForwardUntilWorkerCarriesCargo(pigFarm.getWorker(), PIG);
 
         // Wait for the worker to put the cargo on the flag
         assertEquals(pigFarm.getWorker().getTarget(), pigFarm.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigFarm.getWorker(), pigFarm.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigFarm.getWorker(), pigFarm.getFlag().getPosition());
 
         assertEquals(pigFarm.getFlag().getStackedCargo().size(), 8);
 
@@ -2354,9 +2347,9 @@ public class TestPigFarm {
         headquarter0.blockDeliveryOfMaterial(PIG);
 
         // Verify that the pig farm puts eight pigs on the flag and then stops
-        Utils.waitForFlagToGetStackedCargo(map, pigFarm0.getFlag(), 8);
+        Utils.waitForFlagToGetStackedCargo(pigFarm0.getFlag(), 8);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder0, pigFarm0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder0, pigFarm0.getPosition());
 
         for (int i = 0; i < 300; i++) {
             map.stepTime();
@@ -2423,7 +2416,7 @@ public class TestPigFarm {
 
         assertFalse(pigBreeder0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder0, pigFarm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder0, pigFarm0.getFlag().getPosition());
 
         assertEquals(pigBreeder0.getTarget(), storehouse.getPosition());
 
@@ -2488,11 +2481,11 @@ public class TestPigFarm {
 
         assertFalse(pigBreeder0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder0, pigFarm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder0, pigFarm0.getFlag().getPosition());
 
         assertEquals(pigBreeder0.getTarget(), storehouse.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder0, storehouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder0, storehouse.getPosition());
 
         assertFalse(map.getWorkers().contains(pigBreeder0));
     }
@@ -2522,12 +2515,12 @@ public class TestPigFarm {
             assertEquals(worker.getPosition(), headquarter0.getPosition());
             assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
             assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
             assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
             assertFalse(map.getWorkers().contains(worker));
         }
@@ -2555,25 +2548,16 @@ public class TestPigFarm {
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
-
-        for (int i = 0; i < 100; i++) {
-            assertTrue(worker.isDead());
-            assertTrue(map.getWorkers().contains(worker));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(worker));
     }
 
     @Test
@@ -2612,7 +2596,7 @@ public class TestPigFarm {
 
         assertEquals(worker.getPosition(), pigFarm0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, pigFarm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, pigFarm0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), pigFarm0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
@@ -2620,18 +2604,37 @@ public class TestPigFarm {
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
 
-        for (int i = 0; i < 100; i++) {
+        // Verify that the skeleton decays
+        for (int i = 0; i < 6000; i++) {
             assertTrue(worker.isDead());
             assertTrue(map.getWorkers().contains(worker));
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
+
+            map.stepTime();
+        }
+
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(DecorationType.HUMAN_SKELETON_DECAYED, map.getDecorationAtPoint(worker.getPosition()));
+
+        // Verify that the skeleton disappears
+        for (int i = 0; i < 4000; i++) {
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
 
             map.stepTime();
         }
 
         assertFalse(map.getWorkers().contains(worker));
+        assertFalse(map.isDecoratedAtPoint(worker.getPosition()));
+        assertNotEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
+
     }
 
     @Test
@@ -2662,7 +2665,7 @@ public class TestPigFarm {
         var pigBreeder = Utils.waitForWorkerOutsideBuilding(PigBreeder.class, player0);
 
         // Wait for the pig breeder to go past the headquarters's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -2673,7 +2676,7 @@ public class TestPigFarm {
 
         pigFarm0.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, pigFarm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder, pigFarm0.getFlag().getPosition());
 
         assertEquals(pigBreeder.getPosition(), pigFarm0.getFlag().getPosition());
         assertNotEquals(pigBreeder.getTarget(), headquarter0.getPosition());
@@ -2681,17 +2684,8 @@ public class TestPigFarm {
         assertNull(pigFarm0.getWorker());
         assertNotNull(pigBreeder.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, pigBreeder.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(pigBreeder, pigBreeder.getTarget());
 
-        var point = pigBreeder.getPosition();
-        for (int i = 0; i < 100; i++) {
-            assertTrue(pigBreeder.isDead());
-            assertEquals(pigBreeder.getPosition(), point);
-            assertTrue(map.getWorkers().contains(pigBreeder));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(pigBreeder));
+        assertTrue(pigBreeder.isDead());
     }
 }

@@ -2,6 +2,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -30,7 +31,7 @@ import java.util.List;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Vegetation.*;
 import static org.appland.settlers.model.Vegetation.WATER;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.*;
 
@@ -527,7 +528,7 @@ public class TestForesterHut {
 
         assertTrue(forester.isTraveling());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, forester);
+        Utils.fastForwardUntilWorkersReachTarget(forester);
 
         assertEquals(forester.getPosition(), point);
         assertFalse(forester.isTraveling());
@@ -576,7 +577,7 @@ public class TestForesterHut {
         assertTrue(forester.isTraveling());
 
         // Wait for the forester to reach the spot
-        Utils.fastForwardUntilWorkersReachTarget(map, forester);
+        Utils.fastForwardUntilWorkersReachTarget(forester);
 
         assertTrue(forester.isArrived());
         assertTrue(forester.isAt(point));
@@ -736,7 +737,7 @@ public class TestForesterHut {
 
         assertTrue(forester.isTraveling());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, forester);
+        Utils.fastForwardUntilWorkersReachTarget(forester);
 
         assertTrue(forester.isArrived());
         assertTrue(forester.isAt(point));
@@ -752,7 +753,7 @@ public class TestForesterHut {
         assertEquals(forester.getTarget(), foresterHut.getPosition());
         assertTrue(forester.isTraveling());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, forester);
+        Utils.fastForwardUntilWorkersReachTarget(forester);
 
         assertTrue(forester.isArrived());
         assertTrue(forester.isInsideBuilding());
@@ -798,7 +799,7 @@ public class TestForesterHut {
 
         assertTrue(forester.isTraveling());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, forester);
+        Utils.fastForwardUntilWorkersReachTarget(forester);
 
         assertTrue(forester.isArrived());
         assertTrue(forester.isAt(point));
@@ -1274,7 +1275,7 @@ public class TestForesterHut {
 
         var amount = headquarter0.getAmount(FORESTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, headquarter0.getPosition());
 
         // Verify that the miner is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(FORESTER), amount + 1);
@@ -1604,7 +1605,7 @@ public class TestForesterHut {
         assertTrue(forester.isTraveling());
 
         // Wait for the forester to reach the spot for the tree
-        Utils.fastForwardUntilWorkersReachTarget(map, forester);
+        Utils.fastForwardUntilWorkersReachTarget(forester);
 
         assertTrue(forester.isArrived());
         assertTrue(forester.isAt(point));
@@ -1630,7 +1631,7 @@ public class TestForesterHut {
         assertEquals(forester.getTarget(), foresterHut.getPosition());
         assertTrue(forester.isTraveling());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, forester);
+        Utils.fastForwardUntilWorkersReachTarget(forester);
 
         assertTrue(forester.isArrived());
         assertTrue(forester.isInsideBuilding());
@@ -1676,7 +1677,7 @@ public class TestForesterHut {
         assertNotNull(forester);
         assertEquals(forester.getTarget(), foresterHut0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1687,14 +1688,14 @@ public class TestForesterHut {
         map.removeRoad(road1);
 
         // Verify that the forester continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, flag0.getPosition());
 
         assertEquals(forester.getPosition(), flag0.getPosition());
 
         // Verify that the forester returns to the headquarters when it reaches the flag
         assertEquals(forester.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, headquarter0.getPosition());
     }
 
     @Test
@@ -1736,7 +1737,7 @@ public class TestForesterHut {
         assertNotNull(forester);
         assertEquals(forester.getTarget(), foresterHut0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1747,14 +1748,14 @@ public class TestForesterHut {
         map.removeRoad(road0);
 
         // Verify that the forester continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, flag0.getPosition());
 
         assertEquals(forester.getPosition(), flag0.getPosition());
 
         // Verify that the forester continues to the final flag
         assertEquals(forester.getTarget(), foresterHut0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, foresterHut0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, foresterHut0.getFlag().getPosition());
 
         // Verify that the forester goes out to forester instead of going directly back
         assertNotEquals(forester.getTarget(), headquarter0.getPosition());
@@ -1800,7 +1801,7 @@ public class TestForesterHut {
         assertEquals(forester.getTarget(), foresterHut0.getPosition());
 
         // Wait for the forester to reach the first flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, flag0.getPosition());
 
         map.stepTime();
 
@@ -1811,7 +1812,7 @@ public class TestForesterHut {
         foresterHut0.tearDown();
 
         // Verify that the forester continues walking to the next flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, foresterHut0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, foresterHut0.getFlag().getPosition());
 
         assertEquals(forester.getPosition(), foresterHut0.getFlag().getPosition());
 
@@ -1865,7 +1866,7 @@ public class TestForesterHut {
 
         var amount = storehouse0.getAmount(FORESTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, storehouse0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, storehouse0.getPosition());
 
         // Verify that the forester is stored correctly in the headquarters
         assertEquals(storehouse0.getAmount(FORESTER), amount + 1);
@@ -1920,7 +1921,7 @@ public class TestForesterHut {
 
         var amount = headquarter0.getAmount(FORESTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, headquarter0.getPosition());
 
         // Verify that the forester is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(FORESTER), amount + 1);
@@ -1978,7 +1979,7 @@ public class TestForesterHut {
 
         var amount = headquarter0.getAmount(FORESTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, headquarter0.getPosition());
 
         // Verify that the forester is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(FORESTER), amount + 1);
@@ -2024,7 +2025,7 @@ public class TestForesterHut {
 
         var amount = headquarter0.getAmount(FORESTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, headquarter0.getPosition());
 
         // Verify that the forester is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(FORESTER), amount + 1);
@@ -2055,7 +2056,7 @@ public class TestForesterHut {
         var worker = Utils.waitForWorkersOutsideBuilding(Forester.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, foresterHut0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, foresterHut0.getFlag().getPosition());
 
         // Tear down the building
         foresterHut0.tearDown();
@@ -2063,11 +2064,11 @@ public class TestForesterHut {
         // Verify that the worker goes to the building and then returns to the headquarters instead of entering
         assertEquals(worker.getTarget(), foresterHut0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, foresterHut0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, foresterHut0.getPosition());
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
     }
 
     @Test
@@ -2117,7 +2118,7 @@ public class TestForesterHut {
         assertEquals(forester0.getTarget(), point3);
         assertEquals(forester1.getTarget(), point3);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester0, point3);
+        Utils.fastForwardUntilWorkerReachesPoint(forester0, point3);
 
         assertTrue(forester0.isPlanting() || forester1.isPlanting());
 
@@ -2128,7 +2129,7 @@ public class TestForesterHut {
         assertEquals(forester0.getTarget(), foresterHut0.getPosition());
         assertEquals(forester1.getTarget(), foresterHut1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester0, foresterHut0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester0, foresterHut0.getPosition());
     }
 
     @Test
@@ -2287,7 +2288,7 @@ public class TestForesterHut {
 
         assertFalse(forester0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester0, foresterHut0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester0, foresterHut0.getFlag().getPosition());
 
         assertEquals(forester0.getTarget(), storehouse.getPosition());
 
@@ -2349,11 +2350,11 @@ public class TestForesterHut {
 
         assertFalse(forester0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester0, foresterHut0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester0, foresterHut0.getFlag().getPosition());
 
         assertEquals(forester0.getTarget(), storehouse.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester0, storehouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester0, storehouse.getPosition());
 
         assertFalse(map.getWorkers().contains(forester0));
     }
@@ -2383,12 +2384,12 @@ public class TestForesterHut {
             assertEquals(worker.getPosition(), headquarter0.getPosition());
             assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
             assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
             assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
             assertFalse(map.getWorkers().contains(worker));
         }
@@ -2416,25 +2417,16 @@ public class TestForesterHut {
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
-
-        for (int i = 0; i < 100; i++) {
-            assertTrue(worker.isDead());
-            assertTrue(map.getWorkers().contains(worker));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(worker));
     }
 
     @Test
@@ -2473,7 +2465,7 @@ public class TestForesterHut {
 
         assertEquals(worker.getPosition(), foresterHut0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, foresterHut0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, foresterHut0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), foresterHut0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
@@ -2481,18 +2473,37 @@ public class TestForesterHut {
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
 
-        for (int i = 0; i < 100; i++) {
+        // Verify that the skeleton decays
+        for (int i = 0; i < 6000; i++) {
             assertTrue(worker.isDead());
             assertTrue(map.getWorkers().contains(worker));
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
+
+            map.stepTime();
+        }
+
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(DecorationType.HUMAN_SKELETON_DECAYED, map.getDecorationAtPoint(worker.getPosition()));
+
+        // Verify that the skeleton disappears
+        for (int i = 0; i < 4000; i++) {
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
 
             map.stepTime();
         }
 
         assertFalse(map.getWorkers().contains(worker));
+        assertFalse(map.isDecoratedAtPoint(worker.getPosition()));
+        assertNotEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
+
     }
 
     @Test
@@ -2523,7 +2534,7 @@ public class TestForesterHut {
         var forester = Utils.waitForWorkerOutsideBuilding(Forester.class, player0);
 
         // Wait for the forester to go past the headquarters' flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -2534,7 +2545,7 @@ public class TestForesterHut {
 
         foresterHut0.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, foresterHut0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, foresterHut0.getFlag().getPosition());
 
         assertEquals(forester.getPosition(), foresterHut0.getFlag().getPosition());
         assertNotEquals(forester.getTarget(), headquarter0.getPosition());
@@ -2542,18 +2553,9 @@ public class TestForesterHut {
         assertNull(foresterHut0.getWorker());
         assertNotNull(forester.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, forester.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, forester.getTarget());
 
-        var point = forester.getPosition();
-        for (int i = 0; i < 100; i++) {
-            assertTrue(forester.isDead());
-            assertEquals(forester.getPosition(), point);
-            assertTrue(map.getWorkers().contains(forester));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(forester));
+        assertTrue(forester.isDead());
     }
 
     @Test
@@ -2632,7 +2634,7 @@ public class TestForesterHut {
         assertNotEquals(firstForester, secondForester);
 
         // Verify that the second forester goes back to its forester hut again without planting anything
-        Utils.fastForwardUntilWorkerReachesPoint(map, secondForester, firstForester.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(secondForester, firstForester.getPosition());
 
         for (int i = 0; i < 2_000; i++) {
             if (secondForester.getPosition().equals(secondForester.getHome().getPosition())) {
@@ -2935,7 +2937,7 @@ public class TestForesterHut {
         map.placeFlag(player0, forester.getTarget());
 
         // Verify that the forester doesn't start planting and instead goes back to its home
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, forester.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, forester.getTarget());
 
         assertFalse(forester.isPlanting());
         assertEquals(forester.getTarget(), forester.getHome().getPosition());
@@ -3002,7 +3004,7 @@ public class TestForesterHut {
         map.placeBuilding(new Woodcutter(player0), farmer.getTarget());
 
         // Verify that the farmer doesn't start planting and instead goes back to its home
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farmer.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, farmer.getTarget());
 
         assertFalse(farmer.isPlanting());
         assertEquals(farmer.getTarget(), farmer.getHome().getPosition());
@@ -3086,7 +3088,7 @@ public class TestForesterHut {
         assertTrue(map.isRoadAtPoint(forester.getTarget()));
 
         // Verify that the forester doesn't start planting and instead goes back to its home
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, forester.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, forester.getTarget());
 
         assertFalse(forester.isPlanting());
         assertEquals(forester.getTarget(), forester.getHome().getPosition());
@@ -3140,7 +3142,7 @@ public class TestForesterHut {
 
         Utils.waitForWorkerToBeOutside(forester, map);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, forester.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, forester.getTarget());
 
         assertTrue(forester.isPlanting());
 
@@ -3163,7 +3165,7 @@ public class TestForesterHut {
         assertFalse(map.isTreeAtPoint(forester.getPosition()));
         assertEquals(forester.getTarget(), foresterHut.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, foresterHut.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, foresterHut.getPosition());
 
         assertTrue(forester.isInsideBuilding());
         assertFalse(forester.isPlanting());
@@ -3203,7 +3205,7 @@ public class TestForesterHut {
 
         Utils.waitForWorkerToBeOutside(forester, map);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, forester.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, forester.getTarget());
 
         assertTrue(forester.isPlanting());
 
@@ -3244,7 +3246,7 @@ public class TestForesterHut {
         assertFalse(map.isTreeAtPoint(forester.getPosition()));
         assertEquals(forester.getTarget(), foresterHut.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, foresterHut.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, foresterHut.getPosition());
 
         assertTrue(forester.isInsideBuilding());
         assertFalse(forester.isPlanting());

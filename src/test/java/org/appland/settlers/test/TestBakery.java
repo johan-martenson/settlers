@@ -2,6 +2,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.Direction;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
@@ -24,7 +25,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 /**
@@ -169,7 +170,8 @@ public class TestBakery {
 
     @Test
     public void testHeadquarterHasAtLeastOneBakerAtStart() {
-        var headquarter = new Headquarter(null);
+        var player = new Player("Player 1", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var headquarter = new Headquarter(player);
 
         assertTrue(headquarter.getAmount(BAKER) >= 1);
     }
@@ -214,7 +216,7 @@ public class TestBakery {
         assertNotNull(baker);
         assertEquals(baker.getTarget(), bakery.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, baker);
+        Utils.fastForwardUntilWorkersReachTarget(baker);
 
         assertTrue(baker.isInsideBuilding());
         assertEquals(baker.getHome(), bakery);
@@ -306,7 +308,7 @@ public class TestBakery {
         assertNotNull(baker);
         assertEquals(baker.getTarget(), bakery.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, baker);
+        Utils.fastForwardUntilWorkersReachTarget(baker);
 
         assertTrue(baker.isInsideBuilding());
         assertEquals(baker.getHome(), bakery);
@@ -610,10 +612,10 @@ public class TestBakery {
         Utils.deliverCargo(bakery, FLOUR);
 
         // Wait for the bakery to produce bread
-        Utils.fastForwardUntilWorkerCarriesCargo(map, baker, BREAD);
+        Utils.fastForwardUntilWorkerCarriesCargo(baker, BREAD);
 
         // Wait for the baker to be going to the flag to deliver the bread
-        Utils.waitForWorkerToSetTarget(map, baker, bakery.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(baker, bakery.getFlag().getPosition());
 
         assertNotNull(baker.getCargo());
         assertEquals(baker.getCargo().getMaterial(), BREAD);
@@ -622,14 +624,14 @@ public class TestBakery {
         // Verify that the bakery worker leaves the cargo at the flag
         assertEquals(baker.getTarget(), bakery.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, bakery.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, bakery.getFlag().getPosition());
 
         assertFalse(bakery.getFlag().getStackedCargo().isEmpty());
         assertNull(baker.getCargo());
         assertEquals(baker.getTarget(), bakery.getPosition());
 
         // Verify that the baker goes back to the bakery
-        Utils.fastForwardUntilWorkersReachTarget(map, baker);
+        Utils.fastForwardUntilWorkersReachTarget(baker);
 
         assertTrue(baker.isInsideBuilding());
     }
@@ -679,17 +681,17 @@ public class TestBakery {
         Utils.adjustInventoryTo(headquarter, WATER, 2);
         Utils.adjustInventoryTo(headquarter, FLOUR, 2);
 
-        Utils.waitForFlagToGetStackedCargo(map, bakery.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(bakery.getFlag(), 1);
 
         assertEquals(bakery.getFlag().getStackedCargo().getFirst().getMaterial(), BREAD);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that the courier delivers the cargo to the coal mine (and not the headquarters)
         assertEquals(bakery.getAmount(BREAD), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), coalMine.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), coalMine.getPosition());
 
         assertEquals(coalMine.getAmount(BREAD), 1);
     }
@@ -734,12 +736,12 @@ public class TestBakery {
         // Wait for the courier on the road between the storehouse and the bakery to have a plank cargo
         Utils.deliverCargos(bakery, WATER, FLOUR);
 
-        Utils.waitForFlagToGetStackedCargo(map, bakery.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(bakery.getFlag(), 1);
 
         assertEquals(bakery.getFlag().getStackedCargo().getFirst().getMaterial(), BREAD);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters
         assertEquals(headquarter.getAmount(BREAD), 0);
@@ -747,7 +749,7 @@ public class TestBakery {
         assertFalse(storehouse.needsMaterial(BREAD));
         assertTrue(storehouse.isUnderConstruction());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
         assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(BREAD));
@@ -806,12 +808,12 @@ public class TestBakery {
         // Wait for the flag on the road between the gold mine and the bakery to have a plank cargo
         Utils.deliverCargos(bakery, WATER, FLOUR);
 
-        Utils.waitForFlagToGetStackedCargo(map, bakery.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(bakery.getFlag(), 1);
 
         assertEquals(bakery.getFlag().getStackedCargo().getFirst().getMaterial(), BREAD);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that no stone is delivered from the headquarters
         Utils.adjustInventoryTo(headquarter, BREAD, 1);
@@ -857,7 +859,7 @@ public class TestBakery {
         assertEquals(bakery.getAmount(WATER), 1);
         assertEquals(bakery.getAmount(FLOUR), 1);
 
-        Utils.waitForWorkerToSetTarget(map, baker, bakery.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(baker, bakery.getFlag().getPosition());
 
         assertEquals(bakery.getAmount(FLOUR), 0);
         assertEquals(bakery.getAmount(WATER), 0);
@@ -894,17 +896,17 @@ public class TestBakery {
         // Wait for the baker to produce a new bread cargo
         var baker = bakery0.getWorker();
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, baker, BREAD);
+        Utils.fastForwardUntilWorkerCarriesCargo(baker, BREAD);
 
         assertNotNull(baker.getCargo());
 
         // Verify that the baker puts the bread cargo at the flag
-        Utils.waitForWorkerToSetTarget(map, baker, bakery0.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(baker, bakery0.getFlag().getPosition());
 
         assertEquals(baker.getTarget(), bakery0.getFlag().getPosition());
         assertTrue(bakery0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, bakery0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, bakery0.getFlag().getPosition());
 
         assertNull(baker.getCargo());
         assertFalse(bakery0.getFlag().getStackedCargo().isEmpty());
@@ -912,19 +914,19 @@ public class TestBakery {
         // Wait for the worker to go back to the bakery
         assertEquals(baker.getTarget(), bakery0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, bakery0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, bakery0.getPosition());
 
         // Wait for the worker to rest and produce another cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, baker, BREAD);
+        Utils.fastForwardUntilWorkerCarriesCargo(baker, BREAD);
 
         assertNotNull(baker.getCargo());
 
         // Verify that the second cargo is put at the flag
-        Utils.waitForWorkerToSetTarget(map, baker, bakery0.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(baker, bakery0.getFlag().getPosition());
 
         assertEquals(baker.getTarget(), bakery0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, bakery0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, bakery0.getFlag().getPosition());
 
         assertNull(baker.getCargo());
         assertEquals(bakery0.getFlag().getStackedCargo().size(), 2);
@@ -961,17 +963,17 @@ public class TestBakery {
         // Wait for the baker to produce a new bread cargo
         var baker = bakery0.getWorker();
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, baker, BREAD);
+        Utils.fastForwardUntilWorkerCarriesCargo(baker, BREAD);
 
         assertNotNull(baker.getCargo());
 
         // Verify that the baker puts the bread cargo at the flag
-        Utils.waitForWorkerToSetTarget(map, baker, bakery0.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(baker, bakery0.getFlag().getPosition());
 
         assertEquals(baker.getTarget(), bakery0.getFlag().getPosition());
         assertTrue(bakery0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, bakery0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, bakery0.getFlag().getPosition());
 
         assertNull(baker.getCargo());
         assertFalse(bakery0.getFlag().getStackedCargo().isEmpty());
@@ -996,14 +998,14 @@ public class TestBakery {
         assertNotEquals(courier.getTarget(), bakery0.getFlag().getPosition());
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         // Verify that the courier walks to pick up the cargo
         map.stepTime();
 
         assertEquals(courier.getTarget(), bakery0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         // Verify that the courier has picked up the cargo
         assertNotNull(courier.getCargo());
@@ -1014,7 +1016,7 @@ public class TestBakery {
 
         var amount = headquarter0.getAmount(BREAD);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
         // Verify that the courier has delivered the cargo to the headquarters
         assertNull(courier.getCargo());
@@ -1056,7 +1058,7 @@ public class TestBakery {
 
         var amount = headquarter0.getAmount(BAKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, headquarter0.getPosition());
 
         // Verify that the baker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(BAKER), amount + 1);
@@ -1146,16 +1148,16 @@ public class TestBakery {
         Utils.fastForward(100, map);
 
         // Wait for the baker to produce cargo
-        Utils.fastForwardUntilWorkerProducesCargo(map, baker);
+        Utils.fastForwardUntilWorkerProducesCargo(baker);
 
         assertEquals(baker.getCargo().getMaterial(), BREAD);
 
         // Wait for the worker to deliver the cargo
-        Utils.waitForWorkerToSetTarget(map, baker, bakery0.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(baker, bakery0.getFlag().getPosition());
 
         assertEquals(baker.getTarget(), bakery0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, bakery0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, bakery0.getFlag().getPosition());
 
         // Stop production and verify that no bread is produced
         bakery0.stopProduction();
@@ -1205,16 +1207,16 @@ public class TestBakery {
         Utils.fastForward(100, map);
 
         // Wait for the baker to produce bread
-        Utils.fastForwardUntilWorkerProducesCargo(map, baker);
+        Utils.fastForwardUntilWorkerProducesCargo(baker);
 
         assertEquals(baker.getCargo().getMaterial(), BREAD);
 
         // Wait for the worker to deliver the cargo
-        Utils.waitForWorkerToSetTarget(map, baker, bakery0.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(baker, bakery0.getFlag().getPosition());
 
         assertEquals(baker.getTarget(), bakery0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, bakery0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, bakery0.getFlag().getPosition());
 
         // Stop production
         bakery0.stopProduction();
@@ -1230,7 +1232,7 @@ public class TestBakery {
 
         assertTrue(bakery0.isProductionEnabled());
 
-        Utils.fastForwardUntilWorkerProducesCargo(map, baker);
+        Utils.fastForwardUntilWorkerProducesCargo(baker);
 
         assertNotNull(baker.getCargo());
     }
@@ -1354,7 +1356,7 @@ public class TestBakery {
         assertNotNull(baker);
         assertEquals(baker.getTarget(), bakery0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1365,14 +1367,14 @@ public class TestBakery {
         map.removeRoad(road1);
 
         // Verify that the baker continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, flag0.getPosition());
 
         assertEquals(baker.getPosition(), flag0.getPosition());
 
         // Verify that the baker returns to the headquarters when it reaches the flag
         assertEquals(baker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, headquarter0.getPosition());
     }
 
     @Test
@@ -1414,7 +1416,7 @@ public class TestBakery {
         assertNotNull(baker);
         assertEquals(baker.getTarget(), bakery0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1425,14 +1427,14 @@ public class TestBakery {
         map.removeRoad(road0);
 
         // Verify that the baker continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, flag0.getPosition());
 
         assertEquals(baker.getPosition(), flag0.getPosition());
 
         // Verify that the baker continues to the final flag
         assertEquals(baker.getTarget(), bakery0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, bakery0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, bakery0.getFlag().getPosition());
 
         // Verify that the baker goes out to baker instead of going directly back
         assertNotEquals(baker.getTarget(), headquarter0.getPosition());
@@ -1478,7 +1480,7 @@ public class TestBakery {
         assertEquals(baker.getTarget(), bakery0.getPosition());
 
         // Wait for the baker to reach the first flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, flag0.getPosition());
 
         map.stepTime();
 
@@ -1489,7 +1491,7 @@ public class TestBakery {
         bakery0.tearDown();
 
         // Verify that the baker continues walking to the next flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, bakery0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, bakery0.getFlag().getPosition());
 
         assertEquals(baker.getPosition(), bakery0.getFlag().getPosition());
 
@@ -1539,7 +1541,7 @@ public class TestBakery {
 
         var amount = storehouse0.getAmount(BAKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, storehouse0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, storehouse0.getPosition());
 
         // Verify that the baker is stored correctly in the headquarters
         assertEquals(storehouse0.getAmount(BAKER), amount + 1);
@@ -1590,7 +1592,7 @@ public class TestBakery {
 
         var amount = headquarter0.getAmount(BAKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, headquarter0.getPosition());
 
         // Verify that the baker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(BAKER), amount + 1);
@@ -1644,7 +1646,7 @@ public class TestBakery {
 
         var amount = headquarter0.getAmount(BAKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, headquarter0.getPosition());
 
         // Verify that the baker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(BAKER), amount + 1);
@@ -1689,7 +1691,7 @@ public class TestBakery {
 
         var amount = headquarter0.getAmount(BAKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, headquarter0.getPosition());
 
         // Verify that the baker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(BAKER), amount + 1);
@@ -1720,7 +1722,7 @@ public class TestBakery {
         var worker = Utils.waitForWorkersOutsideBuilding(Baker.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, bakery0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, bakery0.getFlag().getPosition());
 
         // Tear down the building
         bakery0.tearDown();
@@ -1728,11 +1730,11 @@ public class TestBakery {
         // Verify that the worker goes to the building and then returns to the headquarters instead of entering
         assertEquals(worker.getTarget(), bakery0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, bakery0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, bakery0.getPosition());
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
     }
 
     @Test
@@ -2046,7 +2048,7 @@ public class TestBakery {
         Utils.deliverCargo(bakery, WATER);
 
         // Fill the flag with flour cargos
-        Utils.placeCargos(map, FLOUR, 8, bakery.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, bakery.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2063,7 +2065,7 @@ public class TestBakery {
         var road1 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2080,7 +2082,7 @@ public class TestBakery {
         assertEquals(bakery.getFlag().getStackedCargo().size(), 7);
 
         // Verify that the worker produces a cargo of flour and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, bakery.getWorker(), BREAD);
+        Utils.fastForwardUntilWorkerCarriesCargo(bakery.getWorker(), BREAD);
     }
 
     @Test
@@ -2112,7 +2114,7 @@ public class TestBakery {
         Utils.deliverCargo(bakery, WATER);
 
         // Fill the flag with cargos
-        Utils.placeCargos(map, FLOUR, 8, bakery.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, bakery.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2129,7 +2131,7 @@ public class TestBakery {
         var road1 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2149,14 +2151,14 @@ public class TestBakery {
         map.removeRoad(road1);
 
         // The worker produces a cargo and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, bakery.getWorker(), BREAD);
+        Utils.fastForwardUntilWorkerCarriesCargo(bakery.getWorker(), BREAD);
 
         // Wait for the worker to put the cargo on the flag
-        Utils.waitForWorkerToSetTarget(map, bakery.getWorker(), bakery.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(bakery.getWorker(), bakery.getFlag().getPosition());
 
         assertEquals(bakery.getWorker().getTarget(), bakery.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, bakery.getWorker(), bakery.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(bakery.getWorker(), bakery.getFlag().getPosition());
 
         assertEquals(bakery.getFlag().getStackedCargo().size(), 8);
 
@@ -2207,9 +2209,9 @@ public class TestBakery {
         headquarter0.blockDeliveryOfMaterial(BREAD);
 
         // Verify that the bakery puts eight breads on the flag and then stops
-        Utils.waitForFlagToGetStackedCargo(map, bakery0.getFlag(), 8);
+        Utils.waitForFlagToGetStackedCargo(bakery0.getFlag(), 8);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker0, bakery0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker0, bakery0.getPosition());
 
         for (int i = 0; i < 300; i++) {
             map.stepTime();
@@ -2277,7 +2279,7 @@ public class TestBakery {
 
         assertFalse(baker0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker0, bakery0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker0, bakery0.getFlag().getPosition());
 
         assertEquals(baker0.getTarget(), storehouse.getPosition());
 
@@ -2342,11 +2344,11 @@ public class TestBakery {
 
         assertFalse(baker0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker0, bakery0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker0, bakery0.getFlag().getPosition());
 
         assertEquals(baker0.getTarget(), storehouse.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker0, storehouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker0, storehouse.getPosition());
 
         assertFalse(map.getWorkers().contains(baker0));
     }
@@ -2376,12 +2378,12 @@ public class TestBakery {
             assertEquals(worker.getPosition(), headquarter0.getPosition());
             assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
             assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
             assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
             assertFalse(map.getWorkers().contains(worker));
         }
@@ -2409,25 +2411,16 @@ public class TestBakery {
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
-
-        for (int i = 0; i < 100; i++) {
-            assertTrue(worker.isDead());
-            assertTrue(map.getWorkers().contains(worker));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(worker));
     }
 
     @Test
@@ -2466,7 +2459,7 @@ public class TestBakery {
 
         assertEquals(worker.getPosition(), bakery0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, bakery0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, bakery0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), bakery0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
@@ -2474,18 +2467,36 @@ public class TestBakery {
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
 
-        for (int i = 0; i < 100; i++) {
+        // Verify that the skeleton decays
+        for (int i = 0; i < 6000; i++) {
             assertTrue(worker.isDead());
             assertTrue(map.getWorkers().contains(worker));
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
+
+            map.stepTime();
+        }
+
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(DecorationType.HUMAN_SKELETON_DECAYED, map.getDecorationAtPoint(worker.getPosition()));
+
+        // Verify that the skeleton disappears
+        for (int i = 0; i < 4000; i++) {
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
 
             map.stepTime();
         }
 
         assertFalse(map.getWorkers().contains(worker));
+        assertFalse(map.isDecoratedAtPoint(worker.getPosition()));
+        assertNotEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
     }
 
     @Test
@@ -2516,7 +2527,7 @@ public class TestBakery {
         var baker = Utils.waitForWorkerOutsideBuilding(Baker.class, player0);
 
         // Wait for the baker to go past the headquarters's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -2527,7 +2538,7 @@ public class TestBakery {
 
         bakery0.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, bakery0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, bakery0.getFlag().getPosition());
 
         assertEquals(baker.getPosition(), bakery0.getFlag().getPosition());
         assertNotEquals(baker.getTarget(), headquarter0.getPosition());
@@ -2535,17 +2546,8 @@ public class TestBakery {
         assertNull(bakery0.getWorker());
         assertNotNull(baker.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, baker, baker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(baker, baker.getTarget());
 
-        var point = baker.getPosition();
-        for (int i = 0; i < 100; i++) {
-            assertTrue(baker.isDead());
-            assertEquals(baker.getPosition(), point);
-            assertTrue(map.getWorkers().contains(baker));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(baker));
+        assertTrue(baker.isDead());
     }
 }

@@ -7,7 +7,7 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.actors.Rank;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.test.Utils;
@@ -40,7 +40,7 @@ public class TestAttackLocations {
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 100);
 
         // Give player 1 only generals
-        headquarter1.setReservedSoldiers(Soldier.Rank.GENERAL_RANK, 0);
+        headquarter1.setReservedSoldiers(Rank.GENERAL_RANK, 0);
         Utils.clearSoldiersFromInventory(headquarter1);
         Utils.adjustInventoryTo(headquarter1, GENERAL, 2);
 
@@ -94,7 +94,7 @@ public class TestAttackLocations {
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 100);
 
         // Give player 1 only generals
-        headquarter1.setReservedSoldiers(Soldier.Rank.GENERAL_RANK, 0);
+        headquarter1.setReservedSoldiers(Rank.GENERAL_RANK, 0);
         Utils.clearSoldiersFromInventory(headquarter1);
         Utils.adjustInventoryTo(headquarter1, GENERAL, 2);
 
@@ -148,7 +148,7 @@ public class TestAttackLocations {
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 100);
 
         // Give player 1 only generals
-        headquarter1.setReservedSoldiers(Soldier.Rank.GENERAL_RANK, 0);
+        headquarter1.setReservedSoldiers(Rank.GENERAL_RANK, 0);
         Utils.clearSoldiersFromInventory(headquarter1);
         Utils.adjustInventoryTo(headquarter1, GENERAL, 2);
 
@@ -204,7 +204,7 @@ public class TestAttackLocations {
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 100);
 
         // Give player 1 only generals
-        headquarter1.setReservedSoldiers(Soldier.Rank.GENERAL_RANK, 0);
+        headquarter1.setReservedSoldiers(Rank.GENERAL_RANK, 0);
         Utils.clearSoldiersFromInventory(headquarter1);
         Utils.adjustInventoryTo(headquarter1, GENERAL, 2);
 

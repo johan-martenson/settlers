@@ -16,8 +16,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.appland.settlers.model.Material.GENERAL;
-import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.*;
 import static org.junit.Assert.*;
 
 public class TestNumberAttackers {
@@ -57,7 +56,7 @@ public class TestNumberAttackers {
         // Give player 0 a private
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 1);
 
-        // Verify that player 0 can attack player 1
+        // Verify that player 0 can't attack player 1 with more attackers than it has
         assertTrue(player0.canAttack(headquarter1));
         assertEquals(player0.getNumberOfAvailableAttackers(headquarter1), 1);
 
@@ -67,13 +66,14 @@ public class TestNumberAttackers {
             fail();
         } catch (InvalidUserActionException e) { }
 
-        // Verify that the right amount of attackers come out
+        // Verify that player 0 can attack player 1 and that the right amount of attackers come out
         player0.attack(headquarter1, 1, AttackStrength.STRONG);
 
         var attacker = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertFalse(attacker.isInsideBuilding());
+        assertEquals(attacker.getPosition(), headquarter0.getPosition());
         assertFalse(attacker.isDead());
         assertEquals(attacker.getPlayer(), player0);
         assertTrue(attacker.isSoldier());

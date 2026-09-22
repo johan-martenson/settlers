@@ -1,25 +1,25 @@
 package org.appland.settlers.assets.test;
 
-import org.appland.settlers.assets.*;
+import org.appland.settlers.assets.BitmapRLEResource;
+import org.appland.settlers.assets.BitmapRawResource;
+import org.appland.settlers.assets.BitmapResource;
+import org.appland.settlers.assets.FontResource;
+import org.appland.settlers.assets.InvalidFormatException;
+import org.appland.settlers.assets.LBMGameResource;
+import org.appland.settlers.assets.PaletteResource;
+import org.appland.settlers.assets.PlayerBitmapResource;
+import org.appland.settlers.assets.TextureFormat;
+import org.appland.settlers.assets.UnknownResourceTypeException;
 import org.appland.settlers.assets.decoders.BbmDecoder;
 import org.appland.settlers.assets.decoders.BitmapDecoder;
 import org.appland.settlers.assets.decoders.DatDecoder;
 import org.appland.settlers.assets.decoders.LbmDecoder;
 import org.appland.settlers.assets.decoders.LstDecoder;
 import org.appland.settlers.assets.decoders.PaletteDecoder;
-import org.appland.settlers.assets.resources.Bitmap;
-import org.appland.settlers.assets.resources.BitmapFile;
-import org.appland.settlers.assets.resources.BitmapRLE;
-import org.appland.settlers.assets.resources.BitmapRaw;
-import org.appland.settlers.assets.resources.AnimatedLBMFile;
 import org.appland.settlers.assets.resources.Palette;
-import org.appland.settlers.assets.resources.AnimatedPalette;
-import org.appland.settlers.assets.resources.PlayerBitmap;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -37,7 +37,6 @@ public class TestLoadingImages {
     private static final String TEST_TEX_LBM = "src/test/resources/TEX5.LBM";
     private static final String TEST_BITMAP_PAL_BBM = "src/test/resources/pal.bbm";
     private static final String TEST_DAT = "src/test/resources/EDITRES.DAT";
-    private static final String TEST_IDX = "src/test/resources/EDITRES.IDX";
 
     @Test
     public void loadPalBmpFile() throws IOException, InvalidFormatException {
@@ -103,9 +102,9 @@ public class TestLoadingImages {
         var palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
 
         assertNotNull(palette);
-        assertEquals(palette.getName(), "pal5.act(0)");
-        assertEquals(palette.getTransparentIndex(), 0);
-        assertEquals(palette.getNumberColors(), 256);
+        assertEquals("pal5.act(0)", palette.getName());
+        assertEquals(0, palette.getTransparentIndex());
+        assertEquals(256, palette.getNumberColors());
     }
 
     @Test

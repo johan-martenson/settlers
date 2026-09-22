@@ -905,7 +905,7 @@ public class TestMonitoringWhenBuildingsDoWork {
         assertTrue(pigBreeder.isTraveling());
 
         // Wait for the pig breeder to come back to the pig farm and prepare the pig for delivery
-        Utils.fastForwardUntilWorkersReachTarget(map, pigBreeder);
+        Utils.fastForwardUntilWorkersReachTarget(pigBreeder);
 
         assertTrue(pigBreeder.isPreparingPigForDelivery());
 
@@ -1079,7 +1079,7 @@ public class TestMonitoringWhenBuildingsDoWork {
         // Verify that an event is sent when the forester comes back to the forester hut and it stops working
         assertEquals(forester.getTarget(), foresterHut.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, foresterHut.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, foresterHut.getPosition());
 
         assertTrue(monitor.getEvents().size() > 0);
         assertTrue(monitor.getEvents().getLast().changedBuildings().size() > 0);
@@ -1317,12 +1317,12 @@ public class TestMonitoringWhenBuildingsDoWork {
         assertTrue(monitor.getEvents().size() == 0 || !monitor.getLastEvent().changedBuildings().contains(woodcutter));
 
         // Wait for the woodcutter to start going to put wood on the flag
-        Utils.waitForWorkerToSetTarget(map, woodcutterWorker, woodcutter.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(woodcutterWorker, woodcutter.getFlag().getPosition());
 
         // Verify that an event is sent when the woodcutter goes back home and the door opens
         assertTrue(woodcutter.isDoorClosed());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(woodcutterWorker, woodcutter.getFlag().getPosition());
 
         assertFalse(woodcutter.isDoorClosed());
         assertEquals(woodcutterWorker.getTarget(), woodcutter.getPosition());

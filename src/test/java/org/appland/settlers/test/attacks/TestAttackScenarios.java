@@ -77,7 +77,7 @@ public class TestAttackScenarios {
         // Wait for the attacker to walk to the flag
         assertEquals(attacker.getTarget(), barracks0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, attacker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, attacker.getTarget());
 
         // Find the remote defender
         var remoteDefender = Utils.waitForRemoteDefender(barracks0).getFirst();
@@ -103,11 +103,11 @@ public class TestAttackScenarios {
         assertEquals(homeDefender.getHome(), barracks0);
         assertTrue(homeDefender.isFighting());
         assertNotEquals(homeDefender, remoteDefender);
+        assertFalse(remoteDefender.isInsideBuilding());
+        assertEquals(0, barracks0.getHostedSoldiers().size());
 
         // Verify that the remote defender stands waiting while the primary attacker and the home defender fights
         for (int i = 0; i < 2_000; i++) {
-            System.out.println("Test - Waiting for primary attacker to fight home defender " + i + "  (" + remoteDefender + ")");
-
             if (homeDefender.isDead()) {
                 break;
             }
@@ -116,6 +116,7 @@ public class TestAttackScenarios {
             assertTrue(homeDefender.isFighting());
             assertEquals(attacker.getOpponent(), homeDefender);
             assertFalse(attacker.isDead());
+            assertNotEquals(attacker.getOpponent(), remoteDefender);
 
             map.stepTime();
         }
@@ -126,6 +127,8 @@ public class TestAttackScenarios {
         map.stepTime();
 
         assertFalse(attacker.isFighting());
+        assertEquals(attacker.getTarget(), barracks0.getFlag().getPosition());
+        assertTrue(attacker.isTraveling());
 
         Utils.waitForSoldierToWalkToFixedPoint(attacker, map);
 
@@ -135,7 +138,7 @@ public class TestAttackScenarios {
         // Verify that the primary attacker waits by the flag and the remote defender goes to fight it
         map.stepTime();
 
-        assertEquals(remoteDefender.getTarget(), barracks0.getFlag().getPosition());
+        assertEquals(barracks0.getFlag().getPosition(), remoteDefender.getTarget());
 
         for (int i = 0; i < 2_000; i++) {
             if (remoteDefender.getPosition().equals(barracks0.getFlag().getPosition())) {
@@ -150,21 +153,12 @@ public class TestAttackScenarios {
 
         assertEquals(remoteDefender.getPosition(), barracks0.getFlag().getPosition());
 
-        System.out.println("Test - 1 - remote defender: " + remoteDefender);
-        System.out.println("      " + remoteDefender.getPercentageOfDistanceTraveled());
-
         map.stepTime();
-
-        System.out.println("Test - 2 - remote defender: " + remoteDefender);
-        System.out.println("      " + remoteDefender.getPercentageOfDistanceTraveled());
 
         assertTrue(remoteDefender.getTarget().equals(barracks0.getFlag().getPosition().right()) ||
                 remoteDefender.getTarget().equals(barracks0.getFlag().getPosition().left()));
 
-        Utils.waitForSoldierToStopWalkingApart(remoteDefender, map);
-
-        System.out.println("Test - 3 - remote defender: " + remoteDefender);
-        System.out.println("      " + remoteDefender.getPercentageOfDistanceTraveled());
+        Utils.waitForSoldierToStopWalkingApart(remoteDefender);
 
         map.stepTime();
 

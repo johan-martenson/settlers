@@ -8,17 +8,14 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Scout;
-import org.appland.settlers.model.actors.Worker;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.LookoutTower;
@@ -28,11 +25,9 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 /**
@@ -152,7 +147,8 @@ public class TestLookoutTower {
 
     @Test
     public void testHeadquarterHasAtLeastOneScoutAtStart() {
-        var headquarter = new Headquarter(null);
+        var player = new Player("Player 1", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var headquarter = new Headquarter(player);
 
         assertTrue(headquarter.getAmount(SCOUT) >= 1);
     }
@@ -203,7 +199,7 @@ public class TestLookoutTower {
         assertNotNull(Scout);
         assertEquals(Scout.getTarget(), lookoutTower0.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, Scout);
+        Utils.fastForwardUntilWorkersReachTarget(Scout);
 
         assertTrue(Scout.isInsideBuilding());
         assertEquals(Scout.getHome(), lookoutTower0);
@@ -255,7 +251,7 @@ public class TestLookoutTower {
         assertNotNull(Scout);
         assertEquals(Scout.getTarget(), lookoutTower0.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, Scout);
+        Utils.fastForwardUntilWorkersReachTarget(Scout);
 
         assertTrue(Scout.isInsideBuilding());
         assertEquals(Scout.getHome(), lookoutTower0);
@@ -335,7 +331,7 @@ public class TestLookoutTower {
         assertNotNull(Scout);
         assertEquals(Scout.getTarget(), lookoutTower0.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, Scout);
+        Utils.fastForwardUntilWorkersReachTarget(Scout);
 
         assertTrue(Scout.isInsideBuilding());
         assertEquals(Scout.getHome(), lookoutTower0);
@@ -439,7 +435,7 @@ public class TestLookoutTower {
 
         var amount = headquarter0.getAmount(SCOUT);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, Scout, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(Scout, headquarter0.getPosition());
 
         // Verify that the Scout is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(SCOUT), amount + 1);
@@ -706,7 +702,7 @@ public class TestLookoutTower {
         assertNotNull(Scout);
         assertEquals(Scout.getTarget(), lookoutTower0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, Scout, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(Scout, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -717,14 +713,14 @@ public class TestLookoutTower {
         map.removeRoad(road1);
 
         // Verify that the Scout continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, Scout, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(Scout, flag0.getPosition());
 
         assertEquals(Scout.getPosition(), flag0.getPosition());
 
         // Verify that the Scout returns to the headquarter when it reaches the flag
         assertEquals(Scout.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, Scout, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(Scout, headquarter0.getPosition());
     }
 
     @Test
@@ -767,7 +763,7 @@ public class TestLookoutTower {
         assertNotNull(Scout);
         assertEquals(Scout.getTarget(), lookoutTower0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, Scout, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(Scout, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -778,14 +774,14 @@ public class TestLookoutTower {
         map.removeRoad(road0);
 
         // Verify that the Scout continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, Scout, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(Scout, flag0.getPosition());
 
         assertEquals(Scout.getPosition(), flag0.getPosition());
 
         // Verify that the Scout continues to the final flag
         assertEquals(Scout.getTarget(), lookoutTower0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, Scout, lookoutTower0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(Scout, lookoutTower0.getFlag().getPosition());
 
         // Verify that the Scout goes out to Scout instead of going directly back
         assertNotEquals(Scout.getTarget(), headquarter0.getPosition());
@@ -832,7 +828,7 @@ public class TestLookoutTower {
         assertEquals(Scout.getTarget(), lookoutTower0.getPosition());
 
         // Wait for the Scout to reach the first flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, Scout, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(Scout, flag0.getPosition());
 
         map.stepTime();
 
@@ -843,7 +839,7 @@ public class TestLookoutTower {
         lookoutTower0.tearDown();
 
         // Verify that the Scout continues walking to the next flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, Scout, lookoutTower0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(Scout, lookoutTower0.getFlag().getPosition());
 
         assertEquals(Scout.getPosition(), lookoutTower0.getFlag().getPosition());
 
@@ -894,7 +890,7 @@ public class TestLookoutTower {
 
         var amount = storehouse0.getAmount(SCOUT);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, Scout, storehouse0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(Scout, storehouse0.getPosition());
 
         // Verify that the Scout is stored correctly in the headquarter
         assertEquals(storehouse0.getAmount(SCOUT), amount + 1);
@@ -946,7 +942,7 @@ public class TestLookoutTower {
 
         var amount = headquarter0.getAmount(SCOUT);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, Scout, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(Scout, headquarter0.getPosition());
 
         // Verify that the Scout is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(SCOUT), amount + 1);
@@ -1001,7 +997,7 @@ public class TestLookoutTower {
 
         var amount = headquarter0.getAmount(SCOUT);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, Scout, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(Scout, headquarter0.getPosition());
 
         // Verify that the Scout is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(SCOUT), amount + 1);
@@ -1047,7 +1043,7 @@ public class TestLookoutTower {
 
         var amount = headquarter0.getAmount(SCOUT);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, Scout, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(Scout, headquarter0.getPosition());
 
         // Verify that the Scout is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(SCOUT), amount + 1);
@@ -1079,7 +1075,7 @@ public class TestLookoutTower {
         var worker = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, lookoutTower0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, lookoutTower0.getFlag().getPosition());
 
         // Tear down the building
         lookoutTower0.tearDown();
@@ -1087,11 +1083,11 @@ public class TestLookoutTower {
         // Verify that the worker goes to the building and then returns to the headquarter instead of entering
         assertEquals(worker.getTarget(), lookoutTower0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, lookoutTower0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, lookoutTower0.getPosition());
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
     }
 
     @Test
@@ -1310,7 +1306,7 @@ public class TestLookoutTower {
 
         assertFalse(scout0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout0, lookoutTower0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout0, lookoutTower0.getFlag().getPosition());
 
         assertEquals(scout0.getTarget(), storehouse.getPosition());
 
@@ -1372,11 +1368,11 @@ public class TestLookoutTower {
 
         assertFalse(scout0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout0, lookoutTower0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout0, lookoutTower0.getFlag().getPosition());
 
         assertEquals(scout0.getTarget(), storehouse.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout0, storehouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout0, storehouse.getPosition());
 
         assertFalse(map.getWorkers().contains(scout0));
     }
@@ -1407,12 +1403,12 @@ public class TestLookoutTower {
             assertEquals(worker.getPosition(), headquarter0.getPosition());
             assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
             assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
             assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
             assertFalse(map.getWorkers().contains(worker));
         }
@@ -1441,25 +1437,16 @@ public class TestLookoutTower {
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
-
-        for (int i = 0; i < 100; i++) {
-            assertTrue(worker.isDead());
-            assertTrue(map.getWorkers().contains(worker));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(worker));
     }
 
     @Test
@@ -1499,7 +1486,7 @@ public class TestLookoutTower {
 
         assertEquals(worker.getPosition(), lookoutTower0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, lookoutTower0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, lookoutTower0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), lookoutTower0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
@@ -1507,18 +1494,36 @@ public class TestLookoutTower {
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
 
-        for (int i = 0; i < 100; i++) {
+        // Verify that the skeleton decays
+        for (int i = 0; i < 6000; i++) {
             assertTrue(worker.isDead());
             assertTrue(map.getWorkers().contains(worker));
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
+
+            map.stepTime();
+        }
+
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(DecorationType.HUMAN_SKELETON_DECAYED, map.getDecorationAtPoint(worker.getPosition()));
+
+        // Verify that the skeleton disappears
+        for (int i = 0; i < 4000; i++) {
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
 
             map.stepTime();
         }
 
         assertFalse(map.getWorkers().contains(worker));
+        assertFalse(map.isDecoratedAtPoint(worker.getPosition()));
+        assertNotEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
     }
 
     @Test
@@ -1550,7 +1555,7 @@ public class TestLookoutTower {
         var scout = Utils.waitForWorkerOutsideBuilding(Scout.class, player0);
 
         // Wait for the scout to go past the headquarter's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1561,7 +1566,7 @@ public class TestLookoutTower {
 
         lookoutTower0.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, lookoutTower0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, lookoutTower0.getFlag().getPosition());
 
         assertEquals(scout.getPosition(), lookoutTower0.getFlag().getPosition());
         assertNotEquals(scout.getTarget(), headquarter0.getPosition());
@@ -1569,17 +1574,8 @@ public class TestLookoutTower {
         assertNull(lookoutTower0.getWorker());
         assertNotNull(scout.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, scout.getTarget());
 
-        var point = scout.getPosition();
-        for (int i = 0; i < 100; i++) {
-            assertTrue(scout.isDead());
-            assertEquals(scout.getPosition(), point);
-            assertTrue(map.getWorkers().contains(scout));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(scout));
+        assertTrue(scout.isDead());
     }
 }

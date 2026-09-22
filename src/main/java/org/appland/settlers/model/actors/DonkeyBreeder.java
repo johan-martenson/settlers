@@ -3,8 +3,10 @@ package org.appland.settlers.model.actors;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.DonkeyFarm;
 import org.appland.settlers.model.buildings.Storehouse;
 
 import static org.appland.settlers.model.Material.*;
@@ -22,7 +24,7 @@ public class DonkeyBreeder extends Worker {
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
     private final Countdown countdown = new Countdown();
-    private final ProductivityMeasurer productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_FEED + TIME_TO_PREPARE_DONKEY, null);
+    private final org.appland.settlers.model.utils.ProductivityMeasurer productivityMeasurer = new org.appland.settlers.model.utils.ProductivityMeasurer();
 
     private State state = WALKING_TO_TARGET;
 
@@ -36,7 +38,8 @@ public class DonkeyBreeder extends Worker {
         GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
         GOING_TO_DIE,
         DEAD,
-        RETURNING_TO_STORAGE
+        RESTING_BEFORE_STARTING_FIRST_PRODUCTION_CYCLE,
+        WAITING_FOR_RESOURCES, RETURNING_TO_STORAGE
     }
 
     public DonkeyBreeder(Player player, GameMap map) {
@@ -44,14 +47,52 @@ public class DonkeyBreeder extends Worker {
     }
 
     public boolean isFeeding() {
-        return state == State.FEEDING;
+        return state == FEEDING;
+    }
+
+    @Override
+    public void stepTime() throws InvalidUserActionException {
+        super.stepTime();
+
+        productivityMeasurer.reportProductivity(
+            state == RESTING_IN_HOUSE ||
+                    state == GOING_OUT_TO_FEED ||
+                    state == FEEDING ||
+                    state == GOING_BACK_TO_HOUSE_AFTER_FEEDING ||
+                    state == PREPARING_DONKEY_FOR_DELIVERY
+        );
+
+        System.out.println(productivityMeasurer.productivity() + " ---- " + state);
+
+        if (home instanceof DonkeyFarm donkeyFarm) {
+            donkeyFarm.setNumberOfDonkeys(productivityToNumberOfDonkeys());
+        }
+    }
+
+    private int productivityToNumberOfDonkeys() {
+        var productivity = productivityMeasurer.productivity();
+
+        if (productivity < 30) {
+            return 0;
+        } else if (productivity < 60) {
+            return 1;
+        } else if (productivity < 90) {
+            return 2;
+        } else {
+            return 3;
+        }
     }
 
     @Override
     protected void onEnterBuilding(Building building) {
-        state = RESTING_IN_HOUSE;
+        if (state == WALKING_TO_TARGET) {
+            productivityMeasurer.reset();
+            state = RESTING_BEFORE_STARTING_FIRST_PRODUCTION_CYCLE;
+        } else {
+            state = RESTING_IN_HOUSE;
+        }
+
         countdown.countFrom(TIME_TO_REST);
-        productivityMeasurer.setBuilding(building);
     }
 
     private boolean isDonkeyReceiver(GameUtils.HouseOrRoad buildingOrRoad) {
@@ -65,14 +106,19 @@ public class DonkeyBreeder extends Worker {
     @Override
     protected void onIdle() {
         switch (state) {
-            case RESTING_IN_HOUSE -> {
+            case WAITING_FOR_RESOURCES -> {
+                if (home.has(WATER, WHEAT)) {
+                    countdown.countFrom(TIME_TO_REST);
+                    state = RESTING_IN_HOUSE;
+                }
+            }
+
+            case RESTING_IN_HOUSE, RESTING_BEFORE_STARTING_FIRST_PRODUCTION_CYCLE -> {
                 if (countdown.hasReachedZero() && home.isProductionEnabled()) {
                     if (home.getAmount(WATER) > 0 && home.getAmount(WHEAT) > 0) {
                         setOffroadTarget(home.getPosition().downLeft());
-                        state = State.GOING_OUT_TO_FEED;
+                        state = GOING_OUT_TO_FEED;
                         player.reportChangedBuilding(home);
-                    } else {
-                        productivityMeasurer.reportUnproductivity();
                     }
                 } else if (home.isProductionEnabled()) {
                     countdown.step();
@@ -110,12 +156,14 @@ public class DonkeyBreeder extends Worker {
                         donkey.assignToRoad(houseOrRoad.road);
                     }
 
-                    productivityMeasurer.reportProductivity();
-                    productivityMeasurer.nextProductivityCycle();
                     map.getStatisticsManager().donkeyGrown(player, map.getTime());
 
-                    countdown.countFrom(TIME_TO_REST);
-                    state = RESTING_IN_HOUSE;
+                    if (home.has(WATER) && home.has(WHEAT)) {
+                        countdown.countFrom(TIME_TO_REST);
+                        state = RESTING_IN_HOUSE;
+                    } else {
+                        state = WAITING_FOR_RESOURCES;
+                    }
                 } else if (home.isProductionEnabled()) {
                     countdown.step();
                 }
@@ -207,11 +255,7 @@ public class DonkeyBreeder extends Worker {
 
     @Override
     public int getProductivity() {
-
-        // Measure productivity across the length of four rest-work periods
-        return (int)
-                (((double)productivityMeasurer.getSumMeasured() /
-                        (productivityMeasurer.getNumberOfCycles())) * 100);
+        return productivityMeasurer.productivity();
     }
 
     @Override
@@ -222,6 +266,6 @@ public class DonkeyBreeder extends Worker {
 
     @Override
     public boolean isWorking() {
-        return state == State.FEEDING || state == State.PREPARING_DONKEY_FOR_DELIVERY || state == GOING_OUT_TO_FEED;
+        return state == FEEDING || state == PREPARING_DONKEY_FOR_DELIVERY || state == GOING_OUT_TO_FEED;
     }
 }

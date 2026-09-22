@@ -32,6 +32,7 @@ import org.appland.settlers.model.actors.Geologist;
 import org.appland.settlers.model.actors.Hunter;
 import org.appland.settlers.model.actors.Miller;
 import org.appland.settlers.model.actors.PigBreeder;
+import org.appland.settlers.model.actors.Rank;
 import org.appland.settlers.model.actors.Ship;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.Stonemason;
@@ -69,6 +70,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -80,7 +82,7 @@ import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.*;
 import static org.appland.settlers.model.Vegetation.MOUNTAIN_1;
-import static org.appland.settlers.model.actors.Soldier.Rank.*;
+import static org.appland.settlers.model.actors.Rank.*;
 import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.*;
 import static org.appland.settlers.test.AvailableConstruction.PossibleFlag.FLAG_POSSIBLE;
 import static org.appland.settlers.test.AvailableConstruction.PossibleFlag.NO_FLAG_POSSIBLE;
@@ -109,86 +111,77 @@ public class Utils {
         }
     }
 
-    public static void fastForwardUntilWorkersReachTarget(GameMap map, Worker... workers) throws InvalidUserActionException {
-        fastForwardUntilWorkersReachTarget(map, Arrays.asList(workers));
+    public static void fastForwardUntilWorkersReachTarget(Worker... workers) throws InvalidUserActionException {
+        var map = workers[0].getPlayer().getMap();
+        fastForwardUntilWorkersReachTarget(Arrays.asList(workers));
     }
 
-    public static void fastForwardUntilWorkersReachTarget(GameMap map, List<Worker> workers) throws InvalidUserActionException {
+    public static void fastForwardUntilWorkersReachTarget(List<Worker> workers) throws InvalidUserActionException {
+        var map = workers.getFirst().getPlayer().getMap();
+
         assertNotNull(map);
         assertFalse(workers.isEmpty());
         assertTrue(workers.stream().allMatch(Worker::isTraveling));
 
-        for (int i = 0; i < 1000; i++) {
-            if (workers.stream().allMatch(Worker::isArrived)) {
-                break;
-            }
-
-            map.stepTime();
-        }
+        fastForwardUntil(map, () -> workers.stream().allMatch(Worker::isArrived));
     }
 
-    public static void waitForWoodcutterToStartCuttingTree(WoodcutterWorker woodcutterWorker, GameMap map) throws InvalidUserActionException {
-        for (int i = 0; i < 10_000; i++) {
-            if (woodcutterWorker.isCuttingTree()) {
-                break;
-            }
+    public static void waitForWoodcutterToStartCuttingTree(WoodcutterWorker woodcutterWorker) throws InvalidUserActionException {
+        var map = woodcutterWorker.getPlayer().getMap();
 
-            map.stepTime();
-        }
-
-        assertTrue(woodcutterWorker.isCuttingTree());
+        fastForwardUntil(map, woodcutterWorker::isCuttingTree);
     }
 
-    public static void waitForSoldierToBeFighting(Soldier soldier, GameMap map) throws InvalidUserActionException {
-        for (int i = 0; i < 2000; i++) {
+    public static void waitForSoldierToBeFighting(Soldier soldier) throws InvalidUserActionException {
+        var map = soldier.getPlayer().getMap();
+
+        fastForwardUntil(map, soldier::isFighting, () -> {
             assertFalse(soldier.isDying());
             assertFalse(soldier.isDead());
+        });
+    }
 
-            if (soldier.isFighting()) {
-                break;
+    public static void waitForSoldierToWinFight(Soldier soldier) throws InvalidUserActionException {
+        var map = soldier.getPlayer().getMap();
+
+        assertTrue(soldier.isFighting());
+
+        fastForwardUntil(
+                map,
+                () -> !soldier.isFighting(),
+                () -> {
+                    assertFalse(soldier.isDying());
+                    assertFalse(soldier.isDead());
+                });
+    }
+
+    public static void fastForwardUntil(GameMap map, BooleanSupplier condition, Runnable assertFunction) throws InvalidUserActionException {
+        for (int i = 0; i < 1_000; i++) {
+            assertFunction.run();
+
+            if (condition.getAsBoolean()) {
+                return;
             }
 
             map.stepTime();
         }
 
-        assertTrue(soldier.isFighting());
+        fail();
     }
 
-    public static void waitForSoldierToWinFight(Soldier soldier, GameMap map) throws InvalidUserActionException {
-        assertTrue(soldier.isFighting());
-
-        for (int i = 0; i < 2000; i++) {
-            assertFalse(soldier.isDying());
-            assertFalse(soldier.isDead());
-
-            if (!soldier.isFighting()) {
-                break;
-            }
-
-            map.stepTime();
-        }
-
-        assertFalse(soldier.isFighting());
-        assertFalse(soldier.isDying());
-        assertFalse(soldier.isDead());
+    public static void fastForwardUntilWorkerReachesPoint(Worker worker, Point target, Runnable assertFunction) throws InvalidUserActionException {
+        var map = worker.getPlayer().getMap();
+        fastForwardUntil(map, () -> Objects.equals(worker.getPosition(), target), assertFunction);
     }
 
-    public static void fastForwardUntilWorkerReachesPoint(GameMap map, Worker worker, Point target) throws InvalidUserActionException {
+    public static void fastForwardUntilWorkerReachesPoint(Worker worker, Point target) throws InvalidUserActionException {
         assertNotNull(target);
         assertNotNull(worker);
-        assertNotNull(map);
 
-        for (int i = 0; i < 100_000; i++) {
-            if (Objects.equals(worker.getPosition(), target)) {
-                break;
-            }
-
-            map.stepTime();
-        }
-
-        assertEquals(worker.getPosition(), target);
+        fastForwardUntil(worker.getPlayer().getMap(), () -> Objects.equals(worker.getPosition(), target));
     }
 
+    @Deprecated
     public static <T extends Worker> T occupyBuilding(T worker, Building building) {
         var map = building.getMap();
 
@@ -226,17 +219,7 @@ public class Utils {
     }
 
     public static void verifyListContainsWorkerOfType(List<Worker> workers, Class<? extends Worker> workerClass) {
-        var found = false;
-
-        for (var worker : workers) {
-            if (worker.getClass().equals(workerClass)) {
-                found = true;
-
-                break;
-            }
-        }
-
-        assertTrue(found);
+        assertTrue(workers.stream().anyMatch(worker -> worker.getClass().equals(workerClass)));
     }
 
     public static void surroundPointWithWater(Point point, GameMap map) {
@@ -254,29 +237,13 @@ public class Utils {
     public static void fastForwardUntilBuildingIsConstructed(Building building) throws InvalidUserActionException {
         var map = building.getMap();
 
-        for (int i = 0; i < 10000; i++) {
-            if (building.isReady()) {
-                break;
-            }
-
-            map.stepTime();
-        }
-
-        assertTrue(building.isReady());
+        fastForwardUntil(map, building::isReady);
     }
 
     public static void fastForwardUntilBuildingIsOccupied(Building building) throws InvalidUserActionException {
         var map = building.getMap();
 
-        for (int i = 0; i < 1000; i++) {
-            if (building.getWorker() != null) {
-                break;
-            }
-
-            map.stepTime();
-        }
-
-        assertNotNull(building.getWorker());
+        fastForwardUntil(map, () -> building.getWorker() != null);
     }
 
     public static void putGoldAtSurroundingTiles(Point point, Size size, GameMap map) {
@@ -301,13 +268,15 @@ public class Utils {
         }
     }
 
-    public static void putMineralWithinRadius(Material mineral, Point point1, int radius, GameMap map) {
-        for (var p : map.getPointsWithinRadius(point1, radius - 1)) {
+    public static void putMineralWithinRadius(Material mineral, Point point, int radius, GameMap map) {
+        for (var p : map.getPointsWithinRadius(point, radius - 1)) {
             map.surroundPointWithMineral(p, mineral, LARGE);
         }
     }
 
-    public static Courier occupyRoad(Road road, GameMap map) {
+    @Deprecated
+    public static Courier occupyRoad(Road road) {
+        var map = road.getPlayer().getMap();
         var courier = new Courier(road.getPlayer(), map);
 
         map.placeWorker(courier, road.getFlags()[0]);
@@ -327,7 +296,7 @@ public class Utils {
             }
 
             if (storehouse.getAmount(material) > amount) {
-                if (isSoldier(material)) {
+                if (material.isSoldier()) {
                     storehouse.retrieveSoldierFromInventory(material);
                 } else {
                     storehouse.retrieve(material);
@@ -340,30 +309,7 @@ public class Utils {
         assertEquals(storehouse.getAmount(material), amount);
     }
 
-    private static boolean isSoldier(Material material) {
-        if (material == PRIVATE) {
-            return true;
-        }
-
-        if (material == PRIVATE_FIRST_CLASS) {
-            return true;
-        }
-
-        if (material == SERGEANT) {
-            return true;
-        }
-
-        if (material == OFFICER) {
-            return true;
-        }
-
-        if (material == GENERAL) {
-            return true;
-        }
-
-        return false;
-    }
-
+    @Deprecated
     public static void constructHouse(Building building) throws InvalidUserActionException {
         var map = building.getMap();
 
@@ -376,7 +322,7 @@ public class Utils {
 
         assertEquals(builder.getTarget(), building.getPosition());
 
-        fastForwardUntilWorkerReachesPoint(map, builder, building.getPosition());
+        fastForwardUntilWorkerReachesPoint(builder, building.getPosition());
 
         assertTrue(building.isUnderConstruction());
 
@@ -415,78 +361,35 @@ public class Utils {
         assertTrue(building.isReady());
     }
 
-    public static Cargo fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Material... materials) throws InvalidUserActionException {
+    public static Cargo fastForwardUntilWorkerCarriesCargo(Worker worker, Material... materials) throws InvalidUserActionException {
         assertTrue(materials.length > 0);
 
+        var map = worker.getPlayer().getMap();
         var setOfMaterials = new HashSet<>(Arrays.asList(materials));
-        for (int j = 0; j < 20_000; j++) {
-            if (worker.getCargo() != null && setOfMaterials.contains(worker.getCargo().getMaterial())) {
-                break;
-            }
 
-            map.stepTime();
-        }
-
-        assertNotNull(worker.getCargo());
-        assertTrue(setOfMaterials.contains(worker.getCargo().getMaterial()));
+        fastForwardUntil(map, () -> worker.getCargo() != null && setOfMaterials.contains(worker.getCargo().getMaterial()));
 
         return worker.getCargo();
     }
 
-    public static void fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Cargo cargo) throws InvalidUserActionException {
-        for (int j = 0; j < 2000; j++) {
-            if (cargo.equals(worker.getCargo())) {
-                break;
-            }
-
-            map.stepTime();
-        }
-
-        assertEquals(worker.getCargo(), cargo);
+    public static void fastForwardUntilWorkerCarriesCargo(Worker worker, Cargo cargo) throws InvalidUserActionException {
+        var map = worker.getPlayer().getMap();
+        fastForwardUntil(map, () -> cargo.equals(worker.getCargo()));
     }
 
-    public static void fastForwardUntilWorkerProducesCargo(GameMap map, Worker worker) throws InvalidUserActionException {
-        for (int i = 0; i < 300; i++) {
-            if (worker.getCargo() != null) {
-                break;
-            }
-
-            map.stepTime();
-        }
-
-        assertNotNull(worker.getCargo());
+    public static void fastForwardUntilWorkerProducesCargo(Worker worker) throws InvalidUserActionException {
+        var map = worker.getPlayer().getMap();
+        fastForwardUntil(map, () -> worker.getCargo() != null);
     }
 
     public static void waitForMilitaryBuildingToGetPopulated(Building building, int nr) throws InvalidUserActionException {
         var map = building.getMap();
-        var populated = false;
-
-        for (int i = 0; i < 1000; i++) {
-            if (building.getNumberOfHostedSoldiers() == nr) {
-                populated = true;
-
-                break;
-            }
-
-            map.stepTime();
-        }
-
-        assertTrue(populated);
-        assertEquals(building.getNumberOfHostedSoldiers(), nr);
+        fastForwardUntil(map, () -> building.getNumberOfHostedSoldiers() == nr);
     }
 
     public static void waitForMilitaryBuildingToGetPopulated(Building building) throws InvalidUserActionException {
         var map = building.getMap();
-
-        for (int i = 0; i < 1000; i++) {
-            if (building.isOccupied()) {
-                break;
-            }
-
-            map.stepTime();
-        }
-
-        assertTrue(building.isOccupied());
+        fastForwardUntil(map, building::isOccupied);
     }
 
     public static void verifyPointIsWithinBorder(Player player, Point point) {
@@ -497,24 +400,15 @@ public class Utils {
         assertFalse(player.getOwnedLand().contains(point));
     }
 
-    public static void verifyDeliveryOfMaterial(GameMap map, Road road) throws InvalidUserActionException {
+    public static void verifyDeliveryOfMaterial(Road road, Material material) throws InvalidUserActionException {
+        var map = road.getPlayer().getMap();
         var courier = road.getCourier();
-        var delivery = false;
 
-        for (int i = 0; i < 500; i++) {
-            if (courier.getCargo() != null && courier.getCargo().getMaterial() == COIN) {
-                delivery = true;
-
-                break;
-            }
-
-            map.stepTime();
-        }
-
-        assertTrue(delivery);
+        fastForwardUntil(map, () -> courier.getCargo() != null && courier.getCargo().getMaterial() == material);
     }
 
-    public static void verifyNoDeliveryOfMaterial(GameMap map, Road road) throws InvalidUserActionException {
+    public static void verifyNoDeliveryOfMaterial(Road road) throws InvalidUserActionException {
+        var map = road.getPlayer().getMap();
         var courier = road.getCourier();
 
         for (int i = 0; i < 500; i++) {
@@ -526,7 +420,7 @@ public class Utils {
         }
     }
 
-    public static void occupyMilitaryBuilding(Soldier.Rank rank, int amount, Building building) {
+    public static void occupyMilitaryBuilding(Rank rank, int amount, Building building) {
         assertTrue(building.isReady());
 
         for (int i = 0; i < amount; i++) {
@@ -534,7 +428,7 @@ public class Utils {
         }
     }
 
-    public static Soldier occupyMilitaryBuilding(Soldier.Rank rank, Building building) {
+    public static Soldier occupyMilitaryBuilding(Rank rank, Building building) {
         var map = building.getMap();
         var player = building.getPlayer();
         var soldier = new Soldier(player, rank, map);
@@ -547,43 +441,26 @@ public class Utils {
     }
 
     public static Soldier findSoldierOutsideBuilding(Player player) {
-        var map = player.getMap();
-        var soldier = (Soldier) null;
-
-        for (var worker : map.getWorkers()) {
-            if (worker instanceof Soldier soldier1 && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
-                soldier = soldier1;
-
-                break;
-            }
-        }
-
-        return soldier;
+        return player.getMap().getWorkers().stream()
+                .filter(worker -> worker instanceof Soldier)
+                .map(worker -> (Soldier) worker)
+                .filter(worker -> !worker.isInsideBuilding())
+                .filter(worker -> Objects.equals(worker.getPlayer(), player))
+                .findFirst()
+                .orElse(null);
     }
 
     public static List<Soldier> findSoldiersOutsideBuilding(Player player) {
-        var map = player.getMap();
-        var result = new LinkedList<Soldier>();
-
-        for (var worker : map.getWorkers()) {
-            if (worker instanceof Soldier && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
-                result.add((Soldier)worker);
-            }
-        }
-
-        return result;
+        return player.getMap().getWorkers().stream()
+                .filter(worker -> worker instanceof Soldier &&
+                        !worker.isInsideBuilding() && worker.getPlayer().equals(player))
+                .map(worker -> (Soldier) worker)
+                .toList();
     }
 
-    public static void waitForWorkerToDisappear(Worker worker, GameMap map) throws InvalidUserActionException {
-        for (int i = 0; i < 10000; i++) {
-            if (!map.getWorkers().contains(worker)) {
-                break;
-            }
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(worker));
+    public static void waitForWorkerToDisappear(Worker worker) throws InvalidUserActionException {
+        var map = worker.getPlayer().getMap();
+        fastForwardUntil(map, () -> !map.getWorkers().contains(worker));
     }
 
     public static Soldier waitForSoldierOutsideBuilding(Player player) throws InvalidUserActionException {
@@ -715,23 +592,20 @@ public class Utils {
 
     public static Projectile waitForCatapultToThrowProjectile(Catapult catapult) throws InvalidUserActionException {
         var map = catapult.getMap();
-        var projectile = (Projectile) null;
 
         assertTrue(map.getProjectiles().isEmpty());
 
-        for (int i = 0; i < 1000; i++) {
-            map.stepTime();
-
+        for (int i = 0; i < 1_000; i++) {
             if (!map.getProjectiles().isEmpty()) {
-                projectile = map.getProjectiles().getFirst();
-
-                break;
+                return map.getProjectiles().getFirst();
             }
+
+            map.stepTime();
         }
 
-        assertNotNull(projectile);
+        fail();
 
-        return projectile;
+        return null;
     }
 
     public static void waitForProjectileToReachTarget(Projectile projectile, GameMap map) throws InvalidUserActionException {
@@ -740,10 +614,13 @@ public class Utils {
                 break;
             }
 
+            assertTrue(map.getProjectiles().contains(projectile));
+
             map.stepTime();
         }
 
         assertTrue(projectile.isArrived());
+        assertFalse(map.getProjectiles().contains(projectile));
     }
 
     static WildAnimal waitForAnimalToAppear(GameMap map) throws InvalidUserActionException {
@@ -800,16 +677,9 @@ public class Utils {
         assertTrue(hunter.getPosition().distance(animal.getPosition()) <= distance);
     }
 
-    public static void fastForwardUntilWorkerCarriesNoCargo(GameMap map, Worker worker) throws InvalidUserActionException {
-        for (int j = 0; j < 2000; j++) {
-            if (worker.getCargo() == null) {
-                break;
-            }
-
-            map.stepTime();
-        }
-
-        assertNull(worker.getCargo());
+    public static void fastForwardUntilWorkerCarriesNoCargo(Worker worker) throws InvalidUserActionException {
+        var map = worker.getPlayer().getMap();
+        fastForwardUntil(map, () -> worker.getCargo() == null);
     }
 
     static void waitForCargoToReachTarget(GameMap map, Cargo cargo) throws InvalidUserActionException {
@@ -851,8 +721,28 @@ public class Utils {
         building.putCargo(new Cargo(material, building.getMap()));
     }
 
-    static Cargo fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker) throws InvalidUserActionException {
-        for (int i = 0; i < 2000; i++) {
+    static Cargo fastForwardUntilWorkerCarriesCargo(Worker worker, Runnable r) throws InvalidUserActionException {
+        var map = worker.getPlayer().getMap();
+
+        for (int i = 0; i < 2_000; i++) {
+            r.run();
+
+            if (worker.getCargo() != null) {
+                return worker.getCargo();
+            }
+
+            map.stepTime();
+        }
+
+        fail();
+
+        return null;
+    }
+
+
+    static Cargo fastForwardUntilWorkerCarriesCargo(Worker worker) throws InvalidUserActionException {
+        var map = worker.getPlayer().getMap();
+        for (int i = 0; i < 2_000; i++) {
             if (worker.getCargo() != null) {
                 return worker.getCargo();
             }
@@ -1052,7 +942,8 @@ public class Utils {
         map.fillMapWithVegetation(vegetation);
     }
 
-    public static Courier waitForRoadToGetAssignedCourier(GameMap map, Road road0) throws InvalidUserActionException {
+    public static Courier waitForRoadToGetAssignedCourier(Road road0) throws InvalidUserActionException {
+        var map = road0.getPlayer().getMap();
         var courier = (Courier) null;
 
         for (int i = 0; i < 10000; i++) {
@@ -1074,7 +965,7 @@ public class Utils {
         var map = building.getMap();
         var worker = (Worker) null;
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 10_000; i++) {
             worker = building.getWorker();
 
             if (worker != null) {
@@ -1251,16 +1142,9 @@ public class Utils {
         assertEquals(worker.getPosition(), point);
     }
 
-    public static void waitForWorkerToSetTarget(GameMap map, Worker worker, Point point) throws InvalidUserActionException {
-        for (int i = 0; i < 10_000; i++) {
-            if (point.equals(worker.getTarget())) {
-                break;
-            }
-
-            map.stepTime();
-        }
-
-        assertEquals(worker.getTarget(), point);
+    public static void waitForWorkerToSetTarget(Worker worker, Point point) throws InvalidUserActionException {
+        var map = worker.getPlayer().getMap();
+        fastForwardUntil(map, () -> point.equals(worker.getTarget()));
     }
 
     public static void waitForHarvestedCropToDisappear(GameMap map, Crop crop0) throws InvalidUserActionException {
@@ -1537,12 +1421,14 @@ public class Utils {
         System.out.println(pointMinYLeft + " " + pointMinY + " " + pointMinYRight);
     }
 
-    public static void waitForCouriersToBeIdle(GameMap map, Courier... couriers) throws InvalidUserActionException {
-        var listOfCouriers = new ArrayList<Courier>(Arrays.asList(couriers));
-        waitForCouriersToBeIdle(map, listOfCouriers);
+    public static void waitForCouriersToBeIdle(Courier... couriers) throws InvalidUserActionException {
+        var map = couriers[0].getPlayer().getMap();
+        var listOfCouriers = new ArrayList<>(Arrays.asList(couriers));
+        waitForCouriersToBeIdle(listOfCouriers);
     }
 
-    public static void waitForCouriersToBeIdle(GameMap map, Collection<Courier> couriers) throws InvalidUserActionException {
+    public static void waitForCouriersToBeIdle(Collection<Courier> couriers) throws InvalidUserActionException {
+        var map = couriers.iterator().next().getPlayer().getMap();
         for (int i = 0; i < 5000; i++) {
             var allIdle = true;
 
@@ -1578,7 +1464,8 @@ public class Utils {
         return cargo;
     }
 
-    public static void placeCargos(GameMap map, Material material, int amount, Flag flag, Building building) {
+    public static void placeCargos(Material material, int amount, Flag flag, Building building) {
+        var map = building.getMap();
         for (int i = 0; i < amount; i++) {
             placeCargo(map, material, flag, building);
         }
@@ -1598,16 +1485,9 @@ public class Utils {
         assertEquals(building.getAmount(material), targetAmount);
     }
 
-    public static void waitForFlagToGetStackedCargo(GameMap map, Flag flag, int amount) throws InvalidUserActionException {
-        for (int i = 0; i < 20000; i++) {
-            if (flag.getStackedCargo().size() == amount) {
-                break;
-            }
-
-            map.stepTime();
-        }
-
-        assertEquals(flag.getStackedCargo().size(), amount);
+    public static void waitForFlagToGetStackedCargo(Flag flag, int amount) throws InvalidUserActionException {
+        var map = flag.getPlayer().getMap();
+        fastForwardUntil(map, () -> flag.getStackedCargo().size() == amount);
     }
 
     public static void waitForBuildingsToBeConstructed(Building... buildings) throws InvalidUserActionException {
@@ -1817,7 +1697,7 @@ public class Utils {
         }
 
         // Make the builders reach the buildings
-        fastForwardUntilWorkersReachTarget(map, builders);
+        fastForwardUntilWorkersReachTarget(builders);
 
         // Wait for the buildings to get constructed
         for (var building : buildings) {
@@ -2139,7 +2019,7 @@ public class Utils {
 
         assertEquals(builder.getTarget(), building.getPosition());
 
-        fastForwardUntilWorkerReachesPoint(map, builder, building.getPosition());
+        fastForwardUntilWorkerReachesPoint(builder, building.getPosition());
     }
 
     public static Builder waitForBuilderToGetAssignedToBuilding(Building building) throws InvalidUserActionException {
@@ -2779,14 +2659,118 @@ public class Utils {
         headquarter0.setReservedSoldiers(PRIVATE_RANK, privates);
         headquarter0.setReservedSoldiers(PRIVATE_FIRST_CLASS_RANK, privates_first_class);
         headquarter0.setReservedSoldiers(SERGEANT_RANK, sergeants);
-        headquarter0.setReservedSoldiers(Soldier.Rank.OFFICER_RANK, officers);
-        headquarter0.setReservedSoldiers(Soldier.Rank.GENERAL_RANK, generals);
+        headquarter0.setReservedSoldiers(Rank.OFFICER_RANK, officers);
+        headquarter0.setReservedSoldiers(Rank.GENERAL_RANK, generals);
 
         assertEquals(headquarter0.getReservedSoldiers(PRIVATE_RANK), privates);
         assertEquals(headquarter0.getReservedSoldiers(PRIVATE_FIRST_CLASS_RANK), privates_first_class);
         assertEquals(headquarter0.getReservedSoldiers(SERGEANT_RANK), sergeants);
         assertEquals(headquarter0.getReservedSoldiers(OFFICER_RANK), officers);
         assertEquals(headquarter0.getReservedSoldiers(GENERAL_RANK), generals);
+    }
+
+    public static void printPlayersLand(Collection<Player> players, List<Point> points) {
+        var places = new HashMap<Point, String>();
+        var map = players.iterator().next().getMap();
+
+        int playerIndex = 0;
+
+        for (var player : players) {
+            var border = playerIndex == 0 ? "o" : "x";
+            var flag = playerIndex == 0 ? "F" : "f";
+
+            map.getBuildings().stream()
+                    .filter(building -> Objects.equals(building.getPlayer(), player))
+                    .forEach(building -> places.put(
+                            building.getPosition(),
+                            building.getClass().getSimpleName().substring(0, 1)));
+
+            player.getBorderPoints()
+                    .forEach(point -> places.put(point, border));
+
+            map.getFlags().stream()
+                    .filter(flagObject -> Objects.equals(flagObject.getPlayer(), player))
+                    .forEach(flagObject -> places.put(flagObject.getPosition(), flag));
+
+            map.getTrees().stream()
+                    .forEach(tree -> places.put(tree.getPosition(), "A"));
+
+            for (var road : map.getRoads()) {
+                if (!Objects.equals(road.getPlayer(), player)) {
+                    continue;
+                }
+
+                if (road.getLength() == 2) {
+                    continue;
+                }
+
+                Point previous = null;
+                for (var point : road.getWayPoints()) {
+                    if (Objects.equals(point, road.getStart()) ||
+                            Objects.equals(point, road.getEnd())) {
+                        previous = point;
+
+                        continue;
+                    }
+
+                    if (!places.containsKey(point)) {
+                        if (previous.y == point.y) {
+                            places.put(point, "_");
+                        } else if (previous.isDownLeftOf(point) || previous.isUpRightOf(point)) {
+                            places.put(point, "/");
+                        } else if (previous.isDownRightOf(point) || previous.isUpLeftOf(point)) {
+                            places.put(point, "\\");
+                        } else {
+                            places.put(point, "r");
+                        }
+                    }
+
+                    previous = point;
+                }
+            }
+
+            playerIndex++;
+        }
+
+        if (points != null) {
+            for (int i = 0; i < points.size(); i++) {
+                places.put(points.get(i), "" + i);
+            }
+        }
+
+        var minX = Integer.MAX_VALUE;
+        var maxX = Integer.MIN_VALUE;
+        var minY = Integer.MAX_VALUE;
+        var maxY = Integer.MIN_VALUE;
+
+        for (var point : places.keySet()) {
+            minX = Math.min(minX, point.x);
+            maxX = Math.max(maxX, point.x);
+
+            minY = Math.min(minY, point.y);
+            maxY = Math.max(maxY, point.y);
+        }
+
+        System.out.println("Map:");
+
+        for (int y = maxY; y >= minY; y--) {
+            for (int x = minX; x <= maxX; x++) {
+                var point = new Point(x, y);
+                var dot = places.get(point);
+
+                if (dot == null) {
+                    if (players.stream().anyMatch(player -> player.getOwnedLand().contains(point))) {
+                        dot = ".";
+                    } else {
+                        dot = " ";
+                    }
+                }
+
+                System.out.print(dot);
+            }
+
+            System.out.println();
+        }
     }
 
     public static void printPlayerLand(Player player, Collection<Point> points) {
@@ -2803,10 +2787,6 @@ public class Utils {
         map.getFlags().stream()
                 .filter(flag -> Objects.equals(flag.getPlayer(), player))
                 .forEach(flag -> places.put(flag.getPosition(), "F"));
-
-        if (points != null) {
-            points.forEach(point -> places.put(point, "+"));
-        }
 
         for (var road : map.getRoads()) {
             if (!Objects.equals(road.getPlayer(), player)) {
@@ -2841,6 +2821,13 @@ public class Utils {
             }
         }
 
+        if (points != null) {
+            points.forEach(point -> {
+                System.out.println("Put + at " + point);
+                places.put(point, "+");
+            });
+        }
+
         var minX = 500;
         var maxX = 0;
         var minY = 500;
@@ -2854,15 +2841,16 @@ public class Utils {
             maxY = Math.max(maxY, point.y);
         }
 
+        System.out.println("Land of player: " + player.getName());
+
         for (int y = maxY; y >= minY; y--) {
             for (int x = minX; x <= maxX; x++) {
-                if ((x + y) % 2 != 0) {
-                    System.out.print(" ");
+                var point = new Point(x, y);
+                var dot = places.getOrDefault(point, " ");
 
-                    continue;
+                if (dot != null && dot.equals(" ") && player.getOwnedLand().contains(point)) {
+                    dot = ".";
                 }
-
-                var dot = places.getOrDefault(new Point(x, y), ".");
 
                 System.out.print(dot);
             }
@@ -2871,10 +2859,12 @@ public class Utils {
         }
     }
 
-    public static void setNoReservedSoldiers(Headquarter headquarter) {
-        Arrays.stream(Soldier.Rank.values()).forEach(rank -> headquarter.setReservedSoldiers(rank, 0));
+    public static void setNoReservedSoldiers(Headquarter... headquarters) {
+        Arrays.stream(headquarters).forEach(headquarter -> {
+            Arrays.stream(Rank.values()).forEach(rank -> headquarter.setReservedSoldiers(rank, 0));
 
-        Arrays.stream(Soldier.Rank.values()).forEach(rank -> assertEquals(headquarter.getReservedSoldiers(rank), 0));
+            Arrays.stream(Rank.values()).forEach(rank -> assertEquals(headquarter.getReservedSoldiers(rank), 0));
+        });
     }
 
     public static void waitFor(Function<Void, Boolean> f, GameMap map) throws InvalidUserActionException {
@@ -3308,78 +3298,39 @@ public class Utils {
         }
     }
 
-    public static void waitForFlagToHaveAmountStackedCargo(GameMap map, Flag flag, int amount) throws InvalidUserActionException {
-        for (int i = 0; i < 20_000; i++) {
-            if (flag.getStackedCargo().size() == amount) {
-                break;
-            }
-
-            map.stepTime();
-        }
-
-        assertEquals(flag.getStackedCargo().size(), amount);
+    public static void waitForFlagToHaveAmountStackedCargo(Flag flag, int amount) throws InvalidUserActionException {
+        var map = flag.getPlayer().getMap();
+        fastForwardUntil(map, () -> flag.getStackedCargo().size() == amount);
     }
 
     public static void waitForBuildingToHaveProductivity(Building building, int productivity) throws InvalidUserActionException {
-        for (int i = 0; i < 10_000; i++) {
-            if (building.getProductivity() == productivity) {
-                break;
-            }
-
-            building.getMap().stepTime();
-        }
-
-        assertEquals(building.getProductivity(), productivity);
+        var map = building.getMap();
+        fastForwardUntil(map, () -> building.getProductivity() == productivity);
     }
 
     public static void waitForBuildingToChangeProductivity(Building building) throws InvalidUserActionException {
         int previousProductivity = building.getProductivity();
+        var map = building.getMap();
 
-        for (int i = 0; i < 10_000; i++) {
-            if (building.getProductivity() != previousProductivity) {
-                break;
-            }
-
-            building.getPlayer().getMap().stepTime();
-        }
-
-        assertNotEquals(building.getProductivity(), previousProductivity);
+        fastForwardUntil(map, () -> building.getProductivity() != previousProductivity);
     }
 
     public static void waitForGeologistToStopInvestigating(Geologist geologist) throws InvalidUserActionException {
-        for (int i = 0; i < 2_000; i++) {
-            if (!geologist.isInvestigating()) {
-                break;
-            }
-
-            geologist.getPlayer().getMap().stepTime();
-        }
-
-        assertFalse(geologist.isInvestigating());
+        var map = geologist.getPlayer().getMap();
+        fastForwardUntil(map, () -> !geologist.isInvestigating());
     }
 
-    public static <T extends Worker> T waitForOneOfWorkersToReachPoint(List<T> workers, Point point, GameMap map) throws InvalidUserActionException {
-        for (int i = 0; i < 2_000; i++) {
-            if (workers.stream().anyMatch(worker -> Objects.equals(worker.getPosition(), point))) {
-                break;
-            }
-
-            map.stepTime();
-        }
-
-        assertTrue(workers.stream().anyMatch(worker -> Objects.equals(worker.getPosition(), point)));
+    public static <T extends Worker> T waitForOneOfWorkersToReachPoint(List<T> workers, Point point) throws InvalidUserActionException {
+        var map = workers.getFirst().getPlayer().getMap();
+        fastForwardUntil(map, () -> workers.stream().anyMatch(worker -> Objects.equals(worker.getPosition(), point)));
 
         return workers.stream().filter(worker -> Objects.equals(worker.getPosition(), point)).findFirst().get();
     }
 
-    public static Soldier waitForSoldierToBeFightingOpponent(Soldier soldier, GameMap map) throws InvalidUserActionException {
-        for (int i = 0; i < 2_000; i++) {
-            if (soldier.isFighting() && soldier.getOpponent() != null) {
-                break;
-            }
+    public static Soldier waitForSoldierToBeFightingOpponent(Soldier soldier) throws InvalidUserActionException {
+        var map = soldier.getPlayer().getMap();
 
-            map.stepTime();
-        }
+        fastForwardUntil(map, () -> soldier.isFighting() && soldier.getOpponent() != null);
 
         var opponent = soldier.getOpponent();
 
@@ -3396,16 +3347,9 @@ public class Utils {
         return opponent;
     }
 
-    public static <T extends Worker> void waitForWorkersToDie(List<T> workers, GameMap map) throws InvalidUserActionException {
-        for (int i = 0; i < 2_000; i++) {
-            if (workers.stream().allMatch(Worker::isDead)) {
-                break;
-            }
-
-            map.stepTime();
-        }
-
-        assertTrue(workers.stream().allMatch(Worker::isDead));
+    public static <T extends Worker> void waitForWorkersToDie(List<T> workers, GameMap map2) throws InvalidUserActionException {
+        var map = workers.getFirst().getPlayer().getMap();
+        fastForwardUntil(map, () -> workers.stream().allMatch(Worker::isDead));
     }
 
     public static int countAliveSoldiersOutsideForPlayer(Player player) {
@@ -3420,15 +3364,8 @@ public class Utils {
     public static void waitForBuildingToHaveHostedSoldiers(Building building, int amount) throws InvalidUserActionException {
         assertTrue(building.isMilitaryBuilding());
 
-        for (int i = 0; i < 2_000; i++) {
-            if (building.getHostedSoldiers().size() == amount) {
-                break;
-            }
-
-            building.getMap().stepTime();
-        }
-
-        assertEquals(building.getHostedSoldiers().size(), amount);
+        var map = building.getPlayer().getMap();
+        fastForwardUntil(map, () -> building.getHostedSoldiers().size() == amount);
     }
 
     public static void setReserves(Headquarter headquarter, int privates, int privatesFirstClass, int sergeants, int officers, int generals) {
@@ -3463,29 +3400,14 @@ public class Utils {
         return Collections.emptyList();
     }
 
-    public static void waitForSoldierToWalkToFixedPoint(Soldier soldier, GameMap map) throws InvalidUserActionException {
-        for (int i = 0; i < 2_000; i++) {
-            if (!soldier.isTraveling()) {
-                break;
-            }
-
-            map.stepTime();
-        }
-
-        assertFalse(soldier.isTraveling());
+    public static void waitForSoldierToWalkToFixedPoint(Soldier soldier, GameMap map2) throws InvalidUserActionException {
+        var map = soldier.getPlayer().getMap();
+        fastForwardUntil(map, () -> !soldier.isTraveling());
     }
 
-    public static void waitForSoldierToStopWalkingApart(Soldier soldier, GameMap map) throws InvalidUserActionException {
-        for (int i = 0; i < 2_000; i++) {
-            System.out.println(soldier.getPercentageOfDistanceTraveled());
-
-            if (soldier.getPercentageOfDistanceTraveled() == 50) {
-                break;
-            }
-
-
-            map.stepTime();
-        }
+    public static void waitForSoldierToStopWalkingApart(Soldier soldier) throws InvalidUserActionException {
+        var map = soldier.getPlayer().getMap();
+        fastForwardUntil(map, () -> soldier.getPercentageOfDistanceTraveled() == 50);
     }
 
     public static void waitForMilitaryBuildingToHaveNumberOfHostedSoldiers(Building building, int amount) throws InvalidUserActionException {
@@ -3501,6 +3423,113 @@ public class Utils {
 
         assertEquals(building.getNumberOfHostedSoldiers(), amount);
         assertEquals(building.getHostedSoldiers().size(), amount);
+    }
+
+    public static Soldier findPrimaryAttacker(Building building, Player player) {
+        return (Soldier) player.getMap().getWorkers().stream()
+                .filter(Worker::isSoldier)
+                .filter(soldier -> !soldier.isInsideBuilding())
+                .filter(soldier -> Objects.equals(soldier.getPlayer(), player))
+                .filter(soldier -> Objects.equals(soldier.getPosition(), building.getFlag().getPosition()) ||
+                        Objects.equals(soldier.getTarget(), building.getFlag().getPosition()))
+                .findFirst()
+                .get();
+    }
+
+    public static Soldier waitForPrimaryAttacker(Building building, Player player) throws InvalidUserActionException {
+        var map = building.getPlayer().getMap();
+
+        for (int i = 0; i < 2_000; i++) {
+            var maybePrimaryAttacker = player.getMap().getWorkers().stream()
+                    .filter(Worker::isSoldier)
+                    .filter(soldier -> !soldier.isInsideBuilding())
+                    .filter(soldier -> Objects.equals(soldier.getPlayer(), player))
+                    .filter(soldier -> Objects.equals(soldier.getPosition(), building.getFlag().getPosition()) ||
+                            Objects.equals(soldier.getTarget(), building.getFlag().getPosition()))
+                    .findFirst();
+
+            if (maybePrimaryAttacker.isPresent()) {
+                return (Soldier) maybePrimaryAttacker.get();
+            }
+
+            map.stepTime();
+        }
+
+        fail();
+
+        return null;
+    }
+
+    public static Soldier findDefendingSoldierOutside(Player player) {
+        return player.getMap().getWorkers().stream()
+                .filter(Worker::isSoldier)
+                .map(worker -> (Soldier) worker)
+                .filter(soldier -> !soldier.isInsideBuilding())
+                .filter(soldier -> Objects.equals(soldier.getPlayer(), player))
+                .filter(Soldier::isDefending)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public static void waitUntil(BooleanSupplier condition, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 2_000; i++) {
+            if (condition.getAsBoolean()) {
+                return;
+            }
+
+            map.stepTime();
+        }
+
+        fail();
+    }
+
+    public static void clearReserves(Headquarter... headquarters) {
+        Arrays.stream(headquarters).forEach(
+                storehouse -> Arrays.stream(Rank.values()).forEach(
+                        rank -> storehouse.setReservedSoldiers(rank, 0)
+        ));
+    }
+
+    public static void fastForward(int steps, GameMap map, Runnable assertFunction) throws InvalidUserActionException {
+        for (int i = 0; i < steps; i++) {
+            assertFunction.run();
+
+            map.stepTime();
+        }
+    }
+
+    public static void fastForwardUntil(int steps, GameMap map, BooleanSupplier condition) throws InvalidUserActionException {
+        for (int i = 0; i < steps; i++) {
+            if (condition.getAsBoolean()) {
+                return;
+            }
+
+            map.stepTime();
+        }
+
+        fail();
+    }
+
+    public static void fastForwardUntil(GameMap map, BooleanSupplier condition) throws InvalidUserActionException {
+        for (var i = 0; i < 20_000; i++) {
+            if (condition.getAsBoolean()) {
+                return;
+            }
+
+            map.stepTime();
+        }
+
+        fail();
+    }
+
+    public static void waitForWorkerToHavePointNext(Worker worker, Point point) throws InvalidUserActionException {
+        fastForwardUntil(worker.getPlayer().getMap(), () -> Objects.equals(worker.getNextPoint(), point));
+    }
+
+    public static void deliverCargoIfNeeded(Building building, Material material) {
+        if (building.needsMaterial(material)) {
+            deliverCargo(building, material);
+        }
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor, StatisticsListener {
@@ -3745,10 +3774,6 @@ public class Utils {
         public void generalStatisticsChanged(Player player) {
             statisticsEvents.add(new StatisticsUpdatedEvent(StatisticsChangeType.GENERAL_STATISTICS_CHANGED));
         }
-
-        public Map<Point, AvailableConstruction> getMirroredAvailableConstruction() {
-            return this.mirroredAvailableConstruction;
-        }
     }
 
     public enum StatisticsChangeType {
@@ -3831,7 +3856,7 @@ public class Utils {
         return area;
     }
 
-    static void fillMapWithCrops(GameMap map) throws InvalidUserActionException {
+    static void fillMapWithCrops(GameMap map) {
         for (int x = 0; x < map.getWidth(); x++) {
             for (int y = 0; y < map.getHeight(); y++) {
 
@@ -3848,13 +3873,6 @@ public class Utils {
                 var crop = map.placeCrop(point, Crop.CropType.TYPE_1);
             }
         }
-    }
-
-    public static List<WorkerAction> getMonitoredWorkerActionsForWorker(Worker worker, GameViewMonitor monitor) {
-        return monitor.getEvents().stream()
-                .filter(gameChangesList -> gameChangesList.workersWithStartedActions().containsKey(worker))
-                .map(gameChangesList -> gameChangesList.workersWithStartedActions().get(worker))
-                .collect(Collectors.toList());
     }
 
     public static int countMonitoredWorkerActionForWorker(Worker worker, WorkerAction workerAction, GameViewMonitor monitor) {
@@ -3888,7 +3906,7 @@ public class Utils {
         var map = player.getMap();
         var found = (T) null;
 
-        var buildingsBefore = new HashSet<Building>(player.getBuildings());
+        var buildingsBefore = new HashSet<>(player.getBuildings());
         for (int i = 0; i < 10000; i++) {
             for (var building : player.getBuildings()) {
                 if (building.getClass().equals(aClass) && !buildingsBefore.contains(building)) {
@@ -3979,8 +3997,7 @@ public class Utils {
         for (var p : player.getBorderPoints()) {
             var tmpDistance = barracks.getPosition().distance(p);
 
-            if (barracks.getPlayer().getDiscoveredLand().contains(p) &&
-                    tmpDistance < distance) {
+            if (barracks.getPlayer().getDiscoveredLand().contains(p) && tmpDistance < distance) {
                 distance = tmpDistance;
             }
         }

@@ -1,7 +1,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.Direction;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
@@ -24,7 +24,7 @@ import java.util.Objects;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Vegetation.BUILDABLE_MOUNTAIN;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 /**
@@ -276,7 +276,7 @@ public class TestWell {
         }
 
         // Let the var worker reach the well
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, well.getPosition());
 
         assertNotNull(wellWorker);
         assertTrue(wellWorker.isInsideBuilding());
@@ -456,7 +456,7 @@ public class TestWell {
         // Verify that the well worker finally goes back to the well
         assertEquals(wellWorker.getTarget(), well.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, well.getPosition());
 
         assertTrue(wellWorker.isInsideBuilding());
         assertNull(wellWorker.getCargo());
@@ -498,20 +498,20 @@ public class TestWell {
         Utils.fastForward(100, map);
 
         // Wait for the var worker to produce water
-        Utils.fastForwardUntilWorkerCarriesCargo(map, wellWorker, WATER);
+        Utils.fastForwardUntilWorkerCarriesCargo(wellWorker, WATER);
 
         assertNotNull(wellWorker.getCargo());
 
-        Utils.waitForWorkerToSetTarget(map, wellWorker, well.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(wellWorker, well.getFlag().getPosition());
 
         assertEquals(wellWorker.getTarget(), well.getFlag().getPosition());
 
         // Let the worker reach the flag and place the cargo
-        Utils.waitForWorkerToSetTarget(map, wellWorker, well.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(wellWorker, well.getFlag().getPosition());
 
         assertTrue(well.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, well.getFlag().getPosition());
 
         assertFalse(well.getFlag().getStackedCargo().isEmpty());
 
@@ -521,7 +521,7 @@ public class TestWell {
         // Let the var walk back to the well
         assertEquals(wellWorker.getTarget(), well.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, wellWorker);
+        Utils.fastForwardUntilWorkersReachTarget(wellWorker);
 
         assertTrue(wellWorker.isInsideBuilding());
     }
@@ -565,17 +565,17 @@ public class TestWell {
         Utils.waitForNonMilitaryBuildingToGetPopulated(well);
 
         // Wait for the courier on the road between the bakery and the well hut to have a water cargo
-        Utils.waitForFlagToGetStackedCargo(map, well.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(well.getFlag(), 1);
 
         assertEquals(well.getFlag().getStackedCargo().getFirst().getMaterial(), WATER);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that the courier delivers the cargo to the bakery (and not the headquarters)
         assertEquals(well.getAmount(WATER), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), bakery.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), bakery.getPosition());
 
         assertEquals(bakery.getAmount(WATER), 1);
     }
@@ -619,12 +619,12 @@ public class TestWell {
         Utils.waitForNonMilitaryBuildingToGetPopulated(well);
 
         // Wait for the courier on the road between the store house and the well hut to have a stone cargo
-        Utils.waitForFlagToGetStackedCargo(map, well.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(well.getFlag(), 1);
 
         assertEquals(well.getFlag().getStackedCargo().getFirst().getMaterial(), WATER);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that the courier delivers the cargo to the store house's flag so that it can continue to the headquarters
         assertEquals(headquarter.getAmount(WATER), 0);
@@ -632,7 +632,7 @@ public class TestWell {
         assertFalse(storehouse.needsMaterial(WATER));
         assertTrue(storehouse.isUnderConstruction());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
         assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(WATER));
@@ -685,12 +685,12 @@ public class TestWell {
         Utils.deliverCargos(bakery, WATER, 5);
 
         // Wait for the flag on the road between the bakery and the well to have a water cargo
-        Utils.waitForFlagToGetStackedCargo(map, well.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(well.getFlag(), 1);
 
         assertEquals(well.getFlag().getStackedCargo().getFirst().getMaterial(), WATER);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that no water is delivered from the headquarters
         Utils.adjustInventoryTo(headquarter, WATER, 1);
@@ -734,17 +734,17 @@ public class TestWell {
         // Wait for the var worker to produce a new water cargo
         var wellWorker = well0.getWorker();
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, wellWorker, WATER);
+        Utils.fastForwardUntilWorkerCarriesCargo(wellWorker, WATER);
 
         assertNotNull(wellWorker.getCargo());
 
         // Verify that the var worker puts the water cargo at the flag
-        Utils.waitForWorkerToSetTarget(map, wellWorker, well0.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(wellWorker, well0.getFlag().getPosition());
 
         assertEquals(wellWorker.getTarget(), well0.getFlag().getPosition());
         assertTrue(well0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, well0.getFlag().getPosition());
 
         assertNull(wellWorker.getCargo());
         assertFalse(well0.getFlag().getStackedCargo().isEmpty());
@@ -752,19 +752,19 @@ public class TestWell {
         // Wait for the worker to go back to the well
         assertEquals(wellWorker.getTarget(), well0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, well0.getPosition());
 
         // Wait for the worker to rest and produce another cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, wellWorker, WATER);
+        Utils.fastForwardUntilWorkerCarriesCargo(wellWorker, WATER);
 
         assertNotNull(wellWorker.getCargo());
 
         // Verify that the second cargo is put at the flag
-        Utils.waitForWorkerToSetTarget(map, wellWorker, well0.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(wellWorker, well0.getFlag().getPosition());
 
         assertEquals(wellWorker.getTarget(), well0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, well0.getFlag().getPosition());
 
         assertNull(wellWorker.getCargo());
         assertEquals(well0.getFlag().getStackedCargo().size(), 2);
@@ -797,17 +797,17 @@ public class TestWell {
         // Wait for the var worker to produce a new water cargo
         var wellWorker = well0.getWorker();
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, wellWorker, WATER);
+        Utils.fastForwardUntilWorkerCarriesCargo(wellWorker, WATER);
 
         assertNotNull(wellWorker.getCargo());
 
         // Verify that the var worker puts the water cargo at the flag
-        Utils.waitForWorkerToSetTarget(map, wellWorker, well0.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(wellWorker, well0.getFlag().getPosition());
 
         assertEquals(wellWorker.getTarget(), well0.getFlag().getPosition());
         assertTrue(well0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, well0.getFlag().getPosition());
 
         assertNull(wellWorker.getCargo());
         assertFalse(well0.getFlag().getStackedCargo().isEmpty());
@@ -833,14 +833,14 @@ public class TestWell {
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
 
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         // Verify that the courier walks to pick up the cargo
         map.stepTime();
 
         assertEquals(courier.getTarget(), well0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         // Verify that the courier has picked up the cargo
         assertNotNull(courier.getCargo());
@@ -851,7 +851,7 @@ public class TestWell {
 
         var amount = headquarter0.getAmount(WATER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
         // Verify that the courier has delivered the cargo to the headquarters
         assertNull(courier.getCargo());
@@ -893,7 +893,7 @@ public class TestWell {
 
         var amount = headquarter0.getAmount(WELL_WORKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
         // Verify that the var worker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(WELL_WORKER), amount + 1);
@@ -1077,16 +1077,16 @@ public class TestWell {
         Utils.fastForward(100, map);
 
         // Wait for the var worker to produce cargo
-        Utils.fastForwardUntilWorkerProducesCargo(map, wellWorker);
+        Utils.fastForwardUntilWorkerProducesCargo(wellWorker);
 
         assertEquals(wellWorker.getCargo().getMaterial(), WATER);
 
         // Wait for the worker to deliver the cargo
-        Utils.waitForWorkerToSetTarget(map, wellWorker, well0.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(wellWorker, well0.getFlag().getPosition());
 
         assertEquals(wellWorker.getTarget(), well0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, well0.getFlag().getPosition());
 
         // Stop production and verify that no water is produced
         well0.stopProduction();
@@ -1135,16 +1135,16 @@ public class TestWell {
         Utils.fastForward(100, map);
 
         // Wait for the var worker to produce water
-        Utils.fastForwardUntilWorkerProducesCargo(map, wellWorker);
+        Utils.fastForwardUntilWorkerProducesCargo(wellWorker);
 
         assertEquals(wellWorker.getCargo().getMaterial(), WATER);
 
         // Wait for the worker to deliver the cargo
-        Utils.waitForWorkerToSetTarget(map, wellWorker, well0.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(wellWorker, well0.getFlag().getPosition());
 
         assertEquals(wellWorker.getTarget(), well0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, well0.getFlag().getPosition());
 
         // Stop production
         well0.stopProduction();
@@ -1160,7 +1160,7 @@ public class TestWell {
 
         assertTrue(well0.isProductionEnabled());
 
-        Utils.fastForwardUntilWorkerProducesCargo(map, wellWorker);
+        Utils.fastForwardUntilWorkerProducesCargo(wellWorker);
 
         assertNotNull(wellWorker.getCargo());
     }
@@ -1284,7 +1284,7 @@ public class TestWell {
         assertNotNull(wellWorker);
         assertEquals(wellWorker.getTarget(), well0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1295,14 +1295,14 @@ public class TestWell {
         map.removeRoad(road1);
 
         // Verify that the var worker continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, flag0.getPosition());
 
         assertEquals(wellWorker.getPosition(), flag0.getPosition());
 
         // Verify that the var worker returns to the headquarters when it reaches the flag
         assertEquals(wellWorker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, headquarter0.getPosition());
     }
 
     @Test
@@ -1344,7 +1344,7 @@ public class TestWell {
         assertNotNull(wellWorker);
         assertEquals(wellWorker.getTarget(), well0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1355,14 +1355,14 @@ public class TestWell {
         map.removeRoad(road0);
 
         // Verify that the var worker continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, flag0.getPosition());
 
         assertEquals(wellWorker.getPosition(), flag0.getPosition());
 
         // Verify that the var worker continues to the final flag
         assertEquals(wellWorker.getTarget(), well0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, well0.getFlag().getPosition());
 
         // Verify that the var worker goes out to well instead of going directly back
         assertNotEquals(wellWorker.getTarget(), headquarter0.getPosition());
@@ -1408,7 +1408,7 @@ public class TestWell {
         assertEquals(wellWorker.getTarget(), well0.getPosition());
 
         // Wait for the var worker to reach the first flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, flag0.getPosition());
 
         map.stepTime();
 
@@ -1419,7 +1419,7 @@ public class TestWell {
         well0.tearDown();
 
         // Verify that the var worker continues walking to the next flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, well0.getFlag().getPosition());
 
         assertEquals(wellWorker.getPosition(), well0.getFlag().getPosition());
 
@@ -1472,7 +1472,7 @@ public class TestWell {
 
         var amount = storehouse0.getAmount(WELL_WORKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, storehouse0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, storehouse0.getPosition());
 
         // Verify that the var worker is stored correctly in the headquarters
         assertEquals(storehouse0.getAmount(WELL_WORKER), amount + 1);
@@ -1526,7 +1526,7 @@ public class TestWell {
 
         var amount = headquarter0.getAmount(WELL_WORKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, headquarter0.getPosition());
 
         // Verify that the var worker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(WELL_WORKER), amount + 1);
@@ -1580,7 +1580,7 @@ public class TestWell {
 
         var amount = headquarter0.getAmount(WELL_WORKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, headquarter0.getPosition());
 
         // Verify that the var worker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(WELL_WORKER), amount + 1);
@@ -1625,7 +1625,7 @@ public class TestWell {
 
         var amount = headquarter0.getAmount(WELL_WORKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, headquarter0.getPosition());
 
         // Verify that the var worker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(WELL_WORKER), amount + 1);
@@ -1656,7 +1656,7 @@ public class TestWell {
         var worker = Utils.waitForWorkersOutsideBuilding(WellWorker.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, well0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, well0.getFlag().getPosition());
 
         // Tear down the building
         well0.tearDown();
@@ -1664,11 +1664,11 @@ public class TestWell {
         // Verify that the worker goes to the building and then returns to the headquarters instead of entering
         assertEquals(worker.getTarget(), well0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, well0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, well0.getPosition());
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
     }
 
     @Test
@@ -1907,7 +1907,7 @@ public class TestWell {
         var wellWorker = well.getWorker();
 
         // Fill the flag with flour cargos
-        Utils.placeCargos(map, FLOUR, 8, well.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, well.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -1924,7 +1924,7 @@ public class TestWell {
         var road1 = map.placeAutoSelectedRoad(player0, well.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -1941,7 +1941,7 @@ public class TestWell {
         assertEquals(well.getFlag().getStackedCargo().size(), 7);
 
         // Verify that the worker produces a cargo of flour and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, well.getWorker(), WATER);
+        Utils.fastForwardUntilWorkerCarriesCargo(well.getWorker(), WATER);
     }
 
     @Test
@@ -1967,7 +1967,7 @@ public class TestWell {
         Utils.waitForNonMilitaryBuildingToGetPopulated(well);
 
         // Fill the flag with cargos
-        Utils.placeCargos(map, FLOUR, 8, well.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, well.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -1986,7 +1986,7 @@ public class TestWell {
         var road1 = map.placeAutoSelectedRoad(player0, well.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2005,14 +2005,14 @@ public class TestWell {
         map.removeRoad(road1);
 
         // The worker produces a cargo and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, well.getWorker(), WATER);
+        Utils.fastForwardUntilWorkerCarriesCargo(well.getWorker(), WATER);
 
         // Wait for the worker to put the cargo on the flag
-        Utils.waitForWorkerToSetTarget(map, wellWorker, well.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(wellWorker, well.getFlag().getPosition());
 
         assertEquals(well.getWorker().getTarget(), well.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, well.getWorker(), well.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(well.getWorker(), well.getFlag().getPosition());
 
         assertEquals(well.getFlag().getStackedCargo().size(), 8);
 
@@ -2059,9 +2059,9 @@ public class TestWell {
         headquarter0.blockDeliveryOfMaterial(WATER);
 
         // Verify that the well puts eight waters on the flag and then stops
-        Utils.waitForFlagToGetStackedCargo(map, well0.getFlag(), 8);
+        Utils.waitForFlagToGetStackedCargo(well0.getFlag(), 8);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker0, well0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker0, well0.getPosition());
 
         for (int i = 0; i < 300; i++) {
             map.stepTime();
@@ -2125,7 +2125,7 @@ public class TestWell {
 
         assertFalse(wellWorker0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker0, well0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker0, well0.getFlag().getPosition());
 
         assertEquals(wellWorker0.getTarget(), storehouse.getPosition());
 
@@ -2186,11 +2186,11 @@ public class TestWell {
 
         assertFalse(wellWorker0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker0, well0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker0, well0.getFlag().getPosition());
 
         assertEquals(wellWorker0.getTarget(), storehouse.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker0, storehouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker0, storehouse.getPosition());
 
         assertFalse(map.getWorkers().contains(wellWorker0));
     }
@@ -2220,12 +2220,12 @@ public class TestWell {
             assertEquals(worker.getPosition(), headquarter0.getPosition());
             assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
             assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
             assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
             assertFalse(map.getWorkers().contains(worker));
         }
@@ -2242,7 +2242,7 @@ public class TestWell {
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Verify that worker goes out and in continuously when sent out without being blocked
+        // Verify that worker goes out and dies
         Utils.adjustInventoryTo(headquarter0, WELL_WORKER, 1);
 
         headquarter0.blockDeliveryOfMaterial(WELL_WORKER);
@@ -2253,25 +2253,17 @@ public class TestWell {
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
 
-        for (int i = 0; i < 100; i++) {
-            assertTrue(worker.isDead());
-            assertTrue(map.getWorkers().contains(worker));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(worker));
     }
 
     @Test
@@ -2310,7 +2302,7 @@ public class TestWell {
 
         assertEquals(worker.getPosition(), well0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, well0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, well0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), well0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
@@ -2318,18 +2310,37 @@ public class TestWell {
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        // Verify that a fresh skeleton gets placed where the worker dies
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
 
-        for (int i = 0; i < 100; i++) {
+        // Verify that the skeleton decays
+        for (int i = 0; i < 6000; i++) {
             assertTrue(worker.isDead());
             assertTrue(map.getWorkers().contains(worker));
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
+
+            map.stepTime();
+        }
+
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(DecorationType.HUMAN_SKELETON_DECAYED, map.getDecorationAtPoint(worker.getPosition()));
+
+        // Verify that the skeleton disappears
+        for (int i = 0; i < 4000; i++) {
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
 
             map.stepTime();
         }
 
         assertFalse(map.getWorkers().contains(worker));
+        assertFalse(map.isDecoratedAtPoint(worker.getPosition()));
+        assertNotEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
     }
 
     @Test
@@ -2360,7 +2371,7 @@ public class TestWell {
         var wellWorker = Utils.waitForWorkerOutsideBuilding(WellWorker.class, player0);
 
         // Wait for the var worker to go past the headquarters's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -2371,7 +2382,7 @@ public class TestWell {
 
         well0.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, well0.getFlag().getPosition());
 
         assertEquals(wellWorker.getPosition(), well0.getFlag().getPosition());
         assertNotEquals(wellWorker.getTarget(), headquarter0.getPosition());
@@ -2379,17 +2390,8 @@ public class TestWell {
         assertNull(well0.getWorker());
         assertNotNull(wellWorker.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, wellWorker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(wellWorker, wellWorker.getTarget());
 
-        var point = wellWorker.getPosition();
-        for (int i = 0; i < 100; i++) {
-            assertTrue(wellWorker.isDead());
-            assertEquals(wellWorker.getPosition(), point);
-            assertTrue(map.getWorkers().contains(wellWorker));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(wellWorker));
+        assertTrue(wellWorker.isDead());
     }
 }

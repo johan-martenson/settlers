@@ -358,7 +358,7 @@ public class TestPlacementInTerrain {
         // Verify that the woodcutter worker can go back to the headquarters
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(woodcutterWorker, headquarter0.getPosition());
     }
 
     @Test
@@ -1055,7 +1055,7 @@ public class TestPlacementInTerrain {
         // Verify that the woodcutter worker can go back to the headquarters
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(woodcutterWorker, headquarter0.getPosition());
     }
 
     @Test
@@ -1355,7 +1355,7 @@ public class TestPlacementInTerrain {
         // Verify that the woodcutter worker can go back to the headquarters
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(woodcutterWorker, headquarter0.getPosition());
     }
 
     @Test
@@ -1677,7 +1677,7 @@ public class TestPlacementInTerrain {
         // Verify that the woodcutter worker can go back to the headquarters
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(woodcutterWorker, headquarter0.getPosition());
     }
 
     @Test
@@ -2001,7 +2001,7 @@ public class TestPlacementInTerrain {
         // Verify that the woodcutter worker can go back to the headquarters
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(woodcutterWorker, headquarter0.getPosition());
     }
 
     @Test
@@ -2323,7 +2323,7 @@ public class TestPlacementInTerrain {
         // Verify that the woodcutter worker can go back to the headquarters
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(woodcutterWorker, headquarter0.getPosition());
     }
 
     @Test
@@ -2646,7 +2646,7 @@ public class TestPlacementInTerrain {
         // Verify that the woodcutter worker can go back to the headquarters
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(woodcutterWorker, headquarter0.getPosition());
     }
 
     @Test
@@ -4531,7 +4531,7 @@ public class TestPlacementInTerrain {
         // Verify that the woodcutter worker can go back to the headquarters
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(woodcutterWorker, headquarter0.getPosition());
     }
 
     @Test
@@ -4929,7 +4929,7 @@ public class TestPlacementInTerrain {
         // Verify that the woodcutter worker can go back to the headquarters
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(woodcutterWorker, headquarter0.getPosition());
     }
 
     @Test

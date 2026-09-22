@@ -1,7 +1,6 @@
 package org.appland.settlers.model.actors;
 
 import org.appland.settlers.model.BorderChangeCause;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
@@ -12,6 +11,7 @@ import org.appland.settlers.model.OffroadOption;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.WorkerAction;
+import org.appland.settlers.model.buildings.Building;
 
 import java.util.Objects;
 import java.util.Random;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.*;
+import static org.appland.settlers.model.actors.Rank.*;
 import static org.appland.settlers.model.actors.Soldier.State.*;
 
 /**
@@ -45,56 +45,8 @@ public class Soldier extends Worker {
         JUMPING_BACK,
         STANDING_ASIDE,
         DYING,
+        WAITING_TO_MAKE_FIRST_HIT,
         WAITING
-    }
-
-    public enum Rank {
-        PRIVATE_RANK,
-        SERGEANT_RANK,
-        OFFICER_RANK,
-        PRIVATE_FIRST_CLASS_RANK,
-        GENERAL_RANK;
-
-        public static Rank intToRank(int soldierInt) {
-            return switch (soldierInt) {
-                case 0, 1 -> PRIVATE_RANK;
-                case 2, 3 -> PRIVATE_FIRST_CLASS_RANK;
-                case 4, 5, 6 -> SERGEANT_RANK;
-                case 7, 8 -> OFFICER_RANK;
-                case 9, 10 -> GENERAL_RANK;
-                default -> throw new InvalidGameLogicException(String.format("Can't translate %d to rank", soldierInt));
-            };
-        }
-
-        public String getSimpleName() {
-            return switch (this) {
-                case PRIVATE_RANK -> "Private";
-                case PRIVATE_FIRST_CLASS_RANK -> "Private first class";
-                case SERGEANT_RANK -> "Sergeant";
-                case OFFICER_RANK -> "Officer";
-                case GENERAL_RANK -> "General";
-            };
-        }
-
-        public Material toMaterial() {
-            return switch (this) {
-                case PRIVATE_RANK -> PRIVATE;
-                case PRIVATE_FIRST_CLASS_RANK -> PRIVATE_FIRST_CLASS;
-                case SERGEANT_RANK -> SERGEANT;
-                case OFFICER_RANK -> OFFICER;
-                case GENERAL_RANK -> GENERAL;
-            };
-        }
-
-        public int toInt() {
-            return switch (this) {
-                case PRIVATE_RANK -> 0;
-                case PRIVATE_FIRST_CLASS_RANK -> 1;
-                case SERGEANT_RANK -> 2;
-                case OFFICER_RANK -> 3;
-                case GENERAL_RANK -> 4;
-            };
-        }
     }
 
     protected enum State {
@@ -127,11 +79,11 @@ public class Soldier extends Worker {
 
     private Soldier opponent;
     private Rank rank;
-    private State state = WALKING_TO_TARGET;
+    public State state = WALKING_TO_TARGET;
     private int health;
     private Building buildingToAttack;
     private Building buildingToDefend;
-    private FightState fightState;
+    public FightState fightState;
 
     public Soldier(Player player, Rank rank, GameMap map) {
         super(player, map);
@@ -191,6 +143,18 @@ public class Soldier extends Worker {
                     }
                 }
 
+                case WAITING_TO_MAKE_FIRST_HIT -> {
+                    if (!opponent.isReadyToFight()) {
+                        break;
+                    }
+
+                    fightState = FightState.HITTING;
+                    opponent.setBeingHit();
+                    countdown = TIME_FOR_HIT;
+
+                    map.reportWorkerStartedAction(this, WorkerAction.HIT);
+                }
+
                 case WAITING -> {
                     if (opponent.isDead()) {
                         opponent = null;
@@ -211,9 +175,7 @@ public class Soldier extends Worker {
 
                         if (random.nextBoolean()) {
                             fightState = FightState.HITTING;
-
                             opponent.setBeingHit();
-
                             countdown = TIME_FOR_HIT;
 
                             map.reportWorkerStartedAction(this, WorkerAction.HIT);
@@ -390,7 +352,12 @@ public class Soldier extends Worker {
                 var storage = map.getBuildingAtPoint(position);
 
                 enterBuilding(storage);
-                storage.putCargo(new Cargo(rankToMaterial(rank), map));
+
+                if (storage.isHeadquarter()) {
+                    storage.deploySoldier(this);
+                } else {
+                    storage.putCargo(new Cargo(rank.toMaterial(), map));
+                }
 
                 map.removeWorker(this);
                 state = IN_STORAGE;
@@ -618,6 +585,7 @@ public class Soldier extends Worker {
         buildingToDefend = building;
 
         // Register in the building's defense
+        // TODO: this looks like a bug - this method is for defending the soldier's own building so it's not a remote defender
         building.registerRemoteDefender(this);
 
         // Get the primary attacker (the one that will walk to the building's flag and fight there)
@@ -762,38 +730,27 @@ public class Soldier extends Worker {
             fightState = FightState.WAITING;
         } else if (state == WALKING_APART_TO_ATTACK) {
             state = ATTACKING;
-            fightState = FightState.WAITING;
+            fightState = FightState.WAITING_TO_MAKE_FIRST_HIT;
         }
     }
 
     private void setBeingHit() {
-        int likelihoodToHit = switch (opponent.getRank()) {
-            case GENERAL_RANK -> 5;
-            case OFFICER_RANK -> 4;
-            case SERGEANT_RANK -> 3;
-            case PRIVATE_FIRST_CLASS_RANK -> 2;
-            case PRIVATE_RANK -> 1;
-        };
+        int attackerRoll = random.nextInt(opponent.rank.getMaxCombatRoll() + 1);
+        int defenderRoll = random.nextInt(rank.getMaxCombatRoll() + 1);
 
-        int maybeHit = random.nextInt(10); // 0-9 almost uniformly distributed
-
-        if (maybeHit < likelihoodToHit) {
+        if (attackerRoll > defenderRoll) {
             fightState = FightState.GETTING_HIT;
         } else {
-            int next = random.nextInt(2);
-
-            fightState = switch (next) {
-                case 0 -> FightState.JUMPING_BACK;
-                case 1 -> FightState.STANDING_ASIDE;
-                default -> throw new InvalidGameLogicException("Failed to set a reasonable fight state!");
-            };
+            fightState = random.nextBoolean()
+                    ? FightState.JUMPING_BACK
+                    : FightState.STANDING_ASIDE;
         }
 
         map.reportWorkerStartedAction(this, switch (fightState) {
             case GETTING_HIT -> WorkerAction.GET_HIT;
             case JUMPING_BACK -> WorkerAction.JUMP_BACK;
             case STANDING_ASIDE -> WorkerAction.STAND_ASIDE;
-            default -> throw new InvalidGameLogicException("Found unexpected fight state");
+            default -> throw new InvalidGameLogicException("Unexpected fight state");
         });
 
         countdown = TIME_FOR_HIT;
@@ -829,10 +786,15 @@ public class Soldier extends Worker {
         }
     }
 
-    private void reserveForFight(Soldier soldier) {
+    private void reserveForFight(Soldier opponent) {
         buildingToAttack.removeWaitingAttacker(this);
         state = State.RESERVED_BY_DEFENDING_OPPONENT;
-        opponent = soldier;
+        this.opponent = opponent;
+    }
+
+    @Override
+    void onSetTargetBuilding(Building building) {
+        state = WALKING_TO_TARGET;
     }
 
     private void returnAfterAttackIsOver() {

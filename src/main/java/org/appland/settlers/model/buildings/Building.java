@@ -19,7 +19,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.actors.Builder;
 import org.appland.settlers.model.actors.Soldier;
-import org.appland.settlers.model.actors.Soldier.Rank;
+import org.appland.settlers.model.actors.Rank;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.utils.Duration;
 import org.appland.settlers.utils.StatsConstants;
@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toCollection;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.actors.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.utils.MilitaryUtils.*;
 
 public class Building implements EndPoint {
@@ -83,9 +83,9 @@ public class Building implements EndPoint {
     public final Countdown countdown = new Countdown();
     private final Countdown upgradeCountdown = new Countdown();
     private final Countdown healthRecoveryCountdown = new Countdown();
-    private final Map<Material, Integer> promisedDeliveries = new EnumMap<>(Material.class);
-    private final List<Soldier> hostedSoldiers = new ArrayList<>();
-    private final List<Soldier> promisedSoldier = new ArrayList<>();
+    public final Map<Material, Integer> promisedDeliveries = new EnumMap<>(Material.class);
+    protected final List<Soldier> hostedSoldiers = new ArrayList<>();
+    private final List<Soldier> promisedSoldiers = new ArrayList<>();
     private final Set<Soldier> waitingDefenders = new HashSet<>();
 
     private enum State {
@@ -105,7 +105,7 @@ public class Building implements EndPoint {
     protected Flag flag = new Flag(null);
     private Set<Point> defendedLand = null;
     private long generation;
-    private State state = State.PLANNED; // TODO: make private again
+    public State state = State.PLANNED;
     protected Worker worker = null;
     private Worker promisedWorker = null;
     private boolean enablePromotions = true;
@@ -122,7 +122,7 @@ public class Building implements EndPoint {
     public Building(Player player) {
         this.player = player;
 
-        countdown.countFrom(getConstructionCountdown());
+        countdown.countFrom(getConstructionTime());
         flag.setPlayer(player);
     }
 
@@ -251,8 +251,8 @@ public class Building implements EndPoint {
         return requiresWorker != null ? requiresWorker.workerType() : null;
     }
 
-    public void promiseSoldier(Soldier military) {
-        promisedSoldier.add(military);
+    public void promiseSoldier(Soldier soldier) {
+        promisedSoldiers.add(soldier);
     }
 
     public void promiseWorker(Worker worker) {
@@ -270,7 +270,7 @@ public class Building implements EndPoint {
     public boolean needsMilitaryManning() {
         return switch (state) {
             case UNOCCUPIED, OCCUPIED -> {
-                int promised = promisedSoldier.size();
+                int promised = promisedSoldiers.size();
                 int actual = hostedSoldiers.size();
                 int wanted = getWantedAmountHostedSoldiers();
 
@@ -280,8 +280,8 @@ public class Building implements EndPoint {
         };
     }
 
-    public int getPromisedSoldier() {
-        return promisedSoldier.size();
+    public int getPromisedSoldiers() {
+        return promisedSoldiers.size();
     }
 
     public void assignWorker(Worker worker) {
@@ -294,8 +294,7 @@ public class Building implements EndPoint {
                 // Give each type of building a chance to add extra logic when the building has become occupied
                 onBuildingOccupied();
             }
-            default ->
-                    throw new InvalidGameLogicException(format("Can't assign %s to building in state %s", worker, state));
+            default -> throw new InvalidGameLogicException(format("Can't assign %s to building in state %s", worker, state));
         }
     }
 
@@ -308,7 +307,8 @@ public class Building implements EndPoint {
             throw new InvalidGameLogicException("Cannot assign military to building in state %s".formatted(state));
         }
 
-        if (!isSpaceAvailableToHostSoldier(soldier)) {
+        // Headquarters have no limit on how many soldiers they can store
+        if (!isSpaceAvailableToHostSoldier(soldier) && !isHeadquarter()) {
             throw new InvalidGameLogicException(format("Cannot host military, %s already hosting %d soldiers", this, hostedSoldiers.size()));
         }
 
@@ -329,7 +329,8 @@ public class Building implements EndPoint {
         } else {
             soldier.returnToStorage();
         }
-        promisedSoldier.remove(soldier);
+
+        promisedSoldiers.remove(soldier);
 
         player.reportSoldierEnteredBuilding(this);
     }
@@ -345,6 +346,8 @@ public class Building implements EndPoint {
 
     public void setPosition(Point point) {
         position = point;
+
+        hostedSoldiers.forEach(hostedSoldier -> hostedSoldier.setPosition(point));
     }
 
     @Override
@@ -404,6 +407,17 @@ public class Building implements EndPoint {
 
     @Override
     public String toString() {
+        if (isMilitaryBuilding()) {
+            var soldierString = Arrays.stream(Rank.values())
+                    .filter(rank -> getHostedSoldiersWithRank(rank) != 0)
+                    .map(rank -> "%d %s".formatted(getHostedSoldiersWithRank(rank), rank.toMaterial()))
+                    .collect(Collectors.joining(", "));
+
+            return state != State.OCCUPIED
+                    ? "%s at %s (%s)".formatted(getClass().getSimpleName(), position, state)
+                    : "%s at %s (%s) (%s)".formatted(getClass().getSimpleName(), position, state, soldierString);
+        }
+
         return inventory.entrySet().stream().anyMatch(pair -> pair.getValue() != 0)
                 ? format("%s at %s with %s in queue and state: %s", getClass().getSimpleName(), flag, flag.getStackedCargo(), state)
                 : format("%s at %s with nothing in queue and state: %s", getClass().getSimpleName(), flag, state);
@@ -422,6 +436,7 @@ public class Building implements EndPoint {
 
         var duration = new Duration(counterName);
 
+        // Handle closing the door
         if (door == DoorState.OPEN_CLOSE_SOON) {
             if (doorClosing == 0) {
                 door = DoorState.CLOSED;
@@ -431,6 +446,7 @@ public class Building implements EndPoint {
             }
         }
 
+        // Handle health recovery for wounded soldiers
         if (isMilitaryBuilding() && healthRecoveryCountdown.isActive()) {
             if (healthRecoveryCountdown.hasReachedZero()) {
                 var anyRemainingHurtSoldier = false;
@@ -453,24 +469,26 @@ public class Building implements EndPoint {
             }
         }
 
+        // Handle defense if the building is under attack
         if (isUnderAttack()) {
             if (ownDefender == null &&
-                    getNumberOfHostedSoldiers() > 0 &&
+                    !hostedSoldiers.isEmpty() &&
                     primaryAttacker != null &&
                     primaryAttacker.isWaitingForFight()) {
-                ownDefender = retrieveHostedSoldier();
+                ownDefender = retrieveHostedSoldierForDefense();
                 ownDefender.defendOwnBuilding(this);
             }
 
+            // Get remote defenders
             if (remoteDefenders.isEmpty()) {
                 List<Soldier> potentialDefenders = player.getBuildings().stream()
                         .filter(b -> !b.equals(this) && b.isReady() && b.isMilitaryBuilding())
-                        .filter(b -> b instanceof Headquarter hq && hq.hasAny(PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL)
+                        .filter(b -> (b instanceof Headquarter hq && hq.hasAny(PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL))
                                 || b.getHostedSoldiers().size() > 1)
                         .filter(b -> b.getAttackRadius() >= GameUtils.distanceInGameSteps(position, b.getPosition()))
                         .flatMap(b -> {
                             var sorted = sortSoldiersByPreferredStrength(b.getHostedSoldiers(), player.getDefenseStrength());
-                            return sorted.subList(0, sorted.size() - 1).stream();
+                            return sorted.subList(0, b.getNumberOfSoldiersAvailableForRemoteDefense()).stream();
                         })
                         .collect(toCollection(ArrayList::new));
 
@@ -527,7 +545,7 @@ public class Building implements EndPoint {
                     soldier.returnToStorage();
                 }
 
-                if (isMilitaryBuilding() && getAmount(COIN) > 0 && hostsPromotableSoldiers()) {
+                if (isMilitaryBuilding() && getAmount(COIN) > 0 && hostsPromotableSoldiers() && !isHeadquarter()) {
                     if (countdown.hasReachedZero()) {
                         doPromotion();
                     } else {
@@ -561,6 +579,10 @@ public class Building implements EndPoint {
 
         duration.after("stepTime");
         stats.reportVariableValue(counterName, duration.getFullDuration());
+    }
+
+    int getNumberOfSoldiersAvailableForRemoteDefense() {
+        return Math.max(hostedSoldiers.size() - 1, 0);
     }
 
     public Flag getFlag() {
@@ -662,7 +684,7 @@ public class Building implements EndPoint {
         return new PlanksAndStones(planks, stones);
     }
 
-    private int getConstructionCountdown() {
+    private int getConstructionTime() {
         var sizeAnnotation = getClass().getAnnotation(HouseSize.class);
 
         return switch (sizeAnnotation.size()) {
@@ -741,15 +763,14 @@ public class Building implements EndPoint {
                 continue;
             }
 
-            for (var military : hostedSoldiers) {
-                if (promoted.contains(military)) {
+            for (var soldier : hostedSoldiers) {
+                if (promoted.contains(soldier)) {
                     continue;
                 }
 
-                if (military.getRank() == rank) {
-                    military.promote();
-
-                    promoted.add(military);
+                if (soldier.getRank() == rank) {
+                    soldier.promote();
+                    promoted.add(soldier);
 
                     break;
                 }
@@ -762,13 +783,7 @@ public class Building implements EndPoint {
     }
 
     private boolean hostsPromotableSoldiers() {
-        for (var military : hostedSoldiers) {
-            if (military.getRank() != GENERAL_RANK) {
-                return true;
-            }
-        }
-
-        return false;
+        return hostedSoldiers.stream().anyMatch(soldier -> soldier.getRank() != GENERAL_RANK);
     }
 
     public void disablePromotions() {
@@ -784,11 +799,11 @@ public class Building implements EndPoint {
     }
 
     public void evacuate() {
-        for (var military : hostedSoldiers) {
-            military.returnToStorage();
-
+        hostedSoldiers.forEach(soldier -> {
+            soldier.returnToStorage();
             player.reportSoldierLeftBuilding(this);
-        }
+
+        });
 
         hostedSoldiers.clear();
 
@@ -833,6 +848,8 @@ public class Building implements EndPoint {
     }
 
     public boolean canAttack(Building buildingToAttack) {
+        // TODO: should use hexagon instead of circle
+
         if (isMilitaryBuilding()) {
             double distance = position.distance(buildingToAttack.getPosition());
             return distance < getAttackRadius();
@@ -852,9 +869,11 @@ public class Building implements EndPoint {
         return soldier;
     }
 
-    public Soldier retrieveHostedSoldier() {
+    public Soldier retrieveHostedSoldierForDefense() {
         for (var rank : strengthToRank(player.getDefenseStrength())) {
-            var maybeSoldier = hostedSoldiers.stream().filter(soldier -> soldier.getRank() == rank).findFirst();
+            var maybeSoldier = hostedSoldiers.stream()
+                    .filter(soldier -> soldier.getRank() == rank)
+                    .findFirst();
 
             if (maybeSoldier.isPresent()) {
                 hostedSoldiers.remove(maybeSoldier.get());
@@ -865,15 +884,6 @@ public class Building implements EndPoint {
         }
 
         throw new InvalidGameLogicException("Can't retrieve soldier");
-    }
-
-    Soldier retrieveHostedSoldierWithRank(Rank rank) {
-        var optionalMilitary = hostedSoldiers.stream().filter(soldier -> soldier.getRank() == rank).findFirst();
-
-        hostedSoldiers.remove(optionalMilitary.get());
-        player.reportSoldierLeftBuilding(this);
-
-        return optionalMilitary.get();
     }
 
     public boolean isEvacuated() {
@@ -968,7 +978,7 @@ public class Building implements EndPoint {
     public void capture(Player player) throws InvalidUserActionException {
         setPlayer(player);
 
-        promisedSoldier.clear();
+        promisedSoldiers.clear();
         attackers.clear();
         remoteDefenders.clear();
         ownDefender = null;
@@ -1074,6 +1084,8 @@ public class Building implements EndPoint {
 
         if (getNumberOfHostedSoldiers() > 0) {
             hostedSoldiers.removeFirst();
+
+            // TODO: handle the case where the building is a headquarters
 
             map.getStatisticsManager().soldierDied(player, catapult.getPlayer(), map.getTime());
         } else {
@@ -1256,7 +1268,7 @@ public class Building implements EndPoint {
     }
 
     public int getConstructionProgress() {
-        int fullConstructionTime = getConstructionCountdown();
+        int fullConstructionTime = getConstructionTime();
         int currentConstructionTime = countdown.getCount();
 
         if (currentConstructionTime == fullConstructionTime) {
@@ -1305,7 +1317,7 @@ public class Building implements EndPoint {
 
     public void startConstruction() {
         state = State.UNDER_CONSTRUCTION;
-        countdown.countFrom(getConstructionCountdown());
+        countdown.countFrom(getConstructionTime());
 
         map.reportBuildingUnderConstruction(this);
     }
@@ -1403,27 +1415,16 @@ public class Building implements EndPoint {
     }
 
     public int getNumberOfSoldiersAvailableForNewAttack() {
-        var amount = 0;
-
-        if (isHeadquarter()) {
-            for (var rank : Rank.values()) {
-                amount += getAmount(rank.toMaterial());
-            };
-        } else {
-            amount += getHostedSoldiers().size() - 1;
-        }
-
-        return amount;
+        return getHostedSoldiers().size() - 1;
     }
 
     public List<Soldier> getAvailableAttackersForNewAttack(AttackStrength strength) {
-        var soldiers = new ArrayList<>(getHostedSoldiers());
-        var sortedSoldiers = sortSoldiersByPreferredStrength(soldiers, strength);
+        var soldiersSortedByPreferredStrength = sortSoldiersByPreferredStrength(new ArrayList<>(hostedSoldiers), strength);
 
-        var fullAmount = isHeadquarter() ? sortedSoldiers.size() : sortedSoldiers.size() - 1;
+        var amount = (int) Math.ceil(
+                getNumberOfSoldiersAvailableForNewAttack() * player.getAmountOfSoldiersAvailableForAttack() / 10.0
+        );
 
-        var amount = (int) Math.ceil(fullAmount * player.getAmountOfSoldiersAvailableForAttack() / 10.0);
-
-        return sortedSoldiers.stream().limit(amount).collect(Collectors.toList());
+        return soldiersSortedByPreferredStrength.subList(0, amount);
     }
 }

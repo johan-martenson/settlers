@@ -7,9 +7,9 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Vegetation;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.InvalidUserActionException;
@@ -17,11 +17,7 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.actors.Courier;
-import org.appland.settlers.model.actors.Ship;
 import org.appland.settlers.model.actors.Shipwright;
-import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Shipyard;
@@ -31,10 +27,9 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 /**
@@ -327,7 +322,7 @@ public class TestShipyard {
 
         var shipwright = (Shipwright) shipyard.getWorker();
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, shipwright);
+        Utils.fastForwardUntilWorkerCarriesCargo(shipwright);
 
         assertNotNull(shipwright.getCargo());
         assertEquals(shipwright.getCargo().getMaterial(), BOAT);
@@ -498,7 +493,7 @@ public class TestShipyard {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the spot and start to build a ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -632,7 +627,7 @@ public class TestShipyard {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -656,7 +651,7 @@ public class TestShipyard {
         assertEquals(shipwright.getTarget(), shipyard.getPosition());
         assertTrue(shipwright.getPlannedPath().contains(shipyard.getFlag().getPosition()));
 
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isInsideBuilding());
@@ -712,7 +707,7 @@ public class TestShipyard {
         assertFalse(shipwright.isInsideBuilding());
 
         // Wait for the shipwright to reach the position where the new ship will be built
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipwright.getTarget());
 
         // Verify that the shipwright builds a ship given enough resources
         assertTrue(shipwright.isHammering());
@@ -799,7 +794,7 @@ public class TestShipyard {
         assertFalse(shipwright.isInsideBuilding());
 
         // Wait for the shipwright to reach the position where the new ship will be built
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipwright.getTarget());
 
         // Wait for the shipwright to build a ship
         assertTrue(shipwright.isHammering());
@@ -880,7 +875,7 @@ public class TestShipyard {
         assertFalse(shipwright.isInsideBuilding());
 
         // Wait for the shipwright to reach the position where the new ship will be built
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipwright.getTarget());
 
         // Wait for the shipwright to build a ship
         assertTrue(shipwright.isHammering());
@@ -917,7 +912,7 @@ public class TestShipyard {
         assertTrue(GameUtils.distanceInGameSteps(point4, shipyard.getPosition()) < 6);
         assertTrue(GameUtils.isAll(map.getSurroundingTiles(point4), Vegetation.WATER));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point4);
+        Utils.fastForwardUntilWorkerReachesPoint(ship, point4);
 
         Utils.verifyWorkersDoNotMove(map, ship);
     }
@@ -972,7 +967,7 @@ public class TestShipyard {
         assertFalse(shipwright.isInsideBuilding());
 
         // Wait for the shipwright to reach the position where the new ship will be built
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipwright.getTarget());
 
         // Wait for the shipwright to start building a ship
         assertTrue(shipwright.isHammering());
@@ -1126,7 +1121,7 @@ public class TestShipyard {
         assertFalse(shipwright.isInsideBuilding());
 
         // Wait for the shipwright to reach the position where the new ship will be built
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipwright.getTarget());
 
         // Wait for the shipwright to start building a ship
         assertTrue(shipwright.isHammering());
@@ -1189,7 +1184,7 @@ public class TestShipyard {
         assertFalse(shipwright.isInsideBuilding());
 
         // Wait for the shipwright to reach the position where the new ship will be built
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipwright.getTarget());
 
         // Wait for the shipwright to start building a ship
         assertTrue(shipwright.isHammering());
@@ -1252,7 +1247,7 @@ public class TestShipyard {
         assertFalse(shipwright.isInsideBuilding());
 
         // Wait for the shipwright to reach the position where the new ship will be built
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipwright.getTarget());
 
         // Wait for the shipwright to start building a ship
         assertTrue(shipwright.isHammering());
@@ -1341,7 +1336,7 @@ public class TestShipyard {
 
         var amount = headquarter0.getAmount(SHIPWRIGHT);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, headquarter0.getPosition());
 
         // Verify that the shipwright is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(SHIPWRIGHT), amount + 1);
@@ -1680,7 +1675,7 @@ public class TestShipyard {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -1759,7 +1754,7 @@ public class TestShipyard {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -1831,7 +1826,7 @@ public class TestShipyard {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -1910,7 +1905,7 @@ public class TestShipyard {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -1984,7 +1979,7 @@ public class TestShipyard {
         assertTrue(map.isAvailableFlagPoint(player0, point));
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -2047,7 +2042,7 @@ public class TestShipyard {
         assertNotNull(shipwright);
         assertEquals(shipwright.getTarget(), shipyard0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -2058,14 +2053,14 @@ public class TestShipyard {
         map.removeRoad(road1);
 
         // Verify that the shipwright continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, flag0.getPosition());
 
         assertEquals(shipwright.getPosition(), flag0.getPosition());
 
         // Verify that the shipwright returns to the headquarter when it reaches the flag
         assertEquals(shipwright.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, headquarter0.getPosition());
     }
 
     @Test
@@ -2100,7 +2095,7 @@ public class TestShipyard {
         // Wait for a shipwright to start walking towards the shipyard
         var shipwright = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -2111,14 +2106,14 @@ public class TestShipyard {
         map.removeRoad(road0);
 
         // Verify that the shipwright continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, flag0.getPosition());
 
         assertEquals(shipwright.getPosition(), flag0.getPosition());
 
         // Verify that the shipwright continues to the final flag
         assertEquals(shipwright.getTarget(), shipyard0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipyard0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipyard0.getFlag().getPosition());
 
         // Verify that the shipwright goes back to the headquarter
         assertEquals(shipwright.getTarget(), shipyard0.getPosition());
@@ -2160,7 +2155,7 @@ public class TestShipyard {
         assertEquals(shipwright.getTarget(), shipyard0.getPosition());
 
         // Wait for the shipwright to reach the first flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, flag0.getPosition());
 
         map.stepTime();
 
@@ -2171,7 +2166,7 @@ public class TestShipyard {
         shipyard0.tearDown();
 
         // Verify that the shipwright continues walking to the next flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipyard0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipyard0.getFlag().getPosition());
 
         assertEquals(shipwright.getPosition(), shipyard0.getFlag().getPosition());
 
@@ -2208,7 +2203,7 @@ public class TestShipyard {
         // Wait for the shipwright to get to the shipyard
         assertEquals(shipwright.getTarget(), shipyard0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipyard0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipyard0.getPosition());
 
         // Place a second storage closer to the shipyard
         var point2 = new Point(13, 13);
@@ -2231,7 +2226,7 @@ public class TestShipyard {
 
         var amount = storehouse0.getAmount(SHIPWRIGHT);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, storehouse0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, storehouse0.getPosition());
 
         // Verify that the shipwright is stored correctly in the headquarter
         assertEquals(storehouse0.getAmount(SHIPWRIGHT), amount + 1);
@@ -2266,7 +2261,7 @@ public class TestShipyard {
         // Wait for the shipwright to reach the shipyard
         assertEquals(shipwright.getTarget(), shipyard0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipyard0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipyard0.getPosition());
 
         // Place a second storage closer to the shipyard
         var point2 = new Point(13, 13);
@@ -2292,7 +2287,7 @@ public class TestShipyard {
 
         var amount = headquarter0.getAmount(SHIPWRIGHT);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, headquarter0.getPosition());
 
         // Verify that the shipwright is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(SHIPWRIGHT), amount + 1);
@@ -2327,7 +2322,7 @@ public class TestShipyard {
         // Wait for the shipwright to reach the shipyard
         assertEquals(shipwright.getTarget(), shipyard0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipyard0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipyard0.getPosition());
 
         // Place a second storage closer to the shipyard
         var point2 = new Point(13, 13);
@@ -2357,7 +2352,7 @@ public class TestShipyard {
 
         var amount = headquarter0.getAmount(SHIPWRIGHT);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, headquarter0.getPosition());
 
         // Verify that the shipwright is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(SHIPWRIGHT), amount + 1);
@@ -2392,7 +2387,7 @@ public class TestShipyard {
         // Wait for the shipwright to reach the shipyard
         assertEquals(shipwright.getTarget(), shipyard0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipyard0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipyard0.getPosition());
 
         // Place a second storage closer to the shipyard
         var point2 = new Point(13, 13);
@@ -2410,7 +2405,7 @@ public class TestShipyard {
 
         var amount = headquarter0.getAmount(SHIPWRIGHT);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, headquarter0.getPosition());
 
         // Verify that the shipwright is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(SHIPWRIGHT), amount + 1);
@@ -2444,7 +2439,7 @@ public class TestShipyard {
         assertFalse(shipwright.isInsideBuilding());
 
         // Wait for the worker to get to the building's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipyard0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipyard0.getFlag().getPosition());
 
         // Tear down the building
         shipyard0.tearDown();
@@ -2452,11 +2447,11 @@ public class TestShipyard {
         // Verify that the worker goes to the building and then returns to the headquarter instead of entering
         assertEquals(shipwright.getTarget(), shipyard0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipyard0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipyard0.getPosition());
 
         assertEquals(shipwright.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, headquarter0.getPosition());
     }
 
     @Test
@@ -2520,7 +2515,7 @@ public class TestShipyard {
         // Wait for the shipwright to reach the shipyard
         assertEquals(shipwright.getTarget(), shipyard0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipyard0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipyard0.getPosition());
 
         // Make the shipyard create some wheat with full resources available
         for (int i = 0; i < 3000; i++) {
@@ -2569,7 +2564,7 @@ public class TestShipyard {
         // Wait for the shipwright to reach the shipyard
         assertEquals(shipwright.getTarget(), shipyard0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipyard0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipyard0.getPosition());
 
         // Wait for the shipyard to reach 100% productivity
         for (int i = 0; i < 3000; i++) {
@@ -2657,7 +2652,7 @@ public class TestShipyard {
         // Wait for the shipwright to reach the shipyard
         assertEquals(shipwright.getTarget(), shipyard0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipyard0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipyard0.getPosition());
 
         // Verify that the shipyard can produce
         assertTrue(shipyard0.canProduce());
@@ -2711,7 +2706,7 @@ public class TestShipyard {
         Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
 
         // Fill the flag with eight cargos
-        Utils.placeCargos(map, FLOUR, 8, shipyard.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, shipyard.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2734,7 +2729,7 @@ public class TestShipyard {
         var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2750,7 +2745,7 @@ public class TestShipyard {
         assertEquals(shipyard.getFlag().getStackedCargo().size(), 7);
 
         // Verify that the worker produces a boat cargo and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, shipyard.getWorker(), BOAT);
+        Utils.fastForwardUntilWorkerCarriesCargo(shipyard.getWorker(), BOAT);
     }
 
     // TODO: test that boat is delivered to water way directly if it's closer than the nearest storehouse
@@ -2799,13 +2794,13 @@ public class TestShipyard {
         // Wait for the courier on the road between the store house and the shipyard hut to have a boat cargo
         Utils.deliverCargos(shipyard, PLANK, 3);
 
-        Utils.waitForFlagToGetStackedCargo(map, shipyard.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(shipyard.getFlag(), 1);
 
         assertEquals(shipyard.getFlag().getStackedCargo().getFirst().getMaterial(), BOAT);
         assertEquals(shipyard.getFlag().getStackedCargo().getFirst().getTarget(), headquarter);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that the courier delivers the cargo to the store house's flag so that it can continue to the headquarters
         assertEquals(headquarter.getAmount(BOAT), 0);
@@ -2813,7 +2808,7 @@ public class TestShipyard {
         assertFalse(storehouse.needsMaterial(BOAT));
         assertTrue(storehouse.isUnderConstruction());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
         assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(BOAT));
@@ -2847,7 +2842,7 @@ public class TestShipyard {
         assertFalse(shipyard.isProducingShips());
 
         // Fill the flag with cargos
-        Utils.placeCargos(map, FLOUR, 8, shipyard.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, shipyard.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2867,7 +2862,7 @@ public class TestShipyard {
         var road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2888,7 +2883,7 @@ public class TestShipyard {
         map.removeRoad(road1);
 
         // The worker produces a cargo and puts it on the flag
-        Utils.waitForWorkerToSetTarget(map, shipyard.getWorker(), shipyard.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(shipyard.getWorker(), shipyard.getFlag().getPosition());
 
         assertNotNull(shipyard.getWorker().getCargo());
         assertEquals(shipyard.getWorker().getCargo().getMaterial(), BOAT);
@@ -2896,7 +2891,7 @@ public class TestShipyard {
         // Wait for the worker to put the cargo on the flag
         assertEquals(shipyard.getWorker().getTarget(), shipyard.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipyard.getWorker(), shipyard.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipyard.getWorker(), shipyard.getFlag().getPosition());
 
         assertEquals(shipyard.getFlag().getStackedCargo().size(), 8);
 
@@ -2943,9 +2938,9 @@ public class TestShipyard {
         headquarter0.blockDeliveryOfMaterial(BOAT);
 
         // Verify that the shipyard puts eight boats on the flag and then stops
-        Utils.waitForFlagToGetStackedCargo(map, shipyard0.getFlag(), 8);
+        Utils.waitForFlagToGetStackedCargo(shipyard0.getFlag(), 8);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright0, shipyard0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright0, shipyard0.getPosition());
 
         for (int i = 0; i < 300; i++) {
             map.stepTime();
@@ -3009,7 +3004,7 @@ public class TestShipyard {
 
         assertFalse(shipwright0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright0, shipyard0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright0, shipyard0.getFlag().getPosition());
 
         assertEquals(shipwright0.getTarget(), storehouse.getPosition());
 
@@ -3076,11 +3071,11 @@ public class TestShipyard {
 
         assertFalse(shipwright0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright0, shipyard0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright0, shipyard0.getFlag().getPosition());
 
         assertEquals(shipwright0.getTarget(), storehouse.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright0, storehouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright0, storehouse.getPosition());
 
         assertFalse(map.getWorkers().contains(shipwright0));
     }
@@ -3111,12 +3106,12 @@ public class TestShipyard {
             assertEquals(worker.getPosition(), headquarter0.getPosition());
             assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
             assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
             assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
             assertFalse(map.getWorkers().contains(worker));
         }
@@ -3145,25 +3140,16 @@ public class TestShipyard {
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
-
-        for (int i = 0; i < 100; i++) {
-            assertTrue(worker.isDead());
-            assertTrue(map.getWorkers().contains(worker));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(worker));
     }
 
     @Test
@@ -3203,7 +3189,7 @@ public class TestShipyard {
 
         assertEquals(worker.getPosition(), shipyard0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, shipyard0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, shipyard0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), shipyard0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
@@ -3211,18 +3197,36 @@ public class TestShipyard {
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
 
-        for (int i = 0; i < 100; i++) {
+        // Verify that the skeleton decays
+        for (int i = 0; i < 6000; i++) {
             assertTrue(worker.isDead());
             assertTrue(map.getWorkers().contains(worker));
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
+
+            map.stepTime();
+        }
+
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(DecorationType.HUMAN_SKELETON_DECAYED, map.getDecorationAtPoint(worker.getPosition()));
+
+        // Verify that the skeleton disappears
+        for (int i = 0; i < 4000; i++) {
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
 
             map.stepTime();
         }
 
         assertFalse(map.getWorkers().contains(worker));
+        assertFalse(map.isDecoratedAtPoint(worker.getPosition()));
+        assertNotEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
     }
 
     @Test
@@ -3254,7 +3258,7 @@ public class TestShipyard {
         var shipwright = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
 
         // Wait for the shipwright to go past the headquarter's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -3265,7 +3269,7 @@ public class TestShipyard {
 
         shipyard0.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipyard0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipyard0.getFlag().getPosition());
 
         assertEquals(shipwright.getPosition(), shipyard0.getFlag().getPosition());
         assertNotEquals(shipwright.getTarget(), headquarter0.getPosition());
@@ -3273,17 +3277,8 @@ public class TestShipyard {
         assertNull(shipyard0.getWorker());
         assertNotNull(shipwright.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(shipwright, shipwright.getTarget());
 
-        var point = shipwright.getPosition();
-        for (int i = 0; i < 100; i++) {
-            assertTrue(shipwright.isDead());
-            assertEquals(shipwright.getPosition(), point);
-            assertTrue(map.getWorkers().contains(shipwright));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(shipwright));
+        assertTrue(shipwright.isDead());
     }
 }

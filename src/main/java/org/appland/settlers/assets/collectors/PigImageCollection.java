@@ -13,12 +13,14 @@ import java.util.List;
 import java.util.Map;
 
 public class PigImageCollection {
-    private final Map<Pig.PigAction, List<Bitmap>> animations = new EnumMap<>(Pig.PigAction.class);
+    private final Map<Pig.PigAge, Map<Pig.PigAction, List<Bitmap>>> animations = new EnumMap<>(Pig.PigAge.class);
+
     private Bitmap adultShadow;
     private Bitmap pigletShadow;
 
-    public void addAnimation(Pig.PigAction action, List<Bitmap> images) {
+    public void addAnimation(Pig.PigAge age, Pig.PigAction action, List<Bitmap> images) {
         animations
+                .computeIfAbsent(age, k -> new EnumMap<>(Pig.PigAction.class))
                 .computeIfAbsent(action, k -> new ArrayList<>())
                 .addAll(images);
     }
@@ -31,20 +33,26 @@ public class PigImageCollection {
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
         var imageBoard = new ImageBoard();
 
-        animations.forEach((action, images) -> imageBoard.placeImageSeriesBottom(
-                ImageTransformer.normalizeImageSeries(images),
-                "animations",
-                action.name().toLowerCase()));
+        animations.forEach((age, actions) ->
+                actions.forEach((action, images) ->
+                        imageBoard.placeImageSeriesBottom(
+                                ImageTransformer.normalizeImageSeries(images),
+                                "animations",
+                                age.name().toUpperCase(),
+                                action.name().toUpperCase()
+                        )
+                )
+        );
 
         if (adultShadow != null) {
             imageBoard.placeImagesAsRow(List.of(
-                    ImageBoard.makeImagePathPair(adultShadow, "shadows", "adult")
+                    ImageBoard.makeImagePathPair(adultShadow, "shadows", "ADULT")
             ));
         }
 
         if (pigletShadow != null) {
             imageBoard.placeImagesAsRow(List.of(
-                    ImageBoard.makeImagePathPair(pigletShadow, "shadows", "piglet")
+                    ImageBoard.makeImagePathPair(pigletShadow, "shadows", "PIGLET")
             ));
         }
 

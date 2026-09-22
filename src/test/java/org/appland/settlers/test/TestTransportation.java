@@ -31,7 +31,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 public class TestTransportation {
@@ -343,19 +343,19 @@ public class TestTransportation {
 // [(2, 18), (4, 18), (6, 18), (8, 18), (10, 18), (11, 17), (12, 16), (13, 15), (14, 14), (12, 14), (11, 15), (10, 16)]
         assertEquals(forester.getPosition(), start);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, point1);
+        Utils.fastForwardUntilWorkerReachesPoint(forester, point1);
         assertEquals(forester.getPosition(), point1);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, point1.right());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, point1.right());
         assertEquals(forester.getPosition(), point1.right());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, point2);
+        Utils.fastForwardUntilWorkerReachesPoint(forester, point2);
         assertEquals(forester.getPosition(), point2);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, point9);
+        Utils.fastForwardUntilWorkerReachesPoint(forester, point9);
         assertEquals(forester.getPosition(), point9);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, forester, foresterHut.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(forester, foresterHut.getPosition());
         assertTrue(forester.isExactlyAtPoint());
         assertEquals(forester.getPosition(), foresterHut.getPosition());
     }
@@ -453,7 +453,7 @@ public class TestTransportation {
 
         assertFalse(mason.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, mason, mason.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(mason, mason.getTarget());
 
         assertTrue(mason.isGettingStone());
 
@@ -461,7 +461,7 @@ public class TestTransportation {
 
         assertEquals(mason.getTarget(), quarry0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, mason, quarry0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(mason, quarry0.getFlag().getPosition());
 
         assertFalse(quarry0.getFlag().getStackedCargo().isEmpty());
 
@@ -530,13 +530,13 @@ public class TestTransportation {
         assertEquals(mdlToEndCr.getTarget(), endFlag.getPosition());
 
         // Let the courier walk to the cargo at end flag and picks up the cargo
-        Utils.fastForwardUntilWorkerReachesPoint(map, mdlToEndCr, endFlag.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(mdlToEndCr, endFlag.getPosition());
 
         assertEquals(mdlToEndCr.getCargo(), cargo);
         assertEquals(mdlToEndCr.getTarget(), middleFlag.getPosition());
 
         // Let the courier walk to
-        Utils.fastForwardUntilWorkerReachesPoint(map, mdlToEndCr, point1);
+        Utils.fastForwardUntilWorkerReachesPoint(mdlToEndCr, point1);
 
         assertEquals(mdlToEndCr.getPosition(), point1);
 
@@ -553,12 +553,12 @@ public class TestTransportation {
 
         assertEquals(hqToMdlCr.getTarget(), point1);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hqToMdlCr, point1);
+        Utils.fastForwardUntilWorkerReachesPoint(hqToMdlCr, point1);
 
         // Courier has picked up cargo
         assertEquals(hqToMdlCr.getCargo(), cargo);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hqToMdlCr, point0);
+        Utils.fastForwardUntilWorkerReachesPoint(hqToMdlCr, point0);
 
         assertTrue(hqToMdlCr.isAt(storehouse.getPosition()));
         assertNull(hqToMdlCr.getCargo());
@@ -601,7 +601,7 @@ public class TestTransportation {
             }
         }
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertFalse(hqToMiddleRoad.needsCourier());
         assertNotNull(hqToMiddleRoad.getCourier());
@@ -658,7 +658,7 @@ public class TestTransportation {
         var road = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), barracks0.getFlag());
 
         // Occupy the road
-        var courier = Utils.occupyRoad(road, map);
+        var courier = Utils.occupyRoad(road);
 
         // Construct barracks
         Utils.constructHouse(barracks0);
@@ -687,7 +687,7 @@ public class TestTransportation {
         assertEquals(military.getTarget(), barracks0.getPosition());
 
         // Verify that the military reaches the barracks
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, barracks0.getPosition());
 
         assertEquals(military.getPosition(), barracks0.getPosition());
         assertTrue(military.isArrived());
@@ -727,7 +727,7 @@ public class TestTransportation {
         courier.assignToRoad(road0);
 
         // Wait for the courier to rest at the middle of the road
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         // Place cargo to be delivered to the sawmill at the start flag
         var cargo = new Cargo(WOOD, map);
@@ -748,7 +748,7 @@ public class TestTransportation {
         assertEquals(courier.getTarget(), flag0.getPosition());
 
         // Fast forward until the courier picks up the cargo
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point2);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, point2);
 
         assertTrue(courier.isAt(point2));
         assertEquals(courier.getCargo(), cargo);
@@ -795,7 +795,7 @@ public class TestTransportation {
         secondCourier.assignToRoad(road1);
 
         // Let the couriers reach their roads and get assigned
-        Utils.fastForwardUntilWorkersReachTarget(map, courier, secondCourier);
+        Utils.fastForwardUntilWorkersReachTarget(courier, secondCourier);
 
         var cargo = new Cargo(WOOD, map);
         cargo.setPosition(point0);
@@ -818,7 +818,7 @@ public class TestTransportation {
         assertTrue(cargo.isPickupPromised());
 
         // Let the courier reach the cargo and pick it up
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point0);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, point0);
 
         assertEquals(courier.getCargo(), cargo);
         assertEquals(courier.getTarget(), flag1.getPosition());
@@ -827,7 +827,7 @@ public class TestTransportation {
         assertFalse(cargo.isPickupPromised());
 
         // Fast forward until the courier reaches the other flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point2);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, point2);
 
         assertTrue(courier.isAt(point2));
         assertNull(courier.getCargo());
@@ -878,7 +878,7 @@ public class TestTransportation {
         secondCourier.assignToRoad(road1);
 
         // Let the couriers reach their target road and become idle
-        Utils.fastForwardUntilWorkersReachTarget(map, courier, secondCourier);
+        Utils.fastForwardUntilWorkersReachTarget(courier, secondCourier);
 
         // Place a cargo on the first flag
         var cargo = new Cargo(WOOD, map);
@@ -902,7 +902,7 @@ public class TestTransportation {
         assertFalse(flag0.getStackedCargo().isEmpty());
 
         // Let the courier reach and pick up the cargo
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point2);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, point2);
 
         assertEquals(courier.getCargo(), cargo);
         assertTrue(flag0.getStackedCargo().isEmpty());
@@ -950,7 +950,7 @@ public class TestTransportation {
         Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         // Let the couriers reach their target road and become idle
-        Utils.fastForwardUntilWorkersReachTarget(map, courier, courier2);
+        Utils.fastForwardUntilWorkersReachTarget(courier, courier2);
 
         // Place a cargo on the headquarter's flag
         var cargo = new Cargo(PLANK, map);
@@ -966,7 +966,7 @@ public class TestTransportation {
         assertFalse(sawmill.needsMaterial(PLANK));
 
         // Wait for the first courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier, cargo);
 
         assertEquals(courier.getTarget(), flag0.getPosition());
         assertFalse(flag0.getStackedCargo().contains(cargo));
@@ -976,10 +976,10 @@ public class TestTransportation {
         assertFalse(map.areFlagsOrBuildingsConnectedViaRoads(flag0, sawmill));
 
         // Verify that the cargo is placed at the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, flag0.getPosition());
 
         // Verify that the cargo is picked up and about to be returned to the headquarter
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier, cargo);
 
         assertEquals(cargo.getTarget(), headquarter0);
 
@@ -1025,7 +1025,7 @@ public class TestTransportation {
         Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         // Let the courier reach its target road and become idle
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         // Place a cargo on the headquarter's flag
         var cargo = new Cargo(STONE, map);
@@ -1036,7 +1036,7 @@ public class TestTransportation {
         catapult.promiseDelivery(STONE);
 
         // Wait for the courier to pick up the stone
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, STONE);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier, STONE);
 
         // Let the courier start walking
         map.stepTime();
@@ -1052,13 +1052,13 @@ public class TestTransportation {
         assertFalse(courier.getCargo().getTarget().isReady());
 
         // Verify that the courier walks to the catapult's flag and then returns with the cargo
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, catapult.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, catapult.getFlag().getPosition());
 
         assertEquals(courier.getTarget(), headquarter0.getPosition());
         assertNotNull(courier.getCargo());
 
         // Wait for the first courier to go back to the headquarter
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
         // Verify that the courier has put the stone back on the flag
         assertNull(courier.getCargo());
@@ -1108,27 +1108,27 @@ public class TestTransportation {
         var courier3 = road2.getCourier();
         var courier4 = road3.getCourier();
 
-        Utils.waitForCouriersToBeIdle(map, courier, courier3, courier4);
+        Utils.waitForCouriersToBeIdle(courier, courier3, courier4);
 
         // Place a cargo on the headquarter's flag for the sawmill
         var cargo = Utils.placeCargo(map, WOOD, headquarter0.getFlag(), sawmill);
 
         // Wait for the first courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier, cargo);
 
         // Remove the second road
         map.removeRoad(road1);
 
         // Wait for the courier to place the cargo at the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, flag0.getPosition());
 
         // Verify that the first courier picks up the cargo again
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier, cargo);
 
         // Wait for the courier to leave the cargo at the headquarter's flag
         assertEquals(courier.getTarget(), headquarter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getFlag().getPosition());
 
         assertTrue(headquarter0.getFlag().getStackedCargo().contains(cargo));
         assertNull(courier.getCargo());
@@ -1136,22 +1136,22 @@ public class TestTransportation {
         // Verify that the third courier picks up the cargo
         assertEquals(courier3.getTarget(), headquarter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier3, cargo);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier3, cargo);
 
         // Verify that the third courier delivers the cargo to the flag
         assertEquals(courier3.getTarget(), flag1.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier3, flag1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier3, flag1.getPosition());
 
         assertNull(courier3.getCargo());
 
         // Wait for the fourth courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier4, cargo);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier4, cargo);
 
         // Verify that the fourth courier delivers the cargo to the sawmill
         assertEquals(courier4.getTarget(), sawmill.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier4, sawmill.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier4, sawmill.getPosition());
 
         assertNull(courier4.getCargo());
     }
@@ -1210,7 +1210,7 @@ public class TestTransportation {
         sawmill.promiseDelivery(PLANK);
 
         // Wait for the first courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier, cargo);
 
         // Add a shortcut from the second flag to the sawmill
         var road3 = map.placeAutoSelectedRoad(player0, flag0, sawmill.getFlag());
@@ -1224,14 +1224,14 @@ public class TestTransportation {
         // Wait for the first courier to reach the second flag
         assertEquals(courier.getTarget(), flag0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, flag0.getPosition());
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier4, cargo);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier4, cargo);
 
         // Verify that the third courier delivers the cargo to the sawmill
         assertEquals(courier4.getTarget(), sawmill.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier4, sawmill.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier4, sawmill.getPosition());
 
         assertNull(courier4.getCargo());
     }
@@ -1504,7 +1504,7 @@ public class TestTransportation {
         assertTrue(cargo.isPickupPromised());
 
         // Let the courier reach the cargo and pick it up
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), point0);
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), point0);
 
         assertEquals(road0.getCourier().getCargo(), cargo);
         assertEquals(road0.getCourier().getTarget(), flag1.getPosition());
@@ -1519,13 +1519,13 @@ public class TestTransportation {
         var road3 = map.placeAutoSelectedRoad(player0, flag0, sawmill.getFlag());
 
         // Occupy the new longer road
-        Utils.occupyRoad(road3, map);
+        Utils.occupyRoad(road3);
 
         // Remove the final part of the shortest way so the only option is the long way
         map.removeRoad(road2);
 
         // Let the courier get to the second flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), flag1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), flag1.getPosition());
 
         // Verify that the cargo goes back the long way and does not continue the short but impossible way
         for (int i = 0; i < 1000; i++) {
@@ -1544,7 +1544,7 @@ public class TestTransportation {
         assertEquals(cargo, road0.getCourier().getCargo());
         assertEquals(road0.getCourier().getTarget(), flag0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), flag0.getPosition());
 
         assertTrue(flag0.getStackedCargo().contains(cargo));
 
@@ -1564,6 +1564,6 @@ public class TestTransportation {
         assertEquals(cargo, road3.getCourier().getCargo());
         assertEquals(road3.getCourier().getTarget(), sawmill.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road3.getCourier(), sawmill.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road3.getCourier(), sawmill.getFlag().getPosition());
     }
 }

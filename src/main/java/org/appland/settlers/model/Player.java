@@ -48,6 +48,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -329,7 +330,6 @@ public class Player {
 
         for (var building : eligibleBuildings) {
             var availableAttackersFromBuilding = building.getAvailableAttackersForNewAttack(strength);
-
             availableAttackers.addAll(availableAttackersFromBuilding);
         }
 
@@ -819,7 +819,7 @@ public class Player {
                 workersWithNewTargets, changedBorders, newStones, newMessages, promotedRoads, changedFlags,
                 removedDeadTrees, harvestedCrops, newShips, finishedShips, shipsWithNewTargets,
                 removedDecorations, upgradedBuildings, changedAvailableConstruction, toolQuotasChanged, newWorkersOutside,
-                newFallingTrees) &&
+                newFallingTrees, readMessages) &&
             GameUtils.allMapsEmpty(workersWithStartedActions, newDecorations) &&
             !transportPriorityChanged) {
             return;
@@ -1491,7 +1491,6 @@ public class Player {
 
         // Does this soldier affect the number of available attackers in another building?
         if (building.isMilitaryBuilding() && building.getHostedSoldiers().size() > 1) {
-
             for (var monitoredObject : detailedMonitoring) {
                 if (monitoredObject instanceof Building monitoredBuilding) {
                     if (!monitoredBuilding.isMilitaryBuilding()) {
@@ -1564,8 +1563,11 @@ public class Player {
 
     public void reportSoldierLeftBuilding(Building building) {
 
-        // Does this soldier affect the number of available attackers in another building?
-        if (building.isMilitaryBuilding() && !building.getHostedSoldiers().isEmpty()) {
+        // Inventory changed
+        if (detailedMonitoring.contains(building)) {
+            changedBuildings.add(building);
+        // Did the number of available attackers change for any building with detailed monitoring?
+        } else if (building.isMilitaryBuilding() && !building.getHostedSoldiers().isEmpty()) {
             for (var monitoredObject : detailedMonitoring) {
                 if (monitoredObject instanceof Building monitoredBuilding) {
                     if (!monitoredBuilding.isMilitaryBuilding()) {
@@ -1702,6 +1704,12 @@ public class Player {
         var previousAmount = shipyardPlankQuota;
 
         shipyardPlankQuota = amount;
+
+        map.getBuildings().stream()
+                .filter(b -> Objects.equals(b.getPlayer(), this))
+                .filter(b -> b instanceof Storehouse storehouse)
+                .map(Storehouse.class::cast)
+                .forEach(Storehouse::resetPlankAllocationCycle);
 
         if (previousAmount != amount) {
             playerChangeListeners.forEach(listener -> listener.onPlayerChanged(this));

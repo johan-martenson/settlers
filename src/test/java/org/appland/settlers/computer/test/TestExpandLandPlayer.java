@@ -15,6 +15,7 @@ import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.actors.Rank;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Barracks;
@@ -29,7 +30,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static org.appland.settlers.computer.GamePlayUtils.getDistanceToOwnBorder;
+import static org.appland.settlers.computer.util.GamePlay.getDistanceToOwnBorder;
 import static org.appland.settlers.model.Material.*;
 import static org.junit.Assert.*;
 
@@ -448,7 +449,7 @@ public class TestExpandLandPlayer {
         Utils.constructHouse(watchTower);
 
         // Occupy player 1's barracks
-        Utils.occupyMilitaryBuilding(Soldier.Rank.GENERAL_RANK, 6, watchTower);
+        Utils.occupyMilitaryBuilding(Rank.GENERAL_RANK, 6, watchTower);
 
         // Give the player extra building materials and militaries
         Utils.adjustInventoryTo(headquarter0, PLANK, 60);
@@ -512,7 +513,7 @@ public class TestExpandLandPlayer {
         assertNotNull(mainAttacker);
         assertEquals(mainAttacker.getTarget(), barracksToAttack.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, mainAttacker, barracksToAttack.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(mainAttacker, barracksToAttack.getFlag().getPosition());
 
         Utils.waitForBuildingToGetCapturedByPlayer(barracksToAttack, player1);
 

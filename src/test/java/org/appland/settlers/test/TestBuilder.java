@@ -1,6 +1,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -122,7 +123,7 @@ public class TestBuilder {
         map.removeRoad(road0);
 
         // Wait for the builder to go the headquarter's flag and start going back again
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder0, headquarter0.getFlag().getPosition());
 
         assertEquals(builder0.getTarget(), headquarter0.getPosition());
 
@@ -139,7 +140,7 @@ public class TestBuilder {
 
         assertEquals(builder1.getTarget(), woodcutter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder1, woodcutter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder1, woodcutter0.getPosition());
 
         assertEquals(builder1, woodcutter0.getBuilder());
     }
@@ -295,7 +296,7 @@ public class TestBuilder {
 
         assertEquals(builder0.getTarget(), woodcutter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, woodcutter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder0, woodcutter0.getPosition());
 
         // Verify that the building gets built
         Utils.fastForward(100, map);
@@ -366,14 +367,14 @@ public class TestBuilder {
         assertEquals(builder0.getPosition(), woodcutter0.getPosition());
         assertFalse(builder0.isHammering());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, woodcutter0.getPosition().downLeft()); // 20 (not taking direct path)
+        Utils.fastForwardUntilWorkerReachesPoint(builder0, woodcutter0.getPosition().downLeft()); // 20 (not taking direct path)
 
         Utils.verifyBuilderHammersInPlaceForDuration(map, builder0, 20); // 20
 
         assertEquals(builder0.getTarget(), woodcutter0.getPosition().downLeft().left());
         assertFalse(builder0.isHammering());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, woodcutter0.getPosition().downLeft().left()); // 10
+        Utils.fastForwardUntilWorkerReachesPoint(builder0, woodcutter0.getPosition().downLeft().left()); // 10
 
         Utils.verifyBuilderHammersInPlaceForDuration(map, builder0, 20); // 20
 
@@ -381,7 +382,7 @@ public class TestBuilder {
         assertFalse(builder0.isHammering());
         assertFalse(woodcutter0.isReady());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, woodcutter0.getPosition().upRight()); // 30
+        Utils.fastForwardUntilWorkerReachesPoint(builder0, woodcutter0.getPosition().upRight()); // 30
 
         map.stepTime();
 
@@ -455,20 +456,20 @@ public class TestBuilder {
 
         // Give the builder a chance to complete an ongoing walk first
         if (!builder0.getTarget().equals(headquarter0.getPosition())) {
-            Utils.fastForwardUntilWorkerReachesPoint(map, builder0, builder0.getTarget());
+            Utils.fastForwardUntilWorkerReachesPoint(builder0, builder0.getTarget());
         }
 
         // Verify that the builder goes back to the headquarter
         if (!builder0.getPosition().equals(woodcutter0.getFlag().getPosition())) {
             assertEquals(builder0.getTarget(), woodcutter0.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, builder0, woodcutter0.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(builder0, woodcutter0.getFlag().getPosition());
         }
 
         assertEquals(builder0.getPosition(), woodcutter0.getFlag().getPosition());
         assertEquals(builder0.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder0, headquarter0.getPosition());
     }
 
     @Test
@@ -535,14 +536,14 @@ public class TestBuilder {
 
         // Give the builder a chance to complete an ongoing walk first
         if (!builder0.getTarget().equals(headquarter0.getPosition())) {
-            Utils.fastForwardUntilWorkerReachesPoint(map, builder0, builder0.getTarget());
+            Utils.fastForwardUntilWorkerReachesPoint(builder0, builder0.getTarget());
         }
 
         // Verify that the builder goes back to the headquarter
         if (!builder0.getPosition().equals(woodcutter0.getFlag().getPosition())) {
             assertEquals(builder0.getTarget(), woodcutter0.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, builder0, woodcutter0.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(builder0, woodcutter0.getFlag().getPosition());
         }
 
         assertEquals(builder0.getPosition(), woodcutter0.getFlag().getPosition());
@@ -550,7 +551,7 @@ public class TestBuilder {
 
         var amountBuilders = headquarter0.getAmount(Material.BUILDER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder0, headquarter0.getPosition());
 
         assertEquals(headquarter0.getAmount(Material.BUILDER), amountBuilders + 1);
         assertFalse(map.getWorkers().contains(builder0));
@@ -581,7 +582,7 @@ public class TestBuilder {
         Utils.waitForBuildingToBeConstructed(storehouse);
 
         // Wait for the builder of the storehouse to go back to the headquarter
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, storehouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder0, storehouse.getPosition());
 
         assertFalse(map.getWorkers().contains(builder0));
 
@@ -603,7 +604,7 @@ public class TestBuilder {
         assertEquals(builder1.getTargetBuilding(), well0);
         assertEquals(builder1.getTarget(), well0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder1, well0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder1, well0.getPosition());
 
         assertTrue(well0.isUnderConstruction());
 
@@ -618,7 +619,7 @@ public class TestBuilder {
 
         map.stepTime();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder1, well0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder1, well0.getFlag().getPosition());
 
         assertEquals(builder1.getTarget(), storehouse.getPosition());
 
@@ -652,7 +653,7 @@ public class TestBuilder {
         Utils.waitForBuildingToBeConstructed(storehouse);
 
         // Wait for the builder of the storehouse to go back to the headquarter
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, storehouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder0, storehouse.getPosition());
 
         assertFalse(map.getWorkers().contains(builder0));
 
@@ -674,7 +675,7 @@ public class TestBuilder {
         assertEquals(builder1.getTargetBuilding(), well0);
         assertEquals(builder1.getTarget(), well0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder1, well0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder1, well0.getPosition());
 
         assertTrue(well0.isUnderConstruction());
 
@@ -687,11 +688,11 @@ public class TestBuilder {
 
         map.stepTime();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder1, well0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder1, well0.getFlag().getPosition());
 
         assertEquals(builder1.getTarget(), storehouse.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder1, storehouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder1, storehouse.getPosition());
 
         assertFalse(map.getWorkers().contains(builder1));
     }
@@ -721,12 +722,12 @@ public class TestBuilder {
             assertEquals(worker.getPosition(), headquarter0.getPosition());
             assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
             assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
             assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
             assertFalse(map.getWorkers().contains(worker));
         }
@@ -754,25 +755,16 @@ public class TestBuilder {
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
-
-        for (int i = 0; i < 100; i++) {
-            assertTrue(worker.isDead());
-            assertTrue(map.getWorkers().contains(worker));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(worker));
     }
 
     @Test
@@ -801,7 +793,7 @@ public class TestBuilder {
 
         assertFalse(well0.isUnderConstruction());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, well0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder0, well0.getPosition());
 
         assertTrue(well0.isUnderConstruction());
 
@@ -815,18 +807,37 @@ public class TestBuilder {
         assertNotEquals(builder0.getTarget(), headquarter0.getPosition());
         assertFalse(builder0.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, builder0.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(builder0, builder0.getTarget());
 
         assertTrue(builder0.isDead());
+        assertTrue(map.isDecoratedAtPoint(builder0.getPosition()));
+        assertEquals(map.getDecorationAtPoint(builder0.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
 
-        for (int i = 0; i < 100; i++) {
+        // Verify that the skeleton decays
+        for (int i = 0; i < 6000; i++) {
             assertTrue(builder0.isDead());
             assertTrue(map.getWorkers().contains(builder0));
+            assertTrue(map.isDecoratedAtPoint(builder0.getPosition()));
+            assertEquals(map.getDecorationAtPoint(builder0.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
+
+            map.stepTime();
+        }
+
+        assertTrue(map.isDecoratedAtPoint(builder0.getPosition()));
+        assertEquals(DecorationType.HUMAN_SKELETON_DECAYED, map.getDecorationAtPoint(builder0.getPosition()));
+
+        // Verify that the skeleton disappears
+        for (int i = 0; i < 4000; i++) {
+            assertTrue(map.isDecoratedAtPoint(builder0.getPosition()));
+            assertEquals(map.getDecorationAtPoint(builder0.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
 
             map.stepTime();
         }
 
         assertFalse(map.getWorkers().contains(builder0));
+        assertFalse(map.isDecoratedAtPoint(builder0.getPosition()));
+        assertNotEquals(map.getDecorationAtPoint(builder0.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
+
     }
 
     @Test
@@ -862,7 +873,7 @@ public class TestBuilder {
         assertEquals(builder0.getTarget(), well0.getPosition());
 
         // Wait for the well worker to go past the headquarter's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder0, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -873,7 +884,7 @@ public class TestBuilder {
 
         well0.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, well0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder0, well0.getFlag().getPosition());
 
         assertEquals(builder0.getPosition(), well0.getFlag().getPosition());
         assertNotEquals(builder0.getTarget(), headquarter0.getPosition());
@@ -881,18 +892,8 @@ public class TestBuilder {
         assertNull(well0.getWorker());
         assertNotNull(builder0.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, builder0.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(builder0, builder0.getTarget());
 
-        var point = builder0.getPosition();
-
-        for (int i = 0; i < 100; i++) {
-            assertTrue(builder0.isDead());
-            assertEquals(builder0.getPosition(), point);
-            assertTrue(map.getWorkers().contains(builder0));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(builder0));
+        assertTrue(builder0.isDead());
     }
 }

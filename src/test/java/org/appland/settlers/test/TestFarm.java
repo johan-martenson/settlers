@@ -2,6 +2,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Crop;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -34,7 +35,7 @@ import java.util.Objects;
 
 import static org.appland.settlers.model.Crop.GrowthState.*;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 /**
@@ -469,7 +470,7 @@ public class TestFarm {
         assertTrue(farmer.isTraveling());
 
         // Let the farmer reach the spot and start to plant
-        Utils.fastForwardUntilWorkersReachTarget(map, farmer);
+        Utils.fastForwardUntilWorkersReachTarget(farmer);
 
         assertTrue(farmer.isArrived());
         assertTrue(farmer.isAt(point));
@@ -536,7 +537,7 @@ public class TestFarm {
         assertTrue(farmer.isTraveling());
 
         // Let the farmer reach the intended spot and start to plant
-        Utils.fastForwardUntilWorkersReachTarget(map, farmer);
+        Utils.fastForwardUntilWorkersReachTarget(farmer);
 
         assertTrue(farmer.isArrived());
         assertTrue(farmer.isAt(point));
@@ -557,7 +558,7 @@ public class TestFarm {
         assertEquals(farmer.getTarget(), farm.getPosition());
         assertTrue(farmer.getPlannedPath().contains(farm.getFlag().getPosition()));
 
-        Utils.fastForwardUntilWorkersReachTarget(map, farmer);
+        Utils.fastForwardUntilWorkersReachTarget(farmer);
 
         assertTrue(farmer.isArrived());
         assertTrue(farmer.isInsideBuilding());
@@ -613,7 +614,7 @@ public class TestFarm {
         assertEquals(point, crop.getPosition());
 
         // Let the farmer reach the crop and start harvesting
-        Utils.fastForwardUntilWorkersReachTarget(map, farmer);
+        Utils.fastForwardUntilWorkersReachTarget(farmer);
 
         assertTrue(farmer.isArrived());
         assertTrue(farmer.isAt(point));
@@ -644,7 +645,7 @@ public class TestFarm {
         assertNotNull(farmer.getCargo());
         assertEquals(farm.getFlag().getStackedCargo().size(), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, farm.getFlag().getPosition());
 
         assertNull(farmer.getCargo());
         assertEquals(farm.getFlag().getStackedCargo().size(), 1);
@@ -652,7 +653,7 @@ public class TestFarm {
         // Verify that the farmer goes back to the farm from the flag
         assertEquals(farmer.getTarget(), farm.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, farm.getPosition());
 
         assertTrue(farmer.isInsideBuilding());
     }
@@ -696,17 +697,17 @@ public class TestFarm {
         Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
 
         // Wait for the courier on the road between the mill and the farm hut to have a wheat cargo
-        Utils.waitForFlagToGetStackedCargo(map, farm.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(farm.getFlag(), 1);
 
         assertEquals(farm.getFlag().getStackedCargo().getFirst().getMaterial(), WHEAT);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that the courier delivers the cargo to the mill (and not the headquarters)
         assertEquals(farm.getAmount(WHEAT), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), mill.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), mill.getPosition());
 
         assertEquals(mill.getAmount(WHEAT), 1);
     }
@@ -817,7 +818,7 @@ public class TestFarm {
         assertTrue(farmer.isTraveling());
 
         // Let the farmer reach the spot to plant
-        Utils.fastForwardUntilWorkersReachTarget(map, farmer);
+        Utils.fastForwardUntilWorkersReachTarget(farmer);
 
         assertTrue(farmer.isArrived());
         assertTrue(farmer.isAt(point));
@@ -952,7 +953,7 @@ public class TestFarm {
         assertEquals(farmer.getTarget(), farm0.getFlag().getPosition());
         assertTrue(farm0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, farm0.getFlag().getPosition());
 
         assertNull(farmer.getCargo());
         assertFalse(farm0.getFlag().getStackedCargo().isEmpty());
@@ -960,7 +961,7 @@ public class TestFarm {
         // Wait for the worker to go back to the farm
         assertEquals(farmer.getTarget(), farm0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, farm0.getPosition());
 
         // Wait for the worker to rest and produce another cargo
         for (int i = 0; i < 1000; i++) {
@@ -978,7 +979,7 @@ public class TestFarm {
 
         assertEquals(farmer.getTarget(), farm0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, farm0.getFlag().getPosition());
 
         assertNull(farmer.getCargo());
         assertEquals(farm0.getFlag().getStackedCargo().size(), 2);
@@ -1011,7 +1012,7 @@ public class TestFarm {
         // Wait for the farmer to produce a new wheat cargo
         var farmer = farm0.getWorker();
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, farmer, WHEAT);
+        Utils.fastForwardUntilWorkerCarriesCargo(farmer, WHEAT);
 
         assertNotNull(farmer.getCargo());
 
@@ -1019,7 +1020,7 @@ public class TestFarm {
         assertEquals(farmer.getTarget(), farm0.getFlag().getPosition());
         assertTrue(farm0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, farm0.getFlag().getPosition());
 
         assertNull(farmer.getCargo());
         assertFalse(farm0.getFlag().getStackedCargo().isEmpty());
@@ -1045,14 +1046,14 @@ public class TestFarm {
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
 
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         // Verify that the courier walks to pick up the cargo
         map.stepTime();
 
         assertEquals(courier.getTarget(), farm0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         // Verify that the courier has picked up the cargo
         assertNotNull(courier.getCargo());
@@ -1063,7 +1064,7 @@ public class TestFarm {
 
         var amount = headquarter0.getAmount(WHEAT);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
         // Verify that the courier has delivered the cargo to the headquarters
         assertNull(courier.getCargo());
@@ -1105,7 +1106,7 @@ public class TestFarm {
 
         var amount = headquarter0.getAmount(FARMER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, headquarter0.getPosition());
 
         // Verify that the farmer is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(FARMER), amount + 1);
@@ -1819,7 +1820,7 @@ public class TestFarm {
         assertNotNull(farmer);
         assertEquals(farmer.getTarget(), farm0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1830,14 +1831,14 @@ public class TestFarm {
         map.removeRoad(road1);
 
         // Verify that the farmer continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, flag0.getPosition());
 
         assertEquals(farmer.getPosition(), flag0.getPosition());
 
         // Verify that the farmer returns to the headquarters when it reaches the flag
         assertEquals(farmer.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, headquarter0.getPosition());
     }
 
     @Test
@@ -1879,7 +1880,7 @@ public class TestFarm {
         assertNotNull(farmer);
         assertEquals(farmer.getTarget(), farm0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1890,14 +1891,14 @@ public class TestFarm {
         map.removeRoad(road0);
 
         // Verify that the farmer continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, flag0.getPosition());
 
         assertEquals(farmer.getPosition(), flag0.getPosition());
 
         // Verify that the farmer continues to the final flag
         assertEquals(farmer.getTarget(), farm0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, farm0.getFlag().getPosition());
 
         // Verify that the farmer goes out to farmer instead of going directly back
         assertNotEquals(farmer.getTarget(), headquarter0.getPosition());
@@ -1943,7 +1944,7 @@ public class TestFarm {
         assertEquals(farmer.getTarget(), farm0.getPosition());
 
         // Wait for the farmer to reach the first flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, flag0.getPosition());
 
         map.stepTime();
 
@@ -1954,7 +1955,7 @@ public class TestFarm {
         farm0.tearDown();
 
         // Verify that the farmer continues walking to the next flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, farm0.getFlag().getPosition());
 
         assertEquals(farmer.getPosition(), farm0.getFlag().getPosition());
 
@@ -2006,7 +2007,7 @@ public class TestFarm {
 
         var amount = storehouse0.getAmount(FARMER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, storehouse0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, storehouse0.getPosition());
 
         // Verify that the farmer is stored correctly in the headquarters
         assertEquals(storehouse0.getAmount(FARMER), amount + 1);
@@ -2059,7 +2060,7 @@ public class TestFarm {
 
         var amount = headquarter0.getAmount(FARMER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, headquarter0.getPosition());
 
         // Verify that the farmer is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(FARMER), amount + 1);
@@ -2113,7 +2114,7 @@ public class TestFarm {
 
         var amount = headquarter0.getAmount(FARMER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, headquarter0.getPosition());
 
         // Verify that the farmer is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(FARMER), amount + 1);
@@ -2158,7 +2159,7 @@ public class TestFarm {
 
         var amount = headquarter0.getAmount(FARMER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, headquarter0.getPosition());
 
         // Verify that the farmer is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(FARMER), amount + 1);
@@ -2189,7 +2190,7 @@ public class TestFarm {
         var worker = Utils.waitForWorkersOutsideBuilding(Farmer.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, farm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, farm0.getFlag().getPosition());
 
         // Tear down the building
         farm0.tearDown();
@@ -2197,11 +2198,11 @@ public class TestFarm {
         // Verify that the worker goes to the building and then returns to the headquarters instead of entering
         assertEquals(worker.getTarget(), farm0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, farm0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, farm0.getPosition());
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
     }
 
     @Test
@@ -2445,7 +2446,7 @@ public class TestFarm {
         Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
 
         // Fill the flag with flour cargos
-        Utils.placeCargos(map, FLOUR, 8, farm.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, farm.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2465,7 +2466,7 @@ public class TestFarm {
         var road1 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2481,7 +2482,7 @@ public class TestFarm {
         assertEquals(farm.getFlag().getStackedCargo().size(), 7);
 
         // Verify that the worker produces a cargo of flour and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, farm.getWorker(), WHEAT);
+        Utils.fastForwardUntilWorkerCarriesCargo(farm.getWorker(), WHEAT);
     }
 
     @Test
@@ -2507,7 +2508,7 @@ public class TestFarm {
         Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
 
         // Fill the flag with cargos
-        Utils.placeCargos(map, FLOUR, 8, farm.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, farm.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2524,7 +2525,7 @@ public class TestFarm {
         var road1 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2544,7 +2545,7 @@ public class TestFarm {
         map.removeRoad(road1);
 
         // The worker produces a cargo and puts it on the flag
-        Utils.waitForWorkerToSetTarget(map, farm.getWorker(), farm.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(farm.getWorker(), farm.getFlag().getPosition());
 
         assertNotNull(farm.getWorker().getCargo());
         assertEquals(farm.getWorker().getCargo().getMaterial(), WHEAT);
@@ -2552,7 +2553,7 @@ public class TestFarm {
         // Wait for the worker to put the cargo on the flag
         assertEquals(farm.getWorker().getTarget(), farm.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farm.getWorker(), farm.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farm.getWorker(), farm.getFlag().getPosition());
 
         assertEquals(farm.getFlag().getStackedCargo().size(), 8);
 
@@ -2561,7 +2562,7 @@ public class TestFarm {
 
         assertEquals(farmer.getTarget(), farm.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, farm.getPosition());
 
         // Verify that the farmer stays inside because the flag is full
         for (int i = 0; i < 800; i++) {
@@ -2606,9 +2607,9 @@ public class TestFarm {
         headquarter0.blockDeliveryOfMaterial(WHEAT);
 
         // Verify that the farm puts eight wheats on the flag and then stops
-        Utils.waitForFlagToGetStackedCargo(map, farm0.getFlag(), 8);
+        Utils.waitForFlagToGetStackedCargo(farm0.getFlag(), 8);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer0, farm0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer0, farm0.getPosition());
 
         for (int i = 0; i < 300; i++) {
             map.stepTime();
@@ -2671,7 +2672,7 @@ public class TestFarm {
 
         assertFalse(farmer0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer0, farm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer0, farm0.getFlag().getPosition());
 
         assertEquals(farmer0.getTarget(), storehouse.getPosition());
 
@@ -2737,11 +2738,11 @@ public class TestFarm {
 
         assertFalse(farmer0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer0, farm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer0, farm0.getFlag().getPosition());
 
         assertEquals(farmer0.getTarget(), storehouse.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer0, storehouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer0, storehouse.getPosition());
 
         assertFalse(map.getWorkers().contains(farmer0));
     }
@@ -2771,12 +2772,12 @@ public class TestFarm {
             assertEquals(worker.getPosition(), headquarter0.getPosition());
             assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
             assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
             assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
             assertFalse(map.getWorkers().contains(worker));
         }
@@ -2804,25 +2805,16 @@ public class TestFarm {
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
-
-        for (int i = 0; i < 100; i++) {
-            assertTrue(worker.isDead());
-            assertTrue(map.getWorkers().contains(worker));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(worker));
     }
 
     @Test
@@ -2861,7 +2853,7 @@ public class TestFarm {
 
         assertEquals(worker.getPosition(), farm0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, farm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, farm0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), farm0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
@@ -2869,18 +2861,36 @@ public class TestFarm {
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
 
-        for (int i = 0; i < 100; i++) {
+        // Verify that the skeleton decays
+        for (int i = 0; i < 6000; i++) {
             assertTrue(worker.isDead());
             assertTrue(map.getWorkers().contains(worker));
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
+
+            map.stepTime();
+        }
+
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(DecorationType.HUMAN_SKELETON_DECAYED, map.getDecorationAtPoint(worker.getPosition()));
+
+        // Verify that the skeleton disappears
+        for (int i = 0; i < 4000; i++) {
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
 
             map.stepTime();
         }
 
         assertFalse(map.getWorkers().contains(worker));
+        assertFalse(map.isDecoratedAtPoint(worker.getPosition()));
+        assertNotEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
     }
 
     @Test
@@ -2911,7 +2921,7 @@ public class TestFarm {
         var farmer = Utils.waitForWorkerOutsideBuilding(Farmer.class, player0);
 
         // Wait for the farmer to go past the headquarters's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -2922,7 +2932,7 @@ public class TestFarm {
 
         farm0.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, farm0.getFlag().getPosition());
 
         assertEquals(farmer.getPosition(), farm0.getFlag().getPosition());
         assertNotEquals(farmer.getTarget(), headquarter0.getPosition());
@@ -2930,18 +2940,9 @@ public class TestFarm {
         assertNull(farm0.getWorker());
         assertNotNull(farmer.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farmer.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, farmer.getTarget());
 
-        var point = farmer.getPosition();
-        for (int i = 0; i < 100; i++) {
-            assertTrue(farmer.isDead());
-            assertEquals(farmer.getPosition(), point);
-            assertTrue(map.getWorkers().contains(farmer));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(farmer));
+        assertTrue(farmer.isDead());
     }
 
     @Test
@@ -3019,7 +3020,7 @@ public class TestFarm {
         assertNotEquals(firstFarmer, secondFarmer);
 
         // Verify that the second farmer goes back to its farm again without planting anything
-        Utils.fastForwardUntilWorkerReachesPoint(map, secondFarmer, firstFarmer.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(secondFarmer, firstFarmer.getPosition());
 
         for (int i = 0; i < 2_000; i++) {
             if (secondFarmer.getPosition().equals(secondFarmer.getHome().getPosition())) {
@@ -3423,7 +3424,7 @@ public class TestFarm {
         map.placeFlag(player0, farmer.getTarget());
 
         // Verify that the farmer doesn't start planting and instead goes back to its home
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farmer.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, farmer.getTarget());
 
         assertFalse(farmer.isPlanting());
         assertEquals(farmer.getTarget(), farmer.getHome().getPosition());
@@ -3489,7 +3490,7 @@ public class TestFarm {
         map.placeBuilding(new Woodcutter(player0), farmer.getTarget());
 
         // Verify that the farmer doesn't start planting and instead goes back to its home
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farmer.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, farmer.getTarget());
 
         assertFalse(farmer.isPlanting());
         assertEquals(farmer.getTarget(), farmer.getHome().getPosition());
@@ -3562,7 +3563,7 @@ public class TestFarm {
         assertTrue(map.isRoadAtPoint(farmer.getTarget()));
 
         // Verify that the farmer doesn't start planting and instead goes back to its home
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farmer.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, farmer.getTarget());
 
         assertFalse(farmer.isPlanting());
         assertEquals(farmer.getTarget(), farmer.getHome().getPosition());
@@ -3607,7 +3608,7 @@ public class TestFarm {
 
         Utils.waitForWorkerToBeOutside(farmer, map);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farmer.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, farmer.getTarget());
 
         assertTrue(farmer.isPlanting());
 
@@ -3630,7 +3631,7 @@ public class TestFarm {
         assertFalse(map.isCropAtPoint(farmer.getPosition()));
         assertEquals(farmer.getTarget(), farm.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, farm.getPosition());
 
         assertTrue(farmer.isInsideBuilding());
         assertFalse(farmer.isPlanting());
@@ -3667,7 +3668,7 @@ public class TestFarm {
 
         Utils.waitForWorkerToBeOutside(farmer, map);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farmer.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, farmer.getTarget());
 
         assertTrue(farmer.isPlanting());
 
@@ -3701,7 +3702,7 @@ public class TestFarm {
         assertFalse(map.isCropAtPoint(farmer.getPosition()));
         assertEquals(farmer.getTarget(), farm.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, farm.getPosition());
 
         assertTrue(farmer.isInsideBuilding());
         assertFalse(farmer.isPlanting());

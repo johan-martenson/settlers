@@ -23,8 +23,8 @@ import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.LARGE;
-import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 public class TestGameMonitoringWhenDiscovering {
@@ -1019,10 +1019,10 @@ public class TestGameMonitoringWhenDiscovering {
         var road2 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Wait for the road to get a courier standing at the middle
-        var courier0 = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier0 = Utils.waitForRoadToGetAssignedCourier(road0);
 
         var point5 = new Point(35, 5);
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier0, point5);
+        Utils.fastForwardUntilWorkerReachesPoint(courier0, point5);
 
         // Set up monitoring subscription for the player
         var monitor = new Utils.GameViewMonitor();
@@ -1085,10 +1085,10 @@ public class TestGameMonitoringWhenDiscovering {
         var road2 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         // Wait for the road to get a courier standing at the middle
-        var courier0 = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier0 = Utils.waitForRoadToGetAssignedCourier(road0);
 
         var point5 = new Point(35, 5);
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier0, point5);
+        Utils.fastForwardUntilWorkerReachesPoint(courier0, point5);
 
         // Set up monitoring subscription for the player
         var monitor = new Utils.GameViewMonitor();
@@ -1315,7 +1315,7 @@ public class TestGameMonitoringWhenDiscovering {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
@@ -1329,7 +1329,7 @@ public class TestGameMonitoringWhenDiscovering {
         assertEquals(defender.getTarget(), attacker.getPosition());
         assertTrue(barracks1.isUnderAttack());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
 
         assertEquals(defender.getPosition(), attacker.getPosition());
 
@@ -1341,7 +1341,7 @@ public class TestGameMonitoringWhenDiscovering {
         player0.monitorGameView(monitor);
 
         // Verify that an event is sent when the general beats the private
-        Utils.waitForSoldierToWinFight(attacker, map);
+        Utils.waitForSoldierToWinFight(attacker);
 
         assertFalse(attacker.isFighting());
         assertNotNull(monitor.getLastEvent());

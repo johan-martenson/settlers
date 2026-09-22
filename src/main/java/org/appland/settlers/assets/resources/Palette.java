@@ -23,7 +23,7 @@ public class Palette {
 
     private final byte[] colors;
 
-    private int transparentIndex;
+    private int transparentIndex = DEFAULT_TRANSPARENT_INDEX;
     private String name;
 
     /**
@@ -44,22 +44,21 @@ public class Palette {
      */
     public Palette(byte[] colors) {
         this.colors = colors;
-        this.transparentIndex = DEFAULT_TRANSPARENT_INDEX;
     }
 
     /**
      * Loads a palette from the provided stream reader.
      *
      * @param streamReader The stream reader to read from.
-     * @param skip         Whether to skip certain validations.
+     * @param readNumberColors Whether to readNumberColors certain validations.
      * @return The loaded Palette object.
      * @throws IOException            If an I/O error occurs.
      * @throws InvalidFormatException If the palette format is invalid.
      */
-    public static Palette loadPalette(StreamReader streamReader, boolean skip) throws IOException, InvalidFormatException {
+    public static Palette loadPalette(StreamReader streamReader, boolean readNumberColors) throws IOException, InvalidFormatException {
         streamReader.pushByteOrder(ByteOrder.LITTLE_ENDIAN);
 
-        if (skip) {
+        if (readNumberColors) {
             int numberColors = streamReader.getUint16();
 
             if (numberColors != 256) {

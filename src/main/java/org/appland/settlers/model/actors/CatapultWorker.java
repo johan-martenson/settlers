@@ -9,12 +9,16 @@ package org.appland.settlers.model.actors;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
+import org.appland.settlers.model.MapPoint;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Projectile;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Catapult;
 import org.appland.settlers.model.buildings.Storehouse;
 
+import java.util.Comparator;
+
+import static org.appland.settlers.model.GameUtils.getHexagonAreaAroundPoint;
 import static org.appland.settlers.model.Material.STONE;
 
 /**
@@ -26,7 +30,7 @@ public class CatapultWorker extends Worker {
     private final Countdown countdown = new Countdown();
 
     private static final int RESTING_TIME = 99;
-    private static final int MAX_RANGE = 15;
+    private static final int MAX_RANGE = 12;
 
     private State state = State.WALKING_TO_TARGET;
 
@@ -52,7 +56,6 @@ public class CatapultWorker extends Worker {
 
             // Countdown if there are stones available
             if (home.getAmount(STONE) > 0) {
-
                 if (countdown.hasReachedZero()) {
                     var target = findReachableTarget();
 
@@ -112,35 +115,16 @@ public class CatapultWorker extends Worker {
     }
 
     private Building findReachableTarget() {
-        for (var point : map.getPointsWithinRadius(position, MAX_RANGE)) {
-            var mapPoint = map.getMapPoint(point);
-
-            // Filter points without a building
-            if (!mapPoint.isBuilding()) {
-                continue;
-            }
-
-            var building = mapPoint.getBuilding();
-
-            // Filter buildings belonging to the same player
-            if (building.getPlayer().equals(player)) {
-                continue;
-            }
-
-            // Filter non-military buildings
-            if (!building.isMilitaryBuilding()) {
-                continue;
-            }
-
-            // Filer buildings that are not ready
-            if (!building.isReady()) {
-                continue;
-            }
-
-            return building;
-        }
-
-        return null;
+        return getHexagonAreaAroundPoint(position, MAX_RANGE, map).stream()
+                .map(map::getMapPoint)
+                .filter(MapPoint::isBuilding)
+                .map(MapPoint::getBuilding)
+                .filter(b -> !b.getPlayer().equals(player))
+                .filter(Building::isMilitaryBuilding)
+                .filter(Building::isReady)
+                // Find the closest building
+                .min(Comparator.comparingInt(b -> GameUtils.distanceInGameSteps(position, b.getPosition())))
+                .orElse(null);
     }
 
     @Override

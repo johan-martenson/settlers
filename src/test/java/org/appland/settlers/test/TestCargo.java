@@ -81,8 +81,8 @@ public class TestCargo {
         var road1 = map.placeRoad(player0, point2, point5, point6);
 
         // Place couriers on the roads
-        Utils.occupyRoad(road0, map);
-        Utils.occupyRoad(road1, map);
+        Utils.occupyRoad(road0);
+        Utils.occupyRoad(road1);
 
         // Wait for a cargo with the forester hut as target to get picked up by the first courier
         for (int i = 0; i < 2000; i++) {
@@ -106,7 +106,7 @@ public class TestCargo {
         assertEquals(courier.getTarget(), point2);
         assertTrue(flag0.getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point2);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, point2);
 
         // Verify that the courier picks up the cargo again and returns it to the storage
         for (int i = 0; i < 200; i++) {
@@ -121,7 +121,7 @@ public class TestCargo {
         assertEquals(courier.getCargo(), cargo);
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
         assertNull(courier.getCargo());
     }

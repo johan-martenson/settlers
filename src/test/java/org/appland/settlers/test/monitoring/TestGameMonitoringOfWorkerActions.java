@@ -52,8 +52,8 @@ import static org.appland.settlers.model.Vegetation.WATER;
 import static org.appland.settlers.model.WorkerAction.*;
 import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
 import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
-import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.*;
 
@@ -772,7 +772,7 @@ public class TestGameMonitoringOfWorkerActions {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Verify that an event is sent when the geologist starts to investigate
         for (int i = 0; i < 2_000; i++) {
@@ -1031,7 +1031,7 @@ public class TestGameMonitoringOfWorkerActions {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == FAT) {
                 break;
@@ -1112,7 +1112,7 @@ public class TestGameMonitoringOfWorkerActions {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == THIN) {
                 break;
@@ -1195,7 +1195,7 @@ public class TestGameMonitoringOfWorkerActions {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == THIN) {
                 break;
@@ -1278,7 +1278,7 @@ public class TestGameMonitoringOfWorkerActions {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == THIN) {
                 break;
@@ -1388,7 +1388,7 @@ public class TestGameMonitoringOfWorkerActions {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
@@ -1400,7 +1400,7 @@ public class TestGameMonitoringOfWorkerActions {
         assertEquals(defender.getTarget(), attacker.getPosition());
         assertFalse(defender.isFighting());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
 
         assertEquals(defender.getPosition(), attacker.getPosition());
 
@@ -1521,7 +1521,7 @@ public class TestGameMonitoringOfWorkerActions {
             assertEquals(barracks1.getNumberOfHostedSoldiers(), 2);
             assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
             assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
             assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
@@ -1604,7 +1604,7 @@ public class TestGameMonitoringOfWorkerActions {
                 Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
                 // Wait for the defender to go back to the attacked barracks
-                Utils.fastForwardUntilWorkerReachesPoint(map, defender, barracks1.getPosition());
+                Utils.fastForwardUntilWorkerReachesPoint(defender, barracks1.getPosition());
 
                 assertEquals(barracks1.getNumberOfHostedSoldiers(), 2);
             }
@@ -1619,10 +1619,10 @@ public class TestGameMonitoringOfWorkerActions {
                 Utils.waitForFightToStart(map, attacker, otherDefender);
 
                 // Wait for the defender to beat the attacker
-                Utils.waitForSoldierToWinFight(otherDefender, map);
+                Utils.waitForSoldierToWinFight(otherDefender);
 
                 // Wait for the defender to go back to the barracks
-                Utils.fastForwardUntilWorkerReachesPoint(map, otherDefender, barracks1.getPosition());
+                Utils.fastForwardUntilWorkerReachesPoint(otherDefender, barracks1.getPosition());
 
                 // Add a new soldier to the attacked barracks
                 Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks1);
@@ -1713,7 +1713,7 @@ public class TestGameMonitoringOfWorkerActions {
             // Wait for the military to reach the attacked building
             assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
             assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
 
@@ -1795,7 +1795,7 @@ public class TestGameMonitoringOfWorkerActions {
                 Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
                 // Wait for the defender to go back to the attacked barracks
-                Utils.fastForwardUntilWorkerReachesPoint(map, defender, barracks1.getPosition());
+                Utils.fastForwardUntilWorkerReachesPoint(defender, barracks1.getPosition());
             }
 
             // Handle the case where the defender died
@@ -1811,10 +1811,10 @@ public class TestGameMonitoringOfWorkerActions {
                 Utils.waitForFightToStart(map, attacker, otherDefender);
 
                 // Wait for the defender to beat the attacker
-                Utils.waitForSoldierToWinFight(otherDefender, map);
+                Utils.waitForSoldierToWinFight(otherDefender);
 
                 // Wait for the defender to go back to the barracks
-                Utils.fastForwardUntilWorkerReachesPoint(map, otherDefender, barracks1.getPosition());
+                Utils.fastForwardUntilWorkerReachesPoint(otherDefender, barracks1.getPosition());
             }
         }
 
@@ -1885,7 +1885,7 @@ public class TestGameMonitoringOfWorkerActions {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
@@ -1898,7 +1898,7 @@ public class TestGameMonitoringOfWorkerActions {
         assertEquals(defender.getTarget(), attacker.getPosition());
         assertFalse(defender.isFighting());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
 
         assertEquals(defender.getPosition(), attacker.getPosition());
 
@@ -2007,7 +2007,7 @@ public class TestGameMonitoringOfWorkerActions {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
@@ -2019,7 +2019,7 @@ public class TestGameMonitoringOfWorkerActions {
         assertEquals(defender.getTarget(), attacker.getPosition());
         assertFalse(defender.isFighting());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
 
         assertEquals(defender.getPosition(), attacker.getPosition());
 

@@ -8,18 +8,16 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Headquarter;
-import org.appland.settlers.model.statistics.StatisticsManager;
 import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
 import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 public class TestLandStatistics {
@@ -161,7 +159,7 @@ public class TestLandStatistics {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
@@ -172,14 +170,14 @@ public class TestLandStatistics {
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
 
         assertEquals(defender.getPosition(), attacker.getPosition());
 
         // Wait for the general to beat the private
         Utils.waitForFightToStart(map, attacker, defender);
 
-        Utils.waitForSoldierToWinFight(attacker, map);
+        Utils.waitForSoldierToWinFight(attacker);
 
         // Verify that player 1's barracks is in player 1's border and not player 0's
         Utils.verifyPointIsNotWithinBorder(player0, barracks1.getPosition());
@@ -188,7 +186,7 @@ public class TestLandStatistics {
         // Wait for the attacker to return to the fixed point
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, attacker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, attacker.getTarget());
 
         // Verify that the land statistics is updated when the border changes
         assertEquals(attacker.getTarget(), barracks1.getPosition());
@@ -200,7 +198,7 @@ public class TestLandStatistics {
         assertEquals(statisticsManager.getPlayerStatistics(player0).land().getMeasurements().size(), 2);
         assertEquals(statisticsManager.getPlayerStatistics(player1).land().getMeasurements().getLast().value(), player1.getOwnedLand().size());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getPosition());
 
         assertEquals(statisticsManager.getPlayerStatistics(player0).land().getMeasurements().size(), 3);
         assertEquals(statisticsManager.getPlayerStatistics(player0).land().getMeasurements().getLast().value(), player0.getOwnedLand().size());
@@ -263,7 +261,7 @@ public class TestLandStatistics {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
@@ -274,14 +272,14 @@ public class TestLandStatistics {
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(defender, attacker.getPosition());
 
         assertEquals(defender.getPosition(), attacker.getPosition());
 
         // Wait for the general to beat the private
         Utils.waitForFightToStart(map, attacker, defender);
 
-        Utils.waitForSoldierToWinFight(attacker, map);
+        Utils.waitForSoldierToWinFight(attacker);
 
         // Verify that player 1's barracks is in player 1's border and not player 0's
         Utils.verifyPointIsNotWithinBorder(player0, barracks1.getPosition());
@@ -290,7 +288,7 @@ public class TestLandStatistics {
         // Wait for the attacker to return to the fixed point
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, attacker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, attacker.getTarget());
 
         // Start monitoring statistics
         var monitor = new Utils.GameViewMonitor();
@@ -308,7 +306,7 @@ public class TestLandStatistics {
         assertEquals(statisticsManager.getPlayerStatistics(player0).land().getMeasurements().size(), 2);
         assertEquals(statisticsManager.getPlayerStatistics(player1).land().getMeasurements().getLast().value(), player1.getOwnedLand().size());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, barracks1.getPosition());
 
         assertEquals(statisticsManager.getPlayerStatistics(player0).land().getMeasurements().getLast().value(), player0.getOwnedLand().size());
         assertEquals(statisticsManager.getPlayerStatistics(player0).land().getMeasurements().size(), 3);

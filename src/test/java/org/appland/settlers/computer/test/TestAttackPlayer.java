@@ -9,6 +9,7 @@ import org.appland.settlers.assets.Nation;
 import org.appland.settlers.computer.AttackPlayer;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.actors.Rank;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.Player;
@@ -89,7 +90,7 @@ public class TestAttackPlayer {
         var barracks1 = Utils.placeAndOccupyBarracks(player1, point3);
 
         // Add an extra soldier to the attacking player's barracks
-        Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(Rank.PRIVATE_RANK, barracks0);
 
         // Verify that the player attacks the other player
         assertEquals(player0.getNumberOfAvailableAttackers(barracks1), 1);

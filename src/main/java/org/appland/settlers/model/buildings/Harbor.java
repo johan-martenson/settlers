@@ -6,7 +6,6 @@ import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.actors.Ship;
-import org.appland.settlers.model.actors.StorehouseWorker;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.utils.InventoryUtils;
 
@@ -113,7 +112,7 @@ public class Harbor extends Storehouse {
                     var material = entry.getKey();
                     var requiredAmount = entry.getValue();
 
-                    return (int)materialForNextExpedition.getOrDefault(material, 0) == requiredAmount;
+                    return (int) materialForNextExpedition.getOrDefault(material, 0) == requiredAmount;
                 });
     }
 
@@ -144,15 +143,11 @@ public class Harbor extends Storehouse {
     public void depositWorker(Worker worker) {
         var material = Material.workerToMaterial(worker);
 
-        if (expeditionState == State.COLLECTING_MATERIAL_FOR_NEXT_EXPEDITION && REQUIRED_FOR_EXPEDITION.containsKey(material)) {
-            int promised = promisedMaterialForNextExpedition.getOrDefault(material, 0);
-
-            if (promised > 0) {
-                materialForNextExpedition.merge(material, 1, Integer::sum);
-                promisedMaterialForNextExpedition.merge(material, -1, Integer::sum);
-            } else {
-                super.depositWorker(worker);
-            }
+        if (expeditionState == State.COLLECTING_MATERIAL_FOR_NEXT_EXPEDITION &&
+                REQUIRED_FOR_EXPEDITION.containsKey(material) &&
+                promisedMaterialForNextExpedition.getOrDefault(material, 0) > 0) {
+            materialForNextExpedition.merge(material, 1, Integer::sum);
+            promisedMaterialForNextExpedition.merge(material, -1, Integer::sum);
         } else {
             super.depositWorker(worker);
         }
@@ -170,7 +165,7 @@ public class Harbor extends Storehouse {
             ship.setReadyForExpedition();
             expeditionState = State.NO_EXPEDITION_PLANNED;
 
-        player.reportShipReadyForExpedition(ship);
+            player.reportShipReadyForExpedition(ship);
         } else if (needToShipMaterialToOtherHarbor) {
 
             // What does each settlement need?
@@ -194,15 +189,6 @@ public class Harbor extends Storehouse {
     @Override
     public void onConstructionFinished() {
         player.reportHarborReady(this);
-
-        // Add a storage worker manually if this is a separate settlement
-        if (isOwnSettlement) {
-            var storehouseWorker = new StorehouseWorker(player, map);
-
-            map.placeWorker(storehouseWorker, getFlag());
-            storehouseWorker.setTargetBuilding(this);
-            promiseWorker(storehouseWorker);
-        }
     }
 
     public void setOwnSettlement() {
@@ -240,7 +226,17 @@ public class Harbor extends Storehouse {
 
                     // Look for any material that needs shipping and that this harbor has in store
                     .anyMatch(harbor -> harbor.getMaterialNeedingShippingAsStream()
-                                .anyMatch(material -> getAmount(material) > 0));
+                            .anyMatch(material -> getAmount(material) > 0));
+        }
+
+        // Create a builder from a hammer if needed to prepare for the next expedition
+        if (expeditionState == State.COLLECTING_MATERIAL_FOR_NEXT_EXPEDITION) {
+            var projected = getAmount(BUILDER) + promisedDeliveries.getOrDefault(BUILDER, 0);
+
+            if (projected < REQUIRED_FOR_EXPEDITION.get(BUILDER) && getAmount(HAMMER) > 0) {
+                inventory.merge(HAMMER, -1, Integer::sum);
+                inventory.merge(BUILDER, 1, Integer::sum);
+            }
         }
     }
 
@@ -254,11 +250,11 @@ public class Harbor extends Storehouse {
 
                 // Find materials that need shipping - i.e. that are not available locally
                 .filter(material -> buildings.stream()
-                                .filter(building -> !Objects.equals(this, building))
-                                .filter(Building::isStorehouse)
-                                .filter(Building::isReady)
-                                .filter(storeHouse -> GameUtils.areBuildingsOrFlagsConnected(this, storeHouse, map))
-                                .noneMatch(localStoreHouse -> localStoreHouse.getAmount(material) > 0));
+                        .filter(building -> !Objects.equals(this, building))
+                        .filter(Building::isStorehouse)
+                        .filter(Building::isReady)
+                        .filter(storeHouse -> GameUtils.areBuildingsOrFlagsConnected(this, storeHouse, map))
+                        .noneMatch(localStoreHouse -> localStoreHouse.getAmount(material) > 0));
     }
 
     public boolean needsToShipToOtherHarbors() {
@@ -294,5 +290,10 @@ public class Harbor extends Storehouse {
                         Entry::getValue,
                         Integer::sum
                 ));
+    }
+
+    @Override
+    public String toString() {
+        return "Harbor at %s (%s, %s)".formatted(position, state, expeditionState);
     }
 }

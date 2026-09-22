@@ -21,8 +21,9 @@ import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Farmer;
 import org.appland.settlers.model.actors.IronFounder;
 import org.appland.settlers.model.actors.Minter;
+import org.appland.settlers.model.actors.Rank;
 import org.appland.settlers.model.actors.Shipwright;
-import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.actors.StorehouseWorker;
 import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Bakery;
 import org.appland.settlers.model.buildings.Barracks;
@@ -37,6 +38,7 @@ import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.buildings.Shipyard;
 import org.appland.settlers.model.buildings.SlaughterHouse;
 import org.appland.settlers.model.buildings.Storehouse;
+import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.model.messages.BombardedByCatapultMessage;
 import org.appland.settlers.model.messages.BuildingCapturedMessage;
 import org.appland.settlers.model.messages.BuildingLostMessage;
@@ -65,6 +67,35 @@ public class TestToString {
     * TODO:
     *   - Bombarded by catapult message
     */
+
+    @Test
+    public void testStorageWorkerToString() throws InvalidUserActionException {
+
+        // Start new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 41);
+
+        // Place headquarters
+        var point0 = new Point(10, 10);
+        var headquarters = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place woodcutter and connect it to the headquarters
+        var point1 = new Point(15, 15);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarters.getFlag());
+
+        // Wait for the storehouse worker in the headquarters to come out to deliver cargo to the flag
+        var storehouseWorker = Utils.waitForWorkerOutsideBuilding(StorehouseWorker.class, player0);
+
+        // Verify toString
+        assertEquals("Storehouse worker at (10, 10) with cargo (PLANK) (DELIVERING_CARGO_TO_FLAG)", storehouseWorker.toString());
+
+        // Wait for the storehouse worker to put down the cargo
+        Utils.fastForwardUntilWorkerCarriesNoCargo(storehouseWorker);
+
+        // Verify toString
+        assertEquals("Storehouse worker at (11, 9) (GOING_BACK_TO_HOUSE)", storehouseWorker.toString());
+    }
 
     @Test
     public void testStoneToString() throws Exception {
@@ -215,7 +246,7 @@ public class TestToString {
 
         assertTrue(military.isExactlyAtPoint());
         assertNotNull(military);
-        assertEquals(military.getRank(), Soldier.Rank.PRIVATE_RANK);
+        assertEquals(military.getRank(), Rank.PRIVATE_RANK);
 
         // Verify that the toString() method is correct
         assertEquals(military.toString(), "Private soldier (10, 10) (WALKING_TO_TARGET, health: 3/3)");
@@ -259,7 +290,7 @@ public class TestToString {
 
         assertTrue(soldier.isExactlyAtPoint());
         assertNotNull(soldier);
-        assertEquals(soldier.getRank(), Soldier.Rank.PRIVATE_FIRST_CLASS_RANK);
+        assertEquals(soldier.getRank(), Rank.PRIVATE_FIRST_CLASS_RANK);
 
         // Verify that the toString() method is correct
         assertEquals(soldier.toString(), "Private first class soldier (10, 10) (WALKING_TO_TARGET, health: 4/4)");
@@ -303,7 +334,7 @@ public class TestToString {
 
         assertTrue(military.isExactlyAtPoint());
         assertNotNull(military);
-        assertEquals(military.getRank(), Soldier.Rank.SERGEANT_RANK);
+        assertEquals(military.getRank(), Rank.SERGEANT_RANK);
 
         // Verify that the toString() method is correct
         assertEquals(military.toString(), "Sergeant soldier (10, 10) (WALKING_TO_TARGET, health: 5/5)");
@@ -347,7 +378,7 @@ public class TestToString {
 
         assertTrue(military.isExactlyAtPoint());
         assertNotNull(military);
-        assertEquals(military.getRank(), Soldier.Rank.OFFICER_RANK);
+        assertEquals(military.getRank(), Rank.OFFICER_RANK);
 
         // Verify that the toString() method is correct
         assertEquals(military.toString(), "Officer soldier (10, 10) (WALKING_TO_TARGET, health: 6/6)");
@@ -391,7 +422,7 @@ public class TestToString {
 
         assertTrue(military.isExactlyAtPoint());
         assertNotNull(military);
-        assertEquals(military.getRank(), Soldier.Rank.GENERAL_RANK);
+        assertEquals(military.getRank(), Rank.GENERAL_RANK);
 
         // Verify that the toString() method is correct
         assertEquals(military.toString(), "General soldier (10, 10) (WALKING_TO_TARGET, health: 7/7)");
@@ -822,7 +853,7 @@ public class TestToString {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -840,7 +871,7 @@ public class TestToString {
         assertTrue(ship.isUnderConstruction());
 
         // Verify toString for the ship when it's under construction
-        assertEquals(ship.toString(), "Ship under construction (" + ship.getPosition().x + ", " + ship.getPosition().y + ")");
+        assertEquals(ship.toString(), "Ship under construction (" + ship.getPosition().x + ", " + ship.getPosition().y + ") (UNDER_CONSTRUCTION)");
     }
 
     @Test
@@ -916,7 +947,7 @@ public class TestToString {
         assertTrue(shipwright.isTraveling());
 
         // Let the shipwright reach the intended spot and start to build the ship
-        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+        Utils.fastForwardUntilWorkersReachTarget(shipwright);
 
         assertTrue(shipwright.isArrived());
         assertTrue(shipwright.isAt(point));
@@ -937,7 +968,7 @@ public class TestToString {
         Utils.waitForShipToGetBuilt(map, ship);
 
         // Verify toString for the ship when it's ready
-        assertEquals(ship.toString(), "Ship (" + ship.getPosition().x + ", " + ship.getPosition().y + ")");
+        assertEquals(ship.toString(), "Ship (" + ship.getPosition().x + ", " + ship.getPosition().y + ") (SAILING_TO_POINT_TO_WAIT_FOR_ORDERS)");
     }
 
     @Test
@@ -971,5 +1002,136 @@ public class TestToString {
                 crop.toString(),
                 "Crop at (" + crop.getPosition().x + ", " + crop.getPosition().y + ") (JUST_PLANTED)"
         );
+    }
+
+    @Test
+    public void testProjectileToString() throws Exception {
+
+        // Create new game map
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 100, 101);
+
+        // Place headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        Utils.adjustInventoryTo(headquarter0, STONE, 2);
+
+        // Place headquarters
+        var point1 = new Point(45, 5);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        // Place barracks and wait for it to get constructed and occupied
+        var point2 = new Point(29, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player1), point2);
+        var road0 = map.placeAutoSelectedRoad(player1, barracks0.getFlag(), headquarter1.getFlag());
+
+        Utils.waitForBuildingToBeConstructed(barracks0);
+
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
+
+        // Place catapult and wait for it to get constructed and occupied
+        var point3 = new Point(17, 5);
+        var catapult = map.placeBuilding(new Catapult(player0), point3);
+        var road1 = map.placeAutoSelectedRoad(player0, catapult.getFlag(), headquarter0.getFlag());
+
+        Utils.waitForBuildingToBeConstructed(catapult);
+
+        var catapultWorker0 = Utils.waitForNonMilitaryBuildingToGetPopulated(catapult);
+
+        assertTrue(catapultWorker0.isInsideBuilding());
+        assertEquals(catapultWorker0.getHome(), catapult);
+        assertEquals(catapult.getWorker(), catapultWorker0);
+
+        // Deliver stones to the catapult
+        Utils.adjustInventoryTo(headquarter0, STONE, 1);
+
+        Utils.waitForBuildingToHave(catapult, STONE, 1);
+
+        // Verify that the catapult throws a projectile
+        for (int i = 0; i < 99; i++) {
+            assertTrue(map.getProjectiles().isEmpty());
+
+            map.stepTime();
+        }
+
+        // Get the projectile
+        assertEquals(map.getProjectiles().size(), 1);
+
+        var projectile = map.getProjectiles().getFirst();
+
+        assertNotNull(projectile);
+
+        // Verify toString
+        assertEquals("Projectile with target Barracks at (29, 5) (OCCUPIED) (2 PRIVATE) (60/60)", projectile.toString());
+    }
+
+    @Test
+    public void testHeadquartersToString() throws Exception {
+
+        // Start new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 41);
+
+        // Place headquarters
+        var point0 = new Point(10, 12);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Verify toString
+        assertEquals("Headquarter (10, 12) (OCCUPIED)", headquarter0.toString());
+    }
+
+    @Test
+    public void testBarracksOnlyNeedsTwoPlanksForConstruction() throws Exception {
+
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 41);
+
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place barracks
+        var point1 = new Point(6, 12);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
+
+        // Verify toString for the planned barracks
+        assertTrue(barracks0.isPlanned());
+        assertEquals("Barracks at (6, 12) (PLANNED)", barracks0.toString());
+
+        // Connect the barracks to the headquarters and wait for them to be under construction
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
+
+        Utils.waitForBuildingToBeUnderConstruction(barracks0);
+
+        // Verify toString for barracks under construction
+        assertEquals("Barracks at (6, 12) (UNDER_CONSTRUCTION)", barracks0.toString());
+
+        // Wait for the barracks to get fully constructed
+        Utils.waitForBuildingToBeConstructed(barracks0);
+
+        // Verify toString for unoccupied barracks
+        assertEquals("Barracks at (6, 12) (UNOCCUPIED)", barracks0.toString());
+
+        // Wait for the barracks to get occupied
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
+
+        // Verify toString for the populated barracks
+        assertEquals(1, barracks0.getNumberOfHostedSoldiers());
+        assertEquals("Barracks at (6, 12) (OCCUPIED) (1 PRIVATE)", barracks0.toString());
+
+        // Tear down the barracks
+        barracks0.tearDown();
+
+        // Verify toString for the torn down barracks
+        assertEquals("Barracks at (6, 12) (BURNING)", barracks0.toString());
+
+        // Wait for the barracks to stop burning
+        Utils.waitForBuildingToBurnDown(barracks0);
+
+        // Verify toString for burnt down building
+        assertEquals("Barracks at (6, 12) (DESTROYED)", barracks0.toString());
     }
 }

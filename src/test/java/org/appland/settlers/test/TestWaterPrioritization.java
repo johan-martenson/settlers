@@ -111,7 +111,7 @@ public class TestWaterPrioritization {
             Utils.adjustInventoryTo(headquarter0, WATER, 1);
 
             // Wait for the storage worker to pick up a wheat cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, WATER);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, WATER);
 
             // Keep track of where the wheat cargos end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -230,7 +230,7 @@ public class TestWaterPrioritization {
             Utils.adjustInventoryTo(headquarter0, WATER, 1);
 
             // Wait for the storage worker to pick up a wheat cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, WATER);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, WATER);
 
             // Keep track of where the wheat cargos end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -349,7 +349,7 @@ public class TestWaterPrioritization {
             Utils.adjustInventoryTo(headquarter0, WATER, 1);
 
             // Wait for the storage worker to pick up a wheat cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, WATER);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, WATER);
 
             // Keep track of where the wheat cargos end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -468,7 +468,7 @@ public class TestWaterPrioritization {
             Utils.adjustInventoryTo(headquarter0, WATER, 1);
 
             // Wait for the storage worker to pick up a wheat cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, WATER);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, WATER);
 
             // Keep track of where the wheat cargos end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -580,7 +580,7 @@ public class TestWaterPrioritization {
             Utils.adjustInventoryTo(headquarter0, WATER, 1);
 
             // Wait for the storage worker to pick up a wheat cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, WATER);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, WATER);
 
             // Keep track of where the wheat cargos end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -692,7 +692,7 @@ public class TestWaterPrioritization {
             Utils.adjustInventoryTo(headquarter0, WATER, 1);
 
             // Wait for the storage worker to pick up a wheat cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, WATER);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, WATER);
 
             // Keep track of where the wheat cargos end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -808,7 +808,7 @@ public class TestWaterPrioritization {
             Utils.adjustInventoryTo(headquarter0, WATER, 1);
 
             // Wait for the storage worker to pick up a wheat cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, WATER);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, WATER);
 
             // Keep track of where the wheat cargos end up
             var targetBuilding = carrier.getCargo().getTarget();

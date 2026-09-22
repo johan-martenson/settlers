@@ -23,7 +23,6 @@ import static org.appland.settlers.model.WorkerAction.DRAW_WATER_1;
 public class WellWorker extends Worker {
     private static final int PRODUCTION_TIME = 49;
     private static final int RESTING_TIME = 99;
-    private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
     private static final int TIME_IN_HOUSE_WITH_CARGO = 9;
 
     private final Countdown countdown = new Countdown();
@@ -118,14 +117,6 @@ public class WellWorker extends Worker {
                     state = State.GOING_TO_FLAG_WITH_CARGO;
                 }
             }
-
-            case DEAD -> {
-                if (countdown.hasReachedZero()) {
-                    map.removeWorker(this);
-                } else {
-                    countdown.step();
-                }
-            }
         }
     }
 
@@ -204,8 +195,6 @@ public class WellWorker extends Worker {
 
             case GOING_TO_DIE -> {
                 setDead();
-                state = State.DEAD;
-                countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
             }
         }
     }

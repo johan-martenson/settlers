@@ -7,18 +7,16 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
+import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Courier;
-import org.appland.settlers.model.actors.Worker;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.GuardHouse;
@@ -33,12 +31,11 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
 import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 /**
@@ -113,7 +110,7 @@ public class TestCourier {
         courier.assignToRoad(road1);
 
         // Verify that the courier walks to its road and becomes idle
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertEquals(courier.getAssignedRoad(), road1);
         assertTrue(courier.isIdle());
@@ -153,7 +150,7 @@ public class TestCourier {
         assertTrue(courier.isWalkingToRoad());
         assertFalse(courier.isIdle());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertEquals(courier.getPosition(), point3);
         assertTrue(courier.isArrived());
@@ -195,7 +192,7 @@ public class TestCourier {
         assertTrue(courier.isWalkingToRoad());
         assertFalse(courier.isIdle());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertEquals(courier.getPosition(), point3);
         assertTrue(courier.isArrived());
@@ -227,9 +224,9 @@ public class TestCourier {
         var road0 = map.placeRoad(player0, point2, point3, point1);
 
         // Occupy the road and wait for the courier to reach the middle of the road
-        var courier = Utils.occupyRoad(road0, map);
+        var courier = Utils.occupyRoad(road0);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertEquals(courier.getPosition(), point3);
         assertTrue(courier.isArrived());
@@ -297,7 +294,7 @@ public class TestCourier {
         assertFalse(courier.isIdle());
         assertEquals(courier.getTarget(), middle);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, middle);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, middle);
 
         assertEquals(courier.getPosition(), middle);
         assertTrue(courier.isArrived());
@@ -353,7 +350,7 @@ public class TestCourier {
         // Courier will walk to idle point at the road
         assertTrue(courier.isWalkingToRoad());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertEquals(courier.getPosition(), middle);
         assertFalse(flag0.getStackedCargo().isEmpty());
@@ -367,7 +364,7 @@ public class TestCourier {
         assertTrue(courier.isTraveling());
         assertFalse(flag0.getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         /* When worker arrives at the flag it automatically picks up the cargo
             - It picks up the cargo directly and sets the other flag as target
@@ -425,7 +422,7 @@ public class TestCourier {
         // Courier will walk to idle point at the road
         assertTrue(courier.isWalkingToRoad());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertEquals(courier.getPosition(), middle);
         assertFalse(flag0.getStackedCargo().isEmpty());
@@ -439,7 +436,7 @@ public class TestCourier {
         assertTrue(courier.isTraveling());
         assertFalse(flag0.getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         /* When worker arrives at the flag it automatically picks up the cargo
             - It picks up the cargo directly and sets the other flag as target
@@ -450,7 +447,7 @@ public class TestCourier {
         assertTrue(flag0.getStackedCargo().isEmpty());
         assertFalse(courier.isIdle());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         assertNull(courier.getCargo());
         assertFalse(flag1.getStackedCargo().isEmpty());
@@ -461,7 +458,7 @@ public class TestCourier {
         assertFalse(courier.isIdle());
         assertNotEquals(courier.getTarget(), courier.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         assertTrue(courier.isIdle());
     }
@@ -515,7 +512,7 @@ public class TestCourier {
         // Courier will walk to idle point at the road
         assertTrue(courier.isWalkingToRoad());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertEquals(courier.getPosition(), middlePoint);
         assertTrue(courier.isArrived());
@@ -528,7 +525,7 @@ public class TestCourier {
         assertTrue(courier.isTraveling());
         assertFalse(leftWoodcutter.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         assertTrue(courier.isAt(leftWoodcutter.getFlag().getPosition()));
 
@@ -548,7 +545,7 @@ public class TestCourier {
         assertTrue(leftWoodcutter.getFlag().getStackedCargo().isEmpty());
         assertFalse(courier.isIdle());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, middleFlagPoint);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, middleFlagPoint);
 
         assertEquals(middleFlag.getStackedCargo().getFirst(), cargoForRightWoodcutter);
         assertEquals(courier.getCargo(), cargoForLeftWoodcutter);
@@ -607,7 +604,7 @@ public class TestCourier {
         // Courier will walk to idle point at the road
         assertTrue(courier.isWalkingToRoad());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertEquals(courier.getPosition(), middlePoint);
         assertTrue(courier.isArrived());
@@ -620,7 +617,7 @@ public class TestCourier {
         assertTrue(courier.isTraveling());
         assertFalse(leftWoodcutter.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         assertTrue(courier.isAt(leftWoodcutter.getFlag().getPosition()));
 
@@ -633,14 +630,14 @@ public class TestCourier {
         assertTrue(leftWoodcutter.getFlag().getStackedCargo().isEmpty());
         assertFalse(courier.isIdle());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, middleFlag.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, middleFlag.getPosition());
 
         assertEquals(middleFlag.getStackedCargo().getFirst(), cargoForRightWoodcutter);
         assertNull(courier.getCargo());
         assertFalse(courier.isIdle());
         assertEquals(courier.getTarget(), middlePoint);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertTrue(courier.isIdle());
         assertEquals(courier.getPosition(), middlePoint);
@@ -685,7 +682,7 @@ public class TestCourier {
         // Courier will walk to idle point at the road
         assertTrue(courier.isWalkingToRoad());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertEquals(courier.getPosition(), middlePoint);
         assertTrue(courier.isArrived());
@@ -698,7 +695,7 @@ public class TestCourier {
         assertTrue(courier.isTraveling());
         assertFalse(rightFlag.getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         assertTrue(courier.isAt(rightFlagPoint));
 
@@ -714,7 +711,7 @@ public class TestCourier {
 
         assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, leftFlagPoint);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, leftFlagPoint);
 
         // Verify that courier does not deliver the cargo to the flag
         assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
@@ -722,7 +719,7 @@ public class TestCourier {
         assertEquals(courier.getTarget(), woodcutter0.getPosition());
         assertEquals(woodcutter0.getAmount(PLANK), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, woodcutter0.getPosition());
 
         assertNull(courier.getCargo());
         assertFalse(courier.isIdle());
@@ -769,7 +766,7 @@ public class TestCourier {
         // Courier will walk to idle point at the road
         assertTrue(courier.isWalkingToRoad());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertEquals(courier.getPosition(), middlePoint);
         assertTrue(courier.isArrived());
@@ -782,7 +779,7 @@ public class TestCourier {
         assertTrue(courier.isTraveling());
         assertFalse(rightFlag.getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         assertTrue(courier.isAt(rightFlagPoint));
 
@@ -798,25 +795,25 @@ public class TestCourier {
 
         assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, leftFlagPoint);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, leftFlagPoint);
 
         // Verify that courier does not deliver the cargo to the flag
         assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
         assertNotNull(courier.getCargo());
         assertEquals(courier.getTarget(), woodcutter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, woodcutter0.getPosition());
 
         assertFalse(courier.isIdle());
         assertEquals(courier.getPosition(), woodcutter0.getPosition());
         assertEquals(courier.getTarget(), woodcutter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, woodcutter0.getFlag().getPosition());
 
         assertEquals(courier.getPosition(), woodcutter0.getFlag().getPosition());
         assertFalse(courier.isIdle());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         assertEquals(courier.getPosition(), middlePoint);
         assertTrue(courier.isIdle());
@@ -861,7 +858,7 @@ public class TestCourier {
         assertTrue(courier.isWalkingToRoad());
         assertEquals(courier.getTarget(), point3);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point3);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, point3);
 
         assertEquals(courier.getPosition(), point3);
         assertTrue(courier.isArrived());
@@ -873,7 +870,7 @@ public class TestCourier {
         assertEquals(courier.getTarget(), woodcutter.getFlag().getPosition());
         assertTrue(courier.isTraveling());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         assertTrue(courier.isAt(woodcutter.getFlag().getPosition()));
 
@@ -889,20 +886,20 @@ public class TestCourier {
         cargoForWoodcutter.setTarget(woodcutter);
 
         // The courier delivers the cargo at the forester hut
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, foresterHut0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, foresterHut0.getPosition());
 
         // Verify that courier delivers the cargo
         assertNull(courier.getCargo());
 
         // Wait for the courier to go to the forester hut's flag and pick up the cargo
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, foresterHut0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, foresterHut0.getFlag().getPosition());
 
         assertEquals(courier.getCargo(), cargoForWoodcutter);
 
         // Verify that the courier delivers the cargo to the woodcutter
         assertEquals(courier.getTarget(), woodcutter.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, woodcutter.getPosition());
 
         assertNull(courier.getCargo());
     }
@@ -956,7 +953,7 @@ public class TestCourier {
         assertTrue(courier.isWalkingToRoad());
         assertEquals(courier.getTarget(), middlePoint);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, middlePoint);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, middlePoint);
 
         assertEquals(courier.getPosition(), middlePoint);
         assertTrue(courier.isArrived());
@@ -968,7 +965,7 @@ public class TestCourier {
         assertEquals(courier.getTarget(), woodcutter0.getFlag().getPosition());
         assertTrue(courier.isTraveling());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         assertTrue(courier.isAt(woodcutter0.getFlag().getPosition()));
 
@@ -987,7 +984,7 @@ public class TestCourier {
         cargoForWoodcutter.setTarget(woodcutter0);
 
         // Let the courier reach the middle flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, middleFlagPoint);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, middleFlagPoint);
 
         // Verify that courier puts down the cargo and picks up the new cargo
         assertFalse(middleFlag.getStackedCargo().isEmpty());
@@ -995,7 +992,7 @@ public class TestCourier {
         assertEquals(courier.getTarget(), woodcutter0.getPosition());
         assertEquals(woodcutter0.getAmount(PLANK), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, woodcutter0.getPosition());
 
         assertNull(courier.getCargo());
         assertFalse(courier.isIdle());
@@ -1178,7 +1175,7 @@ public class TestCourier {
         var road0 = map.placeRoad(player0, point3, point4, point5);
 
         // Place a courier on the road
-        var courier = Utils.occupyRoad(road0, map);
+        var courier = Utils.occupyRoad(road0);
 
         // Verify that the road is closer to the enemy's storage
         assertTrue(point3.distance(headquarter0.getPosition()) > point3.distance(headquarter1.getPosition()));
@@ -1220,6 +1217,177 @@ public class TestCourier {
         var courier = couriers.getFirst();
 
         assertEquals(courier.getPlayer(), player0);
+    }
+
+    @Test
+    public void testCourierReturnsToStorageWhenAssignedRoadIsRemovedAfterLosingLand() throws Exception {
+
+        // Create two player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 60, 61);
+
+        // Place player 0's headquarters
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place player 1's headquarters
+        var point1 = new Point(39, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        // Place player 0's flag and connect it to the headquarters
+        var point2 = new Point(25, 15);
+        var flag0 = map.placeFlag(player0, point2);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        // Wait for the road to be assigned a courier
+        var courier = Utils.waitForRoadToGetAssignedCourier(road0);
+        Utils.waitForCourierToBeIdle(courier, map);
+
+        // Place player 1's guard house close enough to take player 0's flag when occupied
+        var point3 = new Point(31, 15);
+        var guardHouse1 = map.placeBuilding(new GuardHouse(player1), point3);
+        map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), guardHouse1.getFlag());
+
+        // Wait for the guard house to be built and occupied
+        Utils.fastForwardUntilBuildingIsConstructed(guardHouse1);
+
+        assertTrue(map.getRoads().contains(road0));
+        assertNotNull(map.getFlagAtPoint(point2));
+        assertTrue(map.isFlagAtPoint(point2));
+
+        Utils.waitForMilitaryBuildingToGetPopulated(guardHouse1);
+
+        // Verify that player 0 loses the flag and its road
+        assertFalse(map.getRoads().contains(road0));
+        assertNull(map.getFlagAtPoint(point2));
+
+        // Verify that the courier returns to the headquarters instead of using the removed road
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+
+        for (int i = 0; i < 1_000 && map.getWorkers().contains(courier); i++) {
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(courier));
+    }
+
+    @Test
+    public void testCourierReturnsToStorageWhenAssignedRoadIsRemovedAfterHeadquartersIsLost() throws Exception {
+
+        // Create two player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 60, 61);
+
+        // Place player 0's headquarters
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place player 1's headquarters
+        var point1 = new Point(39, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        // Place barracks for player 1
+        var point2 = new Point(27, 15);
+        var fortress0 = map.placeBuilding(new Fortress(player1), point2);
+        var road0 = map.placeAutoSelectedRoad(player1, fortress0.getFlag(), headquarter1.getFlag());
+
+        Utils.waitForBuildingToBeConstructed(fortress0);
+
+        Utils.waitForMilitaryBuildingToGetPopulated(fortress0);
+
+        // Give player 1 soldiers and remove all soldiers from player 0
+        Utils.setNoReservedSoldiers(headquarter0, headquarter1);
+
+        Utils.clearSoldiersFromInventory(headquarter0, headquarter1);
+
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 10);
+
+        // Place player 0's flag and connect it to the headquarters
+        var point3 = new Point(7, 15);
+        var flag0 = map.placeFlag(player0, point3);
+        var road1 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        // Wait for the road to be assigned a courier
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
+
+        Utils.waitForCourierToBeIdle(courier, map);
+
+        // Wait for the fortress to have two soldiers
+        Utils.waitForMilitaryBuildingToHaveNumberOfHostedSoldiers(fortress0, 9);
+
+        // Wait for the courier to be idle
+        Utils.waitForCouriersToBeIdle(courier);
+
+        // Let player 1 attack player 0's headquarters
+        Utils.printPlayersLand(map.getPlayers(), List.of());
+
+        assertTrue(player1.canAttack(headquarter0));
+
+        player1.attack(headquarter0, 1, AttackStrength.STRONG);
+
+        var attacker = Utils.waitForPrimaryAttacker(headquarter0, player1);
+
+        // Verify that the courier goes away and dies when player 1 conquers player 0's headquarters
+        assertTrue(map.getRoads().contains(road1));
+        assertNotNull(map.getFlagAtPoint(point3));
+        assertTrue(map.isFlagAtPoint(point3));
+
+        Utils.fastForwardUntilWorkerReachesPoint(attacker, headquarter0.getPosition());
+
+        assertTrue(headquarter0.isBurningDown());
+        assertFalse(map.getRoads().contains(road1));
+        assertNull(map.getFlagAtPoint(point3));
+        assertFalse(map.isFlagAtPoint(point3));
+        assertNotNull(courier.getTarget());
+
+        // Verify that a is skeleton placed when the worker dies
+        for (int i = 0; i < 400; i++) {
+            if (courier.isDead()) {
+                break;
+            }
+
+            assertFalse(courier.isInsideBuilding());
+            assertFalse(courier.isDead());
+
+            map.stepTime();
+        }
+
+        assertTrue(courier.isDead());
+        assertTrue(map.getWorkers().contains(courier));
+        assertTrue(map.isDecoratedAtPoint(courier.getPosition()));
+        assertEquals(map.getDecorationAtPoint(courier.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
+
+        // Verify that the skeleton decays
+        for (int i = 0; i < 6000; i++) {
+            assertTrue(courier.isDead());
+            assertTrue(map.getWorkers().contains(courier));
+            assertTrue(map.isDecoratedAtPoint(courier.getPosition()));
+            assertEquals(map.getDecorationAtPoint(courier.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
+
+            map.stepTime();
+        }
+
+        assertTrue(courier.isDead());
+        assertTrue(map.getWorkers().contains(courier));
+        assertTrue(map.isDecoratedAtPoint(courier.getPosition()));
+        assertEquals(map.getDecorationAtPoint(courier.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
+
+        // Verify that the skeleton finally disappears
+        for (int i = 0; i < 4000; i++) {
+            assertTrue(courier.isDead());
+            assertTrue(map.getWorkers().contains(courier));
+            assertTrue(map.isDecoratedAtPoint(courier.getPosition()));
+            assertEquals(map.getDecorationAtPoint(courier.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
+
+            map.stepTime();
+        }
+
+        assertTrue(courier.isDead());
+        assertFalse(map.getWorkers().contains(courier));
+        assertFalse(map.isDecoratedAtPoint(courier.getPosition()));
+        assertNotEquals(map.getDecorationAtPoint(courier.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
     }
 
     @Test
@@ -1321,10 +1489,10 @@ public class TestCourier {
         Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill);
 
         // Wait for the courier to pick up a delivery for the sawmill
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier(), WOOD);
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier(), WOOD);
 
         // Wait until the courier reaches the sawmill's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), sawmill.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), sawmill.getFlag().getPosition());
 
         // Verify that the courier instead returns the cargo to the headquarters because the sawmill is torn down
         map.stepTime();
@@ -1337,14 +1505,14 @@ public class TestCourier {
 
         var cargo = road0.getCourier().getCargo();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), sawmill.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), sawmill.getPosition());
 
         assertNotNull(road0.getCourier().getCargo());
         assertEquals(road0.getCourier().getCargo(), cargo);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), sawmill.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), sawmill.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), headquarter0.getPosition());
 
         assertNull(road0.getCourier().getCargo());
     }
@@ -1379,10 +1547,10 @@ public class TestCourier {
         Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill);
 
         // Wait for the courier to pick up a delivery for the sawmill
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier(), WOOD);
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier(), WOOD);
 
         // Wait until the courier reaches the point before the sawmill's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), sawmill.getFlag().getPosition().left());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), sawmill.getFlag().getPosition().left());
 
         // Verify that the courier instead returns the cargo to the headquarters because the sawmill is torn down
         map.stepTime();
@@ -1393,13 +1561,13 @@ public class TestCourier {
 
         var cargo = road0.getCourier().getCargo();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), sawmill.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), sawmill.getFlag().getPosition());
 
         assertNotNull(road0.getCourier().getCargo());
         assertEquals(road0.getCourier().getCargo(), cargo);
         assertEquals(road0.getCourier().getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), headquarter0.getPosition());
 
         assertNull(road0.getCourier().getCargo());
     }
@@ -1428,7 +1596,7 @@ public class TestCourier {
             var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for the road to get assigned a courier
-            var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+            var courier = Utils.waitForRoadToGetAssignedCourier(road0);
 
             var amount = courierBodyTypes.getOrDefault(courier.getBodyType(), 0);
 
@@ -1468,7 +1636,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == FAT) {
                 break;
@@ -1516,10 +1684,10 @@ public class TestCourier {
         var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter.getFlag());
 
         // Wait for a courier to get assigned to the road
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road);
 
         // Wait for the courier to carry a cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier);
 
         // Verify that the courier doesn't chew gum while carrying the cargo
         for (int i = 0; i < 1000; i++) {
@@ -1560,7 +1728,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == FAT) {
                 break;
@@ -1610,7 +1778,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == FAT) {
                 break;
@@ -1664,7 +1832,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            var courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            var courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             // For thin couriers, verify that they don't start chewing gum
             if (courier.getBodyType() == THIN) {
@@ -1706,7 +1874,7 @@ public class TestCourier {
                 var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
                 // Wait for a courier to get assigned to the road
-                courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+                courier = Utils.waitForRoadToGetAssignedCourier(road);
 
                 if (courier.getBodyType() == FAT) {
                     break;
@@ -1763,7 +1931,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == THIN) {
                 break;
@@ -1816,7 +1984,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter.getFlag());
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == THIN) {
                 break;
@@ -1829,7 +1997,7 @@ public class TestCourier {
         assertEquals(courier.getBodyType(), THIN);
 
         // Wait for the courier to carry a cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier);
 
         // Verify that the courier doesn't read the paper while carrying the cargo
         for (int i = 0; i < 1000; i++) {
@@ -1870,7 +2038,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == THIN) {
                 break;
@@ -1920,7 +2088,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == THIN) {
                 break;
@@ -1974,7 +2142,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            var courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            var courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             // For thin couriers, verify that they don't start chewing gum
             if (courier.getBodyType() == FAT) {
@@ -2016,7 +2184,7 @@ public class TestCourier {
                 var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
                 // Wait for a courier to get assigned to the road
-                courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+                courier = Utils.waitForRoadToGetAssignedCourier(road);
 
                 if (courier.getBodyType() == THIN) {
                     break;
@@ -2072,7 +2240,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == THIN) {
                 break;
@@ -2125,7 +2293,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter.getFlag());
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == THIN) {
                 break;
@@ -2138,7 +2306,7 @@ public class TestCourier {
         assertEquals(courier.getBodyType(), THIN);
 
         // Wait for the courier to carry a cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier);
 
         // Verify that the courier doesn't touch the nose while carrying the cargo
         for (int i = 0; i < 1000; i++) {
@@ -2179,7 +2347,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == THIN) {
                 break;
@@ -2229,7 +2397,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == THIN) {
                 break;
@@ -2283,7 +2451,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            var courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            var courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             // For thin couriers, verify that they don't start chewing gum
             if (courier.getBodyType() == FAT) {
@@ -2326,7 +2494,7 @@ public class TestCourier {
                 var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
                 // Wait for a courier to get assigned to the road
-                courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+                courier = Utils.waitForRoadToGetAssignedCourier(road);
 
                 if (courier.getBodyType() == THIN) {
                     break;
@@ -2382,7 +2550,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == THIN) {
                 break;
@@ -2435,7 +2603,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter.getFlag());
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == THIN) {
                 break;
@@ -2448,7 +2616,7 @@ public class TestCourier {
         assertEquals(courier.getBodyType(), THIN);
 
         // Wait for the courier to carry a cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier);
 
         // Verify that the courier doesn't jump skip rope while carrying the cargo
         for (int i = 0; i < 1000; i++) {
@@ -2489,7 +2657,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == THIN) {
                 break;
@@ -2539,7 +2707,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == THIN) {
                 break;
@@ -2593,7 +2761,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            var courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            var courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             // For thin couriers, verify that they don't start chewing gum
             if (courier.getBodyType() == FAT) {
@@ -2634,7 +2802,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == THIN) {
                 break;
@@ -2689,7 +2857,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == FAT) {
                 break;
@@ -2742,7 +2910,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter.getFlag());
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == FAT) {
                 break;
@@ -2755,7 +2923,7 @@ public class TestCourier {
         assertEquals(courier.getBodyType(), FAT);
 
         // Wait for the courier to carry a cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier);
 
         // Verify that the courier doesn't sit down while carrying the cargo
         for (int i = 0; i < 1000; i++) {
@@ -2796,7 +2964,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == FAT) {
                 break;
@@ -2846,7 +3014,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == FAT) {
                 break;
@@ -2900,7 +3068,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            var courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            var courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             // For thin couriers, verify that they don't start sitting down
             if (courier.getBodyType() == THIN) {
@@ -2943,7 +3111,7 @@ public class TestCourier {
                 var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
                 // Wait for a courier to get assigned to the road
-                courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+                courier = Utils.waitForRoadToGetAssignedCourier(road);
 
                 if (courier.getBodyType() == FAT) {
                     break;
@@ -2999,7 +3167,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == FAT) {
                 break;
@@ -3047,7 +3215,7 @@ public class TestCourier {
             var road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
             // Wait for a courier to get assigned to the road
-            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+            courier = Utils.waitForRoadToGetAssignedCourier(road);
 
             if (courier.getBodyType() == THIN) {
                 break;
@@ -3098,9 +3266,9 @@ public class TestCourier {
         var road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         // Wait for the first road to get assigned a courier
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition().left());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, flag0.getPosition().left());
 
         assertEquals(courier.getPosition(), flag0.getPosition().left());
 
@@ -3108,7 +3276,7 @@ public class TestCourier {
         var woodcutter = map.placeBuilding(new Woodcutter(player0), point2.upLeft());
 
         // Wait for the courier to start walking to the headquarters' flag to pick up a cargo for the woodcutter
-        Utils.waitForWorkerToSetTarget(map, courier, headquarter0.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(courier, headquarter0.getFlag().getPosition());
 
         assertNull(courier.getCargo());
 
@@ -3127,12 +3295,12 @@ public class TestCourier {
            and goes back and becomes idle */
         assertEquals(courier.getTarget(), headquarter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         assertNull(courier.getCargo());
         assertEquals(courier.getTarget(), flag0.getPosition().left());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition().left());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, flag0.getPosition().left());
 
         assertNull(courier.getCargo());
         assertTrue(courier.isIdle());

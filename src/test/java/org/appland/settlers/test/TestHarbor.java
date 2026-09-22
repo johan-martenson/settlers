@@ -12,10 +12,11 @@ import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.TransportCategory;
 import org.appland.settlers.model.Vegetation;
+import org.appland.settlers.model.actors.Builder;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Scout;
+import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.StorehouseWorker;
-import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.Harbor;
@@ -28,8 +29,8 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 /**
@@ -282,7 +283,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testHarborNeedsWorker() throws Exception {
+    public void testBuilderOccupiesFinishedHarbor() throws Exception {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -306,17 +307,28 @@ public class TestHarbor {
         // Connect the harbor with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
+        // Wait for a builder to come out
+        var builder = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+
         // Wait for the harbor to get constructed
         Utils.waitForBuildingToBeConstructed(harbor);
 
+        // Verify that the builder goes to the storehouse and occupies it
+        Utils.waitForWorkerToSetTarget(builder, harbor.getPosition());
+
+        assertTrue(harbor.isUnoccupied());
+        assertTrue(map.getWorkers().contains(builder));
+
+        Utils.fastForwardUntilWorkerReachesPoint(builder, harbor.getPosition());
+
+        assertFalse(harbor.isUnoccupied());
         assertTrue(harbor.isReady());
-
-        // Verify that the finished harbor needs a worker
-        assertTrue(harbor.needsWorker());
+        assertTrue(harbor.isOccupied());
+        assertFalse(map.getWorkers().contains(builder));
     }
 
     @Test
-    public void testStorageWorkerGetsAssignedToFinishedHarbor() throws Exception {
+    public void testStorehouseWorkerIsNotASoldier() throws Exception {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -340,63 +352,19 @@ public class TestHarbor {
         // Connect the harbor with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
-        // Finish construction of the harbor
+        // Wait for the harbor to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(harbor);
 
-        // Run game logic once to let the headquarters assign a harbor worker to the harbor
-        var harborWorker = Utils.waitForWorkerOutsideBuilding(StorehouseWorker.class, player0);
+        var harborWorker = Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
+        // Verify that the harbor worker is not a soldier
         assertNotNull(harborWorker);
-        assertEquals(harborWorker.getTarget(), harbor.getPosition());
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, harbor.getPosition());
-
-        assertTrue(harborWorker.isInsideBuilding());
-        assertEquals(harbor.getWorker(), harborWorker);
+        assertFalse(harborWorker.isSoldier());
+        assertFalse(harborWorker instanceof Soldier);
     }
 
     @Test
-    public void testStorageWorkerIsNotASoldier() throws Exception {
-
-        // Create a single player game
-        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 41);
-
-        // Place a lake
-        var point0 = new Point(13, 9);
-        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
-
-        // Mark a possible place for a harbor
-        var point1 = new Point(10, 8);
-        map.setPossiblePlaceForHarbor(point1);
-
-        // Place headquarters
-        var point2 = new Point(5, 5);
-        var headquarter = map.placeBuilding(new Headquarter(player0), point2);
-
-        // Place harbor
-        var harbor = map.placeBuilding(new Harbor(player0), point1);
-
-        // Connect the harbor with the headquarters
-        var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
-
-        // Wait for the harbor to get constructed
-        Utils.waitForBuildingToBeConstructed(harbor);
-
-        // Run game logic once to let the headquarters assign a harbor worker to the harbor
-        var harborWorker = Utils.waitForWorkerOutsideBuilding(StorehouseWorker.class, player0);
-
-        assertNotNull(harborWorker);
-        assertEquals(harborWorker.getTarget(), harbor.getPosition());
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, harbor.getPosition());
-
-        assertTrue(harborWorker.isInsideBuilding());
-        assertEquals(harbor.getWorker(), harborWorker);
-    }
-
-    @Test
-    public void testStorageWorkerRests() throws Exception {
+    public void testStorehouseWorkerRests() throws Exception {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -423,14 +391,10 @@ public class TestHarbor {
         // Wait for the harbor to get constructed
         Utils.waitForBuildingToBeConstructed(harbor);
 
-        // Wait for a storage worker to start walking to the harbor
-        var harborWorker0 = Utils.waitForWorkerOutsideBuilding(StorehouseWorker.class, player0);
+        // Wait for the harbor to get occupied
+        var harborWorker0 = Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
-        // Wait for the storage worker to reach the harbor
-        assertEquals(harborWorker0.getTarget(), harbor.getPosition());
-        assertFalse(harborWorker0.isInsideBuilding());
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker0, harbor.getPosition());
+        assertTrue(harborWorker0.isInsideBuilding());
 
         // Verify that the harbor worker rests
         for (int i = 0; i < 50; i++) {
@@ -441,7 +405,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageWorkerRestsThenDeliversCargo() throws Exception {
+    public void testStorehouseWorkerRestsThenDeliversCargo() throws Exception {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -463,24 +427,23 @@ public class TestHarbor {
         var point5 = new Point(11, 9);
         var woodcutter = map.placeBuilding(new Woodcutter(player0), point5.upLeft());
 
-        // Place harbor
+        // Place harbor and wait for it to get constructed and occupied
         var harbor = map.placeBuilding(new Harbor(player0), point3);
+        var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
-        // Connect the harbor with the woodcutter
-        var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), woodcutter.getFlag());
+        var harborWorker0 = Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
-        // Finish construction of the harbor
-        Utils.constructHouse(harbor);
+        // Disconnect the storehouse from the headquarters
+        map.removeRoad(road0);
 
-        // Occupy the harbor worker
-        var harborWorker0 = new StorehouseWorker(player0, map);
-        Utils.occupyBuilding(harborWorker0, harbor);
-
-        // The harbor worker rests
-        Utils.fastForward(19, map);
+        // Connect the storehouse with the woodcutter
+        var road1 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), harbor.getFlag());
 
         // Put planks in the harbor
         harbor.putCargo(new Cargo(PLANK, map));
+
+        // The harbor worker rests
+        Utils.fastForward(19, map);
 
         // The harbor worker delivers stone or planks to the woodcutter
         assertTrue(harborWorker0.isInsideBuilding());
@@ -492,14 +455,14 @@ public class TestHarbor {
         assertEquals(harborWorker0.getTarget(), harbor.getFlag().getPosition());
         assertTrue(harbor.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker0, harbor.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(harborWorker0, harbor.getFlag().getPosition());
 
         assertNull(harborWorker0.getCargo());
         assertFalse(harbor.getFlag().getStackedCargo().isEmpty());
     }
 
     @Test
-    public void testStorageWorkerGoesBackToHarborAfterDelivery() throws Exception {
+    public void testStorehouseWorkerGoesBackToHarborAfterDelivery() throws Exception {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -521,25 +484,23 @@ public class TestHarbor {
         var point3 = new Point(13, 9);
         var woodcutter = map.placeBuilding(new Woodcutter(player0), point3.upLeft());
 
-        // Place harbor
+        // Place harbor and wait for it to get constructed and occupied
         var harbor = map.placeBuilding(new Harbor(player0), point1);
+        var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
-        // Connect the harbor with woodcutter
-        var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), woodcutter.getFlag());
+        var harborWorker0 = Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
-        // Construct the harbor
-        Utils.constructHouse(harbor);
+        // Disconnect the harbor from the headquarters
+        map.removeRoad(road0);
 
-        // Occupy the harbor
-        var harborWorker0 = new StorehouseWorker(player0, map);
-
-        Utils.occupyBuilding(harborWorker0, harbor);
-
-        // The harbor worker rests
-        Utils.fastForward(19, map);
+        // Connect the woodcutter with the harbor
+        var road1 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), harbor.getFlag());
 
         // Put planks in the harbor
         harbor.putCargo(new Cargo(PLANK, map));
+
+        // The harbor worker rests
+        Utils.fastForward(19, map);
 
         // The harbor worker delivers stone or planks to the woodcutter
         assertTrue(harborWorker0.isInsideBuilding());
@@ -550,18 +511,18 @@ public class TestHarbor {
         assertNotNull(harborWorker0.getCargo());
         assertEquals(harborWorker0.getTarget(), harbor.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker0, harbor.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(harborWorker0, harbor.getFlag().getPosition());
 
         // Verify that the harbor worker goes back to the harbor
         assertEquals(harborWorker0.getTarget(), harbor.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, harborWorker0);
+        Utils.fastForwardUntilWorkersReachTarget(harborWorker0);
 
         assertTrue(harborWorker0.isInsideBuilding());
     }
 
     @Test
-    public void testStorageWorkerRestsInHarborAfterDelivery() throws Exception {
+    public void testStorehouseWorkerRestsInHarborAfterDelivery() throws Exception {
 
         // Create a single player game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -583,25 +544,23 @@ public class TestHarbor {
         var point3 = new Point(11, 9);
         var woodcutter = map.placeBuilding(new Woodcutter(player0), point3.upLeft());
 
-        // Place harbor
+        // Place harbor and wait for it to get constructed and occupied
         var harbor = map.placeBuilding(new Harbor(player0), point1);
+        var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
-        // Connect the harbor with the woodcutter
-        var road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), woodcutter.getFlag());
+        var harborWorker0 = Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
-        // Construct the harbor
-        Utils.constructHouse(harbor);
+        // Disconnect the harbor from the headquarters
+        map.removeRoad(road0);
 
-        // Occupy the harbor
-        var harborWorker0 = new StorehouseWorker(player0, map);
-
-        Utils.occupyBuilding(harborWorker0, harbor);
-
-        // The harbor worker rests
-        Utils.fastForward(19, map);
+        // Connect the woodcutter with the harbor
+        var road1 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), harbor.getFlag());
 
         // Put planks in the harbor
         harbor.putCargo(new Cargo(PLANK, map));
+
+        // The harbor worker rests
+        Utils.fastForward(19, map);
 
         // The harbor worker delivers stone or planks to the woodcutter
         assertTrue(harborWorker0.isInsideBuilding());
@@ -611,14 +570,14 @@ public class TestHarbor {
         assertFalse(harborWorker0.isInsideBuilding());
         assertEquals(harborWorker0.getTarget(), harbor.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker0, harbor.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(harborWorker0, harbor.getFlag().getPosition());
 
         assertNull(harborWorker0.getCargo());
 
         // Let the harbor worker go back to the harbor
         assertEquals(harborWorker0.getTarget(), harbor.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, harborWorker0);
+        Utils.fastForwardUntilWorkersReachTarget(harborWorker0);
 
         // Verify that the harbor var stays in the harbor and rests
         for (int i = 0; i < 20; i++) {
@@ -629,7 +588,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageWorkerGoesBackToHarborWhenHarborIsDestroyed() throws Exception {
+    public void testStorehouseWorkerGoesBackToHarborWhenHarborIsDestroyed() throws Exception {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -672,14 +631,14 @@ public class TestHarbor {
 
         var amount = headquarter0.getAmount(STOREHOUSE_WORKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(harborWorker, headquarter0.getPosition());
 
         // Verify that the harbor worker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(STOREHOUSE_WORKER), amount + 1);
     }
 
     @Test
-    public void testStorageWorkerDoesNotGoBackToUnfinishedStorageWhenHarborIsDestroyed() throws Exception {
+    public void testStorehouseWorkerDoesNotGoBackToUnfinishedStorehouseWhenHarborIsDestroyed() throws Exception {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -729,7 +688,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageWorkerDoesNotGoBackToBurningStorehouseWhenHarborIsDestroyed() throws Exception {
+    public void testStorehouseWorkerDoesNotGoBackToBurningStorehouseWhenHarborIsDestroyed() throws Exception {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -785,7 +744,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageWorkerDoesNotGoBackToDestroyedStorehouseWhenHarborIsDestroyed() throws Exception {
+    public void testStorehouseWorkerDoesNotGoBackToDestroyedStorehouseWhenHarborIsDestroyed() throws Exception {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -844,7 +803,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageWorkerDoesNotGoBackOffroadToUnfinishedStorehouseWhenHarborIsDestroyed() throws Exception {
+    public void testStorehouseWorkerDoesNotGoBackOffroadToUnfinishedStorehouseWhenHarborIsDestroyed() throws Exception {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -894,7 +853,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageWorkerDoesNotGoBackOffroadToBurningStorehouseWhenHarborIsDestroyed() throws Exception {
+    public void testStorehouseWorkerDoesNotGoBackOffroadToBurningStorehouseWhenHarborIsDestroyed() throws Exception {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -912,21 +871,22 @@ public class TestHarbor {
         var point2 = new Point(15, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
-        // Place harbor
+        // Place harbor and wait for it to get constructed and occupied
         var harbor0 = map.placeBuilding(new Harbor(player0), point1);
+        var road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter0.getFlag());
 
-        // Finish construction of the harbor
-        Utils.constructHouse(harbor0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(harbor0);
 
-        // Occupy the harbor
-        Utils.occupyBuilding(new StorehouseWorker(player0, map), harbor0);
-
-        // Place storehouse
+        // Place storehouse and wait for it to get constructed and occupied
         var point3 = new Point(15, 15);
         var storehouse0 = map.placeBuilding(new Storehouse(player0), point3);
+        var road1 = map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), headquarter0.getFlag());
 
-        // Finish construction of the storehouse
-        Utils.constructHouse(storehouse0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(storehouse0);
+
+        // Remove the roads
+        map.removeRoad(road0);
+        map.removeRoad(road1);
 
         // Destroy the storehouse
         storehouse0.tearDown();
@@ -945,7 +905,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageWorkerDoesNotGoBackOffroadToDestroyedStorehouseWhenHarborIsDestroyed() throws Exception {
+    public void testStorehouseWorkerDoesNotGoBackOffroadToDestroyedStorehouseWhenHarborIsDestroyed() throws Exception {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -963,21 +923,22 @@ public class TestHarbor {
         var point2 = new Point(15, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
-        // Place harbor
+        // Place harbor and wait for it to get constructed and occupied
         var harbor0 = map.placeBuilding(new Harbor(player0), point1);
+        var road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter0.getFlag());
 
-        // Finish construction of the harbor
-        Utils.constructHouse(harbor0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(harbor0);
 
-        // Occupy the harbor
-        Utils.occupyBuilding(new StorehouseWorker(player0, map), harbor0);
-
-        // Place storehouse
+        // Place storehouse and wait for it to get constructed and occupied
         var point4 = new Point(15, 15);
         var storehouse = map.placeBuilding(new Storehouse(player0), point4);
+        var road1 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        // Finish construction of the storehouse
-        Utils.constructHouse(storehouse);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(storehouse);
+
+        // Remove the roads
+        map.removeRoad(road0);
+        map.removeRoad(road1);
 
         // Destroy the storehouse
         storehouse.tearDown();
@@ -999,7 +960,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageWorkerGoesBackOnToHarborOnRoadsIfPossibleWhenHarborIsDestroyed() throws Exception {
+    public void testStorehouseWorkerGoesBackOnToHarborOnRoadsIfPossibleWhenHarborIsDestroyed() throws Exception {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -1252,7 +1213,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testAssignedStorageWorkerHasCorrectlySetPlayer() throws Exception {
+    public void testAssignedStorehouseWorkerHasCorrectlySetPlayer() throws Exception {
 
         // Create new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -1270,25 +1231,14 @@ public class TestHarbor {
         var point2 = new Point(13, 15);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
-        // Place harbor
+        // Place harbor and wait for it to get constructed and occupied
         var harbor0 = map.placeBuilding(new Harbor(player0), point1);
-
-        // Finish construction of the harbor
-        Utils.constructHouse(harbor0);
-
-        // Connect the harbor with the headquarters
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), harbor0.getFlag());
 
-        // Wait for harbor worker to get assigned and leave the headquarters
-        var workers = Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0);
+        var storehuseWorker = Utils.waitForNonMilitaryBuildingToGetPopulated(harbor0);
 
-        assertNotNull(workers);
-        assertEquals(workers.size(), 1);
-
-        // Verify that the player is set correctly in the worker
-        var worker = workers.getFirst();
-
-        assertEquals(worker.getPlayer(), player0);
+        // Verify that player is set correctly
+        assertEquals(player0, storehuseWorker.getPlayer());
     }
 
     @Test
@@ -1394,7 +1344,7 @@ public class TestHarbor {
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
         // Occupy the road
-        Utils.occupyRoad(road0, map);
+        Utils.occupyRoad(road0);
 
         // Place barracks close to the new border
         var point4 = new Point(34, 18);
@@ -1410,7 +1360,7 @@ public class TestHarbor {
         var road1 = map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), barracks0.getFlag());
 
         // Occupy the road
-        Utils.occupyRoad(road1, map);
+        Utils.occupyRoad(road1);
 
         // Capture the barracks for player 0
         player0.attack(barracks0, 2, AttackStrength.STRONG);
@@ -1431,7 +1381,7 @@ public class TestHarbor {
         var road4 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), fortress0.getFlag());
 
         // Occupy the road
-        Utils.occupyRoad(road4, map);
+        Utils.occupyRoad(road4);
 
         // Place flag
         var point5 = new Point(32, 18);
@@ -1466,7 +1416,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageWorkerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
+    public void testStorehouseWorkerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
         // Start new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -1484,234 +1434,71 @@ public class TestHarbor {
         var point2 = new Point(5, 5);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
-        // Place first flag
-        var point3 = new Point(10, 4);
-        var flag0 = map.placeFlag(player0, point3);
-
-        // Place harbor
+        // Place harbor and connect it to the headquarters
         var harbor0 = map.placeBuilding(new Harbor(player0), point1);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), harbor0.getFlag());
 
-        // Finish construction of the harbor
-        Utils.constructHouse(harbor0);
+        // Wait for a builder
+        var builder = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
-        // Connect headquarters and first flag
-        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        // Wait for the harbor to get constructed
+        Utils.waitForBuildingToBeConstructed(harbor0);
 
-        // Connect the first flag with the second flag
-        var road1 = map.placeAutoSelectedRoad(player0, flag0, harbor0.getFlag());
+        // Wait for the builder to be on the way to the flag
+        Utils.waitForWorkerToHavePointNext(builder, harbor0.getFlag().getPosition());
 
-        // Wait for the harbor worker to be on the second road on its way to the flag
-        Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0);
+        // Tear down the harbor (and remove the flag)
+        map.removeFlag(harbor0.getFlag());
 
-        var harborWorker = (StorehouseWorker) null;
-
-        for (var worker : map.getWorkers()) {
-            if (worker instanceof StorehouseWorker && harbor0.getPosition().equals(worker.getTarget())) {
-                harborWorker = (StorehouseWorker) worker;
-            }
-        }
-
-        assertNotNull(harborWorker);
-        assertEquals(harborWorker.getTarget(), harbor0.getPosition());
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, headquarter0.getFlag().getPosition());
-
-        map.stepTime();
-
-        // See that the harbor worker has started walking
-        assertFalse(harborWorker.isExactlyAtPoint());
-
-        // Remove the next road
-        map.removeRoad(road1);
+        assertFalse(map.isFlagAtPoint(harbor0.getPosition().downRight()));
+        assertNotEquals(harbor0.getPosition().downRight(), builder.getPosition());
 
         // Verify that the harbor worker continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder, harbor0.getFlag().getPosition());
 
-        assertEquals(harborWorker.getPosition(), flag0.getPosition());
+        assertEquals(builder.getPosition(), harbor0.getFlag().getPosition());
 
-        // Verify that the harbor worker returns to the headquarterswhen it reaches the flag
-        assertEquals(harborWorker.getTarget(), headquarter0.getPosition());
+        // Verify that the harbor worker returns to the headquarters when it reaches the flag
+        assertEquals(builder.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder, headquarter0.getPosition());
     }
 
     @Test
-    public void testStorageWorkerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
-
-        // Start new game
-        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 41);
-
-        // Place a lake
-        var point0 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
-
-        // Mark a possible place for a harbor
-        var point1 = new Point(15, 5);
-        map.setPossiblePlaceForHarbor(point1);
-
-        // Place headquarters
-        var point2 = new Point(16, 8);
-        var headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
-
-        // Place first flag
-        var point3 = new Point(10, 4);
-        var flag0 = map.placeFlag(player0, point3);
-
-        // Place harbor
-        var point4 = new Point(14, 4);
-        var harbor0 = map.placeBuilding(new Harbor(player0), point1);
-
-        // Finish construction of the harbor
-        Utils.constructHouse(harbor0);
-
-        // Connect headquarters and first flag
-        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
-
-        // Connect the first flag with the second flag
-        var road1 = map.placeAutoSelectedRoad(player0, flag0, harbor0.getFlag());
-
-        // Wait for the harbor worker to be on the second road on its way to the flag
-        Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0);
-
-        var harborWorker = (StorehouseWorker) null;
-
-        for (var worker : map.getWorkers()) {
-            if (worker instanceof StorehouseWorker && harbor0.getPosition().equals(worker.getTarget())) {
-                harborWorker = (StorehouseWorker) worker;
-            }
-        }
-
-        assertNotNull(harborWorker);
-        assertEquals(harborWorker.getTarget(), harbor0.getPosition());
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, headquarter0.getFlag().getPosition());
-
-        map.stepTime();
-
-        // See that the harbor worker has started walking
-        assertFalse(harborWorker.isExactlyAtPoint());
-
-        // Remove the current road
-        map.removeRoad(road0);
-
-        // Verify that the harbor worker continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, flag0.getPosition());
-
-        assertEquals(harborWorker.getPosition(), flag0.getPosition());
-
-        // Verify that the harbor worker continues to the final flag
-        assertEquals(harborWorker.getTarget(), harbor0.getPosition());
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, harbor0.getFlag().getPosition());
-
-        // Verify that the harbor worker goes out to harbor instead of going directly back
-        assertNotEquals(harborWorker.getTarget(), headquarter0.getPosition());
-    }
-
-    @Test
-    public void testStorageWorkerReturnsToHarborIfHarborIsDestroyed() throws Exception {
-
-        // Start new game
-        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 41);
-
-        // Place a lake
-        var point0 = new Point(17, 5);
-        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
-
-        // Mark a possible place for a harbor
-        var point1 = new Point(15, 7);
-        map.setPossiblePlaceForHarbor(point1);
-
-        // Place headquarters
-        var point2 = new Point(5, 5);
-        var headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
-
-        // Place first flag
-        var point3 = new Point(10, 4);
-        var flag0 = map.placeFlag(player0, point3);
-
-        // Place harbor
-        var harbor0 = map.placeBuilding(new Harbor(player0), point1);
-
-        // Finish construction of the harbor
-        Utils.constructHouse(harbor0);
-
-        // Connect headquarters and first flag
-        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
-
-        // Connect the first flag with the second flag
-        var road1 = map.placeAutoSelectedRoad(player0, flag0, harbor0.getFlag());
-
-        // Wait for the harbor worker to be on the second road on its way to the flag
-        Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0);
-
-        var harborWorker = (StorehouseWorker) null;
-
-        for (var worker : map.getWorkers()) {
-            if (worker instanceof StorehouseWorker && harbor0.getPosition().equals(worker.getTarget())) {
-                harborWorker = (StorehouseWorker) worker;
-            }
-        }
-
-        assertNotNull(harborWorker);
-        assertEquals(harborWorker.getTarget(), harbor0.getPosition());
-
-        // Wait for the harbor worker to reach the first flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, flag0.getPosition());
-
-        map.stepTime();
-
-        // See that the harbor worker has started walking
-        assertFalse(harborWorker.isExactlyAtPoint());
-
-        // Tear down the harbor
-        harbor0.tearDown();
-
-        // Verify that the harbor worker continues walking to the next flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, harbor0.getFlag().getPosition());
-
-        assertEquals(harborWorker.getPosition(), harbor0.getFlag().getPosition());
-
-        // Verify that the harbor worker goes back to harbor
-        assertEquals(harborWorker.getTarget(), headquarter0.getPosition());
-    }
-
-    @Test
-    public void testStorageWorkerGoesOffroadBackToClosestStorehouseWhenHarborIsDestroyed() throws Exception {
+    public void testStorehouseWorkerGoesOffroadBackToClosestStorehouseWhenHarborIsDestroyed() throws Exception {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         var map = new GameMap(List.of(player0), 40, 41);
 
         // Place a lake
-        var point0 = new Point(18, 14);
+        var point0 = new Point(18, 16);
         Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         // Mark a possible place for a harbor
-        var point1 = new Point(15, 13);
+        var point1 = new Point(15, 15);
         map.setPossiblePlaceForHarbor(point1);
 
         // Place headquarters
         var point2 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
-        // Place harbor
+        // Place harbor and wait for it to get constructed and occupied
         var harbor0 = map.placeBuilding(new Harbor(player0), point1);
+        var road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter0.getFlag());
 
-        // Finish construction of the harbor
-        Utils.constructHouse(harbor0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(harbor0);
 
-        // Occupy the harbor
-        Utils.occupyBuilding(new StorehouseWorker(player0, map), harbor0);
-
-        // Place a storehouse closer to the harbor
-        var point3 = new Point(13, 11);
+        // Place a storehouse closer to the harbor and wait for it to get constructed and occupied
+        var point3 = new Point(11, 13);
         var storehouse = map.placeBuilding(new Storehouse(player0), point3);
+        var road1 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), storehouse.getFlag());
 
-        // Finish construction of the storehouse
-        Utils.constructHouse(storehouse);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(storehouse);
+
+        // Remove the roads
+        map.removeRoad(road0);
+        map.removeRoad(road1);
 
         // Destroy the harbor
         var harborWorker = harbor0.getWorker();
@@ -1727,14 +1514,14 @@ public class TestHarbor {
 
         var amount = storehouse.getAmount(STOREHOUSE_WORKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, storehouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(harborWorker, storehouse.getPosition());
 
         // Verify that the harbor worker is stored correctly in the headquarters
         assertEquals(storehouse.getAmount(STOREHOUSE_WORKER), amount + 1);
     }
 
     @Test
-    public void testStorageWorkerReturnsOffroadAndAvoidsBurningStorehouseWhenHarborIsDestroyed() throws Exception {
+    public void testStorehouseWorkerReturnsOffroadAndAvoidsBurningStorehouseWhenHarborIsDestroyed() throws Exception {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -1752,21 +1539,22 @@ public class TestHarbor {
         var point2 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
-        // Place harbor
+        // Place harbor and wait for it to get constructed and occupied
         var harbor0 = map.placeBuilding(new Harbor(player0), point1);
+        var road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter0.getFlag());
 
-        // Finish construction of the harbor
-        Utils.constructHouse(harbor0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(harbor0);
 
-        // Occupy the harbor
-        Utils.occupyBuilding(new StorehouseWorker(player0, map), harbor0);
-
-        // Place a storehouse closer to the harbor
-        var point3 = new Point(13, 13);
+        // Place a storehouse closer to the harbor and wait for it to get constructed and occupied
+        var point3 = new Point(11, 13);
         var storehouse = map.placeBuilding(new Storehouse(player0), point3);
+        var road1 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        // Finish construction of the storehouse
-        Utils.constructHouse(storehouse);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(storehouse);
+
+        // Remove the roads
+        map.removeRoad(road0);
+        map.removeRoad(road1);
 
         // Destroy the storehouse
         storehouse.tearDown();
@@ -1785,14 +1573,14 @@ public class TestHarbor {
 
         var amount = headquarter0.getAmount(STOREHOUSE_WORKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(harborWorker, headquarter0.getPosition());
 
         // Verify that the harbor worker is stored correctly in the headquarters
-        assertEquals(headquarter0.getAmount(STOREHOUSE_WORKER), amount + 1);
+        assertTrue(headquarter0.getAmount(STOREHOUSE_WORKER) > amount); // One or both storehouse workers may return
     }
 
     @Test
-    public void testStorageWorkerReturnsOffroadAndAvoidsDestroyedStorehouseWhenHarborIsDestroyed() throws Exception {
+    public void testStorehouseWorkerReturnsOffroadAndAvoidsDestroyedStorehouseWhenHarborIsDestroyed() throws Exception {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -1810,21 +1598,22 @@ public class TestHarbor {
         var point2 = new Point(9, 9);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
-        // Place harbor
+        // Place harbor and wait for it to get constructed and occupied
         var harbor0 = map.placeBuilding(new Harbor(player0), point1);
+        var road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter0.getFlag());
 
-        // Finish construction of the harbor
-        Utils.constructHouse(harbor0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(harbor0);
 
-        // Occupy the harbor
-        Utils.occupyBuilding(new StorehouseWorker(player0, map), harbor0);
-
-        // Place a storehouse closer to the harbor
+        // Place a storehouse closer to the harbor and wait for it to get constructed
         var point3 = new Point(13, 13);
         var storehouse = map.placeBuilding(new Storehouse(player0), point3);
+        var road1 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        // Finish construction of the storehouse
-        Utils.constructHouse(storehouse);
+        Utils.waitForBuildingToBeConstructed(storehouse);
+
+        // Remove the roads
+        map.removeRoad(road0);
+        map.removeRoad(road1);
 
         // Destroy the storehouse
         storehouse.tearDown();
@@ -1846,14 +1635,14 @@ public class TestHarbor {
 
         var amount = headquarter0.getAmount(STOREHOUSE_WORKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(harborWorker, headquarter0.getPosition());
 
         // Verify that the harbor worker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(STOREHOUSE_WORKER), amount + 1);
     }
 
     @Test
-    public void testStorageWorkerReturnsOffroadAndAvoidsUnfinishedStorehouseWhenHarborIsDestroyed() throws Exception {
+    public void testStorehouseWorkerReturnsOffroadAndAvoidsUnfinishedStorehouseWhenHarborIsDestroyed() throws Exception {
 
         // Creating new game
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -1898,7 +1687,7 @@ public class TestHarbor {
 
         var amount = headquarter0.getAmount(STOREHOUSE_WORKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(harborWorker, headquarter0.getPosition());
 
         // Verify that the harbor worker is stored correctly in the headquarters
         assertEquals(headquarter0.getAmount(STOREHOUSE_WORKER), amount + 1);
@@ -1929,14 +1718,17 @@ public class TestHarbor {
         // Place road to connect the headquarters and the harbor
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), harbor0.getFlag());
 
-        // Finish construction of the harbor
-        Utils.constructHouse(harbor0);
+        // Wait for a builder to come out
+        var builder = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
-        // Wait for a worker to start walking to the building
-        var worker = Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0).getFirst();
+        // Wait for the harbor to get constructed
+        Utils.waitForBuildingToBeConstructed(harbor0);
+
+        // Wait for the builder to start walking to the building
+        Utils.waitForWorkerToSetTarget(builder, harbor0.getPosition());
 
         // Wait for the worker to get to the building's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, harbor0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder, harbor0.getFlag().getPosition());
 
         // Tear down the building
         harbor0.tearDown();
@@ -1944,13 +1736,13 @@ public class TestHarbor {
         /* Verify that the worker goes to the building and then returns to the
            headquarters instead of entering */
        
-        assertEquals(worker.getTarget(), harbor0.getPosition());
+        assertEquals(builder.getTarget(), harbor0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, harbor0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder, harbor0.getPosition());
 
-        assertEquals(worker.getTarget(), headquarter0.getPosition());
+        assertEquals(builder.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder, headquarter0.getPosition());
     }
 
     @Test
@@ -2123,7 +1915,7 @@ public class TestHarbor {
         Utils.adjustInventoryTo(harbor, STONE, 50);
 
         // Fill the flag with flour cargos
-        Utils.placeCargos(map, FLOUR, 8, harbor.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, harbor.getFlag(), headquarter);
 
         // Block storage of flour in the harbor to prevent the storage worker from bringing it back in
         harbor.blockDeliveryOfMaterial(FLOUR);
@@ -2153,7 +1945,7 @@ public class TestHarbor {
         assertEquals(harbor.getFlag().getStackedCargo().size(), 7);
 
         // Verify that the worker produces a cargo of flour and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, harbor.getWorker());
+        Utils.fastForwardUntilWorkerCarriesCargo(harbor.getWorker());
     }
 
     @Test
@@ -2198,7 +1990,7 @@ public class TestHarbor {
         Utils.adjustInventoryTo(harbor, STONE, 50);
 
         // Fill the flag with cargos
-        Utils.placeCargos(map, FLOUR, 8, harbor.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, harbor.getFlag(), headquarter);
 
         // Block storage of flour in the harbor to keep the var filled up
         harbor.blockDeliveryOfMaterial(FLOUR);
@@ -2230,11 +2022,11 @@ public class TestHarbor {
         // Wait for the worker to put the cargo on the flag
         assertTrue(fortress.needsMaterial(PLANK));
 
-        var newCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, harbor.getWorker());
+        var newCargo = Utils.fastForwardUntilWorkerCarriesCargo(harbor.getWorker());
 
         assertEquals(harbor.getWorker().getTarget(), harbor.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, harbor.getWorker(), harbor.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(harbor.getWorker(), harbor.getFlag().getPosition());
 
         assertEquals(harbor.getFlag().getStackedCargo().size(), 8);
 
@@ -2292,7 +2084,7 @@ public class TestHarbor {
         // Verify that all the fish gets transported to the harbor
         assertEquals(harbor.getAmount(FISH), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, headquarter.getWorker(), FISH);
+        Utils.fastForwardUntilWorkerCarriesCargo(headquarter.getWorker(), FISH);
 
         assertEquals(headquarter.getWorker().getCargo().getMaterial(), FISH);
 
@@ -2352,11 +2144,11 @@ public class TestHarbor {
         assertEquals(scout.getPosition(), headquarter.getPosition());
         assertNull(headquarter.getWorker().getCargo());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, headquarter.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, headquarter.getFlag().getPosition());
 
         assertEquals(scout.getTarget(), harbor.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, harbor.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, harbor.getPosition());
 
         assertFalse(map.getWorkers().contains(scout));
 
@@ -2416,7 +2208,7 @@ public class TestHarbor {
         // Verify that all the fish gets transported to the harbor before the coins
         assertEquals(harbor.getAmount(FISH), 0);
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, headquarter.getWorker(), FISH);
+        Utils.fastForwardUntilWorkerCarriesCargo(headquarter.getWorker(), FISH);
 
         assertEquals(headquarter.getWorker().getCargo().getMaterial(), FISH);
 
@@ -2487,13 +2279,13 @@ public class TestHarbor {
         for (int i = 0; i < 10; i++) {
 
             // Wait for the var worker to produce a water cargo
-            var cargo = Utils.fastForwardUntilWorkerCarriesCargo(map, wellWorker, WATER);
+            var cargo = Utils.fastForwardUntilWorkerCarriesCargo(wellWorker, WATER);
 
-            Utils.waitForWorkerToSetTarget(map, wellWorker, well.getFlag().getPosition());
+            Utils.waitForWorkerToSetTarget(wellWorker, well.getFlag().getPosition());
 
             assertEquals(well.getWorker().getTarget(), well.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, well.getWorker(), well.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(well.getWorker(), well.getFlag().getPosition());
 
             assertNull(well.getWorker().getCargo());
 
@@ -2501,22 +2293,22 @@ public class TestHarbor {
             well.stopProduction();
 
             // Wait for the courier for the road between the well and the headquarters to pick up the water cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, road1.getCourier(), cargo);
+            Utils.fastForwardUntilWorkerCarriesCargo(road1.getCourier(), cargo);
 
             assertEquals(road1.getCourier().getTarget(), headquarter.getFlag().getPosition());
 
             /* Verify that the cargo is put on the headquarters' flag and picked up by the second courier,
                instead of delivered to the headquarters */
             
-            Utils.fastForwardUntilWorkerReachesPoint(map, road1.getCourier(), headquarter.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(road1.getCourier(), headquarter.getFlag().getPosition());
 
             assertTrue(headquarter.getFlag().getStackedCargo().contains(cargo));
 
-            Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier(), cargo);
+            Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier(), cargo);
 
             assertEquals(road0.getCourier().getTarget(), harbor.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), harbor.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), harbor.getPosition());
 
             assertNull(road0.getCourier().getCargo());
             assertEquals(harbor.getAmount(WATER), i + 1);
@@ -2547,12 +2339,12 @@ public class TestHarbor {
         headquarter.pushOutAll(PLANK);
         headquarter.blockDeliveryOfMaterial(PLANK);
 
-        Utils.waitForFlagToGetStackedCargo(map, headquarter.getFlag(), 8);
+        Utils.waitForFlagToGetStackedCargo(headquarter.getFlag(), 8);
 
         assertEquals(headquarter.getFlag().getStackedCargo().size(), 8);
         assertEquals(headquarter.getWorker().getTarget(), headquarter.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, headquarter.getWorker(), headquarter.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(headquarter.getWorker(), headquarter.getPosition());
 
         for (int i = 0; i < 200; i++) {
             assertTrue(headquarter.getWorker().isInsideBuilding());

@@ -19,7 +19,7 @@ import static org.appland.settlers.assets.SoundType.*;
 
 public class SoundLoader {
 
-    private static boolean debug = false;
+    public static boolean debug = false;
 
     private static void debugPrint(String debugString) {
         if (debug) {
@@ -31,11 +31,9 @@ public class SoundLoader {
         streamReader.pushByteOrder(LITTLE_ENDIAN);
 
         long length = streamReader.getUint32();
-
         var soundType = getSoundTypeFromByteReader(streamReader);
 
         debugPrint(format("Got sound type: %s", soundType.name()));
-
 
         if (soundType == MIDI) {
             return new MidiGameResource(MidiDecoder.loadSoundMidiFromStream(streamReader));
@@ -43,7 +41,7 @@ public class SoundLoader {
             return new WaveGameResource(WaveDecoder.loadWaveSoundFromStream(streamReader, length, true));
         } else if (soundType == XMIDI || soundType == XMID_DIR) {
             return new XMidiGameResource(MidiDecoder.loadXMidiSoundFromStream(streamReader, length, soundType == XMID_DIR));
-        } else if (soundType == WAVE_WITHOUT_HEADER) {
+        } else if (soundType == RAW_PCM) {
             return new WaveGameResource(WaveDecoder.loadWaveSoundFromStream(streamReader, length, false));
         } else {
             throw new RuntimeException("Support for 'other sound' is not implemented yet");
@@ -52,10 +50,9 @@ public class SoundLoader {
 
     private static SoundType getSoundTypeFromByteReader(ByteReader streamReader) throws IOException {
         int position = streamReader.getPosition();
-
         var header = streamReader.getUint8ArrayAsString(4);
 
-        debugPrint(Utils.convertBytesToHex(header.getBytes()));
+        debugPrint("Get sound type from HEX: " + Utils.convertBytesToHex(header.getBytes()) + ", as string: " + header);
 
         var soundType = (SoundType) null;
 
@@ -80,7 +77,7 @@ public class SoundLoader {
                 break;
 
             default:
-                soundType = WAVE_WITHOUT_HEADER;
+                soundType = RAW_PCM;
         }
 
         streamReader.setPosition(position);

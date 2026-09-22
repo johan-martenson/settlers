@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.*;
+import static org.appland.settlers.model.actors.Rank.*;
 import static org.junit.Assert.*;
 
 /**
@@ -207,7 +207,7 @@ public class TestWatchTower {
         // Wait for the military to reach the watch tower
         assertEquals(military.getTarget(), watchTower0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, watchTower0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, watchTower0.getPosition());
 
         assertTrue(military.isInsideBuilding());
     }
@@ -281,7 +281,7 @@ public class TestWatchTower {
         var point3 = new Point(6, 14);
         assertTrue(player0.getBorderPoints().contains(point3));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, watchTower0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, watchTower0.getPosition());
 
         var point4 = new Point(7, 23);
 
@@ -771,7 +771,7 @@ public class TestWatchTower {
         assertEquals(military.getTarget(), headquarter0.getPosition());
         var amount = headquarter0.getAmount(PRIVATE);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(military, military.getTarget());
 
         assertTrue(military.isInsideBuilding());
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
@@ -811,7 +811,7 @@ public class TestWatchTower {
         assertEquals(military.getTarget(), headquarter0.getPosition());
         var amount = headquarter0.getAmount(PRIVATE);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(military, military.getTarget());
 
         assertTrue(military.isInsideBuilding());
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
@@ -883,7 +883,7 @@ public class TestWatchTower {
         assertEquals(military.getTarget(), headquarter0.getPosition());
         var amount = headquarter0.getAmount(PRIVATE);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(military, military.getTarget());
 
         assertTrue(military.isInsideBuilding());
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
@@ -930,7 +930,7 @@ public class TestWatchTower {
 
         var amount = headquarter0.getAmount(PRIVATE);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(military, headquarter0.getPosition());
 
         // Verify that the military is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
@@ -1693,7 +1693,7 @@ public class TestWatchTower {
         assertTrue(watchTower0.needsMaterial(STONE));
 
         // Verify that the courier picks up a stone or plank
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier0);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier0);
 
         assertNotNull(courier0.getCargo());
         assertTrue(Objects.equals(courier0.getCargo().getMaterial(), STONE) || Objects.equals(courier0.getCargo().getMaterial(), PLANK));
@@ -1701,7 +1701,7 @@ public class TestWatchTower {
         // Verify that the courier delivers the cargo
         assertEquals(courier0.getCargo().getTarget(), watchTower0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier0, watchTower0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier0, watchTower0.getPosition());
 
         assertNull(courier0.getCargo());
     }

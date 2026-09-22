@@ -130,7 +130,7 @@ public class TestPrioritization {
             Utils.adjustInventoryTo(headquarter0, BREAD, 1);
 
             // Wait for the storage worker to pick up a bread cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, BREAD);
 
             // Keep track of where the breads end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -258,7 +258,7 @@ public class TestPrioritization {
             Utils.adjustInventoryTo(headquarter0, BREAD, 1);
 
             // Wait for the storage worker to pick up a bread cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, BREAD);
 
             // Keep track of where the breads end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -383,7 +383,7 @@ public class TestPrioritization {
             Utils.adjustInventoryTo(headquarter0, BREAD, 1);
 
             // Wait for the storage worker to pick up a bread cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, BREAD);
 
             // Keep track of where the breads end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -508,7 +508,7 @@ public class TestPrioritization {
             Utils.adjustInventoryTo(headquarter0, BREAD, 1);
 
             // Wait for the storage worker to pick up a bread cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, BREAD);
 
             // Keep track of where the breads end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -633,7 +633,7 @@ public class TestPrioritization {
             Utils.adjustInventoryTo(headquarter0, BREAD, 1);
 
             // Wait for the storage worker to pick up a bread cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, BREAD);
 
             // Keep track of where the breads end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -741,7 +741,7 @@ public class TestPrioritization {
             Utils.adjustInventoryTo(headquarter0, BREAD, 1);
 
             // Wait for the storage worker to pick up a bread cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, BREAD);
 
             // Keep track of where the breads end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -871,7 +871,7 @@ public class TestPrioritization {
             Utils.adjustInventoryTo(headquarter0, BREAD, 1);
 
             // Wait for the storage worker to pick up a bread cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, BREAD);
 
             // Keep track of where the breads end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -1015,7 +1015,7 @@ public class TestPrioritization {
             Utils.adjustInventoryTo(headquarter0, BREAD, 1);
 
             // Wait for the storage worker to pick up a bread cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, BREAD);
 
             // Keep track of where the breads end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -1103,7 +1103,7 @@ public class TestPrioritization {
             Utils.adjustInventoryTo(headquarter0, BREAD, 1);
 
             // Wait for the storage worker to pick up a bread cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, BREAD);
 
             assertEquals(carrier.getCargo().getTarget(), goldMine0);
 
@@ -1125,7 +1125,7 @@ public class TestPrioritization {
         Utils.adjustInventoryTo(headquarter0, BREAD, 1);
 
         // Wait for the storage worker to pick up a bread cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
+        Utils.fastForwardUntilWorkerCarriesCargo(carrier, BREAD);
 
         assertEquals(carrier.getCargo().getTarget(), goldMine0);
 
@@ -1204,7 +1204,7 @@ public class TestPrioritization {
             Utils.adjustInventoryTo(headquarter0, COAL, 1);
 
             // Wait for the storage worker to pick up a coal cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, COAL);
 
             // Keep track of where the coals end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -1322,7 +1322,7 @@ public class TestPrioritization {
             Utils.adjustInventoryTo(headquarter0, COAL, 1);
 
             // Wait for the storage worker to pick up a coal cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, COAL);
 
             // Keep track of where the coals end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -1439,7 +1439,7 @@ public class TestPrioritization {
             Utils.adjustInventoryTo(headquarter0, COAL, 1);
 
             // Wait for the storage worker to pick up a coal cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, COAL);
 
             // Keep track of where the coals end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -1555,7 +1555,7 @@ public class TestPrioritization {
             Utils.adjustInventoryTo(headquarter0, COAL, 1);
 
             // Wait for the storage worker to pick up a coal cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, COAL);
 
             // Keep track of where the coals end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -1655,7 +1655,7 @@ public class TestPrioritization {
             Utils.adjustInventoryTo(headquarter0, COAL, 1);
 
             // Wait for the storage worker to pick up a coal cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, COAL);
 
             // Keep track of where the coals end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -1770,7 +1770,7 @@ public class TestPrioritization {
             Utils.adjustInventoryTo(headquarter0, COAL, 1);
 
             // Wait for the storage worker to pick up a coal cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, COAL);
 
             // Keep track of where the coals end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -1892,7 +1892,7 @@ public class TestPrioritization {
             Utils.adjustInventoryTo(headquarter0, COAL, 1);
 
             // Wait for the storage worker to pick up a coal cargo
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
+            Utils.fastForwardUntilWorkerCarriesCargo(carrier, COAL);
 
             // Keep track of where the coals end up
             var targetBuilding = carrier.getCargo().getTarget();
@@ -1980,7 +1980,7 @@ public class TestPrioritization {
         // Wait for the courier to rest at the middle of the road
         assertEquals(courier.getTarget(), flag0.getPosition().left());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkersReachTarget(courier);
 
         // Place wood cargo to be delivered to the headquarter
         var woodCargo = new Cargo(WOOD, map);
@@ -2018,7 +2018,7 @@ public class TestPrioritization {
 
         map.stepTime();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point1);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, point1);
 
         assertTrue(courier.isAt(point1));
         assertEquals(courier.getCargo(), stoneCargo);
@@ -2028,14 +2028,14 @@ public class TestPrioritization {
 
         map.stepTime();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
         // Verify that the courier picks up the wood cargo next
         assertNull(courier.getCargo());
 
         map.stepTime();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point1);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, point1);
 
         assertTrue(courier.isAt(point1));
         assertEquals(courier.getCargo(), woodCargo);
@@ -2043,12 +2043,12 @@ public class TestPrioritization {
         // Wait for the courier to deliver the cargo
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
         // Verify that the courier picks up the plank cargo next
         assertNull(courier.getCargo());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point1);
+        Utils.fastForwardUntilWorkerReachesPoint(courier, point1);
 
         assertTrue(courier.isAt(point1));
         assertEquals(courier.getCargo(), plankCargo);
@@ -2056,7 +2056,7 @@ public class TestPrioritization {
         // Wait for the courier to deliver the cargo
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
     }
 
     @Test
@@ -2124,11 +2124,11 @@ public class TestPrioritization {
         mill0.stopProduction();
 
         // Assign couriers to the roads
-        Utils.occupyRoad(road0, map);
-        Utils.occupyRoad(road1, map);
-        Utils.occupyRoad(road2, map);
-        Utils.occupyRoad(road3, map);
-        Utils.occupyRoad(road4, map);
+        Utils.occupyRoad(road0);
+        Utils.occupyRoad(road1);
+        Utils.occupyRoad(road2);
+        Utils.occupyRoad(road3);
+        Utils.occupyRoad(road4);
 
         // Verify that the storage worker in the headquarter delivers cargo in the right order
         assertTrue(mint0.needsMaterial(COAL));
@@ -2160,34 +2160,34 @@ public class TestPrioritization {
         Utils.adjustInventoryTo(headquarter0, STONE, 20);
 
         // Verify that the storage worker first delivers wheat
-        var currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
+        var currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(storageWorker);
 
         assertNotNull(currentCargo);
         assertEquals(currentCargo.getMaterial(), WHEAT);
 
         // Wait for the worker to deliver the cargo
-        Utils.fastForwardUntilWorkerCarriesNoCargo(map, storageWorker);
+        Utils.fastForwardUntilWorkerCarriesNoCargo(storageWorker);
 
         // Verify that the storage worker then delivers planks
-        currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
+        currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(storageWorker);
 
         assertNotNull(currentCargo);
         assertEquals(currentCargo.getMaterial(), PLANK);
 
         // Wait for the worker to deliver the cargo
-        Utils.fastForwardUntilWorkerCarriesNoCargo(map, storageWorker);
+        Utils.fastForwardUntilWorkerCarriesNoCargo(storageWorker);
 
         assertFalse(mill0.needsMaterial(WHEAT));
         assertTrue(well0.needsMaterial(PLANK));
 
         // Verify that the storage worker then planks until the well doesn't need them anymore
-        currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
+        currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(storageWorker);
 
         assertNotNull(currentCargo);
         assertEquals(currentCargo.getMaterial(), PLANK);
 
         // Wait for the worker to deliver the cargo
-        Utils.fastForwardUntilWorkerCarriesNoCargo(map, storageWorker);
+        Utils.fastForwardUntilWorkerCarriesNoCargo(storageWorker);
 
         assertFalse(mill0.needsMaterial(WHEAT));
         assertFalse(well0.needsMaterial(PLANK));
@@ -2195,13 +2195,13 @@ public class TestPrioritization {
         // Verify that the storage worker then delivers coal
         assertTrue(mint0.needsMaterial(COAL));
 
-        currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
+        currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(storageWorker);
 
         assertNotNull(currentCargo);
         assertEquals(currentCargo.getMaterial(), COAL);
 
         // Wait for the worker to deliver the cargo
-        Utils.fastForwardUntilWorkerCarriesNoCargo(map, storageWorker);
+        Utils.fastForwardUntilWorkerCarriesNoCargo(storageWorker);
 
         assertFalse(mill0.needsMaterial(WHEAT));
         assertFalse(well0.needsMaterial(PLANK));
@@ -2210,13 +2210,13 @@ public class TestPrioritization {
         // Verify that the storage worker then delivers gold
         assertTrue(mint0.needsMaterial(GOLD));
 
-        currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
+        currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(storageWorker);
 
         assertNotNull(currentCargo);
         assertEquals(currentCargo.getMaterial(), GOLD);
 
         // Wait for the worker to deliver the cargo
-        Utils.fastForwardUntilWorkerCarriesNoCargo(map, storageWorker);
+        Utils.fastForwardUntilWorkerCarriesNoCargo(storageWorker);
     }
 
     @Test

@@ -313,4 +313,8 @@ public class StatisticsManager {
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(building.getPlayer()));
     }
+
+    public void removeListener(StatisticsListener listener) {
+        listeners.remove(listener);
+    }
 }

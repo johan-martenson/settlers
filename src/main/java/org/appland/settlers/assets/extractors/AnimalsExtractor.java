@@ -202,11 +202,11 @@ public class AnimalsExtractor {
         // Extract the pig
         var pig = new PigImageCollection();
 
-        pig.addAnimation(Pig.PigAction.PIG_ACTION_1, getImagesAt(mapBobsLst, MapBobsLst.PIG_ACTION_1));
-        pig.addAnimation(Pig.PigAction.PIG_ACTION_2, getImagesAt(mapBobsLst, MapBobsLst.PIG_ACTION_2));
-        pig.addAnimation(Pig.PigAction.PIG_ACTION_3, getImagesAt(mapBobsLst, MapBobsLst.PIG_ACTION_3));
-        pig.addAnimation(Pig.PigAction.PIG_ACTION_4, getImagesAt(mapBobsLst, MapBobsLst.PIG_ACTION_4));
-        pig.addAnimation(Pig.PigAction.PIG_ACTION_5, getImagesAt(mapBobsLst, MapBobsLst.PIG_ACTION_5));
+        pig.addAnimation(Pig.PigAge.ADULT, Pig.PigAction.PIG_ACTION_1, getImagesAt(mapBobsLst, MapBobsLst.PIG_ACTION_1));
+        pig.addAnimation(Pig.PigAge.PIGLET, Pig.PigAction.PIG_ACTION_2, getImagesAt(mapBobsLst, MapBobsLst.PIG_ACTION_2));
+        pig.addAnimation(Pig.PigAge.PIGLET, Pig.PigAction.PIG_ACTION_3, getImagesAt(mapBobsLst, MapBobsLst.PIG_ACTION_3));
+        pig.addAnimation(Pig.PigAge.PIGLET, Pig.PigAction.PIG_ACTION_4, getImagesAt(mapBobsLst, MapBobsLst.PIG_ACTION_4));
+        pig.addAnimation(Pig.PigAge.PIGLET, Pig.PigAction.PIG_ACTION_5, getImagesAt(mapBobsLst, MapBobsLst.PIG_ACTION_5));
 
         pig.addShadows(getImageAt(mapBobsLst, MapBobsLst.ADULT_PIG_SHADOW), getImageAt(mapBobsLst, MapBobsLst.PIGLET_SHADOW));
 

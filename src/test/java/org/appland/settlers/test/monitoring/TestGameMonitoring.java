@@ -756,7 +756,7 @@ public class TestGameMonitoring {
         // Verify that an event is sent when a house changes from planned to under construction
         assertEquals(monitor.getEvents().size(), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder, woodcutter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder, woodcutter0.getPosition());
 
         map.stepTime();
 
@@ -804,7 +804,7 @@ public class TestGameMonitoring {
         // Verify that an event is sent when a house changes from planned to under construction
         assertEquals(monitor.getEvents().size(), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, builder, woodcutter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(builder, woodcutter0.getPosition());
 
         map.stepTime();
 
@@ -1725,7 +1725,7 @@ public class TestGameMonitoring {
         // Wait for the courier walk onto the road
         var courier0 = road0.getCourier();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier0, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier0, headquarter0.getFlag().getPosition());
 
         assertEquals(monitor.getEvents().size(), 1);
 
@@ -1746,7 +1746,7 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.removedWorkers().size(), 0);
         assertEquals(courier0.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier0, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier0, headquarter0.getPosition());
 
         map.stepTime();
 
@@ -1805,7 +1805,7 @@ public class TestGameMonitoring {
         // Wait for the courier walk onto the road
         var courier0 = road0.getCourier();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier0, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier0, headquarter0.getFlag().getPosition());
 
         assertEquals(monitor.getEvents().size(), 1);
 
@@ -1826,7 +1826,7 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.removedWorkers().size(), 0);
         assertEquals(courier0.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier0, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier0, headquarter0.getPosition());
 
         map.stepTime();
 
@@ -1879,7 +1879,7 @@ public class TestGameMonitoring {
         // Wait for the courier walk onto the road
         var courier0 = road0.getCourier();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier0, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier0, headquarter0.getFlag().getPosition());
 
         // Verify that no event is sent to player 1 when the worker goes back to storage
         assertEquals(road0.getCourier(), courier0);
@@ -1888,7 +1888,7 @@ public class TestGameMonitoring {
 
         map.stepTime();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier0, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier0, headquarter0.getPosition());
 
         map.stepTime();
 
@@ -1920,12 +1920,12 @@ public class TestGameMonitoring {
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Wait for a courier to come out and go to the road
-        var courier0 = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier0 = Utils.waitForRoadToGetAssignedCourier(road0);
         var point3 = new Point(10, 4);
 
         assertEquals(courier0.getTarget(), point3);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier0, point3);
+        Utils.fastForwardUntilWorkerReachesPoint(courier0, point3);
 
         map.stepTime();
 
@@ -1985,12 +1985,12 @@ public class TestGameMonitoring {
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Wait for a courier to come out and go to the road
-        var courier0 = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier0 = Utils.waitForRoadToGetAssignedCourier(road0);
         var point3 = new Point(10, 4);
 
         assertEquals(courier0.getTarget(), point3);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier0, point3);
+        Utils.fastForwardUntilWorkerReachesPoint(courier0, point3);
 
         map.stepTime();
 
@@ -2053,7 +2053,7 @@ public class TestGameMonitoring {
         var point = forester.getTarget();
 
         // Wait for the forester to reach the spot for the tree
-        Utils.fastForwardUntilWorkersReachTarget(map, forester);
+        Utils.fastForwardUntilWorkersReachTarget(forester);
 
         assertTrue(forester.isArrived());
         assertTrue(forester.isAt(point));
@@ -2133,7 +2133,7 @@ public class TestGameMonitoring {
         // Wait for the forester to reach the spot for the tree
         var point = forester.getTarget();
 
-        Utils.fastForwardUntilWorkersReachTarget(map, forester);
+        Utils.fastForwardUntilWorkersReachTarget(forester);
 
         assertTrue(forester.isArrived());
         assertTrue(forester.isAt(point));
@@ -2196,7 +2196,7 @@ public class TestGameMonitoring {
         // Wait for the forester to reach the spot for the tree
         var point = forester.getTarget();
 
-        Utils.fastForwardUntilWorkersReachTarget(map, forester);
+        Utils.fastForwardUntilWorkersReachTarget(forester);
 
         assertTrue(forester.isArrived());
         assertTrue(forester.isAt(point));
@@ -2273,7 +2273,7 @@ public class TestGameMonitoring {
         assertTrue(wcWorker.isTraveling());
 
         // Let the woodcutter reach the tree and start cutting
-        Utils.fastForwardUntilWorkersReachTarget(map, wcWorker);
+        Utils.fastForwardUntilWorkersReachTarget(wcWorker);
 
         assertTrue(wcWorker.isArrived());
         assertTrue(wcWorker.isAt(point));
@@ -2358,7 +2358,7 @@ public class TestGameMonitoring {
         assertTrue(wcWorker.isTraveling());
 
         // Let the woodcutter reach the tree and start cutting
-        Utils.fastForwardUntilWorkersReachTarget(map, wcWorker);
+        Utils.fastForwardUntilWorkersReachTarget(wcWorker);
 
         assertTrue(wcWorker.isArrived());
         assertTrue(wcWorker.isAt(point));
@@ -2434,7 +2434,7 @@ public class TestGameMonitoring {
         assertTrue(wcWorker.isTraveling());
 
         // Let the woodcutter reach the tree and start cutting
-        Utils.fastForwardUntilWorkersReachTarget(map, wcWorker);
+        Utils.fastForwardUntilWorkersReachTarget(wcWorker);
 
         assertTrue(wcWorker.isArrived());
         assertTrue(wcWorker.isAt(point));
@@ -2854,10 +2854,10 @@ public class TestGameMonitoring {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to reach the first site to investigate
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Set up monitoring subscription for the player
         var monitor = new Utils.GameViewMonitor();
@@ -2936,10 +2936,10 @@ public class TestGameMonitoring {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to reach the first site to investigate
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Set up monitoring subscription for the player
         var monitor = new Utils.GameViewMonitor();
@@ -3024,10 +3024,10 @@ public class TestGameMonitoring {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Wait for the geologist to reach the first site to investigate
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(geologist, geologist.getTarget());
 
         // Set up monitoring subscription for player 1
         var monitor = new Utils.GameViewMonitor();
@@ -3357,7 +3357,7 @@ public class TestGameMonitoring {
         assertTrue(farmer.isTraveling());
 
         // Let the farmer reach the spot and start to plant
-        Utils.fastForwardUntilWorkersReachTarget(map, farmer);
+        Utils.fastForwardUntilWorkersReachTarget(farmer);
 
         assertTrue(farmer.isArrived());
         assertTrue(farmer.isAt(point));
@@ -3442,7 +3442,7 @@ public class TestGameMonitoring {
         assertTrue(farmer.isTraveling());
 
         // Let the farmer reach the spot and start to plant
-        Utils.fastForwardUntilWorkersReachTarget(map, farmer);
+        Utils.fastForwardUntilWorkersReachTarget(farmer);
 
         assertTrue(farmer.isArrived());
         assertTrue(farmer.isAt(point));
@@ -3537,7 +3537,7 @@ public class TestGameMonitoring {
         assertTrue(farmer.isTraveling());
 
         // Let the farmer reach the spot and start to plant
-        Utils.fastForwardUntilWorkersReachTarget(map, farmer);
+        Utils.fastForwardUntilWorkersReachTarget(farmer);
 
         assertTrue(farmer.isArrived());
         assertTrue(farmer.isAt(point));
@@ -3648,7 +3648,7 @@ public class TestGameMonitoring {
         assertTrue(farmer.isTraveling());
 
         // Let the farmer reach the spot and start to plant
-        Utils.fastForwardUntilWorkersReachTarget(map, farmer);
+        Utils.fastForwardUntilWorkersReachTarget(farmer);
 
         assertTrue(farmer.isArrived());
         assertTrue(farmer.isAt(point));
@@ -3740,7 +3740,7 @@ public class TestGameMonitoring {
         assertTrue(farmer.isTraveling());
 
         // Let the farmer reach the spot and start to plant
-        Utils.fastForwardUntilWorkersReachTarget(map, farmer);
+        Utils.fastForwardUntilWorkersReachTarget(farmer);
 
         assertTrue(farmer.isArrived());
         assertTrue(farmer.isAt(point));
@@ -3798,9 +3798,9 @@ public class TestGameMonitoring {
         Utils.waitForCropToGetReady(map, crop0);
 
         // Wait for the worker to walk to the crop and start harvesting
-        Utils.waitForWorkerToSetTarget(map, farmer, crop0.getPosition());
+        Utils.waitForWorkerToSetTarget(farmer, crop0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, crop0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, crop0.getPosition());
 
         map.stepTime();
 
@@ -3874,9 +3874,9 @@ public class TestGameMonitoring {
         Utils.waitForCropToGetReady(map, crop0);
 
         // Wait for the worker to walk to the crop and start harvesting
-        Utils.waitForWorkerToSetTarget(map, farmer, crop0.getPosition());
+        Utils.waitForWorkerToSetTarget(farmer, crop0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, crop0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, crop0.getPosition());
 
         map.stepTime();
 
@@ -3953,9 +3953,9 @@ public class TestGameMonitoring {
         Utils.waitForCropToGetReady(map, crop0);
 
         // Wait for the worker to walk to the crop and start harvesting
-        Utils.waitForWorkerToSetTarget(map, farmer, crop0.getPosition());
+        Utils.waitForWorkerToSetTarget(farmer, crop0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, crop0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(farmer, crop0.getPosition());
 
         map.stepTime();
 
@@ -4439,7 +4439,7 @@ public class TestGameMonitoring {
         // Verify that an event is sent when the worker enters the building
         assertEquals(woodcutterWorker.getTarget(), woodcutter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(woodcutterWorker, woodcutter0.getPosition());
 
         assertTrue(woodcutterWorker.isInsideBuilding());
 
@@ -4496,7 +4496,7 @@ public class TestGameMonitoring {
         // Verify that an event is sent when the worker enters the building
         assertEquals(woodcutterWorker.getTarget(), woodcutter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(woodcutterWorker, woodcutter0.getPosition());
 
         assertTrue(woodcutterWorker.isInsideBuilding());
 
@@ -4557,7 +4557,7 @@ public class TestGameMonitoring {
         // Verify that no event is sent to player 1 when the worker enters the building
         assertEquals(woodcutterWorker.getTarget(), woodcutter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(woodcutterWorker, woodcutter0.getPosition());
 
         assertTrue(woodcutterWorker.isInsideBuilding());
 
@@ -4652,7 +4652,7 @@ public class TestGameMonitoring {
         assertNotNull(scout);
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, scout.getTarget());
 
         // Verify that an event is sent when the scout discovers new ground
         var monitor = new Utils.GameViewMonitor();
@@ -4676,7 +4676,7 @@ public class TestGameMonitoring {
 
             assertNotEquals(target, scout.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, scout, target);
+            Utils.fastForwardUntilWorkerReachesPoint(scout, target);
 
             assertTrue(player0.getDiscoveredLand().contains(scout.getPosition()));
             assertEquals(scout.getPosition(), target);
@@ -4744,7 +4744,7 @@ public class TestGameMonitoring {
         assertNotNull(scout);
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, scout.getTarget());
 
         // Verify that an event is sent when the scout discovers new ground
         var monitor = new Utils.GameViewMonitor();
@@ -4768,7 +4768,7 @@ public class TestGameMonitoring {
 
             assertNotEquals(target, scout.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, scout, target);
+            Utils.fastForwardUntilWorkerReachesPoint(scout, target);
 
             assertTrue(player0.getDiscoveredLand().contains(scout.getPosition()));
             assertEquals(scout.getPosition(), target);
@@ -4851,7 +4851,7 @@ public class TestGameMonitoring {
         assertNotNull(scout);
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, scout.getTarget());
 
         var foundNewGround = false;
         var wentToNewGround = false;
@@ -4867,7 +4867,7 @@ public class TestGameMonitoring {
 
             assertNotEquals(target, scout.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, scout, target);
+            Utils.fastForwardUntilWorkerReachesPoint(scout, target);
 
             assertTrue(player0.getDiscoveredLand().contains(scout.getPosition()));
             assertEquals(scout.getPosition(), target);
@@ -4883,7 +4883,7 @@ public class TestGameMonitoring {
         assertTrue(wentToNewGround);
 
         // Wait for the scout to go back to the flag
-        Utils.waitForWorkerToSetTarget(map, scout, flag.getPosition());
+        Utils.waitForWorkerToSetTarget(scout, flag.getPosition());
 
         // Verify that there is no message about discovered land when starting monitoring
         var monitor = new Utils.GameViewMonitor();
@@ -4943,7 +4943,7 @@ public class TestGameMonitoring {
         assertNotNull(scout);
         assertEquals(scout.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(scout, scout.getTarget());
 
         // Verify that no event is sent to player 1 when the scout discovers new ground
         var monitor = new Utils.GameViewMonitor();
@@ -4963,7 +4963,7 @@ public class TestGameMonitoring {
 
             assertNotEquals(target, scout.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, scout, target);
+            Utils.fastForwardUntilWorkerReachesPoint(scout, target);
 
             assertTrue(player0.getDiscoveredLand().contains(scout.getPosition()));
             assertEquals(scout.getPosition(), target);
@@ -5177,7 +5177,7 @@ public class TestGameMonitoring {
         var road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
 
         // Place a worker on the road
-        var courier = Utils.occupyRoad(road0, map);
+        var courier = Utils.occupyRoad(road0);
 
         // Deliver 99 cargo - the road does not become a main road
         for (int i = 0; i < 99; i++) {
@@ -5186,12 +5186,12 @@ public class TestGameMonitoring {
             // Wait for the courier to pick up the cargo
             assertNull(courier.getCargo());
 
-            Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
+            Utils.fastForwardUntilWorkerCarriesCargo(courier, cargo);
 
             // Wait for the courier to deliver the cargo
             assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
             assertNull(courier.getCargo());
             assertFalse(road0.isMainRoad());
@@ -5203,7 +5203,7 @@ public class TestGameMonitoring {
         // Wait for the courier to pick up the cargo
         assertNull(courier.getCargo());
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier, cargo);
 
         // Start monitoring the player
         var monitor = new Utils.GameViewMonitor();
@@ -5212,7 +5212,7 @@ public class TestGameMonitoring {
         // Wait for the courier to deliver the cargo
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getFlag().getPosition());
 
         assertTrue(road0.isMainRoad());
 
@@ -5242,7 +5242,7 @@ public class TestGameMonitoring {
         var road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
 
         // Place a worker on the road
-        var courier = Utils.occupyRoad(road0, map);
+        var courier = Utils.occupyRoad(road0);
 
         // Deliver 99 cargo - the road does not become a main road
         for (int i = 0; i < 99; i++) {
@@ -5251,12 +5251,12 @@ public class TestGameMonitoring {
             // Wait for the courier to pick up the cargo
             assertNull(courier.getCargo());
 
-            Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
+            Utils.fastForwardUntilWorkerCarriesCargo(courier, cargo);
 
             // Wait for the courier to deliver the cargo
             assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
             assertNull(courier.getCargo());
             assertFalse(road0.isMainRoad());
@@ -5268,7 +5268,7 @@ public class TestGameMonitoring {
         // Wait for the courier to pick up the cargo
         assertNull(courier.getCargo());
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier, cargo);
 
         // Start monitoring the player
         var monitor = new Utils.GameViewMonitor();
@@ -5277,7 +5277,7 @@ public class TestGameMonitoring {
         // Wait for the courier to deliver the cargo
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getFlag().getPosition());
 
         assertTrue(road0.isMainRoad());
 
@@ -5323,10 +5323,10 @@ public class TestGameMonitoring {
         var road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
 
         // Wait for the first road to get populated
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road0);
 
         // Wait for the courier of the first road to carry planks for the woodcutter
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier, PLANK);
 
         // Set up monitoring subscription for the player
         var monitor = new Utils.GameViewMonitor();
@@ -5335,7 +5335,7 @@ public class TestGameMonitoring {
         // Verify that an event is sent when the courier puts the cargo down by the flag
         assertEquals(courier.getTarget(), flag0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, flag0.getPosition());
 
         assertFalse(monitor.getEvents().isEmpty());
 
@@ -5377,10 +5377,10 @@ public class TestGameMonitoring {
         var road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
 
         // Wait for the first road to get populated
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road0);
 
         // Wait for the courier of the first road to carry planks for the woodcutter
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANK);
+        Utils.fastForwardUntilWorkerCarriesCargo(courier, PLANK);
 
         // Set up monitoring subscription for the player
         var monitor = new Utils.GameViewMonitor();
@@ -5389,7 +5389,7 @@ public class TestGameMonitoring {
         // Verify that an event is sent when the courier puts the cargo down by the flag
         assertEquals(courier.getTarget(), flag0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, flag0.getPosition());
 
         assertTrue(monitor.getEvents().size() > 0);
 
@@ -5441,10 +5441,10 @@ public class TestGameMonitoring {
         var road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
 
         // Wait for the first road to get populated
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road0);
 
         // Wait for the courier of the first road to go to the headquarter's flag to pick up a plank
-        Utils.waitForWorkerToSetTarget(map, courier, headquarter0.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(courier, headquarter0.getFlag().getPosition());
 
         assertEquals(headquarter0.getFlag().getStackedCargo().size(), 1);
 
@@ -5456,7 +5456,7 @@ public class TestGameMonitoring {
         assertEquals(headquarter0.getFlag().getStackedCargo().size(), 1);
         assertNull(monitor.getLastEvent());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getFlag().getPosition());
 
         assertNotNull(courier.getCargo());
         assertEquals(courier.getCargo().getMaterial(), PLANK);
@@ -5504,10 +5504,10 @@ public class TestGameMonitoring {
         var road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
 
         // Wait for the first road to get populated
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road0);
 
         // Wait for the courier of the first road to go to the headquarter's flag to pick up a plank
-        Utils.waitForWorkerToSetTarget(map, courier, headquarter0.getFlag().getPosition());
+        Utils.waitForWorkerToSetTarget(courier, headquarter0.getFlag().getPosition());
 
         assertEquals(headquarter0.getFlag().getStackedCargo().size(), 1);
 
@@ -5519,7 +5519,7 @@ public class TestGameMonitoring {
         assertEquals(headquarter0.getFlag().getStackedCargo().size(), 1);
         assertNull(monitor.getLastEvent());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getFlag().getPosition());
 
         assertNotNull(courier.getCargo());
         assertEquals(courier.getCargo().getMaterial(), PLANK);
@@ -5571,10 +5571,10 @@ public class TestGameMonitoring {
         // Wait for both roads to get their couriers assigned and standing idle
         var couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1);
 
-        Utils.waitForCouriersToBeIdle(map, couriers);
+        Utils.waitForCouriersToBeIdle(couriers);
 
         // Place eight cargos on the flag between the roads targeting the headquarters
-        Utils.placeCargos(map, WATER, 8, flag1, headquarter0);
+        Utils.placeCargos(WATER, 8, flag1, headquarter0);
 
         // Place two cargos on the other flag
         Utils.placeCargo(map, IRON, flag0, headquarter0);
@@ -5585,7 +5585,7 @@ public class TestGameMonitoring {
         assertEquals(road1.getCourier().getTarget(), flag1.getPosition());
         assertNull(road1.getCourier().getCargo());
 
-        Utils.fastForwardUntilWorkerProducesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerProducesCargo(road0.getCourier());
 
         // Wait for the courier for the short road to be one step away from the middle flag
         assertEquals(road1.getCourier().getTarget(), flag1.getPosition());
@@ -5597,7 +5597,7 @@ public class TestGameMonitoring {
         var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), flag1.getPosition().right());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), flag1.getPosition().right());
 
         // Verify that an event is sent when the courier waits because there is no space on the flag for more cargo
         assertEquals(flag1.getStackedCargo().size(), 8);

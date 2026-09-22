@@ -9,7 +9,6 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Quarry;
 import org.appland.settlers.model.buildings.Sawmill;
@@ -17,7 +16,6 @@ import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
 import static org.junit.Assert.*;
@@ -124,7 +122,8 @@ public class TestProduction {
 
     @Test
     public void testGetWorkerTypeForBuildingNotNeedingWorker() {
-        var headquarter = new Headquarter(null);
+        var player = new Player("Player 1", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var headquarter = new Headquarter(player);
 
         assertFalse(headquarter.needsWorker());
         assertNull(headquarter.getWorkerType());

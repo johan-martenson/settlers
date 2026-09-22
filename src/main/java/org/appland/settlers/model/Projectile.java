@@ -16,20 +16,19 @@ import java.util.Random;
  */
 public class Projectile {
     private static final double FAIL_RATE = 0.25;
-    private static final int    SPEED     = 5;
-    private static final Random RANDOM    = new Random(1);
+    private static final int SPEED = 5;
+    private static final Random RANDOM = new Random(1);
 
     private final Building target;
     private final Catapult source;
-    private final Countdown countdown;
-    private final GameMap   map;
+    private final Countdown countdown = new Countdown();
+    private final GameMap map;
 
     public Projectile(Catapult source, Building targetBuilding, GameMap map) {
         target = targetBuilding;
         this.source = source;
         this.map = map;
 
-        countdown = new Countdown();
         countdown.countFrom((int)(source.getPosition().distance(targetBuilding.getPosition()) * SPEED));
     }
 
@@ -42,22 +41,23 @@ public class Projectile {
     }
 
     public int getProgress() {
-
         int traveled = countdown.getStartedAt() - countdown.getCount();
 
         return (int) ((double) traveled / countdown.getStartedAt() * 100);
     }
 
     public void stepTime() throws InvalidUserActionException {
-
         if (!countdown.hasReachedZero()) {
             countdown.step();
         }
 
         if (countdown.hasReachedZero()) {
 
-            // Determine if the projectile hit the target - the hit rate is 75%
-            if (RANDOM.nextDouble() > FAIL_RATE) {
+            // Determine if the projectile hits the target
+            int distance = GameUtils.distanceInGameSteps(source.getPosition(), target.getPosition());
+            int hitProbability = 13 - distance;
+
+            if (RANDOM.nextInt(18) < hitProbability) {
                 target.hitByCatapult(source);
             }
 
@@ -67,5 +67,10 @@ public class Projectile {
 
     public boolean isArrived() {
         return countdown.hasReachedZero();
+    }
+
+    @Override
+    public String toString() {
+        return "Projectile with target %s (%d/%d)".formatted(target, countdown.getCount(), countdown.getStartedAt());
     }
 }

@@ -2,6 +2,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -21,10 +22,9 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 /**
@@ -173,7 +173,8 @@ public class TestIronSmelter {
 
     @Test
     public void testHeadquarterHasAtLeastOneIronFounderAtStart() {
-        var headquarter = new Headquarter(null);
+        var player = new Player("Player 1", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var headquarter = new Headquarter(player);
 
         assertTrue(headquarter.getAmount(IRON_FOUNDER) >= 1);
     }
@@ -209,7 +210,7 @@ public class TestIronSmelter {
         assertNotNull(ironFounder0);
         assertEquals(ironFounder0.getTarget(), ironSmelter.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, ironFounder0);
+        Utils.fastForwardUntilWorkersReachTarget(ironFounder0);
 
         assertTrue(ironFounder0.isInsideBuilding());
         assertEquals(ironFounder0.getHome(), ironSmelter);
@@ -283,7 +284,7 @@ public class TestIronSmelter {
         assertNotNull(ironFounder0);
         assertEquals(ironFounder0.getTarget(), ironSmelter.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, ironFounder0);
+        Utils.fastForwardUntilWorkersReachTarget(ironFounder0);
 
         assertTrue(ironFounder0.isInsideBuilding());
         assertEquals(ironFounder0.getHome(), ironSmelter);
@@ -444,7 +445,7 @@ public class TestIronSmelter {
         ironSmelter.putCargo(new Cargo(COAL, map));
 
         // Verify that the iron smelter produces iron bars
-        Utils.fastForwardUntilWorkerCarriesCargo(map, ironFounder0);
+        Utils.fastForwardUntilWorkerCarriesCargo(ironFounder0);
 
         map.stepTime();
 
@@ -455,13 +456,13 @@ public class TestIronSmelter {
         // Verify that the iron smelter worker leaves the cargo at the flag
         assertEquals(ironFounder0.getTarget(), ironSmelter.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder0, ironSmelter.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder0, ironSmelter.getFlag().getPosition());
 
         assertFalse(ironSmelter.getFlag().getStackedCargo().isEmpty());
         assertNull(ironFounder0.getCargo());
         assertEquals(ironFounder0.getTarget(), ironSmelter.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, ironFounder0);
+        Utils.fastForwardUntilWorkersReachTarget(ironFounder0);
 
         assertTrue(ironFounder0.isInsideBuilding());
     }
@@ -509,17 +510,17 @@ public class TestIronSmelter {
         Utils.adjustInventoryTo(headquarter, IRON, 2);
         Utils.adjustInventoryTo(headquarter, COAL, 2);
 
-        Utils.waitForFlagToGetStackedCargo(map, ironSmelter.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(ironSmelter.getFlag(), 1);
 
         assertEquals(ironSmelter.getFlag().getStackedCargo().getFirst().getMaterial(), IRON_BAR);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that the courier delivers the cargo to the METAL WORKS (and not the headquarters)
         assertEquals(ironSmelter.getAmount(IRON_BAR), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), metalworks.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), metalworks.getPosition());
 
         assertEquals(metalworks.getAmount(IRON_BAR), 1);
     }
@@ -565,12 +566,12 @@ public class TestIronSmelter {
         // Wait for the courier on the road between the storehouse and the iron smelter to have an iron bar cargo
         Utils.deliverCargos(ironSmelter, COAL, IRON);
 
-        Utils.waitForFlagToGetStackedCargo(map, ironSmelter.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(ironSmelter.getFlag(), 1);
 
         assertEquals(ironSmelter.getFlag().getStackedCargo().getFirst().getMaterial(), IRON_BAR);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters
         assertEquals(headquarter.getAmount(IRON_BAR), 0);
@@ -578,7 +579,7 @@ public class TestIronSmelter {
         assertFalse(storehouse.needsMaterial(IRON_BAR));
         assertTrue(storehouse.isUnderConstruction());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
         assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(IRON_BAR));
@@ -634,12 +635,12 @@ public class TestIronSmelter {
         // Wait for the flag on the road between the armory and the iron smelter to have an iron bar cargo
         Utils.deliverCargos(ironSmelter, COAL, IRON);
 
-        Utils.waitForFlagToGetStackedCargo(map, ironSmelter.getFlag(), 1);
+        Utils.waitForFlagToGetStackedCargo(ironSmelter.getFlag(), 1);
 
         assertEquals(ironSmelter.getFlag().getStackedCargo().getFirst().getMaterial(), IRON_BAR);
 
         // Wait for the courier to pick up the cargo
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(road0.getCourier());
 
         // Verify that no iron bar is delivered from the headquarters
         Utils.adjustInventoryTo(headquarter, IRON_BAR, 1);
@@ -850,7 +851,7 @@ public class TestIronSmelter {
         assertEquals(ironFounder.getTarget(), ironSmelter0.getFlag().getPosition());
         assertTrue(ironSmelter0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironSmelter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, ironSmelter0.getFlag().getPosition());
 
         assertNull(ironFounder.getCargo());
         assertFalse(ironSmelter0.getFlag().getStackedCargo().isEmpty());
@@ -858,7 +859,7 @@ public class TestIronSmelter {
         // Wait for the worker to go back to the iron smelter
         assertEquals(ironFounder.getTarget(), ironSmelter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironSmelter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, ironSmelter0.getPosition());
 
         // Wait for the worker to rest and produce another cargo
         Utils.fastForward(150, map);
@@ -868,7 +869,7 @@ public class TestIronSmelter {
         // Verify that the second cargo is put at the flag
         assertEquals(ironFounder.getTarget(), ironSmelter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironSmelter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, ironSmelter0.getFlag().getPosition());
 
         assertNull(ironFounder.getCargo());
         assertEquals(ironSmelter0.getFlag().getStackedCargo().size(), 2);
@@ -920,7 +921,7 @@ public class TestIronSmelter {
         assertEquals(ironFounder.getTarget(), ironSmelter0.getFlag().getPosition());
         assertTrue(ironSmelter0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironSmelter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, ironSmelter0.getFlag().getPosition());
 
         assertNull(ironFounder.getCargo());
         assertFalse(ironSmelter0.getFlag().getStackedCargo().isEmpty());
@@ -949,14 +950,14 @@ public class TestIronSmelter {
         assertNotEquals(courier.getTarget(), ironSmelter0.getFlag().getPosition());
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         // Verify that the courier walks to pick up the cargo
         map.stepTime();
 
         assertEquals(courier.getTarget(), ironSmelter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, courier.getTarget());
 
         // Verify that the courier has picked up the cargo
         assertNotNull(courier.getCargo());
@@ -967,7 +968,7 @@ public class TestIronSmelter {
 
         var amount = headquarter0.getAmount(IRON_BAR);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(courier, headquarter0.getPosition());
 
         // Verify that the courier has delivered the cargo to the headquarter
         assertNull(courier.getCargo());
@@ -1010,7 +1011,7 @@ public class TestIronSmelter {
 
         var amount = headquarter0.getAmount(IRON_FOUNDER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, headquarter0.getPosition());
 
         // Verify that the iron founder is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(IRON_FOUNDER), amount + 1);
@@ -1200,14 +1201,14 @@ public class TestIronSmelter {
         Utils.fastForward(100, map);
 
         // Wait for the iron founder to produce cargo
-        Utils.fastForwardUntilWorkerProducesCargo(map, ironFounder);
+        Utils.fastForwardUntilWorkerProducesCargo(ironFounder);
 
         assertEquals(ironFounder.getCargo().getMaterial(), IRON_BAR);
 
         // Wait for the worker to deliver the cargo
         assertEquals(ironFounder.getTarget(), ironSmelter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironSmelter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, ironSmelter0.getFlag().getPosition());
 
         // Stop production and verify that no iron bar is produced
         ironSmelter0.stopProduction();
@@ -1261,14 +1262,14 @@ public class TestIronSmelter {
         Utils.fastForward(100, map);
 
         // Wait for the iron founder to produce iron bar
-        Utils.fastForwardUntilWorkerProducesCargo(map, ironFounder);
+        Utils.fastForwardUntilWorkerProducesCargo(ironFounder);
 
         assertEquals(ironFounder.getCargo().getMaterial(), IRON_BAR);
 
         // Wait for the worker to deliver the cargo
         assertEquals(ironFounder.getTarget(), ironSmelter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironSmelter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, ironSmelter0.getFlag().getPosition());
 
         // Stop production
         ironSmelter0.stopProduction();
@@ -1284,7 +1285,7 @@ public class TestIronSmelter {
 
         assertTrue(ironSmelter0.isProductionEnabled());
 
-        Utils.fastForwardUntilWorkerProducesCargo(map, ironFounder);
+        Utils.fastForwardUntilWorkerProducesCargo(ironFounder);
 
         assertNotNull(ironFounder.getCargo());
     }
@@ -1419,7 +1420,7 @@ public class TestIronSmelter {
         assertNotNull(ironFounder);
         assertEquals(ironFounder.getTarget(), ironSmelter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1430,14 +1431,14 @@ public class TestIronSmelter {
         map.removeRoad(road1);
 
         // Verify that the iron founder continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, flag0.getPosition());
 
         assertEquals(ironFounder.getPosition(), flag0.getPosition());
 
         // Verify that the iron founder returns to the headquarter when it reaches the flag
         assertEquals(ironFounder.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, headquarter0.getPosition());
     }
 
     @Test
@@ -1480,7 +1481,7 @@ public class TestIronSmelter {
         assertNotNull(ironFounder);
         assertEquals(ironFounder.getTarget(), ironSmelter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -1491,14 +1492,14 @@ public class TestIronSmelter {
         map.removeRoad(road0);
 
         // Verify that the iron founder continues walking to the flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, flag0.getPosition());
 
         assertEquals(ironFounder.getPosition(), flag0.getPosition());
 
         // Verify that the iron founder continues to the final flag
         assertEquals(ironFounder.getTarget(), ironSmelter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironSmelter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, ironSmelter0.getFlag().getPosition());
 
         // Verify that the iron founder goes out to iron founder instead of going directly back
         assertNotEquals(ironFounder.getTarget(), headquarter0.getPosition());
@@ -1545,7 +1546,7 @@ public class TestIronSmelter {
         assertEquals(ironFounder.getTarget(), ironSmelter0.getPosition());
 
         // Wait for the iron founder to reach the first flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, flag0.getPosition());
 
         map.stepTime();
 
@@ -1556,7 +1557,7 @@ public class TestIronSmelter {
         ironSmelter0.tearDown();
 
         // Verify that the iron founder continues walking to the next flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironSmelter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, ironSmelter0.getFlag().getPosition());
 
         assertEquals(ironFounder.getPosition(), ironSmelter0.getFlag().getPosition());
 
@@ -1607,7 +1608,7 @@ public class TestIronSmelter {
 
         var amount = storehouse0.getAmount(IRON_FOUNDER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, storehouse0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, storehouse0.getPosition());
 
         // Verify that the iron founder is stored correctly in the headquarter
         assertEquals(storehouse0.getAmount(IRON_FOUNDER), amount + 1);
@@ -1659,7 +1660,7 @@ public class TestIronSmelter {
 
         var amount = headquarter0.getAmount(IRON_FOUNDER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, headquarter0.getPosition());
 
         // Verify that the iron founder is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(IRON_FOUNDER), amount + 1);
@@ -1714,7 +1715,7 @@ public class TestIronSmelter {
 
         var amount = headquarter0.getAmount(IRON_FOUNDER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, headquarter0.getPosition());
 
         // Verify that the iron founder is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(IRON_FOUNDER), amount + 1);
@@ -1760,7 +1761,7 @@ public class TestIronSmelter {
 
         var amount = headquarter0.getAmount(IRON_FOUNDER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, headquarter0.getPosition());
 
         // Verify that the iron founder is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(IRON_FOUNDER), amount + 1);
@@ -1792,7 +1793,7 @@ public class TestIronSmelter {
         var worker = Utils.waitForWorkersOutsideBuilding(IronFounder.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, ironSmelter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, ironSmelter0.getFlag().getPosition());
 
         // Tear down the building
         ironSmelter0.tearDown();
@@ -1800,11 +1801,11 @@ public class TestIronSmelter {
         // Verify that the worker goes to the building and then returns to the headquarter instead of entering
         assertEquals(worker.getTarget(), ironSmelter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, ironSmelter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, ironSmelter0.getPosition());
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
     }
 
     @Test
@@ -2134,7 +2135,7 @@ public class TestIronSmelter {
         Utils.deliverCargo(ironSmelter, COAL);
 
         // Fill the flag with flour cargos
-        Utils.placeCargos(map, FLOUR, 8, ironSmelter.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, ironSmelter.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2151,7 +2152,7 @@ public class TestIronSmelter {
         var road1 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2168,7 +2169,7 @@ public class TestIronSmelter {
         assertEquals(ironSmelter.getFlag().getStackedCargo().size(), 7);
 
         // Verify that the worker produces a cargo of flour and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, ironSmelter.getWorker(), IRON_BAR);
+        Utils.fastForwardUntilWorkerCarriesCargo(ironSmelter.getWorker(), IRON_BAR);
     }
 
     @Test
@@ -2201,7 +2202,7 @@ public class TestIronSmelter {
         Utils.deliverCargo(ironSmelter, COAL);
 
         // Fill the flag with cargos
-        Utils.placeCargos(map, FLOUR, 8, ironSmelter.getFlag(), headquarter);
+        Utils.placeCargos(FLOUR, 8, ironSmelter.getFlag(), headquarter);
 
         // Remove the road
         map.removeRoad(road0);
@@ -2218,7 +2219,7 @@ public class TestIronSmelter {
         var road1 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2238,12 +2239,12 @@ public class TestIronSmelter {
         map.removeRoad(road1);
 
         // The worker produces a cargo and puts it on the flag
-        Utils.fastForwardUntilWorkerCarriesCargo(map, ironSmelter.getWorker(), IRON_BAR);
+        Utils.fastForwardUntilWorkerCarriesCargo(ironSmelter.getWorker(), IRON_BAR);
 
         // Wait for the worker to put the cargo on the flag
         assertEquals(ironSmelter.getWorker().getTarget(), ironSmelter.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironSmelter.getWorker(), ironSmelter.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironSmelter.getWorker(), ironSmelter.getFlag().getPosition());
 
         assertEquals(ironSmelter.getFlag().getStackedCargo().size(), 8);
 
@@ -2295,9 +2296,9 @@ public class TestIronSmelter {
         headquarter0.blockDeliveryOfMaterial(IRON_BAR);
 
         // Verify that the iron smelter puts eight iron bars on the flag and then stops
-        Utils.waitForFlagToGetStackedCargo(map, ironSmelter0.getFlag(), 8);
+        Utils.waitForFlagToGetStackedCargo(ironSmelter0.getFlag(), 8);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder0, ironSmelter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder0, ironSmelter0.getPosition());
 
         for (int i = 0; i < 300; i++) {
             map.stepTime();
@@ -2366,7 +2367,7 @@ public class TestIronSmelter {
 
         assertFalse(ironFounder0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder0, ironSmelter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder0, ironSmelter0.getFlag().getPosition());
 
         assertEquals(ironFounder0.getTarget(), storehouse.getPosition());
 
@@ -2432,11 +2433,11 @@ public class TestIronSmelter {
 
         assertFalse(ironFounder0.isInsideBuilding());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder0, ironSmelter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder0, ironSmelter0.getFlag().getPosition());
 
         assertEquals(ironFounder0.getTarget(), storehouse.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder0, storehouse.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder0, storehouse.getPosition());
 
         assertFalse(map.getWorkers().contains(ironFounder0));
     }
@@ -2467,12 +2468,12 @@ public class TestIronSmelter {
             assertEquals(worker.getPosition(), headquarter0.getPosition());
             assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
             assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
             assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getPosition());
 
             assertFalse(map.getWorkers().contains(worker));
         }
@@ -2501,25 +2502,16 @@ public class TestIronSmelter {
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, headquarter0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
-
-        for (int i = 0; i < 100; i++) {
-            assertTrue(worker.isDead());
-            assertTrue(map.getWorkers().contains(worker));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(worker));
     }
 
     @Test
@@ -2560,7 +2552,7 @@ public class TestIronSmelter {
 
         assertEquals(worker.getPosition(), ironSmelter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, ironSmelter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, ironSmelter0.getFlag().getPosition());
 
         assertEquals(worker.getPosition(), ironSmelter0.getFlag().getPosition());
         assertNotNull(worker.getTarget());
@@ -2568,18 +2560,36 @@ public class TestIronSmelter {
         assertNotEquals(worker.getTarget(), headquarter0.getPosition());
         assertFalse(worker.isDead());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(worker, worker.getTarget());
 
         assertTrue(worker.isDead());
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
 
-        for (int i = 0; i < 100; i++) {
+        // Verify that the skeleton decays
+        for (int i = 0; i < 6000; i++) {
             assertTrue(worker.isDead());
             assertTrue(map.getWorkers().contains(worker));
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_FRESH);
+
+            map.stepTime();
+        }
+
+        assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+        assertEquals(DecorationType.HUMAN_SKELETON_DECAYED, map.getDecorationAtPoint(worker.getPosition()));
+
+        // Verify that the skeleton disappears
+        for (int i = 0; i < 4000; i++) {
+            assertTrue(map.isDecoratedAtPoint(worker.getPosition()));
+            assertEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
 
             map.stepTime();
         }
 
         assertFalse(map.getWorkers().contains(worker));
+        assertFalse(map.isDecoratedAtPoint(worker.getPosition()));
+        assertNotEquals(map.getDecorationAtPoint(worker.getPosition()), DecorationType.HUMAN_SKELETON_DECAYED);
     }
 
     @Test
@@ -2611,7 +2621,7 @@ public class TestIronSmelter {
         var ironFounder = Utils.waitForWorkerOutsideBuilding(IronFounder.class, player0);
 
         // Wait for the iron founder to go past the headquarter's flag
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
@@ -2622,7 +2632,7 @@ public class TestIronSmelter {
 
         ironSmelter0.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironSmelter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, ironSmelter0.getFlag().getPosition());
 
         assertEquals(ironFounder.getPosition(), ironSmelter0.getFlag().getPosition());
         assertNotEquals(ironFounder.getTarget(), headquarter0.getPosition());
@@ -2630,17 +2640,8 @@ public class TestIronSmelter {
         assertNull(ironSmelter0.getWorker());
         assertNotNull(ironFounder.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironFounder.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(ironFounder, ironFounder.getTarget());
 
-        var point = ironFounder.getPosition();
-        for (int i = 0; i < 100; i++) {
-            assertTrue(ironFounder.isDead());
-            assertEquals(ironFounder.getPosition(), point);
-            assertTrue(map.getWorkers().contains(ironFounder));
-
-            map.stepTime();
-        }
-
-        assertFalse(map.getWorkers().contains(ironFounder));
+        assertTrue(ironFounder.isDead());
     }
 }
