@@ -27,7 +27,6 @@ import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Pig;
 import org.appland.settlers.model.actors.Rank;
 import org.appland.settlers.model.actors.Ship;
-import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.WildAnimal;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Armory;
@@ -370,18 +369,35 @@ public class JsonUtils {
             }
         }
 
-        if (building instanceof Headquarter headquarter) {
-            var jsonReserved = new JSONObject();
-            var jsonInReserve = new JSONObject();
+        // Add house type specific fields
+        switch (building) {
+            case Headquarter headquarter -> {
+                var jsonReserved = new JSONObject();
+                var jsonInReserve = new JSONObject();
 
-            jsonHouse.put("reserved", jsonReserved);
-            jsonHouse.put("inReserve", jsonInReserve);
+                jsonHouse.put("reserved", jsonReserved);
+                jsonHouse.put("inReserve", jsonInReserve);
 
-            Arrays.stream(Rank.values()).iterator().forEachRemaining(
-                    rank -> {
-                        jsonReserved.put(rank.name().toUpperCase(), headquarter.getReservedSoldiers(rank));
-                        jsonInReserve.put(rank.name().toUpperCase(), headquarter.getActualReservedSoldiers().get(rank));
-                    });
+                Arrays.stream(Rank.values()).iterator().forEachRemaining(
+                        rank -> {
+                            jsonReserved.put(rank.name().toUpperCase(), headquarter.getReservedSoldiers(rank));
+                            jsonInReserve.put(rank.name().toUpperCase(), headquarter.getActualReservedSoldiers().get(rank));
+                        });
+            }
+
+            case PigFarm pigFarm -> {
+                if (pigFarm.isReady()) {
+                    jsonHouse.put("pigs", pigsToJson(pigFarm.getPigs()));
+                }
+            }
+
+            case DonkeyFarm donkeyFarm -> {
+                if (donkeyFarm.isReady()) {
+                    jsonHouse.put("donkeys", donkeysToJson(donkeyFarm.getDonkeys()));
+                }
+            }
+
+            default -> {}
         }
 
         if (!building.getPlayer().equals(player) && building.isMilitaryBuilding() && building.isOccupied()) {
@@ -390,11 +406,14 @@ public class JsonUtils {
             jsonHouse.put("availableAttackers", availableAttackers);
         }
 
-        if (building instanceof PigFarm pigFarm && pigFarm.isReady()) {
-            jsonHouse.put("pigs", pigsToJson(pigFarm.getPigs()));
-        }
-
         return jsonHouse;
+    }
+
+    private JSONArray donkeysToJson(List<DonkeyFarm.BreedingDonkey> donkeys) {
+        return toJsonArray(donkeys, donkey -> new JSONObject(Map.of(
+                "id", idManager.getId(donkey),
+                "slot", donkey.slot().name().toUpperCase()
+        )));
     }
 
     private JSONArray pigsToJson(List<Pig> pigs) {
@@ -511,7 +530,8 @@ public class JsonUtils {
                 "nation", worker.getPlayer().getNation().name().toUpperCase()
         ));
 
-        if (!worker.isExactlyAtPoint() || (worker.getPosition().x + worker.getPosition().y) % 2 != 0 ) { // TODO: needs fixing!!!
+        var height = worker.getPlayer().getMap().getHeight();
+        if (!worker.isExactlyAtPoint() || !GeometryMapping.isValidGamePoint(worker.getPosition(), height)) {
             jsonWorker.put("previous", pointToJson(worker.getLastPoint()));
             jsonWorker.put("next", pointToJson(worker.getNextPoint()));
             jsonWorker.put("percentageTraveled", worker.getPercentageOfDistanceTraveled());
@@ -529,16 +549,6 @@ public class JsonUtils {
         }
 
         return jsonWorker;
-    }
-
-    private String rankToTypeString(Soldier soldier) {
-        return switch (soldier.getRank()) {
-            case PRIVATE_RANK -> "Private";
-            case PRIVATE_FIRST_CLASS_RANK -> "Private_first_class";
-            case SERGEANT_RANK -> "Sergeant";
-            case OFFICER_RANK -> "Officer";
-            case GENERAL_RANK -> "General";
-        };
     }
 
     public JSONObject flagToJson(Flag flag) {
@@ -890,6 +900,10 @@ public class JsonUtils {
             jsonMonitoringEvents.put("newWorkersOutside", workersToJson(gameChangesList.newWorkersOutside()));
         }
 
+        if (!gameChangesList.newWorkers().isEmpty()) {
+            jsonMonitoringEvents.put("newWorkers", workersToJson(gameChangesList.newWorkers()));
+        }
+
         if (!gameChangesList.newFallingTrees().isEmpty()) {
             jsonMonitoringEvents.put("newFallingTrees", treesToJson(gameChangesList.newFallingTrees()));
         }
@@ -918,8 +932,11 @@ public class JsonUtils {
             jsonMonitoringEvents.put("workersWithNewTargets", workersWithNewTargetsToJson(gameChangesList.workersWithNewTargets()));
 
             jsonMonitoringEvents.put("wildAnimalsWithNewTargets", wildAnimalsWithNewTargetsToJson(gameChangesList.workersWithNewTargets()));
+        }
 
-            jsonMonitoringEvents.put("shipsWithNewTargets", shipWithNewTargetsToJson(gameChangesList.workersWithNewTargets()));
+        if (!gameChangesList.shipsWithNewTargets().isEmpty()) {
+            jsonMonitoringEvents.put("shipsWithNewTargets",
+                    shipWithNewTargetsToJson(gameChangesList.shipsWithNewTargets()));
         }
 
         if (!gameChangesList.workersWithStartedActions().isEmpty()) {
@@ -1080,8 +1097,8 @@ public class JsonUtils {
         )));
     }
 
-    private JSONArray shipWithNewTargetsToJson(List<Worker> workers) {
-        return toJsonArrayWithFilter(workers, worker -> shipToJson((Ship) worker), worker -> worker instanceof Ship);
+    private JSONArray shipWithNewTargetsToJson(List<Ship> ships) {
+        return toJsonArray(ships, this::shipToJson);
     }
 
     private JSONObject shipToJson(Ship ship) {
@@ -1091,9 +1108,9 @@ public class JsonUtils {
             cargos.merge(cargo.getMaterial(), 1, Integer::sum);
         }
 
-        return new JSONObject(Map.of(
+        var jsonShip = new JSONObject(Map.of(
                 "id", idManager.getId(ship),
-                "state", ship.isUnderConstruction() ? "UNDER_CONSTRUCTION" : "READY",
+                "constructionState", ship.isUnderConstruction() ? "UNDER_CONSTRUCTION" : "READY", // FIXME: align this with frontend!
                 "x", ship.getPosition().x,
                 "y", ship.getPosition().y,
                 "direction", ship.getDirection().toCompassDirection().name().toUpperCase(),
@@ -1101,6 +1118,16 @@ public class JsonUtils {
                         entry.getKey().name().toUpperCase(), entry.getValue()
                 )))
         ));
+
+        if (ship.isTraveling()) {
+            jsonShip.put("betweenPoints", true);
+            jsonShip.put("previous", ship.getPosition());
+            jsonShip.put("next", ship.getNextPoint());
+            jsonShip.put("percentageTraveled", ship.getPercentageOfDistanceTraveled());
+            jsonShip.put("plannedPath", pointsToJson(ship.getPlannedPath()));
+        }
+
+        return jsonShip;
     }
 
     private JSONArray shipsToJson(List<Ship> ships) {
@@ -1189,7 +1216,7 @@ public class JsonUtils {
                 "id", idManager.getId(message),
                 "type", BOMBARDED_BY_CATAPULT.name().toUpperCase(),
                 "isRead", message.isRead(),
-                "houseType", building.getSimpleName().toUpperCase(),
+                "houseType", building.getSimpleName(),
                 "houseId", idManager.getId(building),
                 "point", buildingToPoint(building)
         ));
@@ -1215,6 +1242,7 @@ public class JsonUtils {
                 "type", MILITARY_BUILDING_CAUSED_LOST_LAND.toString(),
                 "isRead", message.isRead(),
                 "houseId", idManager.getId(building),
+                "houseType", building.getSimpleName(),
                 "point", buildingToPoint(building)
         ));
     }
@@ -1391,9 +1419,7 @@ public class JsonUtils {
     }
 
     private String workerTypeToJson(Worker worker) {
-        return worker.isSoldier()
-                ? rankToTypeString((Soldier) worker)
-                : worker.getClass().getSimpleName();
+        return worker.getClass().getSimpleName();
     }
 
     public JSONArray transportPriorityToJson(List<TransportCategory> transportPriorityList) {
