@@ -16,6 +16,8 @@ public class Map0ZLst {
     public static final Animation WALKING_NORTH_WEST_SHADOW = new Animation(483, 8);
     public static final Animation WALKING_NORTH_EAST_SHADOW = new Animation(491, 8);
 
+    public static final Animation DONKEY_IN_FARM_FADING_IN_OUT = new Animation(918, 8);
+
     public static final int DONKEY_BEER = 1029;
     public static final int DONKEY_TONGS = 1030;
     public static final int DONKEY_HAMMER = 1031;

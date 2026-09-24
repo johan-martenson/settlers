@@ -3,6 +3,7 @@ package org.appland.settlers.assets.extractors;
 import org.appland.settlers.assets.InvalidFormatException;
 import org.appland.settlers.assets.UnknownResourceTypeException;
 import org.appland.settlers.assets.collectors.AnimalImageCollection;
+import org.appland.settlers.assets.collectors.BreedingDonkeyCollection;
 import org.appland.settlers.assets.collectors.PigImageCollection;
 import org.appland.settlers.assets.decoders.LstDecoder;
 import org.appland.settlers.assets.gamefiles.Map0ZLst;
@@ -10,12 +11,14 @@ import org.appland.settlers.assets.gamefiles.MapBobs0Lst;
 import org.appland.settlers.assets.gamefiles.MapBobsLst;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.model.actors.Pig;
+import org.appland.settlers.model.buildings.DonkeyFarm;
 
 import java.io.IOException;
 
 import static org.appland.settlers.assets.CompassDirection.*;
 import static org.appland.settlers.assets.Nation.*;
-import static org.appland.settlers.assets.Utils.*;
+import static org.appland.settlers.assets.Utils.getImageAt;
+import static org.appland.settlers.assets.Utils.getImagesAt;
 import static org.appland.settlers.model.Material.*;
 
 public class AnimalsExtractor {
@@ -198,6 +201,12 @@ public class AnimalsExtractor {
 
         donkey.writeImageAtlas(toDir + "/animals/", defaultPalette);
         log(" - Donkey");
+
+        var breedingDonkey = new BreedingDonkeyCollection();
+
+        breedingDonkey.addAnimation(getImagesAt(map0ZLst, Map0ZLst.DONKEY_IN_FARM_FADING_IN_OUT));
+        breedingDonkey.writeImageAtlas(toDir + "/animals/", defaultPalette);
+        log(" - Breeding donkey");
 
         // Extract the pig
         var pig = new PigImageCollection();

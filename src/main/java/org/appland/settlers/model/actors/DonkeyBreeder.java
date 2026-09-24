@@ -62,8 +62,6 @@ public class DonkeyBreeder extends Worker {
                     state == PREPARING_DONKEY_FOR_DELIVERY
         );
 
-        System.out.println(productivityMeasurer.productivity() + " ---- " + state);
-
         if (home instanceof DonkeyFarm donkeyFarm) {
             donkeyFarm.setNumberOfDonkeys(productivityToNumberOfDonkeys());
         }

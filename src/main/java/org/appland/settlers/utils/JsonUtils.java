@@ -175,10 +175,10 @@ public class JsonUtils {
     }
 
     JSONArray playersToJson(Collection<Player> players, GameResource gameResource) {
-        return toJsonArray(players, player -> playerToJson(player, idManager.getId(player), gameResource));
+        return toJsonArray(players, player -> playerToJson(player, gameResource));
     }
 
-    JSONObject playerToJson(Player player, String playerId, GameResource gameResource) {
+    JSONObject playerToJson(Player player, GameResource gameResource) {
         var jsonPlayer = playerToJson(player);
 
         jsonPlayer.put("type", gameResource.isComputerPlayer(player) ? "COMPUTER" : "HUMAN");
